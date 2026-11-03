@@ -849,7 +849,7 @@ def daily():
     except Exception as e:
         print(f"book estimate failed: {e}")
     save("tracks.json", tracks)
-    write_summary(tracks)
+    push_scoreboard(write_summary(tracks))
 
 
 def mark(pos, tok):
@@ -942,6 +942,24 @@ def write_summary(tracks):
     with open(hist, "w") as fh:
         fh.write("date,track,pnl,open,closed,wins,losses,refills,money_needed\n" + "\n".join(rows) + "\n")
     print("\n".join(md[:12]))
+    return stats
+
+
+def push_scoreboard(stats):
+    """One line per strategy, sent to ntfy after the morning run (backup for the Claude review)."""
+    lines = []
+    for name, s in stats.items():
+        money = f"{'+' if s['pnl'] >= 0 else '-'}${abs(s['pnl']):.2f}"
+        extra = ""
+        if s.get("refills"):
+            extra = f", refilled {s['refills']}x"
+        if CFG["tracks"][name]["start_cash"] is None:
+            extra = f", needed ${s['money_needed']:.2f} so far"
+        lines.append(f"{name}: {money} | {s['open']} open | {s['wins']}W {s['losses']}L{extra}")
+    hb = load("his_book.json", None)
+    if hb:
+        lines.append(f"Copying his whole book at min size: ${hb['cost_min_size_each']:.0f}")
+    push("Paper scoreboard", "\n".join(lines), tags="bar_chart")
 
 
 def selftest():
