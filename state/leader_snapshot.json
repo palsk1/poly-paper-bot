@@ -1,0 +1,751 @@
+{
+ "positions": {
+  "101804221129923221311468014764974740374334424163195744719593146528253694482543": {
+   "avg": 0.8558,
+   "end": "2026-11-04",
+   "event_slug": "ga-12-house-election-winner",
+   "outcome": "Yes",
+   "size": 781.83,
+   "slug": "will-the-republican-party-win-the-ga-12-house-seat",
+   "title": "Will the Republican Party win the GA-12 House seat?"
+  },
+  "106375876055695859045413141458606643340242853794519126089005356920987236120368": {
+   "avg": 0.8667,
+   "end": "2026-12-01",
+   "event_slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
+   "outcome": "No",
+   "size": 14179.62,
+   "slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
+   "title": "Strait of Hormuz traffic returns to normal by November 30?"
+  },
+  "107579523837693009966510082147335435602688448341921829583988771464894280746502": {
+   "avg": 0.8069,
+   "end": "2026-11-04",
+   "event_slug": "ks-02-house-election-winner",
+   "outcome": "Yes",
+   "size": 2636.04,
+   "slug": "will-the-republican-party-win-the-ks-02-house-seat",
+   "title": "Will the Republican Party win the KS-02 House seat?"
+  },
+  "107593745130639131117879088978522276178202216447775798463548111992845416662727": {
+   "avg": 0.5189,
+   "end": "2027-01-21",
+   "event_slug": "uk-annual-inflation-in-2026",
+   "outcome": "Yes",
+   "size": 446.79,
+   "slug": "will-the-uks-2026-inflation-be-between-3pt5-and-3pt9",
+   "title": "Will the UK\u2019s 2026 inflation be between 3.5% and 3.9%?"
+  },
+  "109485388632239321949522534949286742613587937674462715784053878432833137696796": {
+   "avg": 0.7899,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 616.0,
+   "slug": "will-ethereum-reach-3000-by-december-31-2026-from-june-8",
+   "title": "Will Ethereum reach $3,000 by December 31, 2026?"
+  },
+  "109826100684776641944112157925197286946424843318026333964276423338255198566626": {
+   "avg": 0.76,
+   "end": "2026-11-01",
+   "event_slug": "avgpt-of-ships-transiting-bab-el-mandeb-strait-end-of-october",
+   "outcome": "No",
+   "size": 1687.02,
+   "slug": "will-there-be-between-30-and-34-average-daily-transits-of-the-bab-el-mandeb-strait-on-october-31",
+   "title": "Will there be between 30 and 34 average daily transits of the Bab el-Mandeb Strait on October 31?"
+  },
+  "110054483148663433619261017655150680070683731726425503021867203811654487514256": {
+   "avg": 0.4528,
+   "end": "2026-11-30",
+   "event_slug": "spain-general-election-pp-vox-get-50-of-vote",
+   "outcome": "Yes",
+   "size": 1583.1,
+   "slug": "spain-general-election-pp-vox-get-50-of-vote",
+   "title": "Spain General Election: PP + Vox get 50%+ of Vote?"
+  },
+  "110248383649282035723587516659176804306429506602301677654400204028843553475305": {
+   "avg": 0.8633,
+   "end": "2026-11-04",
+   "event_slug": "nc-06-house-election-winner",
+   "outcome": "Yes",
+   "size": 1065.9,
+   "slug": "will-the-republican-party-win-the-nc-06-house-seat",
+   "title": "Will the Republican Party win the NC-06 House seat?"
+  },
+  "111381299800799485509083912497813429956512687399857260440199290536659860679263": {
+   "avg": 0.85,
+   "end": "2026-11-03",
+   "event_slug": "which-tossup-senate-states-will-republicans-win-ak-ia-ks-me-mi-oh-tx",
+   "outcome": "No",
+   "size": 4870.03,
+   "slug": "2026-senate-map-r-ia-ks",
+   "title": "Will Republicans win Iowa and Kansas, and lose Alaska, Maine, Michigan, Ohio, and Texas?"
+  },
+  "111592979787416536527094824125829347487500287001013667141026453581768935971074": {
+   "avg": 0.9229,
+   "end": "2026-11-05",
+   "event_slug": "ethereum-above-on-november-5-2026",
+   "outcome": "Yes",
+   "size": 67.5,
+   "slug": "ethereum-above-2000-on-november-5-2026",
+   "title": "Will the price of Ethereum be above $2,000 on November 5?"
+  },
+  "113508808307372668499310853391266888238769826522569313291924984563751940005973": {
+   "avg": 0.9602,
+   "end": "2026-12-01",
+   "event_slug": "what-price-will-xauusd-hit-in-november-2026",
+   "outcome": "No",
+   "size": 301.42,
+   "slug": "will-xauusd-reach-4600-in-november-2026",
+   "title": "Will Gold (XAUUSD) hit (HIGH) $4,600 in November?"
+  },
+  "16776682188052117519689891208085293054849422310072397287583657274883056961244": {
+   "avg": 0.8099,
+   "end": "2026-11-30",
+   "event_slug": "spain-general-election-winner",
+   "outcome": "Yes",
+   "size": 511.58,
+   "slug": "will-pp-win-the-most-seats-in-the-2026-spanish-general-election",
+   "title": "Will PP win the most seats in the 2026 Spanish general election?"
+  },
+  "18018322549311517016851758197594493738111020117855519122569633561340184519845": {
+   "avg": 0.3097,
+   "end": "2027-01-01",
+   "event_slug": "what-level-will-the-dubai-real-estate-index-hit-in-2026",
+   "outcome": "Yes",
+   "size": 129.12,
+   "slug": "will-the-dfm-real-estate-index-dip-to-8000-in-2026",
+   "title": "Will the DFM Real Estate Index dip to 8,000 in 2026?"
+  },
+  "18702020867581976905619984893323736143098724607754292117438927457109238679413": {
+   "avg": 0.91,
+   "end": "2027-01-01",
+   "event_slug": "iran-agrees-to-surrender-enriched-uranium-stockpile-by",
+   "outcome": "No",
+   "size": 446.2,
+   "slug": "iran-agrees-to-surrender-enriched-uranium-stockpile-by-december-31-2026-752-299",
+   "title": "Iran agrees to surrender enriched uranium stockpile by December 31, 2026?"
+  },
+  "1919821963264881609246544866388503468121156142156160197770849625333051093672": {
+   "avg": 0.8605,
+   "end": "2026-07-19",
+   "event_slug": "next-uk-prime-minister-appointed-by-20260622183221153",
+   "outcome": "Yes",
+   "size": 741.37,
+   "slug": "will-the-next-uk-prime-minister-be-appointed-by-july-19-20260622183223871-165",
+   "title": "Will the next UK Prime Minister be appointed by July 19?"
+  },
+  "19656466572862339640482556881328770761895791708917205607639542632453440464752": {
+   "avg": 0.7665,
+   "end": "2027-01-01",
+   "event_slug": "which-cities-will-russia-enter-by-december-31",
+   "outcome": "No",
+   "size": 4764.24,
+   "slug": "will-russia-enter-kramatorsk-by-december-31-2026",
+   "title": "Will Russia enter Kramatorsk by December 31, 2026?"
+  },
+  "20006732765674855733524007935991362439352594042415161039767275461950712817548": {
+   "avg": 0.4542,
+   "end": "2026-10-28",
+   "event_slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+   "outcome": "Yes",
+   "size": 517.39,
+   "slug": "will-benjamin-netanyahu-be-the-next-prime-minister-of-israel",
+   "title": "Will Benjamin Netanyahu be the next Prime Minister of Israel?"
+  },
+  "20508072772404576884266330300293267272741800260494416818259836712249628797288": {
+   "avg": 0.963,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 166.0,
+   "slug": "will-ethereum-dip-to-1000-by-december-31-2026-273-175",
+   "title": "Will Ethereum dip to $1,000 by December 31, 2026?"
+  },
+  "2218596292846413598888468480279157025100362996982949466208605007576604865353": {
+   "avg": 0.8932,
+   "end": "2027-01-01",
+   "event_slug": "eu-debt-downgrade-before-2027",
+   "outcome": "No",
+   "size": 63.49,
+   "slug": "eu-debt-downgrade-before-2027",
+   "title": "EU debt downgrade before 2027?"
+  },
+  "2427510173563168530654677093444917357767551989792885760649227463000109130939": {
+   "avg": 0.9,
+   "end": "2027-01-01",
+   "event_slug": "will-microstrategy-announce-holding-800k-btc-by-december-31-2026",
+   "outcome": "No",
+   "size": 74.9,
+   "slug": "will-microstrategy-announce-holding-1m-btc-by-december-31-2026-bv81",
+   "title": "Will MicroStrategy announce holding 1M+ BTC by December 31, 2026?-bV81"
+  },
+  "28118914737826867306973139020046610892855763508972918133200301373783068214913": {
+   "avg": 0.1822,
+   "end": "2027-01-01",
+   "event_slug": "tusk-out-by-december-31-2026",
+   "outcome": "Yes",
+   "size": 326.95,
+   "slug": "tusk-out-by-december-31-2026",
+   "title": "Tusk out by December 31?"
+  },
+  "28291496839879254326626786894419520677254800246510983988977971845743573275150": {
+   "avg": 0.7265,
+   "end": "2026-07-31",
+   "event_slug": "us-x-iran-permanent-peace-deal-by",
+   "outcome": "No",
+   "size": 4500.0,
+   "slug": "us-x-iran-permanent-peace-deal-by-july-31-2026-831-252",
+   "title": "US x Iran permanent peace deal by July 31, 2026?"
+  },
+  "31536685606804450810832140065754496682760771245304340917100848225867530581333": {
+   "avg": 0.2121,
+   "end": "2027-01-01",
+   "event_slug": "measles-cases-in-us-in-2026",
+   "outcome": "Yes",
+   "size": 946.4,
+   "slug": "will-there-be-at-least-7500-measles-cases-in-the-us-in-2026-287-181-314-511-633",
+   "title": "Will there be at least 7500 measles cases in the U.S. in 2026?"
+  },
+  "31627048520492227354616069874124458767757243686332730237616510640600462926383": {
+   "avg": 0.0887,
+   "end": "2027-01-01",
+   "event_slug": "uk-election-called-by",
+   "outcome": "Yes",
+   "size": 491.88,
+   "slug": "will-the-next-uk-election-be-called-by-december-31-2026",
+   "title": "Will the next UK election be called by December 31, 2026?"
+  },
+  "31650083965282390269113502048883725495895331661148956202621012482964650485070": {
+   "avg": 0.9099,
+   "end": "2027-01-01",
+   "event_slug": "ipos-before-2027",
+   "outcome": "Yes",
+   "size": 2783.43,
+   "slug": "anthropic-ipo-before-2027",
+   "title": "Anthropic IPO before 2027?"
+  },
+  "32208573006734179312307181192322189830209553609138348846127628742278942011240": {
+   "avg": 0.8213,
+   "end": "2026-11-04",
+   "event_slug": "nc-14-house-election-winner",
+   "outcome": "Yes",
+   "size": 1439.28,
+   "slug": "will-the-republican-party-win-the-nc-14-house-seat",
+   "title": "Will the Republican Party win the NC-14 House seat?"
+  },
+  "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
+   "avg": 0.5,
+   "end": "2026-12-01",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "outcome": "Yes",
+   "size": 303.64,
+   "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
+   "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
+  },
+  "33460385394344753109351907923235209397225125746318923726067817676780036931403": {
+   "avg": 0.7899,
+   "end": "2027-01-01",
+   "event_slug": "bab-el-mandeb-strait-effectively-closed-by",
+   "outcome": "No",
+   "size": 13426.06,
+   "slug": "bab-el-mandeb-strait-effectively-closed-by-december-31-983-117-222-252",
+   "title": "Bab el-Mandeb Strait effectively closed by December 31?"
+  },
+  "33496498519970071859313820280326245409180928812008476783909543753184880734152": {
+   "avg": 0.8495,
+   "end": "2026-11-30",
+   "event_slug": "spain-general-election-pp-vox-majority",
+   "outcome": "Yes",
+   "size": 1308.57,
+   "slug": "spain-general-election-pp-vox-majority",
+   "title": "Spain General Election: PP + Vox Majority?"
+  },
+  "33676235249742435565729532483122262800369378774892710387888607855248244773045": {
+   "avg": 0.9049,
+   "end": "2027-01-01",
+   "event_slug": "us-iran-final-nuclear-deal-by-20260621201254412",
+   "outcome": "No",
+   "size": 6726.26,
+   "slug": "us-iran-final-nuclear-deal-by-december-31-2026-191",
+   "title": "US-Iran Final Nuclear Deal by December 31, 2026?"
+  },
+  "34730098823282204056880725250863591694415190633560416900548276632326632294207": {
+   "avg": 0.6409,
+   "end": "2026-05-31",
+   "event_slug": "us-x-iran-permanent-peace-deal-by",
+   "outcome": "No",
+   "size": 9000.0,
+   "slug": "us-x-iran-permanent-peace-deal-by-june-30-2026-837-641-896-877-363-892-537-597",
+   "title": "US x Iran permanent peace deal by June 30, 2026?"
+  },
+  "35728395164542173668922072915910223708615032412459581576606065900193544616123": {
+   "avg": 0.7104,
+   "end": "2027-01-01",
+   "event_slug": "measles-cases-in-us-in-2026",
+   "outcome": "Yes",
+   "size": 810.0,
+   "slug": "will-there-be-at-least-6500-measles-cases-in-the-uptspt-in-2026",
+   "title": "Will there be at least 6500 measles cases in the U.S. in 2026?"
+  },
+  "36171949415941209163731651383929137457666440830959284956567399765984618770444": {
+   "avg": 0.835,
+   "end": "2027-01-01",
+   "event_slug": "us-x-cuba-military-clash-in-2026",
+   "outcome": "No",
+   "size": 200.1,
+   "slug": "us-x-cuba-military-clash-in-2026",
+   "title": "US x Cuba military clash in 2026?"
+  },
+  "37090128566507509913630589460372620352013766554886380785463533062224343545231": {
+   "avg": 0.5243,
+   "end": "2027-01-01",
+   "event_slug": "venezuela-leader-end-of-2026",
+   "outcome": "Yes",
+   "size": 190.71,
+   "slug": "will-nicols-maduro-be-the-leader-of-venezuela-end-of-2026",
+   "title": "Will Nicol\u00e1s Maduro be the leader of Venezuela end of 2026?"
+  },
+  "37645863493491161018528828119866297260769211443777659494601109167780839538779": {
+   "avg": 0.3132,
+   "end": "2026-09-27",
+   "event_slug": "how-many-ships-transit-the-strait-of-hormuz-week-of-september-21",
+   "outcome": "Yes",
+   "size": 403.96,
+   "slug": "will-25-29-ships-transit-the-strait-of-hormuz-between-september-21-september-27",
+   "title": "Will 25-29 ships transit the Strait of Hormuz between September 21-September 27?"
+  },
+  "38508858428676968447825900892305750232615791339175195608011299023691549494960": {
+   "avg": 0.8772,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 357.0,
+   "slug": "will-ethereum-dip-to-1500-by-december-31-2026-865-787",
+   "title": "Will Ethereum dip to $1,500 by December 31, 2026?"
+  },
+  "40617506054166922538352737983211722002439765026316001500193847105832422306759": {
+   "avg": 0.8616,
+   "end": "2026-11-04",
+   "event_slug": "fl-26-house-election-winner",
+   "outcome": "Yes",
+   "size": 6000.11,
+   "slug": "will-the-republican-party-win-the-fl-26-house-seat",
+   "title": "Will the Republican Party win the FL-26 House seat?"
+  },
+  "4251240413067872674686064123803499349976238079777545616008767482027755117695": {
+   "avg": 0.9649,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 277.73,
+   "slug": "will-ethereum-reach-4500-by-december-31-2026",
+   "title": "Will Ethereum reach $4,500 by December 31, 2026?"
+  },
+  "45703704411582499464332374069133096759975115041207788028520907227627254299472": {
+   "avg": 0.923,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 6089.0,
+   "slug": "will-ethereum-dip-to-1250-by-december-31-2026-from-june-8",
+   "title": "Will Ethereum dip to $1,250 by December 31, 2026?"
+  },
+  "4598154058081600141940343986128371425552111800231706218701820270779979460": {
+   "avg": 0.9099,
+   "end": "2026-12-01",
+   "event_slug": "what-price-will-wti-hit-in-november-2026",
+   "outcome": "Yes",
+   "size": 414.26,
+   "slug": "will-wti-reach-105-in-november-2026",
+   "title": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in November?"
+  },
+  "48727431314333088243693016929623363710488980152833544156961659445129455301311": {
+   "avg": 0.8024,
+   "end": "2027-01-01",
+   "event_slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
+   "outcome": "No",
+   "size": 23000.0,
+   "slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
+   "title": "Strait of Hormuz traffic returns to normal by December 31?"
+  },
+  "50488227317031565004575684525878022626020008256198844799050708993499540064859": {
+   "avg": 0.936,
+   "end": "2027-01-01",
+   "event_slug": "china-x-taiwan-military-clash-before-2027",
+   "outcome": "No",
+   "size": 1156.32,
+   "slug": "china-x-taiwan-military-clash-before-2027",
+   "title": "China x Taiwan military clash before 2027?"
+  },
+  "50854871681873904159181209043129993931106057788784391855429428220428495613305": {
+   "avg": 0.9018,
+   "end": "2027-01-01",
+   "event_slug": "ukraine-signs-peace-deal-with-russia-before-2027",
+   "outcome": "No",
+   "size": 3717.8,
+   "slug": "ukraine-signs-peace-deal-with-russia-before-2027",
+   "title": "Ukraine signs peace deal with Russia by December 31, 2026?"
+  },
+  "5123727839547169903190064776503678655837150265687773203652952267670228347063": {
+   "avg": 0.91,
+   "end": "2026-11-07",
+   "event_slug": "ethereum-above-on-november-7-2026",
+   "outcome": "Yes",
+   "size": 5.0,
+   "slug": "ethereum-above-1900-on-november-7-2026",
+   "title": "Will the price of Ethereum be above $1,900 on November 7?"
+  },
+  "51285366506638443435367264019285898921368420617675748461983918574312009250254": {
+   "avg": 0.92,
+   "end": "2027-01-01",
+   "event_slug": "what-price-will-ethereum-hit-before-2027",
+   "outcome": "No",
+   "size": 3500.0,
+   "slug": "will-ethereum-reach-3500-by-december-31-2026",
+   "title": "Will Ethereum reach $3,500 by December 31, 2026?"
+  },
+  "51698214404532449352833914053067171075562539196210705780429668172498799481236": {
+   "avg": 0.88,
+   "end": "2027-01-01",
+   "event_slug": "russia-military-action-against-eu-country-byptptpt",
+   "outcome": "No",
+   "size": 750.0,
+   "slug": "russia-military-action-against-eu-country-by-december-31-2026",
+   "title": "Russia military action against an EU country by December 31, 2026?"
+  },
+  "5270576456544526486239799524703420814027292921057740392716987991725889174673": {
+   "avg": 0.8967,
+   "end": "2027-01-01",
+   "event_slug": "which-companies-announce-bankruptcy-before-2027",
+   "outcome": "No",
+   "size": 80.0,
+   "slug": "will-lucid-announce-bankruptcy-before-2027-732-585-695",
+   "title": "Will Lucid announce bankruptcy before 2027?"
+  },
+  "52802506667868504339931612703803735835409307518376598441687039242828749241841": {
+   "avg": 0.9184,
+   "end": "2026-11-01",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-october-31",
+   "outcome": "No",
+   "size": 236.99,
+   "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-october-31-2026",
+   "title": "Will at least 10 ships transit the Strait of Hormuz on any day by October 31, 2026?"
+  },
+  "52971557021122043608903206836621385506212442144752938847391758469563893937255": {
+   "avg": 0.8687,
+   "end": "2027-01-01",
+   "event_slug": "will-the-unsc-adopt-a-resolution-endorsing-the-final-us-iran-deal-by-date",
+   "outcome": "No",
+   "size": 7255.38,
+   "slug": "will-the-unsc-adopt-a-resolution-endorsing-the-final-us-iran-deal-by-date",
+   "title": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
+  },
+  "54102938383520896375298746398958233153731487544199218359595722276259981827748": {
+   "avg": 0.8104,
+   "end": "2026-11-04",
+   "event_slug": "tn-09-house-election-winner",
+   "outcome": "Yes",
+   "size": 5906.0,
+   "slug": "will-the-republican-party-win-the-tn-09-house-seat",
+   "title": "Will the Republican Party win the TN-09 House seat?"
+  },
+  "54733769191302064072268075843557311686314513774364292862357372122754582297727": {
+   "avg": 0.69,
+   "end": "2027-07-01",
+   "event_slug": "next-israeli-government-formed-by",
+   "outcome": "No",
+   "size": 810.48,
+   "slug": "next-israeli-government-formed-by-december-31-2026",
+   "title": "Next Israeli government formed by December 31, 2026?"
+  },
+  "5513378025159191337704316460710043026668901636204511402381351948151562535480": {
+   "avg": 0.8276,
+   "end": "2027-01-01",
+   "event_slug": "crude-oil-all-time-high-by",
+   "outcome": "No",
+   "size": 703.59,
+   "slug": "will-crude-oil-reach-a-new-all-time-high-by-december-31",
+   "title": "Will Crude Oil reach a new all-time high by December 31?"
+  },
+  "5526813788185841158736044288002750049313826763078298507194721425905604163522": {
+   "avg": 0.2604,
+   "end": "2027-01-01",
+   "event_slug": "what-level-will-the-dubai-real-estate-index-hit-in-2026",
+   "outcome": "Yes",
+   "size": 1423.46,
+   "slug": "will-the-dfm-real-estate-index-hit-16000-in-2026",
+   "title": "Will the DFM Real Estate Index hit 16,000 in 2026?"
+  },
+  "55312781745086958549818693395440531431492427818819125634808790042923674294197": {
+   "avg": 0.7186,
+   "end": "2027-01-01",
+   "event_slug": "china-x-philippines-military-clash-before-2027-20260723214807932",
+   "outcome": "No",
+   "size": 1260.67,
+   "slug": "china-x-philippines-military-clash-before-2027-20260723214807932",
+   "title": "China x Philippines military clash before 2027?"
+  },
+  "55537582242872438083562820276576086682839822458513737191059827494964360929675": {
+   "avg": 0.85,
+   "end": "2026-11-04",
+   "event_slug": "mn-08-house-election-winner",
+   "outcome": "Yes",
+   "size": 539.1,
+   "slug": "will-the-republican-party-win-the-mn-08-house-seat",
+   "title": "Will the Republican Party win the MN-08 House seat?"
+  },
+  "55894031647621904438253674467236696490985438796207236752533772073470268878422": {
+   "avg": 0.11,
+   "end": "2028-01-01",
+   "event_slug": "coreweave-announces-bankruptcy-by",
+   "outcome": "Yes",
+   "size": 7946.09,
+   "slug": "will-coreweave-announce-bankruptcy-by-december-31-2027",
+   "title": "Will CoreWeave announce bankruptcy by December 31, 2027?"
+  },
+  "56615676606297588259337956203332341775475048285080710344367729433788967812170": {
+   "avg": 0.948,
+   "end": "2027-01-01",
+   "event_slug": "openai-ipo-closing-market-cap",
+   "outcome": "Yes",
+   "size": 1000.0,
+   "slug": "will-openai-not-ipo-by-december-31-2026",
+   "title": "Will OpenAI not IPO by December 31, 2026?"
+  },
+  "58454537620673931975065765941603261443983043687557953981529456895841290775738": {
+   "avg": 0.496,
+   "end": "2026-11-01",
+   "event_slug": "measles-cases-in-uptspt-by-october-31-20260928t160000000z",
+   "outcome": "No",
+   "size": 87.0,
+   "slug": "will-there-be-at-least-4800-measles-cases-in-the-uptspt-by-october-31-2026",
+   "title": "Will there be at least 4800 measles cases in the U.S. by October 31, 2026?"
+  },
+  "59855952379545476461266875939089074481171378466995213858930892770855011813551": {
+   "avg": 0.271,
+   "end": "2026-06-15",
+   "event_slug": "us-x-iran-permanent-peace-deal-by",
+   "outcome": "No",
+   "size": 999.99,
+   "slug": "us-x-iran-permanent-peace-deal-by-june-15-2026-734-856-129",
+   "title": "US x Iran permanent peace deal by June 15, 2026?"
+  },
+  "6001398000421149289548611748676371300248301472415268121240879083773431142165": {
+   "avg": 0.492,
+   "end": "2027-01-01",
+   "event_slug": "will-the-us-grant-flavio-bolsonaro-political-asylum-in-2026",
+   "outcome": "No",
+   "size": 2213.56,
+   "slug": "will-the-us-grant-flavio-bolsonaro-political-asylum-in-2026",
+   "title": "Will the US grant Fl\u00e1vio Bolsonaro political asylum in 2026?"
+  },
+  "64567203262874493228125345172786119741751988350727082094309463494623975963306": {
+   "avg": 0.91,
+   "end": "2026-12-01",
+   "event_slug": "us-iran-final-nuclear-deal-by-20260621201254412",
+   "outcome": "No",
+   "size": 362.71,
+   "slug": "us-iran-final-nuclear-deal-by-november-30-2026",
+   "title": "US-Iran Final Nuclear Deal by November 30, 2026?"
+  },
+  "64683722334765244856670599141119247613447154141978497567748582576515453079673": {
+   "avg": 0.8542,
+   "end": "2027-01-01",
+   "event_slug": "0-ships-transit-bab-el-mandeb-on-any-date-by",
+   "outcome": "No",
+   "size": 1867.09,
+   "slug": "0-ships-transit-bab-el-mandeb-on-any-date-by-december-31",
+   "title": "0 ships transit Bab el-Mandeb on any date by December 31?"
+  },
+  "6951748019944267457340977919999635495635553300507854159007268627444555282625": {
+   "avg": 0.6355,
+   "end": "2026-11-01",
+   "event_slug": "avgpt-of-ships-transiting-bab-el-mandeb-strait-end-of-october",
+   "outcome": "Yes",
+   "size": 1650.11,
+   "slug": "will-there-be-between-25-and-29-average-daily-transits-of-the-bab-el-mandeb-strait-on-october-31",
+   "title": "Will there be between 25 and 29 average daily transits of the Bab el-Mandeb Strait on October 31?"
+  },
+  "70503190433484334149968507013440143727025284387305298117131738088465654100756": {
+   "avg": 0.7799,
+   "end": "2027-01-01",
+   "event_slug": "ubs-announces-move-out-of-switzerland-by",
+   "outcome": "No",
+   "size": 54.88,
+   "slug": "ubs-announces-move-out-of-switzerland-by-december-31-2026",
+   "title": "UBS announces move out of Switzerland by December 31?"
+  },
+  "72797526470060158456877534329779635254462071072848920252088700953130246801302": {
+   "avg": 0.854,
+   "end": "2027-07-01",
+   "event_slug": "next-israeli-government-formed-by",
+   "outcome": "No",
+   "size": 1958.38,
+   "slug": "next-israeli-government-formed-by-november-30-2026",
+   "title": "Next Israeli government formed by November 30, 2026?"
+  },
+  "7305630249804085635496399869905769372294302716159034447326228509068694952392": {
+   "avg": 0.9549,
+   "end": "2027-01-01",
+   "event_slug": "will-the-us-confirm-that-aliens-exist-before-2027",
+   "outcome": "No",
+   "size": 798.05,
+   "slug": "will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
+   "title": "Will the US confirm that aliens exist before 2027?"
+  },
+  "7460473200203500049888783719604614089184190030851720364867764732498211690017": {
+   "avg": 0.8899,
+   "end": "2026-11-04",
+   "event_slug": "fl-21-house-election-winner",
+   "outcome": "Yes",
+   "size": 515.67,
+   "slug": "will-the-republican-party-win-the-fl-21-house-seat",
+   "title": "Will the Republican Party win the FL-21 House seat?"
+  },
+  "75456607043732794219059106581238849324790125612206555490847983483098014836433": {
+   "avg": 0.9105,
+   "end": "2027-01-01",
+   "event_slug": "which-companies-announce-bankruptcy-before-2027",
+   "outcome": "No",
+   "size": 126.25,
+   "slug": "will-c3ai-announce-bankruptcy-before-2027-272-269-675-414-351-737",
+   "title": "Will C3.ai announce bankruptcy before 2027?"
+  },
+  "75774102791102697485931836753404109983384487673615650403513371145958763718567": {
+   "avg": 0.5861,
+   "end": "2027-01-02",
+   "event_slug": "largest-ipo-by-market-cap-in-2026-287",
+   "outcome": "Yes",
+   "size": 4220.45,
+   "slug": "will-spacex-have-the-highest-ipo-market-cap-2026-516",
+   "title": "Will SpaceX have the highest IPO Market Cap 2026?"
+  },
+  "7895824343817204753510495855473599139269072925147941343572500857776153889739": {
+   "avg": 0.4973,
+   "end": "2027-01-01",
+   "event_slug": "measles-cases-in-us-in-2026",
+   "outcome": "Yes",
+   "size": 230.0,
+   "slug": "will-there-be-at-least-7000-measles-cases-in-the-uptspt-in-2026",
+   "title": "Will there be at least 7000 measles cases in the U.S. in 2026?"
+  },
+  "79243400901638739136101495166683130446999000857751907091490404760686047864580": {
+   "avg": 0.2425,
+   "end": "2027-01-01",
+   "event_slug": "what-level-will-the-dubai-real-estate-index-hit-in-2026",
+   "outcome": "Yes",
+   "size": 1662.35,
+   "slug": "will-the-dfm-real-estate-index-dip-to-6000-in-2026",
+   "title": "Will the DFM Real Estate Index dip to 6,000 in 2026?"
+  },
+  "79866552495934116522882218554373127201103319396323342132111150799918797449720": {
+   "avg": 0.9499,
+   "end": "2026-11-16",
+   "event_slug": "nato-x-russia-military-clash-in-2025",
+   "outcome": "No",
+   "size": 377.14,
+   "slug": "nato-x-russia-military-clash-by-november-15-2026",
+   "title": "NATO x Russia military clash by November 15, 2026?"
+  },
+  "83204149385279752284819391054474788827727496660660767254052334861340107835088": {
+   "avg": 0.8057,
+   "end": "2027-01-01",
+   "event_slug": "which-cities-will-russia-enter-by-december-31",
+   "outcome": "No",
+   "size": 1757.46,
+   "slug": "will-russia-enter-sloviansk-by-december-31-2026",
+   "title": "Will Russia enter Sloviansk by December 31, 2026?"
+  },
+  "83247781037352156539108067944461291821683755894607244160607042790356561625563": {
+   "avg": 0.93,
+   "end": "2026-11-04",
+   "event_slug": "which-party-will-win-the-house-in-2026",
+   "outcome": "Yes",
+   "size": 7000.0,
+   "slug": "will-the-democratic-party-control-the-house-after-the-2026-midterm-elections",
+   "title": "Will the Democratic Party control the House after the 2026 Midterm elections?"
+  },
+  "87194740732133168017179001737986231915842576312391051924620967868219853534285": {
+   "avg": 0.35,
+   "end": "2026-12-01",
+   "event_slug": "what-price-will-xauusd-hit-in-november-2026",
+   "outcome": "Yes",
+   "size": 110.0,
+   "slug": "will-xauusd-reach-4100-in-november-2026",
+   "title": "Will Gold (XAUUSD) hit (HIGH) $4,100 in November?"
+  },
+  "88413850173759293611476512232432108451832652893324397952363137965664523235004": {
+   "avg": 0.9517,
+   "end": "2027-01-01",
+   "event_slug": "which-companies-announce-bankruptcy-before-2027",
+   "outcome": "No",
+   "size": 134.89,
+   "slug": "will-lovable-announce-bankruptcy-before-2027-725-658",
+   "title": "Will Lovable announce bankruptcy before 2027?"
+  },
+  "89096812930778440374765353485489646160320033639904489403189925732765885426429": {
+   "avg": 0.1599,
+   "end": "2026-12-01",
+   "event_slug": "what-price-will-xauusd-hit-in-november-2026",
+   "outcome": "Yes",
+   "size": 149.74,
+   "slug": "will-xauusd-reach-4200-in-november-2026",
+   "title": "Will Gold (XAUUSD) hit (HIGH) $4,200 in November?"
+  },
+  "89178381135756556608519763967844682838487648534829343045559119456466859940667": {
+   "avg": 0.7699,
+   "end": "2027-07-01",
+   "event_slug": "ubs-announces-move-out-of-switzerland-by",
+   "outcome": "No",
+   "size": 128.8,
+   "slug": "ubs-announces-move-out-of-switzerland-by-june-30-2027",
+   "title": "UBS announces move out of Switzerland by June 30, 2027?"
+  },
+  "89973293189486756956794882000305756485925969393245738995452375053499323520911": {
+   "avg": 0.8599,
+   "end": "2026-11-04",
+   "event_slug": "tx-32-house-election-winner",
+   "outcome": "Yes",
+   "size": 1570.78,
+   "slug": "will-the-republican-party-win-the-tx-32-house-seat",
+   "title": "Will the Republican Party win the TX-32 House seat?"
+  },
+  "96638299647298818066638013282817126711844933622267923322841901320590663261212": {
+   "avg": 0.93,
+   "end": "2026-12-01",
+   "event_slug": "bab-el-mandeb-strait-effectively-closed-by",
+   "outcome": "No",
+   "size": 121.03,
+   "slug": "bab-el-mandeb-strait-effectively-closed-by-november-30",
+   "title": "Bab el-Mandeb Strait effectively closed by November 30?"
+  },
+  "9706649298892279116283135286098440170027309524180157993045165975148563290345": {
+   "avg": 0.8634,
+   "end": "2026-11-04",
+   "event_slug": "nc-05-house-election-winner",
+   "outcome": "Yes",
+   "size": 2000.0,
+   "slug": "will-the-republican-party-win-the-nc-05-house-seat",
+   "title": "Will the Republican Party win the NC-05 House seat?"
+  },
+  "97510167877629146183110663852676802259514594261866627132210458007114092193992": {
+   "avg": 0.5731,
+   "end": "2027-01-01",
+   "event_slug": "what-level-will-the-dubai-real-estate-index-hit-in-2026",
+   "outcome": "Yes",
+   "size": 353.12,
+   "slug": "will-the-dfm-real-estate-index-dip-to-10000-in-2026",
+   "title": "Will the DFM Real Estate Index dip to 10,000 in 2026?"
+  },
+  "98186426866675970354310931735012910430022072330207169759870366530031711800561": {
+   "avg": 0.4,
+   "end": "2026-09-27",
+   "event_slug": "how-many-ships-transit-the-strait-of-hormuz-week-of-september-21",
+   "outcome": "No",
+   "size": 100.0,
+   "slug": "will-20-24-ships-transit-the-strait-of-hormuz-between-september-21-september-27",
+   "title": "Will 20-24 ships transit the Strait of Hormuz between September 21-September 27?"
+  }
+ }
+}
