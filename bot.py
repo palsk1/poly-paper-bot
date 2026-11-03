@@ -562,25 +562,42 @@ def his_book_estimate():
 
 # ================================================================ strategies on the whole market
 
+def scan_filters():
+    """Server-side pre-filter covering every strategy's widest settings (deadline window, liquidity)."""
+    rs = list(CFG["rules"].values())
+    lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs))
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs))
+    return {"end_date_min": iso(lo), "end_date_max": iso(hi),
+            "liquidity_num_min": min(r["min_liquidity"] for r in rs)}
+
+
 def scan_markets():
-    """All open markets (one pass), shared by every strategy."""
-    out, cursor = [], None
-    for _ in range(400):
-        params = {"closed": "false", "limit": 500, "version": ["v1", "v2"]}
-        if cursor:
-            params["after_cursor"] = cursor
-        try:
-            res = http_json(f"{GAMMA}/markets/keyset", params)
-        except Exception as e:
-            print(f"market scan page failed: {e}")
-            break
-        ms = [m for m in envelope_rows(res, "markets", "data") if isinstance(m, dict)]
-        out += ms
-        cursor = res.get("next_cursor") if isinstance(res, dict) else None
-        if not cursor or not ms:
-            break
-    print(f"scanned {len(out)} open markets")
-    return out
+    """Open markets (one pass), shared by every strategy. Tries server-side filters first;
+    falls back to the unfiltered list if the API rejects them."""
+    for filtered in (True, False):
+        out, cursor, ok = [], None, True
+        for page in range(400):
+            params = {"closed": "false", "limit": 500, "version": ["v1", "v2"]}
+            if filtered:
+                params.update(scan_filters())
+            if cursor:
+                params["after_cursor"] = cursor
+            try:
+                res = http_json(f"{GAMMA}/markets/keyset", params)
+            except Exception as e:
+                print(f"market scan page {page} failed ({'filtered' if filtered else 'unfiltered'}): {e}")
+                ok = page > 0
+                break
+            ms = [m for m in envelope_rows(res, "markets", "data") if isinstance(m, dict)]
+            out += ms
+            cursor = res.get("next_cursor") if isinstance(res, dict) else None
+            if not cursor or not ms:
+                break
+        if ok and out:
+            print(f"scanned {len(out)} open markets ({'server-filtered' if filtered else 'unfiltered'}"
+                  f"{', hit page cap' if cursor else ''})")
+            return out
+    return []
 
 
 def is_sports(m):
@@ -763,16 +780,22 @@ def save_candidates(lists):
 
 def run_strategies(tracks, markets, panic_only=False):
     lists = {}
+    st = load("scan_state.json", {})
+    picked = st.setdefault("picked_on", {})
+    today = now().strftime("%Y-%m-%d")
     for name, tc in CFG["tracks"].items():
         r = rules_for(name)
         if tc["source"] == "screener" and not panic_only:
             cands = boring_side_candidates(markets, r)
-            buy_candidates(tracks, name, cands, r.get("picks_per_day", 1))
+            if picked.get(name) != today:  # one round of daily picks, even if the job is re-run
+                buy_candidates(tracks, name, cands, r.get("picks_per_day", 1))
+                picked[name] = today
             lists[name] = cands
         elif tc["source"] == "panic":
             cands = panic_candidates(markets, r)
             buy_candidates(tracks, name, cands, r.get("picks_per_scan", 1))
             lists[name] = cands
+    save("scan_state.json", st)
     return lists
 
 
