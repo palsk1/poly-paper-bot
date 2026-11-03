@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Run watcher
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
@@ -29,6 +31,6 @@ jobs:
           git add state
           if ! git diff --cached --quiet; then
             git commit -m "watch: $(date -u +%Y-%m-%dT%H:%MZ)"
-            git pull --rebase
+            git pull --rebase -X theirs origin main
             git push
           fi

@@ -565,7 +565,7 @@ def his_book_estimate():
 def scan_markets():
     """All open markets (one pass), shared by every strategy."""
     out, cursor = [], None
-    for _ in range(60):
+    for _ in range(400):
         params = {"closed": "false", "limit": 500, "version": ["v1", "v2"]}
         if cursor:
             params["after_cursor"] = cursor
@@ -703,6 +703,7 @@ def panic_candidates(markets, r):
     for _, m, i, b in shortlist[: r.get("max_history_checks", 40)]:
         tok = market_tokens(m)[i]
         dc = day_change(tok)
+        print(f"  panic check: {str(m.get('question'))[:60]} -> 24h ago/now {dc}")
         if not dc:
             continue
         pre, cur = dc
