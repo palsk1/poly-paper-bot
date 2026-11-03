@@ -653,31 +653,65 @@ def boring_side_candidates(markets, r):
     return out
 
 
+def day_change(token):
+    """(price ~24h ago, price now) for a token from Polymarket's price history, or None."""
+    try:
+        res = http_json(f"{DATA}/v2/prices-history", {"token_id": token, "interval": "1d"})
+    except Exception as e:
+        print(f"price history failed for {token[:12]}...: {e}")
+        return None
+    pts = envelope_rows(res, "data", "history", "points")
+    series = []
+    for p in pts:
+        if isinstance(p, dict):
+            px = fnum(pick(p, "p", "price", "value"), None)
+            if px is not None:
+                series.append(px)
+        elif isinstance(p, (list, tuple)) and len(p) >= 2:
+            series.append(fnum(p[1], None))
+    series = [x for x in series if x is not None]
+    if len(series) < 2:
+        return None
+    return series[0], series[-1]
+
+
 def panic_candidates(markets, r):
-    """Boring side that just dropped >= min_drop in a day from >= min_pre_price, nothing resolved yet."""
-    out = []
+    """Boring side that dropped >= min_drop over the last day from >= min_pre_price, nothing resolved yet.
+    The market list only carries a 1-week change, so that shortlists; price history confirms the 1-day drop."""
+    shortlist = []
     for m in markets:
         prices = binary(m)
         if not prices:
             continue
-        chg = pick(m, "oneDayPriceChange")
+        chg = pick(m, "oneDayPriceChange", "oneWeekPriceChange")
         if chg is None:
             continue
-        chg = fnum(chg)  # change of outcome 0's price over the last day
-        if chg >= r["min_drop"]:
-            i, drop = 1, chg      # outcome 1 fell
-        elif chg <= -r["min_drop"]:
-            i, drop = 0, -chg     # outcome 0 fell
+        chg = fnum(chg)  # change of outcome 0's price
+        if chg >= r["min_drop"] * 0.66:
+            i = 1            # outcome 1 fell
+        elif chg <= -r["min_drop"] * 0.66:
+            i = 0            # outcome 0 fell
         else:
             continue
-        pre = prices[i] + drop
-        if pre < r["min_pre_price"] or not (r["min_price"] <= prices[i] <= r["max_price"]):
+        if not (r["min_price"] <= prices[i] <= r["max_price"]):
             continue
         b = base_filter(m, r)
-        if not b:
+        if b:
+            shortlist.append((abs(chg), m, i, b))
+    shortlist.sort(key=lambda x: -x[0])
+    out = []
+    for _, m, i, b in shortlist[: r.get("max_history_checks", 40)]:
+        tok = market_tokens(m)[i]
+        dc = day_change(tok)
+        if not dc:
+            continue
+        pre, cur = dc
+        drop = pre - cur
+        if drop < r["min_drop"] or pre < r["min_pre_price"] or not (r["min_price"] <= cur <= r["max_price"]):
             continue
         out.append(candidate(m, i, b[0], b[1], {"target": round(min(pre, 0.97), 4), "drop": round(drop, 4)}))
     out.sort(key=lambda c: (not c["nothing_happens"], -c["drop"], -c["liquidity"]))
+    print(f"panic: {len(shortlist)} shortlisted, {len(out)} confirmed")
     return out
 
 
@@ -914,6 +948,8 @@ def selftest():
         print("sample:", {k: ms[0].get(k) for k in ("question", "endDateIso", "outcomes", "outcomePrices", "liquidity",
                                                    "liquidityNum", "volume", "volumeNum", "oneDayPriceChange",
                                                    "feesEnabled", "feeSchedule", "version")})
+    if rows:
+        print("== price history (1d) for first position:", day_change(norm_pos(rows[0])["token"]))
     print("== his book:", his_book_estimate())
     push("Paper bot self-test", "If you can read this, alerts work. Paper money only.", tags="white_check_mark")
     print("selftest done")
