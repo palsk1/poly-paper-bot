@@ -1,0 +1,120 @@
+{
+  "leader": {
+    "name": "sabsabinxz",
+    "address": "0xd3ecb2aee0d65622da559ff356b00e8c2e626603",
+    "min_open_usd": 50
+  },
+  "shares_per_trade": 5,
+  "fallback_slippage": 0.01,
+  "tracks": {
+    "mirror": {
+      "label": "Mirror: copies every position he opens and closes ($20 paper)",
+      "start_cash": 20,
+      "source": "leader",
+      "min_price": 0.02,
+      "max_price": 0.97
+    },
+    "favorites": {
+      "label": "Favorites only: his entries at 80c or more ($20 paper)",
+      "start_cash": 20,
+      "source": "leader",
+      "min_price": 0.80,
+      "max_price": 0.97
+    },
+    "mirror_unlimited": {
+      "label": "Mirror, no cash limit: does he have an edge, and how much money would copying him need?",
+      "start_cash": null,
+      "source": "leader",
+      "min_price": 0.02,
+      "max_price": 0.97
+    },
+    "screener": {
+      "label": "Screener: his style by rule, without him ($20 paper)",
+      "start_cash": 20,
+      "source": "screener",
+      "rules": "screener"
+    },
+    "claude": {
+      "label": "Claude: my own rules, $50 paper, refilled with $50 if it busts",
+      "start_cash": 50,
+      "refill": true,
+      "source": "screener",
+      "rules": "claude"
+    },
+    "panic_fade": {
+      "label": "Panic fade (wildcard): buys the boring side right after a news scare knocks it down 6c+ in a day, sells when it recovers. $50 paper, refilled if it busts",
+      "start_cash": 50,
+      "refill": true,
+      "source": "panic",
+      "rules": "panic_fade"
+    }
+  },
+  "rules": {
+    "screener": {
+      "min_price": 0.80,
+      "max_price": 0.95,
+      "min_days": 7,
+      "max_days": 90,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 50,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": ["up or down"],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "claude": {
+      "why": "Boring side of deadline markets only. Fee-free geopolitics first, shorter deadlines (faster time decay), no crypto price bets (too jumpy), max 2 bets per theme so one surprise can't hit everything, take profit at 97c, cut at 70c.",
+      "min_price": 0.85,
+      "max_price": 0.94,
+      "min_days": 10,
+      "max_days": 60,
+      "min_liquidity": 10000,
+      "min_volume": 100000,
+      "picks_per_day": 2,
+      "max_open": 10,
+      "max_per_theme": 2,
+      "prefer_fee_free": true,
+      "skip_words": ["up or down", "bitcoin", "ethereum", "solana", "btc", "eth ", "xrp", "dogecoin", "price of", "dip to", "reach $", "above $", "below $"],
+      "take_profit": 0.97,
+      "stop_loss": 0.70
+    },
+    "panic_fade": {
+      "why": "Crowds overreact to scary headlines. If the boring side of a deadline market was 82c+ and fell 6c+ in a day without anything resolving, buy it and sell when it climbs back to where it was.",
+      "min_drop": 0.06,
+      "min_pre_price": 0.82,
+      "min_price": 0.55,
+      "max_price": 0.88,
+      "min_days": 10,
+      "max_days": 120,
+      "min_liquidity": 10000,
+      "min_volume": 100000,
+      "picks_per_scan": 2,
+      "max_open": 8,
+      "max_per_theme": 2,
+      "prefer_fee_free": true,
+      "skip_words": ["up or down", "bitcoin", "ethereum", "solana", "btc", "eth ", "xrp", "dogecoin", "price of", "dip to", "reach $", "above $", "below $"],
+      "take_profit": null,
+      "stop_loss": 0.45,
+      "scan_every_hours": 2
+    }
+  },
+  "themes": {
+    "middle east": ["iran", "israel", "gaza", "hamas", "hezbollah", "hormuz", "red sea", "bab el-mandeb", "houthi", "yemen", "saudi", "syria", "lebanon", "netanyahu"],
+    "russia-ukraine": ["russia", "ukraine", "putin", "zelensky", "kyiv", "kramatorsk", "crimea"],
+    "china": ["china", "taiwan", "xi jinping"],
+    "us politics": ["trump", "senate", "house", "governor", "election", "democrat", "republican", "congress"],
+    "us economy": ["fed ", "interest rate", "tariff", "recession", "inflation", "cpi"],
+    "latin america": ["venezuela", "brazil", "bolsonaro", "maduro", "mexico", "argentina"],
+    "south asia": ["india", "pakistan", "kashmir"],
+    "korea": ["korea", "kim jong"],
+    "greenland": ["greenland", "denmark"]
+  },
+  "push": {
+    "on_leader_trades": true,
+    "on_screener_buys": true,
+    "on_claude_trades": true
+  }
+}
