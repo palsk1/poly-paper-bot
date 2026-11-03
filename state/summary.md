@@ -1,4 +1,4 @@
-# Paper bot summary - 2026-11-03T18:02:10Z
+# Paper bot summary - 2026-11-03T18:04:16Z
 
 Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper money only.
 
@@ -11,7 +11,7 @@ Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper m
 | panic_fade | +0.00 | 0 | 0 (0/0) | $50.00 | refills 0; skipped (no cash) 0 |
 | screener | -0.08 | 3 | 0 (0/0) | $6.65 | skipped (no cash) 0 |
 
-**His book right now:** 76 open positions worth $133,495. Holding all of them at the 5-share minimum would cost $284.48. Biggest single position = 15% of his book.
+**His book right now:** 76 open positions worth $133,447. Holding all of them at the 5-share minimum would cost $284.42. Biggest single position = 15% of his book.
 
 
 ## claude
@@ -47,9 +47,9 @@ Screener: his style by rule, without him ($20 paper)
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Strait of Hormuz traffic returns to normal by December 31? | No | 89c | 88c | -0.03 | 2027-01-01 |
-| Will the U.S. invade Iran before 2027? | No | 83c | 82c | -0.02 | 2027-01-01 |
 | Strait of Hormuz traffic returns to normal by November 30? | No | 95c | 94c | -0.03 | 2026-12-01 |
+| Will the U.S. invade Iran before 2027? | No | 83c | 82c | -0.02 | 2027-01-01 |
+| Strait of Hormuz traffic returns to normal by December 31? | No | 89c | 88c | -0.03 | 2027-01-01 |
 
 ## Last 24 hours
 
