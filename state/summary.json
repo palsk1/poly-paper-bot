@@ -1,26 +1,26 @@
 {
- "generated": "2026-11-03T18:04:16Z",
+ "generated": "2026-11-04T07:15:32Z",
  "his_book": {
-  "biggest_position_share": 0.153,
-  "cost_min_size_each": 284.42,
-  "generated": "2026-11-03T18:04:16Z",
-  "his_value": 133447.47,
-  "open_positions": 76
+  "biggest_position_share": 0.174,
+  "cost_min_size_each": 249.86,
+  "generated": "2026-11-04T07:15:31Z",
+  "his_value": 118171.72,
+  "open_positions": 68
  },
  "tracks": {
   "claude": {
-   "cash": 40.6,
+   "cash": 31.35,
    "closed": 0,
    "deposited": 50.0,
    "losses": 0,
    "money_needed": -0.0,
-   "open": 2,
-   "peak_open_cost": 9.4,
-   "pnl": -0.075,
+   "open": 4,
+   "peak_open_cost": 18.65,
+   "pnl": 0.025,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -0.075,
+   "unrealized": 0.025,
    "wins": 0
   },
   "favorites": {
@@ -69,33 +69,33 @@
    "wins": 0
   },
   "panic_fade": {
-   "cash": 50.0,
+   "cash": 46.3106,
    "closed": 0,
    "deposited": 50.0,
    "losses": 0,
    "money_needed": -0.0,
-   "open": 0,
-   "peak_open_cost": 0.0,
-   "pnl": 0.0,
+   "open": 1,
+   "peak_open_cost": 3.68942,
+   "pnl": 0.3106,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": 0.0,
+   "unrealized": 0.3106,
    "wins": 0
   },
   "screener": {
-   "cash": 6.65,
+   "cash": 2.5615,
    "closed": 0,
    "deposited": 20.0,
    "losses": 0,
    "money_needed": -0.0,
-   "open": 3,
-   "peak_open_cost": 13.35,
-   "pnl": -0.075,
+   "open": 4,
+   "peak_open_cost": 17.438475,
+   "pnl": 0.0115,
    "realized": 0.0,
    "refills": 0,
-   "skipped_no_cash": 0,
-   "unrealized": -0.075,
+   "skipped_no_cash": 1,
+   "unrealized": 0.0115,
    "wins": 0
   }
  }

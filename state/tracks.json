@@ -1,11 +1,11 @@
 {
  "claude": {
-  "cash": 40.6,
+  "cash": 31.35,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 9.4,
+  "peak_open_cost": 18.65,
   "positions": {
    "106457173661711072800954463114296112322414039881870249204907915075846013240261": {
     "end": "2026-12-01",
@@ -36,6 +36,36 @@
     "source": "claude",
     "theme": "middle east",
     "title": "US-Iran Final Nuclear Deal by November 30, 2026?"
+   },
+   "74076568846866714142503847026760702713555643778038790220454009063912340064073": {
+    "end": "2026-12-31",
+    "entry": 0.9,
+    "entry_fee": 0.0,
+    "event_key": "486199",
+    "event_slug": "russia-x-ukraine-ceasefire-by",
+    "opened": "2026-11-04T07:15:28Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "russia-x-ukraine-ceasefire-by-december-31-2026",
+    "source": "claude",
+    "theme": "russia-ukraine",
+    "title": "Russia x Ukraine ceasefire by December 31, 2026?"
+   },
+   "98958377014258947550991455499124719368422384127194024651977724095175004038749": {
+    "end": "2026-12-01",
+    "entry": 0.95,
+    "entry_fee": 0.0,
+    "event_key": "48930",
+    "event_slug": "nato-x-russia-military-clash-in-2025",
+    "opened": "2026-11-04T07:15:27Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "nato-x-russia-military-clash-by-november-30-2026",
+    "source": "claude",
+    "theme": "russia-ukraine",
+    "title": "NATO x Russia military clash by November 30, 2026?"
    }
   },
   "realized": 0.0,
@@ -118,13 +148,28 @@
   "unlimited": false
  },
  "screener": {
-  "cash": 6.65,
+  "cash": 2.561525,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 20.0,
   "min_cash": 0.0,
-  "peak_open_cost": 13.35,
+  "peak_open_cost": 17.438475,
   "positions": {
+   "101996110023306359267215939819928021406998500989415641847320025626005179879667": {
+    "end": "2026-11-29",
+    "entry": 0.81,
+    "entry_fee": 0.038475,
+    "event_key": "991810",
+    "event_slug": "worlds-2026-winner",
+    "opened": "2026-11-04T07:15:27Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-t1-win-worlds-2026",
+    "source": "screener",
+    "theme": null,
+    "title": "Will T1 win Worlds 2026?"
+   },
    "106375876055695859045413141458606643340242853794519126089005356920987236120368": {
     "end": "2026-12-01",
     "entry": 0.95,
@@ -173,7 +218,7 @@
   },
   "realized": 0.0,
   "refills": 0,
-  "skipped_no_cash": 0,
+  "skipped_no_cash": 1,
   "start_cash": 20,
   "unlimited": false
  }
