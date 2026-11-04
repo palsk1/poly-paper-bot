@@ -95,67 +95,67 @@
     "annual": 0.155,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T18:25:27Z"
+    "ts": "2026-11-04T18:30:58Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:30Z"
+    "ts": "2026-11-04T18:31:00Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
-    "annual": -0.079,
-    "edge": -0.0132,
+    "annual": -0.085,
+    "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:35Z"
+    "ts": "2026-11-04T18:31:05Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:28Z"
+    "ts": "2026-11-04T18:30:59Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.191,
-    "edge": -0.0326,
+    "annual": -0.196,
+    "edge": -0.0336,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:29Z"
+    "ts": "2026-11-04T18:30:59Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.103,
     "edge": -0.0174,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:37Z"
+    "ts": "2026-11-04T18:31:07Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.072,
-    "edge": -0.0121,
+    "annual": -0.067,
+    "edge": -0.0112,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:33Z"
+    "ts": "2026-11-04T18:31:03Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:31Z"
+    "ts": "2026-11-04T18:31:01Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:34Z"
+    "ts": "2026-11-04T18:31:04Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:36Z"
+    "ts": "2026-11-04T18:31:06Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0265,
     "opportunity": false,
-    "ts": "2026-11-04T18:25:32Z"
+    "ts": "2026-11-04T18:31:02Z"
    }
   },
   "min_cash": 0.0,
@@ -170,7 +170,7 @@
   "unlimited": false
  },
  "claude": {
-  "cash": 36.16,
+  "cash": 40.995,
   "closed": [
    {
     "closed_at": "2026-11-04T17:25:21Z",
@@ -192,6 +192,27 @@
     "theme": "russia-ukraine",
     "title": "NATO x Russia military clash by November 30, 2026?",
     "token": "98958377014258947550991455499124719368422384127194024651977724095175004038749"
+   },
+   {
+    "closed_at": "2026-11-04T18:30:51Z",
+    "end": "2026-12-01",
+    "entry": 0.94,
+    "entry_fee": 0.0,
+    "event_key": "255195",
+    "event_slug": "iran-leadership-change-by",
+    "exit": 0.967,
+    "exit_fee": 0.0,
+    "opened": "2026-11-03T18:02:07Z",
+    "outcome": "No",
+    "pnl": 0.135,
+    "price_source": "book",
+    "reason": "take profit (now 97c), book",
+    "shares": 5,
+    "slug": "iran-leadership-change-by-november-30",
+    "source": "claude",
+    "theme": "middle east",
+    "title": "Iran leadership change by November 30?",
+    "token": "106457173661711072800954463114296112322414039881870249204907915075846013240261"
    }
   ],
   "created": "2026-11-03T17:56:14Z",
@@ -199,21 +220,6 @@
   "min_cash": 0.0,
   "peak_open_cost": 18.65,
   "positions": {
-   "106457173661711072800954463114296112322414039881870249204907915075846013240261": {
-    "end": "2026-12-01",
-    "entry": 0.94,
-    "entry_fee": 0.0,
-    "event_key": "255195",
-    "event_slug": "iran-leadership-change-by",
-    "opened": "2026-11-03T18:02:07Z",
-    "outcome": "No",
-    "price_source": "book",
-    "shares": 5,
-    "slug": "iran-leadership-change-by-november-30",
-    "source": "claude",
-    "theme": "middle east",
-    "title": "Iran leadership change by November 30?"
-   },
    "64567203262874493228125345172786119741751988350727082094309463494623975963306": {
     "end": "2026-12-01",
     "entry": 0.94,
@@ -245,7 +251,7 @@
     "title": "Russia x Ukraine ceasefire by December 31, 2026?"
    }
   },
-  "realized": 0.06,
+  "realized": 0.195,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 50,
