@@ -1,0 +1,15 @@
+name: probe
+# Manual only: prints raw API shapes for debugging. No pushes, no state changes.
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Probe APIs
+        run: python3 probe.py
