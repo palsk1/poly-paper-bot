@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T11:14:22Z"
+    "ts": "2026-11-04T11:25:24Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:25Z"
+    "ts": "2026-11-04T11:25:27Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:29Z"
+    "ts": "2026-11-04T11:25:31Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
-    "annual": 0.03,
-    "edge": 0.0049,
+    "annual": 0.023,
+    "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:23Z"
+    "ts": "2026-11-04T11:25:25Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.214,
     "edge": -0.0369,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:24Z"
+    "ts": "2026-11-04T11:25:26Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:31Z"
+    "ts": "2026-11-04T11:25:33Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:27Z"
+    "ts": "2026-11-04T11:25:29Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:26Z"
+    "ts": "2026-11-04T11:25:28Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:28Z"
+    "ts": "2026-11-04T11:25:30Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:30Z"
+    "ts": "2026-11-04T11:25:32Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0267,
     "opportunity": false,
-    "ts": "2026-11-04T11:14:26Z"
+    "ts": "2026-11-04T11:25:28Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 66.19168,
+  "cash": 46.765614,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -361,8 +361,56 @@
   "created": "2026-11-04T08:27:23Z",
   "deposited": 100.0,
   "min_cash": 0.0,
-  "peak_open_cost": 34.231053,
+  "peak_open_cost": 53.657119,
   "positions": {
+   "16661917299889844562247566603559122251937209362630950418259738730496536105112": {
+    "end": "2026-11-04",
+    "entry": 0.987,
+    "entry_fee": 0.002566,
+    "event_key": "191405",
+    "event_slug": "fl-07-house-election-winner",
+    "opened": "2026-11-04T11:26:11Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-win-the-fl-07-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party win the FL-07 House seat?"
+   },
+   "23832277913601627674704583759931687017229083944047610912090436887985913840534": {
+    "end": "2026-11-04",
+    "entry": 0.96,
+    "entry_fee": 0.00768,
+    "event_key": "886801",
+    "event_slug": "which-senate-races-will-be-within-1",
+    "opened": "2026-11-04T11:26:11Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-south-carolina-2026-senate-race-be-within-1",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the South Carolina 2026 Senate race be within 1%?"
+   },
+   "27605769434518398011307739390524086469915473479848398053636789658653687369442": {
+    "end": "2026-11-01",
+    "entry": 0.965,
+    "entry_fee": 0.0,
+    "event_key": "1111220",
+    "event_slug": "avgpt-of-ships-transiting-strait-of-hormuz-end-of-october",
+    "opened": "2026-11-04T11:26:11Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-there-be-between-0-and-5-average-daily-transits-of-the-strait-of-hormuz-on-october-31",
+    "source": "endgame",
+    "theme": "middle east",
+    "tier": "past_deadline",
+    "title": "Will there be between 0 and 5 average daily transits of the Strait of Hormuz on October 31?"
+   },
    "276946883010743088745764872351799241722170551707375798083252224326120327452": {
     "end": "2026-11-04",
     "entry": 0.96,
@@ -442,6 +490,22 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Republican Party candidate win the 2026 WI-07 House election by 20%-25%?"
+   },
+   "92461925582871836604329373342734059251678046595372592532836439603090558657253": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "834605",
+    "event_slug": "wi-03-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:26:11Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-wi-03-house-election-by-6-9",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party candidate win the 2026 WI-03 House election by 6%-9%?"
    },
    "92718314777145262007643697287300437140247953777540919722864078868801795052277": {
     "end": "2026-11-04",
