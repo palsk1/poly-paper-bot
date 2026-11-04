@@ -95,67 +95,67 @@
     "annual": 0.099,
     "edge": 0.0161,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:19Z"
+    "ts": "2026-11-04T22:40:30Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:20Z"
+    "ts": "2026-11-04T22:40:32Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:23Z"
+    "ts": "2026-11-04T22:40:34Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.024,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:20Z"
+    "ts": "2026-11-04T22:40:31Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.028,
     "edge": -0.0047,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:20Z"
+    "ts": "2026-11-04T22:40:31Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.106,
-    "edge": -0.0178,
+    "annual": -0.122,
+    "edge": -0.0206,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:24Z"
+    "ts": "2026-11-04T22:40:36Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.027,
-    "edge": -0.0045,
+    "annual": -0.033,
+    "edge": -0.0055,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:22Z"
+    "ts": "2026-11-04T22:40:33Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:21Z"
+    "ts": "2026-11-04T22:40:32Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:22Z"
+    "ts": "2026-11-04T22:40:34Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:23Z"
+    "ts": "2026-11-04T22:40:35Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.097,
     "edge": -0.0163,
     "opportunity": false,
-    "ts": "2026-11-04T22:35:21Z"
+    "ts": "2026-11-04T22:40:33Z"
    }
   },
   "min_cash": 0.0,
@@ -826,9 +826,9 @@
     "ts": "2026-11-04T18:42:56Z"
    },
    "bank-of-brazil-decision-in-january-2027:yes": {
-    "edge": 0.0008,
+    "edge": -0.0125,
     "opportunity": false,
-    "ts": "2026-11-04T18:42:55Z"
+    "ts": "2026-11-04T22:43:16Z"
    },
    "bank-of-israel-decision-in-november-2026:yes": {
     "edge": 0.0024,
@@ -841,14 +841,14 @@
     "ts": "2026-11-04T18:42:56Z"
    },
    "donald-trump-of-truth-social-posts-november-3-november-10-2026:yes": {
-    "edge": -0.016,
+    "edge": -0.0011,
     "opportunity": false,
-    "ts": "2026-11-04T20:44:45Z"
+    "ts": "2026-11-04T22:43:15Z"
    },
    "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850:yes": {
     "edge": -0.0186,
     "opportunity": false,
-    "ts": "2026-11-04T20:44:47Z"
+    "ts": "2026-11-04T22:43:16Z"
    },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
@@ -987,7 +987,7 @@
   "unlimited": true
  },
  "panic_fade": {
-  "cash": 42.239109,
+  "cash": 38.239109,
   "closed": [
    {
     "closed_at": "2026-11-04T15:40:36Z",
@@ -1015,7 +1015,7 @@
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 11.985391,
+  "peak_open_cost": 12.295971,
   "positions": {
    "54354873998826259054526425416928957657351494173277941862882815520348432840549": {
     "end": "2026-12-16",
@@ -1032,6 +1032,22 @@
     "target": 0.91,
     "theme": null,
     "title": "Will Anthropic IPO by December 15, 2026?"
+   },
+   "55388160786547632547801386995282574472142366430625594602885285018211080343659": {
+    "end": "2027-01-01",
+    "entry": 0.8,
+    "entry_fee": 0.0,
+    "event_key": "653446",
+    "event_slug": "next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406",
+    "opened": "2026-11-04T22:41:33Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-benjamin-netanyahu-be-the-next-leader-out-before-2027-20260630194627368",
+    "source": "panic_fade",
+    "target": 0.865,
+    "theme": "middle east",
+    "title": "Will Benjamin Netanyahu be the next leader out before 2027?"
    },
    "55811987156233316034004850162265185590623994721542035067805349300388333229197": {
     "end": "2027-01-01",
