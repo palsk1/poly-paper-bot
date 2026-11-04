@@ -95,67 +95,67 @@
     "annual": 0.155,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T20:35:25Z"
+    "ts": "2026-11-04T20:40:35Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:28Z"
+    "ts": "2026-11-04T20:40:38Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:32Z"
+    "ts": "2026-11-04T20:40:43Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.024,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:26Z"
+    "ts": "2026-11-04T20:40:36Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.053,
     "edge": -0.0088,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:27Z"
+    "ts": "2026-11-04T20:40:37Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:33Z"
+    "ts": "2026-11-04T20:40:45Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.05,
-    "edge": -0.0083,
+    "annual": -0.044,
+    "edge": -0.0074,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:30Z"
+    "ts": "2026-11-04T20:40:41Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:29Z"
+    "ts": "2026-11-04T20:40:39Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:31Z"
+    "ts": "2026-11-04T20:40:42Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:33Z"
+    "ts": "2026-11-04T20:40:43Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
-    "annual": -0.097,
-    "edge": -0.0163,
+    "annual": -0.038,
+    "edge": -0.0063,
     "opportunity": false,
-    "ts": "2026-11-04T20:35:29Z"
+    "ts": "2026-11-04T20:40:40Z"
    }
   },
   "min_cash": 0.0,
@@ -818,6 +818,16 @@
     "opportunity": false,
     "ts": "2026-11-04T18:42:56Z"
    },
+   "donald-trump-of-truth-social-posts-november-3-november-10-2026:yes": {
+    "edge": -0.016,
+    "opportunity": false,
+    "ts": "2026-11-04T20:44:45Z"
+   },
+   "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850:yes": {
+    "edge": -0.0186,
+    "opportunity": false,
+    "ts": "2026-11-04T20:44:47Z"
+   },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
     "opportunity": false,
@@ -840,13 +850,28 @@
   "unlimited": false
  },
  "favorites": {
-  "cash": 20.0,
+  "cash": 15.452967,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 20.0,
   "min_cash": 0.0,
-  "peak_open_cost": 0.0,
-  "positions": {},
+  "peak_open_cost": 4.547033,
+  "positions": {
+   "35291645172588917457521605652032084946130296187859859151580316412122619317107": {
+    "end": "2028-04-01",
+    "entry": 0.906,
+    "entry_fee": 0.017033,
+    "event_slug": "next-prime-minister-of-spain-20260625005215443",
+    "leader_avg": 0.904,
+    "opened": "2026-11-04T20:40:28Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
+    "source": "sabsabinxz",
+    "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+   }
+  },
   "realized": 0.0,
   "refills": 0,
   "skipped_no_cash": 0,
@@ -854,12 +879,12 @@
   "unlimited": false
  },
  "mirror": {
-  "cash": 17.3,
+  "cash": 12.752967,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 20.0,
   "min_cash": 0.0,
-  "peak_open_cost": 2.7,
+  "peak_open_cost": 7.247033,
   "positions": {
    "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
     "end": "2026-12-01",
@@ -874,6 +899,20 @@
     "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
     "source": "sabsabinxz",
     "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
+   },
+   "35291645172588917457521605652032084946130296187859859151580316412122619317107": {
+    "end": "2028-04-01",
+    "entry": 0.906,
+    "entry_fee": 0.017033,
+    "event_slug": "next-prime-minister-of-spain-20260625005215443",
+    "leader_avg": 0.904,
+    "opened": "2026-11-04T20:40:28Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
+    "source": "sabsabinxz",
+    "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
    }
   },
   "realized": 0.0,
@@ -883,12 +922,12 @@
   "unlimited": false
  },
  "mirror_unlimited": {
-  "cash": -2.7,
+  "cash": -7.247033,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 0.0,
-  "min_cash": -2.7,
-  "peak_open_cost": 2.7,
+  "min_cash": -7.247033,
+  "peak_open_cost": 7.247033,
   "positions": {
    "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
     "end": "2026-12-01",
@@ -903,6 +942,20 @@
     "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
     "source": "sabsabinxz",
     "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
+   },
+   "35291645172588917457521605652032084946130296187859859151580316412122619317107": {
+    "end": "2028-04-01",
+    "entry": 0.906,
+    "entry_fee": 0.017033,
+    "event_slug": "next-prime-minister-of-spain-20260625005215443",
+    "leader_avg": 0.904,
+    "opened": "2026-11-04T20:40:28Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
+    "source": "sabsabinxz",
+    "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
    }
   },
   "realized": 0.0,
