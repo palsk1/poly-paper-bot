@@ -63,9 +63,30 @@
     "poly_token": "112007327373263623178671509828927834172092799802464528122988153704237637965568",
     "shares": 5,
     "title": "Will Satoshi move any Bitcoin in 2026?"
+   },
+   "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026#4": {
+    "annual": 0.154,
+    "cost": 4.8749,
+    "edge": 0.025,
+    "expected_profit": 0.1251,
+    "k_fee": 0.02,
+    "k_price": 0.94,
+    "k_side": "no",
+    "kalshi": "KXSATOSHIBTCYEAR-27",
+    "kalshi_close": "2027-01-01T05:00:00Z",
+    "opened": "2026-11-04T11:14:22Z",
+    "p_fee": 0.0099,
+    "p_price": 0.029,
+    "pair_id": "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026",
+    "poly_end": "2027-01-01",
+    "poly_outcome": "Yes",
+    "poly_slug": "will-satoshi-move-any-bitcoin-in-2026",
+    "poly_token": "112007327373263623178671509828927834172092799802464528122988153704237637965568",
+    "shares": 5,
+    "title": "Will Satoshi move any Bitcoin in 2026?"
    }
   },
-  "cash": 285.375432,
+  "cash": 280.500576,
   "closed": [],
   "created": "2026-11-04T07:55:55Z",
   "deposited": 300.0,
@@ -74,73 +95,73 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T10:41:36Z"
+    "ts": "2026-11-04T11:14:22Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:38Z"
+    "ts": "2026-11-04T11:14:25Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
-    "annual": -0.078,
+    "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:42Z"
+    "ts": "2026-11-04T11:14:29Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
-    "annual": 0.023,
-    "edge": 0.0039,
+    "annual": 0.03,
+    "edge": 0.0049,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:37Z"
+    "ts": "2026-11-04T11:14:23Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.214,
     "edge": -0.0369,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:38Z"
+    "ts": "2026-11-04T11:14:24Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:43Z"
+    "ts": "2026-11-04T11:14:31Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:40Z"
+    "ts": "2026-11-04T11:14:27Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
-    "annual": -0.097,
-    "edge": -0.0164,
+    "annual": 0.026,
+    "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:39Z"
+    "ts": "2026-11-04T11:14:26Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:41Z"
+    "ts": "2026-11-04T11:14:28Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:43Z"
+    "ts": "2026-11-04T11:14:30Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
-    "annual": -0.1,
-    "edge": -0.0169,
+    "annual": -0.156,
+    "edge": -0.0267,
     "opportunity": false,
-    "ts": "2026-11-04T10:41:40Z"
+    "ts": "2026-11-04T11:14:26Z"
    }
   },
   "min_cash": 0.0,
   "mismatches": 0,
   "opportunities": 1,
-  "peak_open_cost": 14.6247,
+  "peak_open_cost": 19.4996,
   "positions": {},
   "realized": 0.0,
   "refills": 0,
@@ -224,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 75.720703,
+  "cash": 66.19168,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -291,12 +312,56 @@
     "tier": "proposed",
     "title": "Will the Democratic Party candidate win the 2026 Texas Lieutenant Governor election?",
     "token": "94288714604163574102049252490824493204211229391717289463753112166641141429805"
+   },
+   {
+    "closed_at": "2026-11-04T11:14:20Z",
+    "end": "2026-11-03",
+    "entry": 0.9865,
+    "entry_fee": 0.002664,
+    "event_key": "965493",
+    "event_slug": "nevada-attorney-general-election-winner-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "No",
+    "pnl": 0.064836,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-the-republican-party-candidate-win-the-2026-nevada-attorney-general-election",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Republican Party candidate win the 2026 Nevada Attorney General election?",
+    "token": "28056736020593914078877736437906229134838802091308280116038583323350331325172"
+   },
+   {
+    "closed_at": "2026-11-04T11:14:20Z",
+    "end": "2026-11-03",
+    "entry": 0.978,
+    "entry_fee": 0.004303,
+    "event_key": "434869",
+    "event_slug": "which-states-will-use-new-congressional-maps-in-the-midterms",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "Yes",
+    "pnl": 0.105697,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-north-carolina-use-a-new-congressional-map-for-the-2026-united-states-midterm-elections",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will North Carolina use a new congressional map for the 2026 United States midterm elections?",
+    "token": "70196722376027356562466199250104246715403936483742743945156817796831694326112"
    }
   ],
   "created": "2026-11-04T08:27:23Z",
   "deposited": 100.0,
   "min_cash": 0.0,
-  "peak_open_cost": 24.531497,
+  "peak_open_cost": 34.231053,
   "positions": {
    "276946883010743088745764872351799241722170551707375798083252224326120327452": {
     "end": "2026-11-04",
@@ -314,21 +379,37 @@
     "tier": "past_deadline",
     "title": "Will the Democratic Party candidate win the 2026 Michigan Senate election by 0%-3%?"
    },
-   "28056736020593914078877736437906229134838802091308280116038583323350331325172": {
-    "end": "2026-11-03",
-    "entry": 0.9865,
-    "entry_fee": 0.002664,
-    "event_key": "965493",
-    "event_slug": "nevada-attorney-general-election-winner-2026",
-    "opened": "2026-11-04T10:42:16Z",
+   "53920542266383459877338320583559720165026811206427330172563195409123997072871": {
+    "end": "2026-11-04",
+    "entry": 0.98,
+    "entry_fee": 0.00392,
+    "event_key": "833437",
+    "event_slug": "how-many-house-seats-will-the-democrats-win-in-nevada",
+    "opened": "2026-11-04T11:15:20Z",
     "outcome": "No",
-    "price_source": "estimate",
+    "price_source": "book",
     "shares": 5,
-    "slug": "will-the-republican-party-candidate-win-the-2026-nevada-attorney-general-election",
+    "slug": "will-democrats-win-exactly-3-house-seats-in-nevada-in-the-2026-midterm-elections-20260811010753574",
     "source": "endgame",
     "theme": "us politics",
-    "tier": "proposed",
-    "title": "Will the Republican Party candidate win the 2026 Nevada Attorney General election?"
+    "tier": "past_deadline",
+    "title": "Will Democrats win exactly 3 House seats in Nevada in the 2026 midterm elections?"
+   },
+   "55905544830127671449205456651693918770368006531023765035786594552853413661964": {
+    "end": "2026-11-04",
+    "entry": 0.972,
+    "entry_fee": 0.005443,
+    "event_key": "215753",
+    "event_slug": "2026-midterms-house-popular-vote-margin-of-victory-224",
+    "opened": "2026-11-04T11:15:20Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-win-the-popular-vote-in-the-2026-us-house-of-representatives-midterm-elections-by-between-10-and-12-376",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party win the popular vote in the 2026 U.S. House of Representatives midterm elections by between 10% and 12%?"
    },
    "58852733019222657257857989920800865387778184315425789631820735202058753631697": {
     "end": "2026-11-04",
@@ -346,21 +427,37 @@
     "tier": "proposed",
     "title": "Will the Republican Party win the NV-01 House seat?"
    },
-   "70196722376027356562466199250104246715403936483742743945156817796831694326112": {
-    "end": "2026-11-03",
-    "entry": 0.978,
-    "entry_fee": 0.004303,
-    "event_key": "434869",
-    "event_slug": "which-states-will-use-new-congressional-maps-in-the-midterms",
-    "opened": "2026-11-04T10:42:16Z",
-    "outcome": "Yes",
-    "price_source": "estimate",
+   "6152381917307939731970960065594895207291261892575904307531368776018079712399": {
+    "end": "2026-11-04",
+    "entry": 0.99,
+    "entry_fee": 0.00198,
+    "event_key": "834600",
+    "event_slug": "wi-07-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:15:20Z",
+    "outcome": "No",
+    "price_source": "book",
     "shares": 5,
-    "slug": "will-north-carolina-use-a-new-congressional-map-for-the-2026-united-states-midterm-elections",
+    "slug": "will-the-republican-party-candidate-win-the-2026-wi-07-house-election-by-20-25",
     "source": "endgame",
     "theme": "us politics",
-    "tier": "proposed",
-    "title": "Will North Carolina use a new congressional map for the 2026 United States midterm elections?"
+    "tier": "past_deadline",
+    "title": "Will the Republican Party candidate win the 2026 WI-07 House election by 20%-25%?"
+   },
+   "92718314777145262007643697287300437140247953777540919722864078868801795052277": {
+    "end": "2026-11-04",
+    "entry": 0.96,
+    "entry_fee": 0.00768,
+    "event_key": "106097",
+    "event_slug": "mi-04-house-election-winner",
+    "opened": "2026-11-04T11:15:19Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-republican-party-win-the-mi-04-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Republican Party win the MI-04 House seat?"
    },
    "94909040987536769270715360325201420589044604443243218743462043270034738802453": {
     "end": "2026-11-04",
@@ -379,7 +476,7 @@
     "title": "Will the Democratic Party win the NV-03 House seat?"
    }
   },
-  "realized": 0.2522,
+  "realized": 0.422733,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
