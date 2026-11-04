@@ -1,5 +1,6 @@
 name: watch
-# Checks the wallet every ~10 minutes and records paper copies.
+# Runs every 5 min: started by an outside timer (cron-job.org -> workflow_dispatch API) because
+# GitHub's own schedule often skips runs for hours. The cron below stays as a backup.
 on:
   schedule:
     - cron: "3-59/10 * * * *"
