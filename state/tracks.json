@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T12:35:35Z"
+    "ts": "2026-11-04T12:40:41Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:38Z"
+    "ts": "2026-11-04T12:40:44Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:42Z"
+    "ts": "2026-11-04T12:40:49Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:36Z"
+    "ts": "2026-11-04T12:40:42Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.239,
-    "edge": -0.0414,
+    "annual": -0.268,
+    "edge": -0.0466,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:37Z"
+    "ts": "2026-11-04T12:40:43Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.089,
-    "edge": -0.015,
+    "annual": -0.094,
+    "edge": -0.0159,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:45Z"
+    "ts": "2026-11-04T12:40:51Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:41Z"
+    "ts": "2026-11-04T12:40:47Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:39Z"
+    "ts": "2026-11-04T12:40:45Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:42Z"
+    "ts": "2026-11-04T12:40:48Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:44Z"
+    "ts": "2026-11-04T12:40:50Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.213,
     "edge": -0.0367,
     "opportunity": false,
-    "ts": "2026-11-04T12:35:40Z"
+    "ts": "2026-11-04T12:40:46Z"
    }
   },
   "min_cash": 0.0,
@@ -747,10 +747,15 @@
   "realized": 0.0,
   "refills": 0,
   "seen": {
+   "acl2-ksc-phn-2026-11-05:no": {
+    "edge": -0.0112,
+    "opportunity": false,
+    "ts": "2026-11-04T12:44:49Z"
+   },
    "arg-slo-pla-2026-11-06:no": {
     "edge": -0.0117,
     "opportunity": false,
-    "ts": "2026-11-04T10:44:29Z"
+    "ts": "2026-11-04T12:44:49Z"
    },
    "bank-of-israel-decision-in-november-2026:yes": {
     "edge": 0.0024,
@@ -761,6 +766,11 @@
     "edge": 0.0028,
     "opportunity": false,
     "ts": "2026-11-04T10:44:28Z"
+   },
+   "south-korea-annual-inflation-2026:yes": {
+    "edge": 0.0027,
+    "opportunity": false,
+    "ts": "2026-11-04T12:44:48Z"
    },
    "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401:yes": {
     "edge": -0.0183,
