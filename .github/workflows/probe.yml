@@ -2,6 +2,10 @@ name: probe
 # Manual only: prints raw API shapes for debugging. No pushes, no state changes.
 on:
   workflow_dispatch:
+    inputs:
+      what:
+        description: "all | kalshi | poly | endgame | events (or 'arbtest' to dry-run the twin finder)"
+        default: all
 
 jobs:
   probe:
@@ -12,4 +16,5 @@ jobs:
         with:
           ref: main
       - name: Probe APIs
-        run: python3 probe.py && python3 bot.py arbtest
+        run: |
+          if [ "${{ inputs.what }}" = "arbtest" ]; then python3 bot.py arbtest; else python3 probe.py "${{ inputs.what }}"; fi

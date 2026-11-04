@@ -83,9 +83,76 @@ def poly():
     print("poly keyset page size served:", len(r.get("markets") or []))
 
 
+def endgame():
+    """Open markets past or near their end date: how 'result submitted' shows up."""
+    import datetime as dt
+    from collections import Counter
+    now = dt.datetime.now(dt.timezone.utc)
+    f = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")
+    params = {"closed": "false", "limit": 100, "end_date_min": f(now - dt.timedelta(days=30)),
+              "end_date_max": f(now + dt.timedelta(days=1))}
+    ms, cursor = [], None
+    for _ in range(30):
+        p = dict(params)
+        if cursor:
+            p["after_cursor"] = cursor
+        r = get("https://gamma-api.polymarket.com/markets/keyset", p)
+        ms += r.get("markets") or []
+        cursor = r.get("next_cursor")
+        if not cursor:
+            break
+    print(f"== endgame window: {len(ms)} open markets ending between -30d and +1d")
+    st = Counter(json.dumps(m.get("umaResolutionStatuses")) for m in ms)
+    print("umaResolutionStatuses values:", st.most_common(12))
+    print("other status-ish keys:", sorted({k for m in ms for k in m if any(s in k.lower() for s in
+          ("resol", "uma", "accept", "closed", "active", "automatic", "archiv", "ready", "pending"))}))
+    print("acceptingOrders:", Counter(str(m.get("acceptingOrders")) for m in ms).most_common())
+    hi = []
+    for m in ms:
+        try:
+            pr = [float(x) for x in json.loads(m.get("outcomePrices") or "[]")]
+        except ValueError:
+            continue
+        if pr and max(pr) >= 0.95 and max(pr) < 0.995:
+            hi.append(m)
+    print(f"== {len(hi)} with a side at 95-99.5c. Samples:")
+    for m in hi[:25]:
+        print({k: m.get(k) for k in ("question", "endDateIso", "outcomePrices", "bestBid", "bestAsk", "acceptingOrders",
+                                     "umaResolutionStatuses", "umaEndDate", "liquidityNum", "sportsMarketType",
+                                     "feesEnabled", "closedTime", "resolvedBy")})
+
+
+def events():
+    """Multi-candidate events: event fields, negRisk flags and nested market fields."""
+    r = get("https://gamma-api.polymarket.com/events/keyset", {"closed": "false", "limit": 100})
+    evs = r.get("events") or []
+    print("== events page:", len(evs), "keys:", sorted(r.keys()))
+    if evs:
+        print("event keys:", sorted(evs[0].keys()))
+    shown = 0
+    for e in evs:
+        ms = e.get("markets") or []
+        if len(ms) >= 3 and (e.get("negRisk") or e.get("enableNegRisk")):
+            print("\n-- event:", {k: e.get(k) for k in ("title", "slug", "negRisk", "enableNegRisk", "negRiskAugmented",
+                                                      "showAllOutcomes", "endDate", "liquidity", "mutuallyExclusive")})
+            print("   nested market keys:", sorted(ms[0].keys()))
+            asks = [float(m.get("bestAsk") or 0) for m in ms]
+            print(f"   markets {len(ms)}, sum bestAsk {sum(asks):.3f}")
+            for m in ms[:12]:
+                print("   ", {k: m.get(k) for k in ("groupItemTitle", "bestAsk", "bestBid", "outcomePrices", "negRiskOther",
+                                                     "active", "closed", "acceptingOrders")})
+            shown += 1
+            if shown >= 3:
+                break
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
         kalshi()
     if what in ("all", "poly"):
         poly()
+    if what in ("all", "endgame"):
+        endgame()
+    if what in ("all", "events"):
+        events()
