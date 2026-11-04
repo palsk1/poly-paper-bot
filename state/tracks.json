@@ -95,67 +95,67 @@
     "annual": 0.155,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T19:20:35Z"
+    "ts": "2026-11-04T19:25:24Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:38Z"
+    "ts": "2026-11-04T19:25:25Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:43Z"
+    "ts": "2026-11-04T19:25:28Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.024,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:36Z"
+    "ts": "2026-11-04T19:25:24Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.04,
     "edge": -0.0067,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:37Z"
+    "ts": "2026-11-04T19:25:25Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.116,
     "edge": -0.0195,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:45Z"
+    "ts": "2026-11-04T19:25:29Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.061,
     "edge": -0.0102,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:41Z"
+    "ts": "2026-11-04T19:25:27Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:39Z"
+    "ts": "2026-11-04T19:25:26Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:42Z"
+    "ts": "2026-11-04T19:25:27Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:44Z"
+    "ts": "2026-11-04T19:25:28Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.098,
     "edge": -0.0165,
     "opportunity": false,
-    "ts": "2026-11-04T19:20:40Z"
+    "ts": "2026-11-04T19:25:26Z"
    }
   },
   "min_cash": 0.0,
@@ -258,7 +258,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 3.23609,
+  "cash": 3.38027,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -413,6 +413,28 @@
     "tier": "proposed",
     "title": "Will the Democratic Party win the NV-03 House seat?",
     "token": "94909040987536769270715360325201420589044604443243218743462043270034738802453"
+   },
+   {
+    "closed_at": "2026-11-04T19:25:20Z",
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "659973",
+    "event_slug": "how-many-senate-and-governor-elections-will-republicans-win-in-states-won-by-kamala-20260702152603469",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T12:16:05Z",
+    "outcome": "Yes",
+    "pnl": 0.14418,
+    "price_source": "book",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-republicans-win-2-senate-and-governor-elections-in-states-won-by-kamala-20260702152603472",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Republicans win 2 Senate and Governor elections in states won by Kamala?",
+    "token": "12815952369395061580656040420894728094541250183730231747201102962701085209555"
    }
   ],
   "created": "2026-11-04T08:27:23Z",
@@ -451,22 +473,6 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will Chris Van Hollen be the next Senate Majority Leader?"
-   },
-   "12815952369395061580656040420894728094541250183730231747201102962701085209555": {
-    "end": "2026-11-04",
-    "entry": 0.97,
-    "entry_fee": 0.00582,
-    "event_key": "659973",
-    "event_slug": "how-many-senate-and-governor-elections-will-republicans-win-in-states-won-by-kamala-20260702152603469",
-    "opened": "2026-11-04T12:16:05Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "shares": 5,
-    "slug": "will-republicans-win-2-senate-and-governor-elections-in-states-won-by-kamala-20260702152603472",
-    "source": "endgame",
-    "theme": "us politics",
-    "tier": "past_deadline",
-    "title": "Will Republicans win 2 Senate and Governor elections in states won by Kamala?"
    },
    "16661917299889844562247566603559122251937209362630950418259738730496536105112": {
     "end": "2026-11-04",
@@ -708,6 +714,22 @@
     "tier": "past_deadline",
     "title": "Will Hakeem Jeffries be the first Speaker of the House after the 2026 midterms?"
    },
+   "8330947470967427771669107116351634663558077701167425112930221820680859992246": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "1000190",
+    "event_slug": "which-party-will-win-the-arizona-state-senate-in-2026",
+    "opened": "2026-11-04T19:26:08Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-control-the-arizona-senate-after-the-2026-midterm-elections",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party control the Arizona Senate after the 2026 Midterm elections?"
+   },
    "92461925582871836604329373342734059251678046595372592532836439603090558657253": {
     "end": "2026-11-04",
     "entry": 0.97,
@@ -741,7 +763,7 @@
     "title": "Will the Republican Party win the MI-04 House seat?"
    }
   },
-  "realized": 0.528383,
+  "realized": 0.672563,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
