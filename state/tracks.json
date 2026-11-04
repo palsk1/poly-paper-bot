@@ -95,67 +95,67 @@
     "annual": 0.155,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T17:35:27Z"
+    "ts": "2026-11-04T17:40:34Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:30Z"
+    "ts": "2026-11-04T17:40:36Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
-    "annual": -0.079,
-    "edge": -0.0132,
+    "annual": -0.085,
+    "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:34Z"
+    "ts": "2026-11-04T17:40:40Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:28Z"
+    "ts": "2026-11-04T17:40:35Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.196,
     "edge": -0.0336,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:29Z"
+    "ts": "2026-11-04T17:40:35Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.109,
-    "edge": -0.0185,
+    "annual": -0.089,
+    "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:36Z"
+    "ts": "2026-11-04T17:40:41Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0131,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:32Z"
+    "ts": "2026-11-04T17:40:38Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:30Z"
+    "ts": "2026-11-04T17:40:37Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:33Z"
+    "ts": "2026-11-04T17:40:39Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.083,
     "edge": -0.014,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:35Z"
+    "ts": "2026-11-04T17:40:41Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.097,
     "edge": -0.0163,
     "opportunity": false,
-    "ts": "2026-11-04T17:35:31Z"
+    "ts": "2026-11-04T17:40:37Z"
    }
   },
   "min_cash": 0.0,
@@ -805,13 +805,28 @@
   "unlimited": false
  },
  "mirror": {
-  "cash": 20.0,
+  "cash": 17.3,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 20.0,
   "min_cash": 0.0,
-  "peak_open_cost": 0.0,
-  "positions": {},
+  "peak_open_cost": 2.7,
+  "positions": {
+   "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
+    "end": "2026-12-01",
+    "entry": 0.54,
+    "entry_fee": 0.0,
+    "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+    "leader_avg": 0.5,
+    "opened": "2026-11-04T17:40:28Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
+    "source": "sabsabinxz",
+    "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
+   }
+  },
   "realized": 0.0,
   "refills": 0,
   "skipped_no_cash": 0,
@@ -819,13 +834,28 @@
   "unlimited": false
  },
  "mirror_unlimited": {
-  "cash": 0.0,
+  "cash": -2.7,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 0.0,
-  "min_cash": 0.0,
-  "peak_open_cost": 0.0,
-  "positions": {},
+  "min_cash": -2.7,
+  "peak_open_cost": 2.7,
+  "positions": {
+   "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
+    "end": "2026-12-01",
+    "entry": 0.54,
+    "entry_fee": 0.0,
+    "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+    "leader_avg": 0.5,
+    "opened": "2026-11-04T17:40:28Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
+    "source": "sabsabinxz",
+    "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
+   }
+  },
   "realized": 0.0,
   "refills": 0,
   "skipped_no_cash": 0,
