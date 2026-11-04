@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T12:05:26Z"
+    "ts": "2026-11-04T12:10:36Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:28Z"
+    "ts": "2026-11-04T12:10:39Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:32Z"
+    "ts": "2026-11-04T12:10:44Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:27Z"
+    "ts": "2026-11-04T12:10:37Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.234,
-    "edge": -0.0405,
+    "annual": -0.218,
+    "edge": -0.0376,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:27Z"
+    "ts": "2026-11-04T12:10:38Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:33Z"
+    "ts": "2026-11-04T12:10:46Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:30Z"
+    "ts": "2026-11-04T12:10:42Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:29Z"
+    "ts": "2026-11-04T12:10:40Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:31Z"
+    "ts": "2026-11-04T12:10:43Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:33Z"
+    "ts": "2026-11-04T12:10:45Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.213,
     "edge": -0.0367,
     "opportunity": false,
-    "ts": "2026-11-04T12:05:30Z"
+    "ts": "2026-11-04T12:10:41Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 2.94773,
+  "cash": 3.09191,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -356,6 +356,28 @@
     "tier": "proposed",
     "title": "Will North Carolina use a new congressional map for the 2026 United States midterm elections?",
     "token": "70196722376027356562466199250104246715403936483742743945156817796831694326112"
+   },
+   {
+    "closed_at": "2026-11-04T12:10:31Z",
+    "end": "2026-11-04",
+    "entry": 0.987,
+    "entry_fee": 0.002566,
+    "event_key": "106116",
+    "event_slug": "nv-01-house-election-winner",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "No",
+    "pnl": 0.062434,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-the-republican-party-win-the-nv-01-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Republican Party win the NV-01 House seat?",
+    "token": "58852733019222657257857989920800865387778184315425789631820735202058753631697"
    }
   ],
   "created": "2026-11-04T08:27:23Z",
@@ -410,6 +432,22 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Democratic Party win the FL-07 House seat?"
+   },
+   "16719412997978242839966243019673219333732814563842305517820712270028523555970": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "797292",
+    "event_slug": "new-jersey-senate-margin-of-victory-2026",
+    "opened": "2026-11-04T12:11:30Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-new-jersey-senate-election-by-21-or-more",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party candidate win the 2026 New Jersey Senate election by 21% or more?"
    },
    "23832277913601627674704583759931687017229083944047610912090436887985913840534": {
     "end": "2026-11-04",
@@ -522,22 +560,6 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Democratic Party win the popular vote in the 2026 U.S. House of Representatives midterm elections by between 10% and 12%?"
-   },
-   "58852733019222657257857989920800865387778184315425789631820735202058753631697": {
-    "end": "2026-11-04",
-    "entry": 0.987,
-    "entry_fee": 0.002566,
-    "event_key": "106116",
-    "event_slug": "nv-01-house-election-winner",
-    "opened": "2026-11-04T10:42:16Z",
-    "outcome": "No",
-    "price_source": "estimate",
-    "shares": 5,
-    "slug": "will-the-republican-party-win-the-nv-01-house-seat",
-    "source": "endgame",
-    "theme": "us politics",
-    "tier": "proposed",
-    "title": "Will the Republican Party win the NV-01 House seat?"
    },
    "6152381917307939731970960065594895207291261892575904307531368776018079712399": {
     "end": "2026-11-04",
@@ -684,7 +706,7 @@
     "title": "Will the Democratic Party win the NV-03 House seat?"
    }
   },
-  "realized": 0.422733,
+  "realized": 0.485167,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
