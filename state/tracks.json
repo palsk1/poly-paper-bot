@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T11:30:53Z"
+    "ts": "2026-11-04T11:35:23Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:56Z"
+    "ts": "2026-11-04T11:35:24Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T11:31:01Z"
+    "ts": "2026-11-04T11:35:27Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:54Z"
+    "ts": "2026-11-04T11:35:23Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.235,
-    "edge": -0.0407,
+    "annual": -0.159,
+    "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:55Z"
+    "ts": "2026-11-04T11:35:24Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T11:31:03Z"
+    "ts": "2026-11-04T11:35:27Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:59Z"
+    "ts": "2026-11-04T11:35:26Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:57Z"
+    "ts": "2026-11-04T11:35:25Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T11:31:00Z"
+    "ts": "2026-11-04T11:35:26Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T11:31:02Z"
+    "ts": "2026-11-04T11:35:27Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0267,
     "opportunity": false,
-    "ts": "2026-11-04T11:30:58Z"
+    "ts": "2026-11-04T11:35:25Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 27.23639,
+  "cash": 7.80355,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -361,8 +361,24 @@
   "created": "2026-11-04T08:27:23Z",
   "deposited": 100.0,
   "min_cash": 0.0,
-  "peak_open_cost": 73.186343,
+  "peak_open_cost": 92.619183,
   "positions": {
+   "112883235802097588694962200577527079540064220506905432822464479503173986230656": {
+    "end": "2026-11-04",
+    "entry": 0.985,
+    "entry_fee": 0.002955,
+    "event_key": "289908",
+    "event_slug": "next-senate-majority-leader-485",
+    "opened": "2026-11-04T11:35:55Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-chris-van-hollen-be-the-next-senate-majority-leader",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Chris Van Hollen be the next Senate Majority Leader?"
+   },
    "16661917299889844562247566603559122251937209362630950418259738730496536105112": {
     "end": "2026-11-04",
     "entry": 0.987,
@@ -427,6 +443,38 @@
     "tier": "past_deadline",
     "title": "Will the Democratic Party candidate win the 2026 Michigan Senate election by 0%-3%?"
    },
+   "42629907192754178603196212830819548206982547262553252835164269250141835654966": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "834610",
+    "event_slug": "va-10-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:35:55Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-va-10-house-election-by-5-10",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party candidate win the 2026 VA-10 House election by 5%-10%?"
+   },
+   "50029290353970305533397100743006203116503210847886090279418936274481275468712": {
+    "end": "2026-11-04",
+    "entry": 0.961,
+    "entry_fee": 0.007496,
+    "event_key": "1000189",
+    "event_slug": "which-party-will-win-the-texas-state-senate-in-2026",
+    "opened": "2026-11-04T11:35:55Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-republican-party-control-the-texas-senate-after-the-2026-midterm-elections",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Republican Party control the Texas Senate after the 2026 Midterm elections?"
+   },
    "53920542266383459877338320583559720165026811206427330172563195409123997072871": {
     "end": "2026-11-04",
     "entry": 0.98,
@@ -490,6 +538,22 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Republican Party candidate win the 2026 WI-07 House election by 20%-25%?"
+   },
+   "70110943547081522356148631554852443099283839081646948533876907387738782299357": {
+    "end": "2026-11-04",
+    "entry": 0.966,
+    "entry_fee": 0.006569,
+    "event_key": "191390",
+    "event_slug": "co-04-house-election-winner",
+    "opened": "2026-11-04T11:35:55Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-republican-party-win-the-co-04-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Republican Party win the CO-04 House seat?"
    },
    "73990293257762740446329441726210816236433525282117609895692915154666632106974": {
     "end": "2026-11-01",
