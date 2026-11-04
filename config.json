@@ -53,6 +53,18 @@
       "start_cash": 300,
       "source": "arb",
       "rules": "arb"
+    },
+    "endgame": {
+      "label": "Endgame: buys the winning side at 95-99c in markets that are decided but not paid out yet (result submitted, deadline passed, or ending within a day). Holds to payout. $100 paper",
+      "start_cash": 100,
+      "source": "endgame",
+      "rules": "endgame"
+    },
+    "every_horse": {
+      "label": "Buy every horse: buys every outcome of one multi-candidate market when together they cost less than the guaranteed payout after fees. All-YES only on provably complete lists; all-NO is safe either way. $100 paper",
+      "start_cash": 100,
+      "source": "fullset",
+      "rules": "every_horse"
     }
   },
   "rules": {
@@ -188,6 +200,55 @@
         "SPREAD-",
         "TOTAL-"
       ]
+    },
+    "endgame": {
+      "why": "Money comes back in hours or days instead of months. The risk is a 'sure thing' that flips or gets disputed; each trade records which signal it used so we learn which ones are safe.",
+      "min_price": 0.95,
+      "max_price": 0.99,
+      "min_edge": 0.008,
+      "tiers": [
+        "resolved",
+        "proposed",
+        "past_deadline",
+        "ending_soon"
+      ],
+      "ending_soon_hours": 24,
+      "past_deadline_max_days": 30,
+      "min_liquidity": 2000,
+      "picks_per_scan": 4,
+      "max_open": 20,
+      "max_per_theme": 99,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "every_horse": {
+      "why": "Exactly one outcome of a complete list wins, so one share of every YES pays exactly $1; one share of every NO pays (n-1) dollars, or n if an unlisted outcome wins, so the NO version needs no completeness.",
+      "shares": 5,
+      "min_edge": 0.01,
+      "min_annual": 0.15,
+      "max_days": 120,
+      "min_markets": 3,
+      "max_markets": 40,
+      "max_no_set_outcomes": 8,
+      "picks_per_scan": 2,
+      "max_open": 10,
+      "events_pages": 200,
+      "complete_words": [
+        "other",
+        "none",
+        "no one",
+        "nobody",
+        "field",
+        "another",
+        "neither",
+        "no winner",
+        "not listed",
+        "no change",
+        "tie"
+      ]
     }
   },
   "themes": {
@@ -265,6 +326,8 @@
     "on_leader_trades": true,
     "on_screener_buys": true,
     "on_claude_trades": true,
-    "on_arb": true
+    "on_arb": true,
+    "on_endgame": true,
+    "on_fullset": true
   }
 }

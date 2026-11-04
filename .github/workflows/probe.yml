@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what:
-        description: "all | kalshi | poly | endgame | events (or 'arbtest' to dry-run the twin finder)"
+        description: "all | kalshi | poly | endgame | events (or 'arbtest' / 'dryrun' for bot dry runs)"
         default: all
 
 jobs:
@@ -17,4 +17,4 @@ jobs:
           ref: main
       - name: Probe APIs
         run: |
-          if [ "${{ inputs.what }}" = "arbtest" ]; then python3 bot.py arbtest; else python3 probe.py "${{ inputs.what }}"; fi
+          if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi

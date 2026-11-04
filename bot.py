@@ -181,6 +181,9 @@ def load_tracks():
         if tc["source"] == "arb":
             for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
                 tracks[name].setdefault(k, v)
+        if tc["source"] == "fullset":
+            for k, v in (("sets", {}), ("opportunities", 0), ("incomplete", 0), ("seen", {})):
+                tracks[name].setdefault(k, v)
     return tracks
 
 
@@ -385,6 +388,10 @@ def paper_close(track, name, token, price, fee, reason):
     track["closed"].append(rec)
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
+    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame"):
+        push(f"[endgame] FLIP: a 'sure thing' lost (${pnl:+.2f})",
+             f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
+             f"{cents(price)}. This is the risk the test is measuring.", tags="rotating_light")
     return rec
 
 
@@ -392,7 +399,7 @@ def manage_exits(tracks):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the mirrors)."""
     for name, tr in tracks.items():
         tc = CFG["tracks"][name]
-        if tc["source"] in ("leader", "arb"):
+        if tc["source"] in ("leader", "arb", "fullset"):
             continue
         rules = rules_for(name)
         for tok in list(tr["positions"]):
@@ -764,18 +771,22 @@ def buy_candidates(tracks, name, cands, limit):
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
             continue
+        fee = taker_fee(shares, px, c["fee_rate"])
+        if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
+            continue  # too little left after paying the price and the fee
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
                 "price_source": how}
-        if c.get("target"):
-            meta["target"] = c["target"]
-        if not paper_buy(tr, name, c["token"], shares, px, taker_fee(shares, px, c["fee_rate"]), meta):
+        for k in ("target", "tier"):
+            if c.get(k):
+                meta[k] = c[k]
+        if not paper_buy(tr, name, c["token"], shares, px, fee, meta):
             break
         held_events.add(c["event_key"])
         if c["theme"]:
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
-    if bought and CFG["push"].get("on_screener_buys"):
+    if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
         push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag")
     return bought
 
@@ -1269,38 +1280,322 @@ def upper90(k, n):
     return hi
 
 
-def arb_proof(tr):
-    closed = tr["closed"]
-    n, k = len(closed), sum(1 for c in closed if c.get("mismatch"))
-    edges = [c["edge"] for c in closed] + [a["edge"] for a in tr["arbs"].values()]
-    e = sum(edges) / len(edges) if edges else arb_rules()["min_edge"]
-    # A clean arb earns about e per share; a mismatch can lose about the whole $1 stake,
-    # so arbs only pay if mismatches happen less often than about e (e.g. 2.5c edge -> under 2.5%).
+def proof(n, k, e, realized, what="trades", bad="bad outcomes"):
+    """90% test for 'small sure profit vs rare big loss' strategies (arbs, endgame, full sets).
+    A good trade earns about e per share; a bad one loses about the whole $1, so the strategy only pays if
+    bad outcomes happen less often than about e (2.5c edge -> under 1 in 40). After k bad outcomes in n,
+    upper90 gives the highest bad-rate still plausible at 90% confidence; proven = that is below e."""
     ub = upper90(k, n)
-    proven = n >= 20 and ub < e and tr["realized"] > 0
+    proven = n >= 20 and ub < e and realized > 0
     need = 0
     if not proven:
         m = max(n, 1)
-        while upper90(k, m) >= e and m < n + 3000:
+        while upper90(k, m) >= e and m < n + 5000:
             m += 1
         need = max(m - n, 20 - n, 0)
     if n == 0:
-        verdict = (f"Not proven yet: no finished arbs. With ~{e * 100:.1f}c edge we need about "
-                   f"{need} clean finished arbs (0 mismatches) to be 90% sure.")
+        verdict = (f"Not proven yet: no finished {what}. At ~{e * 100:.1f}c edge we need about {need} "
+                   f"finished {what} with 0 {bad} to be 90% sure.")
     elif proven:
-        verdict = (f"PROVEN at 90%: {n} finished arbs, {k} mismatches, profit ${tr['realized']:.2f}. "
-                   f"Mismatch rate is below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
+        verdict = (f"PROVEN at 90%: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. The {bad} rate is "
+                   f"below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
     else:
-        verdict = (f"Not proven yet: {n} finished, {k} mismatches, profit ${tr['realized']:+.2f}. "
-                   f"Need about {need} more clean ones to be 90% sure (if no new mismatches).")
-    return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "mismatch_rate_upper90": round(ub, 4),
+        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit ${realized:+.2f}. Need about "
+                   f"{need} more clean ones to be 90% sure (if no new {bad}).")
+    return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "bad_rate_upper90": round(ub, 4),
             "proven": proven, "more_needed": need, "verdict": verdict}
+
+
+def arb_proof(tr):
+    closed = tr["closed"]
+    edges = [c["edge"] for c in closed] + [a["edge"] for a in tr["arbs"].values()]
+    e = sum(edges) / len(edges) if edges else arb_rules()["min_edge"]
+    return proof(len(closed), sum(1 for c in closed if c.get("mismatch")), e, tr["realized"], "arbs", "mismatches")
+
+
+# ================================================================ endgame: decided but not paid out yet
+#
+# Tiers (strongest first): 'resolved' = oracle says resolved but trading still open; 'proposed' = a result was
+# submitted and is in its 2-hour challenge window; 'past_deadline' = end date passed, nothing submitted yet;
+# 'ending_soon' = ends within a day and the boring side is at 95c+. Disputed markets are skipped.
+# Every trade records its tier, so the stats show which signals are actually safe.
+
+def endgame_candidates(r):
+    f = {"end_date_min": iso(now() - dt.timedelta(days=r["past_deadline_max_days"])),
+         "end_date_max": iso(now() + dt.timedelta(hours=r["ending_soon_hours"])),
+         "liquidity_num_min": r["min_liquidity"]}
+    out, order = [], {t: i for i, t in enumerate(r["tiers"])}
+    for m in scan_markets(f):
+        prices = binary(m)
+        if not prices or m.get("closed") or m.get("acceptingOrders") is False:
+            continue
+        q = str(m.get("question") or "")
+        if any(w in q.lower() for w in r.get("skip_words", [])):
+            continue
+        st = [str(s).lower() for s in jlist(m.get("umaResolutionStatuses"))]
+        if any("disput" in s for s in st):
+            continue
+        i = 0 if prices[0] >= prices[1] else 1
+        if not (r["min_price"] <= prices[i] <= r["max_price"]):
+            continue
+        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        if "resolved" in st:
+            tier, days = "resolved", 0.2
+        elif st and st[-1] == "proposed":
+            tier, days = "proposed", 0.3
+        elif end and end < now():
+            tier, days = "past_deadline", 3.0
+        elif end and (end - now()).total_seconds() <= r["ending_soon_hours"] * 3600:
+            tier, days = "ending_soon", (end - now()).total_seconds() / 86400 + 1
+        else:
+            continue
+        if tier in ("past_deadline", "ending_soon") and is_sports(m):
+            continue  # a live game past its start time is not "decided"
+        liq = fnum(pick(m, "liquidityNum", "liquidity"))
+        c = candidate(m, i, days, liq, {"tier": tier})
+        c["per_day"] = (1 - prices[i]) / max(days, 0.1)
+        out.append(c)
+    out.sort(key=lambda c: (order.get(c["tier"], 9), -c["per_day"]))
+    print(f"endgame: {len(out)} candidates " + str(dict(Counter(c['tier'] for c in out))))
+    return out
+
+
+def run_endgame(tracks):
+    for name, tc in CFG["tracks"].items():
+        if tc["source"] == "endgame":
+            r = rules_for(name)
+            buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
+
+
+def endgame_tier_stats(tr):
+    stats = defaultdict(lambda: [0, 0])
+    for c in tr["closed"]:
+        s = stats[c.get("tier", "?")]
+        s[0] += 1
+        s[1] += 1 if c["pnl"] < 0 else 0
+    return {t: {"finished": v[0], "flips": v[1]} for t, v in stats.items()}
+
+
+def endgame_proof(tr):
+    closed = tr["closed"]
+    edges = [1 - p["entry"] - p.get("entry_fee", 0) / p["shares"] for p in list(tr["positions"].values()) + closed]
+    e = sum(edges) / len(edges) if edges else 0.02
+    return proof(len(closed), sum(1 for c in closed if c["pnl"] < 0), e, tr["realized"], "trades", "flips")
+
+
+# ================================================================ buy every horse: full sets of one event
+#
+# In a multi-candidate event exactly one outcome wins (if the list is complete):
+#   all-YES set: one YES of each costs sum(asks), pays exactly $1   -> only on provably complete lists
+#   all-NO set : one NO of each costs sum(no asks), pays $(n-1), or $n if an unlisted outcome wins -> always safe
+# "Open" lists (negRiskAugmented: names can be added later) are skipped.
+
+def fullset_rules():
+    for n, tc in CFG["tracks"].items():
+        if tc["source"] == "fullset":
+            return n, rules_for(n)
+    return None, None
+
+
+def looks_complete(names, r):
+    low = [str(x).lower() for x in names]
+    if any(re.search(rf"\b{re.escape(w)}\b", x) for x in low for w in r["complete_words"]):
+        return True
+    lo_open = any(re.search(r"(<|under|below|less than|or fewer|or less|or lower|^0\b)", x) for x in low)
+    hi_open = any(re.search(r"(\+|>|over|above|or more|or higher|more than)", x) for x in low)
+    return lo_open and hi_open  # numeric buckets with open ends cover every value
+
+
+def events_scan(r):
+    out, cursor, seen = [], None, 0
+    f = {"end_date_min": iso(now()), "end_date_max": iso(now() + dt.timedelta(days=r["max_days"]))}
+    for page in range(r["events_pages"]):
+        params = {"closed": "false", "limit": 100, **f}
+        if cursor:
+            params["after_cursor"] = cursor
+        try:
+            res = http_json(f"{GAMMA}/events/keyset", params)
+        except Exception as e:
+            if page == 0 and f:
+                print(f"events scan with date filter failed ({e}); retrying without")
+                f, cursor = {}, None
+                continue
+            print(f"events scan page {page} failed: {e}")
+            break
+        evs = envelope_rows(res, "events", "data")
+        seen += len(evs)
+        for e in evs:
+            if not isinstance(e, dict) or not (e.get("negRisk") or e.get("enableNegRisk")) or e.get("negRiskAugmented"):
+                continue
+            ms = [m for m in (e.get("markets") or []) if isinstance(m, dict)]
+            end = parse_iso(e.get("endDate"))
+            if not end or end < now() or (end - now()).days > r["max_days"]:
+                continue
+            if r["min_markets"] <= len(ms) <= r["max_markets"]:
+                out.append(e)
+        cursor = res.get("next_cursor") if isinstance(res, dict) else None
+        if not cursor or not evs:
+            break
+    print(f"every_horse: scanned {seen} events, {len(out)} closed-list multi-candidate events")
+    return out
+
+
+def yes_no_tokens(m):
+    toks, outs = market_tokens(m), [str(o).lower() for o in jlist(m.get("outcomes"))]
+    if len(toks) != 2 or len(outs) != 2 or "yes" not in outs or "no" not in outs:
+        return None
+    return toks[outs.index("yes")], toks[outs.index("no")]
+
+
+def fullset_check(tracks):
+    name, r = fullset_rules()
+    if not name:
+        return
+    tr = tracks[name]
+    if len(tr["sets"]) >= r["max_open"]:
+        return
+    shortlist = []
+    for e in events_scan(r):
+        ms = [m for m in e["markets"]]
+        if any(m.get("closed") and (token_price_from_market(m, (yes_no_tokens(m) or ("", ""))[0]) or 0) > 0.5 for m in ms):
+            continue  # someone already won
+        live = [m for m in ms if not m.get("closed") and m.get("active") is not False]
+        if len(live) < r["min_markets"] or any(m.get("acceptingOrders") is False for m in live):
+            continue
+        if any(yes_no_tokens(m) is None for m in live):
+            continue
+        asks = [fnum(m.get("bestAsk"), None) for m in live]
+        bids = [fnum(m.get("bestBid"), None) for m in live]
+        names = [m.get("groupItemTitle") or m.get("question") for m in ms]
+        if None not in asks and looks_complete(names, r) and 1 - sum(asks) >= r["min_edge"] / 2:
+            shortlist.append(("yes", e, live, 1 - sum(asks)))
+        if None not in bids and len(live) <= r["max_no_set_outcomes"]:
+            n = len(live)
+            gap = (n - 1) - sum(1 - b for b in bids)
+            if gap / (n - 1) >= r["min_edge"] / 2:
+                shortlist.append(("no", e, live, gap / (n - 1)))
+    shortlist.sort(key=lambda x: -x[3])
+    print(f"every_horse: {len(shortlist)} sets look cheap on listed prices")
+    bought = []
+    for kind, e, live, _ in shortlist[:15]:
+        if len(bought) >= r["picks_per_scan"] or len(tr["sets"]) >= r["max_open"]:
+            break
+        sid = f"{e.get('slug')}:{kind}"
+        if sid in tr["sets"]:
+            continue
+        shares, legs, cost, ok = r["shares"], [], 0.0, True
+        for m in live:
+            yt, nt = yes_no_tokens(m)
+            tok = yt if kind == "yes" else nt
+            b = book(tok)
+            px = walk(b["asks"], max(shares, b["min_size"])) if b else None
+            if px is None:
+                ok = False
+                break
+            fee = taker_fee(shares, px, fee_rate(m))
+            cost += shares * px + fee
+            legs.append({"slug": m.get("slug"), "token": tok, "name": m.get("groupItemTitle") or m.get("question"),
+                         "price": round(px, 4), "fee": round(fee, 4)})
+        if not ok:
+            continue
+        n = len(live)
+        guaranteed = shares * (1 if kind == "yes" else n - 1)
+        net = guaranteed - cost
+        days = max(1.0, (parse_iso(e.get("endDate")) - now()).total_seconds() / 86400) + 3
+        edge = net / guaranteed  # profit per $1 of guaranteed payout
+        annual = (net / cost) * 365 / days if cost > 0 else 0
+        seen = tr["seen"].get(sid, {})
+        ok_now = edge >= r["min_edge"] and annual >= r["min_annual"]
+        tr["seen"][sid] = {"ts": iso(), "edge": round(edge, 4), "opportunity": ok_now}
+        if not ok_now:
+            continue
+        if not seen.get("opportunity"):
+            tr["opportunities"] += 1
+        if tr["cash"] + EPS < cost:
+            tr["skipped_no_cash"] += 1
+            log_event({"type": "skip_no_cash", "track": name, "title": e.get("title"), "cost": round(cost, 4)})
+            continue
+        tr["cash"] = round(tr["cash"] - cost, 6)
+        tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+        tr["sets"][sid] = {"title": e.get("title"), "kind": kind, "n": n, "shares": shares, "legs": legs,
+                           "cost": round(cost, 4), "guaranteed": guaranteed, "expected_profit": round(net, 4),
+                           "edge": round(edge, 4), "annual": round(annual, 3), "end": e.get("endDate"), "opened": iso()}
+        tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(s["cost"] for s in tr["sets"].values())), 6)
+        log_event({"type": "set_open", "track": name, "title": e.get("title"), "kind": kind, "n": n,
+                   "price": round(cost / shares, 4), "edge": round(edge, 4)})
+        bought.append(f"all-{kind.upper()} x{n}: {e.get('title')} - pays ${guaranteed:.2f}"
+                      f"{'+' if kind == 'no' else ''} for ${cost:.2f}")
+    if bought and CFG["push"].get("on_fullset"):
+        push(f"[every_horse] bought {len(bought)} full set(s)", "\n".join(bought), tags="horse")
+
+
+def fullset_settle(tracks):
+    name, r = fullset_rules()
+    if not name:
+        return
+    tr = tracks[name]
+    for sid in list(tr["sets"]):
+        s = tr["sets"][sid]
+        pays = [resolved_payout(market_by_slug(l["slug"]), l["token"]) for l in s["legs"]]
+        if any(p is None for p in pays):
+            continue
+        proceeds = s["shares"] * sum(pays)
+        pnl = proceeds - s["cost"]
+        bad = proceeds + 1e-6 < s["guaranteed"]
+        tr["cash"] = round(tr["cash"] + proceeds, 6)
+        tr["realized"] = round(tr["realized"] + pnl, 6)
+        tr["closed"].append({**s, "proceeds": round(proceeds, 4), "pnl": round(pnl, 4), "incomplete": bad,
+                             "closed_at": iso()})
+        del tr["sets"][sid]
+        log_event({"type": "set_close", "track": name, "title": s["title"], "pnl": round(pnl, 4),
+                   "reason": "PAID LESS THAN GUARANTEED (incomplete list?)" if bad else "paid as expected"})
+        if bad:
+            tr["incomplete"] += 1
+            push("[every_horse] set paid less than guaranteed",
+                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
+                 tags="rotating_light")
+
+
+def fullset_proof(tr):
+    closed = tr["closed"]
+    edges = [c["edge"] for c in closed] + [s["edge"] for s in tr["sets"].values()]
+    e = sum(edges) / len(edges) if edges else fullset_rules()[1]["min_edge"]
+    return proof(len(closed), sum(1 for c in closed if c.get("incomplete")), e, tr["realized"], "sets", "short payouts")
+
+
+def fullset_summary(name, tr):
+    locked = sum(s["cost"] for s in tr["sets"].values())
+    expected = sum(s["expected_profit"] for s in tr["sets"].values())
+    pr = fullset_proof(tr)
+    wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr["sets"]), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": 0,
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "locked": round(locked, 4),
+             "expected_locked_profit": round(expected, 4), "gap_episodes": tr["opportunities"], "proof": pr}
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr['sets'])} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) "
+           f"| ${tr['cash']:.2f} | locked ${locked:.2f} (+${expected:.2f} expected); cheap sets found "
+           f"{tr['opportunities']}; short payouts {tr['incomplete']} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n", f"**Proof status:** {pr['verdict']}\n"]
+    if tr["sets"]:
+        lines.append("| Event | Set | Cost | Pays at end | Ends |\n|---|---|---|---|---|")
+        for s in tr["sets"].values():
+            lines.append(f"| {str(s['title'])[:60]} | all-{s['kind'].upper()} x{s['n']} | ${s['cost']:.2f} | "
+                         f"${s['guaranteed']:.2f}{'+' if s['kind'] == 'no' else ''} | {str(s.get('end') or '')[:10]} |")
+    else:
+        lines.append("No open sets.")
+    near = sorted(tr.get("seen", {}).items(), key=lambda x: -x[1]["edge"])[:5]
+    if near:
+        lines.append("\nClosest sets at last check (profit per $1 after fees):")
+        lines += [f"- {sid}: {v['edge'] * 100:+.1f}c ({v['ts'][:16]} UTC)" for sid, v in near]
+    return row, stats, lines
 
 
 def arb_summary(name, tr):
     locked = sum(a["cost"] for a in tr["arbs"].values())
     expected = sum(a["expected_profit"] for a in tr["arbs"].values())
-    proof = arb_proof(tr)
+    pr = arb_proof(tr)
     wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
     stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
              "open": len(tr["arbs"]), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
@@ -1308,14 +1603,14 @@ def arb_summary(name, tr):
              "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
              "skipped_no_cash": tr["skipped_no_cash"], "locked": round(locked, 4),
              "expected_locked_profit": round(expected, 4), "gap_episodes": tr["opportunities"],
-             "mismatches": tr["mismatches"], "proof": proof}
+             "mismatches": tr["mismatches"], "proof": pr}
     row = (f"| {name} | {tr['realized']:+.2f} | {len(tr['arbs'])} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) "
            f"| ${tr['cash']:.2f} | locked ${locked:.2f} (+${expected:.2f} expected); gaps found {tr['opportunities']}; "
            f"mismatches {tr['mismatches']} |")
     pairs = load_pairs()
     cand = load("arb_candidates.json", {})
     lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
-             f"**Proof status:** {proof['verdict']}\n",
+             f"**Proof status:** {pr['verdict']}\n",
              f"Approved twin pairs: {len(pairs['approved'])}, rejected: {len(pairs['rejected'])}, "
              f"new candidates waiting for review: {len(cand.get('candidates', []))}.\n"]
     if tr["arbs"]:
@@ -1347,8 +1642,8 @@ def watch():
         follow_leader(tracks)
     except Exception as e:
         print(f"leader check failed: {e}")
-    manage_exits(tracks)
-    for step in (arb_settle, arb_check):
+    manage_exits(tracks)  # also pays out resolved endgame positions
+    for step in (arb_settle, arb_check, fullset_settle, run_endgame):
         try:
             step(tracks)
         except Exception as e:
@@ -1357,9 +1652,13 @@ def watch():
         markets = scan_markets()
         if markets:
             run_strategies(tracks, markets, panic_only=True)
-            st = load("scan_state.json", {})
-            st["last_panic_scan"] = iso()
-            save("scan_state.json", st)
+        try:
+            fullset_check(tracks)
+        except Exception as e:
+            print(f"fullset_check failed: {e}")
+        st = load("scan_state.json", {})
+        st["last_panic_scan"] = iso()
+        save("scan_state.json", st)
     save("tracks.json", tracks)
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
@@ -1391,11 +1690,11 @@ def daily(force=None):
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, lambda t: arb_propose(), arb_check):
+    for step in (arb_settle, lambda t: arb_propose(), arb_check, fullset_settle, fullset_check, run_endgame):
         try:
             step(tracks)
         except Exception as e:
-            print(f"arb step failed: {e}")
+            print(f"arb/endgame/full-set step failed: {e}")
     try:
         est = his_book_estimate()
         save("his_book.json", {"generated": iso(), **est})
@@ -1421,8 +1720,9 @@ def write_summary(tracks):
     md.append("| Track | P&L | Open | Closed (W/L) | Cash | Notes |")
     md.append("|---|---|---|---|---|---|")
     for name, tr in tracks.items():
-        if CFG["tracks"].get(name, {}).get("source") == "arb":
-            row, stats[name], lines = arb_summary(name, tr)
+        src = CFG["tracks"].get(name, {}).get("source")
+        if src in ("arb", "fullset"):
+            row, stats[name], lines = (arb_summary if src == "arb" else fullset_summary)(name, tr)
             md.append(row)
             detail += lines
             continue
@@ -1438,7 +1738,7 @@ def write_summary(tracks):
         pnl = tr["realized"] + unreal
         if tr["unlimited"]:
             cash = "unlimited"
-            notes = f"money needed so far ${-tr['min_cash']:.2f}; most tied up at once ${tr['peak_open_cost']:.2f}"
+            notes = f"money needed so far ${max(0.0, -tr['min_cash']):.2f}; most tied up at once ${tr['peak_open_cost']:.2f}"
         else:
             cash = f"${tr['cash']:.2f}"
             notes = f"refills {tr['refills']}; " if CFG["tracks"][name].get("refill") else ""
@@ -1448,9 +1748,17 @@ def write_summary(tracks):
         stats[name] = {"pnl": round(pnl, 4), "realized": round(tr["realized"], 4), "unrealized": round(unreal, 4),
                        "open": len(tr["positions"]), "closed": len(tr["closed"]), "wins": wins, "losses": losses,
                        "cash": None if tr["unlimited"] else round(tr["cash"], 4), "deposited": tr["deposited"],
-                       "refills": tr["refills"], "money_needed": round(-tr["min_cash"], 4),
+                       "refills": tr["refills"], "money_needed": round(max(0.0, -tr["min_cash"]), 4),
                        "peak_open_cost": tr["peak_open_cost"], "skipped_no_cash": tr["skipped_no_cash"]}
         detail.append(f"\n## {name}\n{CFG['tracks'].get(name, {}).get('label', '')}\n")
+        if src == "endgame":
+            pr = endgame_proof(tr)
+            stats[name]["proof"] = pr
+            tiers = endgame_tier_stats(tr)
+            detail.append(f"**Proof status:** {pr['verdict']}\n")
+            if tiers:
+                detail.append("By signal: " + ", ".join(f"{t} {v['finished']} finished / {v['flips']} flipped"
+                                                         for t, v in tiers.items()) + "\n")
         if open_rows:
             detail.append("| Market | Side | Entry | Now | P&L | Ends |\n|---|---|---|---|---|---|")
             detail += open_rows
@@ -1469,7 +1777,7 @@ def write_summary(tracks):
     cutoff = now() - dt.timedelta(hours=24)
     p, lines = os.path.join(STATE, "events.jsonl"), []
     keep = ("leader_open", "leader_exit", "paper_buy", "paper_close", "skip_no_cash", "refill",
-            "arb_open", "arb_close", "arb_half_settled", "arb_opportunity")
+            "arb_open", "arb_close", "arb_half_settled", "arb_opportunity", "set_open", "set_close")
     if os.path.exists(p):
         with open(p) as fh:
             for line in fh:
@@ -1512,11 +1820,12 @@ def push_scoreboard(stats):
     lines = []
     for name, s in stats.items():
         money = f"{'+' if s['pnl'] >= 0 else '-'}${abs(s['pnl']):.2f}"
-        if "proof" in s:  # arbitrage track
+        if "proof" in s:  # arb / endgame / full-set tracks: show progress toward the 90% proof
             pr = s["proof"]
-            lines.append(f"{name}: {money} | {s['open']} open (${s['locked']:.0f} locked) | "
+            locked = f" (${s['locked']:.0f} locked)" if "locked" in s else ""
+            lines.append(f"{name}: {money} | {s['open']} open{locked} | "
                          f"proof {pr['finished']}/{pr['finished'] + pr['more_needed']} clean"
-                         f"{', ' + str(pr['mismatches']) + ' MISMATCH' if pr['mismatches'] else ''}")
+                         f"{', ' + str(pr['mismatches']) + ' BAD' if pr['mismatches'] else ''}")
             continue
         extra = ""
         if s.get("refills"):
@@ -1577,7 +1886,22 @@ def arbtest():
               f"\n   P {p['slug'][:50]} ({p['end']}) bid/ask {p['best_bid_yes']}/{p['best_ask_yes']}: {p['question']}")
 
 
+def dryrun():
+    """Endgame + every-horse on live data without saving anything (manual probe workflow)."""
+    tracks = load_tracks()
+    run_endgame(tracks)
+    fullset_check(tracks)
+    for name in ("endgame", "every_horse"):
+        tr = tracks.get(name, {})
+        for p in tr.get("positions", {}).values():
+            print(f"WOULD BUY [{name}] {p.get('tier')}: {p['outcome']} @ {cents(p['entry'])} - {p['title']} (ends {p.get('end')})")
+        for sid, st in tr.get("sets", {}).items():
+            print(f"WOULD BUY [{name}] {sid}: cost ${st['cost']:.2f} pays ${st['guaranteed']:.2f}, edge {st['edge'] * 100:.1f}c")
+        for sid, v in sorted(tr.get("seen", {}).items(), key=lambda x: -x[1]["edge"])[:8]:
+            print(f"  closest set: {sid} {v['edge'] * 100:+.1f}c")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
-     "selftest": selftest, "arbtest": arbtest}[cmd]()
+     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun}[cmd]()
