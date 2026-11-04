@@ -18,7 +18,7 @@
       "label": "Favorites only: his entries at 80c or more ($20 paper)",
       "start_cash": 20,
       "source": "leader",
-      "min_price": 0.80,
+      "min_price": 0.8,
       "max_price": 0.97
     },
     "mirror_unlimited": {
@@ -57,7 +57,7 @@
   },
   "rules": {
     "screener": {
-      "min_price": 0.80,
+      "min_price": 0.8,
       "max_price": 0.95,
       "min_days": 7,
       "max_days": 90,
@@ -67,7 +67,9 @@
       "max_open": 50,
       "max_per_theme": 99,
       "prefer_fee_free": false,
-      "skip_words": ["up or down"],
+      "skip_words": [
+        "up or down"
+      ],
       "take_profit": null,
       "stop_loss": null
     },
@@ -83,9 +85,23 @@
       "max_open": 10,
       "max_per_theme": 2,
       "prefer_fee_free": true,
-      "skip_words": ["up or down", "bitcoin", "ethereum", "solana", "btc", "eth ", "xrp", "dogecoin", "price of", "dip to", "reach $", "above $", "below $"],
+      "skip_words": [
+        "up or down",
+        "bitcoin",
+        "ethereum",
+        "solana",
+        "btc",
+        "eth ",
+        "xrp",
+        "dogecoin",
+        "price of",
+        "dip to",
+        "reach $",
+        "above $",
+        "below $"
+      ],
       "take_profit": 0.97,
-      "stop_loss": 0.70
+      "stop_loss": 0.7
     },
     "panic_fade": {
       "why": "Crowds overreact to scary headlines. If the boring side of a deadline market was 82c+ and fell 6c+ in a day without anything resolving, buy it and sell when it climbs back to where it was.",
@@ -101,7 +117,21 @@
       "max_open": 8,
       "max_per_theme": 2,
       "prefer_fee_free": true,
-      "skip_words": ["up or down", "bitcoin", "ethereum", "solana", "btc", "eth ", "xrp", "dogecoin", "price of", "dip to", "reach $", "above $", "below $"],
+      "skip_words": [
+        "up or down",
+        "bitcoin",
+        "ethereum",
+        "solana",
+        "btc",
+        "eth ",
+        "xrp",
+        "dogecoin",
+        "price of",
+        "dip to",
+        "reach $",
+        "above $",
+        "below $"
+      ],
       "take_profit": null,
       "stop_loss": 0.45,
       "scan_every_hours": 2
@@ -118,25 +148,118 @@
       "max_days": 365,
       "min_liquidity": 2000,
       "date_tolerance_days": 4,
-      "min_match_score": 0.45,
+      "min_match_score": 0.5,
       "max_df": 400,
       "max_candidates": 25,
       "kalshi_min_volume": 500,
       "kalshi_max_pages": 150,
-      "kalshi_skip_prefixes": ["KXMVE", "KXHIGH", "KXLOW", "KXRAIN", "KXSNOW", "KXTEMP", "KXBTC", "KXETH", "KXSOL", "KXXRP", "KXDOGE", "KXSHIBA", "KXINX", "KXNASDAQ", "KXGOLD", "KXSILVER", "KXWTI", "KXUSDJPY", "KXEURUSD"],
-      "poly_skip_words": ["up or down", "price of bitcoin", "price of ethereum", "highest temperature", "lowest temperature"]
+      "kalshi_skip_prefixes": [
+        "KXMVE",
+        "KXHIGH",
+        "KXLOW",
+        "KXRAIN",
+        "KXSNOW",
+        "KXTEMP",
+        "KXBTC",
+        "KXETH",
+        "KXSOL",
+        "KXXRP",
+        "KXDOGE",
+        "KXSHIBA",
+        "KXINX",
+        "KXNASDAQ",
+        "KXGOLD",
+        "KXSILVER",
+        "KXWTI",
+        "KXUSDJPY",
+        "KXEURUSD"
+      ],
+      "poly_skip_words": [
+        "up or down",
+        "price of bitcoin",
+        "price of ethereum",
+        "highest temperature",
+        "lowest temperature"
+      ],
+      "max_price_diff": 0.12,
+      "kalshi_skip_contains": [
+        "GAME-",
+        "MATCH-",
+        "SPREAD-",
+        "TOTAL-"
+      ]
     }
   },
   "themes": {
-    "middle east": ["iran", "israel", "gaza", "hamas", "hezbollah", "hormuz", "red sea", "bab el-mandeb", "houthi", "yemen", "saudi", "syria", "lebanon", "netanyahu"],
-    "russia-ukraine": ["russia", "ukraine", "putin", "zelensky", "kyiv", "kramatorsk", "crimea"],
-    "china": ["china", "taiwan", "xi jinping"],
-    "us politics": ["trump", "senate", "house", "governor", "election", "democrat", "republican", "congress"],
-    "us economy": ["fed ", "interest rate", "tariff", "recession", "inflation", "cpi"],
-    "latin america": ["venezuela", "brazil", "bolsonaro", "maduro", "mexico", "argentina"],
-    "south asia": ["india", "pakistan", "kashmir"],
-    "korea": ["korea", "kim jong"],
-    "greenland": ["greenland", "denmark"]
+    "middle east": [
+      "iran",
+      "israel",
+      "gaza",
+      "hamas",
+      "hezbollah",
+      "hormuz",
+      "red sea",
+      "bab el-mandeb",
+      "houthi",
+      "yemen",
+      "saudi",
+      "syria",
+      "lebanon",
+      "netanyahu"
+    ],
+    "russia-ukraine": [
+      "russia",
+      "ukraine",
+      "putin",
+      "zelensky",
+      "kyiv",
+      "kramatorsk",
+      "crimea"
+    ],
+    "china": [
+      "china",
+      "taiwan",
+      "xi jinping"
+    ],
+    "us politics": [
+      "trump",
+      "senate",
+      "house",
+      "governor",
+      "election",
+      "democrat",
+      "republican",
+      "congress"
+    ],
+    "us economy": [
+      "fed ",
+      "interest rate",
+      "tariff",
+      "recession",
+      "inflation",
+      "cpi"
+    ],
+    "latin america": [
+      "venezuela",
+      "brazil",
+      "bolsonaro",
+      "maduro",
+      "mexico",
+      "argentina"
+    ],
+    "south asia": [
+      "india",
+      "pakistan",
+      "kashmir"
+    ],
+    "korea": [
+      "korea",
+      "kim jong"
+    ],
+    "greenland": [
+      "greenland",
+      "denmark"
+    ]
   },
   "push": {
     "on_leader_trades": true,

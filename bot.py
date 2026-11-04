@@ -938,6 +938,23 @@ _SYN = {"cut": "decrease", "cuts": "decrease", "lower": "decrease", "lowers": "d
         "resign": "leave", "resigns": "leave", "removed": "leave"}
 
 
+_MONTHS = "jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec"
+
+
+def sig_numbers(text):
+    """Numbers that define a market (strikes, counts, thresholds); years and calendar days are left out."""
+    t = str(text or "").lower()
+    t = re.sub(rf"\b({_MONTHS})[a-z]*\.?\s+\d{{1,2}}(st|nd|rd|th)?\b", " ", t)
+    t = re.sub(rf"\b\d{{1,2}}(st|nd|rd|th)?\s+(of\s+)?({_MONTHS})[a-z]*", " ", t)
+    nums = set()
+    for n in re.findall(r"\d+(?:\.\d+)?", t.replace(",", "")):
+        v = float(n)
+        if 2000 <= v <= 2100 and "." not in n:
+            continue
+        nums.add(str(int(v)) if v == int(v) else str(v))
+    return nums
+
+
 def text_tokens(text):
     t = re.sub(r"[^a-z0-9.%$ ]+", " ", str(text or "").lower())
     t = re.sub(r"(\d)([a-z])", r"\1 \2", t)  # "25bps" -> "25 bps"
@@ -967,7 +984,8 @@ def kalshi_scan(r):
         seen += len(ms)
         for m in ms:
             t = str(m.get("ticker") or "")
-            if any(t.startswith(p) for p in r.get("kalshi_skip_prefixes", [])):
+            if any(t.startswith(p) for p in r.get("kalshi_skip_prefixes", [])) or \
+                    any(s in t for s in r.get("kalshi_skip_contains", [])):
                 continue
             if m.get("mve_collection_ticker") or str(m.get("market_type") or "binary") != "binary":
                 continue
@@ -979,8 +997,8 @@ def kalshi_scan(r):
             close = parse_iso(m.get("close_time"))
             if not close:
                 continue
-            out.append({"m": m, "close": close, "ya": ya, "na": na,
-                        "toks": text_tokens(f"{m.get('title', '')} {m.get('yes_sub_title', '')}")})
+            txt = f"{m.get('title', '')} {m.get('yes_sub_title', '')}"
+            out.append({"m": m, "close": close, "ya": ya, "na": na, "toks": text_tokens(txt), "nums": sig_numbers(txt)})
         cursor = res.get("cursor")
         if not cursor or not ms:
             break
@@ -1004,8 +1022,10 @@ def arb_propose():
         if any(w in q.lower() for w in r.get("poly_skip_words", [])):
             continue
         end = parse_iso(m.get("endDateIso") or m.get("endDate"))
-        if end:
-            P.append({"m": m, "end": end, "toks": text_tokens(f"{q} {m.get('groupItemTitle') or ''}")})
+        bb, ba = fnum(m.get("bestBid"), None), fnum(m.get("bestAsk"), None)
+        if end and bb is not None and ba is not None and 0 < ba <= 1:
+            txt = f"{q} {m.get('groupItemTitle') or ''}"
+            P.append({"m": m, "end": end, "toks": text_tokens(txt), "nums": sig_numbers(txt), "bb": bb, "ba": ba})
     K, k_seen = kalshi_scan(r)
     if not P or not K:
         save("arb_candidates.json", {"generated": iso(), "note": "scan failed or empty",
@@ -1026,42 +1046,63 @@ def arb_propose():
             if df[t] <= r.get("max_df", 400):
                 index[t].append(i)
 
-    best_by_poly = {}
+    best_by_poly, dropped = {}, Counter()
     tol = r["date_tolerance_days"] * 86400
+    max_diff = r.get("max_price_diff", 0.12)
     for k in K:
         pool = Counter()
         for t in k["toks"]:
             for i in index.get(t, ()):
                 pool[i] += 1
+        k_mid = (k["ya"] + (1 - k["na"])) / 2
         best = None
         for i, _ in pool.most_common(60):
             p = P[i]
             if abs((p["end"] - k["close"]).total_seconds()) > tol:
                 continue
             s = sum(w[t] ** 2 for t in k["toks"] & p["toks"]) / (k["norm"] * p["norm"])
+            if s < r["min_match_score"]:
+                continue
+            # Twins must agree on their defining numbers (strike, count, threshold) ...
+            if k["nums"] and p["nums"] and not (k["nums"] & p["nums"]):
+                dropped["numbers differ"] += 1
+                continue
+            # ... and be priced alike. A big "gap" almost always means two different questions or a stale quote.
+            p_mid = (p["bb"] + p["ba"]) / 2
+            d_same, d_flip = abs(k_mid - p_mid), abs(k_mid - (1 - p_mid))
+            flip = d_flip < d_same
+            if min(d_same, d_flip) > max_diff:
+                dropped["priced too differently"] += 1
+                continue
             if best is None or s > best[0]:
-                best = (s, i)
-        if not best or best[0] < r["min_match_score"]:
+                best = (s, i, flip)
+        if not best:
             continue
-        s, i = best
+        s, i, flip = best
         pid = f"{k['m'].get('ticker')}|{P[i]['m'].get('slug')}"
         if pid in decided:
             continue
         slug = P[i]["m"].get("slug")
         if slug not in best_by_poly or s > best_by_poly[slug][0]:
-            best_by_poly[slug] = (s, k, P[i])
+            best_by_poly[slug] = (s, k, P[i], flip)
+    print(f"arb: dropped while matching: {dict(dropped)}")
 
     cands = []
-    for s, k, p in best_by_poly.values():
+    for s, k, p, flip in best_by_poly.values():
         km, pm = k["m"], p["m"]
-        bb, ba = fnum(pm.get("bestBid"), None), fnum(pm.get("bestAsk"), None)
-        gap = None
-        if bb is not None and ba is not None and ba > 0:
-            gap = round(1 - min(k["ya"] + (1 - bb), k["na"] + ba), 4)  # assumes Kalshi YES = Polymarket Yes
+        p_yes_ask, p_no_ask = p["ba"], 1 - p["bb"]
+        if flip:  # Kalshi YES behaves like Polymarket No
+            gap = 1 - min(k["ya"] + p_yes_ask, k["na"] + p_no_ask)
+        else:
+            gap = 1 - min(k["ya"] + p_no_ask, k["na"] + p_yes_ask)
+        outs = [str(o) for o in jlist(pm.get("outcomes"))]
+        guess = (outs[1] if flip else outs[0]) if len(outs) == 2 else "?"
         events = pm.get("events") or []
         ev = events[0] if events and isinstance(events[0], dict) else {}
         cands.append({
-            "id": f"{km.get('ticker')}|{pm.get('slug')}", "match_score": round(s, 3), "est_gap_before_fees": gap,
+            "id": f"{km.get('ticker')}|{pm.get('slug')}", "match_score": round(s, 3),
+            "est_gap_before_fees": round(gap, 4),
+            "guess_poly_outcome_for_kalshi_yes": guess + " (price-based guess; verify from the rules)",
             "kalshi": {"ticker": km.get("ticker"), "event_ticker": km.get("event_ticker"), "title": km.get("title"),
                        "yes_sub_title": km.get("yes_sub_title"), "no_sub_title": km.get("no_sub_title"),
                        "close_time": km.get("close_time"), "can_close_early": km.get("can_close_early"),
@@ -1075,7 +1116,8 @@ def arb_propose():
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
         })
-    cands.sort(key=lambda c: (c["est_gap_before_fees"] is None, -(c["est_gap_before_fees"] or 0), -c["match_score"]))
+    # Most twin-like first; among equals, the ones closest to a real (fee-beating) gap.
+    cands.sort(key=lambda c: (-round(c["match_score"], 1), -c["est_gap_before_fees"]))
     save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
                                  "kalshi_kept": len(K), "matched_unreviewed": len(cands),
                                  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
@@ -1523,7 +1565,19 @@ def selftest():
     print("selftest done")
 
 
+def arbtest():
+    """Dry run of the twin finder: prints the candidate list (used by the manual probe workflow, nothing committed)."""
+    arb_propose()
+    d = load("arb_candidates.json", {})
+    print({k: v for k, v in d.items() if k != "candidates"})
+    for c in d.get("candidates", []):
+        k, p = c["kalshi"], c["polymarket"]
+        print(f"\n[{c['match_score']}] gap~{c['est_gap_before_fees']} guess K-YES={c['guess_poly_outcome_for_kalshi_yes'][:3]}"
+              f"\n   K {k['ticker']} ({str(k['close_time'])[:10]}) yes {k['yes_ask']} no {k['no_ask']}: {k['title']} | {k['yes_sub_title']}"
+              f"\n   P {p['slug'][:50]} ({p['end']}) bid/ask {p['best_bid_yes']}/{p['best_ask_yes']}: {p['question']}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
-     "selftest": selftest}[cmd]()
+     "selftest": selftest, "arbtest": arbtest}[cmd]()
