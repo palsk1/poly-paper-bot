@@ -1,15 +1,104 @@
 {
  "arb": {
-  "arbs": {},
-  "cash": 300.0,
+  "arbs": {
+   "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026#1": {
+    "annual": 0.154,
+    "cost": 4.8749,
+    "edge": 0.025,
+    "expected_profit": 0.1251,
+    "k_fee": 0.02,
+    "k_price": 0.94,
+    "k_side": "no",
+    "kalshi": "KXSATOSHIBTCYEAR-27",
+    "kalshi_close": "2027-01-01T05:00:00Z",
+    "opened": "2026-11-04T08:08:54Z",
+    "p_fee": 0.0099,
+    "p_price": 0.029,
+    "pair_id": "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026",
+    "poly_end": "2027-01-01",
+    "poly_outcome": "Yes",
+    "poly_slug": "will-satoshi-move-any-bitcoin-in-2026",
+    "poly_token": "112007327373263623178671509828927834172092799802464528122988153704237637965568",
+    "shares": 5,
+    "title": "Will Satoshi move any Bitcoin in 2026?"
+   }
+  },
+  "cash": 295.125144,
   "closed": [],
   "created": "2026-11-04T07:55:55Z",
   "deposited": 300.0,
-  "last_check": {},
+  "last_check": {
+   "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
+    "annual": 0.154,
+    "edge": 0.025,
+    "opportunity": true,
+    "ts": "2026-11-04T08:08:54Z"
+   },
+   "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
+    "annual": 0.026,
+    "edge": 0.0044,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:56Z"
+   },
+   "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
+    "annual": -0.084,
+    "edge": -0.0143,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:59Z"
+   },
+   "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
+    "annual": 0.004,
+    "edge": 0.0007,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:55Z"
+   },
+   "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
+    "annual": -0.186,
+    "edge": -0.0321,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:55Z"
+   },
+   "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
+    "annual": -0.094,
+    "edge": -0.0159,
+    "opportunity": false,
+    "ts": "2026-11-04T08:09:00Z"
+   },
+   "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
+    "annual": -0.044,
+    "edge": -0.0074,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:58Z"
+   },
+   "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
+    "annual": -0.097,
+    "edge": -0.0164,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:57Z"
+   },
+   "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
+    "annual": -0.054,
+    "edge": -0.0091,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:58Z"
+   },
+   "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
+    "annual": -0.088,
+    "edge": -0.015,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:59Z"
+   },
+   "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
+    "annual": -0.1,
+    "edge": -0.0169,
+    "opportunity": false,
+    "ts": "2026-11-04T08:08:57Z"
+   }
+  },
   "min_cash": 0.0,
   "mismatches": 0,
-  "opportunities": 0,
-  "peak_open_cost": 0.0,
+  "opportunities": 1,
+  "peak_open_cost": 4.8749,
   "positions": {},
   "realized": 0.0,
   "refills": 0,

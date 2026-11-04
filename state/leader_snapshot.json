@@ -1,14 +1,5 @@
 {
  "positions": {
-  "101804221129923221311468014764974740374334424163195744719593146528253694482543": {
-   "avg": 0.8558,
-   "end": "2026-11-04",
-   "event_slug": "ga-12-house-election-winner",
-   "outcome": "Yes",
-   "size": 781.83,
-   "slug": "will-the-republican-party-win-the-ga-12-house-seat",
-   "title": "Will the Republican Party win the GA-12 House seat?"
-  },
   "106375876055695859045413141458606643340242853794519126089005356920987236120368": {
    "avg": 0.8667,
    "end": "2026-12-01",
@@ -71,15 +62,6 @@
    "size": 1065.9,
    "slug": "will-the-republican-party-win-the-nc-06-house-seat",
    "title": "Will the Republican Party win the NC-06 House seat?"
-  },
-  "111381299800799485509083912497813429956512687399857260440199290536659860679263": {
-   "avg": 0.85,
-   "end": "2026-11-03",
-   "event_slug": "which-tossup-senate-states-will-republicans-win-ak-ia-ks-me-mi-oh-tx",
-   "outcome": "No",
-   "size": 4870.03,
-   "slug": "2026-senate-map-r-ia-ks",
-   "title": "Will Republicans win Iowa and Kansas, and lose Alaska, Maine, Michigan, Ohio, and Texas?"
   },
   "111592979787416536527094824125829347487500287001013667141026453581768935971074": {
    "avg": 0.9229,
@@ -233,15 +215,6 @@
    "size": 1439.28,
    "slug": "will-the-republican-party-win-the-nc-14-house-seat",
    "title": "Will the Republican Party win the NC-14 House seat?"
-  },
-  "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
-   "avg": 0.5,
-   "end": "2026-12-01",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "outcome": "Yes",
-   "size": 303.64,
-   "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
-   "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
   },
   "33460385394344753109351907923235209397225125746318923726067817676780036931403": {
    "avg": 0.7899,
@@ -594,15 +567,6 @@
    "slug": "will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
    "title": "Will the US confirm that aliens exist before 2027?"
   },
-  "7460473200203500049888783719604614089184190030851720364867764732498211690017": {
-   "avg": 0.8899,
-   "end": "2026-11-04",
-   "event_slug": "fl-21-house-election-winner",
-   "outcome": "Yes",
-   "size": 515.67,
-   "slug": "will-the-republican-party-win-the-fl-21-house-seat",
-   "title": "Will the Republican Party win the FL-21 House seat?"
-  },
   "75456607043732794219059106581238849324790125612206555490847983483098014836433": {
    "avg": 0.9105,
    "end": "2027-01-01",
@@ -656,15 +620,6 @@
    "size": 1757.46,
    "slug": "will-russia-enter-sloviansk-by-december-31-2026",
    "title": "Will Russia enter Sloviansk by December 31, 2026?"
-  },
-  "83247781037352156539108067944461291821683755894607244160607042790356561625563": {
-   "avg": 0.93,
-   "end": "2026-11-04",
-   "event_slug": "which-party-will-win-the-house-in-2026",
-   "outcome": "Yes",
-   "size": 7000.0,
-   "slug": "will-the-democratic-party-control-the-house-after-the-2026-midterm-elections",
-   "title": "Will the Democratic Party control the House after the 2026 Midterm elections?"
   },
   "87194740732133168017179001737986231915842576312391051924620967868219853534285": {
    "avg": 0.35,
@@ -725,7 +680,7 @@
    "end": "2026-11-04",
    "event_slug": "nc-05-house-election-winner",
    "outcome": "Yes",
-   "size": 2000.0,
+   "size": 1755.35,
    "slug": "will-the-republican-party-win-the-nc-05-house-seat",
    "title": "Will the Republican Party win the NC-05 House seat?"
   },
