@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T11:35:23Z"
+    "ts": "2026-11-04T11:40:34Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:24Z"
+    "ts": "2026-11-04T11:40:36Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:27Z"
+    "ts": "2026-11-04T11:40:40Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:23Z"
+    "ts": "2026-11-04T11:40:35Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.159,
-    "edge": -0.0271,
+    "annual": -0.184,
+    "edge": -0.0315,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:24Z"
+    "ts": "2026-11-04T11:40:36Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:27Z"
+    "ts": "2026-11-04T11:40:41Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:26Z"
+    "ts": "2026-11-04T11:40:38Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:25Z"
+    "ts": "2026-11-04T11:40:37Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:26Z"
+    "ts": "2026-11-04T11:40:39Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:27Z"
+    "ts": "2026-11-04T11:40:40Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0267,
     "opportunity": false,
-    "ts": "2026-11-04T11:35:25Z"
+    "ts": "2026-11-04T11:40:38Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 7.80355,
+  "cash": 2.94773,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -361,8 +361,24 @@
   "created": "2026-11-04T08:27:23Z",
   "deposited": 100.0,
   "min_cash": 0.0,
-  "peak_open_cost": 92.619183,
+  "peak_open_cost": 97.475003,
   "positions": {
+   "100080019064437713660518261691897505022907944643955990180401608803939240517593": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "834407",
+    "event_slug": "ny-04-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:41:13Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-ny-04-house-election-by-10-15",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party candidate win the 2026 NY-04 House election by 10%-15%?"
+   },
    "112883235802097588694962200577527079540064220506905432822464479503173986230656": {
     "end": "2026-11-04",
     "entry": 0.985,
