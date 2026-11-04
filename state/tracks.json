@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T12:10:36Z"
+    "ts": "2026-11-04T12:15:34Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:39Z"
+    "ts": "2026-11-04T12:15:35Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:44Z"
+    "ts": "2026-11-04T12:15:38Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:37Z"
+    "ts": "2026-11-04T12:15:35Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.218,
-    "edge": -0.0376,
+    "annual": -0.18,
+    "edge": -0.0309,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:38Z"
+    "ts": "2026-11-04T12:15:35Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:46Z"
+    "ts": "2026-11-04T12:15:39Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:42Z"
+    "ts": "2026-11-04T12:15:37Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:40Z"
+    "ts": "2026-11-04T12:15:36Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:43Z"
+    "ts": "2026-11-04T12:15:37Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:45Z"
+    "ts": "2026-11-04T12:15:38Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.213,
     "edge": -0.0367,
     "opportunity": false,
-    "ts": "2026-11-04T12:10:41Z"
+    "ts": "2026-11-04T12:15:36Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 3.09191,
+  "cash": 3.23609,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -378,6 +378,28 @@
     "tier": "proposed",
     "title": "Will the Republican Party win the NV-01 House seat?",
     "token": "58852733019222657257857989920800865387778184315425789631820735202058753631697"
+   },
+   {
+    "closed_at": "2026-11-04T12:15:33Z",
+    "end": "2026-11-04",
+    "entry": 0.991,
+    "entry_fee": 0.001784,
+    "event_key": "106117",
+    "event_slug": "nv-03-house-election-winner",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "Yes",
+    "pnl": 0.043216,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-the-democratic-party-win-the-nv-03-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Democratic Party win the NV-03 House seat?",
+    "token": "94909040987536769270715360325201420589044604443243218743462043270034738802453"
    }
   ],
   "created": "2026-11-04T08:27:23Z",
@@ -416,6 +438,22 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will Chris Van Hollen be the next Senate Majority Leader?"
+   },
+   "12815952369395061580656040420894728094541250183730231747201102962701085209555": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "659973",
+    "event_slug": "how-many-senate-and-governor-elections-will-republicans-win-in-states-won-by-kamala-20260702152603469",
+    "opened": "2026-11-04T12:16:05Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-republicans-win-2-senate-and-governor-elections-in-states-won-by-kamala-20260702152603472",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Republicans win 2 Senate and Governor elections in states won by Kamala?"
    },
    "16661917299889844562247566603559122251937209362630950418259738730496536105112": {
     "end": "2026-11-04",
@@ -688,25 +726,9 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Republican Party win the MI-04 House seat?"
-   },
-   "94909040987536769270715360325201420589044604443243218743462043270034738802453": {
-    "end": "2026-11-04",
-    "entry": 0.991,
-    "entry_fee": 0.001784,
-    "event_key": "106117",
-    "event_slug": "nv-03-house-election-winner",
-    "opened": "2026-11-04T10:42:16Z",
-    "outcome": "Yes",
-    "price_source": "estimate",
-    "shares": 5,
-    "slug": "will-the-democratic-party-win-the-nv-03-house-seat",
-    "source": "endgame",
-    "theme": "us politics",
-    "tier": "proposed",
-    "title": "Will the Democratic Party win the NV-03 House seat?"
    }
   },
-  "realized": 0.485167,
+  "realized": 0.528383,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
