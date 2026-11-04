@@ -87,13 +87,30 @@
   "unlimited": true
  },
  "panic_fade": {
-  "cash": 50.0,
+  "cash": 46.31058,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 0.0,
-  "positions": {},
+  "peak_open_cost": 3.68942,
+  "positions": {
+   "70201851876332354439276604090702674974859631903486990974685797729205226013576": {
+    "end": "2027-01-01",
+    "entry": 0.73,
+    "entry_fee": 0.03942,
+    "event_key": "212877",
+    "event_slug": "will-samuel-alito-announce-his-retirement-by",
+    "opened": "2026-11-04T02:58:56Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-samuel-alito-announce-his-retirement-by-december-31-2026-573-343-622",
+    "source": "panic_fade",
+    "target": 0.845,
+    "theme": null,
+    "title": "Will Samuel Alito announce his retirement by December 31, 2026?"
+   }
+  },
   "realized": 0.0,
   "refills": 0,
   "skipped_no_cash": 0,
