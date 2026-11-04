@@ -13,6 +13,8 @@
 | `claude` | Claude's own rules (see `config.json` > `rules.claude.why`) | $50, refilled with $50 if it busts |
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
+| `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports | $100 |
+| `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The arbitrage track, and the known traps it is built to avoid
 
@@ -25,9 +27,14 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 5. **Holds both legs to the end** and flags a **MISMATCH** loudly if the two sites resolve differently.
 6. **Proof line:** a clean arb earns about its edge per share; a mismatch can lose about the whole $1. So arbs only pay if mismatches are rarer than about the edge (2.5c edge -> under 2.5%). The summary shows how many clean finished arbs are needed to be 90% sure of that (about 90 at a 2.5c edge, if none mismatch).
 
+## Endgame and every horse
+
+- **Endgame** earns 1-5c per share on things that are already decided, in hours or days instead of months. The only way to lose is a "sure thing" flipping (a disputed result, a misread rule); the bot pushes **FLIP** when that happens. Results are kept per tier (resolved, proposed, past_deadline, ending_soon) so we can see which kind is actually safe. Proof line: a flip costs about the whole price, so flips must be rarer than the edge (about 2c -> under 1 in 50).
+- **Every horse** is pure math: if buying every candidate costs 96c and exactly one must win, that is 4c locked in. The catch is lists that are not complete (someone unlisted wins and every YES pays 0), so all-YES is only bought when the list has a catch-all outcome and is marked closed; open lists are skipped. The bot pushes **SHORT** if a set ever pays less than expected. Needs >= 1c per share after fees and >= 15% a year.
+
 ## How it runs
 
-- `watch` workflow, every ~10 min (GitHub often runs it less often): checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, panic scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
+- `watch` workflow, every ~10 min (GitHub often runs it less often): checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, endgame scan, panic and every-horse scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
 - `daily` workflow, ~06:17 Stockholm (backup 07:47): settles resolved markets, picks for the rule tracks, proposes arb pairs, writes `state/summary.md`, pushes a scoreboard. Runs once per day; a manual run forces a re-run.
 - `selftest` workflow (manual): checks the APIs and sends a test push. `probe` workflow (manual): prints raw API shapes, no pushes.
 
@@ -36,7 +43,7 @@ Fills are paper fills at the real order book price (taking the ask, selling at t
 ## Files
 
 - `state/summary.md`: human-readable daily report (start here)
-- `state/tracks.json`: every paper position, arb and closed trade
+- `state/tracks.json`: every paper position, arb, every-horse set and closed trade
 - `state/events.jsonl`: everything that happened, one line per event
 - `state/history.csv`: daily P&L per track
 - `state/candidates.json`: what the rule tracks were choosing from
