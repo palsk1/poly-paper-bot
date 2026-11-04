@@ -1,4 +1,4 @@
-# Paper bot summary - 2026-11-04T07:15:31Z
+# Paper bot summary - 2026-11-04T07:59:22Z
 
 Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper money only.
 
@@ -10,8 +10,9 @@ Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper m
 | mirror_unlimited | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $-0.00; most tied up at once $0.00 |
 | panic_fade | +0.31 | 1 | 0 (0/0) | $46.31 | refills 0; skipped (no cash) 0 |
 | screener | +0.01 | 4 | 0 (0/0) | $2.56 | skipped (no cash) 1 |
+| arb | +0.00 | 0 | 0 (0/0) | $300.00 | locked $0.00 (+$0.00 expected); gaps found 0; mismatches 0 |
 
-**His book right now:** 68 open positions worth $118,172. Holding all of them at the 5-share minimum would cost $249.86. Biggest single position = 17% of his book.
+**His book right now:** 67 open positions worth $118,347. Holding all of them at the 5-share minimum would cost $250.28. Biggest single position = 17% of his book.
 
 
 ## claude
@@ -21,8 +22,8 @@ Claude: my own rules, $50 paper, refilled with $50 if it busts
 |---|---|---|---|---|---|
 | Iran leadership change by November 30? | No | 94c | 94c | +0.03 | 2026-12-01 |
 | US-Iran Final Nuclear Deal by November 30, 2026? | No | 94c | 96c | +0.08 | 2026-12-01 |
-| NATO x Russia military clash by November 30, 2026? | No | 95c | 94c | -0.05 | 2026-12-01 |
 | Russia x Ukraine ceasefire by December 31, 2026? | No | 90c | 90c | -0.03 | 2026-12-31 |
+| NATO x Russia military clash by November 30, 2026? | No | 95c | 94c | -0.05 | 2026-12-01 |
 
 ## favorites
 Favorites only: his entries at 80c or more ($20 paper)
@@ -51,10 +52,19 @@ Screener: his style by rule, without him ($20 paper)
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
+| Will T1 win Worlds 2026? | No | 81c | 80c | -0.06 | 2026-11-29 |
 | Strait of Hormuz traffic returns to normal by November 30? | No | 95c | 94c | -0.03 | 2026-12-01 |
 | Will the U.S. invade Iran before 2027? | No | 83c | 84c | +0.08 | 2027-01-01 |
 | Strait of Hormuz traffic returns to normal by December 31? | No | 89c | 90c | +0.02 | 2027-01-01 |
-| Will T1 win Worlds 2026? | No | 81c | 80c | -0.06 | 2026-11-29 |
+
+## arb
+Arbitrage: Kalshi vs Polymarket, reviewed twin markets only, both legs bought, held to the end. $300 paper
+
+**Proof status:** Not proven yet: no finished arbs. With ~2.0c edge we need about 114 clean finished arbs (0 mismatches) to be 90% sure.
+
+Approved twin pairs: 0, rejected: 0, new candidates waiting for review: 25.
+
+No open arbs.
 
 ## Last 24 hours
 
