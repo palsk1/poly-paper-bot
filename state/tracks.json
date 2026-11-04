@@ -95,67 +95,67 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T11:25:24Z"
+    "ts": "2026-11-04T11:30:53Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:27Z"
+    "ts": "2026-11-04T11:30:56Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:31Z"
+    "ts": "2026-11-04T11:31:01Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:25Z"
+    "ts": "2026-11-04T11:30:54Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.214,
-    "edge": -0.0369,
+    "annual": -0.235,
+    "edge": -0.0407,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:26Z"
+    "ts": "2026-11-04T11:30:55Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:33Z"
+    "ts": "2026-11-04T11:31:03Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:29Z"
+    "ts": "2026-11-04T11:30:59Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:28Z"
+    "ts": "2026-11-04T11:30:57Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:30Z"
+    "ts": "2026-11-04T11:31:00Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:32Z"
+    "ts": "2026-11-04T11:31:02Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0267,
     "opportunity": false,
-    "ts": "2026-11-04T11:25:28Z"
+    "ts": "2026-11-04T11:30:58Z"
    }
   },
   "min_cash": 0.0,
@@ -245,7 +245,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 46.765614,
+  "cash": 27.23639,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -361,7 +361,7 @@
   "created": "2026-11-04T08:27:23Z",
   "deposited": 100.0,
   "min_cash": 0.0,
-  "peak_open_cost": 53.657119,
+  "peak_open_cost": 73.186343,
   "positions": {
    "16661917299889844562247566603559122251937209362630950418259738730496536105112": {
     "end": "2026-11-04",
@@ -490,6 +490,70 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Republican Party candidate win the 2026 WI-07 House election by 20%-25%?"
+   },
+   "73990293257762740446329441726210816236433525282117609895692915154666632106974": {
+    "end": "2026-11-01",
+    "entry": 0.976,
+    "entry_fee": 0.0,
+    "event_key": "1099776",
+    "event_slug": "eritrea-invades-ethiopia-byptptpt",
+    "opened": "2026-11-04T11:31:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "eritrea-invades-ethiopia-by-october-31",
+    "source": "endgame",
+    "theme": null,
+    "tier": "past_deadline",
+    "title": "Eritrea invades Ethiopia by October 31?"
+   },
+   "76842673379927080228041555686089862732510090060648863483104356706426189452634": {
+    "end": "2026-11-04",
+    "entry": 0.977,
+    "entry_fee": 0.004494,
+    "event_key": "812675",
+    "event_slug": "ia-04-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:31:47Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-republican-party-candidate-win-the-2026-ia-04-house-election-by-0-5",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Republican Party candidate win the 2026 IA-04 House election by 0%-5%?"
+   },
+   "78758560906788892018786272442027054905144346915994929376439587663972451194958": {
+    "end": "2026-11-04",
+    "entry": 0.982,
+    "entry_fee": 0.003535,
+    "event_key": "834891",
+    "event_slug": "tx-22-house-margin-of-victory-2026",
+    "opened": "2026-11-04T11:31:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-tx-22-house-election",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will the Democratic Party candidate win the 2026 TX-22 House election?"
+   },
+   "81324391717993408186762498276630470462546257831134891865137816576810224949365": {
+    "end": "2026-11-04",
+    "entry": 0.968,
+    "entry_fee": 0.006195,
+    "event_key": "354609",
+    "event_slug": "speaker-of-the-house-after-the-midterms",
+    "opened": "2026-11-04T11:31:46Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-hakeem-jeffries-be-the-first-speaker-of-the-house-after-the-2026-midterms",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Hakeem Jeffries be the first Speaker of the House after the 2026 midterms?"
    },
    "92461925582871836604329373342734059251678046595372592532836439603090558657253": {
     "end": "2026-11-04",
