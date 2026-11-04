@@ -1,860 +1,885 @@
 {
  "candidates": [
   {
-   "est_gap_before_fees": 0.906,
-   "id": "KXRT-HUN-65|will-the-hunger-games-sunrise-on-the-reaping-opening-weekend-box-office-be-between-65m-and-75m",
+   "est_gap_before_fees": 0.031,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2026-11-23T15:00:00Z",
-    "event_ticker": "KXRT-HUN",
-    "no_ask": 0.08,
-    "no_sub_title": "Above 65",
-    "rules_primary": "If The Hunger Games: Sunrise on the Reaping has a Tomatometer score of above 65 on Nov 23, 2026 at 10:00 AM ET, then the market resolves to Yes.",
-    "rules_secondary": "The \"Fresh!\" and \"Certified Fresh!\" subtitles are meant for illustrative purposes only. The Tomatometer score must be above the strike value to resolve as YES (for example, a score of 75 would resolve \"Above 75\" as No.) The market will be determined the Monday after wide release at 10:00 AM ET.\n\nThis market and these products have not been endorsed by Rotten Tomatoes. Any references to Rotten Tomatoes or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Rotten Tomatoes and Kalshi.",
-    "ticker": "KXRT-HUN-65",
-    "title": "The Hunger Games: Sunrise on the Reaping Rotten Tomatoes score?",
-    "volume": 31976.46,
-    "yes_ask": 0.93,
-    "yes_sub_title": "Above 65"
-   },
-   "match_score": 0.528,
-   "polymarket": {
-    "best_ask_yes": 0.014,
-    "best_bid_yes": 0.013,
-    "description": "This market will resolve according to how much \"The Hunger Games: Sunrise on the Reaping\" Opening Weekend Box Office will gross domestically on its opening weekend. The \"Daily Box Office Performance\" figures found on the \"Box Office\" tab on this movie's The Numbers (https://www.the-numbers.com/) page will be used to resolve this market once the values for the 3-day opening weekend (November 20 - 22) are final (i.e., not studio estimates).\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nPlease note, this market will resolve according to the The Numbers figures provided under Weekend Box Office Performance for the 3-day weekend (which typically includes Thursday's previews), regardless of whether domestic refers to only the USA, or to USA and Canada, etc.\n\nIf there is ambiguity as to whether the resolution source's figures are final, this market will remain open until both https://www.boxofficemojo.com/ and https://www.the-numbers.com/ have confirmed their finalized figures.\n\nIf there is no final data available by November 27, 2026, 11:59 PM ET, another credible resolution source will be chosen.",
-    "end": "2026-11-22",
-    "fee_rate": 0.05,
-    "liquidity": 2896,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will \"The Hunger Games: Sunrise on the Reaping\" Opening Weekend Box Office be between 65m and 75m?",
-    "slug": "will-the-hunger-games-sunrise-on-the-reaping-opening-weekend-box-office-be-between-65m-and-75m",
-    "url": "https://polymarket.com/event/the-hunger-games-sunrise-on-the-reaping-opening-weekend-box-office"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.9,
-   "id": "KXSTARSHIPSPACE-26B-3|will-9-10-spacex-starship-launches-successfully-reach-space-in-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXSTARSHIPSPACE-26B",
-    "no_ask": 0.09,
-    "no_sub_title": "Above 3",
-    "rules_primary": "If above 3 Starship launches reach Space in 2026, then the market resolves to Yes.",
-    "rules_secondary": "A Starship will be considered to have reached space if its maximum altitude is at least 62 miles above sea level at any point during its flight.",
-    "ticker": "KXSTARSHIPSPACE-26B-3",
-    "title": "Will above 3 Starship launches reach space in 2026?",
-    "volume": 1674.4,
-    "yes_ask": 0.95,
-    "yes_sub_title": "Above 3"
-   },
-   "match_score": 0.689,
-   "polymarket": {
-    "best_ask_yes": 0.01,
-    "best_bid_yes": 0.005,
-    "description": "This market will resolve according to the number of SpaceX Starship launches successfully reaching an altitude of 62 miles above sea level between January 1, 2026, and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA successful launch is defined as the Starship taking off from its launchpad and reaching a minimum altitude of 62 miles above sea level. Any subsequent anomaly (e.g., an explosion) after the vehicle reaches 62 miles will have no bearing on the outcome.\n\nThe primary resolution source for this market will be SpaceX\u2019s official video feed of the launches (e.g., via SpaceX YouTube Channel), as well as secondary video feeds or written reports if necessary. However, a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 3215,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will 9-10 SpaceX Starship launches successfully reach Space in 2026?",
-    "slug": "will-9-10-spacex-starship-launches-successfully-reach-space-in-2026",
-    "url": "https://polymarket.com/event/how-many-spacex-starship-launches-reach-space-in-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.899,
-   "id": "KXCPICORE-26OCT-T0.0|will-core-cpi-mom-be-0pt0-or-less-in-october-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-10T13:25:00Z",
-    "event_ticker": "KXCPICORE-26OCT",
-    "no_ask": 0.06,
-    "no_sub_title": "Above 0.0%",
-    "rules_primary": "If the seasonally adjusted Consumer Price Index for All Urban Consumers: All Items less Food and Energy for October 2026, as published by the Bureau of Labor Statistics, increases by above 0.0%, then the market resolves to Yes.",
-    "rules_secondary": "Please note that the value of the Underlying is the single-decimal value reported by the BLS.\n\nIn the case of a delay in data caused by a federal government shutdown impacting the reliability of the Source Agency, the market\u2019s latest Expiration Date will be extended to the sooner of the release of the Underlying or six months after the end of the government shutdown.",
-    "ticker": "KXCPICORE-26OCT-T0.0",
-    "title": "Will CPI Core rise more than 0.0% in October?",
-    "volume": 91793.38,
-    "yes_ask": 0.95,
-    "yes_sub_title": "Above 0.0%"
-   },
-   "match_score": 0.609,
-   "polymarket": {
-    "best_ask_yes": 0.041,
-    "best_bid_yes": 0.027,
-    "description": "This is a market about the one-month percent change in the Consumer Price Index for All Urban Consumers excluding food and energy in October 2026 as reported by the Bureau of Labor Statistics.\n\nThis market will resolve to the one-month percentage change in the Consumer Price Index for All Urban Consumers excluding food and energy (Core CPI-U) in October 2026 according to the monthly Bureau of Labor Statistics (BLS) report (seasonally adjusted change from the preceding month).\n\nThe resolution source for this market will be the BLS Consumer Price Index report released for October 2026 (https://www.bls.gov/bls/news-release/cpi.htm), currently scheduled to be released on November 10, 2026, at 8:30 AM ET. Resolution of this market will take place upon release of the aforementioned data.\n\nNote: the resolution source for this market will be the official monthly BLS CPI news release, which reports core inflation (all items less food and energy) over 1-month periods to only one decimal point (e.g., 0.3%). Thus, this is the level of precision that will be used when resolving the market. For the avoidance of doubt, this market resolves on the core CPI figure (the all items index excluding food and energy), not the headline all items CPI figure.\n\nIf the BLS does not release the relevant figures on the scheduled date, this market may remain open up until the scheduled release time of the next CPI report (https://www.bls.gov/schedule). If the information is not released by that time, this market will resolve according to the figures of the most recent previous month with available data.",
-    "end": "2026-11-11",
-    "fee_rate": 0.05,
-    "liquidity": 2636,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Core CPI MoM be 0.0% or less in October?",
-    "slug": "will-core-cpi-mom-be-0pt0-or-less-in-october-2026",
-    "url": "https://polymarket.com/event/core-cpi-mom-october-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.88,
-   "id": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15-BIG|will-jay-z-appear-at-the-2027-big-game-halftime-show",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-02-15T04:59:00Z",
-    "event_ticker": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15",
-    "no_ask": 0.97,
-    "no_sub_title": "Big Pimpin'",
-    "rules_primary": "If the first song performed by Jay-Z during the 2027 NFL Championship Halftime Show is the song ''Big Pimpin''' as performed  by Jay-Z (i.e., its recognizable melody or lyrics sung), whether performed in full, in part, in a medley, or in a mashup, provided it is at least reasonably begun, then the market resolves to Yes.",
-    "rules_secondary": "This market pertains to the first qualifying song performed during the NFL Championship Final Halftime Show performed by Jay-Z. If none of the songs listed in this event are the first qualifying song, all markets in this event will resolve to No.\n\nThe performance must be confirmed by official sources including setlist archives, official tour programs, livestream recordings, or post-event press materials issued by the artist or event organizers. Full or partial live performances count as performed if the song is at least reasonably begun. Medleys count each song as performed in the order they appear. Interludes, band instrumentals while the singer talks, rehearsals, sound checks, and unconfirmed performances do not qualify. If multiple performances occur within the time period, the ordering",
-    "ticker": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15-BIG",
-    "title": "Will Big Pimpin' be the first song performed by Jay-Z during the 2027 NFL Championship Halftime Show?",
-    "volume": 6953.6,
-    "yes_ask": 0.06,
-    "yes_sub_title": "Big Pimpin'"
-   },
-   "match_score": 0.598,
-   "polymarket": {
-    "best_ask_yes": 0.96,
-    "best_bid_yes": 0.94,
-    "description": "Super Bowl LXI is scheduled to be played on February 14, 2027.\n\nThis market will resolve to \u201cYes\u201d if the listed person appears in the 2027 Super Bowl Halftime Show. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA person will be considered to appear in the Super Bowl Halftime Show if they appear live and in person on the official Super Bowl Halftime Show broadcast within one of the following areas: i) the field of play, including the end zones; ii) any surrounding field-level areas below the first level of stands, such as the sidelines, areas behind the end zones, and tunnels leading directly onto the field; or iii) any set, stage, rig, or platform built for the Halftime Show, wherever it stands in the stadium. No particular activity is required, and the length of the appearance does not impact resolution. \n\nThe official broadcast refers to the official Super Bowl broadcaster\u2019s primary national telecast of the 2027 National Football League Super Bowl in the United States, including the official broadcaster\u2019s simultaneous official stream of that telecast.\n\nThe Halftime Show is the entertainment program staged at the stadium between the second and third quarters of the National Football League Super Bowl and presented in the official broadcast, from the start of the program to its conclusion.\n\nThe following will not qualify absent an appearance in the Super Bowl Halftime Show as defined above: attendance at the Super Bowl; an appearance on the official broadcast outside the designated areas, including in the stands, a suite, or another spectator area; an appearance before the Halftime Show begins or after it ends, including a rehearsal or soundcheck; or an appearance that is not live and in person, including a pre-recorded segment, a remote, satellite, holographic, or digi",
-    "end": "2027-02-18",
-    "fee_rate": 0.05,
-    "liquidity": 34597,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Jay Z appear at the 2027 Big Game halftime show?",
-    "slug": "will-jay-z-appear-at-the-2027-big-game-halftime-show",
-    "url": "https://polymarket.com/event/who-will-be-in-the-2027-big-game-halftime-show"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.821,
-   "id": "KXSENDEMLEADRUN-26-27JAN01-CSCH|will-chuck-schumer-be-the-next-us-senate-minority-leader",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXSENDEMLEADRUN-26",
-    "no_ask": 0.14,
-    "no_sub_title": "Chuck Schumer",
-    "rules_primary": "If Chuck Schumer has announced that they will run for Senate Democratic leader for the 120th Congress in 2026 after Issuance and before Jan 1, 2027, including running for the nomination of any political party to contest that office, then the market resolves to Yes.",
-    "rules_secondary": "The person must publicly announce their campaign for it to be reported by a Source Agency. Merely filing campaign paperwork with the Federal Election Commission or similar entity is insufficient without a public announcement. The announcement must be for the specific office and election year listed. Exploratory committees or statements of interest without formal campaign announcements do not qualify. Running for a party's nomination to contest the office counts as running for that office. The announcement must come from the person themselves or their official campaign, not from speculation or third-party sources.\n\nSenate Democratic leader means the top post the Senate Democratic Caucus elects for the 120th Congress after the 2026 midterm elections: Majority Leader if Democrats win the Sena",
-    "ticker": "KXSENDEMLEADRUN-26-27JAN01-CSCH",
-    "title": "Will Chuck Schumer announce a run for Senate Democratic leader for the 120th Congress in 2026?",
-    "volume": 3501.83,
-    "yes_ask": 0.93,
-    "yes_sub_title": "Chuck Schumer"
-   },
-   "match_score": 0.622,
-   "polymarket": {
-    "best_ask_yes": 0.039,
-    "best_bid_yes": 0.007,
-    "description": "This market will resolve according to the individual who is chosen to be the first Senate Minority Leader in the Congress that convenes after the November 3, 2026, U.S. General Election.\n\nIf no Senate Minority Leader is chosen by June 30, 2027, 11:59 PM ET, this market will resolve to \u201cOther\u201d.\n\nThe resolution source will be official information from the United States Senate or official announcements from the caucus organization of the relevant party; however, a consensus of credible reporting may also be used.",
-    "end": "2027-01-03",
-    "fee_rate": 0.04,
-    "liquidity": 12167,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Chuck Schumer be the next US Senate Minority Leader?",
-    "slug": "will-chuck-schumer-be-the-next-us-senate-minority-leader",
-    "url": "https://polymarket.com/event/next-us-senate-minority-leader"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.82,
-   "id": "KXLIGUE1-27-PSG|will-khvicha-kvaratskhelia-psg-record-the-most-assists-in-the-2026-27-ligue-1-season",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-06-13T02:00:00Z",
-    "event_ticker": "KXLIGUE1-27",
-    "no_ask": 0.13,
-    "no_sub_title": "PSG",
-    "rules_primary": "If PSG is the 2026-2027 Ligue 1 champion, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLIGUE1-27-PSG",
-    "title": "Will PSG win the 2026-27 Ligue 1?",
-    "volume": 17177.6,
-    "yes_ask": 0.89,
-    "yes_sub_title": "PSG"
-   },
-   "match_score": 0.572,
-   "polymarket": {
-    "best_ask_yes": 0.05,
-    "best_bid_yes": 0.01,
-    "description": "This market will resolve to the player who records the most assists during the 2026-27 Ligue 1 season.\n\nOnly assists recorded in Ligue 1 matches will count. Assists in other competitions (e.g., domestic cups, UEFA Champions League, UEFA Europa League, UEFA Conference League, international matches) will not count for this market.\n\nIf multiple players tie for the most assists, this market will resolve to the tied player who completed more passes during the 2026-27 Ligue 1 season. If a tie still persists, this market will resolve in favor of the tied player whose last name comes first alphabetically.\n\nIf the 2026-27 Ligue 1 season is canceled or not completed by June 14, 2027, the market will resolve to \"Other\".\n\nThe primary resolution source will be official statistics from Ligue 1. A consensus of credible reporting may also be used.",
-    "end": "2027-06-15",
-    "fee_rate": 0.05,
-    "liquidity": 4352,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Khvicha Kvaratskhelia (PSG) record the most assists in the 2026-27 Ligue 1 season?",
-    "slug": "will-khvicha-kvaratskhelia-psg-record-the-most-assists-in-the-2026-27-ligue-1-season",
-    "url": "https://polymarket.com/event/ligue-1-most-assists-2026-27"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.79,
-   "id": "KXIPOANTHROPIC-DATE-26DEC01|will-anthropic-ipo-on-november-27-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-01T04:59:00Z",
-    "event_ticker": "KXIPOANTHROPIC-DATE",
-    "no_ask": 0.18,
-    "no_sub_title": "Before Dec 1, 2026",
-    "rules_primary": "If Anthropic confirms an IPO before Dec 1, 2026, then the market resolves to Yes.",
-    "rules_secondary": "An IPO is confirmed if 1) the SEC declares the company's Form S-1 effective OR 2) the IPO is priced OR 3) a securities exchange has assigned a ticker to it. As long as any of those events occur, the market will immediately resolve to Yes, even if the company does not start trading until after Dec 1, 2026.",
-    "ticker": "KXIPOANTHROPIC-DATE-26DEC01",
-    "title": "When will Anthropic officially announce an IPO?",
-    "volume": 376919.22,
-    "yes_ask": 0.84,
-    "yes_sub_title": "Before Dec 1, 2026"
-   },
-   "match_score": 0.512,
-   "polymarket": {
-    "best_ask_yes": 0.03,
-    "best_bid_yes": 0.007,
-    "description": "This market will resolve based on the date, in Eastern Time, that Anthropic launches its Initial Public Offering (IPO).\n\nAn IPO refers to the first public sale of shares by the listed company on a recognized stock exchange.\n\nIf no IPO occurs by November 30, 2026, 11:59 PM ET, the market will resolve to \"No IPO by November 30, 2026\".\n\nThe primary resolution source for this market will be the official listing page of the relevant exchange; however, a consensus of credible reporting may also be used.",
-    "end": "2026-11-28",
-    "fee_rate": 0.04,
-    "liquidity": 2396,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Anthropic IPO on November 27, 2026?",
-    "slug": "will-anthropic-ipo-on-november-27-2026",
-    "url": "https://polymarket.com/event/anthropic-ipo-date"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.76,
-   "id": "KXCS2GAME-26NOV040200BBTL-BB|will-betboom-win-the-iem-beijing-2026-1793635200000",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-06T07:00:00Z",
-    "event_ticker": "KXCS2GAME-26NOV040200BBTL",
-    "no_ask": 0.1,
-    "no_sub_title": "BetBoom Team",
-    "rules_primary": "If BetBoom Team wins the IEM Beijing 2026: BetBoom Team vs. Liquid CS2 match originally scheduled for Nov 4, 2026 at 2:00 AM EST, then the market resolves to Yes.",
-    "rules_secondary": "The following market refers to the full match in the IEM Beijing 2026: BetBoom Team vs. Liquid CS2 match originally scheduled for Nov 4, 2026 at 2:00 AM EST\nIf the relevant match is postponed and not started within 48 hours of its originally scheduled start time, the market will resolve to the fair market price.\nIf the relevant match is cancelled before play begins, the market will resolve to the fair market price.\nIf the relevant match is forfeited before any play occurs, the market will resolve to the fair market price.\nIf the relevant match begins and is subsequently forfeited, the market will resolve according to the official result published by the governing body or tournament organizer.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected",
-    "ticker": "KXCS2GAME-26NOV040200BBTL-BB",
-    "title": "BetBoom Team wins",
-    "volume": 70136.91,
-    "yes_ask": 0.91,
-    "yes_sub_title": "BetBoom Team"
-   },
-   "match_score": 0.564,
-   "polymarket": {
-    "best_ask_yes": 0.14,
-    "best_bid_yes": 0.08,
-    "description": "This market will resolve according to the winner of IEM Beijing 2026, currently scheduled for November 2, 2026 to November 8, 2026.\n\nIf this tournament is postponed after December 8, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other.\"\n\nIf multiple teams are declared winner, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be HLTV (https://www.hltv.org/events/8245/iem-beijing-2026); however, a consensus of credible reporting may also be used.",
-    "end": "2026-11-10",
-    "fee_rate": 0.05,
-    "liquidity": 11593,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will BetBoom Win the IEM Beijing 2026?",
-    "slug": "will-betboom-win-the-iem-beijing-2026-1793635200000",
-    "url": "https://polymarket.com/event/iem-beijing-2026-winner-1793635200000"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.738,
-   "id": "KXAIPARETO-26DEC31-OAI|will-openai-have-the-best-ai-model-at-the-end-of-december-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-31T15:00:00Z",
-    "event_ticker": "KXAIPARETO-26DEC31",
-    "no_ask": 0.21,
-    "no_sub_title": "OpenAI",
-    "rules_primary": "If OpenAI has a model on the Pareto frontier of Artificial Analysis's Intelligence Index vs. Cost per Intelligence Index Task chart on Dec 31, 2026, then the market resolves to Yes.",
-    "rules_secondary": "Resolves at 10:00 AM ET on Dec 31, 2026, using the chart on artificialanalysis.ai with the Pareto line shown. A model counts for the creator Artificial Analysis lists for it. A model is on the frontier if the chart's Pareto line passes through it: no other plotted model has an Intelligence Index at least as high and a Cost per Task at least as low, both unrounded, with one of the two strictly better; models with identical values are both on it. A model without a positive Cost per Task is not plotted and cannot be on the frontier.",
-    "ticker": "KXAIPARETO-26DEC31-OAI",
-    "title": "Which AI companies will have a Pareto efficient model at the end of 2026?",
-    "volume": 1000.0,
-    "yes_ask": 0.88,
-    "yes_sub_title": "OpenAI"
-   },
-   "match_score": 0.536,
-   "polymarket": {
-    "best_ask_yes": 0.052,
-    "best_bid_yes": 0.051,
-    "description": "This market will resolve according to the company which owns the model which has the highest arena rank based off the Chatbot Arena LLM Leaderboard (https://lmarena.ai/) when the table under the \"Leaderboard\" tab is checked on December 31, 2026, 12:00 PM ET.\n\nResults from the \"Rank\" section on the Leaderboard tab of https://lmarena.ai/leaderboard/text with the style control off will be used to resolve this market.\n\nModels will be ordered primarily by their leaderboard rank at the market\u2019s check time. If two or more models are tied on rank, they will be ordered by their Arena score, including any underlying, unrounded, granular values reflected in the data below the leaderboard. If a tie remains, alphabetical order of company names as listed in this market group will be used as a final tiebreaker (e.g., if the two models are tied by exact arena score, \u201cGoogle\u201d would be ranked ahead of \u201cxAI\u201d). This market will resolve based on the company that occupies first place under this ranking system.\n\nThe resolution source for this market is the Chatbot Arena LLM Leaderboard found at https://lmarena.ai/. If this resolution source is unavailable at check time, this market will remain open until the leaderboard comes back online and resolve based on the first check after it becomes available. If it becomes permanently unavailable, this market will resolve based on another resolution source.",
-    "end": "2026-12-31",
-    "fee_rate": 0.04,
-    "liquidity": 35861,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will OpenAI have the best AI model at the end of December 2026?",
-    "slug": "will-openai-have-the-best-ai-model-at-the-end-of-december-2026",
-    "url": "https://polymarket.com/event/which-company-has-best-ai-model-end-of-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.729,
-   "id": "KXFEDHIKE-2-26DEC31|will-the-peoples-bank-of-china-increase-rates-by-december-31",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXFEDHIKE-2",
-    "no_ask": 0.26,
+    "close_time": "2027-01-01T05:00:00Z",
+    "event_ticker": "KXSATOSHIBTCYEAR-27",
+    "no_ask": 0.94,
     "no_sub_title": "Before 2027",
-    "rules_primary": "If the Federal Reserve announces an increase in the target range or target level for the federal funds rate after market Issuance and on or before Dec 31, 2026, then the market resolves to Yes.",
+    "rules_primary": "If any wallet labeled as belonging to Satoshi Nakamoto on Arkham\u2019s Intel Explorer shows an \u201cOutflow\u201d or \u201cSwaps\u201d transaction before January 01, 2027, 12:00 AM ET, the market resolves to Yes.",
     "rules_secondary": "",
-    "ticker": "KXFEDHIKE-2-26DEC31",
-    "title": "Will the Federal Reserve hike rates by December 31, 2026?",
-    "volume": 159305.51,
-    "yes_ask": 0.75,
+    "ticker": "KXSATOSHIBTCYEAR-27",
+    "title": "Will Satoshi move any Bitcoin by 2027?",
+    "volume": 947472.42,
+    "yes_ask": 0.07,
     "yes_sub_title": "Before 2027"
    },
-   "match_score": 0.471,
+   "match_score": 0.954,
    "polymarket": {
-    "best_ask_yes": 0.011,
-    "best_bid_yes": 0.002,
-    "description": "This market will resolve according to the first change made to the People\u2019s Bank of China (PBoC) 7-day reverse repo rate between market creation and December 31, 2026, 11:59 PM China Standard Time (CST).\n\nAn \u201cincrease\u201d refers to any change in the 7-day reverse repo rate to a level higher than the most recent effective 7-day reverse repo rate.\n\nA \u201cdecrease\u201d refers to any change in the 7-day reverse repo rate to a level lower than the most recent effective 7-day reverse repo rate.\n\nIf the People\u2019s Bank of China does not change the 7-day reverse repo rate by December 31, 2026, 11:59 PM China Standard Time, this market will resolve to the \u201cNo Change\u201d bracket.\n\nAn official announcement of a change to the PBoC 7-day Reverse Repo Rate within this market\u2019s timeframe will be sufficient to resolve this market, regardless of when the rate change is stated to go into effect.\n\nThe primary resolution source for this market will be official information from the People\u2019s Bank of China, including PBoC Open Market Operations announcements (https://www.pbc.gov.cn/en/3688110/3688181/index.html); however, a consensus of credible reporting on a change to the 7-day reverse repo rate may also be used.",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 2536,
+    "best_ask_yes": 0.029,
+    "best_bid_yes": 0.028,
+    "description": "This market will resolve to \u201cYes\u201d if any wallet labeled as belonging to Satoshi Nakamoto on Arkham\u2019s Intel Explorer shows an \u201cOutflow\u201d or \u201cSwaps\u201d transaction at any time between January 9, 2026, 1:00 PM ET and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo.\u201d\n\nThe resolution source for this market is Arkham\u2019s Intel Explorer, specifically the entity page for Satoshi Nakamoto available at https://intel.arkm.com/explorer/entity/satoshi-nakamoto\n\nIf Arkham becomes permanently unavailable, this market will resolve based on a consensus of credible sources.\n\n\n",
+    "end": "2027-01-01",
+    "fee_rate": 0.07,
+    "liquidity": 62235,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will the People\u2019s Bank of China increase rates by December 31?",
-    "slug": "will-the-peoples-bank-of-china-increase-rates-by-december-31",
-    "url": "https://polymarket.com/event/peoples-bank-of-china-rate-change-by-december-31"
+    "question": "Will Satoshi move any Bitcoin in 2026?",
+    "slug": "will-satoshi-move-any-bitcoin-in-2026",
+    "url": "https://polymarket.com/event/will-satoshi-move-any-bitcoin-in-2026"
    }
   },
   {
-   "est_gap_before_fees": 0.717,
-   "id": "KXTOP3WEALTH-26DEC31-LARRP|will-larry-page-be-richest-person-on-december-31",
+   "est_gap_before_fees": 0.012,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-KJONDPRK|will-kim-jong-un-be-the-next-leader-out-before-2027-20260630194627366",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:48Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.979,
+    "no_sub_title": "Kim Jong Un",
+    "rules_primary": "If Kim Jong Un has either officially announced their intention to leave as Supreme Leader of North Korea or has actually left Supreme Leader of North Korea before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-KJONDPRK",
+    "title": "Will Kim Jong Un leave Supreme Leader of North Korea before Jan 1, 2027?",
+    "volume": 63409.7,
+    "yes_ask": 0.04,
+    "yes_sub_title": "Kim Jong Un"
+   },
+   "match_score": 0.969,
+   "polymarket": {
+    "best_ask_yes": 0.009,
+    "best_bid_yes": 0.006,
+    "description": "This market will resolve according to the first listed individual who ceases to occupy their listed office.\n\nAn announcement of a resignation/removal, or a scheduled departure from office due to the outcome of an election, will not alone qualify.\n\nOnly permanent removal from office will qualify for resolution. Temporary removals, such as impeachment suspensions (e.g., Yoon Suk Yeol's recent impeachment), temporary invocation of the 25th Amendment, or any similar provisional transfers of power, will not count.\n\nAdditionally, if an individual continues in a caretaker or interim role (e.g., Gabriel Attal remaining as caretaker Prime Minister of France), they will not be considered to have ceased occupying the office for the purposes of this market.\n\nIf this criterion has not been met for any of the listed individuals by December 31, 2026, 11:59 PM ET, this market will resolve to \u201cNone before 2027\u201d. No additional individuals will be added to this market after its creation.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 32633,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Kim Jong Un be the next leader out before 2027?",
+    "slug": "will-kim-jong-un-be-the-next-leader-out-before-2027-20260630194627366",
+    "url": "https://polymarket.com/event/next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.01,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTOP3WEALTH-26DEC31",
-    "no_ask": 0.28,
-    "no_sub_title": "Larry Page",
-    "rules_primary": "If Larry Page is one of the three wealthiest people in the world on Dec 31, 2026, then the market resolves to Yes.",
-    "rules_secondary": "",
-    "ticker": "KXTOP3WEALTH-26DEC31-LARRP",
-    "title": "Will Larry Page be one of the three wealthiest people in the world?",
-    "volume": 14019.63,
-    "yes_ask": 0.83,
-    "yes_sub_title": "Larry Page"
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.92,
+    "no_sub_title": "Dario Amodei",
+    "rules_primary": "If Dario Amodei is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-DAR",
+    "title": "Will Dario Amodei be Time Person of the Year in 2026?",
+    "volume": 29300.73,
+    "yes_ask": 0.09,
+    "yes_sub_title": "Dario Amodei"
    },
-   "match_score": 0.463,
+   "match_score": 1.0,
    "polymarket": {
-    "best_ask_yes": 0.003,
-    "best_bid_yes": 0.001,
-    "description": "This market will resolve according to the name ranked #1 on the Bloomberg Billionaires Index on December 31, 2026, 5:30 PM ET.\n\nThe primary resolution source for this market will be the Bloomberg Billionaires Index (https://www.bloomberg.com/billionaires/). If the data for the specified date is not released by December 31, 2026, 11:59 PM ET, the Forbes Real-Time Billionaires List will be used (https://www.forbes.com/real-time-billionaires/#6aa3f0213d78). If neither source provides the specified date's data by January 2, 2027, 11:59 PM ET, this market will resolve according to the latest data point available on the Bloomberg Billionaires Index.",
-    "end": "2027-01-03",
+    "best_ask_yes": 0.07,
+    "best_bid_yes": 0.058,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
     "fee_rate": 0.05,
-    "liquidity": 16420,
+    "liquidity": 23977,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Larry Page be richest person on December 31?",
-    "slug": "will-larry-page-be-richest-person-on-december-31",
-    "url": "https://polymarket.com/event/richest-person-on-december-31-2026"
+    "question": "Will Dario Amodei be TIME Person of the Year 2026?",
+    "slug": "will-dario-amodei-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
    }
   },
   {
-   "est_gap_before_fees": 0.715,
-   "id": "KXHOUSEGOPLEADRUN-26-27JAN01-JJOR|will-jim-jordan-be-the-first-house-majority-leader-after-the-2026-midterms",
+   "est_gap_before_fees": 0.01,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXIPO-26-ANTHROPIC|anthropic-ipo-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXIPO-26",
+    "no_ask": 0.14,
+    "no_sub_title": "Anthropic",
+    "rules_primary": "If Anthropic confirms an IPO before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An IPO is confirmed if 1) the SEC declares the company's Form S-1 effective OR 2) the IPO is priced OR 3) a securities exchange has assigned a ticker to it. As long as any of those events occur, the market will immediately resolve to Yes, even if the company does not start trading until after Jan 1, 2027.",
+    "ticker": "KXIPO-26-ANTHROPIC",
+    "title": "Who will IPO before 2027?",
+    "volume": 397123.03,
+    "yes_ask": 0.89,
+    "yes_sub_title": "Anthropic"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.92,
+    "best_bid_yes": 0.9,
+    "description": "This market will resolve to \"Yes\" if the listed company completes an Initial Public Offering (IPO) by December 31, 2026, 11:59 PM ET, as confirmed by official company announcements or credible news sources. The IPO refers to the first sale of stock by the listed company to the public on any recognized stock exchange.\n\nIf the listed company merges with another entity, is acquired, or ceases to exist before the market resolves, the market will also resolve to \"No\".\n\nThis market will resolve early if the listed company completes an IPO by December 31, 2026, 11:59 PM ET.\n\nThe resolution source for this market is a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 14987,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Anthropic IPO before 2027?",
+    "slug": "anthropic-ipo-before-2027",
+    "url": "https://polymarket.com/event/ipos-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.009,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-BNET|will-benjamin-netanyahu-be-arrested-before-2027-755",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.959,
+    "no_sub_title": "Benjamin Netanyahu",
+    "rules_primary": "If Benjamin Netanyahu is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-BNET",
+    "title": "Will Benjamin Netanyahu be arrested before Jan 2027?",
+    "volume": 12949.55,
+    "yes_ask": 0.055,
+    "yes_sub_title": "Benjamin Netanyahu"
+   },
+   "match_score": 0.954,
+   "polymarket": {
+    "best_ask_yes": 0.032,
+    "best_bid_yes": 0.027,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 18745,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Benjamin Netanyahu be arrested before 2027?",
+    "slug": "will-benjamin-netanyahu-be-arrested-before-2027-755",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.008,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.81,
+    "no_sub_title": "James Talarico",
+    "rules_primary": "If James Talarico is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-JAM",
+    "title": "Will James Talarico be Time Person of the Year in 2026?",
+    "volume": 21922.67,
+    "yes_ask": 0.21,
+    "yes_sub_title": "James Talarico"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.182,
+    "best_bid_yes": 0.166,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 36424,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will James Talarico be TIME Person of the Year 2026?",
+    "slug": "will-james-talarico-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.007,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.98,
+    "no_sub_title": "Bernie Sanders",
+    "rules_primary": "If Bernie Sanders is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-BER",
+    "title": "Will Bernie Sanders be Time Person of the Year in 2026?",
+    "volume": 14583.23,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Bernie Sanders"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.013,
+    "best_bid_yes": 0.011,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2027-01-01",
+    "fee_rate": 0.05,
+    "liquidity": 28944,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Bernie Sanders be TIME Person of the Year 2026?",
+    "slug": "will-bernie-sanders-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.005,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-LJAM|will-letitia-james-be-arrested-before-2027-585",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.939,
+    "no_sub_title": "Letitia James",
+    "rules_primary": "If Letitia James is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-LJAM",
+    "title": "Will Letitia James be arrested before Jan 2027?",
+    "volume": 164024.24,
+    "yes_ask": 0.08,
+    "yes_sub_title": "Letitia James"
+   },
+   "match_score": 0.955,
+   "polymarket": {
+    "best_ask_yes": 0.056,
+    "best_bid_yes": 0.037,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 17880,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Letitia James be arrested before 2027?",
+    "slug": "will-letitia-james-be-arrested-before-2027-585",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.004,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-BCLIN|will-bill-clinton-be-arrested-before-2027-988",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.978,
+    "no_sub_title": "Bill Clinton",
+    "rules_primary": "If Bill Clinton is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-BCLIN",
+    "title": "Will Bill Clinton be arrested before Jan 2027?",
+    "volume": 43257.17,
+    "yes_ask": 0.042,
+    "yes_sub_title": "Bill Clinton"
+   },
+   "match_score": 0.955,
+   "polymarket": {
+    "best_ask_yes": 0.018,
+    "best_bid_yes": 0.016,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 58109,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Bill Clinton be arrested before 2027?",
+    "slug": "will-bill-clinton-be-arrested-before-2027-988",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.002,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-BOM|will-barack-obama-be-arrested-before-2027-939",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.974,
+    "no_sub_title": "Barack Obama",
+    "rules_primary": "If Barack Obama is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-BOM",
+    "title": "Will Barack Obama be arrested before Jan 2027?",
+    "volume": 273911.55,
+    "yes_ask": 0.038,
+    "yes_sub_title": "Barack Obama"
+   },
+   "match_score": 0.96,
+   "polymarket": {
+    "best_ask_yes": 0.024,
+    "best_bid_yes": 0.022,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 58121,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Barack Obama be arrested before 2027?",
+    "slug": "will-barack-obama-be-arrested-before-2027-939",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.002,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-JKER|will-john-kerry-be-arrested-before-2027-733",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.98,
+    "no_sub_title": "John Kerry",
+    "rules_primary": "If John Kerry is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-JKER",
+    "title": "Will John Kerry be arrested before Jan 2027?",
+    "volume": 6990.83,
+    "yes_ask": 0.039,
+    "yes_sub_title": "John Kerry"
+   },
+   "match_score": 0.958,
+   "polymarket": {
+    "best_ask_yes": 0.018,
+    "best_bid_yes": 0.017,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 35467,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will John Kerry be arrested before 2027?",
+    "slug": "will-john-kerry-be-arrested-before-2027-733",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.85,
+    "no_sub_title": "Pope Leo XIV",
+    "rules_primary": "If Pope Leo XIV is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-POP",
+    "title": "Will Pope Leo XIV be Time Person of the Year in 2026?",
+    "volume": 196844.56,
+    "yes_ask": 0.16,
+    "yes_sub_title": "Pope Leo XIV"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.15,
+    "best_bid_yes": 0.13,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 36375,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Pope Leo XIV be TIME Person of the Year 2026?",
+    "slug": "will-pope-leo-xiv-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.7,
+    "no_sub_title": "Zohran Mamdani",
+    "rules_primary": "If Zohran Mamdani is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-ZOH",
+    "title": "Will Zohran Mamdani be Time Person of the Year in 2026?",
+    "volume": 968811.97,
+    "yes_ask": 0.32,
+    "yes_sub_title": "Zohran Mamdani"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.33,
+    "best_bid_yes": 0.32,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 46802,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Zohran Mamdani be TIME Person of the Year 2026?",
+    "slug": "will-zohran-mamdani-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-HCLIN|will-hillary-clinton-be-arrested-before-2027-462",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.979,
+    "no_sub_title": "Hillary Clinton",
+    "rules_primary": "If Hillary Clinton is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-HCLIN",
+    "title": "Will Hillary Clinton be arrested before Jan 2027?",
+    "volume": 227257.54,
+    "yes_ask": 0.045,
+    "yes_sub_title": "Hillary Clinton"
+   },
+   "match_score": 0.963,
+   "polymarket": {
+    "best_ask_yes": 0.021,
+    "best_bid_yes": 0.013,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 62606,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Hillary Clinton be arrested before 2027?",
+    "slug": "will-hillary-clinton-be-arrested-before-2027-462",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-SRIC|will-susan-rice-be-arrested-before-2027-758",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.977,
+    "no_sub_title": "Susan Rice",
+    "rules_primary": "If Susan Rice is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-SRIC",
+    "title": "Will Susan Rice be arrested before Jan 2027?",
+    "volume": 13953.92,
+    "yes_ask": 0.06,
+    "yes_sub_title": "Susan Rice"
+   },
+   "match_score": 0.964,
+   "polymarket": {
+    "best_ask_yes": 0.09,
+    "best_bid_yes": 0.06,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 12624,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Susan Rice be arrested before 2027?",
+    "slug": "will-susan-rice-be-arrested-before-2027-758",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-MKHA|will-mahmoud-khalil-be-arrested-before-2027-137",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.81,
+    "no_sub_title": "Mahmoud Khalil",
+    "rules_primary": "If Mahmoud Khalil is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-MKHA",
+    "title": "Will Mahmoud Khalil be arrested before Jan 2027?",
+    "volume": 12296.75,
+    "yes_ask": 0.2,
+    "yes_sub_title": "Mahmoud Khalil"
+   },
+   "match_score": 0.965,
+   "polymarket": {
+    "best_ask_yes": 0.19,
+    "best_bid_yes": 0.16,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 10573,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Mahmoud Khalil be arrested before 2027?",
+    "slug": "will-mahmoud-khalil-be-arrested-before-2027-137",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.002,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.98,
+    "no_sub_title": "P\u00e9ter Magyar",
+    "rules_primary": "If P\u00e9ter Magyar is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-PET",
+    "title": "Will P\u00e9ter Magyar be Time Person of the Year in 2026?",
+    "volume": 2506.08,
+    "yes_ask": 0.03,
+    "yes_sub_title": "P\u00e9ter Magyar"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.05,
+    "best_bid_yes": 0.028,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 26641,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will P\u00e9ter Magyar be TIME Person of the Year 2026?",
+    "slug": "will-pter-magyar-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.003,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXABRAHAMSA-27-JAN01-LEB|israel-and-lebanon-normalize-relations-before-2027",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXHOUSEGOPLEADRUN-26",
-    "no_ask": 0.28,
-    "no_sub_title": "Jim Jordan",
-    "rules_primary": "If Jim Jordan has announced that they will run for House Republican leader for the 120th Congress in 2026 after Issuance and before Jan 1, 2027, including running for the nomination of any political party to contest that office, then the market resolves to Yes.",
-    "rules_secondary": "The person must publicly announce their campaign for it to be reported by a Source Agency. Merely filing campaign paperwork with the Federal Election Commission or similar entity is insufficient without a public announcement. The announcement must be for the specific office and election year listed. Exploratory committees or statements of interest without formal campaign announcements do not qualify. Running for a party's nomination to contest the office counts as running for that office. The announcement must come from the person themselves or their official campaign, not from speculation or third-party sources.\n\nHouse Republican leader means the top post the House Republican Conference elects for the 120th Congress after the 2026 midterm elections: its nominee for Speaker of the House if",
-    "ticker": "KXHOUSEGOPLEADRUN-26-27JAN01-JJOR",
-    "title": "Will Jim Jordan announce a run for House Republican leader for the 120th Congress in 2026?",
-    "volume": 3551.1,
-    "yes_ask": 0.79,
-    "yes_sub_title": "Jim Jordan"
-   },
-   "match_score": 0.568,
-   "polymarket": {
-    "best_ask_yes": 0.005,
-    "best_bid_yes": 0.001,
-    "description": "This market will resolve according to the first individual selected to be Majority Leader of the United States House of Representatives for the 120th United States Congress, which is scheduled to convene in January 2027 following the 2026 United States midterm elections.\n\nThe primary resolution source will be official information from the United States House of Representatives; however, a consensus of credible reporting may also be used.",
-    "end": "2027-01-03",
-    "fee_rate": 0.04,
-    "liquidity": 10966,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Jim Jordan be the next House Majority Leader?",
-    "slug": "will-jim-jordan-be-the-first-house-majority-leader-after-the-2026-midterms",
-    "url": "https://polymarket.com/event/house-majority-leader-of-the-next-congress"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.713,
-   "id": "KXGPT-ASTRA61-26DEC31|next-astra-model-6pt1-released-by-december-31-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-31T04:59:00Z",
-    "event_ticker": "KXGPT-ASTRA61",
-    "no_ask": 0.75,
-    "no_sub_title": "Before Dec 31, 2026",
-    "rules_primary": "If OpenAI releases Astra 6.1 before Dec 31, 2026, then the market resolves to Yes.",
-    "rules_secondary": "Release must be to the public, outside of a closed beta, though limiting it to a high-cost subscription tier is acceptable.",
-    "ticker": "KXGPT-ASTRA61-26DEC31",
-    "title": "Will OpenAI release Astra 6.1 before Dec 31, 2026?",
-    "volume": 32900.17,
-    "yes_ask": 0.26,
-    "yes_sub_title": "Before Dec 31, 2026"
-   },
-   "match_score": 0.581,
-   "polymarket": {
-    "best_ask_yes": 0.976,
-    "best_bid_yes": 0.973,
-    "description": "This market will resolve to \"Yes\" if OpenAI makes a GPT Astra model designated 6.1 or higher available to the general public between market creation and the specified date (ET). Otherwise, this market will resolve to \"No\".\n\nA qualifying model must be an OpenAI model designated as version 6.1 or higher that includes \"Astra\" in its name or model identifier, regardless of capitalization or surrounding prefixes, suffixes, dates, or descriptors. For example, GPT-6.1 Astra, Astra 6.1, or GPT Astra 7 would all qualify. GPT-6 Astra, including any rollout, promotion, Pro or Fast mode, or snapshot of it, will not qualify. Tier-labeled models such as GPT-5.6 Sol, GPT-5.6 Terra, or GPT-5.6 Luna and their successors, and task-specific or modality lines such as GPT-5.6-Cyber, Daybreak models, Codex, GPT Image, or Realtime models, will not qualify.\n\nA qualifying model must be launched and publicly accessible, including via open beta or open rolling waitlist signups. A closed beta or any form of private access will not suffice. The release must either be clearly defined and publicly announced by OpenAI as accessible to the general public, or otherwise be made publicly accessible and explicitly labeled on the company's official website. Labeling errors, placeholder text, or version names displayed on the website that do not correspond to a model that is actually accessible to the general public will not qualify.\n\nThe primary resolution source for this market will be official information from OpenAI, with additional verification from a consensus of credible reporting.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 30527,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Next Astra Model (6.1+) released by December 31, 2026?",
-    "slug": "next-astra-model-6pt1-released-by-december-31-2026",
-    "url": "https://polymarket.com/event/gpt-astra-6pt1-released-byptptpt"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.7,
-   "id": "KXTOPARTIST-26B-DRA|will-drake-be-the-top-artist-in-the-us-for-2026-20260714171850369",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTOPARTIST-26B",
-    "no_ask": 0.89,
-    "no_sub_title": "Drake",
-    "rules_primary": "If Drake is the most streamed Spotify artist in 2026, then the market resolves to Yes.",
-    "rules_secondary": "This market and these products have not been endorsed by Spotify. Any references to Spotify, Spotify charts, streaming data, or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Spotify and Kalshi.",
-    "ticker": "KXTOPARTIST-26B-DRA",
-    "title": "Who will be the top Spotify artist this year?",
-    "volume": 256165.78,
-    "yes_ask": 0.12,
-    "yes_sub_title": "Drake"
-   },
-   "match_score": 0.728,
-   "polymarket": {
-    "best_ask_yes": 0.85,
-    "best_bid_yes": 0.82,
-    "description": "Spotify releases an annual report of its most streamed artist (see: https://newsroom.spotify.com/2025-12-03/wrapped-top-artists-songs-albums-podcasts-audiobooks/). This market refers to the most streamed Spotify artist in the US for 2026. \n\nThis market will resolve according to the name of the artist listed by Spotify as the top artist in the US of 2026.\n\nIf multiple artists tie for top artist in the US for 2026, this market will resolve according to the artist whose listed name comes first in alphabetical order.\n\nIf Spotify does not release who their top artist in the US for 2026 is by January 31, 2027, 11:59 PM ET, this market will resolve to \"Other\". \n\nThe resolution source for this market will be official information from Spotify, typically released as part of Spotify Wrapped. \n\nNote: This market and these products have not been endorsed by Spotify. Any references to Spotify, Spotify charts, streaming data, or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Spotify and Polymarket. Spotify and related marks are the property of Spotify AB and its group companies.",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 2075,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Drake be the top artist in the US for 2026?",
-    "slug": "will-drake-be-the-top-artist-in-the-us-for-2026-20260714171850369",
-    "url": "https://polymarket.com/event/top-us-artist-2026-20260714171850366"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.699,
-   "id": "KXCBDECISIONINDIA-26DEC04-H25|will-the-reserve-bank-of-india-decrease-the-policy-repo-rate-by-25-bps-at-the-december-2026-meeting",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-04T05:29:00Z",
-    "event_ticker": "KXCBDECISIONINDIA-26DEC04",
-    "no_ask": 0.29,
-    "no_sub_title": "Hike 1-25bps",
-    "rules_primary": "If the Reserve Bank of India takes the action of hike 1-25bps at its December Monetary Policy Committee meeting, then the market resolves to Yes.",
-    "rules_secondary": "The market resolves based on the official policy rate decision announced by the central bank. For central banks with multiple policy rates, only changes to the primary policy rate count. If the meeting is cancelled or delayed past the expiration date, markets for \"Maintain current rate\" resolve to Yes and all others resolve to No. Emergency rate changes between scheduled meetings do not affect resolution of contracts tied to scheduled meetings.",
-    "ticker": "KXCBDECISIONINDIA-26DEC04-H25",
-    "title": "Will the Reserve Bank of India hike 1-25bps at the December Monetary Policy Committee meeting?",
-    "volume": 715.07,
-    "yes_ask": 0.75,
-    "yes_sub_title": "Hike 1-25bps"
-   },
-   "match_score": 0.658,
-   "polymarket": {
-    "best_ask_yes": 0.011,
-    "best_bid_yes": 0.006,
-    "description": "This market will resolve according to the change in basis points in the policy repo rate resulting from the December 2026 meeting of the Reserve Bank of India Monetary Policy Committee, relative to the level it was prior to this meeting.\n\nThe resolution source will be official information from the Reserve Bank of India Monetary Policy Committee, including the statement or release from its December 2026 meeting, with the decision to be announced on December 4, 2026, as listed on the official Reserve Bank of India calendar (https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62422). This market may resolve as soon as the statement or release of the Reserve Bank of India Monetary Policy Committee resulting from its December 2026 meeting with relevant data is issued.\n\nIf the specified rate is defined by an upper and lower bound, the relevant change will be the change to the upper bound.\n\nIf the specified rate is changed to a level not expressed in the displayed options, the change will be rounded according to the following guidelines. Increases or decreases of less than 25 bps will be rounded to 25 bps (e.g. an increase or decrease of 10 bps would be considered to be an increase or decrease of 25 bps). Increases or decreases of greater than 25 bps will be rounded to the nearest 25 bps and will be rounded away from 0 in cases of equidistance (e.g., an increase or decrease of 37.5 bps would be considered to be an increase or decrease of 50 bps). Displayed options of \u201cIncrease\u201d or \u201cDecrease\u201d will include policy rate increases or decreases of any size.\n\nIf the specified meeting is postponed to a date and time before the start of the next scheduled meeting, this market will resolve based on the outcome of that postponed meeting. If the specified meeting is cancelled,",
-    "end": "2026-12-04",
-    "fee_rate": 0.05,
-    "liquidity": 3439,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will the Reserve Bank of India decrease the policy repo rate by 25 bps at the December meeting?",
-    "slug": "will-the-reserve-bank-of-india-decrease-the-policy-repo-rate-by-25-bps-at-the-december-2026-meeting",
-    "url": "https://polymarket.com/event/reserve-bank-of-india-decision-in-december-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.69,
-   "id": "KXNFL1SEED-AFC26-JAC|will-jacksonville-jaguars-win-the-2026-afc-south",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-18T15:00:00Z",
-    "event_ticker": "KXNFL1SEED-AFC26",
-    "no_ask": 0.87,
-    "no_sub_title": "Jacksonville",
-    "rules_primary": "If Jacksonville is the #1 seed in the American Football Conference at the conclusion of the 2026-2027 Pro Football regular season, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXNFL1SEED-AFC26-JAC",
-    "title": "Will Jacksonville be the AFC 1 Seed?",
-    "volume": 43462.65,
-    "yes_ask": 0.16,
-    "yes_sub_title": "Jacksonville"
-   },
-   "match_score": 0.514,
-   "polymarket": {
-    "best_ask_yes": 0.87,
-    "best_bid_yes": 0.85,
-    "description": "This market will resolve according to the team that is declared as the AFC South division champion for the 2026 NFL regular season.\n\nIf multiple teams tie atop the division, this market will resolve according to the official tiebreak procedure of the NFL.\n\nIf the 2026 NFL regular season is cancelled, postponed after January 17, 2027, 11:59 PM ET, or there is otherwise no winner declared for this division within that timeframe, this market will resolve to \u201cOther\u201d.\n\nThe primary resolution source for this market will be official information from the NFL; however, a consensus of credible reporting may also be used.",
-    "end": "2027-01-18",
-    "fee_rate": 0.03,
-    "liquidity": 6795,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Jacksonville Jaguars win the 2026 AFC South?",
-    "slug": "will-jacksonville-jaguars-win-the-2026-afc-south",
-    "url": "https://polymarket.com/event/pro-football-afc-south-champion"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.684,
-   "id": "KXANTHPERSONALAGENT-27JAN01-27JAN01|will-anthropic-launch-a-muse-like-personal-agent-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXANTHPERSONALAGENT-27JAN01",
-    "no_ask": 0.82,
-    "no_sub_title": "Before Jan 1, 2027",
-    "rules_primary": "If an Anthropic product has implemented a general-purpose personal AI agent that remembers the user and starts multi-step tasks across third-party apps on its own before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "The function must be live and processing user interactions, not explicitly labeled as \"beta,\" \"test,\" \"experimental,\" \"preview,\" or \"early access\" or similar, and officially acknowledged by the company through announcements, documentation, or help pages. Implementation includes direct integration into the product's interface, automatic application to user accounts, user-initiated activation through official controls, API implementation, or policy changes that operationally enforce the function. Announcements without deployment, employee-only testing, technical documentation without implementation, and third-party additions without authorization do not qualify. The implementation must occur in the United States unless otherwise specified. If it meets these conditions, it counts from the fir",
-    "ticker": "KXANTHPERSONALAGENT-27JAN01-27JAN01",
-    "title": "Will Anthropic release a personal AI agent before Jan 1, 2027?",
-    "volume": 5987.62,
-    "yes_ask": 0.25,
-    "yes_sub_title": "Before Jan 1, 2027"
-   },
-   "match_score": 0.561,
-   "polymarket": {
-    "best_ask_yes": 0.944,
-    "best_bid_yes": 0.934,
-    "description": "On September 8, 2026, Meta launched Muse, a personal AI agent that runs on a cloud computer dedicated to each user and carries out tasks, such as sending email and booking travel (https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/).\n\nThis market will resolve to \"Yes\" if the listed company launches a Muse-like personal agent by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA Muse-like personal agent is an AI agent that runs on a cloud computer provided by the listed company that is dedicated to the individual user and remains assigned to that user between tasks, can begin tasks on its own, such as on a schedule or when a new email arrives, and can take actions on websites or in the user's connected accounts, such as sending email or submitting forms. \n\nComputing environments created for each task or session will not qualify. Products limited to a single type of task, such as coding, software development, email, or travel booking, offered only through an API, or sold only to businesses will not qualify.\n\nA Muse-like personal agent must be launched and publicly accessible, including via open beta or open rolling waitlist signups. A closed beta or any form of private access will not suffice. Availability limited to paid subscription plans or to certain countries will qualify.\n\nThe primary resolution source for this market will be official information from the listed company, with additional verification from a consensus of credible reporting.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 11411,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Anthropic launch a Muse-like personal agent before 2027?",
-    "slug": "will-anthropic-launch-a-muse-like-personal-agent-before-2027",
-    "url": "https://polymarket.com/event/who-will-launch-a-muse-like-personal-agent-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.678,
-   "id": "KXFEDDECISION-26DEC-H25|reserve-bank-of-australia-increases-interest-rates-by-25-bps-at-the-december-2026-meeting",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-09T18:59:00Z",
-    "event_ticker": "KXFEDDECISION-26DEC",
-    "no_ask": 0.24,
-    "no_sub_title": "Hike 25bps",
-    "rules_primary": "If the Federal Reserve does a Hike of 25bps on December 09, 2026, then the market resolves to Yes.",
-    "rules_secondary": "The outcomes are mutually exclusive: at most one can resolve to Yes. For example, a 50-basis-point hike resolves \u201cHike   25 bps\u201d to Yes and \u201cHike 25 bps\u201d to No.\n\nIf the scheduled FOMC meeting is canceled and does not occur on its scheduled date, \u201cFed maintains rate\u201d resolves to Yes and all other outcomes resolve to No.",
-    "ticker": "KXFEDDECISION-26DEC-H25",
-    "title": "Will the Federal Reserve Hike rates by 25bps at their December 2026 meeting?",
-    "volume": 695481.7,
-    "yes_ask": 0.77,
-    "yes_sub_title": "Hike 25bps"
-   },
-   "match_score": 0.637,
-   "polymarket": {
-    "best_ask_yes": 0.082,
-    "best_bid_yes": 0.052,
-    "description": "This market will resolve according to the change in basis points in the cash rate target resulting from the December 2026 meeting of the Reserve Bank of Australia (RBA) Monetary Policy Board, relative to the level it was prior to this meeting. \n\nThe resolution source will be official information from the Reserve Bank of Australia, including the statement or release from its December 2026 meeting, scheduled for December 7 and December 8, 2026, as listed on the official RBA calendar (https://www.rba.gov.au/schedules-events/calendar/?topics=monetary-policy-board). This market may resolve as soon as the statement or release of the Reserve Bank of Australia Monetary Policy Board resulting from its December 2026 meeting with relevant data is issued.\n\nIf the specified rate is defined by an upper and lower bound, the relevant change will be the change to the upper bound.\n\nIf the specified rate is changed to a level not expressed in the displayed options, the change will be rounded according to the following guidelines. Increases or decreases of less than 25 bps will be rounded to 25 bps (e.g. an increase or decrease of 10 bps would be considered to be an increase or decrease of 25 bps). Increases or decreases of greater than 25 bps will be rounded to the nearest 25 bps and will be rounded away from 0 in cases of equidistance (e.g., an increase or decrease of 37.5 bps would be considered to be an increase or decrease of 50 bps). Displayed options of \"Increase\" or \"Decrease\" will include policy rate increases or decreases of any size.\n\nIf the specified meeting is postponed to a date and time before the start of the next scheduled meeting, this market will resolve based on the outcome of that postponed meeting.\n\nIf the specified meeting is cancelled, or postponed such that no deci",
-    "end": "2026-12-08",
-    "fee_rate": 0.05,
-    "liquidity": 2207,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Reserve Bank of Australia increases interest rates by 25 bps at the December 2026 meeting?",
-    "slug": "reserve-bank-of-australia-increases-interest-rates-by-25-bps-at-the-december-2026-meeting",
-    "url": "https://polymarket.com/event/reserve-bank-of-australia-decision-in-december-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.66,
-   "id": "KXDOTA2GAME-26NOV040600NAVIYES-NAVI|will-natus-vincere-win-the-iem-beijing-2026-1793635200000",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-06T11:00:00Z",
-    "event_ticker": "KXDOTA2GAME-26NOV040600NAVIYES",
-    "no_ask": 0.26,
-    "no_sub_title": "Natus Vincere",
-    "rules_primary": "If Natus Vincere wins the EPL Masters 2026: Natus Vincere vs. Yellow Submarine Dota 2 match originally scheduled for Nov 4, 2026 at 6:00 AM EST, then the market resolves to Yes.",
-    "rules_secondary": "The following market refers to the full match in the EPL Masters 2026: Natus Vincere vs. Yellow Submarine Dota 2 match originally scheduled for Nov 4, 2026 at 6:00 AM EST\nIf the relevant match is postponed and not started within 48 hours of its originally scheduled start time, the market will resolve to the fair market price.\nIf the relevant match is cancelled before play begins, the market will resolve to the fair market price.\nIf the relevant match is forfeited before any play occurs, the market will resolve to the fair market price.\nIf the relevant match begins and is subsequently forfeited, the market will resolve according to the official result published by the governing body or tournament organizer.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way offici",
-    "ticker": "KXDOTA2GAME-26NOV040600NAVIYES-NAVI",
-    "title": "Natus Vincere wins",
-    "volume": 978.14,
-    "yes_ask": 0.75,
-    "yes_sub_title": "Natus Vincere"
-   },
-   "match_score": 0.739,
-   "polymarket": {
-    "best_ask_yes": 0.08,
-    "best_bid_yes": 0.05,
-    "description": "This market will resolve according to the winner of IEM Beijing 2026, currently scheduled for November 2, 2026 to November 8, 2026.\n\nIf this tournament is postponed after December 8, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other.\"\n\nIf multiple teams are declared winner, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be HLTV (https://www.hltv.org/events/8245/iem-beijing-2026); however, a consensus of credible reporting may also be used.",
-    "end": "2026-11-10",
-    "fee_rate": 0.05,
-    "liquidity": 12434,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Natus Vincere Win the IEM Beijing 2026?",
-    "slug": "will-natus-vincere-win-the-iem-beijing-2026-1793635200000",
-    "url": "https://polymarket.com/event/iem-beijing-2026-winner-1793635200000"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.655,
-   "id": "KXALBUMRELEASEDATE-NEWDON-27FEB01|will-octane-don-toliver-be-the-top-spotify-album-for-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-02-01T15:00:00Z",
-    "event_ticker": "KXALBUMRELEASEDATE-NEWDON",
-    "no_ask": 0.34,
-    "no_sub_title": "Before Feb 1, 2027",
-    "rules_primary": "If Don Toliver releases a new album before Feb 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "",
-    "ticker": "KXALBUMRELEASEDATE-NEWDON-27FEB01",
-    "title": "Will Don Toliver release new album before Feb 1, 2027?",
-    "volume": 3307.95,
-    "yes_ask": 0.94,
-    "yes_sub_title": "Before Feb 1, 2027"
-   },
-   "match_score": 0.561,
-   "polymarket": {
-    "best_ask_yes": 0.005,
-    "best_bid_yes": 0.002,
-    "description": "Spotify releases an annual report of its most-streamed albums (see: https://newsroom.spotify.com/2024-12-04/top-songs-artists-podcasts-audiobooks-albums-trends-2024/).\n\nThis market will resolve according to the most-streamed Spotify album for 2026.\n\nIf Spotify does not release its top album for 2026 by January 31, 2027, 11:59 PM ET, this market will default to \"Other\".\n\nThe resolution source for this market will be official information from Spotify, typically released as part of Spotify Wrapped.\n\nThis market and these products have not been endorsed by Spotify. Any references to Spotify, Spotify charts, streaming data, or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Spotify and Polymarket. Spotify and related marks are the property of Spotify AB and its group companies.",
-    "end": "2027-02-01",
-    "fee_rate": 0.05,
-    "liquidity": 2711,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will \"Octane - Don Toliver\" be the top album for 2026?",
-    "slug": "will-octane-don-toliver-be-the-top-spotify-album-for-2026",
-    "url": "https://polymarket.com/event/top-spotify-album-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.65,
-   "id": "KXNHLATLANTIC-27-MTL|will-the-montreal-canadiens-record-80-points",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-05-01T14:00:00Z",
-    "event_ticker": "KXNHLATLANTIC-27",
-    "no_ask": 0.83,
-    "no_sub_title": "Montreal Canadiens",
-    "rules_primary": "If the Montreal Canadiens win the 2026-27 NHL Atlantic Division, then the market resolves to Yes.",
-    "rules_secondary": "",
-    "ticker": "KXNHLATLANTIC-27-MTL",
-    "title": "Will the Montreal Canadiens win the Atlantic Division?",
-    "volume": 9034.4,
-    "yes_ask": 0.21,
-    "yes_sub_title": "Montreal Canadiens"
-   },
-   "match_score": 0.619,
-   "polymarket": {
-    "best_ask_yes": 0.98,
-    "best_bid_yes": 0.86,
-    "description": "This market will resolve to \"Yes\" if the listed team records 80 or more points during the 2026-27 NHL regular season. Otherwise, the associated market will resolve to \"No\".\n\nIf at any point it becomes impossible for the listed team to record 80 or more points during the 2026-27 NHL regular season (e.g. they are mathematically eliminated), the associated market will resolve to \"No\". Any tiebreaker will be considered part of the NHL regular season.\n\nIf the 2026-27 NHL regular season is cancelled, postponed after April 30, 2027, 11:59 PM ET, or it cannot be determined whether the listed team has recorded 80 or more points within that timeframe, this market will resolve to \"No\".\n\nThe primary resolution source will be official information from the NHL; however, a consensus of credible reporting may also be used.",
-    "end": "2027-04-30",
-    "fee_rate": 0.05,
-    "liquidity": 2237,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will the Montreal Canadiens record 80+ points?",
-    "slug": "will-the-montreal-canadiens-record-80-points",
-    "url": "https://polymarket.com/event/nhl-teams-80-plus-points-2026-27"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.6,
-   "id": "KXCBDISRAEL-26NOV23-H25|will-the-bank-of-korea-hike-by-25-bps-at-the-november-2026-meeting",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-23T14:59:00Z",
-    "event_ticker": "KXCBDISRAEL-26NOV23",
+    "event_ticker": "KXABRAHAMSA-27",
     "no_ask": 0.98,
-    "no_sub_title": "Hike 1-25bps",
-    "rules_primary": "If the Bank of Israel takes the action of hike 1-25bps at its November Monetary Committee meeting, then the market resolves to Yes.",
-    "rules_secondary": "The market resolves based on the official policy rate decision announced by the central bank. For central banks with multiple policy rates, only changes to the primary policy rate count. If the meeting is cancelled or delayed past the expiration date, markets for \"Maintain current rate\" resolve to Yes and all others resolve to No. Emergency rate changes between scheduled meetings do not affect resolution of contracts tied to scheduled meetings.",
-    "ticker": "KXCBDISRAEL-26NOV23-H25",
-    "title": "Will the Bank of Israel hike 1-25bps at the November Monetary Committee meeting?",
-    "volume": 2349.48,
-    "yes_ask": 0.18,
-    "yes_sub_title": "Hike 1-25bps"
+    "no_sub_title": "Lebanon",
+    "rules_primary": "If Israel and Lebanon normalize diplomatic relations before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The agreement must be ratified before Jan 1, 2027 to be included within the Payout Criterion.",
+    "ticker": "KXABRAHAMSA-27-JAN01-LEB",
+    "title": "Will Israel and Lebanon normalize relations before Jan 1, 2027?",
+    "volume": 70040.81,
+    "yes_ask": 0.058,
+    "yes_sub_title": "Lebanon"
    },
-   "match_score": 0.632,
+   "match_score": 0.952,
    "polymarket": {
-    "best_ask_yes": 0.81,
-    "best_bid_yes": 0.78,
-    "description": "This market will resolve according to the change in basis points in the base rate resulting from the November 2026 meeting of the Bank of Korea's Monetary Policy Board, relative to the level it was prior to this meeting.\n\nThe resolution source will be official information from the Bank of Korea's Monetary Policy Board, including the statement or release from its November 2026 meeting, scheduled for November 26, 2026, as listed on the official Bank of Korea calendar (https://www.bok.or.kr/eng/bbs/E0000627/view.do?nttId=10094301&searchCnd=1&searchKwd=&depth2=400417&depth3=400022&depth=400022&pageUnit=10&pageIndex=1&programType=newsDataEng&menuNo=400022&oldMenuNo=400022). This market may resolve as soon as the statement or release of the Bank of Korea's Monetary Policy Board resulting from its November 2026 meeting with relevant data is issued.\n\nIf the specified rate is defined by an upper and lower bound, the relevant change will be the change to the upper bound.\n\nIf the specified rate is changed to a level not expressed in the displayed options, the change will be rounded according to the following guidelines. Increases or decreases of less than 25 bps will be rounded to 25 bps (e.g. an increase or decrease of 10 bps would be considered to be an increase or decrease of 25 bps). Increases or decreases of greater than 25 bps will be rounded to the nearest 25 bps and will be rounded away from 0 in cases of equidistance (e.g., an increase or decrease of 37.5 bps would be considered to be an increase or decrease of 50 bps). Displayed options of \"Increase\" or \"Decrease\" will include policy rate increases or decreases of any size.",
-    "end": "2026-11-26",
-    "fee_rate": 0.05,
-    "liquidity": 2513,
+    "best_ask_yes": 0.023,
+    "best_bid_yes": 0.015,
+    "description": "This market will resolve to \"Yes\" if both Israel and Lebanon officially announce the establishment of diplomatic relations by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe primary resolution source for this market will be official information from Israel and the Lebanon, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 31568,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will the Bank of Korea hike by 25 bps at the November 2026 meeting?",
-    "slug": "will-the-bank-of-korea-hike-by-25-bps-at-the-november-2026-meeting",
-    "url": "https://polymarket.com/event/bank-of-korea-decision-in-november"
+    "question": "Israel and Lebanon normalize relations before 2027?",
+    "slug": "israel-and-lebanon-normalize-relations-before-2027",
+    "url": "https://polymarket.com/event/israel-and-lebanon-normalize-relations-before-2027"
    }
   },
   {
-   "est_gap_before_fees": 0.58,
-   "id": "KXDWTSTOP3-26DEC31-HSHU|will-harry-shum-jr-win-dancing-with-the-stars-season-35",
+   "est_gap_before_fees": -0.003,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2026-12-31T15:00:00Z",
-    "event_ticker": "KXDWTSTOP3-26DEC31",
-    "no_ask": 0.24,
-    "no_sub_title": "Harry Shum Jr.",
-    "rules_primary": "If Harry Shum Jr. finishes in the Top 3 in Dancing with the Stars Season 35, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Dancing with the Stars. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXDWTSTOP3-26DEC31-HSHU",
-    "title": "Will Harry Shum Jr. finish in the Top 3 on Dancing with the Stars Season 35?",
-    "volume": 16672.23,
-    "yes_ask": 0.78,
-    "yes_sub_title": "Harry Shum Jr."
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.96,
+    "no_sub_title": "Sam Altman",
+    "rules_primary": "If Sam Altman is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-SA",
+    "title": "Will Sam Altman be Time Person of the Year in 2026?",
+    "volume": 28529.11,
+    "yes_ask": 0.06,
+    "yes_sub_title": "Sam Altman"
    },
-   "match_score": 0.903,
+   "match_score": 1.0,
    "polymarket": {
-    "best_ask_yes": 0.18,
-    "best_bid_yes": 0.16,
-    "description": "Dancing with the Stars is a reality dance competition in which celebrities are paired with professional dancers to perform dance routines. This market will resolve to the celebrity participant of the winning team of Dancing with the Stars: Season 35.\n\nIf multiple winners are announced, this market will resolve in favor of the listed contestant whose name comes first in alphabetical order.\n\nIf Dancing with the Stars: Season 35 concludes without a winner being declared, or if Dancing with the Stars: Season 35 has otherwise not concluded by March 31, 2027, 11:59PM ET this market will resolve to \"Other\".\n\nThe resolution source for this market will be the official broadcast of the final episode of Dancing with the Stars: Season 35.",
+    "best_ask_yes": 0.043,
+    "best_bid_yes": 0.022,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
     "end": "2026-12-31",
     "fee_rate": 0.05,
-    "liquidity": 4420,
+    "liquidity": 27459,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Harry Shum Jr. win Dancing With the Stars: Season 35?",
-    "slug": "will-harry-shum-jr-win-dancing-with-the-stars-season-35",
-    "url": "https://polymarket.com/event/who-will-win-dancing-with-the-stars-season-35"
+    "question": "Will Sam Altman be TIME Person of the Year 2026?",
+    "slug": "will-sam-altman-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
    }
   },
   {
-   "est_gap_before_fees": 0.58,
-   "id": "KXNHLSEASONPTS-27DET-75|will-the-detroit-red-wings-make-the-2026-27-nhl-playoffs",
+   "est_gap_before_fees": -0.006,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-LJUN|will-lee-jun-seok-be-arrested-before-2027",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-04-18T14:00:00Z",
-    "event_ticker": "KXNHLSEASONPTS-27DET",
-    "no_ask": 0.24,
-    "no_sub_title": "75+ points",
-    "rules_primary": "If the DET Red Wings earn at least 75 points in the 2026-27 regular season, then the market resolves to Yes.",
-    "rules_secondary": "This market resolves based on the DET Red Wings official NHL standings points, awarded for wins and overtime or shootout losses in the 2026-27 NHL regular season",
-    "ticker": "KXNHLSEASONPTS-27DET-75",
-    "title": "Will the DET Red Wings NHL team earn at least 75 points in the 2026-27 regular season?",
-    "volume": 666.0,
-    "yes_ask": 0.85,
-    "yes_sub_title": "75+ points"
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.963,
+    "no_sub_title": "Lee Jun-seok",
+    "rules_primary": "If Lee Jun-seok is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-LJUN",
+    "title": "Will Lee Jun-seok be arrested before Jan 2027?",
+    "volume": 3796.16,
+    "yes_ask": 0.069,
+    "yes_sub_title": "Lee Jun-seok"
    },
-   "match_score": 0.519,
+   "match_score": 0.969,
    "polymarket": {
-    "best_ask_yes": 0.18,
-    "best_bid_yes": 0.12,
-    "description": "This market will resolve to \"Yes\" if the listed team makes the 2026-27 NHL Playoffs. Otherwise, this market will resolve to \"No.\"\n\nA team will be considered to have made the Playoffs if it qualifies for the postseason bracket under the official rules of the NHL for the 2026-27 season. Qualification through any officially recognized NHL format (including Wild Card berths) will count.\n\nIf it becomes impossible for the listed team to qualify for the Playoffs based on the rules of the NHL (e.g. the team is mathematically eliminated), this market will resolve immediately to \"No.\"\n\nThe resolution source for this market will be official information from the NHL, however a consensus of credible reporting will also be used.",
-    "end": "2027-04-16",
-    "fee_rate": 0.05,
-    "liquidity": 3046,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will the Detroit Red Wings make the 2026-27 NHL Playoffs?",
-    "slug": "will-the-detroit-red-wings-make-the-2026-27-nhl-playoffs",
-    "url": "https://polymarket.com/event/which-teams-will-make-the-nhl-playoffs-2026-27"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.58,
-   "id": "SENATEAK-26-R|will-the-republicans-win-the-kentucky-governor-race-in-202-20260803163004068",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-11-03T15:00:00Z",
-    "event_ticker": "SENATEAK-26",
-    "no_ask": 0.85,
-    "no_sub_title": "Republican party",
-    "rules_primary": "If a representative of the Republican party is sworn in as a Senator of Alaska for the term beginning in 2027, then the market resolves to Yes.",
-    "rules_secondary": "This market is eligible for accelerated determination after a consensus of media organizations project the winner. See full rules for details.",
-    "ticker": "SENATEAK-26-R",
-    "title": "Will Republicans win the Senate race in Alaska?",
-    "volume": 6466418.33,
-    "yes_ask": 0.16,
-    "yes_sub_title": "Republican party"
-   },
-   "match_score": 0.473,
-   "polymarket": {
-    "best_ask_yes": 0.76,
-    "best_bid_yes": 0.74,
-    "description": "This market will resolve according to the winner of the 2027 Kentucky gubernatorial election.\n\nA candidate shall be considered to represent a party in the event that he or she is the nominee of the party in question. Candidates other than the Democratic or Republican nominee (e.g., Greens, Libertarian, independent) may be added at a later date.\n\nCandidates who run as independents will not be encompassed by the \u201cDemocrat\u201d or \u201cRepublican\u201d options regardless of any affiliation they may have with the party.\n\nThe resolution source for this market is the Associated Press, Fox News, and NBC. This market will resolve once all three sources call the race for the same candidate. If all three sources haven\u2019t called the race in this state for the same candidate, this market will resolve based on the official certification.",
-    "end": "2027-11-03",
+    "best_ask_yes": 0.065,
+    "best_bid_yes": 0.063,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
     "fee_rate": 0.04,
-    "liquidity": 15892,
+    "liquidity": 10534,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will the Republicans win the Kentucky governor race in 2027?",
-    "slug": "will-the-republicans-win-the-kentucky-governor-race-in-202-20260803163004068",
-    "url": "https://polymarket.com/event/kentucky-governor-election-winner-2027-20260803161502425"
+    "question": "Will Lee Jun-seok be arrested before 2027?",
+    "slug": "will-lee-jun-seok-be-arrested-before-2027",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.006,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-KPAT|will-kash-patel-be-arrested-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.976,
+    "no_sub_title": "Kash Patel",
+    "rules_primary": "If Kash Patel is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-KPAT",
+    "title": "Will Kash Patel be arrested before Jan 2027?",
+    "volume": 6776.21,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Kash Patel"
+   },
+   "match_score": 0.96,
+   "polymarket": {
+    "best_ask_yes": 0.031,
+    "best_bid_yes": 0.024,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 29825,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Kash Patel be arrested before 2027?",
+    "slug": "will-kash-patel-be-arrested-before-2027",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.008,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.96,
+    "no_sub_title": "Christina Koch",
+    "rules_primary": "If Christina Koch is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-CHR",
+    "title": "Will Christina Koch be Time Person of the Year in 2026?",
+    "volume": 6792.08,
+    "yes_ask": 0.05,
+    "yes_sub_title": "Christina Koch"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.048,
+    "best_bid_yes": 0.032,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 28498,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Christina Koch be TIME Person of the Year 2026?",
+    "slug": "will-christina-koch-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.009,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.96,
+    "no_sub_title": "Victor Glover",
+    "rules_primary": "If Victor Glover is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-VIC",
+    "title": "Will Victor Glover be Time Person of the Year in 2026?",
+    "volume": 4691.08,
+    "yes_ask": 0.05,
+    "yes_sub_title": "Victor Glover"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.049,
+    "best_bid_yes": 0.041,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 28309,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Victor Glover be TIME Person of the Year 2026?",
+    "slug": "will-victor-glover-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.009,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXTIME-26",
+    "no_ask": 0.96,
+    "no_sub_title": "Mohammad-Bagher Ghalibaf",
+    "rules_primary": "If Mohammad-Bagher Ghalibaf is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
+    "ticker": "KXTIME-26-MOH",
+    "title": "Will Mohammad-Bagher Ghalibaf be Time Person of the Year in 2026?",
+    "volume": 6537.12,
+    "yes_ask": 0.05,
+    "yes_sub_title": "Mohammad-Bagher Ghalibaf"
+   },
+   "match_score": 1.0,
+   "polymarket": {
+    "best_ask_yes": 0.054,
+    "best_bid_yes": 0.041,
+    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 35642,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Mohammad-Bagher Ghalibaf be TIME Person of the Year 2026?",
+    "slug": "will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026",
+    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.009,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARREST-27JAN-JCLA|will-james-clapper-be-arrested-before-2027-886",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARREST-27JAN",
+    "no_ask": 0.919,
+    "no_sub_title": "James Clapper",
+    "rules_primary": "If James Clapper is arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
+    "ticker": "KXARREST-27JAN-JCLA",
+    "title": "Will James Clapper be arrested before Jan 2027?",
+    "volume": 66910.42,
+    "yes_ask": 0.12,
+    "yes_sub_title": "James Clapper"
+   },
+   "match_score": 0.956,
+   "polymarket": {
+    "best_ask_yes": 0.09,
+    "best_bid_yes": 0.07,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 14514,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will James Clapper be arrested before 2027?",
+    "slug": "will-james-clapper-be-arrested-before-2027-886",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
    }
   }
  ],
- "generated": "2026-11-04T07:59:22Z",
+ "generated": "2026-11-04T08:07:23Z",
  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true twins into arb_pairs.json (see 'about' there).",
- "kalshi_kept": 13130,
- "kalshi_scanned": 136509,
- "matched_unreviewed": 565,
- "poly_markets": 7842
+ "kalshi_kept": 11399,
+ "kalshi_scanned": 136530,
+ "matched_unreviewed": 426,
+ "poly_markets": 6812
 }

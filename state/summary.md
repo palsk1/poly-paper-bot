@@ -1,19 +1,28 @@
-# Paper bot summary - 2026-11-04T07:59:22Z
+# Paper bot summary - 2026-11-04T08:07:23Z
 
 Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper money only.
 
 | Track | P&L | Open | Closed (W/L) | Cash | Notes |
 |---|---|---|---|---|---|
+| arb | +0.00 | 0 | 0 (0/0) | $300.00 | locked $0.00 (+$0.00 expected); gaps found 0; mismatches 0 |
 | claude | +0.02 | 4 | 0 (0/0) | $31.35 | refills 0; skipped (no cash) 0 |
 | favorites | +0.00 | 0 | 0 (0/0) | $20.00 | skipped (no cash) 0 |
 | mirror | +0.00 | 0 | 0 (0/0) | $20.00 | skipped (no cash) 0 |
 | mirror_unlimited | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $-0.00; most tied up at once $0.00 |
-| panic_fade | +0.31 | 1 | 0 (0/0) | $46.31 | refills 0; skipped (no cash) 0 |
+| panic_fade | +0.34 | 1 | 0 (0/0) | $46.31 | refills 0; skipped (no cash) 0 |
 | screener | +0.01 | 4 | 0 (0/0) | $2.56 | skipped (no cash) 1 |
-| arb | +0.00 | 0 | 0 (0/0) | $300.00 | locked $0.00 (+$0.00 expected); gaps found 0; mismatches 0 |
 
-**His book right now:** 67 open positions worth $118,347. Holding all of them at the 5-share minimum would cost $250.28. Biggest single position = 17% of his book.
+**His book right now:** 66 open positions worth $118,317. Holding all of them at the 5-share minimum would cost $245.59. Biggest single position = 17% of his book.
 
+
+## arb
+Arbitrage: Kalshi vs Polymarket, reviewed twin markets only, both legs bought, held to the end. $300 paper
+
+**Proof status:** Not proven yet: no finished arbs. With ~2.0c edge we need about 114 clean finished arbs (0 mismatches) to be 90% sure.
+
+Approved twin pairs: 0, rejected: 0, new candidates waiting for review: 25.
+
+No open arbs.
 
 ## claude
 Claude: my own rules, $50 paper, refilled with $50 if it busts
@@ -45,7 +54,7 @@ Panic fade (wildcard): buys the boring side right after a news scare knocks it d
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will Samuel Alito announce his retirement by December 31, 2026? | No | 73c | 80c | +0.31 | 2027-01-01 |
+| Will Samuel Alito announce his retirement by December 31, 2026? | No | 73c | 80c | +0.34 | 2027-01-01 |
 
 ## screener
 Screener: his style by rule, without him ($20 paper)
@@ -56,15 +65,6 @@ Screener: his style by rule, without him ($20 paper)
 | Strait of Hormuz traffic returns to normal by November 30? | No | 95c | 94c | -0.03 | 2026-12-01 |
 | Will the U.S. invade Iran before 2027? | No | 83c | 84c | +0.08 | 2027-01-01 |
 | Strait of Hormuz traffic returns to normal by December 31? | No | 89c | 90c | +0.02 | 2027-01-01 |
-
-## arb
-Arbitrage: Kalshi vs Polymarket, reviewed twin markets only, both legs bought, held to the end. $300 paper
-
-**Proof status:** Not proven yet: no finished arbs. With ~2.0c edge we need about 114 clean finished arbs (0 mismatches) to be 90% sure.
-
-Approved twin pairs: 0, rejected: 0, new candidates waiting for review: 25.
-
-No open arbs.
 
 ## Last 24 hours
 

@@ -1,11 +1,11 @@
 {
- "generated": "2026-11-04T07:59:22Z",
+ "generated": "2026-11-04T08:07:23Z",
  "his_book": {
   "biggest_position_share": 0.174,
-  "cost_min_size_each": 250.28,
-  "generated": "2026-11-04T07:59:22Z",
-  "his_value": 118346.96,
-  "open_positions": 67
+  "cost_min_size_each": 245.59,
+  "generated": "2026-11-04T08:07:23Z",
+  "his_value": 118317.39,
+  "open_positions": 66
  },
  "tracks": {
   "arb": {
@@ -104,11 +104,11 @@
    "money_needed": -0.0,
    "open": 1,
    "peak_open_cost": 3.68942,
-   "pnl": 0.3106,
+   "pnl": 0.3356,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": 0.3106,
+   "unrealized": 0.3356,
    "wins": 0
   },
   "screener": {
