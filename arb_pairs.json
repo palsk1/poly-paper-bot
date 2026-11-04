@@ -1,0 +1,5 @@
+{
+ "about": "Kalshi x Polymarket twin markets. Only 'approved' pairs are traded. Each approved pair's rules were read side by side (event, outcome definition, deadline and time zone, resolution source, early-close/death/cancellation clauses). poly_outcome_for_kalshi_yes = the Polymarket outcome that wins exactly when Kalshi YES wins. Rejected pairs are never proposed again.",
+ "approved": [],
+ "rejected": []
+}

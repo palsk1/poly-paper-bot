@@ -3,22 +3,26 @@
 
 Follows one wallet's positions and runs rule-based strategies, recording
 everything as paper trades. It never places real orders and needs no keys:
-it only reads Polymarket's public APIs and (optionally) sends ntfy pushes.
+it only reads Polymarket's and Kalshi's public APIs and (optionally) sends ntfy pushes.
 
 Usage:
-    python3 bot.py watch     # every ~10 min: copy his opens/exits, manage exits, panic scan every 2h
-    python3 bot.py daily     # once a day: settle resolved markets, strategy picks, summary
+    python3 bot.py watch     # every ~10 min: copy his opens/exits, manage exits, arb checks, panic scan every 2h;
+                             # also runs the daily job if GitHub skipped it
+    python3 bot.py daily     # once a day: settle, strategy picks, arb candidates, summary (FORCE=true to re-run)
     python3 bot.py summary   # rebuild summary files only
     python3 bot.py selftest  # print raw API samples and send a test push
 """
 import datetime as dt
 import json
+import math
 import os
+import re
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATE = os.path.join(ROOT, "state")
@@ -28,6 +32,8 @@ with open(os.path.join(ROOT, "config.json")) as _fh:
 DATA = "https://data-api.polymarket.com"
 GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
+KALSHI = "https://external-api.kalshi.com/trade-api/v2"
+ARB_PAIRS = os.path.join(ROOT, "arb_pairs.json")
 UA = "poly-paper-bot/1.0 (paper trading only)"
 EPS = 1e-9
 
@@ -172,6 +178,9 @@ def load_tracks():
                 "skipped_no_cash": 0,
                 "created": iso(),
             }
+        if tc["source"] == "arb":
+            for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
+                tracks[name].setdefault(k, v)
     return tracks
 
 
@@ -383,7 +392,7 @@ def manage_exits(tracks):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the mirrors)."""
     for name, tr in tracks.items():
         tc = CFG["tracks"][name]
-        if tc["source"] == "leader":
+        if tc["source"] in ("leader", "arb"):
             continue
         rules = rules_for(name)
         for tok in list(tr["positions"]):
@@ -563,23 +572,25 @@ def his_book_estimate():
 # ================================================================ strategies on the whole market
 
 def scan_filters():
-    """Server-side pre-filter covering every strategy's widest settings (deadline window, liquidity)."""
-    rs = list(CFG["rules"].values())
+    """Server-side pre-filter covering the screener/panic strategies' widest settings (deadline window, liquidity).
+    The arb track scans separately with its own window."""
+    rs = [rules_for(n) for n, tc in CFG["tracks"].items() if tc["source"] in ("screener", "panic")]
     lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs))
     hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs))
     return {"end_date_min": iso(lo), "end_date_max": iso(hi),
             "liquidity_num_min": min(r["min_liquidity"] for r in rs)}
 
 
-def scan_markets():
-    """Open markets (one pass), shared by every strategy. Tries server-side filters first;
+def scan_markets(filters=None):
+    """Open markets (one pass). Tries server-side filters first;
     falls back to the unfiltered list if the API rejects them."""
+    filters = filters or scan_filters()
     for filtered in (True, False):
         out, cursor, ok = [], None, True
         for page in range(400):
             params = {"closed": "false", "limit": 500, "version": ["v1", "v2"]}
             if filtered:
-                params.update(scan_filters())
+                params.update(filters)
             if cursor:
                 params["after_cursor"] = cursor
             try:
@@ -805,7 +816,488 @@ def panic_scan_due():
     return last is None or (now() - last).total_seconds() >= hours * 3600 - 300
 
 
+# ================================================================ arbitrage: Kalshi x Polymarket
+#
+# Lessons built in (see README): most "gaps" are stale quotes or markets that only look the same
+# (different deadline, resolution source, death/early-close clause). So the bot only PROPOSES pairs;
+# a pair is traded only after its rules were read side by side and approved in arb_pairs.json.
+# Prices come from both live order books, both sites' taker fees are paid, both legs are held to the end.
+
+_kalshi_cache = {}
+
+
+def arb_rules():
+    return CFG["rules"]["arb"]
+
+
+def arb_track_name():
+    for n, tc in CFG["tracks"].items():
+        if tc["source"] == "arb":
+            return n
+    return None
+
+
+def load_pairs():
+    try:
+        with open(ARB_PAIRS) as fh:
+            d = json.load(fh)
+    except (OSError, ValueError):
+        d = {}
+    d.setdefault("approved", [])
+    d.setdefault("rejected", [])
+    return d
+
+
+def kalshi_get(path, params=None):
+    return http_json(f"{KALSHI}{path}", params)
+
+
+def kalshi_market(ticker):
+    if ticker in _kalshi_cache:
+        return _kalshi_cache[ticker]
+    m = None
+    try:
+        res = kalshi_get(f"/markets/{urllib.parse.quote(ticker)}")
+        m = res.get("market") if isinstance(res, dict) else None
+    except Exception as e:
+        print(f"kalshi market lookup failed for {ticker}: {e}")
+    _kalshi_cache[ticker] = m
+    return m
+
+
+def kpx(m, key):
+    """Kalshi price in dollars: new '<key>_dollars' fields, old cent fields as fallback."""
+    v = m.get(f"{key}_dollars")
+    if v not in (None, ""):
+        return fnum(v, None)
+    v = m.get(key)
+    return None if v in (None, "") else fnum(v, 0) / 100
+
+
+def kalshi_asks(ticker):
+    """(yes_asks, no_asks), ascending [(price, size)]. Kalshi's book lists only bids:
+    buying YES at p means matching a NO bid at 1-p, and vice versa."""
+    try:
+        res = kalshi_get(f"/markets/{urllib.parse.quote(ticker)}/orderbook")
+    except Exception as e:
+        print(f"kalshi book failed for {ticker}: {e}")
+        return None
+    ob = (res.get("orderbook_fp") or res.get("orderbook") or {}) if isinstance(res, dict) else {}
+
+    def bids(*keys):
+        for k in keys:
+            if ob.get(k):
+                out = []
+                for lvl in ob[k]:
+                    if not isinstance(lvl, (list, tuple)) or len(lvl) < 2:
+                        continue
+                    p, s = fnum(lvl[0], None), fnum(lvl[1], 0)
+                    if p is None or s <= 0:
+                        continue
+                    out.append((p / 100 if p > 1 else p, s))
+                return out
+        return []
+
+    yes_bids, no_bids = bids("yes_dollars", "yes"), bids("no_dollars", "no")
+    yes_asks = sorted(((round(1 - p, 6), s) for p, s in no_bids), key=lambda x: x[0])
+    no_asks = sorted(((round(1 - p, 6), s) for p, s in yes_bids), key=lambda x: x[0])
+    return yes_asks, no_asks
+
+
+def kalshi_fee(shares, price):
+    """Kalshi taker fee: 0.07 x contracts x p x (1-p), rounded UP to the cent, per order."""
+    rate = arb_rules().get("kalshi_fee_rate", 0.07)
+    return math.ceil(rate * shares * price * (1 - price) * 100 - 1e-9) / 100
+
+
+def kalshi_payout(m, side):
+    """Per-share payout of our Kalshi leg once settled, else None. Handles 'settled at a price'
+    outcomes (e.g. Kalshi's death carve-out) through settlement_value_dollars."""
+    if not m:
+        return None
+    res = str(m.get("result") or "").lower()
+    if res in ("yes", "no"):
+        return 1.0 if res == side else 0.0
+    if str(m.get("status") or "").lower() in ("finalized", "settled"):
+        v = fnum(m.get("settlement_value_dollars"), None)
+        if v is not None:
+            return v if side == "yes" else 1 - v
+    return None
+
+
+# ---- candidate pairs (daily): cheap text matching, then a human/Claude reads the rules
+
+_STOP = set("will the a an be by in of to on at for and or is are this that with from as it its market "
+            "which who what does do has have had get any next".split())
+_SYN = {"cut": "decrease", "cuts": "decrease", "lower": "decrease", "lowers": "decrease", "reduce": "decrease",
+        "hike": "increase", "hikes": "increase", "raise": "increase", "raises": "increase",
+        "bp": "bps", "democrats": "democratic", "democrat": "democratic", "dem": "democratic",
+        "dems": "democratic", "republicans": "republican", "gop": "republican", "u.s": "usa", "us": "usa",
+        "america": "usa", "american": "usa", "wins": "win", "won": "win", "elected": "win",
+        "nominee": "nomination", "nominated": "nomination", "out": "leave", "leaves": "leave",
+        "resign": "leave", "resigns": "leave", "removed": "leave"}
+
+
+def text_tokens(text):
+    t = re.sub(r"[^a-z0-9.%$ ]+", " ", str(text or "").lower())
+    t = re.sub(r"(\d)([a-z])", r"\1 \2", t)  # "25bps" -> "25 bps"
+    out = set()
+    for w in t.split():
+        w = w.strip(".")
+        if w and w not in _STOP:
+            out.add(_SYN.get(w, w))
+    return out
+
+
+def kalshi_scan(r):
+    out, cursor, seen = [], None, 0
+    base = {"status": "open", "limit": 1000, "mve_filter": "exclude",
+            "min_close_ts": int((now() + dt.timedelta(days=r["min_days"])).timestamp()),
+            "max_close_ts": int((now() + dt.timedelta(days=r["max_days"])).timestamp())}
+    for page in range(r.get("kalshi_max_pages", 150)):
+        params = dict(base)
+        if cursor:
+            params["cursor"] = cursor
+        try:
+            res = kalshi_get("/markets", params)
+        except Exception as e:
+            print(f"kalshi scan page {page} failed: {e}")
+            break
+        ms = res.get("markets") or []
+        seen += len(ms)
+        for m in ms:
+            t = str(m.get("ticker") or "")
+            if any(t.startswith(p) for p in r.get("kalshi_skip_prefixes", [])):
+                continue
+            if m.get("mve_collection_ticker") or str(m.get("market_type") or "binary") != "binary":
+                continue
+            if fnum(pick(m, "volume_fp", "volume")) < r["kalshi_min_volume"]:
+                continue
+            ya, na = kpx(m, "yes_ask"), kpx(m, "no_ask")
+            if ya is None or na is None or not (0.02 <= ya <= 0.98) or not (0.02 <= na <= 0.98):
+                continue
+            close = parse_iso(m.get("close_time"))
+            if not close:
+                continue
+            out.append({"m": m, "close": close, "ya": ya, "na": na,
+                        "toks": text_tokens(f"{m.get('title', '')} {m.get('yes_sub_title', '')}")})
+        cursor = res.get("cursor")
+        if not cursor or not ms:
+            break
+        time.sleep(0.05)
+    print(f"kalshi: scanned {seen} open markets, kept {len(out)}")
+    return out, seen
+
+
+def arb_propose():
+    """Find Kalshi/Polymarket markets that look like twins; save the best unreviewed ones with both rule texts."""
+    r = arb_rules()
+    pairs = load_pairs()
+    decided = {p.get("id") for p in pairs["approved"] + pairs["rejected"]}
+    lo, hi = now() + dt.timedelta(days=r["min_days"]), now() + dt.timedelta(days=r["max_days"])
+    poly = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi), "liquidity_num_min": r["min_liquidity"]})
+    P = []
+    for m in poly:
+        if m.get("closed") or m.get("acceptingOrders") is False or is_sports(m) or not binary(m):
+            continue
+        q = str(m.get("question") or "")
+        if any(w in q.lower() for w in r.get("poly_skip_words", [])):
+            continue
+        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        if end:
+            P.append({"m": m, "end": end, "toks": text_tokens(f"{q} {m.get('groupItemTitle') or ''}")})
+    K, k_seen = kalshi_scan(r)
+    if not P or not K:
+        save("arb_candidates.json", {"generated": iso(), "note": "scan failed or empty",
+                                     "poly_markets": len(P), "kalshi_markets": len(K), "candidates": []})
+        return
+
+    df = Counter()
+    for x in P + K:
+        df.update(x["toks"])
+    n_docs = len(P) + len(K)
+    w = {t: math.log((n_docs + 1) / (c + 1)) + 1 for t, c in df.items()}
+    norm = lambda ts: math.sqrt(sum(w[t] ** 2 for t in ts)) or 1.0
+    for x in P + K:
+        x["norm"] = norm(x["toks"])
+    index = defaultdict(list)
+    for i, x in enumerate(P):
+        for t in x["toks"]:
+            if df[t] <= r.get("max_df", 400):
+                index[t].append(i)
+
+    best_by_poly = {}
+    tol = r["date_tolerance_days"] * 86400
+    for k in K:
+        pool = Counter()
+        for t in k["toks"]:
+            for i in index.get(t, ()):
+                pool[i] += 1
+        best = None
+        for i, _ in pool.most_common(60):
+            p = P[i]
+            if abs((p["end"] - k["close"]).total_seconds()) > tol:
+                continue
+            s = sum(w[t] ** 2 for t in k["toks"] & p["toks"]) / (k["norm"] * p["norm"])
+            if best is None or s > best[0]:
+                best = (s, i)
+        if not best or best[0] < r["min_match_score"]:
+            continue
+        s, i = best
+        pid = f"{k['m'].get('ticker')}|{P[i]['m'].get('slug')}"
+        if pid in decided:
+            continue
+        slug = P[i]["m"].get("slug")
+        if slug not in best_by_poly or s > best_by_poly[slug][0]:
+            best_by_poly[slug] = (s, k, P[i])
+
+    cands = []
+    for s, k, p in best_by_poly.values():
+        km, pm = k["m"], p["m"]
+        bb, ba = fnum(pm.get("bestBid"), None), fnum(pm.get("bestAsk"), None)
+        gap = None
+        if bb is not None and ba is not None and ba > 0:
+            gap = round(1 - min(k["ya"] + (1 - bb), k["na"] + ba), 4)  # assumes Kalshi YES = Polymarket Yes
+        events = pm.get("events") or []
+        ev = events[0] if events and isinstance(events[0], dict) else {}
+        cands.append({
+            "id": f"{km.get('ticker')}|{pm.get('slug')}", "match_score": round(s, 3), "est_gap_before_fees": gap,
+            "kalshi": {"ticker": km.get("ticker"), "event_ticker": km.get("event_ticker"), "title": km.get("title"),
+                       "yes_sub_title": km.get("yes_sub_title"), "no_sub_title": km.get("no_sub_title"),
+                       "close_time": km.get("close_time"), "can_close_early": km.get("can_close_early"),
+                       "rules_primary": str(km.get("rules_primary") or "")[:1500],
+                       "rules_secondary": str(km.get("rules_secondary") or "")[:800],
+                       "yes_ask": k["ya"], "no_ask": k["na"], "volume": fnum(pick(km, "volume_fp", "volume"))},
+            "polymarket": {"slug": pm.get("slug"), "question": pm.get("question"),
+                           "outcomes": jlist(pm.get("outcomes")), "end": pm.get("endDateIso"),
+                           "best_bid_yes": bb, "best_ask_yes": ba,
+                           "liquidity": round(fnum(pick(pm, "liquidityNum", "liquidity"))),
+                           "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
+                           "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
+        })
+    cands.sort(key=lambda c: (c["est_gap_before_fees"] is None, -(c["est_gap_before_fees"] or 0), -c["match_score"]))
+    save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
+                                 "kalshi_kept": len(K), "matched_unreviewed": len(cands),
+                                 "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
+                                                  "twins into arb_pairs.json (see 'about' there).",
+                                 "candidates": cands[: r["max_candidates"]]})
+    print(f"arb: {len(cands)} unreviewed twin candidates saved (top {r['max_candidates']})")
+
+
+# ---- live check of approved pairs (every watch run)
+
+def arb_check(tracks):
+    name = arb_track_name()
+    if not name:
+        return
+    tr, r = tracks[name], arb_rules()
+    for pair in load_pairs()["approved"]:
+        try:
+            arb_check_pair(name, tr, pair, r)
+        except Exception as e:
+            print(f"arb check failed for {pair.get('id')}: {e}")
+
+
+def arb_check_pair(name, tr, pair, r):
+    pid = pair["id"]
+    km, pm = kalshi_market(pair["kalshi"]), market_by_slug(pair["poly_slug"])
+    if not km or not pm:
+        return
+    if str(km.get("status") or "").lower() not in ("active", "open") or pm.get("closed") \
+            or pm.get("acceptingOrders") is False:
+        return
+    toks, outs = market_tokens(pm), [str(o) for o in jlist(pm.get("outcomes"))]
+    want = str(pair.get("poly_outcome_for_kalshi_yes", "Yes"))
+    if len(toks) != 2 or want not in outs:
+        print(f"arb {pid}: outcome '{want}' not found in {outs}")
+        return
+    iy = outs.index(want)
+    kb = kalshi_asks(pair["kalshi"])
+    pb = {0: book(toks[0]), 1: book(toks[1])}
+    if not kb or not pb[0] or not pb[1]:
+        return
+    shares = max(r["lot_shares"], pb[0]["min_size"], pb[1]["min_size"])
+    ends = [d for d in (parse_iso(km.get("close_time")), parse_iso(pm.get("endDateIso") or pm.get("endDate"))) if d]
+    days = max(1.0, (max(ends) - now()).total_seconds() / 86400 if ends else 30) + r["settle_buffer_days"]
+    rate = fee_rate(pm)
+    best = None
+    # leg A: Kalshi YES + Polymarket outcome that wins when Kalshi NO wins; leg B: the mirror image
+    for k_side, k_levels, j in (("yes", kb[0], 1 - iy), ("no", kb[1], iy)):
+        pk, pp = walk(k_levels, shares), walk(pb[j]["asks"], shares)
+        if pk is None or pp is None:
+            continue
+        kf, pf = kalshi_fee(shares, pk), taker_fee(shares, pp, rate)
+        cost = shares * (pk + pp) + kf + pf
+        net = shares - cost
+        c = {"k_side": k_side, "pk": pk, "pp": pp, "kf": kf, "pf": pf, "cost": cost, "net": net,
+             "edge": net / shares, "annual": (net / cost) * 365 / days if cost > 0 else 0,
+             "p_tok": toks[j], "p_out": outs[j]}
+        if best is None or c["edge"] > best["edge"]:
+            best = c
+    if not best:
+        return
+    ok = best["edge"] >= r["min_edge"] and best["annual"] >= r["min_annual"]
+    prev = tr["last_check"].get(pid, {})
+    tr["last_check"][pid] = {"ts": iso(), "edge": round(best["edge"], 4), "annual": round(best["annual"], 3),
+                             "opportunity": ok}
+    if not ok:
+        return
+    if not prev.get("opportunity"):
+        tr["opportunities"] += 1  # count each gap episode once, not every check while it lasts
+        log_event({"type": "arb_opportunity", "track": name, "pair": pid, "edge": round(best["edge"], 4),
+                   "annual": round(best["annual"], 3), "title": pm.get("question")})
+    if sum(1 for a in tr["arbs"].values() if a["pair_id"] == pid) >= r["max_lots_per_pair"]:
+        return
+    if tr["cash"] + EPS < best["cost"]:
+        tr["skipped_no_cash"] += 1
+        log_event({"type": "skip_no_cash", "track": name, "title": pm.get("question"), "cost": round(best["cost"], 4)})
+        return
+    tr["cash"] = round(tr["cash"] - best["cost"], 6)
+    tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+    aid = f"{pid}#{len(tr['closed']) + len(tr['arbs']) + 1}"
+    tr["arbs"][aid] = {
+        "pair_id": pid, "title": pm.get("question"), "shares": shares, "opened": iso(),
+        "kalshi": pair["kalshi"], "k_side": best["k_side"], "k_price": round(best["pk"], 4), "k_fee": best["kf"],
+        "poly_slug": pair["poly_slug"], "poly_token": best["p_tok"], "poly_outcome": best["p_out"],
+        "p_price": round(best["pp"], 4), "p_fee": round(best["pf"], 4), "cost": round(best["cost"], 4),
+        "expected_profit": round(best["net"], 4), "edge": round(best["edge"], 4), "annual": round(best["annual"], 3),
+        "kalshi_close": km.get("close_time"), "poly_end": pm.get("endDateIso"),
+    }
+    tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(a["cost"] for a in tr["arbs"].values())), 6)
+    log_event({"type": "arb_open", "track": name, "title": pm.get("question"), "pair": pid,
+               "price": round(best["pk"] + best["pp"], 4), "edge": round(best["edge"], 4)})
+    if CFG["push"].get("on_arb") and not prev.get("opportunity"):  # one ping per gap, not per lot
+        push(f"[arb] locked {best['edge'] * 100:.1f}c/share",
+             f"{pm.get('question')}\nKalshi {best['k_side'].upper()} {cents(best['pk'])} + Polymarket "
+             f"{best['p_out']} {cents(best['pp'])}, fees ${best['kf'] + best['pf']:.2f}\n"
+             f"{shares:.0f} shares: pays ${shares:.2f} at the end for ${best['cost']:.2f} (paper)",
+             click=market_link(pair["poly_slug"]), tags="scales")
+
+
+def arb_settle(tracks):
+    name = arb_track_name()
+    if not name:
+        return
+    tr = tracks[name]
+    for aid in list(tr["arbs"]):
+        a = tr["arbs"][aid]
+        _kalshi_cache.pop(a["kalshi"], None)
+        pk = kalshi_payout(kalshi_market(a["kalshi"]), a["k_side"])
+        pp = resolved_payout(market_by_slug(a["poly_slug"]), a["poly_token"])
+        if pk is None or pp is None:
+            if (pk is None) != (pp is None) and not a.get("half_settled"):
+                a["half_settled"] = iso()
+                log_event({"type": "arb_half_settled", "track": name, "title": a["title"],
+                           "kalshi_done": pk is not None, "poly_done": pp is not None})
+            continue
+        proceeds = a["shares"] * (pk + pp)
+        pnl = proceeds - a["cost"]
+        mismatch = abs(pk + pp - 1) > 0.01
+        tr["cash"] = round(tr["cash"] + proceeds, 6)
+        tr["realized"] = round(tr["realized"] + pnl, 6)
+        tr["closed"].append({**a, "k_payout": pk, "p_payout": pp, "pnl": round(pnl, 4), "mismatch": mismatch,
+                             "closed_at": iso()})
+        del tr["arbs"][aid]
+        log_event({"type": "arb_close", "track": name, "title": a["title"], "pnl": round(pnl, 4),
+                   "reason": "MISMATCH: the two sites resolved differently" if mismatch else "both legs resolved"})
+        if mismatch:
+            tr["mismatches"] += 1
+            push("[arb] MISMATCH: sites resolved differently",
+                 f"{a['title']}\nKalshi paid {pk:.2f}, Polymarket paid {pp:.2f} per share. P&L ${pnl:+.2f} (paper). "
+                 "This is the risk the experiment is measuring.", tags="rotating_light")
+
+
+# ---- "is it proven?" (90% confidence that resolution mismatches are rarer than the edge)
+
+def binom_cdf(k, n, p):
+    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k + 1))
+
+
+def upper90(k, n):
+    """One-sided 90% upper bound on the mismatch rate after k mismatches in n arbs (Clopper-Pearson)."""
+    if n == 0:
+        return 1.0
+    lo, hi = k / n, 1.0
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        if binom_cdf(k, n, mid) > 0.10:
+            lo = mid
+        else:
+            hi = mid
+    return hi
+
+
+def arb_proof(tr):
+    closed = tr["closed"]
+    n, k = len(closed), sum(1 for c in closed if c.get("mismatch"))
+    edges = [c["edge"] for c in closed] + [a["edge"] for a in tr["arbs"].values()]
+    e = sum(edges) / len(edges) if edges else arb_rules()["min_edge"]
+    # A clean arb earns about e per share; a mismatch can lose about the whole $1 stake,
+    # so arbs only pay if mismatches happen less often than about e (e.g. 2.5c edge -> under 2.5%).
+    ub = upper90(k, n)
+    proven = n >= 20 and ub < e and tr["realized"] > 0
+    need = 0
+    if not proven:
+        m = max(n, 1)
+        while upper90(k, m) >= e and m < n + 3000:
+            m += 1
+        need = max(m - n, 20 - n, 0)
+    if n == 0:
+        verdict = (f"Not proven yet: no finished arbs. With ~{e * 100:.1f}c edge we need about "
+                   f"{need} clean finished arbs (0 mismatches) to be 90% sure.")
+    elif proven:
+        verdict = (f"PROVEN at 90%: {n} finished arbs, {k} mismatches, profit ${tr['realized']:.2f}. "
+                   f"Mismatch rate is below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
+    else:
+        verdict = (f"Not proven yet: {n} finished, {k} mismatches, profit ${tr['realized']:+.2f}. "
+                   f"Need about {need} more clean ones to be 90% sure (if no new mismatches).")
+    return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "mismatch_rate_upper90": round(ub, 4),
+            "proven": proven, "more_needed": need, "verdict": verdict}
+
+
+def arb_summary(name, tr):
+    locked = sum(a["cost"] for a in tr["arbs"].values())
+    expected = sum(a["expected_profit"] for a in tr["arbs"].values())
+    proof = arb_proof(tr)
+    wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr["arbs"]), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": 0,
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "locked": round(locked, 4),
+             "expected_locked_profit": round(expected, 4), "gap_episodes": tr["opportunities"],
+             "mismatches": tr["mismatches"], "proof": proof}
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr['arbs'])} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) "
+           f"| ${tr['cash']:.2f} | locked ${locked:.2f} (+${expected:.2f} expected); gaps found {tr['opportunities']}; "
+           f"mismatches {tr['mismatches']} |")
+    pairs = load_pairs()
+    cand = load("arb_candidates.json", {})
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
+             f"**Proof status:** {proof['verdict']}\n",
+             f"Approved twin pairs: {len(pairs['approved'])}, rejected: {len(pairs['rejected'])}, "
+             f"new candidates waiting for review: {len(cand.get('candidates', []))}.\n"]
+    if tr["arbs"]:
+        lines.append("| Market | Kalshi leg | Polymarket leg | Cost | Pays at end | Ends |\n|---|---|---|---|---|---|")
+        for a in tr["arbs"].values():
+            lines.append(f"| {str(a['title'])[:60]} | {a['k_side'].upper()} {cents(a['k_price'])} | {a['poly_outcome']} "
+                         f"{cents(a['p_price'])} | ${a['cost']:.2f} | ${a['shares']:.2f} | "
+                         f"{str(a.get('poly_end') or a.get('kalshi_close') or '')[:10]}"
+                         f"{' (one side settled ' + a['half_settled'][:10] + ')' if a.get('half_settled') else ''} |")
+    else:
+        lines.append("No open arbs.")
+    watching = [(pid, c) for pid, c in tr.get("last_check", {}).items()]
+    if watching:
+        lines.append("\nLast check of approved pairs (best net edge per share after fees):")
+        for pid, c in watching[:15]:
+            lines.append(f"- {pid}: {c['edge'] * 100:+.1f}c ({c['ts'][:16]} UTC)")
+    return row, stats, lines
+
+
 # ================================================================ commands
+
+def today_utc():
+    return now().strftime("%Y-%m-%d")
+
 
 def watch():
     tracks = load_tracks()
@@ -814,6 +1306,11 @@ def watch():
     except Exception as e:
         print(f"leader check failed: {e}")
     manage_exits(tracks)
+    for step in (arb_settle, arb_check):
+        try:
+            step(tracks)
+        except Exception as e:
+            print(f"{step.__name__} failed: {e}")
     if panic_scan_due():
         markets = scan_markets()
         if markets:
@@ -822,6 +1319,10 @@ def watch():
             st["last_panic_scan"] = iso()
             save("scan_state.json", st)
     save("tracks.json", tracks)
+    # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
+    if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
+        print("daily job hasn't run today (GitHub skipped it?); catching up now")
+        daily(force=False)
 
 
 def settle_resolved(tracks):
@@ -832,7 +1333,12 @@ def settle_resolved(tracks):
                 paper_close(tr, name, tok, payout, 0.0, "resolved")
 
 
-def daily():
+def daily(force=None):
+    if force is None:
+        force = os.environ.get("FORCE", "").strip().lower() == "true"
+    if not force and load("scan_state.json", {}).get("last_daily") == today_utc():
+        print("daily job already ran today; skipping (set FORCE=true to re-run)")
+        return
     tracks = load_tracks()
     settle_resolved(tracks)
     manage_exits(tracks)
@@ -843,12 +1349,20 @@ def daily():
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
+    for step in (arb_settle, lambda t: arb_propose(), arb_check):
+        try:
+            step(tracks)
+        except Exception as e:
+            print(f"arb step failed: {e}")
     try:
         est = his_book_estimate()
         save("his_book.json", {"generated": iso(), **est})
     except Exception as e:
         print(f"book estimate failed: {e}")
     save("tracks.json", tracks)
+    st = load("scan_state.json", {})
+    st["last_daily"] = today_utc()
+    save("scan_state.json", st)
     push_scoreboard(write_summary(tracks))
 
 
@@ -865,6 +1379,11 @@ def write_summary(tracks):
     md.append("| Track | P&L | Open | Closed (W/L) | Cash | Notes |")
     md.append("|---|---|---|---|---|---|")
     for name, tr in tracks.items():
+        if CFG["tracks"].get(name, {}).get("source") == "arb":
+            row, stats[name], lines = arb_summary(name, tr)
+            md.append(row)
+            detail += lines
+            continue
         unreal, open_rows = 0.0, []
         for tok, pos in tr["positions"].items():
             px = mark(pos, tok)
@@ -907,7 +1426,8 @@ def write_summary(tracks):
     md.append("\n## Last 24 hours\n")
     cutoff = now() - dt.timedelta(hours=24)
     p, lines = os.path.join(STATE, "events.jsonl"), []
-    keep = ("leader_open", "leader_exit", "paper_buy", "paper_close", "skip_no_cash", "refill")
+    keep = ("leader_open", "leader_exit", "paper_buy", "paper_close", "skip_no_cash", "refill",
+            "arb_open", "arb_close", "arb_half_settled", "arb_opportunity")
     if os.path.exists(p):
         with open(p) as fh:
             for line in fh:
@@ -950,6 +1470,12 @@ def push_scoreboard(stats):
     lines = []
     for name, s in stats.items():
         money = f"{'+' if s['pnl'] >= 0 else '-'}${abs(s['pnl']):.2f}"
+        if "proof" in s:  # arbitrage track
+            pr = s["proof"]
+            lines.append(f"{name}: {money} | {s['open']} open (${s['locked']:.0f} locked) | "
+                         f"proof {pr['finished']}/{pr['finished'] + pr['more_needed']} clean"
+                         f"{', ' + str(pr['mismatches']) + ' MISMATCH' if pr['mismatches'] else ''}")
+            continue
         extra = ""
         if s.get("refills"):
             extra = f", refilled {s['refills']}x"

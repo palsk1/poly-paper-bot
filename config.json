@@ -47,6 +47,12 @@
       "refill": true,
       "source": "panic",
       "rules": "panic_fade"
+    },
+    "arb": {
+      "label": "Arbitrage: Kalshi vs Polymarket, reviewed twin markets only, both legs bought, held to the end. $300 paper",
+      "start_cash": 300,
+      "source": "arb",
+      "rules": "arb"
     }
   },
   "rules": {
@@ -99,6 +105,26 @@
       "take_profit": null,
       "stop_loss": 0.45,
       "scan_every_hours": 2
+    },
+    "arb": {
+      "why": "Buy YES on one site and NO on the other when both together cost less than $1 after both sites' fees. Only on pairs whose rules were read side by side and approved (arb_pairs.json). Hold both legs to resolution.",
+      "min_edge": 0.02,
+      "min_annual": 0.15,
+      "lot_shares": 5,
+      "max_lots_per_pair": 4,
+      "settle_buffer_days": 3,
+      "kalshi_fee_rate": 0.07,
+      "min_days": 1,
+      "max_days": 365,
+      "min_liquidity": 2000,
+      "date_tolerance_days": 4,
+      "min_match_score": 0.45,
+      "max_df": 400,
+      "max_candidates": 25,
+      "kalshi_min_volume": 500,
+      "kalshi_max_pages": 150,
+      "kalshi_skip_prefixes": ["KXMVE", "KXHIGH", "KXLOW", "KXRAIN", "KXSNOW", "KXTEMP", "KXBTC", "KXETH", "KXSOL", "KXXRP", "KXDOGE", "KXSHIBA", "KXINX", "KXNASDAQ", "KXGOLD", "KXSILVER", "KXWTI", "KXUSDJPY", "KXEURUSD"],
+      "poly_skip_words": ["up or down", "price of bitcoin", "price of ethereum", "highest temperature", "lowest temperature"]
     }
   },
   "themes": {
@@ -115,6 +141,7 @@
   "push": {
     "on_leader_trades": true,
     "on_screener_buys": true,
-    "on_claude_trades": true
+    "on_claude_trades": true,
+    "on_arb": true
   }
 }

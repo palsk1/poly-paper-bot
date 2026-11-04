@@ -1,6 +1,6 @@
 # poly-paper-bot
 
-**Paper trading only.** This bot never places real orders and holds no keys. It reads Polymarket's public data and records pretend trades so we can see which approach would actually have made money.
+**Paper trading only.** This bot never places real orders and holds no keys. It reads Polymarket's and Kalshi's public data and records pretend trades so we can see which approach would actually have made money.
 
 ## What it tests (each track has its own paper wallet)
 
@@ -12,23 +12,37 @@
 | `screener` | His "boring outcome" style by rule, without him | $20 |
 | `claude` | Claude's own rules (see `config.json` > `rules.claude.why`) | $50, refilled with $50 if it busts |
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
+| `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
+
+## The arbitrage track, and the known traps it is built to avoid
+
+Research (Nov 2026) found cross-site gaps are real but small: when both prices are fresh, a 3c+ gap shows up about 1 time in 20, break-even after both sites' fees is about 3c at mid prices, and money stays locked until the market ends. Most big "gaps" are stale quotes or markets that only *look* the same (different deadline, resolution source, or death/early-close clause, e.g. the Feb 2026 Khamenei markets settled very differently on the two sites). So:
+
+1. **The daily job only proposes pairs** (`state/arb_candidates.json`): text-matched markets with close dates within 4 days, both rule texts attached.
+2. **A pair is traded only after its rules were read side by side and approved** in `arb_pairs.json` (the morning Claude review does this; rejected pairs are never proposed again).
+3. **Prices come from both live order books** (Kalshi lists only bids: buying YES at p = matching a NO bid at 1-p), with both taker fees (Kalshi 0.07 x n x p x (1-p) rounded up to the cent; Polymarket's category rate).
+4. **Only takes it if** it nets >= 2c per share AND >= 15% a year (no locking money for years for pennies). 5 shares per lot, max 4 lots per pair.
+5. **Holds both legs to the end** and flags a **MISMATCH** loudly if the two sites resolve differently.
+6. **Proof line:** a clean arb earns about its edge per share; a mismatch can lose about the whole $1. So arbs only pay if mismatches are rarer than about the edge (2.5c edge -> under 2.5%). The summary shows how many clean finished arbs are needed to be 90% sure of that (about 90 at a 2.5c edge, if none mismatch).
 
 ## How it runs
 
-- `watch` workflow, every ~10 min: checks his wallet, copies opens/exits, handles take-profit/stop-loss, panic scan every 2 hours. Sends ntfy pushes.
-- `daily` workflow, ~06:17 Stockholm (winter): settles resolved markets, picks for the rule tracks, writes `state/summary.md`.
-- `selftest` workflow (manual): checks the APIs and sends a test push.
+- `watch` workflow, every ~10 min (GitHub often runs it less often): checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, panic scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
+- `daily` workflow, ~06:17 Stockholm (backup 07:47): settles resolved markets, picks for the rule tracks, proposes arb pairs, writes `state/summary.md`, pushes a scoreboard. Runs once per day; a manual run forces a re-run.
+- `selftest` workflow (manual): checks the APIs and sends a test push. `probe` workflow (manual): prints raw API shapes, no pushes.
 
-Fills are paper fills at the real order book price (taking the ask, selling at the bid), including Polymarket's taker fee where the market charges one.
+Fills are paper fills at the real order book price (taking the ask, selling at the bid), including taker fees.
 
-## Files in `state/`
+## Files
 
-- `summary.md`: human-readable daily report (start here)
-- `tracks.json`: every paper position and closed trade
-- `events.jsonl`: everything that happened, one line per event
-- `history.csv`: daily P&L per track
-- `candidates.json`: what the rule tracks were choosing from
-- `his_book.json`: his current book and what holding all of it at minimum size would cost
+- `state/summary.md`: human-readable daily report (start here)
+- `state/tracks.json`: every paper position, arb and closed trade
+- `state/events.jsonl`: everything that happened, one line per event
+- `state/history.csv`: daily P&L per track
+- `state/candidates.json`: what the rule tracks were choosing from
+- `state/arb_candidates.json`: proposed Kalshi/Polymarket twin pairs waiting for review
+- `state/his_book.json`: his current book and what holding all of it at minimum size would cost
+- `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup
 
