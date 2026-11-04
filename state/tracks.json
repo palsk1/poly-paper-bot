@@ -95,67 +95,67 @@
     "annual": 0.155,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T14:35:25Z"
+    "ts": "2026-11-04T14:40:37Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:27Z"
+    "ts": "2026-11-04T14:40:40Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:30Z"
+    "ts": "2026-11-04T14:40:45Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": 0.023,
     "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:25Z"
+    "ts": "2026-11-04T14:40:38Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.231,
-    "edge": -0.0399,
+    "annual": -0.252,
+    "edge": -0.0437,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:26Z"
+    "ts": "2026-11-04T14:40:39Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.105,
-    "edge": -0.0178,
+    "annual": -0.1,
+    "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:31Z"
+    "ts": "2026-11-04T14:40:47Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.033,
     "edge": -0.0055,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:28Z"
+    "ts": "2026-11-04T14:40:43Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0043,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:27Z"
+    "ts": "2026-11-04T14:40:41Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:29Z"
+    "ts": "2026-11-04T14:40:44Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.083,
     "edge": -0.014,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:31Z"
+    "ts": "2026-11-04T14:40:46Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.213,
     "edge": -0.0367,
     "opportunity": false,
-    "ts": "2026-11-04T14:35:28Z"
+    "ts": "2026-11-04T14:40:42Z"
    }
   },
   "min_cash": 0.0,
@@ -768,9 +768,9 @@
     "ts": "2026-11-04T10:44:28Z"
    },
    "south-korea-annual-inflation-2026:yes": {
-    "edge": 0.0027,
+    "edge": -0.0142,
     "opportunity": false,
-    "ts": "2026-11-04T12:44:48Z"
+    "ts": "2026-11-04T14:44:44Z"
    },
    "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401:yes": {
     "edge": -0.0183,
@@ -826,13 +826,29 @@
   "unlimited": true
  },
  "panic_fade": {
-  "cash": 42.241489,
+  "cash": 38.014609,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 7.758511,
+  "peak_open_cost": 11.985391,
   "positions": {
+   "54354873998826259054526425416928957657351494173277941862882815520348432840549": {
+    "end": "2026-12-16",
+    "entry": 0.84,
+    "entry_fee": 0.02688,
+    "event_key": "549019",
+    "event_slug": "anthropic-ipo-by",
+    "opened": "2026-11-04T14:42:07Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-anthropic-ipo-by-december-15-2026",
+    "source": "panic_fade",
+    "target": 0.91,
+    "theme": null,
+    "title": "Will Anthropic IPO by December 15, 2026?"
+   },
    "55811987156233316034004850162265185590623994721542035067805349300388333229197": {
     "end": "2027-01-01",
     "entry": 0.806,
