@@ -1111,7 +1111,7 @@ def arb_propose():
                        "yes_ask": k["ya"], "no_ask": k["na"], "volume": fnum(pick(km, "volume_fp", "volume"))},
             "polymarket": {"slug": pm.get("slug"), "question": pm.get("question"),
                            "outcomes": jlist(pm.get("outcomes")), "end": pm.get("endDateIso"),
-                           "best_bid_yes": bb, "best_ask_yes": ba,
+                           "best_bid_yes": p["bb"], "best_ask_yes": p["ba"],
                            "liquidity": round(fnum(pick(pm, "liquidityNum", "liquidity"))),
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
