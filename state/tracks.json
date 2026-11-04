@@ -42,9 +42,30 @@
     "poly_token": "112007327373263623178671509828927834172092799802464528122988153704237637965568",
     "shares": 5,
     "title": "Will Satoshi move any Bitcoin in 2026?"
+   },
+   "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026#3": {
+    "annual": 0.154,
+    "cost": 4.8749,
+    "edge": 0.025,
+    "expected_profit": 0.1251,
+    "k_fee": 0.02,
+    "k_price": 0.94,
+    "k_side": "no",
+    "kalshi": "KXSATOSHIBTCYEAR-27",
+    "kalshi_close": "2027-01-01T05:00:00Z",
+    "opened": "2026-11-04T10:41:36Z",
+    "p_fee": 0.0099,
+    "p_price": 0.029,
+    "pair_id": "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026",
+    "poly_end": "2027-01-01",
+    "poly_outcome": "Yes",
+    "poly_slug": "will-satoshi-move-any-bitcoin-in-2026",
+    "poly_token": "112007327373263623178671509828927834172092799802464528122988153704237637965568",
+    "shares": 5,
+    "title": "Will Satoshi move any Bitcoin in 2026?"
    }
   },
-  "cash": 290.250288,
+  "cash": 285.375432,
   "closed": [],
   "created": "2026-11-04T07:55:55Z",
   "deposited": 300.0,
@@ -53,73 +74,73 @@
     "annual": 0.154,
     "edge": 0.025,
     "opportunity": true,
-    "ts": "2026-11-04T08:27:26Z"
+    "ts": "2026-11-04T10:41:36Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.026,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:29Z"
+    "ts": "2026-11-04T10:41:38Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
-    "annual": -0.084,
-    "edge": -0.0143,
+    "annual": -0.078,
+    "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:33Z"
+    "ts": "2026-11-04T10:41:42Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
-    "annual": 0.017,
-    "edge": 0.0028,
+    "annual": 0.023,
+    "edge": 0.0039,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:27Z"
+    "ts": "2026-11-04T10:41:37Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.163,
-    "edge": -0.0279,
+    "annual": -0.214,
+    "edge": -0.0369,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:28Z"
+    "ts": "2026-11-04T10:41:38Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.111,
-    "edge": -0.0188,
+    "annual": -0.085,
+    "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:35Z"
+    "ts": "2026-11-04T10:41:43Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.044,
-    "edge": -0.0074,
+    "annual": -0.038,
+    "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:31Z"
+    "ts": "2026-11-04T10:41:40Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.097,
     "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:30Z"
+    "ts": "2026-11-04T10:41:39Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:32Z"
+    "ts": "2026-11-04T10:41:41Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
-    "annual": -0.088,
+    "annual": -0.089,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:34Z"
+    "ts": "2026-11-04T10:41:43Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.1,
     "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-04T08:27:30Z"
+    "ts": "2026-11-04T10:41:40Z"
    }
   },
   "min_cash": 0.0,
   "mismatches": 0,
   "opportunities": 1,
-  "peak_open_cost": 9.7498,
+  "peak_open_cost": 14.6247,
   "positions": {},
   "realized": 0.0,
   "refills": 0,
@@ -203,29 +224,80 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 80.44452,
-  "closed": [],
-  "created": "2026-11-04T08:27:23Z",
-  "deposited": 100.0,
-  "min_cash": 0.0,
-  "peak_open_cost": 19.55548,
-  "positions": {
-   "111649766234039037427682269364802963545469686703405787669781062611537339501604": {
+  "cash": 75.720703,
+  "closed": [
+   {
+    "closed_at": "2026-11-04T10:41:34Z",
     "end": "2026-11-04",
     "entry": 0.989,
     "entry_fee": 0.002176,
     "event_key": "833601",
     "event_slug": "new-hampshire-senate-and-governor-combo-20260810221355675",
+    "exit": 1.0,
+    "exit_fee": 0.0,
     "opened": "2026-11-04T08:28:12Z",
     "outcome": "No",
+    "pnl": 0.052824,
     "price_source": "estimate",
+    "reason": "resolved",
     "shares": 5,
     "slug": "will-republicans-sweep-the-new-hampshire-senate-and-governor-elections-20260810221355677",
     "source": "endgame",
     "theme": "us politics",
     "tier": "proposed",
-    "title": "Will Republicans sweep the New Hampshire Senate and Governor elections?"
+    "title": "Will Republicans sweep the New Hampshire Senate and Governor elections?",
+    "token": "111649766234039037427682269364802963545469686703405787669781062611537339501604"
    },
+   {
+    "closed_at": "2026-11-04T10:41:35Z",
+    "end": "2026-11-03",
+    "entry": 0.9825,
+    "entry_fee": 0.003439,
+    "event_key": "965555",
+    "event_slug": "vermont-lieutenant-governor-election-winner-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T08:28:12Z",
+    "outcome": "Yes",
+    "pnl": 0.084061,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-vermont-lieutenant-governor-election",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Democratic Party candidate win the 2026 Vermont Lieutenant Governor election?",
+    "token": "72114266463379433906187959416306959572546325827181022723106443232608510560756"
+   },
+   {
+    "closed_at": "2026-11-04T10:41:35Z",
+    "end": "2026-11-03",
+    "entry": 0.976,
+    "entry_fee": 0.004685,
+    "event_key": "965554",
+    "event_slug": "texas-lieutenant-governor-election-winner-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T08:28:12Z",
+    "outcome": "Yes",
+    "pnl": 0.115315,
+    "price_source": "estimate",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-the-democratic-party-candidate-win-the-2026-texas-lieutenant-governor-election",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Democratic Party candidate win the 2026 Texas Lieutenant Governor election?",
+    "token": "94288714604163574102049252490824493204211229391717289463753112166641141429805"
+   }
+  ],
+  "created": "2026-11-04T08:27:23Z",
+  "deposited": 100.0,
+  "min_cash": 0.0,
+  "peak_open_cost": 24.531497,
+  "positions": {
    "276946883010743088745764872351799241722170551707375798083252224326120327452": {
     "end": "2026-11-04",
     "entry": 0.96,
@@ -242,40 +314,72 @@
     "tier": "past_deadline",
     "title": "Will the Democratic Party candidate win the 2026 Michigan Senate election by 0%-3%?"
    },
-   "72114266463379433906187959416306959572546325827181022723106443232608510560756": {
+   "28056736020593914078877736437906229134838802091308280116038583323350331325172": {
     "end": "2026-11-03",
-    "entry": 0.9825,
-    "entry_fee": 0.003439,
-    "event_key": "965555",
-    "event_slug": "vermont-lieutenant-governor-election-winner-2026",
-    "opened": "2026-11-04T08:28:12Z",
-    "outcome": "Yes",
+    "entry": 0.9865,
+    "entry_fee": 0.002664,
+    "event_key": "965493",
+    "event_slug": "nevada-attorney-general-election-winner-2026",
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "No",
     "price_source": "estimate",
     "shares": 5,
-    "slug": "will-the-democratic-party-candidate-win-the-2026-vermont-lieutenant-governor-election",
+    "slug": "will-the-republican-party-candidate-win-the-2026-nevada-attorney-general-election",
     "source": "endgame",
     "theme": "us politics",
     "tier": "proposed",
-    "title": "Will the Democratic Party candidate win the 2026 Vermont Lieutenant Governor election?"
+    "title": "Will the Republican Party candidate win the 2026 Nevada Attorney General election?"
    },
-   "94288714604163574102049252490824493204211229391717289463753112166641141429805": {
-    "end": "2026-11-03",
-    "entry": 0.976,
-    "entry_fee": 0.004685,
-    "event_key": "965554",
-    "event_slug": "texas-lieutenant-governor-election-winner-2026",
-    "opened": "2026-11-04T08:28:12Z",
-    "outcome": "Yes",
+   "58852733019222657257857989920800865387778184315425789631820735202058753631697": {
+    "end": "2026-11-04",
+    "entry": 0.987,
+    "entry_fee": 0.002566,
+    "event_key": "106116",
+    "event_slug": "nv-01-house-election-winner",
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "No",
     "price_source": "estimate",
     "shares": 5,
-    "slug": "will-the-democratic-party-candidate-win-the-2026-texas-lieutenant-governor-election",
+    "slug": "will-the-republican-party-win-the-nv-01-house-seat",
     "source": "endgame",
     "theme": "us politics",
     "tier": "proposed",
-    "title": "Will the Democratic Party candidate win the 2026 Texas Lieutenant Governor election?"
+    "title": "Will the Republican Party win the NV-01 House seat?"
+   },
+   "70196722376027356562466199250104246715403936483742743945156817796831694326112": {
+    "end": "2026-11-03",
+    "entry": 0.978,
+    "entry_fee": 0.004303,
+    "event_key": "434869",
+    "event_slug": "which-states-will-use-new-congressional-maps-in-the-midterms",
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "Yes",
+    "price_source": "estimate",
+    "shares": 5,
+    "slug": "will-north-carolina-use-a-new-congressional-map-for-the-2026-united-states-midterm-elections",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will North Carolina use a new congressional map for the 2026 United States midterm elections?"
+   },
+   "94909040987536769270715360325201420589044604443243218743462043270034738802453": {
+    "end": "2026-11-04",
+    "entry": 0.991,
+    "entry_fee": 0.001784,
+    "event_key": "106117",
+    "event_slug": "nv-03-house-election-winner",
+    "opened": "2026-11-04T10:42:16Z",
+    "outcome": "Yes",
+    "price_source": "estimate",
+    "shares": 5,
+    "slug": "will-the-democratic-party-win-the-nv-03-house-seat",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "proposed",
+    "title": "Will the Democratic Party win the NV-03 House seat?"
    }
   },
-  "realized": 0.0,
+  "realized": 0.2522,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -293,7 +397,28 @@
   "positions": {},
   "realized": 0.0,
   "refills": 0,
-  "seen": {},
+  "seen": {
+   "arg-slo-pla-2026-11-06:no": {
+    "edge": -0.0117,
+    "opportunity": false,
+    "ts": "2026-11-04T10:44:29Z"
+   },
+   "bank-of-israel-decision-in-november-2026:yes": {
+    "edge": 0.0024,
+    "opportunity": false,
+    "ts": "2026-11-04T10:44:28Z"
+   },
+   "peoples-bank-of-china-rate-change-by-december-31:yes": {
+    "edge": 0.0028,
+    "opportunity": false,
+    "ts": "2026-11-04T10:44:28Z"
+   },
+   "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401:yes": {
+    "edge": -0.0183,
+    "opportunity": false,
+    "ts": "2026-11-04T10:44:29Z"
+   }
+  },
   "sets": {},
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -342,13 +467,29 @@
   "unlimited": true
  },
  "panic_fade": {
-  "cash": 46.31058,
+  "cash": 42.241489,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 3.68942,
+  "peak_open_cost": 7.758511,
   "positions": {
+   "55811987156233316034004850162265185590623994721542035067805349300388333229197": {
+    "end": "2027-01-01",
+    "entry": 0.806,
+    "entry_fee": 0.039091,
+    "event_key": "498879",
+    "event_slug": "next-james-bond-actor-398",
+    "opened": "2026-11-04T10:42:33Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "no-one-announced-as-next-james-bond",
+    "source": "panic_fade",
+    "target": 0.8975,
+    "theme": null,
+    "title": "No one announced as next James Bond?"
+   },
    "70201851876332354439276604090702674974859631903486990974685797729205226013576": {
     "end": "2027-01-01",
     "entry": 0.73,
