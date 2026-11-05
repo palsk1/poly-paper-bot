@@ -95,103 +95,103 @@
     "annual": 0.12,
     "edge": 0.0193,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:25Z"
+    "ts": "2026-11-05T09:01:12Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.059,
     "edge": -0.0097,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:32Z"
+    "ts": "2026-11-05T09:01:25Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:26Z"
+    "ts": "2026-11-05T09:01:15Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.086,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:29Z"
+    "ts": "2026-11-05T09:01:20Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.115,
     "edge": -0.0192,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:25Z"
+    "ts": "2026-11-05T09:01:13Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.098,
     "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:33Z"
+    "ts": "2026-11-05T09:01:27Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.197,
-    "edge": -0.0335,
+    "annual": -0.164,
+    "edge": -0.0277,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:26Z"
+    "ts": "2026-11-05T09:01:14Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.02,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:31Z"
+    "ts": "2026-11-05T09:01:23Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": -0.003,
     "edge": -0.0004,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:31Z"
+    "ts": "2026-11-05T09:01:24Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.096,
-    "edge": -0.0159,
+    "annual": -0.101,
+    "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:30Z"
+    "ts": "2026-11-05T09:01:22Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.07,
     "edge": -0.0116,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:32Z"
+    "ts": "2026-11-05T09:01:26Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.09,
-    "edge": -0.015,
+    "annual": -0.079,
+    "edge": -0.0131,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:28Z"
+    "ts": "2026-11-05T09:01:18Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.039,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:27Z"
+    "ts": "2026-11-05T09:01:16Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.141,
     "edge": -0.0237,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:33Z"
+    "ts": "2026-11-05T09:01:28Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.161,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:28Z"
+    "ts": "2026-11-05T09:01:19Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.09,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:30Z"
+    "ts": "2026-11-05T09:01:21Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.097,
     "edge": -0.0161,
     "opportunity": false,
-    "ts": "2026-11-05T08:55:27Z"
+    "ts": "2026-11-05T09:01:17Z"
    }
   },
   "min_cash": 0.0,
@@ -909,9 +909,9 @@
     "ts": "2026-11-04T12:44:49Z"
    },
    "bank-of-brazil-decision-in-december-20260918:yes": {
-    "edge": -0.0368,
+    "edge": 0.0011,
     "opportunity": false,
-    "ts": "2026-11-04T18:42:56Z"
+    "ts": "2026-11-05T09:05:27Z"
    },
    "bank-of-brazil-decision-in-january-2027:yes": {
     "edge": 0.0116,
@@ -919,9 +919,9 @@
     "ts": "2026-11-05T00:43:04Z"
    },
    "bank-of-canada-decision-in-december-20260908230600011:yes": {
-    "edge": -0.0158,
+    "edge": -0.0056,
     "opportunity": false,
-    "ts": "2026-11-05T02:44:36Z"
+    "ts": "2026-11-05T09:05:30Z"
    },
    "bank-of-israel-decision-in-november-2026:yes": {
     "edge": 0.0024,
@@ -929,9 +929,9 @@
     "ts": "2026-11-04T10:44:28Z"
    },
    "canada-annual-inflation-2026:yes": {
-    "edge": 0.0089,
+    "edge": -0.0199,
     "opportunity": false,
-    "ts": "2026-11-05T07:04:17Z"
+    "ts": "2026-11-05T09:05:29Z"
    },
    "cz-binance-of-tweets-october-30-november-6-2026:yes": {
     "edge": -0.0076,
@@ -944,14 +944,14 @@
     "ts": "2026-11-04T22:43:15Z"
    },
    "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850:yes": {
-    "edge": -0.0136,
+    "edge": -0.0186,
     "opportunity": false,
-    "ts": "2026-11-05T07:04:18Z"
+    "ts": "2026-11-05T09:05:32Z"
    },
    "october-inflation-china-annual:yes": {
-    "edge": -0.0243,
+    "edge": -0.0253,
     "opportunity": false,
-    "ts": "2026-11-05T07:04:19Z"
+    "ts": "2026-11-05T09:05:29Z"
    },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
