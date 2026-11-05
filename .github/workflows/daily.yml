@@ -36,7 +36,7 @@ jobs:
             # GitHub sometimes rejects a push with a one-off server error; retry so the run's paper trades aren't lost
             for i in 1 2 3 4; do
               git pull --rebase -X theirs origin main && git push && exit 0
-              echo "push attempt $i failed, retrying"; sleep $((i * 10))
+              echo "push attempt $i failed, retrying"; git rebase --abort 2>/dev/null || true; sleep $((i * 10))
             done
             exit 1
           fi
