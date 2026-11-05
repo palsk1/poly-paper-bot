@@ -95,67 +95,67 @@
     "annual": 0.106,
     "edge": 0.0172,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:23Z"
+    "ts": "2026-11-05T05:06:30Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:25Z"
+    "ts": "2026-11-05T05:06:31Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.086,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:28Z"
+    "ts": "2026-11-05T05:06:34Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
-    "annual": -0.115,
-    "edge": -0.0192,
+    "annual": -0.056,
+    "edge": -0.0092,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:24Z"
+    "ts": "2026-11-05T05:06:30Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
-    "annual": -0.094,
-    "edge": -0.0157,
+    "annual": -0.175,
+    "edge": -0.0296,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:24Z"
+    "ts": "2026-11-05T05:06:31Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.092,
-    "edge": -0.0153,
+    "annual": -0.104,
+    "edge": -0.0174,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:30Z"
+    "ts": "2026-11-05T05:06:35Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.101,
     "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:27Z"
+    "ts": "2026-11-05T05:06:33Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.039,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:26Z"
+    "ts": "2026-11-05T05:06:32Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.064,
     "edge": -0.0107,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:28Z"
+    "ts": "2026-11-05T05:06:33Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.084,
     "edge": -0.014,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:29Z"
+    "ts": "2026-11-05T05:06:35Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.096,
     "edge": -0.0161,
     "opportunity": false,
-    "ts": "2026-11-05T04:55:26Z"
+    "ts": "2026-11-05T05:06:32Z"
    }
   },
   "min_cash": 0.0,
@@ -170,7 +170,7 @@
   "unlimited": false
  },
  "claude": {
-  "cash": 45.815,
+  "cash": 36.565,
   "closed": [
    {
     "closed_at": "2026-11-04T17:25:21Z",
@@ -241,6 +241,21 @@
   "min_cash": 0.0,
   "peak_open_cost": 18.65,
   "positions": {
+   "59822649710870591002443082281655284432277286805384619774600638740092677692228": {
+    "end": "2026-11-16",
+    "entry": 0.91,
+    "entry_fee": 0.0,
+    "event_key": "699735",
+    "event_slug": "us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+    "opened": "2026-11-05T05:02:38Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "us-announces-end-of-iranian-blockade-by-november-15-2026",
+    "source": "claude",
+    "theme": "middle east",
+    "title": "US announces end of Iranian blockade by November 15, 2026?"
+   },
    "74076568846866714142503847026760702713555643778038790220454009063912340064073": {
     "end": "2026-12-31",
     "entry": 0.9,
@@ -255,6 +270,21 @@
     "source": "claude",
     "theme": "russia-ukraine",
     "title": "Russia x Ukraine ceasefire by December 31, 2026?"
+   },
+   "84641922064827552827253311981339741860829640000680909725575149181637431473946": {
+    "end": "2026-12-31",
+    "entry": 0.94,
+    "entry_fee": 0.0,
+    "event_key": "427694",
+    "event_slug": "will-another-country-leave-opec-in-2026",
+    "opened": "2026-11-05T05:02:38Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-another-country-leave-opec-in-2026",
+    "source": "claude",
+    "theme": null,
+    "title": "Will another country leave OPEC in 2026?"
    }
   },
   "realized": 0.315,
@@ -264,7 +294,7 @@
   "unlimited": false
  },
  "endgame": {
-  "cash": 3.611131,
+  "cash": 3.755311,
   "closed": [
    {
     "closed_at": "2026-11-04T10:41:34Z",
@@ -463,6 +493,28 @@
     "tier": "past_deadline",
     "title": "Will the Republican Party win the MI-04 House seat?",
     "token": "92718314777145262007643697287300437140247953777540919722864078868801795052277"
+   },
+   {
+    "closed_at": "2026-11-05T05:01:03Z",
+    "end": "2026-11-04",
+    "entry": 0.98,
+    "entry_fee": 0.00392,
+    "event_key": "833437",
+    "event_slug": "how-many-house-seats-will-the-democrats-win-in-nevada",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "opened": "2026-11-04T11:15:20Z",
+    "outcome": "No",
+    "pnl": 0.09608,
+    "price_source": "book",
+    "reason": "resolved",
+    "shares": 5,
+    "slug": "will-democrats-win-exactly-3-house-seats-in-nevada-in-the-2026-midterm-elections-20260811010753574",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Democrats win exactly 3 House seats in Nevada in the 2026 midterm elections?",
+    "token": "53920542266383459877338320583559720165026811206427330172563195409123997072871"
    }
   ],
   "created": "2026-11-04T08:27:23Z",
@@ -485,6 +537,22 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Democratic Party candidate win the 2026 NY-04 House election by 10%-15%?"
+   },
+   "11171459698407947456784119317297651503992169965974767646330174989838021422603": {
+    "end": "2026-11-04",
+    "entry": 0.97,
+    "entry_fee": 0.00582,
+    "event_key": "434869",
+    "event_slug": "which-states-will-use-new-congressional-maps-in-the-midterms",
+    "opened": "2026-11-05T05:02:19Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-louisiana-use-a-new-congressional-map-for-the-2026-united-states-midterm-elections",
+    "source": "endgame",
+    "theme": "us politics",
+    "tier": "past_deadline",
+    "title": "Will Louisiana use a new congressional map for the 2026 United States midterm elections?"
    },
    "112883235802097588694962200577527079540064220506905432822464479503173986230656": {
     "end": "2026-11-04",
@@ -613,22 +681,6 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will the Republican Party control the Texas Senate after the 2026 Midterm elections?"
-   },
-   "53920542266383459877338320583559720165026811206427330172563195409123997072871": {
-    "end": "2026-11-04",
-    "entry": 0.98,
-    "entry_fee": 0.00392,
-    "event_key": "833437",
-    "event_slug": "how-many-house-seats-will-the-democrats-win-in-nevada",
-    "opened": "2026-11-04T11:15:20Z",
-    "outcome": "No",
-    "price_source": "book",
-    "shares": 5,
-    "slug": "will-democrats-win-exactly-3-house-seats-in-nevada-in-the-2026-midterm-elections-20260811010753574",
-    "source": "endgame",
-    "theme": "us politics",
-    "tier": "past_deadline",
-    "title": "Will Democrats win exactly 3 House seats in Nevada in the 2026 midterm elections?"
    },
    "55905544830127671449205456651693918770368006531023765035786594552853413661964": {
     "end": "2026-11-04",
@@ -791,7 +843,7 @@
     "title": "Will the Democratic Party candidate win the 2026 WI-03 House election by 6%-9%?"
    }
   },
-  "realized": 0.864883,
+  "realized": 0.960963,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -858,7 +910,7 @@
    "october-inflation-china-annual:yes": {
     "edge": -0.0119,
     "opportunity": false,
-    "ts": "2026-11-05T04:44:55Z"
+    "ts": "2026-11-05T05:09:28Z"
    },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
@@ -1169,7 +1221,7 @@
   },
   "realized": 0.0,
   "refills": 0,
-  "skipped_no_cash": 1,
+  "skipped_no_cash": 2,
   "start_cash": 20,
   "unlimited": false
  }

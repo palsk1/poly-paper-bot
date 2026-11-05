@@ -1,49 +1,39 @@
 {
  "claude": [
   {
-   "days": 11.7,
+   "days": 10.8,
    "fee_rate": 0.0,
-   "liquidity": 132587,
+   "liquidity": 58472,
    "outcome": "No",
-   "price": 0.925,
+   "price": 0.905,
    "slug": "us-announces-end-of-iranian-blockade-by-november-15-2026",
    "theme": "middle east",
    "title": "US announces end of Iranian blockade by November 15, 2026?"
   },
   {
-   "days": 26.7,
+   "days": 55.8,
    "fee_rate": 0.0,
-   "liquidity": 25029,
+   "liquidity": 105052,
    "outcome": "No",
-   "price": 0.94,
-   "slug": "nato-x-russia-military-clash-by-november-30-2026",
-   "theme": "russia-ukraine",
-   "title": "NATO x Russia military clash by November 30, 2026?"
-  },
-  {
-   "days": 56.7,
-   "fee_rate": 0.0,
-   "liquidity": 122613,
-   "outcome": "No",
-   "price": 0.895,
+   "price": 0.905,
    "slug": "russia-x-ukraine-ceasefire-by-december-31-2026",
    "theme": "russia-ukraine",
    "title": "Russia x Ukraine ceasefire by December 31, 2026?"
   },
   {
-   "days": 56.7,
+   "days": 55.8,
    "fee_rate": 0.0,
-   "liquidity": 20374,
+   "liquidity": 22249,
    "outcome": "No",
-   "price": 0.92,
+   "price": 0.93,
    "slug": "will-another-country-leave-opec-in-2026",
    "theme": null,
    "title": "Will another country leave OPEC in 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 359962,
+   "liquidity": 345023,
    "outcome": "No",
    "price": 0.895,
    "slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
@@ -51,49 +41,79 @@
    "title": "Strait of Hormuz traffic returns to normal by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 173570,
+   "liquidity": 318124,
    "outcome": "No",
    "price": 0.885,
-   "slug": "us-iran-final-nuclear-deal-by-december-31-2026-191",
+   "slug": "will-the-us-invade-iran-before-2027",
    "theme": "middle east",
-   "title": "US-Iran Final Nuclear Deal by December 31, 2026?"
+   "title": "Will the U.S. invade Iran before 2027?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 167869,
+   "liquidity": 260410,
    "outcome": "No",
-   "price": 0.895,
+   "price": 0.925,
    "slug": "iran-leadership-change-by-december-31-974-976-658-482-568-685-996-469-827",
    "theme": "middle east",
    "title": "Iran leadership change by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 142725,
+   "liquidity": 259781,
    "outcome": "No",
    "price": 0.935,
-   "slug": "kharg-island-no-longer-under-iranian-control-by-december-31-20260730004337418",
+   "slug": "us-iran-final-nuclear-deal-by-december-31-2026-191",
    "theme": "middle east",
-   "title": "Kharg Island no longer under Iranian control by December 31?"
+   "title": "US-Iran Final Nuclear Deal by December 31, 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 92221,
+   "liquidity": 125549,
    "outcome": "No",
-   "price": 0.915,
+   "price": 0.875,
+   "slug": "russia-x-ukraine-ceasefire-agreement-by-december-31-2026",
+   "theme": "russia-ukraine",
+   "title": "Russia x Ukraine ceasefire agreement by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 114771,
+   "outcome": "No",
+   "price": 0.925,
    "slug": "bab-el-mandeb-strait-effectively-closed-by-december-31-983-117-222-252",
    "theme": "middle east",
    "title": "Bab el-Mandeb Strait effectively closed by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 68022,
+   "liquidity": 87681,
+   "outcome": "No",
+   "price": 0.875,
+   "slug": "nato-x-russia-military-clash-by-december-31-2026-244-538-582",
+   "theme": "russia-ukraine",
+   "title": "NATO x Russia military clash by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 87337,
+   "outcome": "No",
+   "price": 0.923,
+   "slug": "iran-agrees-to-end-enrichment-of-uranium-by-december-31-1",
+   "theme": "middle east",
+   "title": " Iran agrees to end enrichment of uranium by December 31?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 67792,
    "outcome": "No",
    "price": 0.925,
    "slug": "ukraine-signs-peace-deal-with-russia-before-2027",
@@ -101,79 +121,59 @@
    "title": "Ukraine signs peace deal with Russia by December 31, 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 65084,
+   "liquidity": 65713,
    "outcome": "No",
-   "price": 0.935,
-   "slug": "iran-agrees-to-surrender-enriched-uranium-stockpile-by-december-31-2026-752-299",
+   "price": 0.88,
+   "slug": "will-dilution-of-iranian-uranium-be-in-a-us-iran-deal-in-2026-20260623023201639",
    "theme": "middle east",
-   "title": "Iran agrees to surrender enriched uranium stockpile by December 31, 2026?"
+   "title": "Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 63443,
+   "liquidity": 55370,
    "outcome": "No",
-   "price": 0.85,
+   "price": 0.89,
    "slug": "will-trump-and-putin-not-meet-432",
    "theme": "russia-ukraine",
    "title": "Will Trump and Putin not meet?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 57280,
+   "liquidity": 51567,
    "outcome": "No",
-   "price": 0.915,
-   "slug": "cuban-regime-falls-in-2026",
-   "theme": null,
-   "title": "Cuban regime falls in 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 56515,
-   "outcome": "No",
-   "price": 0.9175,
-   "slug": "iran-agrees-to-end-enrichment-of-uranium-by-december-31-1",
+   "price": 0.925,
+   "slug": "will-a-us-iran-deal-in-2026-include-surrender-of-iranian-enriched-uranium-20260623023201640",
    "theme": "middle east",
-   "title": " Iran agrees to end enrichment of uranium by December 31?"
+   "title": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 56459,
+   "liquidity": 50170,
    "outcome": "No",
-   "price": 0.87,
-   "slug": "nato-x-russia-military-clash-by-december-31-2026-244-538-582",
-   "theme": "russia-ukraine",
-   "title": "NATO x Russia military clash by December 31, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 54728,
-   "outcome": "No",
-   "price": 0.91,
+   "price": 0.925,
    "slug": "iran-coup-attempt-by-december-31-2026",
    "theme": "middle east",
    "title": "Iran coup attempt by December 31, 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 50237,
+   "liquidity": 49977,
    "outcome": "No",
-   "price": 0.9335,
-   "slug": "us-obtains-iranian-enriched-uranium-by-december-31-725-733-123-574-634",
-   "theme": "middle east",
-   "title": "US obtains Iranian enriched uranium by December 31?"
+   "price": 0.91,
+   "slug": "will-zelenskyy-talk-to-putin-by-december-31-992-711",
+   "theme": "russia-ukraine",
+   "title": "Will Zelenskyy talk to Putin by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 49416,
+   "liquidity": 49352,
    "outcome": "No",
    "price": 0.865,
    "slug": "will-a-5-uranium-enrichment-cap-1-year-be-in-a-us-iran-deal-in-2026-20260623023201637",
@@ -181,19 +181,9 @@
    "title": "Will a \u22645% Uranium Enrichment Cap (1+ Year) be in a US-Iran deal in 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 49215,
-   "outcome": "No",
-   "price": 0.88,
-   "slug": "will-zelenskyy-talk-to-putin-by-december-31-992-711",
-   "theme": "russia-ukraine",
-   "title": "Will Zelenskyy talk to Putin by December 31?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 44462,
+   "liquidity": 48965,
    "outcome": "No",
    "price": 0.865,
    "slug": "will-iran-reconstruction-funding-be-in-a-us-iran-deal-in-2026-20260623023201638",
@@ -201,113 +191,136 @@
    "title": "Will Iran Reconstruction Funding be in a US-Iran deal in 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 33957,
+   "liquidity": 46511,
    "outcome": "No",
-   "price": 0.885,
+   "price": 0.855,
+   "slug": "pedro-snchez-out-as-pm-of-spain-by-december-31-2026",
+   "theme": null,
+   "title": "Pedro S\u00e1nchez out as PM of Spain by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 41244,
+   "outcome": "No",
+   "price": 0.925,
    "slug": "us-strike-on-cuba-by-december-31",
    "theme": null,
    "title": "US strike on Cuba by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 33897,
+   "liquidity": 41158,
    "outcome": "No",
-   "price": 0.865,
+   "price": 0.9295,
+   "slug": "will-iran-withdraw-from-the-npt-before-2027",
+   "theme": "middle east",
+   "title": "Will Iran withdraw from the NPT before 2027?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 41090,
+   "outcome": "No",
+   "price": 0.855,
+   "slug": "china-x-philippines-military-clash-before-2027-20260723214807932",
+   "theme": "china",
+   "title": "China x Philippines military clash before 2027?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 37197,
+   "outcome": "No",
+   "price": 0.875,
    "slug": "will-a-1-year-enrichment-moratorium-be-in-a-us-iran-deal-in-2026-20260623023201635",
    "theme": "middle east",
    "title": "Will a 1+ Year Enrichment Moratorium be in a US-Iran deal in 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 32354,
+   "liquidity": 36356,
    "outcome": "No",
-   "price": 0.87,
-   "slug": "will-a-new-country-join-the-abraham-accords-before-2027",
-   "theme": null,
-   "title": "Will a new country join the Abraham Accords before 2027?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 29994,
-   "outcome": "No",
-   "price": 0.91,
-   "slug": "will-russia-capture-all-of-kostyantynivka-by-december-31-2026-372-718-278-996",
-   "theme": "russia-ukraine",
-   "title": "Will Russia capture all of Kostyantynivka by December 31, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 28961,
-   "outcome": "No",
-   "price": 0.905,
-   "slug": "will-a-us-iran-deal-in-2026-include-surrender-of-iranian-enriched-uranium-20260623023201640",
-   "theme": "middle east",
-   "title": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 27577,
-   "outcome": "No",
-   "price": 0.905,
-   "slug": "saudi-airspace-closed-by-december-31-2026",
-   "theme": "middle east",
-   "title": "Will Saudi airspace be closed by December 31?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 26866,
-   "outcome": "No",
-   "price": 0.87,
-   "slug": "will-the-unsc-adopt-a-resolution-endorsing-the-final-us-iran-deal-by-date",
-   "theme": "middle east",
-   "title": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 25197,
-   "outcome": "No",
-   "price": 0.875,
+   "price": 0.89,
    "slug": "mojtaba-khamenei-seen-in-public-by-december-31-671",
    "theme": null,
    "title": "Mojtaba Khamenei seen in public by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 24974,
+   "liquidity": 35695,
    "outcome": "No",
-   "price": 0.87,
-   "slug": "will-benjamin-netanyahu-be-the-next-leader-out-before-2027-20260630194627368",
-   "theme": "middle east",
-   "title": "Will Benjamin Netanyahu be the next leader out before 2027?"
+   "price": 0.88,
+   "slug": "us-strike-on-colombia-by-december-31",
+   "theme": null,
+   "title": "US strike on Colombia by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 24457,
+   "liquidity": 34770,
    "outcome": "No",
-   "price": 0.93,
-   "slug": "foreign-intervention-in-gaza-by-december-31-775",
+   "price": 0.905,
+   "slug": "will-the-unsc-adopt-a-resolution-endorsing-the-final-us-iran-deal-by-date",
    "theme": "middle east",
-   "title": "Foreign intervention in Gaza by December 31?"
+   "title": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 34042,
+   "outcome": "No",
+   "price": 0.905,
+   "slug": "will-russia-capture-all-of-kostyantynivka-by-december-31-2026-372-718-278-996",
+   "theme": "russia-ukraine",
+   "title": "Will Russia capture all of Kostyantynivka by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 32851,
+   "outcome": "No",
+   "price": 0.905,
+   "slug": "iran-charges-hormuz-fees-by-december-31-20260706203029175-553",
+   "theme": "middle east",
+   "title": "Iran charges Hormuz fees by December 31?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 32525,
+   "outcome": "No",
+   "price": 0.8735,
+   "slug": "will-a-new-country-join-the-abraham-accords-before-2027",
+   "theme": null,
+   "title": "Will a new country join the Abraham Accords before 2027?"
   }
  ],
- "generated": "2026-11-04T08:05:38Z",
- "panic_fade": [],
+ "generated": "2026-11-05T05:02:43Z",
+ "panic_fade": [
+  {
+   "days": 56.8,
+   "drop": 0.115,
+   "fee_rate": 0.0,
+   "liquidity": 22858,
+   "outcome": "No",
+   "price": 0.755,
+   "slug": "will-benjamin-netanyahu-be-the-next-leader-out-before-2027-20260630194627368",
+   "target": 0.87,
+   "theme": "middle east",
+   "title": "Will Benjamin Netanyahu be the next leader out before 2027?"
+  }
+ ],
  "screener": [
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 359962,
+   "liquidity": 345023,
    "outcome": "No",
    "price": 0.895,
    "slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
@@ -315,9 +328,19 @@
    "title": "Strait of Hormuz traffic returns to normal by December 31?"
   },
   {
-   "days": 24.7,
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 318124,
+   "outcome": "No",
+   "price": 0.885,
+   "slug": "will-the-us-invade-iran-before-2027",
+   "theme": "middle east",
+   "title": "Will the U.S. invade Iran before 2027?"
+  },
+  {
+   "days": 23.8,
    "fee_rate": 0.05,
-   "liquidity": 291720,
+   "liquidity": 262393,
    "outcome": "No",
    "price": 0.805,
    "slug": "will-t1-win-worlds-2026",
@@ -325,119 +348,29 @@
    "title": "Will T1 win Worlds 2026?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 277786,
+   "liquidity": 260410,
    "outcome": "No",
-   "price": 0.845,
-   "slug": "will-the-us-invade-iran-before-2027",
-   "theme": "middle east",
-   "title": "Will the U.S. invade Iran before 2027?"
-  },
-  {
-   "days": 26.7,
-   "fee_rate": 0.0,
-   "liquidity": 242617,
-   "outcome": "No",
-   "price": 0.945,
-   "slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
-   "theme": "middle east",
-   "title": "Strait of Hormuz traffic returns to normal by November 30?"
-  },
-  {
-   "days": 24.7,
-   "fee_rate": 0.05,
-   "liquidity": 178108,
-   "outcome": "No",
-   "price": 0.8495,
-   "slug": "will-bilibili-gaming-win-worlds-2026",
-   "theme": null,
-   "title": "Will Bilibili Gaming win Worlds 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 173570,
-   "outcome": "No",
-   "price": 0.885,
-   "slug": "us-iran-final-nuclear-deal-by-december-31-2026-191",
-   "theme": "middle east",
-   "title": "US-Iran Final Nuclear Deal by December 31, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 167869,
-   "outcome": "No",
-   "price": 0.895,
+   "price": 0.925,
    "slug": "iran-leadership-change-by-december-31-974-976-658-482-568-685-996-469-827",
    "theme": "middle east",
    "title": "Iran leadership change by December 31?"
   },
   {
-   "days": 26.7,
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 163829,
-   "outcome": "No",
-   "price": 0.945,
-   "slug": "iran-leadership-change-by-november-30",
-   "theme": "middle east",
-   "title": "Iran leadership change by November 30?"
-  },
-  {
-   "days": 24.7,
-   "fee_rate": 0.05,
-   "liquidity": 160324,
-   "outcome": "No",
-   "price": 0.8985,
-   "slug": "will-invictus-gaming-win-worlds-2026",
-   "theme": null,
-   "title": "Will Invictus Gaming win Worlds 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.04,
-   "liquidity": 152096,
-   "outcome": "No",
-   "price": 0.89,
-   "slug": "will-delcy-rodrguez-be-the-leader-of-venezuela-end-of-2026",
-   "theme": "latin america",
-   "title": "Will Delcy Rodr\u00edguez be the leader of Venezuela end of 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 147431,
-   "outcome": "No",
-   "price": 0.925,
-   "slug": "will-bitcoin-dip-to-50000-by-december-31-2026-454-325-222-878-949-487-451-853-523-111",
-   "theme": null,
-   "title": "Will Bitcoin dip to $50,000 by December 31, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 142725,
+   "liquidity": 259781,
    "outcome": "No",
    "price": 0.935,
-   "slug": "kharg-island-no-longer-under-iranian-control-by-december-31-20260730004337418",
+   "slug": "us-iran-final-nuclear-deal-by-december-31-2026-191",
    "theme": "middle east",
-   "title": "Kharg Island no longer under Iranian control by December 31?"
+   "title": "US-Iran Final Nuclear Deal by December 31, 2026?"
   },
   {
-   "days": 24.7,
-   "fee_rate": 0.05,
-   "liquidity": 141316,
-   "outcome": "No",
-   "price": 0.9075,
-   "slug": "will-dplus-kia-win-worlds-2026",
-   "theme": null,
-   "title": "Will Dplus KIA win Worlds 2026?"
-  },
-  {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.04,
-   "liquidity": 139438,
+   "liquidity": 210577,
    "outcome": "No",
    "price": 0.935,
    "slug": "france-declares-state-of-emergency-by-december-31-2026",
@@ -445,164 +378,244 @@
    "title": "France declares state of emergency by December 31, 2026?"
   },
   {
-   "days": 11.7,
-   "fee_rate": 0.0,
-   "liquidity": 132587,
+   "days": 56.8,
+   "fee_rate": 0.07,
+   "liquidity": 204434,
    "outcome": "No",
    "price": 0.925,
-   "slug": "us-announces-end-of-iranian-blockade-by-november-15-2026",
-   "theme": "middle east",
-   "title": "US announces end of Iranian blockade by November 15, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 130875,
-   "outcome": "No",
-   "price": 0.885,
    "slug": "will-bitcoin-dip-to-55000-by-december-31-2026-527-627-868-745-188-361-314-673-612-946-821-624-855-557-684-381-884-939-182-939-516",
    "theme": null,
    "title": "Will Bitcoin dip to $55,000 by December 31, 2026?"
   },
   {
-   "days": 61.7,
-   "fee_rate": 0.04,
-   "liquidity": 124368,
+   "days": 56.8,
+   "fee_rate": 0.07,
+   "liquidity": 199594,
    "outcome": "No",
-   "price": 0.86,
+   "price": 0.935,
+   "slug": "will-bitcoin-dip-to-50000-by-december-31-2026-454-325-222-878-949-487-451-853-523-111",
+   "theme": null,
+   "title": "Will Bitcoin dip to $50,000 by December 31, 2026?"
+  },
+  {
+   "days": 23.8,
+   "fee_rate": 0.05,
+   "liquidity": 180887,
+   "outcome": "No",
+   "price": 0.853,
+   "slug": "will-bilibili-gaming-win-worlds-2026",
+   "theme": null,
+   "title": "Will Bilibili Gaming win Worlds 2026?"
+  },
+  {
+   "days": 60.8,
+   "fee_rate": 0.04,
+   "liquidity": 138173,
+   "outcome": "No",
+   "price": 0.875,
    "slug": "will-anthropics-valuation-hit-high-3pt0t-by-december-31",
    "theme": null,
    "title": "Will Anthropic's valuation hit (HIGH) $3.0T by December 31?"
   },
   {
-   "days": 56.7,
-   "fee_rate": 0.0,
-   "liquidity": 122613,
+   "days": 56.8,
+   "fee_rate": 0.04,
+   "liquidity": 136580,
    "outcome": "No",
-   "price": 0.895,
-   "slug": "russia-x-ukraine-ceasefire-by-december-31-2026",
-   "theme": "russia-ukraine",
-   "title": "Russia x Ukraine ceasefire by December 31, 2026?"
+   "price": 0.925,
+   "slug": "will-delcy-rodrguez-be-the-leader-of-venezuela-end-of-2026",
+   "theme": "latin america",
+   "title": "Will Delcy Rodr\u00edguez be the leader of Venezuela end of 2026?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.04,
-   "liquidity": 120247,
+   "days": 81.8,
+   "fee_rate": 0.03,
+   "liquidity": 127152,
+   "outcome": "No",
+   "price": 0.8975,
+   "slug": "will-lsu-tigers-win-the-2027-cfp-national-championship",
+   "theme": null,
+   "title": "Will LSU Tigers win the 2027 CFP National Championship?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 125549,
    "outcome": "No",
    "price": 0.875,
-   "slug": "will-crude-oil-reach-a-new-all-time-high-by-december-31",
-   "theme": null,
-   "title": "Will Crude Oil reach a new all-time high by December 31?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 114569,
-   "outcome": "No",
-   "price": 0.835,
    "slug": "russia-x-ukraine-ceasefire-agreement-by-december-31-2026",
    "theme": "russia-ukraine",
    "title": "Russia x Ukraine ceasefire agreement by December 31, 2026?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 113027,
+   "days": 83.8,
+   "fee_rate": 0.05,
+   "liquidity": 124139,
    "outcome": "No",
-   "price": 0.905,
-   "slug": "will-bitcoin-reach-100000-by-december-31-2026-571-361-361",
-   "theme": null,
-   "title": "Will Bitcoin reach $100,000 by December 31, 2026?"
+   "price": 0.815,
+   "slug": "will-the-fed-increase-interest-rates-by-25-bps-after-the-january-2027-meeting-20260729233815506",
+   "theme": "us economy",
+   "title": "Will the Fed increase interest rates by 25 bps after the January 2027 meeting?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 105712,
-   "outcome": "No",
-   "price": 0.845,
-   "slug": "will-bitcoin-dip-to-60k-by-december-31-2026-from-july-21",
-   "theme": null,
-   "title": "Will Bitcoin dip to $60,000 by December 31, 2026?"
-  },
-  {
-   "days": 57.7,
-   "fee_rate": 0.0,
-   "liquidity": 92221,
-   "outcome": "No",
-   "price": 0.915,
-   "slug": "bab-el-mandeb-strait-effectively-closed-by-december-31-983-117-222-252",
-   "theme": "middle east",
-   "title": "Bab el-Mandeb Strait effectively closed by December 31?"
-  },
-  {
-   "days": 25.7,
+   "days": 24.8,
    "fee_rate": 0.04,
-   "liquidity": 87457,
+   "liquidity": 120993,
    "outcome": "No",
-   "price": 0.89,
+   "price": 0.875,
    "slug": "will-psoe-win-the-most-seats-in-the-2026-spanish-general-election",
    "theme": "us politics",
    "title": "Will PSOE win the most seats in the 2026 Spanish general election?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 86902,
+   "days": 23.8,
+   "fee_rate": 0.05,
+   "liquidity": 118315,
    "outcome": "No",
-   "price": 0.935,
-   "slug": "will-ethereum-reach-3500-by-december-31-2026",
+   "price": 0.918,
+   "slug": "will-dplus-kia-win-worlds-2026",
    "theme": null,
-   "title": "Will Ethereum reach $3,500 by December 31, 2026?"
+   "title": "Will Dplus KIA win Worlds 2026?"
   },
   {
-   "days": 57.7,
+   "days": 23.8,
+   "fee_rate": 0.05,
+   "liquidity": 117919,
+   "outcome": "No",
+   "price": 0.9155,
+   "slug": "will-invictus-gaming-win-worlds-2026",
+   "theme": null,
+   "title": "Will Invictus Gaming win Worlds 2026?"
+  },
+  {
+   "days": 56.8,
    "fee_rate": 0.0,
-   "liquidity": 85783,
+   "liquidity": 115035,
    "outcome": "No",
-   "price": 0.9435,
-   "slug": "will-the-doge-1-lunar-mission-launch-before-2027",
-   "theme": null,
-   "title": "Will the Doge-1 Lunar Mission launch by December 31, 2026?"
+   "price": 0.945,
+   "slug": "iran-agrees-to-surrender-enriched-uranium-stockpile-by-december-31-2026-752-299",
+   "theme": "middle east",
+   "title": "Iran agrees to surrender enriched uranium stockpile by December 31, 2026?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 81332,
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 114771,
    "outcome": "No",
-   "price": 0.815,
-   "slug": "will-ethereum-reach-3000-by-december-31-2026-from-june-8",
-   "theme": null,
-   "title": "Will Ethereum reach $3,000 by December 31, 2026?"
+   "price": 0.925,
+   "slug": "bab-el-mandeb-strait-effectively-closed-by-december-31-983-117-222-252",
+   "theme": "middle east",
+   "title": "Bab el-Mandeb Strait effectively closed by December 31?"
   },
   {
-   "days": 57.7,
+   "days": 56.8,
    "fee_rate": 0.07,
-   "liquidity": 79226,
+   "liquidity": 110023,
    "outcome": "No",
-   "price": 0.895,
+   "price": 0.885,
+   "slug": "will-bitcoin-dip-to-60k-by-december-31-2026-from-july-21",
+   "theme": null,
+   "title": "Will Bitcoin dip to $60,000 by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.04,
+   "liquidity": 109274,
+   "outcome": "No",
+   "price": 0.92,
+   "slug": "will-crude-oil-reach-a-new-all-time-high-by-december-31",
+   "theme": null,
+   "title": "Will Crude Oil reach a new all-time high by December 31?"
+  },
+  {
+   "days": 55.8,
+   "fee_rate": 0.0,
+   "liquidity": 105052,
+   "outcome": "No",
+   "price": 0.905,
+   "slug": "russia-x-ukraine-ceasefire-by-december-31-2026",
+   "theme": "russia-ukraine",
+   "title": "Russia x Ukraine ceasefire by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.07,
+   "liquidity": 98079,
+   "outcome": "No",
+   "price": 0.865,
+   "slug": "will-bitcoin-reach-100000-by-december-31-2026-571-361-361",
+   "theme": null,
+   "title": "Will Bitcoin reach $100,000 by December 31, 2026?"
+  },
+  {
+   "days": 63.8,
+   "fee_rate": 0.05,
+   "liquidity": 96484,
+   "outcome": "No",
+   "price": 0.9365,
+   "slug": "will-avengers-doomsday-be-the-top-grossing-movie-of-2026",
+   "theme": null,
+   "title": "Will Avengers: Doomsday be the top grossing movie of 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 87681,
+   "outcome": "No",
+   "price": 0.875,
+   "slug": "nato-x-russia-military-clash-by-december-31-2026-244-538-582",
+   "theme": "russia-ukraine",
+   "title": "NATO x Russia military clash by December 31, 2026?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.0,
+   "liquidity": 87337,
+   "outcome": "No",
+   "price": 0.923,
+   "slug": "iran-agrees-to-end-enrichment-of-uranium-by-december-31-1",
+   "theme": "middle east",
+   "title": " Iran agrees to end enrichment of uranium by December 31?"
+  },
+  {
+   "days": 81.8,
+   "fee_rate": 0.03,
+   "liquidity": 86914,
+   "outcome": "No",
+   "price": 0.8635,
+   "slug": "will-miami-hurricanes-win-the-2027-cfp-national-championship",
+   "theme": null,
+   "title": "Will Miami Hurricanes win the 2027 CFP National Championship?"
+  },
+  {
+   "days": 56.8,
+   "fee_rate": 0.07,
+   "liquidity": 86363,
+   "outcome": "No",
+   "price": 0.9075,
    "slug": "will-ethereum-dip-to-1500-by-december-31-2026-865-787",
    "theme": null,
    "title": "Will Ethereum dip to $1,500 by December 31, 2026?"
   },
   {
-   "days": 57.7,
-   "fee_rate": 0.07,
-   "liquidity": 72786,
+   "days": 81.8,
+   "fee_rate": 0.03,
+   "liquidity": 84393,
    "outcome": "No",
-   "price": 0.835,
-   "slug": "will-ethereum-dip-to-1750-by-december-31-2026-20260806184731889",
+   "price": 0.855,
+   "slug": "will-notre-dame-fighting-irish-win-the-2027-cfp-national-championship",
    "theme": null,
-   "title": "Will Ethereum dip to $1,750 by December 31, 2026?"
+   "title": "Will Notre Dame Fighting Irish win the 2027 CFP National Championship?"
   },
   {
-   "days": 57.7,
+   "days": 25.8,
    "fee_rate": 0.07,
-   "liquidity": 69791,
+   "liquidity": 81813,
    "outcome": "No",
-   "price": 0.9495,
-   "slug": "opensea-fdv-above-2b-one-day-after-launch-771-639-367-482-177-837",
+   "price": 0.9485,
+   "slug": "will-bitcoin-reach-97pt5k-in-november-2026",
    "theme": null,
-   "title": "Opensea FDV above $2B one day after launch?"
+   "title": "Will Bitcoin reach $97,500 in November?"
   }
  ]
 }
