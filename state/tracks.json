@@ -95,67 +95,67 @@
     "annual": 0.106,
     "edge": 0.0172,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:23Z"
+    "ts": "2026-11-05T04:40:33Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:25Z"
+    "ts": "2026-11-05T04:40:36Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.086,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:28Z"
+    "ts": "2026-11-05T04:40:41Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
-    "annual": -0.037,
-    "edge": -0.0061,
+    "annual": -0.115,
+    "edge": -0.0192,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:23Z"
+    "ts": "2026-11-05T04:40:34Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.112,
     "edge": -0.0188,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:24Z"
+    "ts": "2026-11-05T04:40:35Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:29Z"
+    "ts": "2026-11-05T04:40:43Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.112,
-    "edge": -0.0188,
+    "annual": -0.101,
+    "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:27Z"
+    "ts": "2026-11-05T04:40:39Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.039,
     "edge": -0.0064,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:25Z"
+    "ts": "2026-11-05T04:40:37Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
-    "annual": -0.03,
-    "edge": -0.005,
+    "annual": -0.042,
+    "edge": -0.0069,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:27Z"
+    "ts": "2026-11-05T04:40:40Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.084,
     "edge": -0.014,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:29Z"
+    "ts": "2026-11-05T04:40:42Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.096,
     "edge": -0.0161,
     "opportunity": false,
-    "ts": "2026-11-05T04:35:26Z"
+    "ts": "2026-11-05T04:40:38Z"
    }
   },
   "min_cash": 0.0,
@@ -854,6 +854,11 @@
     "edge": -0.0032,
     "opportunity": false,
     "ts": "2026-11-05T02:44:35Z"
+   },
+   "october-inflation-china-annual:yes": {
+    "edge": -0.0119,
+    "opportunity": false,
+    "ts": "2026-11-05T04:44:55Z"
    },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
