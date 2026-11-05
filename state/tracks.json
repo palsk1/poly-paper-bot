@@ -95,103 +95,103 @@
     "annual": 0.12,
     "edge": 0.0193,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:37Z"
+    "ts": "2026-11-05T12:50:31Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.059,
     "edge": -0.0097,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:45Z"
+    "ts": "2026-11-05T12:50:41Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:39Z"
+    "ts": "2026-11-05T12:50:34Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
-    "annual": -0.135,
-    "edge": -0.0226,
+    "annual": -0.13,
+    "edge": -0.0216,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:42Z"
+    "ts": "2026-11-05T12:50:37Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.115,
     "edge": -0.0192,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:37Z"
+    "ts": "2026-11-05T12:50:32Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.099,
     "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:47Z"
+    "ts": "2026-11-05T12:50:42Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.129,
     "edge": -0.0216,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:38Z"
+    "ts": "2026-11-05T12:50:33Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.02,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:44Z"
+    "ts": "2026-11-05T12:50:40Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": -0.082,
     "edge": -0.0135,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:45Z"
+    "ts": "2026-11-05T12:50:40Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.121,
-    "edge": -0.0201,
+    "annual": -0.133,
+    "edge": -0.0222,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:43Z"
+    "ts": "2026-11-05T12:50:39Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.121,
     "edge": -0.0202,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:46Z"
+    "ts": "2026-11-05T12:50:42Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.039,
-    "edge": -0.0064,
+    "annual": -0.045,
+    "edge": -0.0074,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:41Z"
+    "ts": "2026-11-05T12:50:36Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.099,
     "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:39Z"
+    "ts": "2026-11-05T12:50:34Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.117,
     "edge": -0.0195,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:47Z"
+    "ts": "2026-11-05T12:50:43Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.161,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:41Z"
+    "ts": "2026-11-05T12:50:37Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.092,
     "edge": -0.0153,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:43Z"
+    "ts": "2026-11-05T12:50:38Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.097,
     "edge": -0.0161,
     "opportunity": false,
-    "ts": "2026-11-05T12:45:40Z"
+    "ts": "2026-11-05T12:50:35Z"
    }
   },
   "min_cash": 0.0,
@@ -1014,12 +1014,12 @@
   "unlimited": false
  },
  "mirror": {
-  "cash": 12.752967,
+  "cash": 11.363547,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 20.0,
   "min_cash": 0.0,
-  "peak_open_cost": 7.247033,
+  "peak_open_cost": 8.636453,
   "positions": {
    "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
     "end": "2026-12-01",
@@ -1048,6 +1048,20 @@
     "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
     "source": "sabsabinxz",
     "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+   },
+   "70071592420137476676935286377781779672157004436137616627487590484756055232944": {
+    "end": "2028-11-08",
+    "entry": 0.27,
+    "entry_fee": 0.03942,
+    "event_slug": "democratic-presidential-nominee-2028",
+    "leader_avg": 0.2699,
+    "opened": "2026-11-05T12:50:27Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-jon-ossoff-win-the-2028-democratic-presidential-nomination-885",
+    "source": "sabsabinxz",
+    "title": "Will Jon Ossoff win the 2028 Democratic presidential nomination?"
    }
   },
   "realized": 0.0,
@@ -1057,12 +1071,12 @@
   "unlimited": false
  },
  "mirror_unlimited": {
-  "cash": -7.247033,
+  "cash": -8.636453,
   "closed": [],
   "created": "2026-11-03T17:56:14Z",
   "deposited": 0.0,
-  "min_cash": -7.247033,
-  "peak_open_cost": 7.247033,
+  "min_cash": -8.636453,
+  "peak_open_cost": 8.636453,
   "positions": {
    "32392763822753473124035928136248806020616344873491087876352214614828043589225": {
     "end": "2026-12-01",
@@ -1091,6 +1105,20 @@
     "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
     "source": "sabsabinxz",
     "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+   },
+   "70071592420137476676935286377781779672157004436137616627487590484756055232944": {
+    "end": "2028-11-08",
+    "entry": 0.27,
+    "entry_fee": 0.03942,
+    "event_slug": "democratic-presidential-nominee-2028",
+    "leader_avg": 0.2699,
+    "opened": "2026-11-05T12:50:27Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-jon-ossoff-win-the-2028-democratic-presidential-nomination-885",
+    "source": "sabsabinxz",
+    "title": "Will Jon Ossoff win the 2028 Democratic presidential nomination?"
    }
   },
   "realized": 0.0,
