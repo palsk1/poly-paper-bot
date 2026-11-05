@@ -88,6 +88,54 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
    "approved": "2026-11-04"
+  },
+  {
+   "id": "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-MARK",
+   "poly_slug": "will-mark-carney-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-MAR",
+   "poly_slug": "will-marco-rubio-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-ALE",
+   "poly_slug": "will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-MOJ",
+   "poly_slug": "will-mojtaba-khamenei-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-DT",
+   "poly_slug": "will-donald-trump-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-REI",
+   "poly_slug": "will-reid-wiseman-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-05"
   }
  ],
  "rejected": [
@@ -160,6 +208,101 @@
    "id": "KXARREST-27JAN-JCLA|will-james-clapper-be-arrested-before-2027-886",
    "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
    "date": "2026-11-04"
+  },
+  {
+   "id": "KXARREST-27JAN-LLYN|will-loretta-lynch-be-arrested-before-2027-462",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-ASCH|will-adam-schiff-be-arrested-before-2027-269",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-BJOH|will-brandon-johnson-be-arrested-before-2027",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-AFAU|will-anthony-fauci-be-arrested-before-2027-464",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-THOM|will-tom-homan-be-arrested-before-2027",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXABRAHAMSA-27-JAN01|israel-and-saudi-arabia-normalize-relations-before-2027",
+   "reason": "Kalshi needs the agreement ratified; Polymarket only needs both sides to announce relations.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXIPO-26-DISCORD|discord-ipo-before-2027",
+   "reason": "Kalshi pays on IPO 'confirmed' (S-1 effective, priced or ticker); Polymarket needs shares actually sold by Dec 31.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-LCOO|will-lisa-cook-be-arrested-before-2027",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-GPT|will-chatgpt-be-time-person-of-the-year-2026",
+   "reason": "Not a person: Kalshi's cover/group rules are written for people, Polymarket uses its own 'synonymous concept' test. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXNHLHART-27-CMCDAVID97|will-connor-mcdavid-win-the-2026-27-hart-memorial-trophy",
+   "reason": "Polymarket goes to 'Other' if no winner by Jun 30 2027 and picks alphabetically on multiple winners; Kalshi has neither clause.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-LJAE|lee-jae-myung-arrested-before-2027",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXSERIEATOP-27TOP4-ROM|will-roma-finish-in-the-top-4-of-the-2026-27-serie-a-season",
+   "reason": "Polymarket resolves No if the season is cancelled or runs past Jun 13 2027; Kalshi has no such clause.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXRECOGPALESTINE-27-GER|will-germany-recognize-palestine-before-2027",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission) as recognition; Polymarket needs formal recognition only.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-JBRE|will-john-brennan-be-arrested-before-2027-847",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXARREST-27JAN-JZAP|will-jos-luis-rodrguez-zapatero-be-arrested-before-2027-376",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest/electronic monitoring. Could split.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXRECOGPALESTINE-27-NZ|will-new-zealand-recognize-palestine-before-2027",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission) as recognition; Polymarket needs formal recognition only.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXRECOGPALESTINE-27-DUT|will-the-netherlands-recognize-palestine-before-2027",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission) as recognition; Polymarket needs formal recognition only.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXCONMEBOLLIB-26-PAL|2026-soccer-copa-libertadores-winner-palmeiras",
+   "reason": "Polymarket goes to 'Other' if no champion by Dec 12 and picks alphabetically on multiple winners; Kalshi has neither.",
+   "date": "2026-11-05"
+  },
+  {
+   "id": "KXRT-AVE-70|will-avengers-doomsday-score-at-least-70-on-the-rotten-tomatoes-tomatometer-20261221",
+   "reason": "Kalshi needs ABOVE 70, Polymarket AT LEAST 70: a score of exactly 70 splits them.",
+   "date": "2026-11-05"
   }
  ]
 }
