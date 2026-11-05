@@ -95,67 +95,67 @@
     "annual": 0.099,
     "edge": 0.0161,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:23Z"
+    "ts": "2026-11-05T00:40:33Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": 0.027,
     "edge": 0.0044,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:29Z"
+    "ts": "2026-11-05T00:40:34Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.085,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:32Z"
+    "ts": "2026-11-05T00:40:36Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.037,
     "edge": -0.0061,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:23Z"
+    "ts": "2026-11-05T00:40:33Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.076,
     "edge": -0.0127,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:29Z"
+    "ts": "2026-11-05T00:40:33Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.095,
-    "edge": -0.0159,
+    "annual": -0.101,
+    "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:33Z"
+    "ts": "2026-11-05T00:40:37Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.016,
     "edge": -0.0026,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:31Z"
+    "ts": "2026-11-05T00:40:35Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
-    "annual": -0.154,
-    "edge": -0.026,
+    "annual": -0.098,
+    "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:30Z"
+    "ts": "2026-11-05T00:40:34Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.054,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:31Z"
+    "ts": "2026-11-05T00:40:36Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.079,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:32Z"
+    "ts": "2026-11-05T00:40:36Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.155,
     "edge": -0.0263,
     "opportunity": false,
-    "ts": "2026-11-05T00:35:30Z"
+    "ts": "2026-11-05T00:40:35Z"
    }
   },
   "min_cash": 0.0,
@@ -826,9 +826,14 @@
     "ts": "2026-11-04T18:42:56Z"
    },
    "bank-of-brazil-decision-in-january-2027:yes": {
-    "edge": -0.0125,
+    "edge": 0.0116,
     "opportunity": false,
-    "ts": "2026-11-04T22:43:16Z"
+    "ts": "2026-11-05T00:43:04Z"
+   },
+   "bank-of-canada-decision-in-december-20260908230600011:yes": {
+    "edge": 0.0046,
+    "opportunity": false,
+    "ts": "2026-11-05T00:43:04Z"
    },
    "bank-of-israel-decision-in-november-2026:yes": {
     "edge": 0.0024,
@@ -848,7 +853,7 @@
    "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850:yes": {
     "edge": -0.0186,
     "opportunity": false,
-    "ts": "2026-11-04T22:43:16Z"
+    "ts": "2026-11-05T00:43:05Z"
    },
    "peoples-bank-of-china-rate-change-by-december-31:yes": {
     "edge": 0.0028,
@@ -987,7 +992,7 @@
   "unlimited": true
  },
  "panic_fade": {
-  "cash": 38.239109,
+  "cash": 34.539109,
   "closed": [
    {
     "closed_at": "2026-11-04T15:40:36Z",
@@ -1015,7 +1020,7 @@
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 12.295971,
+  "peak_open_cost": 15.995971,
   "positions": {
    "54354873998826259054526425416928957657351494173277941862882815520348432840549": {
     "end": "2026-12-16",
@@ -1064,6 +1069,22 @@
     "target": 0.8975,
     "theme": null,
     "title": "No one announced as next James Bond?"
+   },
+   "66255671088804707681511323064315150986307471908131081808279119719218775249892": {
+    "end": "2027-01-01",
+    "entry": 0.74,
+    "entry_fee": 0.0,
+    "event_key": "34051",
+    "event_slug": "netanyahu-out-before-2027",
+    "opened": "2026-11-05T00:41:28Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "netanyahu-out-before-2027-684-719-226-657",
+    "source": "panic_fade",
+    "target": 0.82,
+    "theme": "middle east",
+    "title": "Netanyahu out by end of 2026?"
    }
   },
   "realized": 0.53508,
