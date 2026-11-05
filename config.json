@@ -221,6 +221,11 @@
       "skip_words": [
         "up or down"
       ],
+      "weak_tier_skip_words": [
+        "election", "midterm", "house seat", "senate", "governor", "congressional", "speaker of the house",
+        "majority leader", "popular vote", "attorney general", "mayor", "primary", "referendum", "ballot",
+        "parliament", "seats in"
+      ],
       "take_profit": null,
       "stop_loss": null
     },

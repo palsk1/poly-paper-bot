@@ -1351,6 +1351,8 @@ def endgame_candidates(r):
             continue
         if tier in ("past_deadline", "ending_soon") and is_sports(m):
             continue  # a live game past its start time is not "decided"
+        if tier in ("past_deadline", "ending_soon") and any(w in q.lower() for w in r.get("weak_tier_skip_words", [])):
+            continue  # an election past its date is not "decided" until a result is proposed (votes still counting)
         liq = fnum(pick(m, "liquidityNum", "liquidity"))
         c = candidate(m, i, days, liq, {"tier": tier})
         c["per_day"] = (1 - prices[i]) / max(days, 0.1)

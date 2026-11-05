@@ -13,7 +13,7 @@
 | `claude` | Claude's own rules (see `config.json` > `rules.claude.why`) | $50, refilled with $50 if it busts |
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
-| `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports | $100 |
+| `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The arbitrage track, and the known traps it is built to avoid
