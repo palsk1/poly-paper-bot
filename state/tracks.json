@@ -95,103 +95,103 @@
     "annual": -0.004,
     "edge": -0.0007,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:26Z"
+    "ts": "2026-11-06T05:07:36Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.06,
     "edge": -0.0097,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:36Z"
+    "ts": "2026-11-06T05:07:42Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.131,
     "edge": -0.0216,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:28Z"
+    "ts": "2026-11-06T05:07:38Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.188,
     "edge": -0.0313,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:32Z"
+    "ts": "2026-11-06T05:07:40Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.108,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:27Z"
+    "ts": "2026-11-06T05:07:37Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
-    "annual": -0.093,
-    "edge": -0.0153,
+    "annual": -0.1,
+    "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:38Z"
+    "ts": "2026-11-06T05:07:43Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.106,
     "edge": -0.0174,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:28Z"
+    "ts": "2026-11-06T05:07:37Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.145,
     "edge": -0.024,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:35Z"
+    "ts": "2026-11-06T05:07:42Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": -0.042,
     "edge": -0.0069,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:35Z"
+    "ts": "2026-11-06T05:07:42Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.122,
     "edge": -0.0201,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:34Z"
+    "ts": "2026-11-06T05:07:41Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.036,
     "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:37Z"
+    "ts": "2026-11-06T05:07:43Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.142,
     "edge": -0.0235,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:31Z"
+    "ts": "2026-11-06T05:07:39Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.025,
     "edge": 0.004,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:29Z"
+    "ts": "2026-11-06T05:07:38Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.131,
     "edge": -0.0216,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:39Z"
+    "ts": "2026-11-06T05:07:44Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.157,
     "edge": -0.026,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:32Z"
+    "ts": "2026-11-06T05:07:40Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.081,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:33Z"
+    "ts": "2026-11-06T05:07:41Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.098,
     "edge": -0.0161,
     "opportunity": false,
-    "ts": "2026-11-06T04:55:30Z"
+    "ts": "2026-11-06T05:07:39Z"
    }
   },
   "min_cash": 0.0,
@@ -206,7 +206,7 @@
   "unlimited": false
  },
  "claude": {
-  "cash": 36.565,
+  "cash": 27.715,
   "closed": [
    {
     "closed_at": "2026-11-04T17:25:21Z",
@@ -275,8 +275,38 @@
   "created": "2026-11-03T17:56:14Z",
   "deposited": 50.0,
   "min_cash": 0.0,
-  "peak_open_cost": 18.65,
+  "peak_open_cost": 22.6,
   "positions": {
+   "1910830010387565971650098373488592514702818137344973088263643820608151819241": {
+    "end": "2027-01-01",
+    "entry": 0.88,
+    "entry_fee": 0.0,
+    "event_key": "73130",
+    "event_slug": "will-the-us-invade-iran-before-2027",
+    "opened": "2026-11-06T05:04:38Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "will-the-us-invade-iran-before-2027",
+    "source": "claude",
+    "theme": "middle east",
+    "title": "Will the U.S. invade Iran before 2027?"
+   },
+   "59273134941764012408045569907046357545104808797292790712334779584918185110546": {
+    "end": "2026-12-01",
+    "entry": 0.89,
+    "entry_fee": 0.0,
+    "event_key": "1161680",
+    "event_slug": "us-imports-russian-diesel-by-october-31",
+    "opened": "2026-11-06T05:04:38Z",
+    "outcome": "No",
+    "price_source": "book",
+    "shares": 5,
+    "slug": "us-imports-russian-diesel-by-november-30",
+    "source": "claude",
+    "theme": "russia-ukraine",
+    "title": "US imports Russian diesel by November 30?"
+   },
    "59822649710870591002443082281655284432277286805384619774600638740092677692228": {
     "end": "2026-11-16",
     "entry": 0.91,
@@ -903,15 +933,20 @@
     "opportunity": false,
     "ts": "2026-11-04T12:44:49Z"
    },
+   "arg-ind-rie-2026-11-06:no": {
+    "edge": -0.0093,
+    "opportunity": false,
+    "ts": "2026-11-06T05:09:49Z"
+   },
    "arg-slo-pla-2026-11-06:no": {
     "edge": -0.0117,
     "opportunity": false,
     "ts": "2026-11-04T12:44:49Z"
    },
    "bank-of-brazil-decision-in-december-20260918:yes": {
-    "edge": -0.0022,
+    "edge": -0.0047,
     "opportunity": false,
-    "ts": "2026-11-05T21:05:38Z"
+    "ts": "2026-11-06T05:09:48Z"
    },
    "bank-of-brazil-decision-in-january-2027:yes": {
     "edge": 0.0116,
@@ -934,9 +969,9 @@
     "ts": "2026-11-04T10:44:28Z"
    },
    "brazil-annual-inflation-2026:yes": {
-    "edge": -0.0077,
+    "edge": -0.005,
     "opportunity": false,
-    "ts": "2026-11-05T15:04:03Z"
+    "ts": "2026-11-06T05:09:44Z"
    },
    "canada-annual-inflation-2026:yes": {
     "edge": -0.0052,
@@ -958,20 +993,30 @@
     "opportunity": false,
     "ts": "2026-11-05T23:03:55Z"
    },
-   "fed-decision-in-january-20260729233815502:yes": {
-    "edge": -0.0034,
+   "epl-bri-bre-2026-11-08:no": {
+    "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-06T03:04:15Z"
+    "ts": "2026-11-06T05:09:48Z"
+   },
+   "fed-decision-in-january-20260729233815502:yes": {
+    "edge": -0.0002,
+    "opportunity": false,
+    "ts": "2026-11-06T05:09:45Z"
    },
    "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850:yes": {
-    "edge": -0.0084,
+    "edge": -0.0116,
     "opportunity": false,
-    "ts": "2026-11-06T01:03:33Z"
+    "ts": "2026-11-06T05:09:47Z"
    },
    "how-many-fed-rate-hikes-in-2026-20260623190717369:yes": {
     "edge": -0.0094,
     "opportunity": false,
     "ts": "2026-11-05T17:05:11Z"
+   },
+   "lowest-mississippi-level-at-st-louis-by-november-30:yes": {
+    "edge": -0.0032,
+    "opportunity": false,
+    "ts": "2026-11-06T05:09:46Z"
    },
    "october-inflation-china-annual:yes": {
     "edge": -0.0154,
@@ -989,9 +1034,9 @@
     "ts": "2026-11-05T07:04:17Z"
    },
    "south-africa-annual-inflation-2026:yes": {
-    "edge": 0.0026,
+    "edge": 0.0005,
     "opportunity": false,
-    "ts": "2026-11-06T03:04:14Z"
+    "ts": "2026-11-06T05:09:43Z"
    },
    "south-korea-annual-inflation-2026:yes": {
     "edge": -0.0087,
@@ -1409,7 +1454,7 @@
   },
   "realized": 0.0,
   "refills": 0,
-  "skipped_no_cash": 2,
+  "skipped_no_cash": 3,
   "start_cash": 20,
   "unlimited": false
  }

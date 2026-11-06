@@ -1,885 +1,885 @@
 {
  "candidates": [
   {
-   "est_gap_before_fees": 0.01,
+   "est_gap_before_fees": 0.02,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026",
+   "id": "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
     "event_ticker": "KXTIME-26",
-    "no_ask": 0.9,
-    "no_sub_title": "Mark Carney",
-    "rules_primary": "If Mark Carney is Time Person of the Year for 2026, then the market resolves to Yes.",
+    "no_ask": 0.89,
+    "no_sub_title": "Abdul El-Sayed",
+    "rules_primary": "If Abdul El-Sayed is Time Person of the Year for 2026, then the market resolves to Yes.",
     "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-MARK",
-    "title": "Will Mark Carney be Time Person of the Year in 2026?",
-    "volume": 47021.36,
-    "yes_ask": 0.11,
-    "yes_sub_title": "Mark Carney"
+    "ticker": "KXTIME-26-ABD",
+    "title": "Will Abdul El-Sayed be Time Person of the Year in 2026?",
+    "volume": 14628.26,
+    "yes_ask": 0.12,
+    "yes_sub_title": "Abdul El-Sayed"
    },
    "match_score": 1.0,
    "polymarket": {
-    "best_ask_yes": 0.14,
-    "best_bid_yes": 0.12,
+    "best_ask_yes": 0.09,
+    "best_bid_yes": 0.03,
     "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
+    "end": "2027-01-01",
     "fee_rate": 0.05,
-    "liquidity": 4303,
+    "liquidity": 3590,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Mark Carney be TIME Person of the Year 2026?",
-    "slug": "will-mark-carney-be-time-person-of-the-year-2026",
+    "question": "Will Abdul El-Sayed be TIME Person of the Year 2026?",
+    "slug": "will-abdul-el-sayed-be-time-person-of-the-year-2026",
     "url": "https://polymarket.com/event/time-person-of-the-year-2026"
    }
   },
   {
    "est_gap_before_fees": 0.009,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026",
+   "id": "KXLIGUE1-27-ASM|will-monaco-win-the-2026-27-ligue-1-championship-20260701201053344",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
-    "no_ask": 0.98,
-    "no_sub_title": "Marco Rubio",
-    "rules_primary": "If Marco Rubio is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-MAR",
-    "title": "Will Marco Rubio be Time Person of the Year in 2026?",
-    "volume": 7552.55,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Marco Rubio"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.055,
-    "best_bid_yes": 0.049,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 19095,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Marco Rubio be TIME Person of the Year 2026?",
-    "slug": "will-marco-rubio-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.002,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-LLYN|will-loretta-lynch-be-arrested-before-2027-462",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.979,
-    "no_sub_title": "Loretta Lynch",
-    "rules_primary": "If Loretta Lynch is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-LLYN",
-    "title": "Will Loretta Lynch be arrested before Jan 2027?",
-    "volume": 8823.57,
-    "yes_ask": 0.058,
-    "yes_sub_title": "Loretta Lynch"
-   },
-   "match_score": 0.966,
-   "polymarket": {
-    "best_ask_yes": 0.023,
-    "best_bid_yes": 0.011,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 41766,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Loretta Lynch be arrested before 2027?",
-    "slug": "will-loretta-lynch-be-arrested-before-2027-462",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.004,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
+    "close_time": "2027-06-13T02:00:00Z",
+    "event_ticker": "KXLIGUE1-27",
     "no_ask": 0.97,
-    "no_sub_title": "Alexandria Ocasio-Cortez",
-    "rules_primary": "If Alexandria Ocasio-Cortez is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-ALE",
-    "title": "Will Alexandria Ocasio-Cortez be Time Person of the Year in 2026?",
-    "volume": 1832.4,
+    "no_sub_title": "Monaco",
+    "rules_primary": "If Monaco is the 2026-2027 Ligue 1 champion, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXLIGUE1-27-ASM",
+    "title": "Will Monaco win the 2026-27 Ligue 1?",
+    "volume": 20967.13,
     "yes_ask": 0.04,
-    "yes_sub_title": "Alexandria Ocasio-Cortez"
+    "yes_sub_title": "Monaco"
    },
-   "match_score": 1.0,
+   "match_score": 0.951,
    "polymarket": {
-    "best_ask_yes": 0.043,
-    "best_bid_yes": 0.036,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2027-01-01",
-    "fee_rate": 0.05,
-    "liquidity": 3492,
+    "best_ask_yes": 0.021,
+    "best_bid_yes": 0.019,
+    "description": "This market will resolve according to the team that wins the 2026-27 Ligue 1 Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 Ligue 1 Championship per the rules of Ligue 1 (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 Ligue 1 season is cancelled, postponed after June 14, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from Ligue 1; however, a consensus of credible reporting may also be used.",
+    "end": "2027-06-15",
+    "fee_rate": 0.03,
+    "liquidity": 52257,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Alexandria Ocasio-Cortez be TIME Person of the Year 2026?",
-    "slug": "will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.004,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-ASCH|will-adam-schiff-be-arrested-before-2027-269",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.976,
-    "no_sub_title": "Adam Schiff",
-    "rules_primary": "If Adam Schiff is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-ASCH",
-    "title": "Will Adam Schiff be arrested before Jan 2027?",
-    "volume": 59503.66,
-    "yes_ask": 0.055,
-    "yes_sub_title": "Adam Schiff"
-   },
-   "match_score": 0.962,
-   "polymarket": {
-    "best_ask_yes": 0.028,
-    "best_bid_yes": 0.022,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 34868,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Adam Schiff be arrested before 2027?",
-    "slug": "will-adam-schiff-be-arrested-before-2027-269",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.005,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-BJOH|will-brandon-johnson-be-arrested-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.98,
-    "no_sub_title": "Brandon Johnson",
-    "rules_primary": "If Brandon Johnson is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-BJOH",
-    "title": "Will Brandon Johnson be arrested before Jan 2027?",
-    "volume": 4170.71,
-    "yes_ask": 0.037,
-    "yes_sub_title": "Brandon Johnson"
-   },
-   "match_score": 0.955,
-   "polymarket": {
-    "best_ask_yes": 0.041,
-    "best_bid_yes": 0.032,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 16507,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Brandon Johnson be arrested before 2027?",
-    "slug": "will-brandon-johnson-be-arrested-before-2027",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.007,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
-    "no_ask": 0.97,
-    "no_sub_title": "Mojtaba Khamenei",
-    "rules_primary": "If Mojtaba Khamenei is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-MOJ",
-    "title": "Will Mojtaba Khamenei be Time Person of the Year in 2026?",
-    "volume": 18618.35,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Mojtaba Khamenei"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.05,
-    "best_bid_yes": 0.033,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 5278,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Mojtaba Khamenei be TIME Person of the Year 2026?",
-    "slug": "will-mojtaba-khamenei-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.009,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-AFAU|will-anthony-fauci-be-arrested-before-2027-464",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.979,
-    "no_sub_title": "Anthony Fauci",
-    "rules_primary": "If Anthony Fauci is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-AFAU",
-    "title": "Will Anthony Fauci be arrested before Jan 2027?",
-    "volume": 207819.79,
-    "yes_ask": 0.045,
-    "yes_sub_title": "Anthony Fauci"
-   },
-   "match_score": 0.958,
-   "polymarket": {
-    "best_ask_yes": 0.041,
-    "best_bid_yes": 0.036,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 61726,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Anthony Fauci be arrested before 2027?",
-    "slug": "will-anthony-fauci-be-arrested-before-2027-464",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.009,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-THOM|will-tom-homan-be-arrested-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.979,
-    "no_sub_title": "Tom Homan",
-    "rules_primary": "If Tom Homan is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-THOM",
-    "title": "Will Tom Homan be arrested before Jan 2027?",
-    "volume": 15267.47,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Tom Homan"
-   },
-   "match_score": 0.959,
-   "polymarket": {
-    "best_ask_yes": 0.042,
-    "best_bid_yes": 0.031,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 17471,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Tom Homan be arrested before 2027?",
-    "slug": "will-tom-homan-be-arrested-before-2027",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+    "question": "Will Monaco win the 2026-27 Ligue 1 Championship?",
+    "slug": "will-monaco-win-the-2026-27-ligue-1-championship-20260701201053344",
+    "url": "https://polymarket.com/event/ligue-1-2027-champion-20260701201053335"
    }
   },
   {
    "est_gap_before_fees": -0.01,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXABRAHAMSA-27-JAN01|israel-and-saudi-arabia-normalize-relations-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXABRAHAMSA-27",
-    "no_ask": 0.972,
-    "no_sub_title": "Saudi Arabia",
-    "rules_primary": "If Israel and Saudi Arabia normalize diplomatic relations before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "The agreement must be ratified before Jan 1, 2027 to be included within the Payout Criterion.",
-    "ticker": "KXABRAHAMSA-27-JAN01",
-    "title": "Will Israel and Saudi Arabia normalize relations before Jan 1, 2027?",
-    "volume": 221242.49,
-    "yes_ask": 0.03,
-    "yes_sub_title": "Saudi Arabia"
-   },
-   "match_score": 0.96,
-   "polymarket": {
-    "best_ask_yes": 0.048,
-    "best_bid_yes": 0.02,
-    "description": "This market will resolve to \"Yes\" if both Israel and the Kingdom of Saudi Arabia officially announce the establishment of diplomatic relations by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe primary resolution source for this market will be official information from Israel and the Kingdom of Saudi Arabia, however a consensus of credible reporting may also be used.\n",
-    "end": "2027-01-01",
-    "fee_rate": 0.0,
-    "liquidity": 29109,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Israel and Saudi Arabia normalize relations before 2027?",
-    "slug": "israel-and-saudi-arabia-normalize-relations-before-2027",
-    "url": "https://polymarket.com/event/israel-and-saudi-arabia-normalize-relations-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026",
+   "id": "KXHURPATHHAWAII-26DEC|will-a-hurricane-make-landfall-in-hawaii-before-2027-20260721182828397",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
-    "no_ask": 0.95,
-    "no_sub_title": "Donald Trump",
-    "rules_primary": "If Donald Trump is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-DT",
-    "title": "Will Donald Trump be Time Person of the Year in 2026?",
-    "volume": 194428.54,
-    "yes_ask": 0.06,
-    "yes_sub_title": "Donald Trump"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.07,
-    "best_bid_yes": 0.05,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 28618,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Donald Trump be TIME Person of the Year 2026?",
-    "slug": "will-donald-trump-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXIPO-26-DISCORD|discord-ipo-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXIPO-26",
-    "no_ask": 0.95,
-    "no_sub_title": "Discord",
-    "rules_primary": "If Discord confirms an IPO before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "An IPO is confirmed if 1) the SEC declares the company's Form S-1 effective OR 2) the IPO is priced OR 3) a securities exchange has assigned a ticker to it. As long as any of those events occur, the market will immediately resolve to Yes, even if the company does not start trading until after Jan 1, 2027.",
-    "ticker": "KXIPO-26-DISCORD",
-    "title": "Who will IPO before 2027?",
-    "volume": 140523.97,
-    "yes_ask": 0.08,
-    "yes_sub_title": "Discord"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.06,
-    "best_bid_yes": 0.052,
-    "description": "This market will resolve to \"Yes\" if the listed company completes an Initial Public Offering (IPO) by December 31, 2026, 11:59 PM ET, as confirmed by official company announcements or credible news sources. The IPO refers to the first sale of stock by the listed company to the public on any recognized stock exchange.\n\nIf the listed company merges with another entity, is acquired, or ceases to exist before the market resolves, the market will also resolve to \"No\".\n\nThis market will resolve early if the listed company completes an IPO by December 31, 2026, 11:59 PM ET.\n\nThe resolution source for this market is a consensus of credible reporting.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 8406,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Discord IPO before 2027?",
-    "slug": "discord-ipo-before-2027",
-    "url": "https://polymarket.com/event/ipos-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.012,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
+    "event_ticker": "KXHURPATHHAWAII-26DEC",
     "no_ask": 0.96,
-    "no_sub_title": "Reid Wiseman",
-    "rules_primary": "If Reid Wiseman is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-REI",
-    "title": "Will Reid Wiseman be Time Person of the Year in 2026?",
-    "volume": 11907.45,
+    "no_sub_title": "Before 2027",
+    "rules_primary": "If a 74 mph or higher hurricane makes landfall in Hawaii during the 2026 hurricane season, then the market resolves to Yes.",
+    "rules_secondary": "This market encompasses the primary southeastern islands of the state of Hawaii. Those islands are: Ni\u02bbihau, Kaua\u02bbi, O\u02bbahu, Moloka\u02bbi, L\u0101na\u02bbi, Kaho\u02bbolawe, Maui, and the island of Hawai'i. It does not include the Midway Atoll, nor the Northwestern Islands, also known as the Leeward Hawaiian Islands.",
+    "ticker": "KXHURPATHHAWAII-26DEC",
+    "title": "Will a hurricane make landfall in Hawaii during the 2026 hurricane season?",
+    "volume": 178664.91,
     "yes_ask": 0.05,
-    "yes_sub_title": "Reid Wiseman"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.054,
-    "best_bid_yes": 0.038,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 24219,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Reid Wiseman be TIME Person of the Year 2026?",
-    "slug": "will-reid-wiseman-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.012,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-LCOO|will-lisa-cook-be-arrested-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.969,
-    "no_sub_title": "Lisa Cook",
-    "rules_primary": "If Lisa Cook is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-LCOO",
-    "title": "Will Lisa Cook be arrested before Jan 2027?",
-    "volume": 34717.88,
-    "yes_ask": 0.058,
-    "yes_sub_title": "Lisa Cook"
-   },
-   "match_score": 0.956,
-   "polymarket": {
-    "best_ask_yes": 0.043,
-    "best_bid_yes": 0.025,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 14864,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Lisa Cook be arrested before 2027?",
-    "slug": "will-lisa-cook-be-arrested-before-2027",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.017,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTIME-26-GPT|will-chatgpt-be-time-person-of-the-year-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXTIME-26",
-    "no_ask": 0.98,
-    "no_sub_title": "ChatGPT",
-    "rules_primary": "If ChatGPT is Time Person of the Year for 2026, then the market resolves to Yes.",
-    "rules_secondary": "This will count towards the payout criterion: \nIf multiple persons win, all persons that are listed are encompassed within the Payout Criterion. If, for example, the Person of the Year is \u201cJoe Biden and Kamala Harris\u201d, both \u201cJoe Biden\u201d and \u201cKamala Harris\u201d strikes are encompassed within the Payout Criterion. \nThe person must be explicitly named as the Person of the Year or pictured on the/a relevant cover if they are associated with the group/concept winning (the picture is only relevant for a natural human being winning). Some examples to illustrate this: \u201cJamal Khasogghi\u201d would resolve to Yes in 2018, when \u201cThe Guardians\u201d won, as he is also named and shown on a cover and falls within \u201cThe Guardians\u201d. Similarly, \u201cBill Gates\u201d would resolve to Yes in 2005. \nIf Time uses language that does no",
-    "ticker": "KXTIME-26-GPT",
-    "title": "Will ChatGPT be Time Person of the Year in 2026?",
-    "volume": 21488.91,
-    "yes_ask": 0.03,
-    "yes_sub_title": "ChatGPT"
-   },
-   "match_score": 1.0,
-   "polymarket": {
-    "best_ask_yes": 0.038,
-    "best_bid_yes": 0.013,
-    "description": "This market will resolve to \u201cYes\u201d if the listed person, group, entity, or thing is TIME Person of the Year for 2026. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA listed option will be considered TIME Person of the Year if they/it are explicitly named as Person of the Year. \n\nAdditionally, the following rules apply:\n\nIf multiple people are explicitly named person of the year, both people will be considered TIME Person of the Year.\n\nIf the TIME Person of the Year is a concept, group or thing, a person may still be considered Person of the Year if they are also explicitly named person of the year, or if they are directly associated with the concept, group or thing named as person of the Year and are pictured on any official TIME cover announcing the Person of the Year. For example, in 2025 when TIME Person of the Year was \u201cArchitects of AI\u201d the option for Sam Altman would have resolved to \u201cYes\u201d as he was associated with the concept and is pictured on the Cover. However, if Sam Altman were Person of the Year, and ChatGPT was shown on the cover, this would not qualify for ChatGPT because ChatGPT is not a person.\n\nIf the TIME Person of the Year is a specific concept, group, entity, or thing (e.g. artificial intelligence), listed concepts or entities will be considered Person of the Year only if they are synonymous with the announced TIME Person of the Year. For example, if ChatGPT were Person of the Year, options for AI or LLMs would resolve to \u201cNo\u201d because, while they are conceptually linked, they are not synonymous.\n\nIf TIME uses language that does not refer to a specific, commonly-recognized, concept, group, entity, or thing (e.g. 2011\u2019s \u201cThe Protester\u201d or 2017\u2019s \u201cThe Silence Breakers\u201d), the TIME Person of the Year feature article will be used to determine the meaning o",
-    "end": "2026-12-31",
-    "fee_rate": 0.05,
-    "liquidity": 20970,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will ChatGPT be TIME Person of the Year 2026?",
-    "slug": "will-chatgpt-be-time-person-of-the-year-2026",
-    "url": "https://polymarket.com/event/time-person-of-the-year-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.018,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXNHLHART-27-CMCDAVID97|will-connor-mcdavid-win-the-2026-27-hart-memorial-trophy",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-06-30T14:00:00Z",
-    "event_ticker": "KXNHLHART-27",
-    "no_ask": 0.4,
-    "no_sub_title": "Connor McDavid",
-    "rules_primary": "If Connor McDavid wins the NHL Hart Memorial Trophy in the 2026-27 NHL season, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXNHLHART-27-CMCDAVID97",
-    "title": "Who will win Hart Memorial Trophy?",
-    "volume": 10135.14,
-    "yes_ask": 0.64,
-    "yes_sub_title": "Connor McDavid"
-   },
-   "match_score": 0.982,
-   "polymarket": {
-    "best_ask_yes": 0.618,
-    "best_bid_yes": 0.611,
-    "description": "This market will resolve to the player who wins the Hart Memorial Trophy for the 2026-27 NHL season.\n\nIn the event of a tie, this market will resolve according to the official winner as determined by NHL rules. If multiple winners are announced then this market will resolve to the player whose listed last name comes first alphabetically.\n\nIf the 2026-27 NHL season is cancelled, postponed after June 30, 2027, 11:59 PM ET, or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe resolution source for this market will be official information from the NHL; however, a consensus of credible reporting may also be used.",
-    "end": "2027-07-01",
-    "fee_rate": 0.05,
-    "liquidity": 3647,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Connor McDavid win the 2026-27 Hart Memorial Trophy?",
-    "slug": "will-connor-mcdavid-win-the-2026-27-hart-memorial-trophy",
-    "url": "https://polymarket.com/event/nhl-hart-memorial-trophy-winner-2026-27"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.019,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-LJAE|lee-jae-myung-arrested-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.98,
-    "no_sub_title": "Lee Jae Myung",
-    "rules_primary": "If Lee Jae Myung is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-LJAE",
-    "title": "Will Lee Jae Myung be arrested before Jan 2027?",
-    "volume": 4165.17,
-    "yes_ask": 0.05,
-    "yes_sub_title": "Lee Jae Myung"
-   },
-   "match_score": 0.97,
-   "polymarket": {
-    "best_ask_yes": 0.04,
-    "best_bid_yes": 0.031,
-    "description": "This market will resolve to \"Yes\" if the Leader of the Democratic Party of Korea Lee Jae-myung is arrested or detained by law enforcement by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 49931,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Lee Jae-myung arrested before 2027?",
-    "slug": "lee-jae-myung-arrested-before-2027",
-    "url": "https://polymarket.com/event/lee-jae-myung-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.02,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXSERIEATOP-27TOP4-ROM|will-roma-finish-in-the-top-4-of-the-2026-27-serie-a-season",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-06-14T02:00:00Z",
-    "event_ticker": "KXSERIEATOP-27TOP4",
-    "no_ask": 0.32,
-    "no_sub_title": "Roma",
-    "rules_primary": "If Roma is a top 4 finisher in the 2026-27 Serie A season, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXSERIEATOP-27TOP4-ROM",
-    "title": "Will Roma finish in the top 4 in the Serie A season?",
-    "volume": 507.81,
-    "yes_ask": 0.8,
-    "yes_sub_title": "Roma"
-   },
-   "match_score": 0.972,
-   "polymarket": {
-    "best_ask_yes": 0.79,
-    "best_bid_yes": 0.78,
-    "description": "This market will resolve to \"Yes\" if the listed club finishes in the top 4 (positions 1 through 4) of the final standings of the 2026-27 Serie A season. Otherwise, this market will resolve to \"No\".\n\nIf at any point it becomes impossible for the listed club to finish in the top 4 of the 2026-27 Serie A season (e.g., they are mathematically unable to achieve enough points), this market will resolve to \"No\".\n\nIn the event of a tie for the final top-4 position, this market will resolve based on the clubs officially recognized by Serie A as finishing in the top 4 of the final standings.\n\nIf the 2026-27 Serie A season is cancelled, postponed after June 13, 2027, 11:59 PM ET, or there are otherwise no final standings declared within that timeframe, this market will resolve to \"No\".\n\nThe primary resolution source will be official information from Serie A; however, a consensus of credible reporting may also be used.",
-    "end": "2027-06-14",
-    "fee_rate": 0.05,
-    "liquidity": 3098,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Roma finish in the top 4 of the 2026-27 Serie A season?",
-    "slug": "will-roma-finish-in-the-top-4-of-the-2026-27-serie-a-season",
-    "url": "https://polymarket.com/event/serie-a-top-4-finishers-2026-27"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.02,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRECOGPALESTINE-27-GER|will-germany-recognize-palestine-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXRECOGPALESTINE-27",
-    "no_ask": 0.966,
-    "no_sub_title": "Germany",
-    "rules_primary": "If Germany recognizes Palestine before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Official diplomatic recognition may include, but is not limited to:\n\nA formal announcement by the recognizing country that it recognizes the recognized country as a sovereign state\nEstablishment of diplomatic relations at the ambassadorial level\nOpening of an embassy or diplomatic mission (not just consulates)\nSigning of a joint communiqu\u00e9 establishing diplomatic relations\nAn official state visit by the head of state/government acknowledging sovereignty\nA formal letter of recognition from the head of state/government or foreign minister\n\nThe following do NOT constitute recognition:\n\nTrade relations or commercial agreements alone\nConsular relations without diplomatic relations\nParticipation in the same international conference\nHumanitarian assistance or aid\nCultural or educational exchanges",
-    "ticker": "KXRECOGPALESTINE-27-GER",
-    "title": "Who will recognize Palestine?",
-    "volume": 6723.49,
-    "yes_ask": 0.081,
-    "yes_sub_title": "Germany"
+    "yes_sub_title": "Before 2027"
    },
    "match_score": 0.953,
    "polymarket": {
-    "best_ask_yes": 0.054,
-    "best_bid_yes": 0.032,
-    "description": "This market will resolve based on the countries that officially recognize Palestine as a state by December 31, 2026, 11:59pm ET.\n\nAn announcement of intentions will not suffice to resolve this market to \"Yes.\" Only a government's formal recognition of the State of Palestine will count toward a \u201cYes\u201d resolution for this market.\n\nThe primary resolution source for this market will be official government information. However, a consensus of credible reporting will also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 10717,
+    "best_ask_yes": 0.05,
+    "best_bid_yes": 0.03,
+    "description": "This market will resolve to \"Yes\" if any storm makes landfall in the State of Hawaii at Category 1 strength or higher, as reported in official Central Pacific Hurricane Center advisories (https://www.nhc.noaa.gov/cphc/), between market creation and December 31, 2026, 11:59:59 PM ET. Otherwise, this market will resolve to \"No\". A landfall counts toward this determination only if it occurs within this window; the time of the physical landfall governs, not the time any confirming advisory is issued.\n\nA hurricane is a tropical cyclone with maximum sustained winds of 74 mph or greater (Category 1 or higher on the Saffir-Simpson Hurricane Wind Scale), as described at https://www.nhc.noaa.gov/aboutsshws.php, and a hurricane landfall is said to occur when the hurricane's surface center intersects with the coastline, as described at https://www.nhc.noaa.gov/aboutgloss.shtml#LANDFALL. A storm must hold hurricane strength (Category 1 or higher on the Saffir-Simpson scale) at the moment its surface center intersects the coastline for that landfall to qualify. \n\n\"Hawaii\" means the entire State of Hawaii as recognized under U.S. law, including the main Hawaiian Islands (Hawai\u02bbi, Maui, O\u02bbahu, Kaua\u02bbi, Moloka\u02bbi, L\u0101na\u02bbi, Ni\u02bbihau, and Kaho\u02bbolawe) and the Northwestern Hawaiian Islands (including Midway Atoll and the Papah\u0101naumoku\u0101kea Marine National Monument).\n\nThe wind speed at the moment of landfall will be determined from the CPHC advisory or Special Advisory in effect at the time closest to the reported landfall time; where no advisory covers that exact moment, the most recent advisory issued prior to landfall governs.\n\nThis market may resolve based on the initial CPHC advisory reporting a qualifying landfall regardless of any later advisory, retraction, best-track revision, or reanaly",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 6330,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Germany recognize Palestine before 2027?",
-    "slug": "will-germany-recognize-palestine-before-2027",
-    "url": "https://polymarket.com/event/which-countries-will-recognize-palestine-before-2027"
+    "question": "Will a hurricane make landfall in Hawaii before 2027?",
+    "slug": "will-a-hurricane-make-landfall-in-hawaii-before-2027-20260721182828397",
+    "url": "https://polymarket.com/event/will-a-hurricane-make-landfall-in-hawaii-before-2027-20260721182828397"
    }
   },
   {
-   "est_gap_before_fees": -0.02,
+   "est_gap_before_fees": -0.01,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-JBRE|will-john-brennan-be-arrested-before-2027-847",
+   "id": "KXCBDCHILE-26DEC15-H25|will-the-central-bank-of-chile-increase-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.87,
-    "no_sub_title": "John Brennan",
-    "rules_primary": "If John Brennan is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-JBRE",
-    "title": "Will John Brennan be arrested before Jan 2027?",
-    "volume": 156502.97,
-    "yes_ask": 0.15,
-    "yes_sub_title": "John Brennan"
+    "close_time": "2026-12-15T21:59:00Z",
+    "event_ticker": "KXCBDCHILE-26DEC15",
+    "no_ask": 0.65,
+    "no_sub_title": "Hike 1-25bps",
+    "rules_primary": "If the Central Bank of Chile takes the action of hike 1-25bps at its December Monetary Policy Meeting, then the market resolves to Yes.",
+    "rules_secondary": "The market resolves based on the official policy rate decision announced by the central bank. For central banks with multiple policy rates, only changes to the primary policy rate count. If the meeting is cancelled or delayed past the expiration date, markets for \"Maintain current rate\" resolve to Yes and all others resolve to No. Emergency rate changes between scheduled meetings do not affect resolution of contracts tied to scheduled meetings.",
+    "ticker": "KXCBDCHILE-26DEC15-H25",
+    "title": "Will the Central Bank of Chile hike 1-25bps at the December Monetary Policy Meeting?",
+    "volume": 10232.26,
+    "yes_ask": 0.41,
+    "yes_sub_title": "Hike 1-25bps"
    },
-   "match_score": 0.957,
+   "match_score": 0.958,
+   "polymarket": {
+    "best_ask_yes": 0.41,
+    "best_bid_yes": 0.4,
+    "description": "This market will resolve according to the change in basis points in the monetary policy rate resulting from the December 2026 meeting of the Central Bank of Chile (Banco Central de Chile), relative to the level it was prior to this meeting.\n\nThe resolution source will be official information from the Central Bank of Chile, including the statement or release from its December 2026 meeting, scheduled for December 15, 2026, as listed on the official Central Bank of Chile calendar (https://www.bcentral.cl/es/web/banco-central/noticias-y-publicaciones/prensa/calendario-de-politica-monetaria-y-financiera). This market may resolve as soon as the statement or release of the Central Bank of Chile resulting from its December 2026 meeting with relevant data is issued.\n\nIf the specified rate is defined by an upper and lower bound, the relevant change will be the change to the upper bound.\n\nIf the specified rate is changed to a level not expressed in the displayed options, the change will be rounded according to the following guidelines. Increases or decreases of less than 25 bps will be rounded to 25 bps (e.g. an increase or decrease of 10 bps would be considered to be an increase or decrease of 25 bps). Increases or decreases of greater than 25 bps will be rounded to the nearest 25 bps and will be rounded away from 0 in cases of equidistance (e.g., an increase or decrease of 37.5 bps would be considered to be an increase or decrease of 50 bps). Displayed options of \u201cIncrease\u201d or \u201cDecrease\u201d will include policy rate increases or decreases of any size.\n\nIf the specified meeting is postponed to a date and time before the start of the next scheduled meeting, this market will resolve based on the outcome of that postponed meeting. If the specified meeting is cancelled, or postponed such",
+    "end": "2026-12-15",
+    "fee_rate": 0.05,
+    "liquidity": 2066,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will the Central Bank of Chile increase the monetary policy rate by 25 bps at the December meeting?",
+    "slug": "will-the-central-bank-of-chile-increase-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+    "url": "https://polymarket.com/event/central-bank-of-chile-decision-in-december-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.04,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXMTGSWITCH-27JAN-LMURK|lisa-murkowski-leaves-the-republican-party-in-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXMTGSWITCH-27JAN",
+    "no_ask": 0.919,
+    "no_sub_title": "Lisa Murkowski",
+    "rules_primary": "If Lisa Murkowski leaves, announces that they are leaving, or is expelled from the Republican party before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Lisa Murkowski leaves the Republican party if, after Issuance and before Jan 1, 2027, any of the following occurs:\nLisa Murkowski changes their official party registration from Republican to another party or to independent or unaffiliated status.\nLisa Murkowski announces they are no longer a member of the Republican party.\nLisa Murkowski is expelled from the Republican party by official party action.\nIf Lisa Murkowski is a member of the U.S. Senate, Lisa Murkowski announces they will no longer caucus with the Republican party or begins caucusing with a different party.\n\nThe following do NOT count:\nResignation from Congress or expulsion from Congress.\nTemporary suspension from party activities or committees while remaining a member of the Republican party.\nLoss of party endorsement or suppo",
+    "ticker": "KXMTGSWITCH-27JAN-LMURK",
+    "title": "Will Lisa Murkowski leave the Republican party?",
+    "volume": 58664.59,
+    "yes_ask": 0.12,
+    "yes_sub_title": "Lisa Murkowski"
+   },
+   "match_score": 0.994,
    "polymarket": {
     "best_ask_yes": 0.15,
-    "best_bid_yes": 0.13,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "best_bid_yes": 0.08,
+    "description": "This market will resolve to \u201cYes\u201d if Lisa Murkowski leaves, or announces that she is leaving, the Republican Party by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn official announcement from Murkowski that she will leave the Republican Party, join a separate party, or become an independent within this market\u2019s timeframe will be sufficient to resolve this market to \u201cYes\u201d, regardless of when the announced party switch is intended to take effect or whether Murkowski intends to continue caucusing with the Republican Party.\n\nThe primary resolution source for this market will be official information from Lisa Murkowski; however, a consensus of credible reporting may also be used.",
     "end": "2027-01-01",
     "fee_rate": 0.04,
-    "liquidity": 18459,
+    "liquidity": 11688,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will John Brennan be arrested before 2027?",
-    "slug": "will-john-brennan-be-arrested-before-2027-847",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.026,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXARREST-27JAN-JZAP|will-jos-luis-rodrguez-zapatero-be-arrested-before-2027-376",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXARREST-27JAN",
-    "no_ask": 0.979,
-    "no_sub_title": "Jos\u00e9 Luis Rodr\u00edguez Zapatero",
-    "rules_primary": "If Jos\u00e9 Luis Rodr\u00edguez Zapatero is arrested before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Clarification (9/25/25): The contract states that if an individual \"surrenders at a police station or courthouse with their attorney\" the payout criterion is satisfied. To be clear, voluntarily surrendering to law enforcement pursuant to an indictment without an arrest warrant is sufficient to resolve a market to Yes.",
-    "ticker": "KXARREST-27JAN-JZAP",
-    "title": "Will Jos\u00e9 Luis Rodr\u00edguez Zapatero be arrested before Jan 2027?",
-    "volume": 13395.38,
-    "yes_ask": 0.069,
-    "yes_sub_title": "Jos\u00e9 Luis Rodr\u00edguez Zapatero"
-   },
-   "match_score": 0.977,
-   "polymarket": {
-    "best_ask_yes": 0.047,
-    "best_bid_yes": 0.035,
-    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 17676,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Jos\u00e9 Luis Rodr\u00edguez Zapatero be arrested before 2027?",
-    "slug": "will-jos-luis-rodrguez-zapatero-be-arrested-before-2027-376",
-    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.036,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRECOGPALESTINE-27-NZ|will-new-zealand-recognize-palestine-before-2027",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXRECOGPALESTINE-27",
-    "no_ask": 0.96,
-    "no_sub_title": "New Zealand",
-    "rules_primary": "If New Zealand recognizes Palestine before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Official diplomatic recognition may include, but is not limited to:\n\nA formal announcement by the recognizing country that it recognizes the recognized country as a sovereign state\nEstablishment of diplomatic relations at the ambassadorial level\nOpening of an embassy or diplomatic mission (not just consulates)\nSigning of a joint communiqu\u00e9 establishing diplomatic relations\nAn official state visit by the head of state/government acknowledging sovereignty\nA formal letter of recognition from the head of state/government or foreign minister\n\nThe following do NOT constitute recognition:\n\nTrade relations or commercial agreements alone\nConsular relations without diplomatic relations\nParticipation in the same international conference\nHumanitarian assistance or aid\nCultural or educational exchanges",
-    "ticker": "KXRECOGPALESTINE-27-NZ",
-    "title": "Who will recognize Palestine?",
-    "volume": 10051.32,
-    "yes_ask": 0.096,
-    "yes_sub_title": "New Zealand"
-   },
-   "match_score": 0.955,
-   "polymarket": {
-    "best_ask_yes": 0.11,
-    "best_bid_yes": 0.06,
-    "description": "This market will resolve based on the countries that officially recognize Palestine as a state by December 31, 2026, 11:59pm ET.\n\nAn announcement of intentions will not suffice to resolve this market to \"Yes.\" Only a government's formal recognition of the State of Palestine will count toward a \u201cYes\u201d resolution for this market.\n\nThe primary resolution source for this market will be official government information. However, a consensus of credible reporting will also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 10618,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will New Zealand recognize Palestine before 2027?",
-    "slug": "will-new-zealand-recognize-palestine-before-2027",
-    "url": "https://polymarket.com/event/which-countries-will-recognize-palestine-before-2027"
+    "question": "Lisa Murkowski leaves the Republican Party in 2026?",
+    "slug": "lisa-murkowski-leaves-the-republican-party-in-2026",
+    "url": "https://polymarket.com/event/lisa-murkowski-leaves-the-republican-party-in-2026"
    }
   },
   {
    "est_gap_before_fees": -0.045,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRECOGPALESTINE-27-DUT|will-the-netherlands-recognize-palestine-before-2027",
+   "id": "KXRECOGPALESTINE-27-GRE|will-greece-recognize-palestine-before-2027",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
     "event_ticker": "KXRECOGPALESTINE-27",
-    "no_ask": 0.955,
-    "no_sub_title": "The Netherlands",
-    "rules_primary": "If the Netherlands recognizes Palestine before Jan 1, 2027, then the market resolves to Yes.",
+    "no_ask": 0.979,
+    "no_sub_title": "Greece",
+    "rules_primary": "If Greece recognizes Palestine before Jan 1, 2027, then the market resolves to Yes.",
     "rules_secondary": "Official diplomatic recognition may include, but is not limited to:\n\nA formal announcement by the recognizing country that it recognizes the recognized country as a sovereign state\nEstablishment of diplomatic relations at the ambassadorial level\nOpening of an embassy or diplomatic mission (not just consulates)\nSigning of a joint communiqu\u00e9 establishing diplomatic relations\nAn official state visit by the head of state/government acknowledging sovereignty\nA formal letter of recognition from the head of state/government or foreign minister\n\nThe following do NOT constitute recognition:\n\nTrade relations or commercial agreements alone\nConsular relations without diplomatic relations\nParticipation in the same international conference\nHumanitarian assistance or aid\nCultural or educational exchanges",
-    "ticker": "KXRECOGPALESTINE-27-DUT",
+    "ticker": "KXRECOGPALESTINE-27-GRE",
     "title": "Who will recognize Palestine?",
-    "volume": 6045.22,
-    "yes_ask": 0.1,
-    "yes_sub_title": "The Netherlands"
+    "volume": 7337.04,
+    "yes_ask": 0.086,
+    "yes_sub_title": "Greece"
    },
-   "match_score": 0.959,
+   "match_score": 0.955,
    "polymarket": {
-    "best_ask_yes": 0.09,
-    "best_bid_yes": 0.04,
+    "best_ask_yes": 0.092,
+    "best_bid_yes": 0.041,
     "description": "This market will resolve based on the countries that officially recognize Palestine as a state by December 31, 2026, 11:59pm ET.\n\nAn announcement of intentions will not suffice to resolve this market to \"Yes.\" Only a government's formal recognition of the State of Palestine will count toward a \u201cYes\u201d resolution for this market.\n\nThe primary resolution source for this market will be official government information. However, a consensus of credible reporting will also be used.",
     "end": "2027-01-01",
     "fee_rate": 0.04,
-    "liquidity": 10533,
+    "liquidity": 11262,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will The Netherlands recognize Palestine before 2027?",
-    "slug": "will-the-netherlands-recognize-palestine-before-2027",
+    "question": "Will Greece recognize Palestine before 2027?",
+    "slug": "will-greece-recognize-palestine-before-2027",
     "url": "https://polymarket.com/event/which-countries-will-recognize-palestine-before-2027"
    }
   },
   {
-   "est_gap_before_fees": -0.07,
+   "est_gap_before_fees": 0.09,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXCONMEBOLLIB-26-PAL|2026-soccer-copa-libertadores-winner-palmeiras",
+   "id": "KXTRUMPADMINLEAVE-26DEC31-MRUB|marco-rubio-out-as-secretary-of-state-by-december-31-2026",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2026-12-14T03:00:00Z",
-    "event_ticker": "KXCONMEBOLLIB-26",
-    "no_ask": 0.41,
-    "no_sub_title": "Palmeiras",
-    "rules_primary": "If Palmeiras is the 2026 Copa Libertadores champion, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXCONMEBOLLIB-26-PAL",
-    "title": "Will Palmeiras win the Copa Libertadores?",
-    "volume": 3696.11,
-    "yes_ask": 0.69,
-    "yes_sub_title": "Palmeiras"
+    "close_time": "2027-01-01T14:59:00Z",
+    "event_ticker": "KXTRUMPADMINLEAVE-26DEC31",
+    "no_ask": 0.73,
+    "no_sub_title": "Marco Rubio",
+    "rules_primary": "If Marco Rubio leaves as Secretary of State before 2027, then the market resolves to Yes.",
+    "rules_secondary": "Marco Rubio must have an actual departure date by vacating the role within the time period. \n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expiration of term without renewal, recall, or other means by which the in",
+    "ticker": "KXTRUMPADMINLEAVE-26DEC31-MRUB",
+    "title": "Will Marco Rubio leaves Secretary of State in before 2027?",
+    "volume": 408857.13,
+    "yes_ask": 0.28,
+    "yes_sub_title": "Marco Rubio"
    },
-   "match_score": 1.0,
+   "match_score": 0.9,
    "polymarket": {
-    "best_ask_yes": 0.66,
-    "best_bid_yes": 0.62,
-    "description": "This market will resolve to \"Yes\" if the listed club is determined as the champion of the Copa Libertadores. Otherwise, it will resolve to \"No\".\n\nIf at any point it becomes impossible for a listed participant to be named as the champion of Copa Libertadores per the rules of Copa Libertadores (e.g., participant is eliminated), the corresponding market will resolve to \"No\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed name comes first alphabetically.\n\nIf this event is cancelled, postponed after December 12, 2026, 11:59 PM ET, or a champion has not been declared within this timeframe, this market will resolve to \"Other\".\n\nThe resolution source will be official information from the Copa Libertadores; however a consensus of credible reporting may also be used.",
-    "end": "2026-12-12",
-    "fee_rate": 0.03,
-    "liquidity": 4940,
+    "best_ask_yes": 0.18,
+    "best_bid_yes": 0.16,
+    "description": "This market will resolve to \u201cYes\u201d if Marco Rubio ceases to be U.S. Secretary of State for any period of time between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Marco Rubio's resignation/removal by this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from Marco Rubio and the U.S. government; however, a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 34858,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Palmeiras win Copa Libertadores?",
-    "slug": "2026-soccer-copa-libertadores-winner-palmeiras",
-    "url": "https://polymarket.com/event/2026-soccer-copa-libertadores-winner"
+    "question": "Marco Rubio out as Secretary of State by December 31, 2026?",
+    "slug": "marco-rubio-out-as-secretary-of-state-by-december-31-2026",
+    "url": "https://polymarket.com/event/marco-rubio-out-as-secretary-of-state-byptptpt"
    }
   },
   {
-   "est_gap_before_fees": 0.079,
+   "est_gap_before_fees": 0.045,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRT-AVE-70|will-avengers-doomsday-score-at-least-70-on-the-rotten-tomatoes-tomatometer-20261221",
+   "id": "KXLEAVEMERZ-29JAN01-27APR01|friedrich-merz-out-as-chancellor-of-germany-before-march-31-2027",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2026-12-21T15:00:00Z",
-    "event_ticker": "KXRT-AVE",
-    "no_ask": 0.21,
-    "no_sub_title": "Above 70",
-    "rules_primary": "If Avengers: Doomsday has a Tomatometer score of above 70 on the Monday after wide release at 10:00 AM ET, then the market resolves to Yes.",
-    "rules_secondary": "The \"Fresh!\" and \"Certified Fresh!\" subtitles are meant for illustrative purposes only. The Tomatometer score must be above the strike value to resolve as YES (for example, a score of 75 would resolve \"Above 75\" as No.) The market will be determined the Monday after wide release at 10:00 AM ET.\n\nThis market and these products have not been endorsed by Rotten Tomatoes. Any references to Rotten Tomatoes or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Rotten Tomatoes and Kalshi.",
-    "ticker": "KXRT-AVE-70",
-    "title": "Avengers: Doomsday Rotten Tomatoes score?",
-    "volume": 34869.56,
-    "yes_ask": 0.8,
-    "yes_sub_title": "Above 70"
+    "close_time": "2027-04-01T03:59:00Z",
+    "event_ticker": "KXLEAVEMERZ-29JAN01",
+    "no_ask": 0.9,
+    "no_sub_title": "Before Apr 1, 2027",
+    "rules_primary": "If Friedrich Merz has either officially announced their intention to leave as Chancellor of Germany or has actually left as Chancellor of Germany before Apr 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEAVEMERZ-29JAN01-27APR01",
+    "title": "Will Friedrich Merz leave Chancellor of Germany before Apr 1, 2027?",
+    "volume": 2885.94,
+    "yes_ask": 0.14,
+    "yes_sub_title": "Before Apr 1, 2027"
    },
-   "match_score": 0.856,
+   "match_score": 0.862,
    "polymarket": {
-    "best_ask_yes": 0.89,
-    "best_bid_yes": 0.879,
-    "description": "This market will resolve to \"Yes\" if the displayed Rotten Tomatoes \"All Critics\" Tomatometer score for Avengers: Doomsday is at least equal to the specified number at 10:00 AM ET on the Monday following the movie's wide theatrical release. Otherwise, this market will resolve to \"No\".\n\nIf, for any reason, the resolution data is unavailable at this market's specified check time, the resolution source will be checked until the relevant data is available. This market will resolve to \"No\" if no data is available by the Friday of that same week, 11:59 PM ET, or the movie does not release by December 31, 2027.",
-    "end": "2026-12-21",
-    "fee_rate": 0.05,
-    "liquidity": 3831,
+    "best_ask_yes": 0.055,
+    "best_bid_yes": 0.054,
+    "description": "This market will resolve to \u201cYes\u201d if Friedrich Merz ceases to be the Chancellor of Germany for any period of time by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Friedrich Merz's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be the government of Germany, however a consensus of credible reporting will also suffice.",
+    "end": "2027-04-01",
+    "fee_rate": 0.04,
+    "liquidity": 59617,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will \"Avengers: Doomsday\" score at least 70 on the Rotten Tomatoes Tomatometer?",
-    "slug": "will-avengers-doomsday-score-at-least-70-on-the-rotten-tomatoes-tomatometer-20261221",
-    "url": "https://polymarket.com/event/avengers-doomsday-rotten-tomatoes-score-20261221"
+    "question": "Friedrich Merz out as Chancellor of Germany before March 31, 2027?",
+    "slug": "friedrich-merz-out-as-chancellor-of-germany-before-march-31-2027",
+    "url": "https://polymarket.com/event/friedrich-merz-out-as-chancellor-of-germany-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.04,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEAVEMERZ-29JAN01-27JUL01|friedrich-merz-out-as-chancellor-of-germany-before-june-30-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-07-01T03:59:00Z",
+    "event_ticker": "KXLEAVEMERZ-29JAN01",
+    "no_ask": 0.75,
+    "no_sub_title": "Before Jul 1, 2027",
+    "rules_primary": "If Friedrich Merz has either officially announced their intention to leave as Chancellor of Germany or has actually left as Chancellor of Germany before Jul 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEAVEMERZ-29JAN01-27JUL01",
+    "title": "Will Friedrich Merz leave Chancellor of Germany before Jul 1, 2027?",
+    "volume": 986.15,
+    "yes_ask": 0.29,
+    "yes_sub_title": "Before Jul 1, 2027"
+   },
+   "match_score": 0.856,
+   "polymarket": {
+    "best_ask_yes": 0.21,
+    "best_bid_yes": 0.2,
+    "description": "This market will resolve to \u201cYes\u201d if Friedrich Merz ceases to be the Chancellor of Germany for any period of time by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Friedrich Merz's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be the government of Germany, however a consensus of credible reporting will also suffice.",
+    "end": "2027-07-01",
+    "fee_rate": 0.04,
+    "liquidity": 33961,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Friedrich Merz out as Chancellor of Germany before June 30, 2027?",
+    "slug": "friedrich-merz-out-as-chancellor-of-germany-before-june-30-2027",
+    "url": "https://polymarket.com/event/friedrich-merz-out-as-chancellor-of-germany-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.034,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-VZELUKR|will-volodymyr-zelenskyy-be-the-next-leader-out-before-2027-20260630194627373",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:48Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.961,
+    "no_sub_title": "Volodymyr Zelenskyy",
+    "rules_primary": "If Volodymyr Zelenskyy has either officially announced their intention to leave as President of Ukraine or has actually left President of Ukraine before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-VZELUKR",
+    "title": "Will Volodymyr Zelenskyy leave President of Ukraine before Jan 1, 2027?",
+    "volume": 145596.36,
+    "yes_ask": 0.049,
+    "yes_sub_title": "Volodymyr Zelenskyy"
+   },
+   "match_score": 0.888,
+   "polymarket": {
+    "best_ask_yes": 0.005,
+    "best_bid_yes": 0.003,
+    "description": "This market will resolve according to the first listed individual who ceases to occupy their listed office.\n\nAn announcement of a resignation/removal, or a scheduled departure from office due to the outcome of an election, will not alone qualify.\n\nOnly permanent removal from office will qualify for resolution. Temporary removals, such as impeachment suspensions (e.g., Yoon Suk Yeol's recent impeachment), temporary invocation of the 25th Amendment, or any similar provisional transfers of power, will not count.\n\nAdditionally, if an individual continues in a caretaker or interim role (e.g., Gabriel Attal remaining as caretaker Prime Minister of France), they will not be considered to have ceased occupying the office for the purposes of this market.\n\nIf this criterion has not been met for any of the listed individuals by December 31, 2026, 11:59 PM ET, this market will resolve to \u201cNone before 2027\u201d. No additional individuals will be added to this market after its creation.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 37467,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Volodymyr Zelenskyy be the next leader out before 2027?",
+    "slug": "will-volodymyr-zelenskyy-be-the-next-leader-out-before-2027-20260630194627373",
+    "url": "https://polymarket.com/event/next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.03,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPCOUNTRIES-27JAN01-GER|will-donald-trump-visit-germany-in-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXTRUMPCOUNTRIES-27JAN01",
+    "no_ask": 0.959,
+    "no_sub_title": "Germany",
+    "rules_primary": "If Donald Trump has physically travelled to and been present within the geographic boundaries of Germany after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The following do NOT constitute a visit:\n\nFlying over the area without landing\nLayovers during which the person remains in an airplane\nVirtual or remote appearances\nPresence in international waters adjacent to the area\nPresence solely within embassy or consulate grounds\nPlans, announcements, or scheduling of future visits that do not occur during the applicable time period\n\nFor the avoidance of doubt, a visit occurs only when the person exits an aircraft, vehicle, vessel, or train within the area, or otherwise physically enters the area not aboard one. Remaining aboard, including during flyovers, drive-throughs, and non-exit refueling stops, does not constitute a visit. Exiting within the area constitutes a visit regardless of duration or method of exit.",
+    "ticker": "KXTRUMPCOUNTRIES-27JAN01-GER",
+    "title": "Will Donald Trump visit Germany before Jan 1, 2027?",
+    "volume": 31633.17,
+    "yes_ask": 0.05,
+    "yes_sub_title": "Germany"
+   },
+   "match_score": 0.865,
+   "polymarket": {
+    "best_ask_yes": 0.09,
+    "best_bid_yes": 0.08,
+    "description": "If U.S. President Donald Trump visits a listed country between January 1 and December 31, 2026 11:59 PM ET, the relevant market will resolve to \"Yes\". Otherwise, this market will resolve to \"No\".\n\nFor the purpose of this market, a \"visit\" is defined as Trump physically entering the terrestrial or maritime territory of the listed country. Whether or not Trump enters the country's airspace during the timeframe of this market will have no bearing on a positive resolution.\n\nThe primary resolution source for this information will be official information from government of the United States of America, official information from Trump or released by his verified social media accounts (e.g. https://twitter.com/POTUS), however, a consensus of credible reporting will also be used.",
+    "end": "2027-01-02",
+    "fee_rate": 0.04,
+    "liquidity": 5110,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Donald Trump visit Germany in 2026?",
+    "slug": "will-donald-trump-visit-germany-in-2026",
+    "url": "https://polymarket.com/event/which-countries-will-donald-trump-visit-in-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.028,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXDWTSTOP3-26DEC31-TAT|will-tatyana-ali-win-dancing-with-the-stars-season-35",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-12-31T15:00:00Z",
+    "event_ticker": "KXDWTSTOP3-26DEC31",
+    "no_ask": 0.97,
+    "no_sub_title": "Tatyana Ali",
+    "rules_primary": "If Tatyana Ali finishes in the Top 3 in Dancing with the Stars Season 35, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Dancing with the Stars. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXDWTSTOP3-26DEC31-TAT",
+    "title": "Will Tatyana Ali finish in the Top 3 on Dancing with the Stars Season 35?",
+    "volume": 26274.27,
+    "yes_ask": 0.04,
+    "yes_sub_title": "Tatyana Ali"
+   },
+   "match_score": 0.895,
+   "polymarket": {
+    "best_ask_yes": 0.002,
+    "best_bid_yes": 0.001,
+    "description": "Dancing with the Stars is a reality dance competition in which celebrities are paired with professional dancers to perform dance routines. This market will resolve to the celebrity participant of the winning team of Dancing with the Stars: Season 35.\n\nIf multiple winners are announced, this market will resolve in favor of the listed contestant whose name comes first in alphabetical order.\n\nIf Dancing with the Stars: Season 35 concludes without a winner being declared, or if Dancing with the Stars: Season 35 has otherwise not concluded by March 31, 2027, 11:59PM ET this market will resolve to \"Other\".\n\nThe resolution source for this market will be the official broadcast of the final episode of Dancing with the Stars: Season 35.",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 3172,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Tatyana Ali win Dancing With the Stars: Season 35?",
+    "slug": "will-tatyana-ali-win-dancing-with-the-stars-season-35",
+    "url": "https://polymarket.com/event/who-will-win-dancing-with-the-stars-season-35"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.02,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXUECL-27-ATA|will-atalanta-win-the-2026-27-uefa-conference-league",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-06-16T22:00:00Z",
+    "event_ticker": "KXUECL-27",
+    "no_ask": 0.96,
+    "no_sub_title": "Atalanta",
+    "rules_primary": "If Atalanta is the 2026-27 UEFA Conference League champion, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXUECL-27-ATA",
+    "title": "Will Atalanta win the UEFA Conference League?",
+    "volume": 856.66,
+    "yes_ask": 0.07,
+    "yes_sub_title": "Atalanta"
+   },
+   "match_score": 0.921,
+   "polymarket": {
+    "best_ask_yes": 0.11,
+    "best_bid_yes": 0.09,
+    "description": "This market will resolve according to the team that wins the 2026-27 UEFA Conference League Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 UEFA Conference League Championship per the rules of UEFA Conference League (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 UEFA Conference League season is cancelled, postponed after June 16, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from UEFA Conference League; however, a consensus of credible reporting may also be used.",
+    "end": "2027-06-16",
+    "fee_rate": 0.05,
+    "liquidity": 18016,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Atalanta win the 2026-27 UEFA Conference League Championship?",
+    "slug": "will-atalanta-win-the-2026-27-uefa-conference-league",
+    "url": "https://polymarket.com/event/uefa-conference-league-2027-champion"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.02,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXARRESTNETANYAHU-28JAN01-27JAN01|will-benjamin-netanyahu-be-arrested-before-2027-755",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXARRESTNETANYAHU-28JAN01",
+    "no_ask": 0.95,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Benjamin Netanyahu has been arrested before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "For purposes of this Contract, \"arrested\" means:\nBeing taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\nVoluntarily surrendering to law enforcement authorities in response to an arrest warrant\nBeing formally booked or processed following detention\n\nThe following scenarios would satisfy the Payout Criterion:\nBenjamin Netanyahu is handcuffed and taken to a police station\nBenjamin Netanyahu surrenders at a police station or courthouse with their attorney\nBenjamin Netanyahu is arrested in any country and this is reported by a Source Agency\nBenjamin Netanyahu is detained at an airport or border crossing and formally arrested\n\nThe following scenarios would NOT satisfy the Payout Criterion:\nAn arrest warrant b",
+    "ticker": "KXARRESTNETANYAHU-28JAN01-27JAN01",
+    "title": "Will Benjamin Netanyahu be arrested before Jan 1, 2027?",
+    "volume": 37495.91,
+    "yes_ask": 0.06,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.927,
+   "polymarket": {
+    "best_ask_yes": 0.03,
+    "best_bid_yes": 0.026,
+    "description": "This market will resolve to \"Yes\" if the listed individual is arrested by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA qualifying arrest/detention includes:\n* Being taken into physical custody by law enforcement authorities (including federal, state, local, military, or international law enforcement)\n* Voluntarily surrendering to law enforcement authorities in response to an arrest warrant\n* Being formally booked or processed following detention\n* Being handcuffed by a state authority and taken to a police station\n* Surrendering at a police station or courthouse with their attorney\n* Being placed under house arrest or electronic monitoring\n\nThe following scenarios will NOT qualify as an arrest/detention\n* An arrest warrant being issued but not executed\n* Being briefly detained but not arrested (e.g. such as in the South Korean judicial system when an individual is awaiting a judge\u2019s decision on whether to grant a detention warrant)\n* Being questioned or interviewed without arrest\n* Being named in an indictment without arrest\n\nThe primary resolution source for this market will be official information from the arresting government and law enforcement, however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 33155,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Benjamin Netanyahu be arrested before 2027?",
+    "slug": "will-benjamin-netanyahu-be-arrested-before-2027-755",
+    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.02,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXRT-WILD-92|will-wild-horse-nine-score-at-least-92-on-the-rotten-tomatoes-tomatometer-20261109",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-11-09T15:00:00Z",
+    "event_ticker": "KXRT-WILD",
+    "no_ask": 0.08,
+    "no_sub_title": "Above 92",
+    "rules_primary": "If Wild Horse Nine has a Tomatometer score of above 92 on Nov 9, 2026 at 10:00 AM ET, then the market resolves to Yes.",
+    "rules_secondary": "The \"Fresh!\" and \"Certified Fresh!\" subtitles are meant for illustrative purposes only. The Tomatometer score must be above the strike value to resolve as YES (for example, a score of 75 would resolve \"Above 75\" as No.) The market will be determined the Monday after wide release at 10:00 AM ET.\n\nThis market and these products have not been endorsed by Rotten Tomatoes. Any references to Rotten Tomatoes or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Rotten Tomatoes and Kalshi.",
+    "ticker": "KXRT-WILD-92",
+    "title": "Wild Horse Nine Rotten Tomatoes score?",
+    "volume": 119560.7,
+    "yes_ask": 0.93,
+    "yes_sub_title": "Above 92"
+   },
+   "match_score": 0.89,
+   "polymarket": {
+    "best_ask_yes": 0.968,
+    "best_bid_yes": 0.95,
+    "description": "This market will resolve to \"Yes\" if the displayed Rotten Tomatoes \"All Critics\" Tomatometer score for Wild Horse Nine is at least equal to the specified number at 10:00 AM ET on November 9, 2026. Otherwise, this market will resolve to \"No\".\n\nIf, for any reason, the resolution data is unavailable at this market's specified end time, the resolution source will be checked until the relevant data is available. This market will resolve to \"No\" if no data is available by November 13, 2026, 11:59 PM ET.",
+    "end": "2026-11-09",
+    "fee_rate": 0.05,
+    "liquidity": 3595,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will \"Wild Horse Nine\" score at least 92 on the Rotten Tomatoes Tomatometer?",
+    "slug": "will-wild-horse-nine-score-at-least-92-on-the-rotten-tomatoes-tomatometer-20261109",
+    "url": "https://polymarket.com/event/wild-horse-nine-rotten-tomatoes-score-20261109"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.018,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-JMILARG|will-javier-milei-be-the-next-leader-out-before-2027-20260630194627371",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:48Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.98,
+    "no_sub_title": "Javier Milei",
+    "rules_primary": "If Javier Milei has either officially announced their intention to leave as President of Argentina or has actually left President of Argentina before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-JMILARG",
+    "title": "Will Javier Milei leave President of Argentina before Jan 1, 2027?",
+    "volume": 5669.03,
+    "yes_ask": 0.024,
+    "yes_sub_title": "Javier Milei"
+   },
+   "match_score": 0.896,
+   "polymarket": {
+    "best_ask_yes": 0.002,
+    "best_bid_yes": 0.001,
+    "description": "This market will resolve according to the first listed individual who ceases to occupy their listed office.\n\nAn announcement of a resignation/removal, or a scheduled departure from office due to the outcome of an election, will not alone qualify.\n\nOnly permanent removal from office will qualify for resolution. Temporary removals, such as impeachment suspensions (e.g., Yoon Suk Yeol's recent impeachment), temporary invocation of the 25th Amendment, or any similar provisional transfers of power, will not count.\n\nAdditionally, if an individual continues in a caretaker or interim role (e.g., Gabriel Attal remaining as caretaker Prime Minister of France), they will not be considered to have ceased occupying the office for the purposes of this market.\n\nIf this criterion has not been met for any of the listed individuals by December 31, 2026, 11:59 PM ET, this market will resolve to \u201cNone before 2027\u201d. No additional individuals will be added to this market after its creation.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 21573,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Javier Milei be the next leader out before 2027?",
+    "slug": "will-javier-milei-be-the-next-leader-out-before-2027-20260630194627371",
+    "url": "https://polymarket.com/event/next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.017,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-EMACFRA|will-emmanuel-macron-be-the-next-leader-out-before-2027-20260630194627364",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:48Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.98,
+    "no_sub_title": "Emmanuel Macron",
+    "rules_primary": "If Emmanuel Macron has either officially announced their intention to leave as President of France or has actually left President of France before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-EMACFRA",
+    "title": "Will Emmanuel Macron leave President of France before Jan 1, 2027?",
+    "volume": 103047.66,
+    "yes_ask": 0.029,
+    "yes_sub_title": "Emmanuel Macron"
+   },
+   "match_score": 0.901,
+   "polymarket": {
+    "best_ask_yes": 0.003,
+    "best_bid_yes": 0.002,
+    "description": "This market will resolve according to the first listed individual who ceases to occupy their listed office.\n\nAn announcement of a resignation/removal, or a scheduled departure from office due to the outcome of an election, will not alone qualify.\n\nOnly permanent removal from office will qualify for resolution. Temporary removals, such as impeachment suspensions (e.g., Yoon Suk Yeol's recent impeachment), temporary invocation of the 25th Amendment, or any similar provisional transfers of power, will not count.\n\nAdditionally, if an individual continues in a caretaker or interim role (e.g., Gabriel Attal remaining as caretaker Prime Minister of France), they will not be considered to have ceased occupying the office for the purposes of this market.\n\nIf this criterion has not been met for any of the listed individuals by December 31, 2026, 11:59 PM ET, this market will resolve to \u201cNone before 2027\u201d. No additional individuals will be added to this market after its creation.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 33197,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Emmanuel Macron be the next leader out before 2027?",
+    "slug": "will-emmanuel-macron-be-the-next-leader-out-before-2027-20260630194627364",
+    "url": "https://polymarket.com/event/next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.017,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXOPENAIANOTHERMILLENNIUM-28-27JAN01|will-openai-announce-another-millennium-prize-solution-by-december-31-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXOPENAIANOTHERMILLENNIUM-28",
+    "no_ask": 0.86,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If OpenAI announces a complete solution developed by OpenAI or researchers collaborating directly with OpenAI on that solution to one of the five qualifying Millennium Prize Problems (Birch and Swinnerton-Dyer, Hodge, P versus NP, Riemann, or Yang-Mills), excluding the Navier-Stokes existence and smoothness problem and the Poincare conjecture before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The qualifying announcement must expressly state that OpenAI developed or co-developed the solution, or expressly identify outside researchers as having collaborated with OpenAI on developing that solution.\n\nThe qualifying problems are the Birch and Swinnerton-Dyer Conjecture, Hodge Conjecture, P versus NP, Riemann Hypothesis, and Yang-Mills existence and mass gap problem. The Navier-Stokes existence and smoothness problem and the Poincare conjecture do NOT count.\n\nWork by an independent ChatGPT user does NOT count, even if OpenAI publicizes it. Providing model access or research credits alone is not direct collaboration on the solution. Partial results, numerical evidence, or formalization of a previously known solution do NOT count as a complete solution.\n\nClay acceptance, peer review, a",
+    "ticker": "KXOPENAIANOTHERMILLENNIUM-28-27JAN01",
+    "title": "Will OpenAI announce another Millennium Prize solution before Jan 1, 2027?",
+    "volume": 58695.01,
+    "yes_ask": 0.15,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.898,
+   "polymarket": {
+    "best_ask_yes": 0.123,
+    "best_bid_yes": 0.12,
+    "description": "This market will resolve to \"Yes\" if OpenAI, or an official representative of OpenAI, announces that OpenAI has solved any of the qualifying Millennium Prize Problems between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe qualifying problems are the Riemann Hypothesis, P versus NP, the Yang-Mills existence and mass gap problem, the Hodge Conjecture, and the Birch and Swinnerton-Dyer Conjecture (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of OpenAI, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used OpenAI's models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe primary resolution source for this market will be official information from OpenAI and/or its official representatives; however, a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 39635,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will OpenAI announce another Millennium Prize solution by December 31, 2026?",
+    "slug": "will-openai-announce-another-millennium-prize-solution-by-december-31-2026",
+    "url": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.016,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-VPUTRUS|will-vladimir-putin-be-the-next-leader-out-before-2027-20260630194627374",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:48Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.979,
+    "no_sub_title": "Vladimir Putin",
+    "rules_primary": "If Vladimir Putin has either officially announced their intention to leave as President of Russia or has actually left President of Russia before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-VPUTRUS",
+    "title": "Will Vladimir Putin leave President of Russia before Jan 1, 2027?",
+    "volume": 824136.73,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Vladimir Putin"
+   },
+   "match_score": 0.88,
+   "polymarket": {
+    "best_ask_yes": 0.005,
+    "best_bid_yes": 0.004,
+    "description": "This market will resolve according to the first listed individual who ceases to occupy their listed office.\n\nAn announcement of a resignation/removal, or a scheduled departure from office due to the outcome of an election, will not alone qualify.\n\nOnly permanent removal from office will qualify for resolution. Temporary removals, such as impeachment suspensions (e.g., Yoon Suk Yeol's recent impeachment), temporary invocation of the 25th Amendment, or any similar provisional transfers of power, will not count.\n\nAdditionally, if an individual continues in a caretaker or interim role (e.g., Gabriel Attal remaining as caretaker Prime Minister of France), they will not be considered to have ceased occupying the office for the purposes of this market.\n\nIf this criterion has not been met for any of the listed individuals by December 31, 2026, 11:59 PM ET, this market will resolve to \u201cNone before 2027\u201d. No additional individuals will be added to this market after its creation.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+    "end": "2027-01-01",
+    "fee_rate": 0.0,
+    "liquidity": 26835,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Vladimir Putin be the next leader out before 2027?",
+    "slug": "will-vladimir-putin-be-the-next-leader-out-before-2027-20260630194627374",
+    "url": "https://polymarket.com/event/next-leader-out-of-power-before-2027-no-starmer-or-petro-20260630194619406"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.01,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPADMINLEAVE-26DEC31-SWIL|susie-wiles-out-as-white-house-chief-of-staff-by-december-31",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T14:59:00Z",
+    "event_ticker": "KXTRUMPADMINLEAVE-26DEC31",
+    "no_ask": 0.57,
+    "no_sub_title": "Susie Wiles",
+    "rules_primary": "If Susie Wiles leaves as Chief of Staff before 2027, then the market resolves to Yes.",
+    "rules_secondary": "Susie Wiles must have an actual departure date by vacating the role within the time period. \n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expiration of term without renewal, recall, or other means by which the in",
+    "ticker": "KXTRUMPADMINLEAVE-26DEC31-SWIL",
+    "title": "Will Susie WIles leaves Chief of Staff in before 2027?",
+    "volume": 411767.16,
+    "yes_ask": 0.44,
+    "yes_sub_title": "Susie Wiles"
+   },
+   "match_score": 0.86,
+   "polymarket": {
+    "best_ask_yes": 0.46,
+    "best_bid_yes": 0.45,
+    "description": "This market will resolve to \u201cYes\u201d if Susie Wiles ceases to be the White House Chief of Staff for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Wiles' resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from the Trump administration; however, a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 37357,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Susie Wiles out as White House Chief of Staff by December 31?",
+    "slug": "susie-wiles-out-as-white-house-chief-of-staff-by-december-31",
+    "url": "https://polymarket.com/event/susie-wiles-out-as-white-house-chief-of-staff-by-december-31"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.003,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLEADERSOUT-27JAN01-FMERCGER|friedrich-merz-out-as-chancellor-of-germany-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-02T03:17:49Z",
+    "event_ticker": "KXLEADERSOUT-27JAN01",
+    "no_ask": 0.965,
+    "no_sub_title": "Friedrich Merz",
+    "rules_primary": "If Friedrich Merz has either officially announced their intention to leave as Chancellor of Germany or has actually left Chancellor of Germany before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
+    "ticker": "KXLEADERSOUT-27JAN01-FMERCGER",
+    "title": "Will Friedrich Merz leave Chancellor of Germany before Jan 1, 2027?",
+    "volume": 97794.25,
+    "yes_ask": 0.037,
+    "yes_sub_title": "Friedrich Merz"
+   },
+   "match_score": 0.909,
+   "polymarket": {
+    "best_ask_yes": 0.032,
+    "best_bid_yes": 0.03,
+    "description": "This market will resolve to \u201cYes\u201d if Friedrich Merz ceases to be the Chancellor of Germany for any period of time by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Friedrich Merz's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be the government of Germany, however a consensus of credible reporting will also suffice.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 114013,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Friedrich Merz out as Chancellor of Germany before December 31, 2026?",
+    "slug": "friedrich-merz-out-as-chancellor-of-germany-before-2027",
+    "url": "https://polymarket.com/event/friedrich-merz-out-as-chancellor-of-germany-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.003,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXPAHLAVIHEAD-27JAN-RPAH|will-reza-pahlavi-be-head-of-state-in-iran-end-of-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXPAHLAVIHEAD-27JAN",
+    "no_ask": 0.98,
+    "no_sub_title": "Reza Pahlavi",
+    "rules_primary": "If Reza Pahlavi is appointed, elected, named, designated, or succeeded to the position as the head of state or government of Iran before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Interim or acting appointments do NOT count.",
+    "ticker": "KXPAHLAVIHEAD-27JAN-RPAH",
+    "title": "Who will be the next the head of state or government of Iran?",
+    "volume": 2031986.92,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Reza Pahlavi"
+   },
+   "match_score": 0.9,
+   "polymarket": {
+    "best_ask_yes": 0.017,
+    "best_bid_yes": 0.013,
+    "description": "This market will resolve to the individual who de facto holds and exercises the powers of the head of state of the Islamic Republic of Iran on December 31, 2026 at 12:00 PM ET.\n\nFor the purposes of this market, \u201cde facto holds\u201d refers to the individual who exercises primary governing authority over the Iranian state at that time, including effective control over the armed forces, national institutions, and core executive decision-making, regardless of formal title, constitutional designation, or international recognition.\n\nFormal appointment, recognition by the United Nations, or recognition by foreign governments is not required.\n\nIf more than one individual claims to be head of state, this market will resolve to the individual who demonstrably exercises primary governing control within Iran\u2019s territory at the specified time.\n\nIndicators of de facto authority may include control over the armed forces and security services; control over executive ministries and state administrative institutions; enforcement of national laws; issuance of binding national directives; and effective control over the capital and core state infrastructure.\n\nSymbolic status, foreign recognition without domestic control, nomination without effective authority, or expired prior service will not qualify.\n\nIf no individual exercises effective governing control at the specified time, this market will resolve to \u201cNo Head of State\u201d.\n\nThe primary resolution source will be a consensus of credible reporting assessing who exercises effective governing authority at the specified time.",
+    "end": "2026-12-31",
+    "fee_rate": 0.0,
+    "liquidity": 132857,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Reza Pahlavi be head of state in Iran end of 2026?",
+    "slug": "will-reza-pahlavi-be-head-of-state-in-iran-end-of-2026",
+    "url": "https://polymarket.com/event/iran-leader-end-of-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.001,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPCOUNTRIES-27JAN01-ISR|will-donald-trump-visit-israel-in-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXTRUMPCOUNTRIES-27JAN01",
+    "no_ask": 0.909,
+    "no_sub_title": "Israel",
+    "rules_primary": "If Donald Trump has physically travelled to and been present within the geographic boundaries of Israel after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The following do NOT constitute a visit:\n\nFlying over the area without landing\nLayovers during which the person remains in an airplane\nVirtual or remote appearances\nPresence in international waters adjacent to the area\nPresence solely within embassy or consulate grounds\nPlans, announcements, or scheduling of future visits that do not occur during the applicable time period\n\nFor the avoidance of doubt, a visit occurs only when the person exits an aircraft, vehicle, vessel, or train within the area, or otherwise physically enters the area not aboard one. Remaining aboard, including during flyovers, drive-throughs, and non-exit refueling stops, does not constitute a visit. Exiting within the area constitutes a visit regardless of duration or method of exit.",
+    "ticker": "KXTRUMPCOUNTRIES-27JAN01-ISR",
+    "title": "Will Donald Trump visit Israel before Jan 1, 2027?",
+    "volume": 68821.21,
+    "yes_ask": 0.097,
+    "yes_sub_title": "Israel"
+   },
+   "match_score": 0.854,
+   "polymarket": {
+    "best_ask_yes": 0.09,
+    "best_bid_yes": 0.05,
+    "description": "If U.S. President Donald Trump visits a listed country between January 1 and December 31, 2026 11:59 PM ET, the relevant market will resolve to \"Yes\". Otherwise, this market will resolve to \"No\".\n\nFor the purpose of this market, a \"visit\" is defined as Trump physically entering the terrestrial or maritime territory of the listed country. Whether or not Trump enters the country's airspace during the timeframe of this market will have no bearing on a positive resolution.\n\nThe primary resolution source for this information will be official information from government of the United States of America, official information from Trump or released by his verified social media accounts (e.g. https://twitter.com/POTUS), however, a consensus of credible reporting will also be used.",
+    "end": "2027-01-02",
+    "fee_rate": 0.04,
+    "liquidity": 2361,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Donald Trump visit Israel in 2026?",
+    "slug": "will-donald-trump-visit-israel-in-2026",
+    "url": "https://polymarket.com/event/which-countries-will-donald-trump-visit-in-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.001,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXALIENS-27",
+    "no_ask": 0.978,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If the President, any member of the Cabinet, any member of the Joint Chiefs of Staff, or any US federal agency definitively states that extraterrestrial life or technology exists before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "For purposes of this Contract, the Cabinet includes the heads of the 15 government agencies in the Cabinet as of Issuance, as well the Administrator of the EPA, the President's Chief of Staff, Director of National Intelligence, Director of OMB, Director of CIA, United States Trade Representative, Ambassador to the UN, Chair of the Council of Economic Advisers, Administrator of the SBA, and Director of OSTP.",
+    "ticker": "KXALIENS-27",
+    "title": "Will the U.S. confirm that aliens exist before 2027?",
+    "volume": 30210494.7,
+    "yes_ask": 0.024,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.922,
+   "polymarket": {
+    "best_ask_yes": 0.021,
+    "best_bid_yes": 0.02,
+    "description": "This market will resolve to \"Yes\" if the President of the United States, any member of the Cabinet of the United States, any member of the Joint Chiefs of Staff, or any US federal agency definitively states that extraterrestrial life or technology exists by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe primary resolution source for this market will be official information from the government of the United States, however a consensus of credible reporting will also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 1761115,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will the US confirm that aliens exist before 2027?",
+    "slug": "will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
+    "url": "https://polymarket.com/event/will-the-us-confirm-that-aliens-exist-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.0,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXUCL-27-BMU|will-bayern-munich-win-the-2026-27-uefa-champions-league-championship-20260701202025565",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-06-19T21:00:00Z",
+    "event_ticker": "KXUCL-27",
+    "no_ask": 0.87,
+    "no_sub_title": "Bayern Munich",
+    "rules_primary": "If Bayern Munich is the 2026-27 Champions League winner, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXUCL-27-BMU",
+    "title": "Will Bayern Munich win the Champions League?",
+    "volume": 322504.92,
+    "yes_ask": 0.14,
+    "yes_sub_title": "Bayern Munich"
+   },
+   "match_score": 0.867,
+   "polymarket": {
+    "best_ask_yes": 0.13,
+    "best_bid_yes": 0.12,
+    "description": "This market will resolve according to the team that wins the 2026-27 UEFA Champions League Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 UEFA Champions League Championship per the rules of UEFA Champions League (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 UEFA Champions League season is cancelled, postponed after June 19, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from UEFA Champions League; however, a consensus of credible reporting may also be used.",
+    "end": "2027-06-20",
+    "fee_rate": 0.03,
+    "liquidity": 256277,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Bayern Munich win the 2026-27 UEFA Champions League Championship?",
+    "slug": "will-bayern-munich-win-the-2026-27-uefa-champions-league-championship-20260701202025565",
+    "url": "https://polymarket.com/event/uefa-champions-league-2027-champion-20260701202025549"
    }
   }
  ],
- "generated": "2026-11-05T05:06:29Z",
+ "generated": "2026-11-06T05:07:36Z",
  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true twins into arb_pairs.json (see 'about' there).",
- "kalshi_kept": 11035,
- "kalshi_scanned": 140416,
- "matched_unreviewed": 442,
- "poly_markets": 7467
+ "kalshi_kept": 10057,
+ "kalshi_scanned": 142595,
+ "matched_unreviewed": 420,
+ "poly_markets": 7597
 }

@@ -1,11 +1,11 @@
 {
- "generated": "2026-11-05T05:10:23Z",
+ "generated": "2026-11-06T05:10:31Z",
  "his_book": {
   "biggest_position_share": 0.183,
-  "cost_min_size_each": 238.04,
-  "generated": "2026-11-05T05:10:22Z",
-  "his_value": 112577.56,
-  "open_positions": 65
+  "cost_min_size_each": 242.13,
+  "generated": "2026-11-06T05:10:30Z",
+  "his_value": 113448.12,
+  "open_positions": 66
  },
  "tracks": {
   "arb": {
@@ -37,18 +37,18 @@
    "wins": 0
   },
   "claude": {
-   "cash": 36.565,
+   "cash": 27.715,
    "closed": 3,
    "deposited": 50.0,
    "losses": 0,
    "money_needed": 0.0,
-   "open": 3,
-   "peak_open_cost": 18.65,
-   "pnl": 0.265,
+   "open": 5,
+   "peak_open_cost": 22.6,
+   "pnl": 0.24,
    "realized": 0.315,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -0.05,
+   "unrealized": -0.075,
    "wins": 3
   },
   "endgame": {
@@ -59,7 +59,7 @@
    "money_needed": 0.0,
    "open": 20,
    "peak_open_cost": 97.475003,
-   "pnl": -1.9622,
+   "pnl": -0.5597,
    "proof": {
     "avg_edge": 0.025,
     "bad_rate_upper90": 0.2057,
@@ -72,7 +72,7 @@
    "realized": 0.961,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -2.9232,
+   "unrealized": -1.5207,
    "wins": 10
   },
   "every_horse": {
@@ -110,26 +110,26 @@
    "money_needed": 0.0,
    "open": 1,
    "peak_open_cost": 4.547033,
-   "pnl": -0.1245,
+   "pnl": 0.0105,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -0.1245,
+   "unrealized": 0.0105,
    "wins": 0
   },
   "mirror": {
-   "cash": 12.753,
+   "cash": 11.3635,
    "closed": 0,
    "deposited": 20.0,
    "losses": 0,
    "money_needed": 0.0,
-   "open": 2,
-   "peak_open_cost": 7.247033,
-   "pnl": -1.0495,
+   "open": 3,
+   "peak_open_cost": 8.636453,
+   "pnl": -1.5565,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -1.0495,
+   "unrealized": -1.5565,
    "wins": 0
   },
   "mirror_unlimited": {
@@ -137,29 +137,29 @@
    "closed": 0,
    "deposited": 0.0,
    "losses": 0,
-   "money_needed": 7.247,
-   "open": 2,
-   "peak_open_cost": 7.247033,
-   "pnl": -1.0495,
+   "money_needed": 8.6365,
+   "open": 3,
+   "peak_open_cost": 8.636453,
+   "pnl": -1.5565,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": -1.0495,
+   "unrealized": -1.5565,
    "wins": 0
   },
   "panic_fade": {
-   "cash": 34.5391,
+   "cash": 18.6952,
    "closed": 1,
    "deposited": 50.0,
    "losses": 0,
    "money_needed": 0.0,
-   "open": 4,
-   "peak_open_cost": 15.995971,
-   "pnl": 0.7066,
+   "open": 8,
+   "peak_open_cost": 31.839842,
+   "pnl": -1.1348,
    "realized": 0.5351,
    "refills": 0,
    "skipped_no_cash": 0,
-   "unrealized": 0.1715,
+   "unrealized": -1.6698,
    "wins": 1
   },
   "screener": {
@@ -170,11 +170,11 @@
    "money_needed": 0.0,
    "open": 4,
    "peak_open_cost": 17.438475,
-   "pnl": 0.3015,
+   "pnl": 0.469,
    "realized": 0.0,
    "refills": 0,
-   "skipped_no_cash": 2,
-   "unrealized": 0.3015,
+   "skipped_no_cash": 3,
+   "unrealized": 0.469,
    "wins": 0
   }
  }
