@@ -30,6 +30,7 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 ## Endgame and every horse
 
 - **Endgame** earns 1-5c per share on things that are already decided, in hours or days instead of months. The only way to lose is a "sure thing" flipping (a disputed result, a misread rule); the bot pushes **FLIP** when that happens. Results are kept per tier (resolved, proposed, past_deadline, ending_soon) so we can see which kind is actually safe. Proof line: a flip costs about the whole price, so flips must be rarer than the edge (about 2c -> under 1 in 50).
+- **Sell-early test (endgame, records only):** for each open endgame position the bot notes the first time the bid would have filled us at 98c and at 99c (`shadow_sell_at` in config), and the bid after 24h held. When the trade pays out, it compares what each rule would have made vs holding, and how many days sooner the money would have come back. Nothing is actually sold; this is to decide later whether selling early is worth it.
 - **Every horse** is pure math: if buying every candidate costs 96c and exactly one must win, that is 4c locked in. The catch is lists that are not complete (someone unlisted wins and every YES pays 0), so all-YES is only bought when the list has a catch-all outcome and is marked closed; open lists are skipped. The bot pushes **SHORT** if a set ever pays less than expected. Needs >= 1c per share after fees and >= 15% a year.
 
 ## How it runs
@@ -49,6 +50,7 @@ Fills are paper fills at the real order book price (taking the ask, selling at t
 - `state/candidates.json`: what the rule tracks were choosing from
 - `state/arb_candidates.json`: proposed Kalshi/Polymarket twin pairs waiting for review
 - `state/his_book.json`: his current book and what holding all of it at minimum size would cost
+- `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup

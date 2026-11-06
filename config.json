@@ -227,7 +227,8 @@
         "parliament", "seats in"
       ],
       "take_profit": null,
-      "stop_loss": null
+      "stop_loss": null,
+      "shadow_sell_at": [0.98, 0.99]
     },
     "every_horse": {
       "why": "Exactly one outcome of a complete list wins, so one share of every YES pays exactly $1; one share of every NO pays (n-1) dollars, or n if an unlisted outcome wins, so the NO version needs no completeness.",

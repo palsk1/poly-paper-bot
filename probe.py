@@ -146,6 +146,16 @@ def events():
                 break
 
 
+def activity():
+    addr = json.load(open("config.json"))["leader"]["address"]
+    for path in ("activity", "trades"):
+        try:
+            res = get(f"https://data-api.polymarket.com/{path}", {"user": addr, "limit": 5})
+            show(f"data-api /{path} (his last 5)", res, 3000)
+        except Exception as e:
+            print(f"/{path} failed: {e}")
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
@@ -156,3 +166,5 @@ if __name__ == "__main__":
         endgame()
     if what in ("all", "events"):
         events()
+    if what in ("all", "activity"):
+        activity()

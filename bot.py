@@ -385,6 +385,11 @@ def paper_close(track, name, token, price, fee, reason):
     track["cash"] = round(track["cash"] + proceeds, 6)
     rec = {**pos, "token": token, "exit": round(price, 6), "exit_fee": round(fee, 6),
            "closed_at": iso(), "reason": reason, "pnl": round(pnl, 6)}
+    if CFG["tracks"].get(name, {}).get("source") == "endgame" and "shadow" in pos:
+        try:
+            rec["shadow_results"] = shadow_results(rec)
+        except Exception as e:
+            print(f"shadow results failed: {e}")
     track["closed"].append(rec)
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
@@ -393,6 +398,64 @@ def paper_close(track, name, token, price, fee, reason):
              f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
              f"{cents(price)}. This is the risk the test is measuring.", tags="rotating_light")
     return rec
+
+
+def shadow_sell_check(pos, tok, m, px_now, rules):
+    """'What if we sold early' test for endgame (records only, never trades): the first time the bid would
+    fill us at each threshold (and once after 24h held), note the fill price net of fees."""
+    sh = pos.setdefault("shadow", {})
+    th = rules.get("shadow_sell_at", [])
+    wants_time = "after_24h" not in sh and (now() - parse_iso(pos["opened"])).total_seconds() >= 86400
+    open_th = [t for t in th if f"bid_{t:.2f}" not in sh]
+    if not wants_time and not (open_th and px_now >= min(open_th) - 0.015):
+        return  # nothing to check; skip the order-book call
+    bid, _, how = quote(tok, "sell", pos["shares"], m)
+    if bid is None or how != "book":
+        return
+    fee = taker_fee(pos["shares"], bid, fee_rate(m))
+    rec = {"px": round(bid, 4), "fee": round(fee, 5), "at": iso()}
+    for t in open_th:
+        if bid >= t - EPS:
+            sh[f"bid_{t:.2f}"] = rec
+    if wants_time:
+        sh["after_24h"] = {**rec, "late_start": pos["opened"] < "2026-11-06T12"}
+
+
+def shadow_results(rec):
+    """On close: what each early-sell rule would have made vs holding, and how many days sooner."""
+    basis = rec["shares"] * rec["entry"] + rec.get("entry_fee", 0.0)
+    closed = parse_iso(rec["closed_at"])
+    res = {}
+    for rule in [f"bid_{t:.2f}" for t in rules_for("endgame").get("shadow_sell_at", [])] + ["after_24h"]:
+        s = rec.get("shadow", {}).get(rule)
+        if s:
+            res[rule] = {"pnl": round(rec["shares"] * s["px"] - s["fee"] - basis, 5),
+                         "days_sooner": round((closed - parse_iso(s["at"])).total_seconds() / 86400, 2),
+                         "sold": True}
+        else:
+            res[rule] = {"pnl": rec["pnl"], "days_sooner": 0.0, "sold": False}
+    return res
+
+
+def shadow_summary(tr):
+    rows = [c for c in tr["closed"] if "shadow_results" in c]
+    rules = [f"bid_{t:.2f}" for t in rules_for("endgame").get("shadow_sell_at", [])] + ["after_24h"]
+    if not rows:
+        hit = {r: sum(1 for p in tr["positions"].values() if r in p.get("shadow", {})) for r in rules}
+        return (f"**Sell-early test** (records only, started 2026-11-06): no finished trades with data yet. "
+                f"Open positions that would already have been sold: " +
+                ", ".join(f"{r.replace('bid_', 'bid >= ')} {n}" for r, n in hit.items()) + ".\n")
+    hold = sum(c["pnl"] for c in rows)
+    days = [(parse_iso(c["closed_at"]) - parse_iso(c["opened"])).total_seconds() / 86400 for c in rows]
+    parts = [f"hold to payout ${hold:+.2f} (avg {sum(days) / len(days):.1f} days to get the money back)"]
+    for r in rules:
+        res = [c["shadow_results"][r] for c in rows if r in c["shadow_results"]]
+        sold = [x for x in res if x["sold"]]
+        p = sum(x["pnl"] for x in res)
+        soon = sum(x["days_sooner"] for x in sold) / len(sold) if sold else 0
+        parts.append(f"{r.replace('bid_', 'sell at bid >= ').replace('after_24h', 'sell after 24h')} ${p:+.2f} "
+                     f"({len(sold)}/{len(res)} sold, money back {soon:.1f} days sooner)")
+    return f"**Sell-early test** ({len(rows)} finished trades, records only): " + "; ".join(parts) + ".\n"
 
 
 def manage_exits(tracks):
@@ -414,6 +477,11 @@ def manage_exits(tracks):
             px_now = token_price_from_market(m, tok)
             if px_now is None:
                 continue
+            if tc["source"] == "endgame":
+                try:
+                    shadow_sell_check(pos, tok, m, px_now, rules)
+                except Exception as e:
+                    print(f"shadow check failed: {e}")
             target = pos.get("target") or rules.get("take_profit")
             stop = rules.get("stop_loss")
             reason = None
@@ -465,12 +533,161 @@ def norm_pos(r):
     }
 
 
-def slim(p):
-    return {k: p[k] for k in ("size", "avg", "outcome", "title", "slug", "event_slug", "end")}
+def slim(p, first_seen=None):
+    d = {k: p[k] for k in ("size", "avg", "outcome", "title", "slug", "event_slug", "end")}
+    if first_seen:
+        d["first_seen"] = first_seen
+    return d
 
 
 def leader_tracks():
     return [n for n, tc in CFG["tracks"].items() if tc["source"] == "leader"]
+
+
+_activity_cache = {}
+
+
+def leader_activity(addr):
+    """His recent wallet activity (trades, redeems, merges), newest first. One API call per run."""
+    if addr not in _activity_cache:
+        rows = []
+        try:
+            res = http_json(f"{DATA}/activity", {"user": addr, "limit": 500})
+            rows = envelope_rows(res, "data", "activity")
+        except Exception as e:
+            print(f"activity lookup failed: {e}")
+        if not rows:
+            try:
+                res = http_json(f"{DATA}/trades", {"user": addr, "limit": 500})
+                rows = envelope_rows(res, "data", "trades")
+            except Exception as e:
+                print(f"trades lookup failed: {e}")
+        _activity_cache[addr] = rows
+    return _activity_cache[addr]
+
+
+def act_time(a):
+    t = pick(a, "timestamp", "time", "created_at", "createdAt")
+    if isinstance(t, (int, float)) or (isinstance(t, str) and t.isdigit()):
+        t = float(t)
+        return dt.datetime.fromtimestamp(t / 1000 if t > 1e11 else t, dt.timezone.utc)
+    return parse_iso(t)
+
+
+def leader_exit_fill(addr, tok, days=7):
+    """How he left one position: ('sold'|'redeemed'|'merged', avg price, shares) from his own activity, or None."""
+    cutoff = now() - dt.timedelta(days=days)
+    sold_sh = sold_usd = 0.0
+    kinds = set()
+    for a in leader_activity(addr):
+        asset = str(pick(a, "asset", "asset_id", "token_id", "tokenId", default=""))
+        typ = str(pick(a, "type", default="TRADE")).upper()
+        t = act_time(a)
+        if t and t < cutoff:
+            continue
+        if typ in ("REDEEM", "MERGE") and (asset == tok or not asset):
+            if asset == tok:
+                kinds.add(typ.lower() + "d" if typ == "MERGE" else "redeemed")
+            continue
+        if asset != tok or typ != "TRADE" or str(pick(a, "side", default="")).upper() != "SELL":
+            continue
+        sh, px = fnum(pick(a, "size", "shares")), fnum(pick(a, "price"))
+        if sh > 0 and 0 < px <= 1:
+            sold_sh += sh
+            sold_usd += sh * px
+    if sold_sh > 0:
+        return "sold", sold_usd / sold_sh, sold_sh
+    if kinds:
+        return sorted(kinds)[0], None, 0.0
+    return None
+
+
+def record_his_exit(q, tok, after, resolved, payout, m):
+    """Append one row to state/his_exits.json: when he got out, at what price, and what holding would have paid."""
+    lead = CFG["leader"]
+    got = None
+    try:
+        got = leader_exit_fill(lead["address"], tok)
+    except Exception as e:
+        print(f"exit fill lookup failed: {e}")
+    kind, px, src = None, None, "none"
+    if got:
+        kind, px, _ = got
+        src = "his trades" if px is not None else "his activity"
+    if px is None and payout is not None:
+        kind, px, src = kind or "redeemed", payout, "settled price"
+    if px is None and not resolved:
+        bid, _, how = quote(tok, "sell", CFG["shares_per_trade"], m)
+        if bid is not None:
+            kind, px, src = kind or "sold", bid, f"bid at detection ({how})"
+    end = parse_iso(q.get("end"))
+    shares = max(0.0, q.get("size", 0) - after)
+    avg = q.get("avg") or 0.0
+    row = {"ts": iso(), "token": tok, "title": q.get("title"), "outcome": q.get("outcome"),
+           "slug": q.get("slug"), "event_slug": q.get("event_slug"), "end": q.get("end"),
+           "kind": kind or ("redeemed" if resolved else "unknown"), "early": not resolved,
+           "shares": round(shares, 2), "his_avg": avg, "exit_price": None if px is None else round(px, 4),
+           "price_source": src, "first_seen": q.get("first_seen"),
+           "days_left": None if not end else round((end - now()).total_seconds() / 86400, 1)}
+    if px is not None:
+        row["profit_per_share"] = round(px - avg, 4)
+        row["profit_usd"] = round(shares * (px - avg), 2)
+        row["left_on_table_per_share"] = round(1 - px, 4)  # what he'd have gained more if it paid $1
+    if row["first_seen"]:
+        row["days_held"] = round((now() - parse_iso(row["first_seen"])).total_seconds() / 86400, 1)
+    rows = load("his_exits.json", [])
+    rows.append(row)
+    save("his_exits.json", rows)
+    return row
+
+
+def settle_his_exits():
+    """For his early exits, look up how the market finally paid: did selling early help or hurt him?"""
+    rows = load("his_exits.json", [])
+    changed = False
+    for r in rows:
+        if not r.get("early") or r.get("final") is not None or r.get("exit_price") is None:
+            continue
+        p = resolved_payout(market_by_slug(r.get("slug")), r["token"])
+        if p is None:
+            continue
+        r["final"] = p
+        r["selling_early_gained_per_share"] = round(r["exit_price"] - p, 4)
+        r["selling_early_gained_usd"] = round(r["shares"] * (r["exit_price"] - p), 2)
+        changed = True
+    if changed:
+        save("his_exits.json", rows)
+
+
+def his_exit_summary():
+    rows = [r for r in load("his_exits.json", []) if r.get("exit_price") is not None]
+    if not rows:
+        return ["\n## How he exits\nNo exits with a known price recorded yet (logging started 2026-11-06).\n"]
+    early = [r for r in rows if r.get("early")]
+    out = ["\n## How he exits\n",
+           f"{len(rows)} exits with a known price since 2026-11-06: {len(early)} sold early, "
+           f"{len(rows) - len(early)} held to the payout.\n"]
+
+    def med(xs):
+        xs = sorted(x for x in xs if x is not None)
+        return None if not xs else xs[len(xs) // 2]
+    if early:
+        wins = [r for r in early if (r.get("profit_per_share") or 0) > 0]
+        mp, ml, md_ = med([r["exit_price"] for r in early]), med([r.get("left_on_table_per_share") for r in early]), \
+            med([r.get("days_left") for r in early])
+        out.append(f"Early sells: {len(wins)} in profit, {len(early) - len(wins)} at a loss; typical sell price "
+                   f"{cents(mp)}, typical cents left on the table {'?' if ml is None else f'{ml * 100:.0f}c'}, "
+                   f"typical days left before the end date {'?' if md_ is None else md_}.\n")
+        fin = [r for r in early if r.get("final") is not None]
+        if fin:
+            g = sum(r["selling_early_gained_usd"] for r in fin)
+            out.append(f"Of those, {len(fin)} markets have paid out since: selling early {'gained' if g >= 0 else 'cost'} "
+                       f"him ${abs(g):,.2f} vs holding.\n")
+        out.append("| Market | Side | His avg | Sold at | Profit/sh | Days left | Shares |\n|---|---|---|---|---|---|---|")
+        for r in early[-10:]:
+            out.append(f"| {str(r['title'])[:60]} | {r['outcome']} | {cents(r['his_avg'])} | {cents(r['exit_price'])} | "
+                       f"{r.get('profit_per_share', 0) * 100:+.0f}c | {r.get('days_left', '?')} | {r['shares']:.0f} |")
+    return out
 
 
 def follow_leader(tracks):
@@ -550,14 +767,27 @@ def follow_leader(tracks):
                     continue
                 paper_close(tr, name, tok, px, taker_fee(sh, px, fee_rate(m)), f"leader exit ({how})")
             closed_by.append(name)
+        try:
+            xr = record_his_exit(q, tok, after, resolved, payout, m)
+        except Exception as e:
+            print(f"recording his exit failed: {e}")
+            xr = {}
         log_event({"type": "leader_exit", "token": tok, "title": q.get("title"), "outcome": q.get("outcome"),
-                   "size_before": q.get("size"), "size_after": after, "resolved": resolved, "closed_by": closed_by})
+                   "size_before": q.get("size"), "size_after": after, "resolved": resolved, "closed_by": closed_by,
+                   "his_avg": q.get("avg"), "exit_price": xr.get("exit_price"), "exit_kind": xr.get("kind"),
+                   "exit_price_source": xr.get("price_source"), "days_left": xr.get("days_left")})
         if CFG["push"]["on_leader_trades"] and not resolved:
+            how = ""
+            if xr.get("exit_price") is not None:
+                how = (f"Sold at ~{cents(xr['exit_price'])} (his avg {cents(q.get('avg'))}, "
+                       f"{xr['profit_per_share'] * 100:+.0f}c/sh, ~${xr['profit_usd']:,.0f}), "
+                       f"{xr.get('days_left', '?')} days before the end date.\n")
             push(f"{lead['name']} EXIT {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} sh)",
-                 f"{q.get('title')}\nPaper closed in: {', '.join(closed_by) or 'none'}",
+                 f"{q.get('title')}\n{how}Paper closed in: {', '.join(closed_by) or 'none'}",
                  click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend")
 
-    new_snap = {"positions": {t: slim(p) for t, p in cur.items()}}
+    new_snap = {"positions": {t: slim(p, prev.get(t, {}).get("first_seen") or (None if t in prev else iso()))
+                              for t, p in cur.items()}}
     if new_snap != snap:
         save("leader_snapshot.json", new_snap)
 
@@ -1698,6 +1928,10 @@ def daily(force=None):
         except Exception as e:
             print(f"arb/endgame/full-set step failed: {e}")
     try:
+        settle_his_exits()
+    except Exception as e:
+        print(f"settling his exits failed: {e}")
+    try:
         est = his_book_estimate()
         save("his_book.json", {"generated": iso(), **est})
     except Exception as e:
@@ -1761,6 +1995,10 @@ def write_summary(tracks):
             if tiers:
                 detail.append("By signal: " + ", ".join(f"{t} {v['finished']} finished / {v['flips']} flipped"
                                                          for t, v in tiers.items()) + "\n")
+            try:
+                detail.append(shadow_summary(tr))
+            except Exception as e:
+                print(f"shadow summary failed: {e}")
         if open_rows:
             detail.append("| Market | Side | Entry | Now | P&L | Ends |\n|---|---|---|---|---|---|")
             detail += open_rows
@@ -1774,6 +2012,10 @@ def write_summary(tracks):
                   f"${hb['cost_min_size_each']:,.2f}. Biggest single position = "
                   f"{hb['biggest_position_share'] * 100:.0f}% of his book.\n")
     md += detail
+    try:
+        md += his_exit_summary()
+    except Exception as e:
+        print(f"exit summary failed: {e}")
 
     md.append("\n## Last 24 hours\n")
     cutoff = now() - dt.timedelta(hours=24)
