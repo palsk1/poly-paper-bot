@@ -136,6 +136,22 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Same person/year; both count multiple winners and people pictured on the cover when a group/concept wins; both end Dec 31 11:59 PM ET.",
    "approved": "2026-11-05"
+  },
+  {
+   "id": "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-ABD",
+   "poly_slug": "will-abdul-el-sayed-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year; same multiple-winner and pictured-on-cover rules as the other approved TIME pairs; both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-06"
+  },
+  {
+   "id": "KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
+   "kalshi": "KXALIENS-27",
+   "poly_slug": "will-the-us-confirm-that-aliens-exist-before-2027-789-924-249",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Word-for-word same test (President, Cabinet, Joint Chiefs or federal agency 'definitively states' ET life/tech exists), both end Dec 31 2026 11:59 PM ET. Risk: a vague official statement could be judged differently.",
+   "approved": "2026-11-06"
   }
  ],
  "rejected": [
@@ -303,6 +319,121 @@
    "id": "KXRT-AVE-70|will-avengers-doomsday-score-at-least-70-on-the-rotten-tomatoes-tomatometer-20261221",
    "reason": "Kalshi needs ABOVE 70, Polymarket AT LEAST 70: a score of exactly 70 splits them.",
    "date": "2026-11-05"
+  },
+  {
+   "id": "KXLIGUE1-27-ASM|will-monaco-win-the-2026-27-ligue-1-championship-20260701201053344",
+   "reason": "Polymarket goes to 'Other' if the season is cancelled or no winner by Jun 14 2027; Kalshi has no such clause.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXHURPATHHAWAII-26DEC|will-a-hurricane-make-landfall-in-hawaii-before-2027-20260721182828397",
+   "reason": "Kalshi excludes Midway and the Northwestern Hawaiian Islands; Polymarket includes them.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXCBDCHILE-26DEC15-H25|will-the-central-bank-of-chile-increase-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Kalshi bucket is 1-25bps; Polymarket rounds to nearest 25 (a 30bp hike = '25' on Poly, not on Kalshi); postponement rules differ.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXMTGSWITCH-27JAN-LMURK|lisa-murkowski-leaves-the-republican-party-in-2026",
+   "reason": "Kalshi also counts expulsion or switching caucus; Polymarket counts only her leaving/announcing, regardless of caucus.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXRECOGPALESTINE-27-GRE|will-greece-recognize-palestine-before-2027",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission) as recognition; Polymarket needs formal recognition only.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXTRUMPADMINLEAVE-26DEC31-MRUB|marco-rubio-out-as-secretary-of-state-by-december-31-2026",
+   "reason": "Polymarket resolves Yes on an announcement; Kalshi needs actual departure and has a death 'last fair price' clause.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEAVEMERZ-29JAN01-27APR01|friedrich-merz-out-as-chancellor-of-germany-before-march-31-2027",
+   "reason": "Kalshi ignores announcements of leaving more than a year out, Polymarket counts any announcement; Poly title says 'before March 31' vs Kalshi 'before Apr 1'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEAVEMERZ-29JAN01-27JUL01|friedrich-merz-out-as-chancellor-of-germany-before-june-30-2027",
+   "reason": "Kalshi ignores announcements of leaving more than a year out, Polymarket counts any announcement; Poly title says 'before June 30' vs Kalshi 'before Jul 1'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-VZELUKR|will-volodymyr-zelenskyy-be-the-next-leader-out-before-2027-20260630194627373",
+   "reason": "Polymarket is 'first of a list to leave' and ignores announcements; Kalshi is 'this person leaves or announces'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXTRUMPCOUNTRIES-27JAN01-GER|will-donald-trump-visit-germany-in-2026",
+   "reason": "Kalshi needs him to exit the plane/vessel and excludes embassy-only presence; Polymarket counts any entry into land or sea territory (e.g. a Ramstein stop on the plane).",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXDWTSTOP3-26DEC31-TAT|will-tatyana-ali-win-dancing-with-the-stars-season-35",
+   "reason": "Kalshi is Top 3, Polymarket is winner only.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXUECL-27-ATA|will-atalanta-win-the-2026-27-uefa-conference-league",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 16 2027; Kalshi has no such clause.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXARRESTNETANYAHU-28JAN01-27JAN01|will-benjamin-netanyahu-be-arrested-before-2027-755",
+   "reason": "Polymarket counts house arrest/electronic monitoring; Kalshi's list doesn't and its exclusions are cut off.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXRT-WILD-92|will-wild-horse-nine-score-at-least-92-on-the-rotten-tomatoes-tomatometer-20261109",
+   "reason": "Kalshi needs ABOVE 92, Polymarket AT LEAST 92: a score of exactly 92 splits them.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-JMILARG|will-javier-milei-be-the-next-leader-out-before-2027-20260630194627371",
+   "reason": "Polymarket is 'first of a list to leave' and ignores announcements; Kalshi is 'this person leaves or announces'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-EMACFRA|will-emmanuel-macron-be-the-next-leader-out-before-2027-20260630194627364",
+   "reason": "Polymarket is 'first of a list to leave' and ignores announcements; Kalshi is 'this person leaves or announces'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXOPENAIANOTHERMILLENNIUM-28-27JAN01|will-openai-announce-another-millennium-prize-solution-by-december-31-2026",
+   "reason": "Kalshi needs a 'complete solution' with extra exclusions (text cut off); Polymarket needs only an OpenAI announcement it solved one. Too close to call.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-VPUTRUS|will-vladimir-putin-be-the-next-leader-out-before-2027-20260630194627374",
+   "reason": "Polymarket is 'first of a list to leave' and ignores announcements; Kalshi is 'this person leaves or announces'.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXTRUMPADMINLEAVE-26DEC31-SWIL|susie-wiles-out-as-white-house-chief-of-staff-by-december-31",
+   "reason": "Polymarket resolves Yes on an announcement; Kalshi needs actual departure and has a death 'last fair price' clause.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-FMERCGER|friedrich-merz-out-as-chancellor-of-germany-before-2027",
+   "reason": "Kalshi ignores announcements of leaving more than a year out, Polymarket counts any announcement.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXPAHLAVIHEAD-27JAN-RPAH|will-reza-pahlavi-be-head-of-state-in-iran-end-of-2026",
+   "reason": "Kalshi: formally named head of state OR government (no interim); Polymarket: who de facto holds power on Dec 31 noon ET.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXTRUMPCOUNTRIES-27JAN01-ISR|will-donald-trump-visit-israel-in-2026",
+   "reason": "Kalshi needs him to exit the plane/vessel and excludes embassy-only presence; Polymarket counts any entry into land or sea territory.",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "KXUCL-27-BMU|will-bayern-munich-win-the-2026-27-uefa-champions-league-championship-20260701202025565",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
+   "date": "2026-11-06"
   }
  ]
 }
