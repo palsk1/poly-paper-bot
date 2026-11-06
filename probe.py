@@ -157,6 +157,19 @@ def activity():
             print(f"/{path} failed: {e}")
 
 
+def sells():
+    """All his SELL trades in the last 500 trades, one line each (used to backfill state/his_exits.json)."""
+    addr = json.load(open("config.json"))["leader"]["address"]
+    res = get("https://data-api.polymarket.com/v2/trades", {"user": addr, "limit": 500})
+    rows = res.get("data", []) if isinstance(res, dict) else res
+    print("== his sells (ts, token, size, price, outcome, title)")
+    for r in rows:
+        if str(r.get("side")).upper() == "SELL":
+            print("SELL", json.dumps([r.get("timestamp"), r.get("token_id"), r.get("size"), r.get("price"),
+                                      r.get("outcome"), r.get("title"), r.get("slug")]))
+    print("total trades returned:", len(rows), "oldest ts:", min((r.get("timestamp") or 0) for r in rows) if rows else None)
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
@@ -169,3 +182,5 @@ if __name__ == "__main__":
         events()
     if what in ("all", "activity"):
         activity()
+    if what == "sells":
+        sells()

@@ -552,13 +552,13 @@ def leader_activity(addr):
     if addr not in _activity_cache:
         rows = []
         try:
-            res = http_json(f"{DATA}/activity", {"user": addr, "limit": 500})
+            res = http_json(f"{DATA}/v2/activity", {"user": addr, "limit": 500})
             rows = envelope_rows(res, "data", "activity")
         except Exception as e:
             print(f"activity lookup failed: {e}")
         if not rows:
             try:
-                res = http_json(f"{DATA}/trades", {"user": addr, "limit": 500})
+                res = http_json(f"{DATA}/v2/trades", {"user": addr, "limit": 500})
                 rows = envelope_rows(res, "data", "trades")
             except Exception as e:
                 print(f"trades lookup failed: {e}")
