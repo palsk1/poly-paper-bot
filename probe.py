@@ -170,6 +170,46 @@ def sells():
     print("total trades returned:", len(rows), "oldest ts:", min((r.get("timestamp") or 0) for r in rows) if rows else None)
 
 
+def exits_study():
+    """His trades grouped per token, with each market's end date and final price: when does he sell early?"""
+    addr = json.load(open("config.json"))["leader"]["address"]
+    rows, cursor = [], None
+    for _ in range(20):
+        params = {"user": addr, "limit": 500}
+        if cursor:
+            params["cursor"] = cursor
+        res = get("https://data-api.polymarket.com/v2/trades", params)
+        rows += res.get("data", []) if isinstance(res, dict) else res
+        cursor = ((res.get("pagination") or {}) if isinstance(res, dict) else {}).get("next_cursor")
+        if not cursor:
+            break
+    print("trades:", len(rows))
+    by = {}
+    for r in rows:
+        by.setdefault(r.get("token_id"), []).append(r)
+    for tok, rs in by.items():
+        sells = [r for r in rs if str(r.get("side")).upper() == "SELL"]
+        if not sells:
+            continue
+        buys = [r for r in rs if str(r.get("side")).upper() == "BUY"]
+        slug = rs[0].get("slug")
+        end, final = None, None
+        try:
+            m = get(f"https://gamma-api.polymarket.com/markets/slug/{urllib.parse.quote(slug)}")
+            m = m[0] if isinstance(m, list) else m
+            end = m.get("endDateIso") or m.get("endDate")
+            toks = json.loads(m.get("clobTokenIds") or "[]")
+            prices = json.loads(m.get("outcomePrices") or "[]")
+            if m.get("closed") and tok in toks:
+                final = prices[toks.index(tok)]
+        except Exception as e:
+            end = f"err {e}"
+        out = {"t": rs[0].get("title"), "o": rs[0].get("outcome"), "end": end, "final": final,
+               "buys": [[b.get("timestamp"), round(float(b.get("size") or 0), 2), round(float(b.get("price") or 0), 4)] for b in buys],
+               "sells": [[s.get("timestamp"), round(float(s.get("size") or 0), 2), round(float(s.get("price") or 0), 4)] for s in sells]}
+        print("X", json.dumps(out))
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
@@ -184,3 +224,5 @@ if __name__ == "__main__":
         activity()
     if what == "sells":
         sells()
+    if what == "exits":
+        exits_study()
