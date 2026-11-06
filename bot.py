@@ -665,7 +665,8 @@ def his_exit_summary():
         return ["\n## How he exits\nNo exits with a known price recorded yet (logging started 2026-11-06).\n"]
     early = [r for r in rows if r.get("early")]
     out = ["\n## How he exits\n",
-           f"{len(rows)} exits with a known price since 2026-11-06: {len(early)} sold early, "
+           f"{len(rows)} exits with a known price (logged since 2026-11-06, plus his big early sells since March "
+           f"backfilled from his trade history): {len(early)} sold early, "
            f"{len(rows) - len(early)} held to the payout.\n"]
 
     def med(xs):
