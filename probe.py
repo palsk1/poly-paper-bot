@@ -148,10 +148,11 @@ def events():
 
 def activity():
     addr = json.load(open("config.json"))["leader"]["address"]
-    for path in ("activity", "trades"):
+    for path in ("v2/activity", "v2/trades", "v2/user/activity", "v2/users/activity", "v2/trades/user",
+                 "v2/closed-positions", "activity", "trades"):
         try:
-            res = get(f"https://data-api.polymarket.com/{path}", {"user": addr, "limit": 5})
-            show(f"data-api /{path} (his last 5)", res, 3000)
+            res = get(f"https://data-api.polymarket.com/{path}", {"user": addr, "limit": 3})
+            show(f"data-api /{path} (his last 3)", res, 2000)
         except Exception as e:
             print(f"/{path} failed: {e}")
 
