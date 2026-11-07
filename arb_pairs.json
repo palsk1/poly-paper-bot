@@ -152,6 +152,14 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Word-for-word same test (President, Cabinet, Joint Chiefs or federal agency 'definitively states' ET life/tech exists), both end Dec 31 2026 11:59 PM ET. Risk: a vague official statement could be judged differently.",
    "approved": "2026-11-06"
+  },
+  {
+   "id": "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027",
+   "kalshi": "KXRECOGSOMALI-29-27",
+   "poly_slug": "will-trump-recognize-somaliland-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need formal US recognition of Somaliland as sovereign (mere acknowledgement/status change excluded), both end Dec 31 2026 ET, US-government source. Risk: Kalshi example list (embassy, ambassador, State Dept list) could be read broader than 'formal recognition'.",
+   "approved": "2026-11-07"
   }
  ],
  "rejected": [
@@ -434,6 +442,126 @@
    "id": "KXUCL-27-BMU|will-bayern-munich-win-the-2026-27-uefa-champions-league-championship-20260701202025565",
    "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
    "date": "2026-11-06"
+  },
+  {
+   "id": "KXIRANEMBASSY-27|will-the-us-reopen-its-embassy-in-iran-in-2026",
+   "reason": "Kalshi needs an actual opening or a specific opening date; Polymarket counts any clearly committed announcement.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-KIIN|will-kiin-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXTRUMPADMINLEAVE-26DEC31-PHEG|pete-hegseth-out-as-secretary-of-defense-by-december-31",
+   "reason": "Kalshi needs an actual departure (death -> last fair price); Polymarket resolves Yes on an announced resignation/removal.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXAIMILLENNIUM-28-27JAN01|will-ai-solve-1-more-millennium-prize-problem-in-2026",
+   "reason": "Kalshi needs journal publication/CMI-style recognition; Polymarket needs only a lab announcement (and only 5 listed problems).",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXGAMEAWARDS-BMUL-MAR|will-marathon-win-best-multiplayer-at-the-2026-game-awards-1785857785554",
+   "reason": "Polymarket has tie (alphabetical) and no-winner-by-Dec-31 ('Other') clauses; Kalshi has neither.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-RULER|will-ruler-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXRT-HUN-60|will-the-hunger-games-sunrise-on-the-reaping-score-at-least-60-on-the-rotten-tomatoes-tomatometer-20261123",
+   "reason": "Kalshi needs a score strictly ABOVE the strike; Polymarket counts 'at least' the strike, so an exact score settles differently.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXNEWOUTBREAK-P-26|new-pandemic-in-2026",
+   "reason": "Polymarket needs a WHO pandemic declaration; Kalshi rule gives no source or definition of 'becomes a pandemic'.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLEAVEMERZ-29JAN01-27JAN01|friedrich-merz-out-as-chancellor-of-germany-before-2027",
+   "reason": "Kalshi ignores announcements of leaving >1 year out and has its own announcement test; Polymarket counts any resignation/removal announcement or any gap in office.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLEAVEOPEC-27|will-another-country-leave-opec-in-2026",
+   "reason": "Deadline differs: Kalshi before Jan 1 ET, Polymarket Dec 31 11:59 PM Gulf time (~9 hours earlier); qualifying-announcement lists differ too.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXGYANESHOUT-26OCT-27JAN01|will-gyanesh-kumar-be-out-as-chief-election-commissioner-of-india-by-december-31",
+   "reason": "Kalshi needs an actual departure; Polymarket resolves Yes on an announcement or if he is detained/prevented from serving.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-PEYZ|will-peyz-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-CHOVY|will-chovy-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-CANYON|will-canyon-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXUECL-27-PAN|will-panathinaikos-win-the-2026-27-uefa-conference-league",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 16 2027 or no winner; Kalshi has no such clause.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXMOVIEDELAYDUNEPT3-26DEC18|will-dune-part-three-be-delayed-20260720163825706",
+   "reason": "Polymarket needs an official new-date announcement by Dec 17; Kalshi says 'release delayed past Dec 18' with no announcement/source definition.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-XUN|will-xun-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-KERIA|will-keria-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-VIPER|will-viper-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-DORAN|will-doran-win-worlds-2026-finals-mvp",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name and goes 'Other' if postponed/undeclared by Nov 28.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXTRUMPCOUNTRIES-27JAN01-SA|will-donald-trump-visit-saudi-arabia-in-2026",
+   "reason": "Kalshi needs him to exit the plane/vessel and excludes embassy-only presence; Polymarket counts any entry into land or sea territory.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXRT-HUN-50|will-the-hunger-games-sunrise-on-the-reaping-score-at-least-50-on-the-rotten-tomatoes-tomatometer-20261123",
+   "reason": "Kalshi needs a score strictly ABOVE the strike; Polymarket counts 'at least' the strike, so an exact score settles differently.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXUECL-27-ASM|will-monaco-win-the-2026-27-uefa-conference-league",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 16 2027 or no winner; Kalshi has no such clause.",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "KXLEADERSOUT-27JAN01-STAKJAP|sanae-takaichi-out-as-prime-minister-of-japan-in-2026",
+   "reason": "Kalshi ignores announcements of leaving >1 year out; Polymarket counts any announcement, any gap in office, or being detained/prevented.",
+   "date": "2026-11-07"
   }
  ]
 }
