@@ -529,5 +529,25 @@
   "title": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
   "token": null,
   "ts": "2026-11-05T17:23:34Z"
+ },
+ {
+  "days_left": -0.7,
+  "early": false,
+  "end": "2026-11-07",
+  "event_slug": "ethereum-above-on-november-7-2026",
+  "exit_price": 1.0,
+  "first_seen": null,
+  "his_avg": 0.91,
+  "kind": "redeemed",
+  "left_on_table_per_share": 0.0,
+  "outcome": "Yes",
+  "price_source": "settled price",
+  "profit_per_share": 0.09,
+  "profit_usd": 0.45,
+  "shares": 5.0,
+  "slug": "ethereum-above-1900-on-november-7-2026",
+  "title": "Will the price of Ethereum be above $1,900 on November 7?",
+  "token": "5123727839547169903190064776503678655837150265687773203652952267670228347063",
+  "ts": "2026-11-07T17:45:30Z"
  }
 ]
