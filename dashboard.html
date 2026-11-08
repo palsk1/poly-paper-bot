@@ -130,6 +130,7 @@ const money = (x, sign = true) => x == null ? "–" : (x < 0 ? "−" : (sign ? "
 const cls = x => x == null ? "" : x > 0.004 ? "pos" : x < -0.004 ? "neg" : "";
 const M = (x, sign = true) => `<span class="num ${sign ? cls(x) : ""}">${money(x, sign)}</span>`;
 const cents = x => x == null ? "–" : (Math.round(x * 10) / 10) + "c";
+const FEW = 10;  // below this many finished trades, per-$100 numbers are noise: hide them
 // one plain line: what went in, what it's worth now (paper money)
 function pot(t) {
   const start = t.cash == null ? (t.needed || 0) : (t.deposited || 0);
@@ -247,7 +248,7 @@ function curveChart(el, t) {
       <div class="rank">${i + 1}</div>
       <div class="grow"><div class="name">${esc(n)}${t.trust.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.lab ? '<span class="tag">lab</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
         <div class="pot">${pot(t)}</div>
-        <div class="meta">today ${M(t.today)} · ${t.trust.finished} done · worst case ${M(t.trust.worst_per_100)} per $100</div></div>
+        <div class="meta">today ${M(t.today)} · ${t.trust.finished} done · ${t.trust.finished >= FEW ? `worst case ${M(t.trust.worst_per_100)} per $100` : "too few trades to judge"}</div></div>
       <div>${spark(t)}</div></div></div>`;
   }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies qualify so far.</p>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
@@ -311,7 +312,7 @@ pick.onchange = () => detail(pick.value);
 function openDetail(n) { pick.value = n; detail(n); $("detail-h").scrollIntoView({behavior: "smooth"}); }
 function detail(n) {
   const t = byName[n]; if (!t) return;
-  const cash = t.cash == null ? `no cash limit, needed so far ${money(t.needed, false)}` : `cash left ${money(t.cash, false)} of ${money(t.deposited, false)}`;
+  const cash = t.cash == null ? `No cash limit, needed so far ${money(t.needed, false)}` : `Cash left ${money(t.cash, false)} of ${money(t.deposited, false)}`;
   const tr = t.trust;
   let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tr.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
     <div class="pot big">${pot(t)}</div>
@@ -320,9 +321,9 @@ function detail(n) {
       <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
       <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
       <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
-      <div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>
+      ${tr.finished >= FEW ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>` : `<div class="tile"><div class="v" style="font-size:16px">Too early</div><div class="k">${tr.finished} finished, need ${FEW}+ to judge</div></div>`}
     </div>
-    <p class="sub" style="margin-top:8px">${tr.finished} finished, average ${money(tr.avg_per_100)} per $100${D.rank_size ? ` (at $${D.rank_size} a bet)` : ""}. ${cash}. ${tr.proven ? "" : `Proven needs ${D.min_proven}+ finished trades and a worst case above $0.`}</p>
+    <p class="sub" style="margin-top:8px">${tr.finished >= FEW ? `${tr.finished} finished, average ${money(tr.avg_per_100)} per $100${D.rank_size ? ` (at $${D.rank_size} a bet)` : ""}.` : `Only ${tr.finished} finished trade${tr.finished === 1 ? "" : "s"}, so the "per $100" numbers mean nothing yet. The real result is the dollar line at the top.`} ${cash}. ${tr.proven ? "" : `Proven needs ${D.min_proven}+ finished trades and a worst case above $0.`}</p>
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
     <div id="curve"></div></div>`;
   if (t.late && t.late.n) h += `<div class="card"><b>Copying late</b><p class="sub">${t.late.n} copied buys cost ${M(t.late.usd, true)} more than the wallet paid (about ${cents(t.late.c_per_share)} a share).</p></div>`;
