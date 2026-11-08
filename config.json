@@ -1208,9 +1208,9 @@
       "tiers": [
         "resolved",
         "proposed",
-        "past_deadline",
-        "ending_soon"
+        "past_deadline"
       ],
+      "tiers_note": "ending_soon dropped 2026-11-08 (Jan's OK): the backtest (backtest/report.md) lost about $5-6 per $100 on it, mostly weather, crypto-price and tweet-count buckets at 95c a day before the end. Lab variants keep their own frozen tier lists.",
       "ending_soon_hours": 24,
       "past_deadline_max_days": 30,
       "min_liquidity": 2000,
@@ -1600,6 +1600,12 @@
     },
     "endgame_97": {
       "inherit": "endgame",
+      "tiers": [
+        "resolved",
+        "proposed",
+        "past_deadline",
+        "ending_soon"
+      ],
       "min_price": 0.97,
       "max_price": 0.99,
       "min_edge": 0.005,
@@ -1608,6 +1614,12 @@
     },
     "endgame_sell98": {
       "inherit": "endgame",
+      "tiers": [
+        "resolved",
+        "proposed",
+        "past_deadline",
+        "ending_soon"
+      ],
       "min_price": 0.95,
       "max_price": 0.97,
       "take_profit": 0.985,
