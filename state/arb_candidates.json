@@ -1,101 +1,31 @@
 {
  "candidates": [
   {
-   "est_gap_before_fees": 0.006,
+   "est_gap_before_fees": 0.05,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXIRANEMBASSY-27|will-the-us-reopen-its-embassy-in-iran-in-2026",
+   "id": "KXHEGSETHOUT-26APR-27JAN01|pete-hegseth-out-as-secretary-of-defense-by-december-31",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXIRANEMBASSY-27",
-    "no_ask": 0.976,
-    "no_sub_title": "Before 2027",
-    "rules_primary": "If the United States has announced the opening of an embassy or consulate of the United States of America in Iran after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "The embassy/consulate must be opened or have a specific date on which it will be opened to be encompassed by the Payout Criterion. It also includes an embassy being re-opened after suspending operations.",
-    "ticker": "KXIRANEMBASSY-27",
-    "title": "Will the US reopen its embassy in Iran before Jan 1, 2027?",
-    "volume": 243833.45,
-    "yes_ask": 0.025,
-    "yes_sub_title": "Before 2027"
-   },
-   "match_score": 0.905,
-   "polymarket": {
-    "best_ask_yes": 0.018,
-    "best_bid_yes": 0.007,
-    "description": "This market will resolve to \"Yes\" if the U.S. government announces the reopening/opening of any embassy or consulate in Iran, or if such a reopening/opening is otherwise confirmed, by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nAn official announcement made within this market\u2019s timeframe will qualify for a \"Yes\" resolution regardless of whether an actual embassy or consulate opening subsequently takes place within the timeframe.\n\nAny opening of a U.S. embassy or consulate in Iran will qualify regardless of its exact location.\n\nAnnouncements that do not clearly commit to opening an embassy or consulate, such as general diplomatic statements, exploratory comments, or partial/conditional steps, will not count.\n\nThe resolution source will be official statements from the Governments of the U.S.; however, a consensus of credible reporting will also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 14015,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will the US reopen its embassy in Iran in 2026?",
-    "slug": "will-the-us-reopen-its-embassy-in-iran-in-2026",
-    "url": "https://polymarket.com/event/will-the-us-reopen-its-embassy-in-iran-in-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.001,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-KIIN|will-kiin-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.87,
-    "no_sub_title": "Kiin",
-    "rules_primary": "If Kiin wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-KIIN",
-    "title": "Will Kiin win Finals MVP at League of Legends Worlds?",
-    "volume": 9905.45,
-    "yes_ask": 0.14,
-    "yes_sub_title": "Kiin"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.155,
-    "best_bid_yes": 0.141,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 5517,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Kiin win Worlds 2026 Finals MVP?",
-    "slug": "will-kiin-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.0,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTRUMPADMINLEAVE-26DEC31-PHEG|pete-hegseth-out-as-secretary-of-defense-by-december-31",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T14:59:00Z",
-    "event_ticker": "KXTRUMPADMINLEAVE-26DEC31",
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXHEGSETHOUT-26APR",
     "no_ask": 0.69,
-    "no_sub_title": "Pete Hegseth",
-    "rules_primary": "If Pete Hegseth leaves as Secretary of Defense before 2027, then the market resolves to Yes.",
-    "rules_secondary": "Pete Hegseth must have an actual departure date by vacating the role within the time period. \n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expiration of term without renewal, recall, or other means by which the i",
-    "ticker": "KXTRUMPADMINLEAVE-26DEC31-PHEG",
-    "title": "Will Pete Hegseth leaves Secretary of Defense in before 2027?",
-    "volume": 1904788.9,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Pete Hegseth leaves as Secretary of Defense before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Pete Hegseth must have an actual departure date and vacate the role within the time period.\n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expulsion, expiration of term without renewal, recall, or other means by wh",
+    "ticker": "KXHEGSETHOUT-26APR-27JAN01",
+    "title": "Will Pete Hegseth be out as Secretary of Defense before Jan 1, 2027?",
+    "volume": 292512.62,
     "yes_ask": 0.32,
-    "yes_sub_title": "Pete Hegseth"
+    "yes_sub_title": "Before Jan 1, 2027"
    },
-   "match_score": 0.914,
+   "match_score": 0.862,
    "polymarket": {
-    "best_ask_yes": 0.33,
-    "best_bid_yes": 0.32,
+    "best_ask_yes": 0.38,
+    "best_bid_yes": 0.37,
     "description": "This market will resolve to \u201cYes\u201d if Pete Hegseth ceases to be U.S. Secretary of Defense for any period of time between market creation and the specified date (ET). Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Pete Hegseth's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from Pete Hegseth and the U.S. government; however, a consensus of credible reporting may also be used.",
     "end": "2027-01-01",
     "fee_rate": 0.04,
-    "liquidity": 125556,
+    "liquidity": 89082,
     "outcomes": [
      "Yes",
      "No"
@@ -106,780 +36,850 @@
    }
   },
   {
-   "est_gap_before_fees": 0.0,
+   "est_gap_before_fees": -0.003,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXAIMILLENNIUM-28-27JAN01|will-ai-solve-1-more-millennium-prize-problem-in-2026",
+   "id": "KXLOLAWARD-WORLDS26FMVP-KNIGHT|will-knight-win-worlds-2026-finals-mvp",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXAIMILLENNIUM-28",
-    "no_ask": 0.97,
-    "no_sub_title": "Before 2027",
-    "rules_primary": "If any AI lab solves another Millennium Prize Problem after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "A Millennium Prize Problem counts as solved on the first date that, by Expiration, remains unretracted and either:\n\nA complete proof, disproof, or counterexample addressing the problem as originally formulated by the Clay Mathematics Institute is published in a reputable peer-reviewed mathematics or scientific journal.\nCMI or another recognized academic governing or recognition body officially states that the problem has been resolved by reference to a specific written work.\nAt least two Source Agencies themselves report that the problem has been proven, disproven, or otherwise resolved by reference to a specific publicly available written work.\n\nA preprint, announcement, blog post, conference presentation, technical report, or machine-checked formalization does NOT by itself constitute a ",
-    "ticker": "KXAIMILLENNIUM-28-27JAN01",
-    "title": "Will any AI lab solve a Millennium Prize Problem before 2027?",
-    "volume": 14532.51,
-    "yes_ask": 0.08,
-    "yes_sub_title": "Before 2027"
+    "close_time": "2026-11-29T15:00:00Z",
+    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
+    "no_ask": 0.9,
+    "no_sub_title": "Knight",
+    "rules_primary": "If Knight wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
+    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXLOLAWARD-WORLDS26FMVP-KNIGHT",
+    "title": "Will Knight win Finals MVP at League of Legends Worlds?",
+    "volume": 13565.29,
+    "yes_ask": 0.11,
+    "yes_sub_title": "Knight"
    },
-   "match_score": 0.879,
+   "match_score": 0.851,
    "polymarket": {
-    "best_ask_yes": 0.1,
-    "best_bid_yes": 0.08,
-    "description": "This market will resolve according to the number of distinct qualifying Millennium Prize Problems for which an eligible AI lab announces a solution by December 31, 2026, 11:59 PM ET.\n\nEach qualifying problem is counted once, regardless of how many eligible AI labs announce a solution to it or how many announcements are made.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab's models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, toge",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 21013,
+    "best_ask_yes": 0.103,
+    "best_bid_yes": 0.091,
+    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+    "end": "2026-11-29",
+    "fee_rate": 0.05,
+    "liquidity": 7441,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will AI solve 1 more Millennium Prize Problem in 2026?",
-    "slug": "will-ai-solve-1-more-millennium-prize-problem-in-2026",
-    "url": "https://polymarket.com/event/how-many-more-millennium-prize-problems-will-ai-solve-in-2026"
+    "question": "Will Knight win Worlds 2026 Finals MVP?",
+    "slug": "will-knight-win-worlds-2026-finals-mvp",
+    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
    }
   },
   {
-   "est_gap_before_fees": 0.0,
+   "est_gap_before_fees": -0.009,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXGAMEAWARDS-BMUL-MAR|will-marathon-win-best-multiplayer-at-the-2026-game-awards-1785857785554",
+   "id": "KXTRUMPPARDON-27JAN01-SBF|will-trump-pardon-sam-bankman-fried-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXTRUMPPARDON-27JAN01",
+    "no_ask": 0.98,
+    "no_sub_title": "Sam Bankman-Fried",
+    "rules_primary": "If Sam Bankman-Fried has been given a presidential pardon, commutation, or reprieve during Trump's second term and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "",
+    "ticker": "KXTRUMPPARDON-27JAN01-SBF",
+    "title": "Will Sam Bankman-Fried receive a presidential pardon before Jan 1, 2027?",
+    "volume": 81239.44,
+    "yes_ask": 0.048,
+    "yes_sub_title": "Sam Bankman-Fried"
+   },
+   "match_score": 0.854,
+   "polymarket": {
+    "best_ask_yes": 0.029,
+    "best_bid_yes": 0.017,
+    "description": "This market will resolve to \"Yes\" if the listed individual receives a presidential pardon, commutation, or reprieve from Donald Trump between November 17, 2025 and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe primary resolution source for whether the individual is pardoned or not will be official information from the US government, however a consensus of credible reporting will also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 28652,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Trump pardon Sam Bankman-Fried before 2027?",
+    "slug": "will-trump-pardon-sam-bankman-fried-before-2027",
+    "url": "https://polymarket.com/event/who-will-trump-pardon-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.011,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLOLAWARD-WORLDS26FMVP-ONER|will-oner-win-worlds-2026-finals-mvp",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-11-29T15:00:00Z",
+    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
+    "no_ask": 0.98,
+    "no_sub_title": "Oner",
+    "rules_primary": "If Oner wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
+    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXLOLAWARD-WORLDS26FMVP-ONER",
+    "title": "Will Oner win Finals MVP at League of Legends Worlds?",
+    "volume": 4123.36,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Oner"
+   },
+   "match_score": 0.858,
+   "polymarket": {
+    "best_ask_yes": 0.031,
+    "best_bid_yes": 0.003,
+    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+    "end": "2026-11-29",
+    "fee_rate": 0.05,
+    "liquidity": 8195,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Oner win Worlds 2026 Finals MVP?",
+    "slug": "will-oner-win-worlds-2026-finals-mvp",
+    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.015,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXDEMORAESOUT-26SEP-27JAN01|alexandre-de-moraes-out-as-brazil-supreme-court-justice",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXDEMORAESOUT-26SEP",
+    "no_ask": 0.94,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Alexandre de Moraes leaves as Justice of the Supreme Federal Court of Brazil before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Alexandre de Moraes must have an actual departure date and vacate the role within the time period.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expulsion, expiration of term without renewal, recall, or other means by which the individual no longer occupies the role. This includes both voluntary and involuntary early departure and the natural expiration of a term.\n\nTemporary leaves of absence, suspensions, or recusals do not constitute leaving unless the individual formally and permanently ceases to hold the position. If Alexandre de Moraes vacates the role and then re-occupies the role, the contract shall settle on the initial vacation of the role.",
+    "ticker": "KXDEMORAESOUT-26SEP-27JAN01",
+    "title": "Will Alexandre de Moraes leave Brazil's Supreme Court before Jan 1, 2027?",
+    "volume": 18284.85,
+    "yes_ask": 0.1,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.871,
+   "polymarket": {
+    "best_ask_yes": 0.075,
+    "best_bid_yes": 0.044,
+    "description": "This market will resolve to \u201cYes\u201d if Alexandre de Moraes ceases to be a Justice of Brazil\u2019s Supreme Federal Court for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Alexandre de Moraes's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from Alexandre de Moraes and the government of Brazil; however, a consensus of credible reporting may also be used.\n",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 12285,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Alexandre de Moraes out as Brazil Supreme Court Justice?",
+    "slug": "alexandre-de-moraes-out-as-brazil-supreme-court-justice",
+    "url": "https://polymarket.com/event/alexandre-de-moraes-out-as-brazil-supreme-court-justice"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.019,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXLOLAWARD-WORLDS26FMVP-FAKER|will-faker-win-worlds-2026-finals-mvp",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-11-29T15:00:00Z",
+    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
+    "no_ask": 0.96,
+    "no_sub_title": "Faker",
+    "rules_primary": "If Faker wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
+    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXLOLAWARD-WORLDS26FMVP-FAKER",
+    "title": "Will Faker win Finals MVP at League of Legends Worlds?",
+    "volume": 6673.68,
+    "yes_ask": 0.05,
+    "yes_sub_title": "Faker"
+   },
+   "match_score": 0.853,
+   "polymarket": {
+    "best_ask_yes": 0.059,
+    "best_bid_yes": 0.028,
+    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+    "end": "2026-11-29",
+    "fee_rate": 0.05,
+    "liquidity": 6511,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Faker win Worlds 2026 Finals MVP?",
+    "slug": "will-faker-win-worlds-2026-finals-mvp",
+    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.025,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXNYCMINWAGE-27JAN01|will-mamdani-raise-the-minimum-wage-to-30-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXNYCMINWAGE-27JAN01",
+    "no_ask": 0.965,
+    "no_sub_title": "Yes",
+    "rules_primary": "If a bill establishing a minimum wage of at least $30 per hour for New York City set to go in effect 2030 or earlier has become law in New York City before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Laws passed by New York State are encompassed within the Payout Criterion if they apply to or govern New York City. Enactment requires completion of all constitutional and legal requirements for the legislation to become binding law. For standard legislation requiring executive approval, this includes final passage by all required legislative bodies, executive signature OR becoming law despite executive inaction OR successful veto override, and satisfaction of any required waiting periods. For legislation not requiring executive approval, this includes final passage and completion of required waiting periods. For constitutional amendments, this includes passage with required supermajorities and completion of ratification processes. For executive orders, this includes official signature, pu",
+    "ticker": "KXNYCMINWAGE-27JAN01",
+    "title": "Will Mamdani raise the minimum wage to $30 before 2027?",
+    "volume": 25054.94,
+    "yes_ask": 0.066,
+    "yes_sub_title": "Yes"
+   },
+   "match_score": 0.943,
+   "polymarket": {
+    "best_ask_yes": 0.06,
+    "best_bid_yes": 0.04,
+    "description": "Zohran Mamdani has proposed raising New York City's minimum wage to $30 an hour by 2030. You can read more about that here: https://www.cityandstateny.com/policy/2025/02/mamdani-unveils-30-30-minimum-wage-push-part-mayoral-campaign/403015/?oref=csny-homepage-top-story\n\nThis market will resolve to \u201cYes\u201d if both the following occur:\n\n1. Zohran Mamdani wins the 2025 NYC Mayoral election.\n\n2. A policy is enacted in New York City before December 31, 2026, 11:59 PM ET, which would establish a minimum wage of at least $30 an hour, effective by December 31, 2030, or earlier. \n\nThe policy will be considered to have been enacted if a local or state law is passed, or mayoral executive order is issued which will bring the stated minimum wage into effect within the specified timeframe. The introduction, proposal, or announcement of such a policy without legal enactment will not qualify.\n\nThe enactment of a policy that initiates a structured increase of the minimum wage to at least $30 an hour in NYC over the course of several years will qualify for an immediate \"Yes\" resolution, so long as that policy explicitly outlines it will achieve that level by the stated date.\n\nEnactment of limited or temporary pilots which are not formally intended for citywide expansion (e.g., policies that explicitly cover only select boroughs, neighborhoods, or time periods) will not count.\n\nPolicies which include limited exceptions\u2014such as such as exceptions for restaurant workers, etc.\u2014will still qualify as long as a general policy of a $30 per hour minimum wage in New York City by 2030 is enacted.\n\nIf Mamdani is confirmed to have lost the 2025 NYC Mayoral election by a consensus of credible reporting, or if the stated terms are not satisfied within this market's timeframe, this market will immediately ",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 11499,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Mamdani raise the minimum wage to $30 before 2027?",
+    "slug": "will-mamdani-raise-the-minimum-wage-to-30-before-2027",
+    "url": "https://polymarket.com/event/will-mamdani-raise-the-minimum-wage-to-30-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.028,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXDAVEYOUT-27JAN01|ed-davey-out-as-liberal-democrats-leader-by-december-31",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXDAVEYOUT-27JAN01",
+    "no_ask": 0.96,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Ed Davey of the Liberal Democrats has resigned or otherwise left their position as leader of their party, or announced that they will do so before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The market resolves to Yes if the party leader resigns, is removed, or announces they will resign from party leadership. An announcement that the leader will leave within the next year counts even before it takes effect. This includes voluntary resignation, losing a leadership election, being ousted by the party, or any other mechanism that ends their party leadership. Temporarily stepping aside or taking leave while remaining leader does not qualify. The market is about party leadership positions, not government positions - a leader can resign from government while remaining party leader or vice versa.",
+    "ticker": "KXDAVEYOUT-27JAN01",
+    "title": "Will Ed Davey resign as the Liberal Democrats leader before Jan 1, 2027?",
+    "volume": 4440.29,
+    "yes_ask": 0.08,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.902,
+   "polymarket": {
+    "best_ask_yes": 0.068,
+    "best_bid_yes": 0.038,
+    "description": "This market will resolve to \u201cYes\u201d if Ed Davey ceases to be Leader of the Liberal Democrats for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Ed Davey's resignation/removal by this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from Ed Davey and the Liberal Democrats; however, a consensus of credible reporting may also be used.",
+    "end": "2026-12-31",
+    "fee_rate": 0.04,
+    "liquidity": 2969,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Ed Davey out as Liberal Democrats Leader by December 31?",
+    "slug": "ed-davey-out-as-liberal-democrats-leader-by-december-31",
+    "url": "https://polymarket.com/event/ed-davey-out-as-liberal-democrats-leader-by-december-31"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.039,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXUECL-27-AJA|will-ajax-win-the-2026-27-uefa-conference-league",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-06-16T22:00:00Z",
+    "event_ticker": "KXUECL-27",
+    "no_ask": 0.94,
+    "no_sub_title": "Ajax",
+    "rules_primary": "If Ajax is the 2026-27 UEFA Conference League champion, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXUECL-27-AJA",
+    "title": "Will Ajax win the UEFA Conference League?",
+    "volume": 693.13,
+    "yes_ask": 0.14,
+    "yes_sub_title": "Ajax"
+   },
+   "match_score": 0.914,
+   "polymarket": {
+    "best_ask_yes": 0.099,
+    "best_bid_yes": 0.093,
+    "description": "This market will resolve according to the team that wins the 2026-27 UEFA Conference League Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 UEFA Conference League Championship per the rules of UEFA Conference League (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 UEFA Conference League season is cancelled, postponed after June 16, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from UEFA Conference League; however, a consensus of credible reporting may also be used.",
+    "end": "2027-06-16",
+    "fee_rate": 0.05,
+    "liquidity": 13201,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Ajax win the 2026-27 UEFA Conference League Championship?",
+    "slug": "will-ajax-win-the-2026-27-uefa-conference-league",
+    "url": "https://polymarket.com/event/uefa-conference-league-2027-champion"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.05,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPSTATES-27JAN01-AR|will-donald-trump-visit-arkansas-in-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXTRUMPSTATES-27JAN01",
+    "no_ask": 0.97,
+    "no_sub_title": "Arkansas",
+    "rules_primary": "If Donald Trump has physically travelled to and been present within the geographic boundaries of Arkansas after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "The following do NOT constitute a visit:\n\nFlying over the area without landing\nLayovers during which the person remains in an airplane\nVirtual or remote appearances\nPresence in international waters adjacent to the area\nPresence solely within embassy or consulate grounds\nPlans, announcements, or scheduling of future visits that do not occur during the applicable time period\n\nFor the avoidance of doubt, a visit occurs only when the person exits an aircraft, vehicle, vessel, or train within the area, or otherwise physically enters the area not aboard one. Remaining aboard, including during flyovers, drive-throughs, and non-exit refueling stops, does not constitute a visit. Exiting within the area constitutes a visit regardless of duration or method of exit.",
+    "ticker": "KXTRUMPSTATES-27JAN01-AR",
+    "title": "Will Donald Trump visit Arkansas before Jan 1, 2027?",
+    "volume": 2542.19,
+    "yes_ask": 0.11,
+    "yes_sub_title": "Arkansas"
+   },
+   "match_score": 0.871,
+   "polymarket": {
+    "best_ask_yes": 0.31,
+    "best_bid_yes": 0.06,
+    "description": "If U.S. President Donald Trump visits the listed state between January 1 and December 31, 2026, 11:59 PM ET, this market will resolve to \"Yes\". Otherwise, this market will resolve to \"No\".\n\nFor the purpose of this market, a \"visit\" is defined as Trump physically entering the terrestrial territory of the listed state. Whether or not Trump enters the state\u2019s airspace during the timeframe of this market will have no bearing on a positive resolution.\n\nThe primary resolution source for this information will be official information from the government of the United States of America, official information from Trump, or released by his verified social media accounts (e.g., https://twitter.com/POTUS); however, a consensus of credible reporting will also be used.",
+    "end": "2027-01-02",
+    "fee_rate": 0.04,
+    "liquidity": 2861,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Donald Trump visit Arkansas in 2026?",
+    "slug": "will-donald-trump-visit-arkansas-in-2026",
+    "url": "https://polymarket.com/event/which-states-will-donald-trump-visit-in-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": -0.05,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPADMINLEAVE-26DEC31-HLUT|howard-lutnick-out-as-secretary-of-commerce-by-december-31",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T14:59:00Z",
+    "event_ticker": "KXTRUMPADMINLEAVE-26DEC31",
+    "no_ask": 0.81,
+    "no_sub_title": "Howard Lutnick",
+    "rules_primary": "If Howard Lutnick leaves as Secretary of Commerce before 2027, then the market resolves to Yes.",
+    "rules_secondary": "Howard Lutnick must have an actual departure date by vacating the role within the time period. \n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expiration of term without renewal, recall, or other means by which the",
+    "ticker": "KXTRUMPADMINLEAVE-26DEC31-HLUT",
+    "title": "Will Howard Lutnick leaves Secretary of Commerce in before 2027?",
+    "volume": 441922.55,
+    "yes_ask": 0.2,
+    "yes_sub_title": "Howard Lutnick"
+   },
+   "match_score": 0.937,
+   "polymarket": {
+    "best_ask_yes": 0.25,
+    "best_bid_yes": 0.15,
+    "description": "This market will resolve to \u201cYes\u201d if Howard Lutnick ceases to be the US Secretary of Commerce for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Lutnick's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from the Trump administration however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 3416,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Howard Lutnick out as Secretary of Commerce by December 31?",
+    "slug": "howard-lutnick-out-as-secretary-of-commerce-by-december-31",
+    "url": "https://polymarket.com/event/howard-lutnick-out-as-secretary-of-commerce-by-december-31"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.066,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXSAGDPQOQ-26DEC01-T1.2|will-brazils-q3-2026-gdp-growth-rate-qoq-be-at-least-1pt2",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-12-01T10:29:00Z",
+    "event_ticker": "KXSAGDPQOQ-26DEC01",
+    "no_ask": 0.93,
+    "no_sub_title": "Above 1.2%",
+    "rules_primary": "If the South Africa GDP growth rate QoQ for Q3 2026 is above 1.2%, then the market resolves to Yes.",
+    "rules_secondary": "",
+    "ticker": "KXSAGDPQOQ-26DEC01-T1.2",
+    "title": "Will South Africa GDP growth rate QoQ for Q3 2026 be above 1.2%?",
+    "volume": 14905.83,
+    "yes_ask": 0.15,
+    "yes_sub_title": "Above 1.2%"
+   },
+   "match_score": 0.754,
+   "polymarket": {
+    "best_ask_yes": 0.004,
+    "best_bid_yes": 0.001,
+    "description": "This market will resolve according to Brazil\u2019s gross domestic product growth rate compared to the prior quarter (GDP at market prices, %) in the 3rd quarter of 2026, as reported by the Instituto Brasileiro de Geografia e Estat\u00edstica\u2019s (IBGE) System of Quarterly National Accounts release for Q3 of 2026, scheduled for release on December 2, 2026.\n\nThe GDP release and relevant statistics will be made available here: https://www.ibge.gov.br/en/statistics/economic/national-accounts/17262-quarterly-national-accounts.html\n\nIf the specified release is not published, this market will resolve based on the first published figure for the specified quarter\u2019s GDP growth rate compared to the prior quarter. If no data for the specified quarter is released by the date the next quarter's data is scheduled to be released, this market will resolve based on data from the last available quarter.\n\nNote: the resolution source for this market reports GDP growth rates compared to the prior quarter to only one decimal point (e.g. 0.8%). Thus, this is the level of precision that will be used when resolving the market.\n\nNote: data from the initial release of the referenced GDP report is what will be used to resolve this market. Data may be revised during the following quarter or as a part of the next estimate's publication, however any revisions to GDP report data made after the initial release will not be considered for this market's resolution. For the full release schedule, see: https://www.ibge.gov.br/en/calendar.html",
+    "end": "2026-12-02",
+    "fee_rate": 0.05,
+    "liquidity": 2593,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Brazil's Q3 2026 GDP growth rate (QoQ) be at least 1.2%?",
+    "slug": "will-brazils-q3-2026-gdp-growth-rate-qoq-be-at-least-1pt2",
+    "url": "https://polymarket.com/event/brazil-gdp-growth-in-q3-2026-qoq"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.06,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXDWTSRANK-226DEC31-AGLE|will-amber-glenn-win-dancing-with-the-stars-season-35",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2026-12-31T15:00:00Z",
-    "event_ticker": "KXGAMEAWARDS-BMUL",
-    "no_ask": 0.95,
-    "no_sub_title": "Marathon",
-    "rules_primary": "If Marathon has won Best Multiplayer at the 2026 Game Awards, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Game Awards. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXGAMEAWARDS-BMUL-MAR",
-    "title": "Will Marathon win the 2026 Game Award for Best Multiplayer?",
-    "volume": 983.51,
-    "yes_ask": 0.07,
-    "yes_sub_title": "Marathon"
+    "event_ticker": "KXDWTSRANK-226DEC31",
+    "no_ask": 0.81,
+    "no_sub_title": "Amber Glenn",
+    "rules_primary": "If Amber Glenn finishes 2nd on Dancing with the Stars Season 35, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Dancing with the Stars. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXDWTSRANK-226DEC31-AGLE",
+    "title": "Will Amber Glenn finish 2nd Place on Dancing with the Stars Season 35?",
+    "volume": 50756.88,
+    "yes_ask": 0.2,
+    "yes_sub_title": "Amber Glenn"
    },
-   "match_score": 0.864,
+   "match_score": 0.807,
    "polymarket": {
-    "best_ask_yes": 0.08,
-    "best_bid_yes": 0.07,
-    "description": "The Game Awards are presented annually to honor achievements in the video game industry. The 2026 Game Awards are currently scheduled to be presented on December 10, 2026.\n\nThis market will resolve according to the listed video game that wins the 2026 Game Award for Best Multiplayer.\n\nIf a game is not officially nominated for the 2026 Game Award for Best Multiplayer when the 2026 nominees are announced, the corresponding market will immediately resolve to \"No\".\n\nIn case of a tie for the winner, this market will resolve in favor of the nominated game whose listed title comes first in alphabetical order.\n\nIf, for any reason, no winner is declared by December 31, 2026, 11:59 PM ET, this market will resolve to \"Other\".\n\nThe primary resolution source for this market will be official information from The Game Awards, including data from their website (e.g., https://thegameawards.com/) and the live broadcast of the award ceremony; however, a consensus of credible reporting may also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.05,
-    "liquidity": 3673,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Marathon win Best Multiplayer at the 2026 Game Awards?",
-    "slug": "will-marathon-win-best-multiplayer-at-the-2026-game-awards-1785857785554",
-    "url": "https://polymarket.com/event/the-game-awards-best-multiplayer-20260804145650"
-   }
-  },
-  {
-   "est_gap_before_fees": 0.0,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-RULER|will-ruler-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.91,
-    "no_sub_title": "Ruler",
-    "rules_primary": "If Ruler wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-RULER",
-    "title": "Will Ruler win Finals MVP at League of Legends Worlds?",
-    "volume": 3611.33,
-    "yes_ask": 0.1,
-    "yes_sub_title": "Ruler"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.112,
+    "best_ask_yes": 0.13,
     "best_bid_yes": 0.1,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
+    "description": "Dancing with the Stars is a reality dance competition in which celebrities are paired with professional dancers to perform dance routines. This market will resolve to the celebrity participant of the winning team of Dancing with the Stars: Season 35.\n\nIf multiple winners are announced, this market will resolve in favor of the listed contestant whose name comes first in alphabetical order.\n\nIf Dancing with the Stars: Season 35 concludes without a winner being declared, or if Dancing with the Stars: Season 35 has otherwise not concluded by March 31, 2027, 11:59PM ET this market will resolve to \"Other\".\n\nThe resolution source for this market will be the official broadcast of the final episode of Dancing with the Stars: Season 35.",
+    "end": "2026-12-31",
     "fee_rate": 0.05,
-    "liquidity": 11187,
+    "liquidity": 4741,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Ruler win Worlds 2026 Finals MVP?",
-    "slug": "will-ruler-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
+    "question": "Will Amber Glenn win Dancing With the Stars: Season 35?",
+    "slug": "will-amber-glenn-win-dancing-with-the-stars-season-35",
+    "url": "https://polymarket.com/event/who-will-win-dancing-with-the-stars-season-35"
    }
   },
   {
-   "est_gap_before_fees": 0.0,
+   "est_gap_before_fees": 0.03,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRT-HUN-60|will-the-hunger-games-sunrise-on-the-reaping-score-at-least-60-on-the-rotten-tomatoes-tomatometer-20261123",
+   "id": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-ERL|will-erling-haaland-rank-in-googles-top-5-most-searched-people-of-2026",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2026-11-23T15:00:00Z",
-    "event_ticker": "KXRT-HUN",
-    "no_ask": 0.06,
-    "no_sub_title": "Above 60",
-    "rules_primary": "If The Hunger Games: Sunrise on the Reaping has a Tomatometer score of above 60 on Nov 23, 2026 at 10:00 AM ET, then the market resolves to Yes.",
-    "rules_secondary": "The \"Fresh!\" and \"Certified Fresh!\" subtitles are meant for illustrative purposes only. The Tomatometer score must be above the strike value to resolve as YES (for example, a score of 75 would resolve \"Above 75\" as No.) The market will be determined the Monday after wide release at 10:00 AM ET.\n\nThis market and these products have not been endorsed by Rotten Tomatoes. Any references to Rotten Tomatoes or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Rotten Tomatoes and Kalshi.",
-    "ticker": "KXRT-HUN-60",
-    "title": "The Hunger Games: Sunrise on the Reaping Rotten Tomatoes score?",
-    "volume": 19081.82,
-    "yes_ask": 0.95,
-    "yes_sub_title": "Above 60"
+    "close_time": "2026-12-31T15:00:00Z",
+    "event_ticker": "KXRANKLISTGOOGLESEARCHTOP5-26DEC",
+    "no_ask": 0.38,
+    "no_sub_title": "Erling Haaland",
+    "rules_primary": "If Erling Haaland is in Top 5 search on Google\u2019s Year in Search 2026 Global \u2013 People in 2026, then the market resolves to Yes.",
+    "rules_secondary": "This market resolves based on the individuals ranked in the \u201cPeople\u201d section of Google\u2019s official Year in Search 2026 \u2013 Global list. Google\u2019s report includes multiple sections such as Searches, News, Passings, and People \u2014 only the People section applies to this market. For example, If Liam Payne is top 5 in \u201cSearches\u201d but Donald Trump is top 5 in \u201cPeople,\u201d the market resolves Yes to Donald Trump.\n\nThis market and these products have not been endorsed by Google. Any references Google, or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Google and Kalshi.",
+    "ticker": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-ERL",
+    "title": "Will Erling Haaland be in the Top 5 rank on Google\u2019s Year in Search 2026 Global \u2013 People?",
+    "volume": 20177.01,
+    "yes_ask": 0.66,
+    "yes_sub_title": "Erling Haaland"
    },
-   "match_score": 0.877,
+   "match_score": 0.798,
    "polymarket": {
-    "best_ask_yes": 0.94,
-    "best_bid_yes": 0.91,
-    "description": "This market will resolve to \"Yes\" if the displayed Rotten Tomatoes \"All Critics\" Tomatometer score for The Hunger Games: Sunrise on the Reaping is at least equal to the specified number at 10:00 AM ET on November 23, 2026. Otherwise, this market will resolve to \"No\".\n\nIf, for any reason, the resolution data is unavailable at this market's specified end time, the resolution source will be checked until the relevant data is available. This market will resolve to \"No\" if no data is available by November 27, 2026, 11:59 PM ET.",
-    "end": "2026-11-23",
+    "best_ask_yes": 0.59,
+    "best_bid_yes": 0.52,
+    "description": "This market will resolve to \"Yes\" if the listed individual is ranked in the Top 5 of Google\u2019s official Year in Search Global \"People\" list for 2026. Otherwise, this market will resolve to \"No.\"\n\nThe specified list is expected to be displayed on the Google Trends Year in Search hub, with location selected to Global. The navigation procedure as of market creation involves going to trends.withgoogle.com/year-in-search/ and clicking through Global \u2192 Trending \u2192 People. The 2026 page is expected to appear using the same navigation once released (as the 2025 page currently shows the specified ranking). This market will resolve based on the specified list regardless of navigation procedure.\n\nThis market may resolve as soon as the specified list for 2026 is released. If Google does not release the specified list by March 31, 2027, 11:59 PM ET, this market will resolve to \"No.\"\n\nThe resolution source for this market will be the specified list as published by Google.",
+    "end": "2026-12-31",
     "fee_rate": 0.05,
-    "liquidity": 2499,
+    "liquidity": 3135,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will \"The Hunger Games: Sunrise on the Reaping\" score at least 60 on the Rotten Tomatoes Tomatometer?",
-    "slug": "will-the-hunger-games-sunrise-on-the-reaping-score-at-least-60-on-the-rotten-tomatoes-tomatometer-20261123",
-    "url": "https://polymarket.com/event/the-hunger-games-sunrise-on-the-reaping-rotten-tomatoes-score-20261123"
+    "question": "Will Erling Haaland rank in Google\u2019s Top 5 Most Searched People of 2026?",
+    "slug": "will-erling-haaland-rank-in-googles-top-5-most-searched-people-of-2026",
+    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
    }
   },
   {
-   "est_gap_before_fees": -0.001,
+   "est_gap_before_fees": 0.03,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXNEWOUTBREAK-P-26|new-pandemic-in-2026",
+   "id": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-BAD|will-bad-bunny-rank-in-googles-top-5-most-searched-people-of-2026",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXNEWOUTBREAK-P-26",
-    "no_ask": 0.98,
-    "no_sub_title": "In 2026",
-    "rules_primary": "If any disease becomes a pandemic in 2026, then the market resolves to Yes.",
-    "rules_secondary": "",
-    "ticker": "KXNEWOUTBREAK-P-26",
-    "title": "Pandemic in 2026?",
-    "volume": 1049032.66,
-    "yes_ask": 0.03,
-    "yes_sub_title": "In 2026"
+    "close_time": "2026-12-31T15:00:00Z",
+    "event_ticker": "KXRANKLISTGOOGLESEARCHTOP5-26DEC",
+    "no_ask": 0.42,
+    "no_sub_title": "Bad Bunny",
+    "rules_primary": "If Bad Bunny is in Top 5 search on Google\u2019s Year in Search 2026 Global \u2013 People in 2026, then the market resolves to Yes.",
+    "rules_secondary": "This market resolves based on the individuals ranked in the \u201cPeople\u201d section of Google\u2019s official Year in Search 2026 \u2013 Global list. Google\u2019s report includes multiple sections such as Searches, News, Passings, and People \u2014 only the People section applies to this market. For example, If Liam Payne is top 5 in \u201cSearches\u201d but Donald Trump is top 5 in \u201cPeople,\u201d the market resolves Yes to Donald Trump.\n\nThis market and these products have not been endorsed by Google. Any references Google, or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Google and Kalshi.",
+    "ticker": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-BAD",
+    "title": "Will Bad Bunny be in the Top 5 rank on Google\u2019s Year in Search 2026 Global \u2013 People?",
+    "volume": 17138.28,
+    "yes_ask": 0.6,
+    "yes_sub_title": "Bad Bunny"
    },
-   "match_score": 0.897,
+   "match_score": 0.789,
    "polymarket": {
-    "best_ask_yes": 0.021,
-    "best_bid_yes": 0.018,
-    "description": "This market will resolve to \"Yes\" if the World Health Organization (WHO) declares any disease a pandemic between January 1, 2026 and December 31, 2026 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe resolution source will be official announcements from the World Health Organization.",
-    "end": "2027-01-01",
-    "fee_rate": 0.0,
-    "liquidity": 48089,
+    "best_ask_yes": 0.55,
+    "best_bid_yes": 0.49,
+    "description": "This market will resolve to \"Yes\" if the listed individual is ranked in the Top 5 of Google\u2019s official Year in Search Global \"People\" list for 2026. Otherwise, this market will resolve to \"No.\"\n\nThe specified list is expected to be displayed on the Google Trends Year in Search hub, with location selected to Global. The navigation procedure as of market creation involves going to trends.withgoogle.com/year-in-search/ and clicking through Global \u2192 Trending \u2192 People. The 2026 page is expected to appear using the same navigation once released (as the 2025 page currently shows the specified ranking). This market will resolve based on the specified list regardless of navigation procedure.\n\nThis market may resolve as soon as the specified list for 2026 is released. If Google does not release the specified list by March 31, 2027, 11:59 PM ET, this market will resolve to \"No.\"\n\nThe resolution source for this market will be the specified list as published by Google.",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 2602,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "New pandemic in 2026?",
-    "slug": "new-pandemic-in-2026",
-    "url": "https://polymarket.com/event/new-pandemic-in-2026"
+    "question": "Will Bad Bunny rank in Google\u2019s Top 5 Most Searched People of 2026?",
+    "slug": "will-bad-bunny-rank-in-googles-top-5-most-searched-people-of-2026",
+    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
    }
   },
   {
-   "est_gap_before_fees": -0.004,
+   "est_gap_before_fees": 0.03,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027",
+   "id": "KXHEGSETHOUT-26AUG-26DEC01|pete-hegseth-out-as-secretary-of-defense-by-october-31-20261001003401433",
    "kalshi": {
     "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXRECOGSOMALI-29",
-    "no_ask": 0.959,
-    "no_sub_title": "Before 2027",
-    "rules_primary": "If the United States explicitly and formally recognizes Somaliland as a sovereign state independent from any previously recognized country after Issuance and before Jan 1, 2027, the market resolves to Yes.",
-    "rules_secondary": "This could include: opening a U.S. embassy with Somaliland, accepting an ambassador from Somaliland, including the entity as an independent country in U.S. Department of State country lists, or signing a formal treaty, bilateral agreement, or communique that explicitly identifies Somaliland as an independent and sovereign state.\n\nMerely acknowledging a governing authority exists, without recognizing its authority, is insufficient to resolve the market to Yes. Establishing a consulate or liaison office without the formal status and language of recognition does not qualify. Trade offices, cultural centers, or other non-embassy missions are insufficient. Participation alongside the entity in international conferences, humanitarian aid missions, or multilateral forums does not in itself consti",
-    "ticker": "KXRECOGSOMALI-29-27",
-    "title": "Will Trump recognize Somaliland?",
-    "volume": 17047.42,
-    "yes_ask": 0.049,
-    "yes_sub_title": "Before Jan 1, 2027"
+    "close_time": "2026-12-01T04:59:00Z",
+    "event_ticker": "KXHEGSETHOUT-26APR",
+    "no_ask": 0.79,
+    "no_sub_title": "Before Dec 1, 2026",
+    "rules_primary": "If Pete Hegseth leaves as Secretary of Defense before Dec 1, 2026, then the market resolves to Yes.",
+    "rules_secondary": "Pete Hegseth must have an actual departure date and vacate the role within the time period.\n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expulsion, expiration of term without renewal, recall, or other means by wh",
+    "ticker": "KXHEGSETHOUT-26AUG-26DEC01",
+    "title": "Will Pete Hegseth be out as Secretary of Defense before Dec 1, 2026?",
+    "volume": 828616.45,
+    "yes_ask": 0.23,
+    "yes_sub_title": "Before Dec 1, 2026"
    },
-   "match_score": 0.928,
+   "match_score": 0.846,
    "polymarket": {
-    "best_ask_yes": 0.045,
-    "best_bid_yes": 0.036,
-    "description": "This market will resolve to \"Yes\" if the United States formally recognizes the Republic of Somaliland as a sovereign state by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nOnly formal recognition of Somaliland will qualify. Statements/actions which acknowledge the Republic of Somaliland, or change its diplomatic status with the U.S. but do not formally recognize the country as a sovereign state will not qualify.\n\nThe primary resolution source for this market will be official information from the government of the United States, however a consensus of credible reporting will also be used.",
-    "end": "2027-01-01",
-    "fee_rate": 0.0,
-    "liquidity": 18709,
+    "best_ask_yes": 0.28,
+    "best_bid_yes": 0.26,
+    "description": "This market will resolve to \u201cYes\u201d if Pete Hegseth ceases to be U.S. Secretary of Defense for any period of time between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Pete Hegseth's resignation/removal by this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be official information from Pete Hegseth and the U.S. government; however, a consensus of credible reporting may also be used.",
+    "end": "2026-12-01",
+    "fee_rate": 0.04,
+    "liquidity": 73298,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Trump recognize Somaliland before 2027?",
-    "slug": "will-trump-recognize-somaliland-before-2027",
-    "url": "https://polymarket.com/event/will-trump-recognize-somaliland-before-2027"
+    "question": "Pete Hegseth out as Secretary of Defense by November 30?",
+    "slug": "pete-hegseth-out-as-secretary-of-defense-by-october-31-20261001003401433",
+    "url": "https://polymarket.com/event/pete-hegseth-out-as-secretary-of-defense-by-november-30-20261001003401433"
    }
   },
   {
-   "est_gap_before_fees": -0.006,
+   "est_gap_before_fees": 0.029,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLEAVEMERZ-29JAN01-27JAN01|friedrich-merz-out-as-chancellor-of-germany-before-2027",
+   "id": "KXFEDERALCHARGE-27JAN01-AFAU|anthony-fauci-charged-by-december-31-20260729165802089",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXLEAVEMERZ-29JAN01",
-    "no_ask": 0.98,
+    "event_ticker": "KXFEDERALCHARGE-27JAN01",
+    "no_ask": 0.944,
+    "no_sub_title": "Anthony Fauci",
+    "rules_primary": "If Anthony Fauci has been formally charged with a federal crime  after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Charges filed in military courts are included. The reinstatement of charges filed prior to Issuance does not count; only the filing of a new charging document after Issuance triggers the Payout Criterion.\n\nFormal charges require the filing of a criminal complaint, information, or indictment with an appropriate court. Arrests without charges, being named as a target of investigation, civil lawsuits, and administrative actions do not constitute charges. Traffic violations that don't require court appearances and sealed charges that remain sealed through the deadline also don't count. If charges are filed and then dismissed before the deadline, the market still resolves to Yes. Pre-trial diversion agreements involving formal charges count as charges. For groups of individuals, charges against",
+    "ticker": "KXFEDERALCHARGE-27JAN01-AFAU",
+    "title": "Will Anthony Fauci be charged with a any crime before Jan 1, 2027?",
+    "volume": 555912.22,
+    "yes_ask": 0.057,
+    "yes_sub_title": "Anthony Fauci"
+   },
+   "match_score": 0.764,
+   "polymarket": {
+    "best_ask_yes": 0.027,
+    "best_bid_yes": 0.02,
+    "description": "This market will resolve to \u201cYes\u201d if any Federal or State jurisdiction of the United States formally charges or otherwise announces a criminal indictment of Anthony Fauci between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nFor the purposes of this market the District of Columbia and any county, municipality, or other subdivision of a State shall be included within the definition of a State.\n\nThe primary resolution source for this market will be official information from US governmental sources, however a wide consensus of credible reporting will also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 12129,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Anthony Fauci charged by December 31?",
+    "slug": "anthony-fauci-charged-by-december-31-20260729165802089",
+    "url": "https://polymarket.com/event/anthony-fauci-charged-by-december-31-20260729165802089"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.019,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T15:00:00Z",
+    "event_ticker": "KXBESHEARRUN-28",
+    "no_ask": 0.9,
     "no_sub_title": "Before Jan 1, 2027",
-    "rules_primary": "If Friedrich Merz has either officially announced their intention to leave as Chancellor of Germany or has actually left as Chancellor of Germany before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
-    "ticker": "KXLEAVEMERZ-29JAN01-27JAN01",
-    "title": "Will Friedrich Merz leave Chancellor of Germany before Jan 1, 2027?",
-    "volume": 6223.6,
+    "rules_primary": "If Andy Beshear has announced that he will run for President of the United States in 2028 before Jan 1, 2027, including running for the nomination of any political party to contest that office, then the market resolves to Yes.",
+    "rules_secondary": "The person must publicly announce their campaign for it to be reported by a Source Agency. Merely filing campaign paperwork with the Federal Election Commission or similar entity is insufficient without a public announcement. The announcement must be for the specific office and election year listed. Exploratory committees or statements of interest without formal campaign announcements do not qualify. Running for a party's nomination to contest the office counts as running for that office. The announcement must come from the person themselves or their official campaign, not from speculation or third-party sources.",
+    "ticker": "KXBESHEARRUN-28-27JAN01",
+    "title": "Will Andy Beshear announce a run for President of the United States before Jan 1, 2027?",
+    "volume": 1784.64,
+    "yes_ask": 0.14,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.758,
+   "polymarket": {
+    "best_ask_yes": 0.081,
+    "best_bid_yes": 0.069,
+    "description": "This market will resolve to \u201cYes\u201d if the listed individual officially announces that they are running for U.S. President in the 2028 United States presidential election by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement by the listed individual  will be sufficient to trigger a \"Yes\" resolution, regardless of whether they actually filed a nomination to run, or whether they actually file a nomination to run in the future.\n\nThe primary resolution source for this market will be official statements by the listed individual (ex: via speech, social media, etc.), however a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 23187,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Andy Beshear announce a Presidential run before 2027?",
+    "slug": "will-andy-beshear-announce-a-presidential-run-before-2027",
+    "url": "https://polymarket.com/event/who-will-announce-presidential-run-before-2027"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.019,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXFEDERALCHARGE-27JAN01-GPET|will-gustavo-petro-be-charged-in-the-us-by-december-31",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXFEDERALCHARGE-27JAN01",
+    "no_ask": 0.96,
+    "no_sub_title": "Gustavo Petro",
+    "rules_primary": "If Gustavo Petro has been formally charged with a federal crime  after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Charges filed in military courts are included. The reinstatement of charges filed prior to Issuance does not count; only the filing of a new charging document after Issuance triggers the Payout Criterion.\n\nFormal charges require the filing of a criminal complaint, information, or indictment with an appropriate court. Arrests without charges, being named as a target of investigation, civil lawsuits, and administrative actions do not constitute charges. Traffic violations that don't require court appearances and sealed charges that remain sealed through the deadline also don't count. If charges are filed and then dismissed before the deadline, the market still resolves to Yes. Pre-trial diversion agreements involving formal charges count as charges. For groups of individuals, charges against",
+    "ticker": "KXFEDERALCHARGE-27JAN01-GPET",
+    "title": "Will Gustavo Petro be charged with a any crime before Jan 1, 2027?",
+    "volume": 15702.4,
+    "yes_ask": 0.041,
+    "yes_sub_title": "Gustavo Petro"
+   },
+   "match_score": 0.765,
+   "polymarket": {
+    "best_ask_yes": 0.08,
+    "best_bid_yes": 0.06,
+    "description": "This market will resolve to \u201cYes\u201d if any Federal or State jurisdiction of the United States formally charges or announces a criminal indictment of Colombian President Gustavo Petro by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nFor the purposes of this market, the District of Columbia and any county, municipality, or other subdivision of a State shall be included within the definition of a State.\n\nThe primary resolution source for this market will be official information from US governmental sources; however, a wide consensus of credible reporting will also be used.\n",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 12062,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Gustavo Petro be charged in the US by December 31?",
+    "slug": "will-gustavo-petro-be-charged-in-the-us-by-december-31",
+    "url": "https://polymarket.com/event/will-gustavo-petro-be-charged-in-the-us-by-april-30"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.018,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXDWTSRANK-326DEC31-TAT|will-tatyana-ali-win-dancing-with-the-stars-season-35",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-12-31T15:00:00Z",
+    "event_ticker": "KXDWTSRANK-326DEC31",
+    "no_ask": 0.98,
+    "no_sub_title": "Tatyana Ali",
+    "rules_primary": "If Tatyana Ali finishes 3rd in Dancing with the Stars Season 35, then the market resolves to Yes.",
+    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Dancing with the Stars. All trademarks, logos, and brand names are the property of their respective owners.",
+    "ticker": "KXDWTSRANK-326DEC31-TAT",
+    "title": "Will Tatyana Ali finish 3rd Place on Dancing with the Stars Season 35?",
+    "volume": 16482.19,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Tatyana Ali"
+   },
+   "match_score": 0.808,
+   "polymarket": {
+    "best_ask_yes": 0.002,
+    "best_bid_yes": 0.001,
+    "description": "Dancing with the Stars is a reality dance competition in which celebrities are paired with professional dancers to perform dance routines. This market will resolve to the celebrity participant of the winning team of Dancing with the Stars: Season 35.\n\nIf multiple winners are announced, this market will resolve in favor of the listed contestant whose name comes first in alphabetical order.\n\nIf Dancing with the Stars: Season 35 concludes without a winner being declared, or if Dancing with the Stars: Season 35 has otherwise not concluded by March 31, 2027, 11:59PM ET this market will resolve to \"Other\".\n\nThe resolution source for this market will be the official broadcast of the final episode of Dancing with the Stars: Season 35.",
+    "end": "2026-12-31",
+    "fee_rate": 0.05,
+    "liquidity": 3453,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Tatyana Ali win Dancing With the Stars: Season 35?",
+    "slug": "will-tatyana-ali-win-dancing-with-the-stars-season-35",
+    "url": "https://polymarket.com/event/who-will-win-dancing-with-the-stars-season-35"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.016,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXCBDCHILE-26DEC15-H25P|will-the-central-bank-of-chile-decrease-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2026-12-15T21:59:00Z",
+    "event_ticker": "KXCBDCHILE-26DEC15",
+    "no_ask": 0.98,
+    "no_sub_title": "Hike more than 25bps",
+    "rules_primary": "If the Central Bank of Chile takes the action of hike more than 25bps at its December Monetary Policy Meeting, then the market resolves to Yes.",
+    "rules_secondary": "The market resolves based on the official policy rate decision announced by the central bank. For central banks with multiple policy rates, only changes to the primary policy rate count. If the meeting is cancelled or delayed past the expiration date, markets for \"Maintain current rate\" resolve to Yes and all others resolve to No. Emergency rate changes between scheduled meetings do not affect resolution of contracts tied to scheduled meetings.",
+    "ticker": "KXCBDCHILE-26DEC15-H25P",
+    "title": "Will the Central Bank of Chile hike more than 25bps at the December Monetary Policy Meeting?",
+    "volume": 4676.76,
+    "yes_ask": 0.03,
+    "yes_sub_title": "Hike more than 25bps"
+   },
+   "match_score": 0.831,
+   "polymarket": {
+    "best_ask_yes": 0.004,
+    "best_bid_yes": 0.002,
+    "description": "This market will resolve according to the change in basis points in the monetary policy rate resulting from the December 2026 meeting of the Central Bank of Chile (Banco Central de Chile), relative to the level it was prior to this meeting.\n\nThe resolution source will be official information from the Central Bank of Chile, including the statement or release from its December 2026 meeting, scheduled for December 15, 2026, as listed on the official Central Bank of Chile calendar (https://www.bcentral.cl/es/web/banco-central/noticias-y-publicaciones/prensa/calendario-de-politica-monetaria-y-financiera). This market may resolve as soon as the statement or release of the Central Bank of Chile resulting from its December 2026 meeting with relevant data is issued.\n\nIf the specified rate is defined by an upper and lower bound, the relevant change will be the change to the upper bound.\n\nIf the specified rate is changed to a level not expressed in the displayed options, the change will be rounded according to the following guidelines. Increases or decreases of less than 25 bps will be rounded to 25 bps (e.g. an increase or decrease of 10 bps would be considered to be an increase or decrease of 25 bps). Increases or decreases of greater than 25 bps will be rounded to the nearest 25 bps and will be rounded away from 0 in cases of equidistance (e.g., an increase or decrease of 37.5 bps would be considered to be an increase or decrease of 50 bps). Displayed options of \u201cIncrease\u201d or \u201cDecrease\u201d will include policy rate increases or decreases of any size.\n\nIf the specified meeting is postponed to a date and time before the start of the next scheduled meeting, this market will resolve based on the outcome of that postponed meeting. If the specified meeting is cancelled, or postponed such",
+    "end": "2026-12-15",
+    "fee_rate": 0.05,
+    "liquidity": 2403,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will the Central Bank of Chile decrease the monetary policy rate by 25 bps at the December meeting?",
+    "slug": "will-the-central-bank-of-chile-decrease-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+    "url": "https://polymarket.com/event/central-bank-of-chile-decision-in-december-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.015,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXHEGSETHIMPEACH-27JUL01-27JAN01|pete-hegseth-impeached-by-december-31-2026-20260628214100529",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXHEGSETHIMPEACH-27JUL01",
+    "no_ask": 0.4,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Pete Hegseth is formally impeached before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Pete Hegseth is impeached when the U.S. House of Representatives adopts at least one article of impeachment against him; a Senate trial or conviction is not required.",
+    "ticker": "KXHEGSETHIMPEACH-27JUL01-27JAN01",
+    "title": "Will Pete Hegseth be impeached before Jan 1, 2027?",
+    "volume": 119835.87,
+    "yes_ask": 0.62,
+    "yes_sub_title": "Before Jan 1, 2027"
+   },
+   "match_score": 0.818,
+   "polymarket": {
+    "best_ask_yes": 0.585,
+    "best_bid_yes": 0.579,
+    "description": "This market will resolve to \u201cYes\u201c if the US House of Representatives, by simple majority vote, approves or passes one or more articles of impeachment of United States Secretary of War Pete Hegseth, between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nNeither trial nor conviction by the US Senate, nor removal from office, is necessary to resolve this market to \u201cYes\u201c.\n\nIf the named individual permanently vacates the specified office prior to the satisfaction of the criteria for a \"Yes\" resolution, this market will immediately resolve to \"No\".\n\nThe primary resolution source for this market will be information from the federal government of the United States; however, a consensus of credible reporting may also be used.",
+    "end": "2027-01-01",
+    "fee_rate": 0.04,
+    "liquidity": 58640,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Pete Hegseth impeached by December 31, 2026?",
+    "slug": "pete-hegseth-impeached-by-december-31-2026-20260628214100529",
+    "url": "https://polymarket.com/event/pete-hegseth-impeached-by-june-30"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.013,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXTRUMPMEETING-27JAN01-NPXIV|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T14:59:00Z",
+    "event_ticker": "KXTRUMPMEETING-27JAN01",
+    "no_ask": 0.959,
+    "no_sub_title": "Pope Leo XIV",
+    "rules_primary": "If Donald Trump and Pope Leo XIV meet in person after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "A qualifying meeting must satisfy the following: both persons must be present (physically or virtually, as specified by &lt;meet&gt;) and engage in communication or interaction\u2014mere presence in the same location without interaction does not constitute a meeting unless otherwise specified. The meeting must be confirmed by at least one Source Agency through official statement, press release, credible media report, or other documented evidence. The meeting must occur at any point during the time period; for meetings that span across the boundary of the time period, any portion of the meeting occurring within the time period is sufficient. Coincidental encounters without purposeful engagement (e.g., passing in a hallway without acknowledgment) do not count. Communication via intermediaries, wr",
+    "ticker": "KXTRUMPMEETING-27JAN01-NPXIV",
+    "title": "Will Donald Trump meet in person Pope Leo XIV before Jan 1, 2027?",
+    "volume": 33625.95,
+    "yes_ask": 0.044,
+    "yes_sub_title": "Pope Leo XIV"
+   },
+   "match_score": 0.836,
+   "polymarket": {
+    "best_ask_yes": 0.028,
+    "best_bid_yes": 0.027,
+    "description": "This market will resolve to \"Yes\" if the listed individual meets with Donald Trump between January 1, and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA meeting is defined as any encounter where both listed individual and Trump are present and interact with each other in person.\n\nThe resolution source will be a consensus of credible reporting.",
+    "end": "2027-01-02",
+    "fee_rate": 0.04,
+    "liquidity": 23054,
+    "outcomes": [
+     "Yes",
+     "No"
+    ],
+    "question": "Will Trump meet with Pope Leo XIV in 2026?",
+    "slug": "will-trump-meet-with-pope-leo-xiv-in-2026",
+    "url": "https://polymarket.com/event/who-will-trump-meet-with-in-2026"
+   }
+  },
+  {
+   "est_gap_before_fees": 0.013,
+   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
+   "id": "KXPUTINZELMEET-29JAN01-27JAN01|will-zelenskyy-and-putin-meet-next-in-us",
+   "kalshi": {
+    "can_close_early": true,
+    "close_time": "2027-01-01T04:59:00Z",
+    "event_ticker": "KXPUTINZELMEET-29JAN01",
+    "no_ask": 0.96,
+    "no_sub_title": "Before Jan 1, 2027",
+    "rules_primary": "If Vladimir Putin and Volodymyr Zelenskyy meet in person after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "Both Vladimir Putin and Volodymyr Zelenskyy must be physically present in the same location and directly communicate or interact after Issuance and before the applicable date. A bilateral, pull-aside, sideline, informal, or multilateral encounter qualifies if direct interaction is documented. Mere co-attendance, proximity without interaction, an intermediary, a letter, a phone or video call, a prerecorded appearance, or a scheduled-but-cancelled meeting does NOT qualify.",
+    "ticker": "KXPUTINZELMEET-29JAN01-27JAN01",
+    "title": "Will Putin and Zelenskyy meet in person before Jan 1, 2027?",
+    "volume": 6504.29,
     "yes_ask": 0.09,
     "yes_sub_title": "Before Jan 1, 2027"
    },
-   "match_score": 0.908,
+   "match_score": 0.817,
    "polymarket": {
-    "best_ask_yes": 0.026,
-    "best_bid_yes": 0.025,
-    "description": "This market will resolve to \u201cYes\u201d if Friedrich Merz ceases to be the Chancellor of Germany for any period of time by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Friedrich Merz's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be the government of Germany, however a consensus of credible reporting will also suffice.",
+    "best_ask_yes": 0.027,
+    "best_bid_yes": 0.02,
+    "description": "This market will resolve according to the location of the next meeting between Volodymyr Zelenskyy and Vladimir Putin by December 31, 2026, 11:59 PM ET. If no meeting takes place by December 31 ET, this market will resolve to \"No meeting before 2027\".\n\nA meeting is defined as any encounter where Zelenskyy and Putin are both present and interact with each other in person.\n\nFor the purpose of this market, a meeting held on Ukrainian territory under the de facto control of Russia (e.g., Crimea) will be considered part of Russia.\n\nThe primary resolution source for this market will be a consensus of credible reporting.",
     "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 114281,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Friedrich Merz out as Chancellor of Germany before December 31, 2026?",
-    "slug": "friedrich-merz-out-as-chancellor-of-germany-before-2027",
-    "url": "https://polymarket.com/event/friedrich-merz-out-as-chancellor-of-germany-before-2027"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLEAVEOPEC-27|will-another-country-leave-opec-in-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXLEAVEOPEC-27",
-    "no_ask": 0.94,
-    "no_sub_title": "Yes",
-    "rules_primary": "If any member state of OPEC announces they are leaving the organization before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "An agreement or announcement qualifies if it involves any of the following:\n\nFormal signing of treaties\nParliamentary approval with binding effect\nOfficial ratification\nFormal commitment by the head of state/government with constitutional authority\nOfficial statements by authorized ministers\nOfficial press releases\nFormal declarations during government proceedings\nOfficial statements to international bodies\n\nPhased implementation announcements and multi-party agreements where the country is a signatory also qualify.\n\nThe following do NOT qualify:\n\nPreliminary discussions\nConditional agreements contingent on circumstances\nOpposition party statements\nLeaked documents\nThink-tank recommendations\nGeneral aspirations without specific commitment\nDraft legislation without approval\nRegional actions",
-    "ticker": "KXLEAVEOPEC-27",
-    "title": "Will another country leave OPEC in 2026?",
-    "volume": 28812.96,
-    "yes_ask": 0.1,
-    "yes_sub_title": "Yes"
-   },
-   "match_score": 0.921,
-   "polymarket": {
-    "best_ask_yes": 0.07,
-    "best_bid_yes": 0.06,
-    "description": "On April 28, 2026, the United Arab Emirates officially announced that it would withdraw from OPEC. You can read more about that here: https://www.reuters.com/markets/commodities/uae-says-it-quits-opec-opec-statement-2026-04-28/.\n\nThis market will resolve to \u201cYes\u201d if another OPEC member officially announces its withdrawal from OPEC between market creation and December 31, 2026, 11:59 PM Gulf Standard Time. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn official announcement made by any country that is an OPEC member at the time of market creation and has not already announced its exit will suffice, regardless of when the withdrawal is set to take effect.\n\nInformal announcements, statements from unnamed sources, or leaks will not qualify.\n\nThis market\u2019s primary resolution source will be official information from the respective governments; however, a consensus of credible reporting will also be used.",
-    "end": "2026-12-31",
     "fee_rate": 0.0,
-    "liquidity": 20406,
+    "liquidity": 105575,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will another country leave OPEC in 2026?",
-    "slug": "will-another-country-leave-opec-in-2026",
-    "url": "https://polymarket.com/event/will-another-country-leave-opec-in-2026"
+    "question": "Will Zelenskyy and Putin meet next in US before 2027?",
+    "slug": "will-zelenskyy-and-putin-meet-next-in-us",
+    "url": "https://polymarket.com/event/where-will-zelenskyy-and-putin-meet-next"
    }
   },
   {
-   "est_gap_before_fees": -0.01,
+   "est_gap_before_fees": 0.012,
    "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXGYANESHOUT-26OCT-27JAN01|will-gyanesh-kumar-be-out-as-chief-election-commissioner-of-india-by-december-31",
+   "id": "KXFARAGEOUTREFORM-26JUL-JAN01|nigel-farage-out-as-reform-uk-leader-in-2026-20260622233131512",
    "kalshi": {
     "can_close_early": true,
     "close_time": "2027-01-01T04:59:00Z",
-    "event_ticker": "KXGYANESHOUT-26OCT",
-    "no_ask": 0.9,
+    "event_ticker": "KXFARAGEOUTREFORM-26JUL",
+    "no_ask": 0.95,
     "no_sub_title": "Before Jan 1, 2027",
-    "rules_primary": "If Gyanesh Kumar leaves as Chief Election Commissioner of India before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "Gyanesh Kumar must have an actual departure date and vacate the role within the time period.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expulsion, expiration of term without renewal, recall, or other means by which the individual no longer occupies the role. This includes both voluntary and involuntary early departure and the natural expiration of a term. Temporary leaves of absence, suspensions, or recusals do not constitute leaving unless the individual formally and permanently ceases to hold the position.",
-    "ticker": "KXGYANESHOUT-26OCT-27JAN01",
-    "title": "Will Gyanesh Kumar be out as Chief Election Commissioner of India before Jan 1, 2027?",
-    "volume": 6100.61,
-    "yes_ask": 0.15,
+    "rules_primary": "If Nigel Farage leaves as Leader of Reform UK before Jan 1, 2027, then the market resolves to Yes.",
+    "rules_secondary": "This market resolves based on when the departure is publicly announced or officially communicated, regardless of the effective date.\n\nIf the person leaves the role due to death (i.e., if the person dies while holding the role), all contracts on the person may resolve to the last fair price as determined in the sole discretion of the Exchange. Temporary leaves of absence, suspensions, or recusals do not constitute leaving, resigning from, or retiring from the role unless the individual formally and permanently ceases to hold the position. If the person vacates the role and then re-occupies the role, the contract may settle on the initial vacation of the role.\n\nFor \"leave,\" cessation of holding the role qualifies, including resignation, retirement, removal, expulsion, expiration of term with",
+    "ticker": "KXFARAGEOUTREFORM-26JUL-JAN01",
+    "title": "Will Nigel Farage announce their departure as Leader of Reform UK before Jan 1, 2027?",
+    "volume": 14345.05,
+    "yes_ask": 0.06,
     "yes_sub_title": "Before Jan 1, 2027"
    },
-   "match_score": 0.923,
+   "match_score": 0.766,
    "polymarket": {
-    "best_ask_yes": 0.11,
-    "best_bid_yes": 0.08,
-    "description": "This market will resolve to \u201cYes\u201d if Gyanesh Kumar ceases to be Chief Election Commissioner of India for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Gyanesh Kumar's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nIf the specified individual is detained, effectively removed from the specified position, or otherwise permanently prevented from fulfilling the duties of the specified position within this market\u2019s timeframe, it will qualify for a \u201cYes\u201d resolution.\n\nThe resolution source for this market will be official information from Gyanesh Kumar, the Election Commission of India, and the government of India; however, a consensus of credible reporting may also be used.",
+    "best_ask_yes": 0.038,
+    "best_bid_yes": 0.025,
+    "description": "This market will resolve to \u201cYes\u201d if Nigel Farage ceases to be the Leader of Reform UK for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Nigel Farage\u2019s resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nThe resolution source for this market will be information from Reform UK, however a consensus of credible reporting will also suffice.",
     "end": "2027-01-01",
     "fee_rate": 0.04,
-    "liquidity": 19902,
+    "liquidity": 20596,
     "outcomes": [
      "Yes",
      "No"
     ],
-    "question": "Will Gyanesh Kumar be out as Chief Election Commissioner of India by December 31?",
-    "slug": "will-gyanesh-kumar-be-out-as-chief-election-commissioner-of-india-by-december-31",
-    "url": "https://polymarket.com/event/gyanesh-kumar-out-as-chief-election-commissioner-of-india-by-december-31"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-PEYZ|will-peyz-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.86,
-    "no_sub_title": "Peyz",
-    "rules_primary": "If Peyz wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-PEYZ",
-    "title": "Will Peyz win Finals MVP at League of Legends Worlds?",
-    "volume": 10338.42,
-    "yes_ask": 0.17,
-    "yes_sub_title": "Peyz"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.15,
-    "best_bid_yes": 0.13,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 5030,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Peyz win Worlds 2026 Finals MVP?",
-    "slug": "will-peyz-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-CHOVY|will-chovy-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.83,
-    "no_sub_title": "Chovy",
-    "rules_primary": "If Chovy wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-CHOVY",
-    "title": "Will Chovy win Finals MVP at League of Legends Worlds?",
-    "volume": 14333.84,
-    "yes_ask": 0.2,
-    "yes_sub_title": "Chovy"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.21,
-    "best_bid_yes": 0.19,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 4927,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Chovy win Worlds 2026 Finals MVP?",
-    "slug": "will-chovy-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.01,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-CANYON|will-canyon-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.93,
-    "no_sub_title": "Canyon",
-    "rules_primary": "If Canyon wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-CANYON",
-    "title": "Will Canyon win Finals MVP at League of Legends Worlds?",
-    "volume": 2016.35,
-    "yes_ask": 0.08,
-    "yes_sub_title": "Canyon"
-   },
-   "match_score": 0.856,
-   "polymarket": {
-    "best_ask_yes": 0.08,
-    "best_bid_yes": 0.068,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 6828,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Canyon win Worlds 2026 Finals MVP?",
-    "slug": "will-canyon-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.014,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXUECL-27-PAN|will-panathinaikos-win-the-2026-27-uefa-conference-league",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-06-16T22:00:00Z",
-    "event_ticker": "KXUECL-27",
-    "no_ask": 0.94,
-    "no_sub_title": "Panathinaikos",
-    "rules_primary": "If Panathinaikos is the 2026-27 UEFA Conference League champion, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXUECL-27-PAN",
-    "title": "Will Panathinaikos win the UEFA Conference League?",
-    "volume": 821.35,
-    "yes_ask": 0.07,
-    "yes_sub_title": "Panathinaikos"
-   },
-   "match_score": 0.922,
-   "polymarket": {
-    "best_ask_yes": 0.074,
-    "best_bid_yes": 0.04,
-    "description": "This market will resolve according to the team that wins the 2026-27 UEFA Conference League Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 UEFA Conference League Championship per the rules of UEFA Conference League (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 UEFA Conference League season is cancelled, postponed after June 16, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from UEFA Conference League; however, a consensus of credible reporting may also be used.",
-    "end": "2027-06-16",
-    "fee_rate": 0.05,
-    "liquidity": 12127,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Panathinaikos win the 2026-27 UEFA Conference League Championship?",
-    "slug": "will-panathinaikos-win-the-2026-27-uefa-conference-league",
-    "url": "https://polymarket.com/event/uefa-conference-league-2027-champion"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.014,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXMOVIEDELAYDUNEPT3-26DEC18|will-dune-part-three-be-delayed-20260720163825706",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-12-18T04:59:00Z",
-    "event_ticker": "KXMOVIEDELAYDUNEPT3-26DEC18",
-    "no_ask": 0.97,
-    "no_sub_title": "Before Dec 18, 2026",
-    "rules_primary": "If Dune: Part Three's release is delayed past December 18, 2026, then the market resolves to Yes.",
-    "rules_secondary": "",
-    "ticker": "KXMOVIEDELAYDUNEPT3-26DEC18",
-    "title": "Will Dune: Part Three be delayed?",
-    "volume": 3911.69,
-    "yes_ask": 0.1,
-    "yes_sub_title": "Before Dec 18, 2026"
-   },
-   "match_score": 0.863,
-   "polymarket": {
-    "best_ask_yes": 0.044,
-    "best_bid_yes": 0.024,
-    "description": "Dune: Part Three is expected to be released on December 18, 2026.\n\nThis market will resolve to \"Yes\" if a new release date later than the one stated above is officially announced by December 17, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nA qualifying announcement must be made through official communication channels of a competent entity such as the studio, distributor, production, or a parent company, or a subsidiary, or authorized representative thereof.\n\nResolution will be based on official statements from competent entities; however, a consensus of credible reporting may be used.",
-    "end": "2026-12-18",
-    "fee_rate": 0.05,
-    "liquidity": 6138,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Dune: Part Three be delayed?",
-    "slug": "will-dune-part-three-be-delayed-20260720163825706",
-    "url": "https://polymarket.com/event/will-dune-part-three-be-delayed-20260720163825706"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.014,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-XUN|will-xun-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.97,
-    "no_sub_title": "Xun",
-    "rules_primary": "If Xun wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-XUN",
-    "title": "Will Xun win Finals MVP at League of Legends Worlds?",
-    "volume": 944.72,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Xun"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.044,
-    "best_bid_yes": 0.014,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 4186,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Xun win Worlds 2026 Finals MVP?",
-    "slug": "will-xun-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.016,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-KERIA|will-keria-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.96,
-    "no_sub_title": "Keria",
-    "rules_primary": "If Keria wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-KERIA",
-    "title": "Will Keria win Finals MVP at League of Legends Worlds?",
-    "volume": 9073.56,
-    "yes_ask": 0.05,
-    "yes_sub_title": "Keria"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.086,
-    "best_bid_yes": 0.034,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 7330,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Keria win Worlds 2026 Finals MVP?",
-    "slug": "will-keria-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.017,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-VIPER|will-viper-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.95,
-    "no_sub_title": "Viper",
-    "rules_primary": "If Viper wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-VIPER",
-    "title": "Will Viper win Finals MVP at League of Legends Worlds?",
-    "volume": 3980.72,
-    "yes_ask": 0.06,
-    "yes_sub_title": "Viper"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.068,
-    "best_bid_yes": 0.043,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 6737,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Viper win Worlds 2026 Finals MVP?",
-    "slug": "will-viper-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.017,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLOLAWARD-WORLDS26FMVP-DORAN|will-doran-win-worlds-2026-finals-mvp",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-29T15:00:00Z",
-    "event_ticker": "KXLOLAWARD-WORLDS26FMVP",
-    "no_ask": 0.97,
-    "no_sub_title": "Doran",
-    "rules_primary": "If Doran wins the League of Legends Worlds Finals MVP for 2026, then the market resolves to Yes.",
-    "rules_secondary": "If multiple players shared Finals MVP, Yes holders will be paid 1/N where N is the number of shared participants. No holders will be paid $1 minus the Yes payout.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXLOLAWARD-WORLDS26FMVP-DORAN",
-    "title": "Will Doran win Finals MVP at League of Legends Worlds?",
-    "volume": 1846.92,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Doran"
-   },
-   "match_score": 0.859,
-   "polymarket": {
-    "best_ask_yes": 0.047,
-    "best_bid_yes": 0.002,
-    "description": "This market will resolve according to the player named Finals MVP (Most Valuable Player of the Grand Final) of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026, with the Grand Final scheduled for November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a Finals MVP has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple players are declared a Finals MVP (e.g., due to ties or special circumstances), this market will resolve in favor of the player whose listed in-game name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
-    "end": "2026-11-29",
-    "fee_rate": 0.05,
-    "liquidity": 6703,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Doran win Worlds 2026 Finals MVP?",
-    "slug": "will-doran-win-worlds-2026-finals-mvp",
-    "url": "https://polymarket.com/event/worlds-2026-finals-mvp"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.019,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXTRUMPCOUNTRIES-27JAN01-SA|will-donald-trump-visit-saudi-arabia-in-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-01T15:00:00Z",
-    "event_ticker": "KXTRUMPCOUNTRIES-27JAN01",
-    "no_ask": 0.973,
-    "no_sub_title": "Saudi Arabia",
-    "rules_primary": "If Donald Trump has physically travelled to and been present within the geographic boundaries of Saudi Arabia after Issuance and before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "The following do NOT constitute a visit:\n\nFlying over the area without landing\nLayovers during which the person remains in an airplane\nVirtual or remote appearances\nPresence in international waters adjacent to the area\nPresence solely within embassy or consulate grounds\nPlans, announcements, or scheduling of future visits that do not occur during the applicable time period\n\nFor the avoidance of doubt, a visit occurs only when the person exits an aircraft, vehicle, vessel, or train within the area, or otherwise physically enters the area not aboard one. Remaining aboard, including during flyovers, drive-throughs, and non-exit refueling stops, does not constitute a visit. Exiting within the area constitutes a visit regardless of duration or method of exit.",
-    "ticker": "KXTRUMPCOUNTRIES-27JAN01-SA",
-    "title": "Will Donald Trump visit Saudi Arabia before Jan 1, 2027?",
-    "volume": 34142.18,
-    "yes_ask": 0.049,
-    "yes_sub_title": "Saudi Arabia"
-   },
-   "match_score": 0.901,
-   "polymarket": {
-    "best_ask_yes": 0.06,
-    "best_bid_yes": 0.03,
-    "description": "If U.S. President Donald Trump visits a listed country between January 1 and December 31, 2026 11:59 PM ET, the relevant market will resolve to \"Yes\". Otherwise, this market will resolve to \"No\".\n\nFor the purpose of this market, a \"visit\" is defined as Trump physically entering the terrestrial or maritime territory of the listed country. Whether or not Trump enters the country's airspace during the timeframe of this market will have no bearing on a positive resolution.\n\nThe primary resolution source for this information will be official information from government of the United States of America, official information from Trump or released by his verified social media accounts (e.g. https://twitter.com/POTUS), however, a consensus of credible reporting will also be used.",
-    "end": "2026-12-31",
-    "fee_rate": 0.04,
-    "liquidity": 3780,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Donald Trump visit Saudi Arabia in 2026?",
-    "slug": "will-donald-trump-visit-saudi-arabia-in-2026",
-    "url": "https://polymarket.com/event/which-countries-will-donald-trump-visit-in-2026"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.019,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXRT-HUN-50|will-the-hunger-games-sunrise-on-the-reaping-score-at-least-50-on-the-rotten-tomatoes-tomatometer-20261123",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2026-11-23T15:00:00Z",
-    "event_ticker": "KXRT-HUN",
-    "no_ask": 0.04,
-    "no_sub_title": "Above 50",
-    "rules_primary": "If The Hunger Games: Sunrise on the Reaping has a Tomatometer score of above 50 on Nov 23, 2026 at 10:00 AM ET, then the market resolves to Yes.",
-    "rules_secondary": "The \"Fresh!\" and \"Certified Fresh!\" subtitles are meant for illustrative purposes only. The Tomatometer score must be above the strike value to resolve as YES (for example, a score of 75 would resolve \"Above 75\" as No.) The market will be determined the Monday after wide release at 10:00 AM ET.\n\nThis market and these products have not been endorsed by Rotten Tomatoes. Any references to Rotten Tomatoes or any associated marks are descriptive only and do not indicate an endorsement of this product or any affiliation between Rotten Tomatoes and Kalshi.",
-    "ticker": "KXRT-HUN-50",
-    "title": "The Hunger Games: Sunrise on the Reaping Rotten Tomatoes score?",
-    "volume": 3102.71,
-    "yes_ask": 0.97,
-    "yes_sub_title": "Above 50"
-   },
-   "match_score": 0.875,
-   "polymarket": {
-    "best_ask_yes": 0.986,
-    "best_bid_yes": 0.951,
-    "description": "This market will resolve to \"Yes\" if the displayed Rotten Tomatoes \"All Critics\" Tomatometer score for The Hunger Games: Sunrise on the Reaping is at least equal to the specified number at 10:00 AM ET on November 23, 2026. Otherwise, this market will resolve to \"No\".\n\nIf, for any reason, the resolution data is unavailable at this market's specified end time, the resolution source will be checked until the relevant data is available. This market will resolve to \"No\" if no data is available by November 27, 2026, 11:59 PM ET.",
-    "end": "2026-11-23",
-    "fee_rate": 0.05,
-    "liquidity": 6444,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will \"The Hunger Games: Sunrise on the Reaping\" score at least 50 on the Rotten Tomatoes Tomatometer?",
-    "slug": "will-the-hunger-games-sunrise-on-the-reaping-score-at-least-50-on-the-rotten-tomatoes-tomatometer-20261123",
-    "url": "https://polymarket.com/event/the-hunger-games-sunrise-on-the-reaping-rotten-tomatoes-score-20261123"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.02,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXUECL-27-ASM|will-monaco-win-the-2026-27-uefa-conference-league",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-06-16T22:00:00Z",
-    "event_ticker": "KXUECL-27",
-    "no_ask": 0.96,
-    "no_sub_title": "Monaco",
-    "rules_primary": "If Monaco is the 2026-27 UEFA Conference League champion, then the market resolves to Yes.",
-    "rules_secondary": "Kalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
-    "ticker": "KXUECL-27-ASM",
-    "title": "Will Monaco win the UEFA Conference League?",
-    "volume": 1041.88,
-    "yes_ask": 0.13,
-    "yes_sub_title": "Monaco"
-   },
-   "match_score": 0.916,
-   "polymarket": {
-    "best_ask_yes": 0.13,
-    "best_bid_yes": 0.11,
-    "description": "This market will resolve according to the team that wins the 2026-27 UEFA Conference League Championship.\n\nIf at any point it becomes impossible for a listed team to win the 2026-27 UEFA Conference League Championship per the rules of UEFA Conference League (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \"No\".\n\nIf the 2026-27 UEFA Conference League season is cancelled, postponed after June 16, 2027, 11:59 PM ET or there is otherwise no winner declared within that timeframe, this market will resolve to \"Other\".\n\nThe primary resolution source will be official information from UEFA Conference League; however, a consensus of credible reporting may also be used.",
-    "end": "2027-06-16",
-    "fee_rate": 0.05,
-    "liquidity": 4972,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Will Monaco win the 2026-27 UEFA Conference League Championship?",
-    "slug": "will-monaco-win-the-2026-27-uefa-conference-league",
-    "url": "https://polymarket.com/event/uefa-conference-league-2027-champion"
-   }
-  },
-  {
-   "est_gap_before_fees": -0.02,
-   "guess_poly_outcome_for_kalshi_yes": "Yes (price-based guess; verify from the rules)",
-   "id": "KXLEADERSOUT-27JAN01-STAKJAP|sanae-takaichi-out-as-prime-minister-of-japan-in-2026",
-   "kalshi": {
-    "can_close_early": true,
-    "close_time": "2027-01-02T03:17:48Z",
-    "event_ticker": "KXLEADERSOUT-27JAN01",
-    "no_ask": 0.979,
-    "no_sub_title": "Sanae Takaichi",
-    "rules_primary": "If Sanae Takaichi has either officially announced their intention to leave as Prime Minister of Japan or has actually left Prime Minister of Japan before Jan 1, 2027, then the market resolves to Yes.",
-    "rules_secondary": "An \"official announcement\" means a statement by the person themselves, their authorized representative, or the official body governing the office that the person will be departing from the office. Such announcements must be reported by at least one Source Agency to be considered official. The announcement must not specify they are leaving in more than a year from the statement, in which case the market does not resolve to Yes.\n\n\"Leaving office\" means the person no longer holds the office in any capacity, including but not limited to: resignation (effective), termination, removal, impeachment and removal, recall, or the expiration of their term without renewal. Temporary absences such as medical leave, suspension with possibility of return, or delegation of duties while retaining the office",
-    "ticker": "KXLEADERSOUT-27JAN01-STAKJAP",
-    "title": "Will Sanae Takaichi leave Prime Minister of Japan before Jan 1, 2027?",
-    "volume": 53269.02,
-    "yes_ask": 0.04,
-    "yes_sub_title": "Sanae Takaichi"
-   },
-   "match_score": 0.931,
-   "polymarket": {
-    "best_ask_yes": 0.044,
-    "best_bid_yes": 0.02,
-    "description": "This market will resolve to \u201cYes\u201d if Sanae Takaichi ceases to be Prime Minister of Japan for any period of time between market creation and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Takaichi's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes into effect.\n\nIf the specified individual is detained, effectively removed from the specified position, or otherwise permanently prevented from fulfilling the duties of the specified position within this market\u2019s timeframe, it will qualify for a \u201cYes\u201d resolution.\n\nThe resolution source for this market will be official information from Sanae Takaichi and the government of Japan; however, a consensus of credible reporting may also be used.\n",
-    "end": "2027-01-01",
-    "fee_rate": 0.04,
-    "liquidity": 42793,
-    "outcomes": [
-     "Yes",
-     "No"
-    ],
-    "question": "Sanae Takaichi out as Prime Minister of Japan in 2026?",
-    "slug": "sanae-takaichi-out-as-prime-minister-of-japan-in-2026",
-    "url": "https://polymarket.com/event/sanae-takaichi-out-as-prime-minister-of-japan-in-2026"
+    "question": "Nigel Farage out as Reform UK leader by December 31, 2026?",
+    "slug": "nigel-farage-out-as-reform-uk-leader-in-2026-20260622233131512",
+    "url": "https://polymarket.com/event/nigel-farage-out-as-reform-uk-leader-in-2026-20260622233131512"
    }
   }
  ],
- "generated": "2026-11-07T05:07:48Z",
+ "generated": "2026-11-08T05:05:55Z",
  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true twins into arb_pairs.json (see 'about' there).",
- "kalshi_kept": 10350,
+ "kalshi_kept": 10770,
  "kalshi_scanned": 150000,
- "matched_unreviewed": 407,
- "poly_markets": 8026
+ "matched_unreviewed": 350,
+ "poly_markets": 7575
 }
