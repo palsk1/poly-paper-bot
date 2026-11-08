@@ -160,6 +160,14 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Both need formal US recognition of Somaliland as sovereign (mere acknowledgement/status change excluded), both end Dec 31 2026 ET, US-government source. Risk: Kalshi example list (embassy, ambassador, State Dept list) could be read broader than 'formal recognition'.",
    "approved": "2026-11-07"
+  },
+  {
+   "id": "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027",
+   "kalshi": "KXBESHEARRUN-28-27JAN01",
+   "poly_slug": "will-andy-beshear-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Beshear himself to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count on either), both end Dec 31 2026 ET. Risk: a vague 'I'm running' remark could be judged differently.",
+   "approved": "2026-11-08"
   }
  ],
  "rejected": [
@@ -562,6 +570,126 @@
    "id": "KXLEADERSOUT-27JAN01-STAKJAP|sanae-takaichi-out-as-prime-minister-of-japan-in-2026",
    "reason": "Kalshi ignores announcements of leaving >1 year out; Polymarket counts any announcement, any gap in office, or being detained/prevented.",
    "date": "2026-11-07"
+  },
+  {
+   "id": "KXHEGSETHOUT-26APR-27JAN01|pete-hegseth-out-as-secretary-of-defense-by-december-31",
+   "reason": "Kalshi needs an actual departure; Polymarket resolves Yes on a mere announcement (and has no death carve-out).",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-KNIGHT|will-knight-win-worlds-2026-finals-mvp",
+   "reason": "Shared MVP pays 1/N on Kalshi but goes to the alphabetically first name on Polymarket; Polymarket also has an 'Other' postponement clause.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXTRUMPPARDON-27JAN01-SBF|will-trump-pardon-sam-bankman-fried-before-2027",
+   "reason": "Kalshi counts any presidential pardon during Trump's second term; Polymarket needs it to come from Trump himself (a Vance pardon would split).",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-ONER|will-oner-win-worlds-2026-finals-mvp",
+   "reason": "Shared MVP pays 1/N on Kalshi but goes to the alphabetically first name on Polymarket; Polymarket also has an 'Other' postponement clause.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXDEMORAESOUT-26SEP-27JAN01|alexandre-de-moraes-out-as-brazil-supreme-court-justice",
+   "reason": "Kalshi needs an actual departure; Polymarket resolves Yes on a mere announcement.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXLOLAWARD-WORLDS26FMVP-FAKER|will-faker-win-worlds-2026-finals-mvp",
+   "reason": "Shared MVP pays 1/N on Kalshi but goes to the alphabetically first name on Polymarket; Polymarket also has an 'Other' postponement clause.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXNYCMINWAGE-27JAN01|will-mamdani-raise-the-minimum-wage-to-30-before-2027",
+   "reason": "Different enactment tests (Kalshi 'bill becomes law', Polymarket also counts mayoral orders and excludes pilots); Polymarket also needs Mamdani to have won 2025.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXDAVEYOUT-27JAN01|ed-davey-out-as-liberal-democrats-leader-by-december-31",
+   "reason": "Kalshi counts an announcement only if leaving within a year; Polymarket counts any announcement or any gap in leadership.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXUECL-27-AJA|will-ajax-win-the-2026-27-uefa-conference-league",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 16 2027 or no winner; Kalshi has no such clause.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXTRUMPSTATES-27JAN01-AR|will-donald-trump-visit-arkansas-in-2026",
+   "reason": "Kalshi window starts at issuance; Polymarket counts visits since Jan 1 2026 (price gap suggests it matters).",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXTRUMPADMINLEAVE-26DEC31-HLUT|howard-lutnick-out-as-secretary-of-commerce-by-december-31",
+   "reason": "Kalshi needs an actual departure (death carve-out to last fair price); Polymarket resolves Yes on an announcement.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXSAGDPQOQ-26DEC01-T1.2|will-brazils-q3-2026-gdp-growth-rate-qoq-be-at-least-1pt2",
+   "reason": "Different countries: Kalshi is South Africa GDP, Polymarket is Brazil GDP; also 'above' vs 'at least'.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXDWTSRANK-226DEC31-AGLE|will-amber-glenn-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 2nd, Polymarket is winning.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-ERL|will-erling-haaland-rank-in-googles-top-5-most-searched-people-of-2026",
+   "reason": "Polymarket waits until Mar 31 2027 then resolves No if no list; Kalshi closes Dec 31 2026 with no no-publish rule shown.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXRANKLISTGOOGLESEARCHTOP5-26DEC-BAD|will-bad-bunny-rank-in-googles-top-5-most-searched-people-of-2026",
+   "reason": "Polymarket waits until Mar 31 2027 then resolves No if no list; Kalshi closes Dec 31 2026 with no no-publish rule shown.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXHEGSETHOUT-26AUG-26DEC01|pete-hegseth-out-as-secretary-of-defense-by-october-31-20261001003401433",
+   "reason": "Kalshi needs an actual departure; Polymarket resolves Yes on a mere announcement.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXFEDERALCHARGE-27JAN01-AFAU|anthony-fauci-charged-by-december-31-20260729165802089",
+   "reason": "Kalshi counts federal (and military) charges only; Polymarket also counts state/local charges and announced indictments.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXFEDERALCHARGE-27JAN01-GPET|will-gustavo-petro-be-charged-in-the-us-by-december-31",
+   "reason": "Kalshi counts federal charges only; Polymarket also counts state/local charges and announced indictments.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXDWTSRANK-326DEC31-TAT|will-tatyana-ali-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 3rd, Polymarket is winning.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXCBDCHILE-26DEC15-H25P|will-the-central-bank-of-chile-decrease-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different outcome: Kalshi is a hike of more than 25bps, Polymarket is a 25bp cut.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXHEGSETHIMPEACH-27JUL01-27JAN01|pete-hegseth-impeached-by-december-31-2026-20260628214100529",
+   "reason": "Polymarket resolves No at once if Hegseth leaves office before impeachment; Kalshi has no such clause (House could still impeach).",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXTRUMPMEETING-27JAN01-NPXIV|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "reason": "Kalshi meeting rule is a template (unfilled 'physically or virtually', 'purposeful engagement', Source Agency) vs Polymarket's any in-person interaction; window starts differ.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXPUTINZELMEET-29JAN01-27JAN01|will-zelenskyy-and-putin-meet-next-in-us",
+   "reason": "Different question: Polymarket is about the meeting being in the US; Kalshi is any meeting anywhere.",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "KXFARAGEOUTREFORM-26JUL-JAN01|nigel-farage-out-as-reform-uk-leader-in-2026-20260622233131512",
+   "reason": "Kalshi death clause settles at last fair price; Polymarket would resolve Yes if he ceases to be leader.",
+   "date": "2026-11-08"
   }
  ]
 }
