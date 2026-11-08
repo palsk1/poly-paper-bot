@@ -529,6 +529,7 @@ def paper_buy(track, name, token, shares, price, fee, meta):
     except Exception as e:
         print(f"real-size buy failed: {e}")
     track["peak_open_cost"] = round(max(track["peak_open_cost"], open_cost(track)), 6)
+    LATE_PENDING.append((time.time(), name, token))
     log_event({"type": "paper_buy", "track": name, "token": token, "title": meta.get("title"),
                "outcome": meta.get("outcome"), "shares": shares, "price": round(price, 4), "fee": round(fee, 4)})
     return True
@@ -3613,6 +3614,63 @@ def real_money_md(tracks, stats):
     return out
 
 
+# ================================================================ late fill check (what if our order landed later?)
+#
+# Paper fills happen at the very moment the bot reads the book. A real order lands a bit later, and in a fast
+# market the price may have moved. At the end of each run, every buy from that run is re-priced on a fresh book
+# (same shares, at least `late_fill.seconds` after the buy) and stored on the position as "late". Records only:
+# it never changes a trade. Kalshi legs (arb) aren't re-checked.
+
+LATE_PENDING = []  # (time of buy, track name, token) for this run
+
+
+def late_fill_check(tracks):
+    cfg = CFG.get("late_fill", {})
+    if not cfg.get("on", True) or not LATE_PENDING:
+        return
+    wait = cfg.get("seconds", 30)
+    todo, LATE_PENDING[:] = list(LATE_PENDING), []
+    last = max(t for t, _, _ in todo)  # every buy gets at least `wait` seconds
+    if time.time() - last < wait:
+        time.sleep(wait - (time.time() - last))
+    seen = {}
+    for t0, name, tok in todo:
+        pos = (tracks.get(name) or {}).get("positions", {}).get(tok)
+        if not pos or "late" in pos or not str(tok).isdigit():
+            continue
+        if tok not in seen:
+            bk = book(tok)
+            seen[tok] = (time.time(), bk)
+        t1, bk = seen[tok]
+        px = walk(bk["asks"], pos["shares"]) if bk and bk["asks"] else None
+        pos["late"] = {"s": round(t1 - t0), "px": None if px is None else round(px, 6)}
+    print(f"late fill check: re-priced {len(todo)} buys ({len(seen)} books)")
+
+
+def late_md(tracks):
+    rows = []
+    for name, tr in tracks.items():
+        fills = [p for p in list(tr["positions"].values()) + tr["closed"] if isinstance(p, dict) and p.get("late")]
+        priced = [p for p in fills if p["late"].get("px") is not None]
+        if not fills:
+            continue
+        paid = sum(p["shares"] * p["entry"] for p in priced)
+        extra = sum(p["shares"] * (p["late"]["px"] - p["entry"]) for p in priced)
+        worse = sum(1 for p in priced if p["late"]["px"] > p["entry"] + 1e-9)
+        secs = sum(p["late"]["s"] for p in fills) / len(fills)
+        rows.append((-len(fills), f"| {name} | {len(fills)} | {worse} | {len(fills) - len(priced)} | "
+                     f"${extra / paid * 100 if paid > EPS else 0:+.2f} | {secs:.0f}s |"))
+    out = ["\n## Late fill check\n",
+           "Each buy is priced again on a fresh book about half a minute later, as if our order had landed late. "
+           "Extra cost per $100 bought (plus = later would have cost more; that's money the paper P&L doesn't show). "
+           "Records only, started 2026-11-08.\n"]
+    if not rows:
+        return out + ["No re-priced buys yet."]
+    out += ["| Strategy | Buys checked | Got pricier | Gone (book empty) | Extra cost per $100 | Delay |",
+            "|---|---|---|---|---|---|"]
+    return out + [r for _, r in sorted(rows)]
+
+
 # ================================================================ commands
 
 def today_utc():
@@ -3662,6 +3720,10 @@ def watch():
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
+    try:
+        late_fill_check(tracks)
+    except Exception as e:
+        print(f"late fill check failed: {e}")
     save("tracks.json", tracks)
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
@@ -3710,6 +3772,10 @@ def daily(force=None):
         save("his_book.json", {"generated": iso(), **est})
     except Exception as e:
         print(f"book estimate failed: {e}")
+    try:
+        late_fill_check(tracks)
+    except Exception as e:
+        print(f"late fill check failed: {e}")
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()
@@ -3810,6 +3876,7 @@ def write_summary(tracks):
     md += leaderboard_md(stats)
     try:
         md += real_money_md(tracks, stats)
+        md += late_md(tracks)
     except Exception as e:
         print(f"real money summary failed: {e}")
     try:

@@ -177,6 +177,19 @@ Paper trades are 5 shares (about $5), which nearly always fit at the best price.
 
 Not modeled: our own orders moving the price for the next 5-minute check (the paper bot never moves it), and deposit/withdrawal costs.
 
+## Late fill check (added 2026-11-08)
+
+Paper fills happen at the exact moment the bot reads the book. A real order lands a little later, and a fast market may have moved by then (Jan's earlier bot looked great on paper and lost live for exactly this reason). At the end of every run, each buy from that run is priced again on a fresh book, with the same shares, at least 30 seconds later (`config.json` > `late_fill`). The result is stored on the position as `late` (`s` = seconds later, `px` = the price then, or null if the book was empty). `summary.md` shows per strategy how much more (or less) the late fill would have cost per $100. Records only: no trade or rule changes. Kalshi legs aren't re-checked.
+
+## Market data recorder (added 2026-11-08)
+
+`recorder.py` saves live market data so future backtests can replay real order books instead of guessing slippage. The idea is from a Reddit bot builder who recorded data for 3 months before testing strategies. The `recorder` workflow runs nonstop, about 5h40m per run, with the next run queued, and saves:
+
+- **every minute:** the books (top 15 levels) of every Kalshi and Polymarket market closing within 3 hours (15-minute and hourly crypto, commodities, weather; no sports), the Kalshi trade tape for them, and Binance spot prices
+- **every 5 minutes:** the Polymarket books of every open position of every track, the reviewed Kalshi arb tickers, and the Polymarket trades of the fast markets
+
+A book is saved only when it changed. One gzipped JSON-lines file per UTC hour is uploaded to a GitHub release `data-YYYYMMDD`, so the repo itself stays small. Records only, no trading. Test it with the `probe` workflow `rec_once` (one pass) or `rec_6` (6 minutes).
+
 ## Files
 
 - `state/summary.md`: human-readable daily report (start here)
