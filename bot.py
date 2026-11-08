@@ -560,7 +560,7 @@ def paper_close(track, name, token, price, fee, reason):
     track["closed"].append(rec)
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
-    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame"):
+    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and reason == "resolved" and CFG["push"].get("on_endgame"):
         push(f"[{name}] FLIP: a 'sure thing' lost (${pnl:+.2f})",
              f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
              f"{cents(price)}. This is the risk the test is measuring.", tags="rotating_light")
@@ -665,6 +665,11 @@ def manage_exits(tracks, lab=True):
                 continue
             fill, _, how = quote(tok, "sell", pos["shares"], m)
             if fill is None:
+                continue
+            if reason.startswith("take profit") and fill < target - 0.01:
+                # bug fix 2026-11-08: the listed price can say 100c while the real bid on a finished match is 80c.
+                # Taking profit means the bid is really there; otherwise keep holding (it pays out at the end).
+                tr["tp_thin_skips"] = tr.get("tp_thin_skips", 0) + 1
                 continue
             rec = paper_close(tr, name, tok, fill, taker_fee(pos["shares"], fill, fee_rate(m)), f"{reason}, {how}")
             if rec and CFG["push"].get("on_claude_trades"):
@@ -3926,11 +3931,17 @@ def write_summary(tracks):
     return stats
 
 
+def top_eligible(s):
+    """Top 10: ahead on 3+ finished trades AND still ahead once open bets are counted at today's price
+    (2026-11-08: a strategy with a nice finished-trade record but open bets sinking it shouldn't be on top)."""
+    return s["trust"]["finished"] >= 3 and s["trust"]["avg_per_100"] > 0 and s["pnl"] > 0
+
+
 def push_scoreboard(stats):
     """Daily ntfy scoreboard: only the top 10 by trust (all strategies are still tracked; summary.md ranks them all).
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
-    order = [x for x in ranked(stats) if stats[x]["trust"]["finished"] >= 3 and stats[x]["trust"]["avg_per_100"] > 0]
+    order = [x for x in ranked(stats) if top_eligible(stats[x])]
     top = order[:n]  # only strategies that are actually ahead on 3+ finished trades can make the list
     save("top.json", {"generated": iso(), "tracks": top})
     lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]

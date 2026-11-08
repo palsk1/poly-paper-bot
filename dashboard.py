@@ -125,7 +125,7 @@ def build(offline=False):
     stats = scoreboard(tracks)
     names = list(stats)
     n_top = bot.CFG["push"].get("top_n", 10)
-    top = [x for x in bot.ranked(stats) if stats[x]["trust"]["finished"] >= 3 and stats[x]["trust"]["avg_per_100"] > 0][:n_top]
+    top = [x for x in bot.ranked(stats) if bot.top_eligible(stats[x])][:n_top]
     rows = []
     for n in names:
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
