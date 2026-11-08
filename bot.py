@@ -559,7 +559,8 @@ def paper_close(track, name, token, price, fee, reason):
     track["closed"].append(rec)
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
-    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame"):
+    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame") \
+            and not rules_for(name).get("fade"):  # fade_sure loses most bets by design: no FLIP alert for those
         push(f"[{name}] FLIP: a 'sure thing' lost (${pnl:+.2f})",
              f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
              f"{cents(price)}. This is the risk the test is measuring.", tags="rotating_light")
@@ -2017,7 +2018,9 @@ def endgame_candidates(r):
         if any("disput" in s for s in st):
             continue
         i = 0 if prices[0] >= prices[1] else 1
-        if not (r["min_price"] <= prices[i] <= r["max_price"]):
+        if not (r.get("fav_min_price", r["min_price"]) <= prices[i] <= r.get("fav_max_price", r["max_price"])):
+            continue
+        if r.get("only_words") and not any(w in q.lower() for w in r["only_words"]):
             continue
         end = parse_iso(m.get("endDateIso") or m.get("endDate"))
         if "resolved" in st:
@@ -2037,8 +2040,11 @@ def endgame_candidates(r):
         if tier in ("past_deadline", "ending_soon") and any(w in q.lower() for w in r.get("weak_tier_skip_words", [])):
             continue  # an election past its date is not "decided" until a result is proposed (votes still counting)
         liq = fnum(pick(m, "liquidityNum", "liquidity"))
+        per_day = (1 - prices[i]) / max(days, 0.1)
+        if r.get("fade"):
+            i = 1 - i  # fade_sure: buy the cheap side of the "sure thing" (min/max_price then apply to what we buy)
         c = candidate(m, i, days, liq, {"tier": tier})
-        c["per_day"] = (1 - prices[i]) / max(days, 0.1)
+        c["per_day"] = per_day
         out.append(c)
     out.sort(key=lambda c: (order.get(c["tier"], 9), -c["per_day"]))
     print(f"endgame: {len(out)} candidates " + str(dict(Counter(c['tier'] for c in out))))
@@ -3766,7 +3772,7 @@ def write_summary(tracks):
         if is_lab(name):
             continue  # lab tracks: one row each in the lab table + the ranking, no per-position detail
         detail.append(f"\n## {name}\n{CFG['tracks'].get(name, {}).get('label', '')}\n")
-        if src == "endgame":
+        if src == "endgame" and not rules_for(name).get("fade"):
             pr = endgame_proof(tr)
             stats[name]["proof"] = pr
             tiers = endgame_tier_stats(tr)

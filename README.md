@@ -17,6 +17,7 @@
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
+| `fade_sure` | The mirror image of the dropped endgame signal: in weather, crypto-price and post-count markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -128,6 +129,10 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 - **Endgame** earns 1-5c per share on things that are already decided, in hours or days instead of months. The only way to lose is a "sure thing" flipping (a disputed result, a misread rule); the bot pushes **FLIP** when that happens. Results are kept per tier (resolved, proposed, past_deadline, ending_soon) so we can see which kind is actually safe. Since 2026-11-08 the main track only uses resolved and proposed: the backtest showed ending_soon and past_deadline both lose (see `backtest/report.md`); only lab variants still trade them. Proof line: a flip costs about the whole price, so flips must be rarer than the edge (about 2c -> under 1 in 50).
 - **Sell-early test (endgame, records only):** for each open endgame position the bot notes the first time the bid would have filled us at 98c and at 99c (`shadow_sell_at` in config), and the bid after 24h held. When the trade pays out, it compares what each rule would have made vs holding, and how many days sooner the money would have come back. Nothing is actually sold; this is to decide later whether selling early is worth it.
 - **Every horse** is pure math: if buying every candidate costs 96c and exactly one must win, that is 4c locked in. The catch is lists that are not complete (someone unlisted wins and every YES pays 0), so all-YES is only bought when the list has a catch-all outcome and is marked closed; open lists are skipped. The bot pushes **SHORT** if a set ever pays less than expected. Needs >= 1c per share after fees and >= 15% a year.
+
+## Fade the sure thing (added 2026-11-08)
+
+The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
 
 ## Maker: get paid to quote (added 2026-11-08)
 

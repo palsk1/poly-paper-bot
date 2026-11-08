@@ -76,6 +76,12 @@
       "source": "endgame",
       "rules": "endgame"
     },
+    "fade_sure": {
+      "label": "Fade the sure thing: in weather, crypto-price and post-count markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
+      "start_cash": 25,
+      "source": "endgame",
+      "rules": "fade_sure"
+    },
     "every_horse": {
       "label": "Buy every horse: buys every outcome of one multi-candidate market when together they cost less than the guaranteed payout after fees. All-YES only on provably complete lists; all-NO is safe either way. $100 paper",
       "start_cash": 100,
@@ -1586,6 +1592,21 @@
       "min_edge": 0.004,
       "max_open": 40,
       "picks_per_scan": 3
+    },
+    "fade_sure": {
+      "inherit": "endgame",
+      "why": "2026-11-08: 'sure' 93-98c favorites in weather/crypto-price/post-count markets a day before the end flipped far more often than their price said (backtest/report.md). This buys the other side. Checked with backtest.py btfade (backtest/fade.md). From the Reddit/forum idea hunt; Claude's track, rule changes reported.",
+      "fade": true,
+      "tiers": ["ending_soon"],
+      "fav_min_price": 0.90,
+      "fav_max_price": 0.98,
+      "min_price": 0.02,
+      "max_price": 0.10,
+      "min_edge": null,
+      "only_words": ["temperature", "rain", "snow", "bitcoin", "ethereum", "solana", "xrp", "btc", "eth ", "tweets", " posts "],
+      "max_open": 40,
+      "picks_per_scan": 3,
+      "shadow_sell_at": []
     },
     "endgame_ending_soon": {
       "inherit": "endgame",
