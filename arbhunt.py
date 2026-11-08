@@ -131,6 +131,7 @@ def ladder_pairs(ms):
             tq, nq = template(m.get("question"))
             td, nd = template(m.get("description"))
             dq = DATE_RE.findall(str(m.get("question") or "").lower())
+            stats["q_only_" + tq[:0]] += 0
             fams[(tq, td)].append({"m": m, "nums": nq, "dnums": nd, "has_date": bool(dq), "q": q})
         for (tq, td), fam in fams.items():
             if len(fam) < 2:
@@ -140,7 +141,10 @@ def ladder_pairs(ms):
                 up, down = bool(UP.search(tq)), bool(DOWN.search(tq))
                 ends = {(end_of(x["m"]) or now()).date() for x in fam}
                 if up == down or "between" in tq or "<n> -" in tq or len(ends) != 1:
-                    stats["strike_family_skipped"] += 1
+                    why = "up==down" if up == down else ("ends differ" if len(ends) != 1 else "range")
+                    stats["strike_skipped_" + why] += 1
+                    if stats["strike_skipped_" + why] <= 6:
+                        print("  skip", why, "|", tq[:110], "|", len(fam), sorted(ends)[:3])
                     continue
                 stats["strike_families"] += 1
                 fam.sort(key=lambda x: x["nums"][0])
@@ -159,6 +163,8 @@ def ladder_pairs(ms):
                             pairs.append((a["m"], b["m"], "deadline"))
             else:
                 stats["family_other"] += 1
+                if stats["family_other"] <= 12:
+                    print("  other |", tq[:110], "|", [x["nums"] for x in fam][:4], [x["has_date"] for x in fam][:4])
     return pairs, stats
 
 
@@ -356,3 +362,115 @@ if __name__ == "__main__":
         hunt_rejected()
     if what in ("hunt", "hunt_sports"):
         hunt_sports()
+
+
+# ------------------------------------------------------------------ sports v2: match by league + date + team codes
+
+LEAGUES = {"nfl": "KXNFLGAME", "nba": "KXNBAGAME", "nhl": "KXNHLGAME", "cbb": "KXNCAAMBGAME", "cfb": "KXNCAAFGAME",
+           "epl": "KXEPLGAME", "lal": "KXLALIGAGAME", "sea": "KXSERIEAGAME", "bun": "KXBUNDESLIGAGAME",
+           "fl1": "KXLIGUE1GAME"}
+SLUG_RE = re.compile(r"^([a-z0-9]+)-([a-z0-9]+)-([a-z0-9]+)-(\d{4})-(\d{2})-(\d{2})$")
+KEV_RE = re.compile(r"^(KX[A-Z0-9]+GAME)-(\d{2})([A-Z]{3})(\d{2})([A-Z0-9]+)$")
+_MONS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
+
+def kalshi_games(series):
+    out = []
+    try:
+        res = bot.kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 1000})
+    except Exception as e:
+        print(f"kalshi {series}: {e}")
+        return out
+    for m in res.get("markets") or []:
+        mm = KEV_RE.match(str(m.get("event_ticker") or ""))
+        if not mm:
+            continue
+        d = dt.date(2000 + int(mm.group(2)), _MONS.index(mm.group(3)) + 1, int(mm.group(4)))
+        team = str(m.get("ticker") or "").rsplit("-", 1)[-1]
+        out.append({"m": m, "date": d, "codes": mm.group(5), "team": team})
+    return out
+
+
+def hunt_sports2():
+    ms = bot._scan_markets({"end_date_min": bot.iso(now() - dt.timedelta(days=1)),
+                            "end_date_max": bot.iso(now() + dt.timedelta(days=5))})
+    P = {}
+    for m in ms:
+        if not bot.is_sports(m) or m.get("closed") or str(m.get("sportsMarketType") or "") != "moneyline":
+            continue
+        mm = SLUG_RE.match(str(m.get("slug") or ""))
+        if mm and mm.group(1) in LEAGUES and len(jlist(m.get("outcomes"))) == 2:
+            P[(mm.group(1), mm.group(2).upper(), mm.group(3).upper(), mm.group(4) + mm.group(5) + mm.group(6))] = m
+    print(f"poly moneyline games in supported leagues: {len(P)}; leagues {Counter(k[0] for k in P)}")
+    rows, unmatched = [], Counter()
+    descs = {}
+    for lg, series in LEAGUES.items():
+        K = kalshi_games(series)
+        by_ev = defaultdict(list)
+        for k in K:
+            by_ev[(k["date"], k["codes"])].append(k)
+        n_match = 0
+        for (d, codes), ks in by_ev.items():
+            hit = None
+            for dd in (d, d - dt.timedelta(days=1), d + dt.timedelta(days=1)):
+                for (l2, a, b, ds), m in P.items():
+                    if l2 == lg and ds == dd.strftime("%Y%m%d") and codes in (a + b, b + a):
+                        hit = (a, b, m)
+                        break
+                if hit:
+                    break
+            if not hit:
+                unmatched[lg] += 1
+                continue
+            n_match += 1
+            a, b, m = hit
+            descs.setdefault(lg, (str(m.get("description") or "")[:900], str(ks[0]["m"].get("rules_secondary") or "")[:500]))
+            outs = [str(o) for o in jlist(m.get("outcomes"))]
+            toks = bot.market_tokens(m)
+            pb = [bot.book(toks[0]), bot.book(toks[1])]
+            if not pb[0] or not pb[1]:
+                continue
+            rate = bot.fee_rate(m)
+            for k in ks:
+                if k["team"] not in (a, b):
+                    continue
+                j = 0 if k["team"] == a else 1  # ASSUMPTION checked below by price: slug order == outcomes order
+                kb = bot.kalshi_asks(k["m"].get("ticker"))
+                if not kb:
+                    continue
+                k_mid = (bot.kpx(k["m"], "yes_ask") + bot.kpx(k["m"], "yes_bid")) / 2 if bot.kpx(k["m"], "yes_bid") is not None else None
+                p_mid = (pb[j]["asks"][0][0] + pb[j]["bids"][0][0]) / 2 if pb[j]["asks"] and pb[j]["bids"] else None
+                best = None
+                for k_side, lv, pj in (("yes", kb[0], 1 - j), ("no", kb[1], j)):
+                    pk, pp = bot.walk(lv, SHARES), bot.walk(pb[pj]["asks"], SHARES)
+                    if pk is None or pp is None:
+                        continue
+                    cost = SHARES * (pk + pp) + bot.kalshi_fee(SHARES, pk) + bot.taker_fee(SHARES, pp, rate)
+                    e = 1 - cost / SHARES
+                    if best is None or e > best["edge"]:
+                        best = {"edge": round(e, 4), "k_side": k_side, "pk": round(pk, 3), "pp": round(pp, 3),
+                                "p_out": outs[pj]}
+                if best:
+                    best.update({"kalshi": k["m"].get("ticker"), "k_team": k["m"].get("yes_sub_title"), "poly": m.get("slug"),
+                                 "poly_team_j": outs[j], "k_mid": k_mid and round(k_mid, 3), "p_mid": p_mid and round(p_mid, 3),
+                                 "start": m.get("gameStartTime"), "fee": rate})
+                    rows.append(best)
+        print(f"{lg}: kalshi games {len(by_ev)}, matched {n_match}")
+    print("unmatched kalshi games by league:", dict(unmatched))
+    for lg, (pd, kd) in descs.items():
+        print(f"--- {lg} rules\n POLY: {pd}\n KALSHI: {kd}")
+    bad = [r for r in rows if r["k_mid"] is not None and r["p_mid"] is not None and abs(r["k_mid"] - r["p_mid"]) > 0.15]
+    print(f"sports2 rows {len(rows)}; price-disagree >15c (likely wrong team order): {len(bad)}")
+    good = [r for r in rows if r not in bad]
+    good.sort(key=lambda r: -r["edge"])
+    print(f"edge>=0: {sum(r['edge'] >= 0 for r in good)}, >=1c: {sum(r['edge'] >= 0.01 for r in good)}, "
+          f">=2c: {sum(r['edge'] >= 0.02 for r in good)}; median edge "
+          f"{sorted(r['edge'] for r in good)[len(good) // 2] if good else None}")
+    for r in good[:25]:
+        print(json.dumps(r))
+    for r in bad[:5]:
+        print("DISAGREE", json.dumps(r))
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "hunt_sports2":
+    hunt_sports2()
