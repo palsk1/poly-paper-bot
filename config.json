@@ -11,6 +11,15 @@
     "min_trades_proven": 30,
     "lab_exit_minutes": 30
   },
+  "real_size": {
+    "why": "Paper trades are 5 shares (~$5). Real money ($300-500 in one strategy) means $10-$100 a trade, which eats deeper into the order book. Every paper fill is also re-priced on the same live book at these stakes (records only, never changes what a track trades). The trust ranking uses rank_size_usd.",
+    "sizes_usd": [10, 25, 50, 100],
+    "rank_size_usd": 25,
+    "rank_on_real_size": true,
+    "max_slip": 0.02,
+    "max_price": 0.99,
+    "thin_exit_haircut": 0.5
+  },
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
