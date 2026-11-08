@@ -40,7 +40,7 @@ from bot import CLOB, DATA, GAMMA, KALSHI, fnum, http_json, envelope_rows
 
 CFG = bot.CFG.get("recorder", {})
 FAST_HOURS = CFG.get("fast_hours", 3)
-FAST_MAX_KALSHI = CFG.get("fast_max_kalshi", 250)
+FAST_MAX_KALSHI = CFG.get("fast_max_kalshi", 400)
 FAST_MAX_POLY = CFG.get("fast_max_poly", 300)
 LEVELS = CFG.get("levels", 15)
 WIDE_EVERY = CFG.get("wide_every_min", 5)
@@ -91,7 +91,8 @@ def kalshi_fast():
         if not cursor:
             break
     vol = lambda m: fnum(m.get("volume_24h_fp") or m.get("volume_24h"), 0)
-    out.sort(key=vol, reverse=True)
+    # 15-minute markets first (they're the point), then the busiest of the rest
+    out.sort(key=lambda m: ("15M" not in str(m.get("event_ticker")), -vol(m)))
     return [{"tk": m.get("ticker"), "ev": m.get("event_ticker"), "t": m.get("title"), "st": m.get("yes_sub_title"),
              "cl": m.get("close_time"), "v24": vol(m)} for m in out[:FAST_MAX_KALSHI] if m.get("ticker")]
 
@@ -101,15 +102,15 @@ def poly_fast():
     now = dt.datetime.now(dt.timezone.utc)
     end = now + dt.timedelta(hours=FAST_HOURS)
     out, off = [], 0
-    for _ in range(10):
+    for _ in range(30):
         rows = envelope_rows(http_json(f"{GAMMA}/markets", {
-            "closed": "false", "active": "true", "limit": 500, "offset": off,
+            "closed": "false", "active": "true", "limit": 100, "offset": off,
             "end_date_min": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "end_date_max": end.strftime("%Y-%m-%dT%H:%M:%SZ")}),
             "markets", "data")
         out += [m for m in rows if isinstance(m, dict)]
-        if len(rows) < 500:
+        if len(rows) < 100:
             break
-        off += 500
+        off += 100
     res = []
     for m in out:
         toks = bot.market_tokens(m)
@@ -205,7 +206,7 @@ def kalshi_trades(since, tickers):
 
 
 def poly_trades(cid):
-    res = http_json(f"{DATA}/trades", {"market": cid, "limit": 500, "takerOnly": "false"}, retries=2)
+    res = http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500}, retries=2)
     return envelope_rows(res, "data", "trades")
 
 
@@ -384,6 +385,10 @@ if __name__ == "__main__":
     if cmd == "loop":
         run(float(sys.argv[2]) if len(sys.argv) > 2 else 340)
     elif cmd == "once":
+        import collections
+        kf, pf = kalshi_fast(), poly_fast()
+        print("kalshi fast series:", collections.Counter(str(m["ev"]).rsplit("-", 1)[0] for m in kf).most_common(40))
+        print("poly fast sample:", [m["q"][:60] for m in pf[:40]], len(pf))
         st = run(0.5, upload_files=False)
         for p in sorted(os.listdir(OUT_DIR)):
             fp = f"{OUT_DIR}/{p}"
