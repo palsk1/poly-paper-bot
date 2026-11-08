@@ -162,6 +162,37 @@ def log_event(ev):
     print("EVENT", json.dumps(ev, sort_keys=True))
 
 
+# ---- "alive but waiting": what each strategy saw on its last check and why it didn't buy (records only)
+_STATUS = {}
+
+
+def saw(name, msg):
+    """One plain line about this run's check for a track, e.g. '0 of 11,236 markets match its rules'."""
+    _STATUS.setdefault(name, {"skips": Counter()})["msg"] = msg
+
+
+def why(name, reason):
+    """Count one skip reason for a track this run."""
+    _STATUS.setdefault(name, {"skips": Counter()})["skips"][reason] += 1
+
+
+def stamp_status(tracks):
+    """Copy this run's notes into tracks[name]['status'] (shown on the dashboard). Tracks not checked this run keep
+    their last note; the paced rule tracks get a 'next pick' note so a quiet day doesn't look dead."""
+    picked = load("scan_state.json", {}).get("picked_on", {})
+    for name, tc in CFG["tracks"].items():
+        tr = tracks.get(name)
+        if tr is None:
+            continue
+        st = _STATUS.get(name)
+        if st:
+            tr["status"] = {"at": iso(), "msg": st.get("msg", ""), "skips": dict(st["skips"].most_common(5))}
+        elif tc["source"] in ("screener", "random", "momentum") and picked.get(name) != today_utc():
+            tr["status"] = {"at": iso(), "msg": "Picks once a day at the morning run (about 06:00 Stockholm); "
+                                                "no pick yet today.", "skips": {}}
+    _STATUS.clear()
+
+
 def load_tracks():
     tracks = load("tracks.json", {})
     for name, tc in CFG["tracks"].items():
@@ -888,6 +919,9 @@ def follow_leader(tracks):
         print("Empty positions response while we expected some; skipping leader check this run.")
         return
     n = CFG["shares_per_trade"]
+    newest = max((v.get("first_seen") or "" for v in prev.values()), default="")
+    for name in leader_tracks():
+        saw(name, f"Watching his {len(cur)} open positions. Last new one seen: {newest[:10] or 'none since the start'}.")
 
     # ---- new positions he opened
     for tok, p in cur.items():
@@ -908,8 +942,10 @@ def follow_leader(tracks):
         for name in leader_tracks():
             tc, tr = CFG["tracks"][name], tracks[name]
             if px is None or tok in tr["positions"] or not (tc["min_price"] <= px <= tc["max_price"]):
+                why(name, "his new bet's price is outside its range")
                 continue
             if p["size"] * max(p["avg"], 0.01) < tc.get("min_open_usd", lead["min_open_usd"]):
+                why(name, "his new bet was too small")
                 continue  # e.g. sab_big: only his $1,000+ bets
             if paper_buy(tr, name, tok, shares, px, taker_fee(shares, px, rate),
                          {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"],
@@ -1029,23 +1065,31 @@ def copy_open(tracks, name, p, r, extra=None):
         return False
     if len(tr["positions"]) >= r.get("max_open", 999):
         tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+        why(name, "full (max open bets)")
         return False
     m = market_by_slug(p["slug"])
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
+        why(name, "market closed")
         return False
     end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
     if end and end < now():
+        why(name, "market already past its end date")
         return False
     px, shares, how = quote(p["token"], "buy", CFG["shares_per_trade"], m)
     if px is None or not (r.get("min_price", 0.02) <= px <= r.get("max_price", 0.97)):
+        why(name, "no order book" if px is None else "price under 3c or over 97c")
         return False
     if r.get("max_chase") is not None and p["avg"] and px > p["avg"] + r["max_chase"]:
         tr["skipped_chase"] = tr.get("skipped_chase", 0) + 1  # we'd be paying well above what they paid: too late
+        why(name, "too late (price 5c+ above what they paid)")
         return False
     meta = {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"], "event_slug": p["event_slug"],
             "end": p["end"], "source": name, "their_avg": p["avg"], "their_size": p["size"], "price_source": how}
     meta.update(extra or {})
-    return paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta)
+    if not paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta):
+        why(name, "out of cash")
+        return False
+    return True
 
 
 def copy_close(tracks, name, tok, why):
@@ -1101,10 +1145,12 @@ def follow_wallets(tracks):
         addr = CFG["tracks"][name]["address"].lower()
         rows, complete = got.get(addr, (None, False))
         if rows is None:
+            saw(name, "Wallet lookup failed this run (API error); tries again in 5 minutes.")
             continue
         cur = {p["token"]: p for p in rows if p["token"] and p["size"] >= 1}
         prev = old.get(addr, set())
         if addr not in old:
+            saw(name, f"First look: {len(cur)} positions recorded as the starting point.")
             snaps[addr] = {"held": sorted(tkey(t) for t in cur), "since": iso()}
             log_event({"type": "wallet_baseline", "track": name, "positions": len(cur)})
             live[addr] = cur
@@ -1121,14 +1167,22 @@ def follow_wallets(tracks):
         if CFG["tracks"][name].get("backfill") and not tr.get("backfilled"):
             backfill(tracks, name, cur, r)
         # new positions
+        fresh = 0
         for tok, p in cur.items():
-            if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+            if tkey(tok) in prev or p["redeemable"]:
+                continue
+            fresh += 1
+            if p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+                why(name, f"too small (under ${r['min_open_usd']})")
                 continue
             if day["n"] >= r.get("max_new_per_day", 999):
                 tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+                why(name, "daily copy limit reached")
                 continue
             if copy_open(tracks, name, p, r):
                 day["n"] += 1
+        saw(name, f"Watching {len(cur)} open positions of this wallet; {fresh} new since the last check. "
+                  f"Watching since {str(snaps[addr].get('since') or '?')[:10]}.")
         # exits: the wallet sold (or redeemed) most of what it had when we copied
         for tok in list(tr["positions"]):
             q = cur.get(tok)
@@ -1172,6 +1226,8 @@ def follow_consensus(tracks, live):
             elif holders.get(tok, 0) == 0:
                 copy_close(tracks, name, tok, "all wallets left")
         done = set(tr.setdefault("seen", []))
+        hot = sum(1 for _, k in count.items() if k >= r["min_wallets"])
+        saw(name, f"{hot} markets held by {r['min_wallets']}+ of the copied wallets right now ({len(live)} wallets read).")
         tried = 0
         for tok, k in count.most_common():
             if k < r["min_wallets"] or tried >= r.get("picks_per_run", 5) or len(tr["positions"]) >= r.get("max_open", 999):
@@ -1433,18 +1489,23 @@ def buy_candidates(tracks, name, cands, limit):
         if len(bought) >= limit or len(tr["positions"]) >= r.get("max_open", 999):
             break
         if c["token"] in tr["positions"] or c["event_key"] in held_events:
+            why(name, "already holds this market")
             continue
         if c["theme"] and themes.get(c["theme"], 0) >= r.get("max_per_theme", 999):
+            why(name, "too many bets on this theme")
             continue
         px, shares, how = quote(c["token"], "buy", n, c["market"])
         lo = r.get("min_price", 0.0)
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
+            why(name, "no order book" if px is None else "real price outside its range")
             continue
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
+            why(name, "too little profit after the fee")
             continue  # too little left after paying the price and the fee
         if c.get("model_p") is not None and c["model_p"] - px - fee / shares < r.get("min_model_edge", 0):
+            why(name, "real price ate the model's edge")
             continue  # weather/crypto: the real fill price ate the model's edge
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
@@ -1457,11 +1518,15 @@ def buy_candidates(tracks, name, cands, limit):
         if r.get("sl_rel"):
             meta["stop"] = round(max(0.01, px - r["sl_rel"]), 4)    # cut at entry - sl_rel
         if not paper_buy(tr, name, c["token"], shares, px, fee, meta):
+            why(name, "out of cash")
             break
         held_events.add(c["event_key"])
         if c["theme"]:
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
+    if len(tr["positions"]) >= r.get("max_open", 999):
+        why(name, "full (max open bets)")
+    saw(name, f"{len(cands)} market{'' if len(cands) == 1 else 's'} matched its rules, bought {len(bought)}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
         push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag", track=name)
     return bought
@@ -2176,6 +2241,10 @@ def fullset_check(tracks):
                 shortlist.append(("no", e, live, gap / (n - 1)))
     shortlist.sort(key=lambda x: -x[3])
     print(f"every_horse: {len(shortlist)} sets look cheap on listed prices")
+    near = sorted((v["edge"] for v in tr["seen"].values() if str(v.get("ts", ""))[:10] >= iso(now() - dt.timedelta(days=2))[:10]),
+                  reverse=True)
+    saw(name, f"{len(shortlist)} sets looked cheap on listed prices; none is cheap on the real order book yet"
+              + (f" (closest {near[0] * 100:+.1f}c a share)" if near else "") + ".")
     bought = []
     for kind, e, live, _ in shortlist[:15]:
         if len(bought) >= r["picks_per_scan"] or len(tr["sets"]) >= r["max_open"]:
@@ -2579,7 +2648,13 @@ def ladder_check(tracks, force=False):
     save("scan_state.json", st)
     tr = tracks[name]
     lp = load("ladder_pairs.json", {}).get("list", [])
+    if not lp and not load("ladder_pairs.json", {}).get("generated"):
+        # bug fix: the pair list was only built by the daily job, so a track added after it sat idle until tomorrow
+        print("ladder: no pair list yet; building it now")
+        ladder_discover()
+        lp = load("ladder_pairs.json", {}).get("list", [])
     if not lp:
+        saw(name, "No ladder pairs found in today's markets.")
         return
     fresh = gamma_markets_by_id([p["a"]["mid"] for p in lp] + [p["b"]["mid"] for p in lp])
     print(f"ladder: {len(lp)} pairs, fresh prices for {len(fresh)} markets")
@@ -2599,6 +2674,7 @@ def ladder_check(tracks, force=False):
             short.append((est, p, a, b))
     short.sort(key=lambda x: -x[0])
     print(f"ladder: {len(short)} pairs look cheap on listed prices")
+    saw(name, f"Checked {len(lp)} ladder pairs; {len(short)} looked cheap on listed prices.")
     bought = []
     for est, p, a, b in short[: r["books_per_check"]]:
         if len(bought) >= r["picks_per_check"] or len(tr["sets"]) >= r["max_open"]:
@@ -3346,6 +3422,13 @@ def maker_cycle(tracks, pick_new=True):
             maker_close(tr, name, key, "resolved", payout)
             continue
         bk = book(b["yes_tok"])
+        if (m is None or bk is None) and b.get("misses", 0) < 6:
+            # bug fix: one failed market/book lookup (an API blip) used to close the book as "market left the list".
+            # Skip it this run instead; last_ts stays, so the next run catches up on fills. 6 misses in a row = gone.
+            b["misses"] = b.get("misses", 0) + 1
+            why(name, "market or order book lookup failed; retrying next run")
+            continue
+        b["misses"] = 0
         sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
         q = b.get("q") or {}
         elapsed = max(0.0, t_now - b["last_ts"])
@@ -3457,6 +3540,7 @@ def maker_cycle(tracks, pick_new=True):
                        "reason": f"pool ${c['rate']:.0f}/day, est. ${c['per_day']:.2f}/day for us"})
     tr["peak_open_cost"] = round(max(tr["peak_open_cost"], maker_locked(tr) + sum(
         b["yes_cost"] + b["no_cost"] for b in tr["books"].values())), 6)
+    saw(name, f"Quoting in {len(tr['books'])} markets; {tr['fills']} fills and ${tr['rewards']:.2f} rewards so far.")
 
 
 def maker_summary(name, tr):
@@ -3735,6 +3819,7 @@ def watch():
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    stamp_status(tracks)
     save("tracks.json", tracks)
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
@@ -3787,6 +3872,7 @@ def daily(force=None):
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    stamp_status(tracks)
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()

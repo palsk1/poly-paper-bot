@@ -326,6 +326,11 @@ function detail(n) {
     <p class="sub" style="margin-top:8px">${tr.finished >= FEW ? `${tr.finished} finished, average ${money(tr.avg_per_100)} per $100${D.rank_size ? ` (at $${D.rank_size} a bet)` : ""}.` : `Only ${tr.finished} finished trade${tr.finished === 1 ? "" : "s"}, so the "per $100" numbers mean nothing yet. The real result is the dollar line at the top.`} ${cash}. ${tr.proven ? "" : `Proven needs ${D.min_proven}+ finished trades and a worst case above $0.`}</p>
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
     <div id="curve"></div></div>`;
+  if (t.status) {
+    const sk = Object.entries(t.status.skips || {});
+    h += `<div class="card"><b>Last check</b> <span class="sub">${esc(stockholm(t.status.at))}</span><p class="sub">${esc(t.status.msg || "")}</p>` +
+      (sk.length ? `<p class="sub">Skipped this check: ${sk.map(([k, v]) => `${esc(k)} ×${v}`).join(", ")}</p>` : "") + `</div>`;
+  }
   if (t.late && t.late.n) h += `<div class="card"><b>Copying late</b><p class="sub">${t.late.n} copied buys cost ${M(t.late.usd, true)} more than the wallet paid (about ${cents(t.late.c_per_share)} a share).</p></div>`;
   h += `<h2 style="font-size:16px">Open bets (${t.n_bets})</h2><div class="card">` + (t.bets.length ? t.bets.map(b =>
     `<div class="bet"><div class="t"><a href="${esc(b.u)}" target="_blank" rel="noopener">${esc(b.t)}</a></div>

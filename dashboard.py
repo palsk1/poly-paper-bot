@@ -137,7 +137,7 @@ def build(offline=False):
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
-            "late": late_copy(tr), "rs": real_size(tr),
+            "late": late_copy(tr), "rs": real_size(tr), "status": tr.get("status"),
         })
     data = {"generated": bot.iso(), "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
             "order": bot.ranked(stats), "tracks": rows, "trial_end": "2027-01-01",
