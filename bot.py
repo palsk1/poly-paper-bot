@@ -1059,6 +1059,25 @@ def copy_close(tracks, name, tok, why):
     return bool(paper_close(tr, name, tok, px, taker_fee(pos["shares"], px, fee_rate(m)), f"{why} ({how})"))
 
 
+def backfill(tracks, name, cur, r):
+    """wb_* tracks: once, buy the minimum (5 shares) of each of the wallet's current open positions at today's price,
+    biggest first, up to max_backfill; a few per run so one run doesn't do hundreds of order-book calls. After that the
+    track behaves like its w_* twin (copies new positions, sells when the wallet sells)."""
+    tr = tracks[name]
+    tried = set(tr.setdefault("bf_tried", []))
+    live = sorted((p for p in cur.values() if not p["redeemable"] and p["size"] >= 5 and p["cur"]
+                   and p["size"] * p["cur"] >= r["min_open_usd"]), key=lambda p: -p["size"] * p["cur"])
+    todo = [p for p in live[: r.get("max_backfill", 30)] if tkey(p["token"]) not in tried]
+    for p in todo[: r.get("backfill_per_run", 10)]:
+        tr["bf_tried"].append(tkey(p["token"]))
+        # avg=0: no 'too late' rule here, buying at today's price is the point of this test
+        copy_open(tracks, name, dict(p, avg=0), r, {"backfill": True, "their_avg": p["avg"]})
+    if len(todo) <= r.get("backfill_per_run", 10):
+        tr["backfilled"] = iso()
+        log_event({"type": "wallet_backfilled", "track": name, "bought": sum(1 for x in tr["positions"].values()
+                                                                             if x.get("backfill"))})
+
+
 def follow_wallets(tracks):
     names = wallet_tracks()
     if not names:
@@ -1068,6 +1087,7 @@ def follow_wallets(tracks):
     with ThreadPoolExecutor(8) as ex:
         got = dict(zip(addrs, ex.map(lambda a: wallet_positions(a, r.get("max_pages", 4)), addrs)))
     snaps = load("wallet_snaps.json", {})
+    old = {a: set(v.get("held", [])) for a, v in snaps.items()}  # w_ and wb_ twins share a wallet: both diff vs last run
     today = today_utc()
     live = {}  # addr -> {token: position} for this run (used by the consensus tracks)
     for name in names:
@@ -1076,8 +1096,8 @@ def follow_wallets(tracks):
         if rows is None:
             continue
         cur = {p["token"]: p for p in rows if p["token"] and p["size"] >= 1}
-        prev = set(snaps.get(addr, {}).get("held", []))
-        if addr not in snaps:
+        prev = old.get(addr, set())
+        if addr not in old:
             snaps[addr] = {"held": sorted(tkey(t) for t in cur), "since": iso()}
             log_event({"type": "wallet_baseline", "track": name, "positions": len(cur)})
             live[addr] = cur
@@ -1091,6 +1111,8 @@ def follow_wallets(tracks):
         if day.get("date") != today:
             day.clear()
             day.update({"date": today, "n": 0})
+        if CFG["tracks"][name].get("backfill") and not tr.get("backfilled"):
+            backfill(tracks, name, cur, r)
         # new positions
         for tok, p in cur.items():
             if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
