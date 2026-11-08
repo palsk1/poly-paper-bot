@@ -340,6 +340,7 @@ def quote(token, side, shares, m=None):
     """Paper fill price. 'buy' takes the ask, 'sell' hits the bid.
     Falls back to the listed price +/- slippage if the book is unavailable."""
     bk = book(token)
+    LAST_BOOK[token] = (time.time(), bk)  # the real-size model re-walks this same book at $10-$100
     if bk:
         shares = max(shares, bk["min_size"])
         px = walk(bk["asks"] if side == "buy" else bk["bids"], shares)
@@ -351,6 +352,124 @@ def quote(token, side, shares, m=None):
     slip = CFG["fallback_slippage"]
     px = min(0.999, mid + slip) if side == "buy" else max(0.001, mid - slip)
     return px, shares, "estimate"
+
+
+# ================================================================ real-size check (what $10-$100 a trade would get)
+#
+# Paper fills are 5 shares (about $5). Real money ($300-500 in one strategy) means $10-$100 a trade, which eats
+# deeper into the order book: a worse average price, a bigger fee, and in thin markets not everything fits.
+# Every paper fill also re-walks the SAME live book at each size in config "real_size" and records what that
+# trade would have cost and paid. It never changes what a track buys or sells (the paper trades and the frozen lab
+# rules stay exactly as they were); it only adds a second set of numbers that the trust ranking uses.
+
+LAST_BOOK = {}  # token -> (time, book) from the latest quote()
+
+
+def rs_cfg():
+    return CFG.get("real_size", {})
+
+
+def rs_sizes():
+    return [int(x) for x in rs_cfg().get("sizes_usd", [10, 25, 50, 100])]
+
+
+def fresh_book(token):
+    t, bk = LAST_BOOK.get(token, (0, None))
+    return bk if time.time() - t < 300 else None
+
+
+def fill_usd(levels, usd, limit=None):
+    """Spend up to `usd` on ask levels (cheapest first) without paying more than `limit`. -> (shares, cost)."""
+    left, sh, cost = usd, 0.0, 0.0
+    for p, s in levels:
+        if limit is not None and p > limit + EPS:
+            break
+        if p <= 0:
+            continue
+        take = min(s, left / p)
+        sh, cost, left = sh + take, cost + take * p, left - take * p
+        if left <= 1e-6:
+            break
+    return sh, cost
+
+
+def fill_shares(levels, shares):
+    """Sell (or buy) `shares` into book levels. -> (filled shares, money), may fill less than asked."""
+    left, got, money = shares, 0.0, 0.0
+    for p, s in levels:
+        take = min(left, s)
+        got, money, left = got + take, money + take * p, left - take
+        if left <= EPS:
+            break
+    return got, money
+
+
+def implied_rate(shares, price, fee):
+    d = shares * price * (1 - price)
+    return fee / d if d > EPS else 0.0
+
+
+def rs_buy(token, shares, price, fee):
+    """Real-size buy at each stake: {size: [shares, cost incl. fee, filled the whole stake?]}.
+    A real bot would use a limit order, so it never pays more than the best ask + max_slip (and never 99c+)."""
+    bk = fresh_book(token)
+    rate = implied_rate(shares, price, fee)
+    out = {"rate": round(rate, 5), "how": "book" if bk and bk["asks"] else "estimate", "s": {}}
+    if out["how"] == "book":
+        best = bk["asks"][0][0]
+        limit = max(price, min(rs_cfg().get("max_price", 0.99), best + rs_cfg().get("max_slip", 0.02)))
+    for size in rs_sizes():
+        if out["how"] == "book":
+            sh, c = fill_usd(bk["asks"], size, limit)
+        else:  # no book (rare): assume the paper price plus the fallback slippage, fully filled
+            px = min(0.999, price + CFG["fallback_slippage"])
+            sh, c = size / px, size
+        f = taker_fee(sh, c / sh, rate) if sh > EPS else 0.0
+        out["s"][str(size)] = [round(sh, 3), round(c + f, 4), bool(c >= size * 0.97)]
+    return out
+
+
+def rs_close(pos, token, price, fee, resolved):
+    """Real-size result at each stake: {size: [cost, pnl, filled the whole stake?]} or None (no real-size data).
+    Resolved: every share pays `price`. Sold early: walk the same live bids; shares the bids can't take are
+    valued at half the worst bid (thin_exit_haircut), because dumping them would cost more."""
+    rs = pos.get("rs")
+    if not rs:
+        return None
+    bk = None if resolved else fresh_book(token)
+    out = {}
+    for size, (sh, cost, full) in rs["s"].items():
+        if sh <= EPS:
+            out[size] = [0.0, 0.0, False]  # nothing would have filled: no trade at this size
+            continue
+        if resolved:
+            proceeds = sh * price
+        elif bk and bk["bids"]:
+            got, money = fill_shares(bk["bids"], sh)
+            rest = sh - got
+            proceeds = money + rest * bk["bids"][-1][0] * rs_cfg().get("thin_exit_haircut", 0.5)
+            proceeds -= taker_fee(got, money / got, rs["rate"]) if got > EPS else 0.0
+            full = full and rest <= EPS
+        else:
+            px = max(0.001, price - CFG["fallback_slippage"])
+            proceeds = sh * px - taker_fee(sh, px, rs["rate"])
+        out[size] = [round(cost, 4), round(proceeds - cost, 4), full]
+    return out
+
+
+def rs_pair_fill(size, legs, min_edge, payout_per_share, fees):
+    """Arb / full-set real size: buy the same number of shares on every leg (each leg = ask levels), as many as
+    `size` dollars allow while the average edge stays >= min_edge. -> [shares, cost, filled the whole stake?]."""
+    per = sum(l[0][0] for l in legs if l) or 1
+    n = size / per
+    while n >= 1:
+        px = [walk(l, n) for l in legs]
+        if None not in px:
+            cost = n * sum(px) + fees(n, px)
+            if (n * payout_per_share - cost) / n >= min_edge:
+                return [round(n, 3), round(cost, 4), bool(cost >= size * 0.97)]
+        n *= 0.8
+    return [0.0, 0.0, False]
 
 
 def resolved_payout(m, token):
@@ -405,6 +524,10 @@ def paper_buy(track, name, token, shares, price, fee, meta):
     track["min_cash"] = round(min(track["min_cash"], track["cash"]), 6)
     track["positions"][token] = {"shares": shares, "entry": round(price, 6), "entry_fee": round(fee, 6),
                                  "opened": iso(), **meta}
+    try:
+        track["positions"][token]["rs"] = rs_buy(token, shares, price, fee)
+    except Exception as e:
+        print(f"real-size buy failed: {e}")
     track["peak_open_cost"] = round(max(track["peak_open_cost"], open_cost(track)), 6)
     log_event({"type": "paper_buy", "track": name, "token": token, "title": meta.get("title"),
                "outcome": meta.get("outcome"), "shares": shares, "price": round(price, 4), "fee": round(fee, 4)})
@@ -422,6 +545,12 @@ def paper_close(track, name, token, price, fee, reason):
     track["cash"] = round(track["cash"] + proceeds, 6)
     rec = {**pos, "token": token, "exit": round(price, 6), "exit_fee": round(fee, 6),
            "closed_at": iso(), "reason": reason, "pnl": round(pnl, 6)}
+    try:
+        r = rs_close(pos, token, price, fee, reason == "resolved")
+        if r:
+            rec["rs_pnl"] = r
+    except Exception as e:
+        print(f"real-size close failed: {e}")
     if CFG["tracks"].get(name, {}).get("source") == "endgame" and "shadow" in pos:
         try:
             rec["shadow_results"] = shadow_results(rec)
@@ -1703,7 +1832,7 @@ def arb_check_pair(name, tr, pair, r):
         net = shares - cost
         c = {"k_side": k_side, "pk": pk, "pp": pp, "kf": kf, "pf": pf, "cost": cost, "net": net,
              "edge": net / shares, "annual": (net / cost) * 365 / days if cost > 0 else 0,
-             "p_tok": toks[j], "p_out": outs[j]}
+             "p_tok": toks[j], "p_out": outs[j], "levels": [k_levels, pb[j]["asks"]]}
         if best is None or c["edge"] > best["edge"]:
             best = c
     if not best:
@@ -1735,6 +1864,12 @@ def arb_check_pair(name, tr, pair, r):
         "expected_profit": round(best["net"], 4), "edge": round(best["edge"], 4), "annual": round(best["annual"], 3),
         "kalshi_close": km.get("close_time"), "poly_end": pm.get("endDateIso"),
     }
+    try:
+        fees = lambda n, px: kalshi_fee(n, px[0]) + taker_fee(n, px[1], rate)  # noqa: E731
+        tr["arbs"][aid]["rs"] = {"s": {str(s): rs_pair_fill(s, best["levels"], r["min_edge"], 1.0, fees)
+                                       for s in rs_sizes()}}
+    except Exception as e:
+        print(f"real-size arb failed: {e}")
     tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(a["cost"] for a in tr["arbs"].values())), 6)
     log_event({"type": "arb_open", "track": name, "title": pm.get("question"), "pair": pid,
                "price": round(best["pk"] + best["pp"], 4), "edge": round(best["edge"], 4)})
@@ -1767,8 +1902,11 @@ def arb_settle(tracks):
         mismatch = abs(pk + pp - 1) > 0.01
         tr["cash"] = round(tr["cash"] + proceeds, 6)
         tr["realized"] = round(tr["realized"] + pnl, 6)
-        tr["closed"].append({**a, "k_payout": pk, "p_payout": pp, "pnl": round(pnl, 4), "mismatch": mismatch,
-                             "closed_at": iso()})
+        rec = {**a, "k_payout": pk, "p_payout": pp, "pnl": round(pnl, 4), "mismatch": mismatch, "closed_at": iso()}
+        if a.get("rs"):
+            rec["rs_pnl"] = {k: [c, round(n * (pk + pp) - c, 4) if n > EPS else 0.0, f]
+                             for k, (n, c, f) in a["rs"]["s"].items()}
+        tr["closed"].append(rec)
         del tr["arbs"][aid]
         log_event({"type": "arb_close", "track": name, "title": a["title"], "pnl": round(pnl, 4),
                    "reason": "MISMATCH: the two sites resolved differently" if mismatch else "both legs resolved"})
@@ -2009,7 +2147,7 @@ def fullset_check(tracks):
         sid = f"{e.get('slug')}:{kind}"
         if sid in tr["sets"]:
             continue
-        shares, legs, cost, ok = r["shares"], [], 0.0, True
+        shares, legs, cost, ok, levels, rates = r["shares"], [], 0.0, True, [], []
         for m in live:
             yt, nt = yes_no_tokens(m)
             tok = yt if kind == "yes" else nt
@@ -2019,6 +2157,8 @@ def fullset_check(tracks):
                 ok = False
                 break
             fee = taker_fee(shares, px, fee_rate(m))
+            levels.append(b["asks"])
+            rates.append(fee_rate(m))
             cost += shares * px + fee
             legs.append({"slug": m.get("slug"), "token": tok, "name": m.get("groupItemTitle") or m.get("question"),
                          "price": round(px, 4), "fee": round(fee, 4)})
@@ -2046,6 +2186,13 @@ def fullset_check(tracks):
         tr["sets"][sid] = {"title": e.get("title"), "kind": kind, "n": n, "shares": shares, "legs": legs,
                            "cost": round(cost, 4), "guaranteed": guaranteed, "expected_profit": round(net, 4),
                            "edge": round(edge, 4), "annual": round(annual, 3), "end": e.get("endDate"), "opened": iso()}
+        try:
+            per = 1 if kind == "yes" else n - 1
+            fees = lambda k, px: sum(taker_fee(k, p, rt) for p, rt in zip(px, rates))  # noqa: E731
+            tr["sets"][sid]["rs"] = {"s": {str(sz): rs_pair_fill(sz, levels, r["min_edge"] * per, per, fees)
+                                           for sz in rs_sizes()}}
+        except Exception as ex:
+            print(f"real-size set failed: {ex}")
         tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(s["cost"] for s in tr["sets"].values())), 6)
         log_event({"type": "set_open", "track": name, "title": e.get("title"), "kind": kind, "n": n,
                    "price": round(cost / shares, 4), "edge": round(edge, 4)})
@@ -2081,8 +2228,11 @@ def sets_settle(tracks, name, tag, why):
         bad = proceeds + 1e-6 < s["guaranteed"]
         tr["cash"] = round(tr["cash"] + proceeds, 6)
         tr["realized"] = round(tr["realized"] + pnl, 6)
-        tr["closed"].append({**s, "proceeds": round(proceeds, 4), "pnl": round(pnl, 4), "incomplete": bad,
-                             "closed_at": iso()})
+        rec = {**s, "proceeds": round(proceeds, 4), "pnl": round(pnl, 4), "incomplete": bad, "closed_at": iso()}
+        if s.get("rs"):
+            rec["rs_pnl"] = {k: [c, round(k_ * sum(pays) - c, 4) if k_ > EPS else 0.0, f]
+                             for k, (k_, c, f) in s["rs"]["s"].items()}
+        tr["closed"].append(rec)
         del tr["sets"][sid]
         log_event({"type": "set_close", "track": name, "title": s["title"], "pnl": round(pnl, 4),
                    "reason": f"PAID LESS THAN GUARANTEED ({why})" if bad else "paid as expected"})
@@ -2506,18 +2656,30 @@ def ladder_summary(name, tr):
 #      whole family, not per strategy).
 # A strategy counts as PROVEN when that worst case is above $0 after at least min_trades_proven finished trades.
 
-def trade_returns(tr):
+def trade_returns(tr, size=None):
+    """(pnl, cost) per finished trade. With `size`, use the real-size numbers for that stake when the trade has
+    them (trades from before 2026-11-08 don't: they count with their paper numbers). A trade where nothing would
+    have filled at that size is left out: a real bot would simply not have made it."""
     out = []
     for c in tr["closed"]:
+        rs = (c.get("rs_pnl") or {}).get(str(size)) if size else None
+        if rs:
+            if rs[0] > EPS:
+                out.append((rs[1], rs[0]))
+            continue
         basis = c.get("cost") or (c.get("shares", 0) * c.get("entry", 0) + c.get("entry_fee", 0.0))
         if basis and basis > 0:
             out.append((c["pnl"], basis))
     return out
 
 
-def trust(tr, n_tracks=None):
+def rs_rank_size():
+    return rs_cfg().get("rank_size_usd") if rs_cfg().get("rank_on_real_size", True) else None
+
+
+def trust(tr, n_tracks=None, size="rank"):
     rk = CFG.get("ranking", {})
-    rows = trade_returns(tr)
+    rows = trade_returns(tr, rs_rank_size() if size == "rank" else size)
     n = len(rows)
     rets = [p / b for p, b in rows] + [-1.0] * int(rk.get("phantom_losses", 1))
     m = len(rets)
@@ -2540,17 +2702,67 @@ def ranked(stats):
 
 
 def leaderboard_md(stats):
+    sz = rs_rank_size()
+    at = f" at ${sz} a trade" if sz else ""
     out = ["\n## All strategies, ranked by trust\n",
            "Ranked by the worst profit per $100 bet that is still plausible (one imaginary total loss added, bar raised "
            "for testing many strategies at once). Only finished trades count. **PROVEN** = that worst case is above $0 "
            f"after {CFG.get('ranking', {}).get('min_trades_proven', 30)}+ finished trades. Controls show what luck looks like.\n",
-           "| # | Strategy | Finished | Profit (done) | Avg per $100 | Worst per $100 | P&L incl. open | Today | Open |",
-           "|---|---|---|---|---|---|---|---|---|"]
+           (f"Since 2026-11-08 the ranking uses **real-size** numbers: what each trade would have done with ${sz} instead "
+            "of 5 shares (deeper into the order book, bigger fee, only what actually fits; see \"Real money check\"). "
+            "Older trades count with their paper numbers. \"Paper\" shows the 5-share number for comparison.\n") if sz else "",
+           f"| # | Strategy | Finished | Profit{at} (done) | Avg per $100 | Paper avg per $100 | Worst per $100 | "
+           "P&L incl. open (paper) | Today | Open |",
+           "|---|---|---|---|---|---|---|---|---|---|"]
     for i, n in enumerate(ranked(stats), 1):
         s, t = stats[n], stats[n]["trust"]
+        tp = s.get("trust_paper", t)
         out.append(f"| {i} | {n}{' **PROVEN**' if t['proven'] else ''} | {t['finished']} | ${t['profit']:+.2f} | "
-                   f"${t['avg_per_100']:+.2f} | ${t['worst_per_100']:+.2f} | ${s['pnl']:+.2f} | ${s.get('today', 0):+.2f} | "
-                   f"{s['open']} |")
+                   f"${t['avg_per_100']:+.2f} | ${tp['avg_per_100']:+.2f} | ${t['worst_per_100']:+.2f} | ${s['pnl']:+.2f} | "
+                   f"${s.get('today', 0):+.2f} | {s['open']} |")
+    return out
+
+
+def rs_fills(tr):
+    """Real-size buy records of every trade (open and finished) that has them."""
+    items = list(tr.get("closed", [])) + list(tr.get("positions", {}).values()) + \
+        list(tr.get("arbs", {}).values()) + list(tr.get("sets", {}).values())
+    return [x["rs"]["s"] for x in items if isinstance(x.get("rs"), dict) and x["rs"].get("s")]
+
+
+def real_money_md(tracks, stats):
+    """Per strategy: profit per $100 at each stake on finished trades, and how much of a $100 order the book holds."""
+    sizes = rs_sizes()
+    big = str(max(sizes))
+    rows = []
+    for name, tr in tracks.items():
+        fills = rs_fills(tr)
+        if not fills:
+            continue
+        done = [c for c in tr["closed"] if c.get("rs_pnl")]
+        paper = sum(c["pnl"] for c in done) / max(sum(c.get("cost") or (c["shares"] * c["entry"] + c.get("entry_fee", 0))
+                                                     for c in done), EPS) * 100 if done else None
+        cells = []
+        for sz in sizes:
+            rr = [c["rs_pnl"][str(sz)] for c in done if str(sz) in c["rs_pnl"] and c["rs_pnl"][str(sz)][0] > EPS]
+            cost = sum(x[0] for x in rr)
+            cells.append(f"${sum(x[1] for x in rr) / cost * 100:+.2f}" if cost > EPS else "-")
+        fit = [f[big][1] for f in fills if big in f]
+        full = sum(1 for f in fills if f.get(str(rs_rank_size() or sizes[0]), [0, 0, False])[2])
+        rows.append((len(done), f"| {name} | {len(done)} | {'-' if paper is None else f'${paper:+.2f}'} | " + " | ".join(cells) +
+                     f" | ${sum(fit) / len(fit):.0f} | {full} of {len(fills)} |"))
+    out = ["\n## Real money check\n",
+           "Every paper trade (5 shares) is also priced at bigger stakes on the same live order book: a limit order that "
+           f"never pays more than the best price + {rs_cfg().get('max_slip', 0.02) * 100:.0f}c, the bigger fee, and only what "
+           "fits. Selling early walks the real bids. This is the number that matters for the $300-500 in January. "
+           "Profit per $100 on finished trades, paper (5 shares) vs each stake:\n"]
+    if not rows:
+        return out + ["No trades with real-size data yet (started 2026-11-08)."]
+    sz = rs_rank_size() or sizes[0]
+    out += ["| Strategy | Finished (with data) | Paper | " + " | ".join(f"${s}" for s in sizes) +
+            f" | Of a ${big} order, fits on avg | Fully filled at ${sz} |",
+            "|---|---|---|" + "---|" * len(sizes) + "---|---|"]
+    out += [r for _, r in sorted(rows, key=lambda x: -x[0])]
     return out
 
 
@@ -2741,6 +2953,7 @@ def write_summary(tracks):
                     before[f[1]] = fnum(f[2])  # rows are in date order: the last one before today wins
     for n, s_ in stats.items():
         s_["trust"] = trust(tracks[n], len(stats))
+        s_["trust_paper"] = trust(tracks[n], len(stats), None)
         s_["today"] = round(s_["pnl"] - before.get(n, 0.0), 4)
     if lab_rows:
         md.append("\n**Lab** (added 2026-11-08: 40 copied wallets, crowd, sabsabinxz and rule variants; frozen until "
@@ -2748,6 +2961,10 @@ def write_summary(tracks):
         md += ["| Track | P&L | Open | Closed (W/L) | Cash | Notes |", "|---|---|---|---|---|---|"] + lab_rows
     md += detail
     md += leaderboard_md(stats)
+    try:
+        md += real_money_md(tracks, stats)
+    except Exception as e:
+        print(f"real money summary failed: {e}")
     try:
         md += his_exit_summary()
     except Exception as e:
@@ -2806,6 +3023,8 @@ def push_scoreboard(stats):
         s, t = stats[name], stats[name]["trust"]
         lines.append(f"{i}. {name}{' PROVEN' if t['proven'] else ''}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}) | "
                      f"{t['finished']} done | worst case {usd(t['worst_per_100'])[:-3]} per $100")
+    if rs_rank_size():
+        lines.append(f"(ranked on what ${rs_rank_size()} a trade would really have done)")
     best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)
     if best and best not in top and stats[best].get("today", 0) > 0:
         lines.append(f"Best day (probably luck): {best} +${stats[best]['today']:.2f}")
@@ -2912,6 +3131,48 @@ def copytest():
     print(f"copytest took {time.time() - t0:.1f}s")
 
 
+def depthtest():
+    """Live real-size check (manual probe workflow, saves nothing): re-prices every open position's token on today's
+    order book at each stake in config "real_size", as if it were bought now."""
+    tracks = load_tracks()
+    seen, per_track = {}, defaultdict(list)
+    for name, tr in tracks.items():
+        for tok, pos in tr["positions"].items():
+            per_track[name].append(tok)
+            seen.setdefault(tok, pos)
+    toks = list(seen)[:int(os.environ.get("DEPTH_MAX", "150"))]
+    with ThreadPoolExecutor(8) as ex:
+        books = dict(zip(toks, ex.map(book, toks)))
+    res = {}
+    for tok in toks:
+        bk = books.get(tok)
+        if not bk or not bk["asks"]:
+            continue
+        p5 = walk(bk["asks"], 5)
+        if p5 is None:
+            continue
+        LAST_BOOK[tok] = (time.time(), bk)
+        r = rs_buy(tok, 5, p5, taker_fee(5, p5, 0.0))
+        res[tok] = (p5, {k: v for k, v in r["s"].items()})
+        line = " | ".join(f"${k}: {v[0]:.0f} sh @ {cents(v[1] / v[0]) if v[0] else '-'}{'' if v[2] else ' PARTIAL'}"
+                          for k, v in r["s"].items())
+        print(f"{cents(p5)} 5sh | {line} | {seen[tok].get('title', '')[:60]}")
+    print("\nPer track (open positions re-priced now; fee not included):")
+    for name, ts in per_track.items():
+        rows = [res[t] for t in ts if t in res]
+        if not rows:
+            continue
+        parts = []
+        for sz in rs_sizes():
+            k = str(sz)
+            worse = [v[k][1] / v[k][0] - p5 for p5, v in rows if v[k][0] > EPS]
+            fit = sum(min(v[k][1], sz) for _, v in rows) / len(rows)
+            full = sum(1 for _, v in rows if v[k][2])
+            parts.append(f"${sz}: fits ${fit:.0f} avg, {full}/{len(rows)} full, "
+                         f"+{(sum(worse) / len(worse) if worse else 0) * 100:.1f}c/share")
+        print(f"{name} ({len(rows)} open): " + "; ".join(parts))
+
+
 # ================================================================ lab: finding wallets worth following
 
 def leaderboard(category="OVERALL", period="MONTH", order="PNL", limit=50, pages=2):
@@ -3002,4 +3263,5 @@ def discover():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
-     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest}[cmd]()
+     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
+     "depthtest": depthtest}[cmd]()

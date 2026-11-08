@@ -67,4 +67,5 @@ With this few trades, results are mostly luck, so say so when reporting.
 ## Working on the code
 - `bot.py` is one file with commands `watch | daily | summary | selftest | arbtest | dryrun | discover`. `config.json` holds every rule. `arb_pairs.json` is edited by the review, not by the bot.
 - Before pushing: `python3 -c "import ast;ast.parse(open('bot.py').read())"`. Test risky changes with an offline mock (monkeypatch `bot.http_json`) or a `dryrun` probe.
+- **Real-size check (2026-11-08):** every fill is also priced at $10/$25/$50/$100 on the same book (`real_size` in config, `rs` on positions, `rs_pnl` on closed trades). Records only; the trust ranking uses the $25 numbers. See README "Real money check".
 - Fills are paper fills at real order-book prices (walking the asks for 5 shares) and include taker fees. Polymarket fee = rate × shares × p × (1−p); Kalshi fee = ceil(0.07 × C × P × (1−P)) to the cent. Kalshi order books list **bids only**.
