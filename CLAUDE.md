@@ -38,6 +38,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 | arb | $300 | Kalshi × Polymarket, **reviewed twin pairs only**. Holds to the end and flags MISMATCH. |
 | endgame | $100 | 95–99c on markets already decided or nearly decided. Tiers: resolved, proposed, past_deadline, ending_soon. Includes a sell-early shadow test (records only). |
 | every_horse | $100 | Buys the full outcome set when it costs less than the guaranteed payout |
+| ladder | $100 | Added 2026-11-08 (Jan's "scale up arb" ask). NO on the stricter + YES on the looser of two markets in one Polymarket event (strike or deadline ladder). Needs Jan's OK for rule changes, like arb. |
 | lab (62 tracks) | $500 each, or no limit for copy tracks | 40 copied wallets, smart-money crowd, sabsabinxz variants, favorite bands, controls, momentum, panic and endgame variants. Listed in README "The lab". |
 
 ## Decisions and findings so far

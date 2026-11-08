@@ -14,6 +14,7 @@
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
+| `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
@@ -91,6 +92,17 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 4. **Only takes it if** it nets >= 2c per share AND >= 15% a year (no locking money for years for pennies). 5 shares per lot, max 4 lots per pair.
 5. **Holds both legs to the end** and flags a **MISMATCH** loudly if the two sites resolve differently.
 6. **Proof line:** a clean arb earns about its edge per share; a mismatch can lose about the whole $1. So arbs only pay if mismatches are rarer than about the edge (2.5c edge -> under 2.5%). The summary shows how many clean finished arbs are needed to be 90% sure of that (about 90 at a 2.5c edge, if none mismatch).
+
+## Ladder pairs (added 2026-11-08)
+
+The arb track needs two *different* sites to describe the same thing, and the review rejects most pairs because they don't. A ladder pair needs no review: both markets sit in the same Polymarket event, with the same rules text except the strike or the deadline, so one can't say YES without the other.
+
+- **Daily** (`state/ladder_pairs.json`): scans ~24,000 yes/no markets and keeps only families where (1) the question and rules text differ only in the strike or the "by <date>" deadline, (2) the direction is clear from the words ("above", "at least", "by"; "hit/reach/dip" only with the ↑/↓ labels), (3) it isn't a range, an exact count or a "top N" rank, (4) the deadline in the question agrees with the market's end date, and (5) the crowd's prices agree with the direction (the stricter market never trades more than 10c above the looser one). One-winner (negRisk) events are left to every_horse. On 2026-11-08 this kept about 6,000 pairs.
+- **Every 30 min** (watch): fresh listed prices for all of them in one batch call; anything close is priced on both live order books for 5 shares plus fees. Buys at >= 2c per share and >= 15% a year, one lot per pair, at most 20 open.
+- **Settles** when both legs have paid; a pair paying less than $1 pushes **SHORT** (it means we misread a family).
+- **First live look (2026-11-08):** of 6,000 pairs, 30 were not overpriced and the best paid 1.3c per share after fees (StandX FDV above $1B / above $100M). So gaps are real but usually below the 2c bar; the track waits for the spikes.
+
+Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` workflow, `hunt_*` inputs): Kalshi vs Polymarket **game winners** (NFL, NBA, NHL, college basketball) match cleanly by team codes but cost more than $1 after both fees on all 160 checks (usually by about 4c, never closer than 0.8c); the **same question listed twice** on Polymarket never had a gap; and the **104 rejected pairs**, priced both ways, showed gaps of at most 2.4c, and in every case checked the gap was on the side the rule difference makes unsafe (the market prices that risk in).
 
 ## Endgame and every horse
 
