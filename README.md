@@ -19,9 +19,9 @@
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
-62 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
+64 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
 
-**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 71 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 71 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
+**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 73 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 73 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
 
 **Rules are frozen until 2027-01-01** (bug fixes only, reported), otherwise the evidence resets.
 
@@ -34,6 +34,7 @@
 | Controls | `control_random`, `control_longshot` | A coin flip, and longshots at 3-10c (studies: these lose). If a control ranks high, luck is winning and nothing above it is trustworthy |
 | Price moves | `momentum_week`, `fade_rally`, `panic_fade_4c`, `panic_fade_10c` | Ride a 10c+ weekly rise / bet on a bounce after a 10c+ fall; panic fade with smaller and bigger triggers |
 | Endgame variants | `endgame_strict`, `endgame_ending_soon`, `endgame_97`, `endgame_sell98` | Which endgame signal is safe, and whether selling at 98.5c beats holding |
+| Fast markets (added later on 2026-11-08) | `wx_forecast`, `crypto_late` | Markets that pay out within hours or 2 days, priced with outside data. See "Fast markets" below |
 
 Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discover`): profitable in at least two time windows, 5-400 open positions, mostly not 15-minute crypto up/down bets (a 5-minute bot is too slow for those), profit per dollar traded of at least 3c (traders with a view, not market makers). Weather, mentions and sports specialists are in on purpose, because their markets pay out within days, so they collect finished trades fastest. Four election-month hot hands test whether a hot streak lasts.
 
@@ -81,6 +82,22 @@ Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discov
 | `w_monopoly_money` | `0x7ea7bcd658a253bfa78618a8e127cc73b54879ac` | election-month hot hand: does it last? |
 
 Check the lab on live data without saving anything: run the `probe` workflow with `copytest`.
+
+## Fast markets: weather and crypto (lab, added 2026-11-08)
+
+Two lab tracks for markets that pay out within hours or two days, so they collect finished trades long before January. Both compare the market's price with a model built from free outside data and buy only when the model says a side is clearly too cheap after the fee. One bet per market group (one per city and day, one per coin candle), because buckets of the same day all move together.
+
+| Track | Markets | Model | Buys when |
+|---|---|---|---|
+| `wx_forecast` | "Highest/lowest temperature in CITY on DATE" (about 50 cities, a high and a low each day). They settle on the airport's hourly METAR reports from aviationweather.gov (SPECI reports don't count) | ECMWF ensemble (51 forecasts, Open-Meteo), shifted by how far it was off at that airport over the last 24h, plus what was already observed today (a day's high can't go back down). Error allowance 1.1°C plus 0.4°C per day ahead | the model's chance beats the price by 12c+ after the fee, price 5-90c. Gaps over 45c are ignored as more likely our data error than the crowd's |
+| `crypto_late` | Last 45 minutes of the hourly "Bitcoin/Ethereum/Solana/XRP/Dogecoin/BNB Up or Down" candles and the noon-ET "above $X" ladders. Both settle on Binance | the coin's hourly volatility over the last week, made 1.5x bigger for sudden jumps (Binance's own price feed) | the model gives a side 97+ in 100 and it still costs 96c or less, with 2c+ left after the fee |
+
+Checked and left out (dry run on live data, 2026-11-08):
+- **The same crypto model 3-30h out** ("the market overprices big moves"): the ladders matched the model within about 1c at every strike, so it would never trade.
+- **Weather buckets the day's reports have already ruled out**: they were already priced at 99.95c, so the bots got there first.
+- **Sports odds**: the free odds feed (ESPN) blocks GitHub's servers. Sports games are covered by the Kalshi vs Polymarket arb work instead.
+
+Check them on live data without saving anything: run the `probe` workflow with `fasttest` (prints the model next to every price, and what it would buy). `fast`/`fast2`/`fast3` print the raw market and data shapes.
 
 ## The arbitrage track, and the known traps it is built to avoid
 
