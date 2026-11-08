@@ -15,6 +15,7 @@
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
+| `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
@@ -126,6 +127,24 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 - **Endgame** earns 1-5c per share on things that are already decided, in hours or days instead of months. The only way to lose is a "sure thing" flipping (a disputed result, a misread rule); the bot pushes **FLIP** when that happens. Results are kept per tier (resolved, proposed, past_deadline, ending_soon) so we can see which kind is actually safe. Proof line: a flip costs about the whole price, so flips must be rarer than the edge (about 2c -> under 1 in 50).
 - **Sell-early test (endgame, records only):** for each open endgame position the bot notes the first time the bid would have filled us at 98c and at 99c (`shadow_sell_at` in config), and the bid after 24h held. When the trade pays out, it compares what each rule would have made vs holding, and how many days sooner the money would have come back. Nothing is actually sold; this is to decide later whether selling early is worth it.
 - **Every horse** is pure math: if buying every candidate costs 96c and exactly one must win, that is 4c locked in. The catch is lists that are not complete (someone unlisted wins and every YES pays 0), so all-YES is only bought when the list has a catch-all outcome and is marked closed; open lists are skipped. The bot pushes **SHORT** if a set ever pays less than expected. Needs >= 1c per share after fees and >= 15% a year.
+
+## Maker: get paid to quote (added 2026-11-08)
+
+Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
+
+- Up to 4 markets at a time, picked every hour by estimated reward per dollar. Skips markets ending within 7 days or already past their date (insiders know the answer), sports, middle price outside 15-85c, and markets where nobody else is quoting near the middle (we would be first in line to get run over).
+- Posts a YES bid and a YES ask (= a NO bid) of 50 shares at the current best prices, at the **back of the queue**. Re-posts every run.
+- **Fills come from the real trade tape:** an order fills only if a trade went through our price, or more traded at our price than was queued ahead of us. Quotes sit unchanged between runs, so news in between hits us like it would hit a real slow bot.
+- **Rewards** use Polymarket's own formula against everyone else in the public book, assuming the others are as two-sided as possible (gives us the smaller share), credited only for the minutes since the last run (max 15).
+- A YES from one fill and a NO from the other merge back into $1. Holding stops growing at 2 lots per side. After 3 days, or when a market leaves the list, leftovers are sold at the bid with the taker fee: that is one finished trade for the ranking.
+- `summary.md` splits the result into **rewards earned** and **trading result** (getting picked off, spreads, leftovers). It only works if the first number stays bigger.
+
+Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estimated about $35 a day of rewards per $100 of quotes, but replaying the last day of prices said a slow bot would have lost about $44 per $100 to getting picked off. Both numbers are rough (one is a snapshot, the other a price replay without the order book), so this track is the real test. Rewards may also have payout minimums or limits we can't see from the public data.
+
+## Ideas tested and dropped (2026-11-08, `edges.py`)
+
+- **negRisk conversion** (sell a whole multi-outcome set right now for more than $1, by turning one NO into a YES of every other outcome): 5,681 events checked; on the real books with fees the best was -0.05c a share. Market makers keep this shut.
+- **Holding rewards**: real (Polymarket pays $3.25 a year per $100 held, sampled hourly) but only on 255 long-dated markets (2028 elections, "before 2027" markets). On a $300 stake that is about $10 a year, so it is a small bonus for whichever strategy holds those markets, not a strategy.
 
 ## How it runs
 

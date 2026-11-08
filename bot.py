@@ -630,7 +630,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -3115,6 +3115,372 @@ def fasttest():
 #      whole family, not per strategy).
 # A strategy counts as PROVEN when that worst case is above $0 after at least min_trades_proven finished trades.
 
+# ================================================================ maker: get paid to quote (liquidity rewards)
+#
+# Polymarket pays ~$190k a day to people who leave resting buy AND sell orders close to the middle price (the
+# "liquidity rewards"; each market has a daily pool, a max distance v from the middle and a min order size). The
+# catch is getting picked off: when news hits, someone who knows more takes our stale order. This track measures
+# both, on paper and on the pessimistic side:
+#  - We "post" a YES bid and a YES ask (= a NO bid) at the current best prices, joining the back of the queue.
+#  - Fills come from the real trade tape: our order fills only if a trade went THROUGH our price, or if more traded
+#    AT our price than was queued in front of us when we posted. Our quotes stay where they were until the next run
+#    (every ~5 min), so news in between hits us like it would hit a slow bot.
+#  - Rewards: each run we score our quotes with Polymarket's formula against everyone else in the public book
+#    (assuming the others are as two-sided as possible, which gives us the smaller share), and credit that share of
+#    the pool for the minutes since the last run (at most 15, so a skipped run earns nothing).
+#  - A YES bought on one side and a NO bought on the other merge back into $1. Leftovers are sold at the bid (taker
+#    fee) when the market leaves our list or after max_days, which ends one finished "trade" for the ranking.
+
+def maker_rules():
+    for n, tc in CFG["tracks"].items():
+        if tc["source"] == "maker":
+            return n, rules_for(n)
+    return None, None
+
+
+def reward_score(v, s):
+    """Polymarket's per-share reward score for an order s cents from the middle, max distance v cents."""
+    return ((v - s) / v) ** 2 if 0 <= s < v else 0.0
+
+
+def reward_markets(max_pages=40):
+    out, cur = [], ""
+    for _ in range(max_pages):
+        try:
+            res = http_json(f"{CLOB}/sampling-markets", {"next_cursor": cur} if cur else None)
+        except Exception as e:
+            print(f"maker: reward list failed: {e}")
+            break
+        rows = envelope_rows(res, "data", "markets")
+        for m in rows:
+            rw = m.get("rewards") or {}
+            rate = sum(fnum(x.get("rewards_daily_rate")) for x in (rw.get("rates") or []) if isinstance(x, dict))
+            toks = [t for t in (m.get("tokens") or []) if isinstance(t, dict)]
+            if rate <= 0 or m.get("closed") or m.get("accepting_orders") is False or len(toks) != 2:
+                continue
+            out.append({"cid": m.get("condition_id"), "title": m.get("question"), "slug": m.get("market_slug"),
+                        "rate": rate, "min_size": fnum(rw.get("min_size")), "v": fnum(rw.get("max_spread")),
+                        "yes": str(toks[0].get("token_id")), "no": str(toks[1].get("token_id")),
+                        "end": m.get("end_date_iso")})
+        cur = res.get("next_cursor") if isinstance(res, dict) else None
+        if not rows or not cur or cur == "LTE=":
+            break
+    return out
+
+
+def book_scores(bk, v, min_size):
+    """(middle, everyone else's score on the buy side, on the sell side, best bid, best ask). YES and NO are one
+    mirrored book on Polymarket, so the YES book alone holds all of it."""
+    bids = [(p, s) for p, s in bk["bids"] if s >= min_size] or bk["bids"]
+    asks = [(p, s) for p, s in bk["asks"] if s >= min_size] or bk["asks"]
+    if not bids or not asks:
+        return None
+    mid = (bids[0][0] + asks[0][0]) / 2
+    qb = sum(reward_score(v, (mid - p) * 100) * s for p, s in bk["bids"] if s >= min_size)
+    qa = sum(reward_score(v, (p - mid) * 100) * s for p, s in bk["asks"] if s >= min_size)
+    return mid, qb, qa, bk["bids"][0][0], bk["asks"][0][0]
+
+
+def our_share(mid, qb, qa, v, bid, ask, size):
+    """Our share of the pool right now for quotes at bid/ask (None = that side is not posted)."""
+    sb = reward_score(v, (mid - bid) * 100) * size if bid is not None else 0.0
+    sa = reward_score(v, (ask - mid) * 100) * size if ask is not None else 0.0
+    two_ok = 0.10 <= mid <= 0.90
+    ours = max(min(sb, sa), max(sb, sa) / 3) if two_ok else min(sb, sa)
+    comp = min(qb, qa) + (abs(qb - qa) / 3 if two_ok else 0.0)
+    return ours / (ours + comp) if ours > 0 else 0.0
+
+
+def maker_pick(tr, r):
+    """Best markets to quote now: est. reward per $ of quotes, with the traps filtered out."""
+    held = {b["cid"] for b in tr["books"].values()}
+    soon = now() + dt.timedelta(days=r["min_days_left"])
+    pre = []
+    for rm in reward_markets():
+        end = parse_iso(rm["end"])
+        if rm["cid"] in held or not end or end < soon or rm["min_size"] > r["max_shares"] or rm["v"] <= 0:
+            continue
+        if any(w in str(rm["title"]).lower() for w in r.get("skip_words", [])):
+            continue
+        pre.append(rm)
+    pre.sort(key=lambda x: -x["rate"])
+
+    def est(rm):
+        bk = book(rm["yes"])
+        sc = book_scores(bk, rm["v"], rm["min_size"]) if bk else None
+        if not sc:
+            return None
+        mid, qb, qa, bb, ba = sc
+        if not (r["min_mid"] <= mid <= r["max_mid"]) or (mid - bb) * 100 >= rm["v"] or (ba - mid) * 100 >= rm["v"]:
+            return None  # outside the band, or nobody quoting near the middle (we would be the first to get hit)
+        size = max(rm["min_size"], r["shares"])
+        share = our_share(mid, qb, qa, rm["v"], bb, ba, size)
+        return {**rm, "per_day": rm["rate"] * share, "per_dollar": rm["rate"] * share / size, "mid": mid, "size": size}
+    with ThreadPoolExecutor(8) as ex:
+        cands = [c for c in ex.map(est, pre[:r["scan_books"]]) if c]
+    cands.sort(key=lambda c: -c["per_dollar"])
+    out = []
+    for c in cands:
+        m = market_by_slug(c["slug"])
+        if not m or is_sports(m) or m.get("closed") or m.get("acceptingOrders") is False:
+            continue
+        c["fee_rate"] = fee_rate(m)
+        c["event_slug"] = str(((m.get("events") or [{}])[0] or {}).get("slug") or "")
+        out.append(c)
+        if len(out) >= r["max_markets"]:
+            break
+    print(f"maker: {len(pre)} reward markets pass the date/size filters, {len(cands)} have a book we can join; "
+          f"best: {[(c['slug'][:40], round(c['per_day'], 2)) for c in out]}")
+    return out
+
+
+def maker_trades(cid, since):
+    try:
+        res = http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500})
+    except Exception as e:
+        print(f"maker: trades failed for {cid[:10]}: {e}")
+        return None
+    out = []
+    for t in envelope_rows(res, "data", "trades"):
+        ts = fnum(pick(t, "timestamp", "time"))
+        ts = ts / 1000 if ts > 1e11 else ts
+        if ts > since:
+            out.append((ts, str(pick(t, "token_id", "asset", default="")), fnum(t.get("price")), fnum(t.get("size"))))
+    return out
+
+
+def maker_locked(tr):
+    """Cash our resting orders tie up (a YES bid locks bid x size, a NO bid locks (1-ask) x size)."""
+    tot = 0.0
+    for b in tr["books"].values():
+        q = b.get("q") or {}
+        if q.get("bid"):
+            tot += q["bid"]["px"] * b["size"]
+        if q.get("ask"):
+            tot += (1 - q["ask"]["px"]) * b["size"]
+    return tot
+
+
+def maker_inv_value(b, mid):
+    return b["yes"] * mid + b["no"] * (1 - mid)
+
+
+def maker_close(tr, name, key, why, payout=None):
+    """End one market episode: merge pairs, then pay out (resolved) or sell what is left at the bid."""
+    b = tr["books"].pop(key)
+    proceeds, fee = 0.0, 0.0
+    for side, tok in (("yes", b["yes_tok"]), ("no", b["no_tok"])):
+        sh = b[side]
+        if sh <= EPS:
+            continue
+        if payout is not None:
+            px = payout if side == "yes" else 1 - payout
+        else:
+            bk = book(tok)
+            px = walk(bk["bids"], sh) if bk else None
+            if px is None:  # nobody to sell to: count it at half the best bid (or nothing)
+                px = (bk["bids"][0][0] / 2) if bk and bk["bids"] else 0.0
+            fee += taker_fee(sh, px, b.get("fee_rate", 0.0))
+        proceeds += sh * px
+    proceeds -= fee
+    pnl = b["rewards"] + b["merged_pnl"] + proceeds - b["yes_cost"] - b["no_cost"]
+    tr["cash"] = round(tr["cash"] + proceeds, 6)
+    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"], 6)  # rewards/merges booked already
+    rec = {"title": b["title"], "slug": b["slug"], "cid": b["cid"], "opened": b["opened"], "closed_at": iso(),
+           "reason": why, "cost": round(b["size"], 4), "pnl": round(pnl, 4), "rewards": round(b["rewards"], 4),
+           "merged_pnl": round(b["merged_pnl"], 4), "leftover_pnl": round(proceeds - b["yes_cost"] - b["no_cost"], 4),
+           "fills": b["fills"], "minutes_quoted": round(b["minutes"], 1)}
+    tr["closed"].append(rec)
+    log_event({"type": "maker_close", "track": name, "title": b["title"], "pnl": round(pnl, 4), "reason": why})
+    return rec
+
+
+def maker_cycle(tracks, pick_new=True):
+    name, r = maker_rules()
+    if not name:
+        return
+    tr = tracks[name]
+    tr.setdefault("books", {})
+    for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
+        tr.setdefault(k, v)
+    t_now = time.time()
+    for key in list(tr["books"]):
+        b = tr["books"][key]
+        m = market_by_slug(b["slug"])
+        payout = resolved_payout(m, b["yes_tok"])
+        if payout is not None:
+            maker_close(tr, name, key, "resolved", payout)
+            continue
+        bk = book(b["yes_tok"])
+        sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
+        q = b.get("q") or {}
+        elapsed = max(0.0, t_now - b["last_ts"])
+        # 1) fills since the last check, from the real trade tape
+        trades = maker_trades(b["cid"], b["last_ts"])
+        if trades is None:
+            trades = []
+        at_bid = at_ask = 0.0
+        hit_bid = hit_ask = False
+        for ts, tok, px, sz in trades:
+            yp = px if tok == b["yes_tok"] else 1 - px
+            if q.get("bid"):
+                if yp < q["bid"]["px"] - 1e-9:
+                    hit_bid = True
+                elif abs(yp - q["bid"]["px"]) < 1e-9:
+                    at_bid += sz
+            if q.get("ask"):
+                if yp > q["ask"]["px"] + 1e-9:
+                    hit_ask = True
+                elif abs(yp - q["ask"]["px"]) < 1e-9:
+                    at_ask += sz
+        if q.get("bid") and (hit_bid or at_bid > q["bid"]["queue"] + EPS):
+            b["yes"] += b["size"]
+            b["yes_cost"] += b["size"] * q["bid"]["px"]
+            tr["cash"] = round(tr["cash"] - b["size"] * q["bid"]["px"], 6)
+            b["fills"] += 1
+            tr["fills"] += 1
+            q["bid"] = None
+        elif q.get("bid"):
+            q["bid"]["queue"] = max(0.0, q["bid"]["queue"] - at_bid)
+        if q.get("ask") and (hit_ask or at_ask > q["ask"]["queue"] + EPS):
+            b["no"] += b["size"]
+            b["no_cost"] += b["size"] * (1 - q["ask"]["px"])
+            tr["cash"] = round(tr["cash"] - b["size"] * (1 - q["ask"]["px"]), 6)
+            b["fills"] += 1
+            tr["fills"] += 1
+            q["ask"] = None
+        elif q.get("ask"):
+            q["ask"]["queue"] = max(0.0, q["ask"]["queue"] - at_ask)
+        # 2) a YES and a NO merge back into $1
+        pairs = min(b["yes"], b["no"])
+        if pairs > EPS:
+            ay, an = b["yes_cost"] / b["yes"], b["no_cost"] / b["no"]
+            gain = pairs * (1 - ay - an)
+            b["merged_pnl"] += gain
+            tr["realized"] = round(tr["realized"] + gain, 6)
+            tr["cash"] = round(tr["cash"] + pairs, 6)
+            b["yes_cost"] -= pairs * ay
+            b["no_cost"] -= pairs * an
+            b["yes"] -= pairs
+            b["no"] -= pairs
+            tr["merges"] += 1
+        # 3) rewards for the minutes our (old) quotes were resting, scored against today's book
+        if sc and elapsed > 0:
+            mid, qb, qa, bb, ba = sc
+            sh = our_share(mid, qb, qa, b["v"], (q.get("bid") or {}).get("px"), (q.get("ask") or {}).get("px"), b["size"])
+            mins = min(elapsed / 60, r["max_credit_minutes"])
+            earned = b["rate"] * sh * mins / 1440
+            b["rewards"] += earned
+            b["minutes"] += mins
+            tr["rewards"] = round(tr["rewards"] + earned, 6)
+            tr["realized"] = round(tr["realized"] + earned, 6)
+            tr["cash"] = round(tr["cash"] + earned, 6)
+        b["last_ts"] = t_now
+        # 4) leave, or re-post at today's best prices
+        end = parse_iso(b.get("end"))
+        too_old = (now() - parse_iso(b["opened"])).total_seconds() > r["max_days"] * 86400
+        if too_old or (end and end < now() + dt.timedelta(days=r["min_days_left"] - 2)) or not sc \
+                or not m or m.get("closed") or m.get("acceptingOrders") is False:
+            maker_close(tr, name, key, "episode over" if too_old else "market left the list")
+            continue
+        mid, qb, qa, bb, ba = sc
+        net = b["yes"] - b["no"]
+        b["q"] = {"bid": None, "ask": None}
+        if (mid - bb) * 100 < b["v"] and net < r["max_inventory_lots"] * b["size"] and r["min_mid"] - 0.05 <= mid <= r["max_mid"] + 0.05:
+            old = q.get("bid")
+            lvl = next((s for p, s in bk["bids"] if abs(p - bb) < 1e-9), 0.0)
+            b["q"]["bid"] = old if old and abs(old["px"] - bb) < 1e-9 else {"px": bb, "queue": lvl}
+        if (ba - mid) * 100 < b["v"] and -net < r["max_inventory_lots"] * b["size"] and r["min_mid"] - 0.05 <= mid <= r["max_mid"] + 0.05:
+            old = q.get("ask")
+            lvl = next((s for p, s in bk["asks"] if abs(p - ba) < 1e-9), 0.0)
+            b["q"]["ask"] = old if old and abs(old["px"] - ba) < 1e-9 else {"px": ba, "queue": lvl}
+        b["mid"] = mid
+    # 5) fill free slots
+    last = parse_iso(tr["last_pick"]) if tr["last_pick"] else None
+    if pick_new and len(tr["books"]) < r["max_markets"] and (not last or (now() - last).total_seconds() >= r["pick_every_minutes"] * 60):
+        tr["last_pick"] = iso()
+        for c in maker_pick(tr, r):
+            if len(tr["books"]) >= r["max_markets"]:
+                break
+            need = c["size"]  # a bid + an ask lock about $1 per share pair
+            if tr["cash"] - maker_locked(tr) - need < -EPS:
+                tr["skipped_no_cash"] += 1
+                continue
+            bk = book(c["yes"])
+            sc = book_scores(bk, c["v"], c["min_size"]) if bk else None
+            if not sc:
+                continue
+            mid, qb, qa, bb, ba = sc
+            tr["books"][c["cid"]] = {
+                "cid": c["cid"], "title": c["title"], "slug": c["slug"], "event_slug": c["event_slug"], "end": c["end"],
+                "yes_tok": c["yes"], "no_tok": c["no"], "rate": c["rate"], "v": c["v"], "min_size": c["min_size"],
+                "size": c["size"], "fee_rate": c["fee_rate"], "opened": iso(), "last_ts": t_now, "mid": mid,
+                "est_per_day": round(c["per_day"], 4), "yes": 0.0, "no": 0.0, "yes_cost": 0.0, "no_cost": 0.0,
+                "rewards": 0.0, "merged_pnl": 0.0, "fills": 0, "minutes": 0.0,
+                "q": {"bid": {"px": bb, "queue": next((s for p, s in bk["bids"] if abs(p - bb) < 1e-9), 0.0)},
+                      "ask": {"px": ba, "queue": next((s for p, s in bk["asks"] if abs(p - ba) < 1e-9), 0.0)}}}
+            log_event({"type": "maker_open", "track": name, "title": c["title"], "price": round(mid, 4),
+                       "reason": f"pool ${c['rate']:.0f}/day, est. ${c['per_day']:.2f}/day for us"})
+    tr["peak_open_cost"] = round(max(tr["peak_open_cost"], maker_locked(tr) + sum(
+        b["yes_cost"] + b["no_cost"] for b in tr["books"].values())), 6)
+
+
+def maker_summary(name, tr):
+    books = tr.get("books", {})
+    unreal = sum(maker_inv_value(b, b.get("mid", 0.5)) - b["yes_cost"] - b["no_cost"] for b in books.values())
+    pnl = tr["realized"] + unreal
+    wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
+    stats = {"pnl": round(pnl, 4), "realized": round(tr["realized"], 4), "unrealized": round(unreal, 4),
+             "open": len(books), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": 0,
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "rewards": round(tr.get("rewards", 0.0), 4),
+             "fills": tr.get("fills", 0)}
+    picked_off = pnl - tr.get("rewards", 0.0)
+    row = (f"| {name} | {pnl:+.2f} | {len(books)} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) | "
+           f"${tr['cash']:.2f} | rewards +${tr.get('rewards', 0.0):.2f}, trading {picked_off:+.2f}; fills {tr.get('fills', 0)} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
+             f"Rewards earned **${tr.get('rewards', 0.0):.2f}**, buying and selling (getting picked off, spreads, "
+             f"leftovers) **{picked_off:+.2f}**. It only works if the first number stays bigger.\n"]
+    if books:
+        lines.append("| Market | Pool/day | Quotes (YES bid / ask) | Holding | Rewards | Fills | Ends |\n|---|---|---|---|---|---|---|")
+        for b in books.values():
+            q = b.get("q") or {}
+            qs = f"{cents((q.get('bid') or {}).get('px'))} / {cents((q.get('ask') or {}).get('px'))}"
+            hold = f"{b['yes']:.0f} YES, {b['no']:.0f} NO"
+            lines.append(f"| {b['title'][:60]} | ${b['rate']:.0f} | {qs} | {hold} | ${b['rewards']:.2f} | {b['fills']} | "
+                         f"{str(b.get('end'))[:10]} |")
+    else:
+        lines.append("No markets quoted right now.")
+    return row, stats, lines
+
+
+def makertest():
+    """Live check of the maker track (manual probe workflow, saves nothing): pick markets, post, wait, settle once."""
+    global save, log_event
+    save = lambda *a, **k: None  # noqa: E731
+    log_event = lambda ev: print("event:", ev)  # noqa: E731
+    tracks = load_tracks()
+    name, r = maker_rules()
+    tracks[name]["books"] = {}
+    tracks[name]["last_pick"] = ""
+    maker_cycle(tracks)
+    for rnd in range(3):
+        print(f"--- waiting 4 min (round {rnd + 1}/3)")
+        time.sleep(240)
+        _market_cache.clear()
+        maker_cycle(tracks, pick_new=False)
+        tr = tracks[name]
+        for b in tr["books"].values():
+            q = b.get("q") or {}
+            print(f"  {b['slug'][:50]}: rewards ${b['rewards']:.3f} over {b['minutes']:.0f} min (est ${b['est_per_day']:.2f}/day), "
+                  f"fills {b['fills']}, holding {b['yes']:.0f} YES / {b['no']:.0f} NO, quotes "
+                  f"{cents((q.get('bid') or {}).get('px'))}/{cents((q.get('ask') or {}).get('px'))}, mid {b['mid']:.3f}")
+    row, st, lines = maker_summary(name, tracks[name])
+    print(row)
+    print("\n".join(lines))
+
+
 def trade_returns(tr, size=None):
     """(pnl, cost) per finished trade. With `size`, use the real-size numbers for that stake when the trade has
     them (trades from before 2026-11-08 don't: they count with their paper numbers). A trade where nothing would
@@ -3258,7 +3624,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -3346,8 +3712,8 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder"):
-            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary}[src](name, tr)
+        if src in ("arb", "fullset", "ladder", "maker"):
+            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary, "maker": maker_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -3433,7 +3799,8 @@ def write_summary(tracks):
     cutoff = now() - dt.timedelta(hours=24)
     p, lines = os.path.join(STATE, "events.jsonl"), []
     keep = ("leader_open", "leader_exit", "paper_buy", "paper_close", "skip_no_cash", "refill",
-            "arb_open", "arb_close", "arb_half_settled", "arb_opportunity", "set_open", "set_close")
+            "arb_open", "arb_close", "arb_half_settled", "arb_opportunity", "set_open", "set_close",
+            "maker_open", "maker_close")
     if os.path.exists(p):
         with open(p) as fh:
             for line in fh:
@@ -3723,4 +4090,4 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
-     "depthtest": depthtest, "fasttest": fasttest}[cmd]()
+     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest}[cmd]()
