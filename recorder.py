@@ -102,9 +102,10 @@ def poly_fast():
     now = dt.datetime.now(dt.timezone.utc)
     end = now + dt.timedelta(hours=FAST_HOURS)
     out, off = [], 0
-    for _ in range(30):
+    for _ in range(FAST_MAX_POLY // 100 + 3):  # busiest first; gamma refuses offsets past ~2000
         rows = envelope_rows(http_json(f"{GAMMA}/markets", {
             "closed": "false", "active": "true", "limit": 100, "offset": off,
+            "order": "volume24hr", "ascending": "false",
             "end_date_min": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "end_date_max": end.strftime("%Y-%m-%dT%H:%M:%SZ")}),
             "markets", "data")
         out += [m for m in rows if isinstance(m, dict)]
