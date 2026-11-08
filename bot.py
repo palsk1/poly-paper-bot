@@ -184,7 +184,7 @@ def load_tracks():
         if tc["source"] == "arb":
             for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
                 tracks[name].setdefault(k, v)
-        if tc["source"] == "fullset":
+        if tc["source"] in ("fullset", "ladder"):
             for k, v in (("sets", {}), ("opportunities", 0), ("incomplete", 0), ("seen", {})):
                 tracks[name].setdefault(k, v)
     return tracks
@@ -630,7 +630,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "maker")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -1415,10 +1415,12 @@ def buy_candidates(tracks, name, cands, limit):
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
             continue  # too little left after paying the price and the fee
+        if c.get("model_p") is not None and c["model_p"] - px - fee / shares < r.get("min_model_edge", 0):
+            continue  # weather/crypto: the real fill price ate the model's edge
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
                 "price_source": how}
-        for k in ("target", "tier"):
+        for k in ("target", "tier", "model_p", "signal"):
             if c.get(k):
                 meta[k] = c[k]
         if r.get("tp_rel"):
@@ -2203,9 +2205,20 @@ def fullset_check(tracks):
 
 
 def fullset_settle(tracks):
-    name, r = fullset_rules()
-    if not name:
-        return
+    name, _ = fullset_rules()
+    if name:
+        sets_settle(tracks, name, "every_horse", "incomplete list?")
+
+
+def ladder_settle(tracks):
+    name, _ = ladder_rules()
+    if name:
+        sets_settle(tracks, name, "ladder", "the two markets resolved in a way that should be impossible")
+
+
+def sets_settle(tracks, name, tag, why):
+    """Pays out finished multi-leg sets (every_horse full sets, ladder pairs). A set that pays less than its
+    guaranteed amount is flagged loudly: that is the disaster these strategies bet against."""
     tr = tracks[name]
     for sid in list(tr["sets"]):
         s = tr["sets"][sid]
@@ -2224,10 +2237,10 @@ def fullset_settle(tracks):
         tr["closed"].append(rec)
         del tr["sets"][sid]
         log_event({"type": "set_close", "track": name, "title": s["title"], "pnl": round(pnl, 4),
-                   "reason": "PAID LESS THAN GUARANTEED (incomplete list?)" if bad else "paid as expected"})
+                   "reason": f"PAID LESS THAN GUARANTEED ({why})" if bad else "paid as expected"})
         if bad:
             tr["incomplete"] += 1
-            push("[every_horse] set paid less than guaranteed",
+            push(f"[{tag}] SHORT: paid less than guaranteed",
                  f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
                  tags="rotating_light")
 
@@ -2236,6 +2249,13 @@ def fullset_proof(tr):
     closed = tr["closed"]
     edges = [c["edge"] for c in closed] + [s["edge"] for s in tr["sets"].values()]
     e = sum(edges) / len(edges) if edges else fullset_rules()[1]["min_edge"]
+    return proof(len(closed), sum(1 for c in closed if c.get("incomplete")), e, tr["realized"], "sets", "short payouts")
+
+
+def sets_proof(tr, r):
+    closed = tr["closed"]
+    edges = [c["edge"] for c in closed] + [s["edge"] for s in tr["sets"].values()]
+    e = sum(edges) / len(edges) if edges else r["min_edge"]
     return proof(len(closed), sum(1 for c in closed if c.get("incomplete")), e, tr["realized"], "sets", "short payouts")
 
 
@@ -2304,6 +2324,785 @@ def arb_summary(name, tr):
         for pid, c in watching[:15]:
             lines.append(f"- {pid}: {c['edge'] * 100:+.1f}c ({c['ts'][:16]} UTC)")
     return row, stats, lines
+
+
+# ================================================================ ladder: two markets of one Polymarket event that can't disagree
+#
+# Some events list the same question with different strikes or deadlines ("BTC above 110k / 120k on Dec 31",
+# "ceasefire by Dec 31 / by Mar 31"). If the stricter one (A) says YES, the looser one (B) must say YES too.
+# So NO on A + YES on B pays at least $1 whatever happens, and $2 if only B comes true. When the two together
+# cost less than $1 after fees, that is a locked-in profit inside one site: same rules, same resolver, no
+# cross-site mismatch. The daily job finds the families (state/ladder_pairs.json); the watch job prices them.
+
+_LMON = "january|february|march|april|may|june|july|august|september|october|november|december|" \
+        "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec"
+_LDATE = re.compile(rf"\b({_LMON})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s+(\d{{4}}))?\b"
+                    rf"|\b(\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?({_LMON})\b(?:,?\s+(\d{{4}}))?"
+                    rf"|\b({_LMON})\s+(\d{{4}})\b|\bq[1-4]\s+\d{{4}}\b|\b(?:end of|in)\s+\d{{4}}\b|\b\d{{4}}-\d{{2}}-\d{{2}}\b")
+_LNUM = re.compile(r"[$€£]?\d[\d,]*(?:\.\d+)?\s*(?:k|m|b|bn|million|billion|trillion|%|bps|c)?\b", re.I)
+_LUP = re.compile(r"\b(above|over|more than|at least|exceed|exceeds|or more|or higher|greater than|surpass)\b|\+")
+_LDOWN = re.compile(r"\b(below|under|less than|at most|or lower|or less|fewer than)\b")
+_LTOUCH = re.compile(r"\b(hit|hits|reach|reaches|dip|dips|fall to|falls to|drop to|drops to)\b")
+_LMONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+
+
+def ladder_rules():
+    for n, tc in CFG["tracks"].items():
+        if tc["source"] == "ladder":
+            return n, rules_for(n)
+    return None, None
+
+
+def _lnum(s):
+    s = s.lower().replace(",", "").strip()
+    m = re.match(r"[$€£]?(\d+(?:\.\d+)?)\s*(.*)$", s)
+    if not m:
+        return None
+    mult = {"k": 1e3, "m": 1e6, "million": 1e6, "b": 1e9, "bn": 1e9, "billion": 1e9, "trillion": 1e12}
+    return float(m.group(1)) * mult.get(m.group(2).strip(), 1)
+
+
+def ladder_template(text):
+    """(text with dates -> <d> and numbers -> <n>, [date strings], [numbers]). Years alone stay text."""
+    t = str(text or "").lower()
+    dates = [m.group(0) for m in _LDATE.finditer(t)]
+    t = _LDATE.sub(" <d> ", t)
+    nums = []
+
+    def rep(m):
+        v = _lnum(m.group(0))
+        if v is None or (1990 <= v <= 2100 and "." not in m.group(0) and "$" not in m.group(0)):
+            return m.group(0)
+        nums.append(v)
+        return " <n> "
+    t = _LNUM.sub(rep, t)
+    return re.sub(r"\s+", " ", t).strip(), dates, nums
+
+
+def _ldate_value(s, default_year):
+    """'march 31, 2027' / '31 march' -> date, or None."""
+    m = re.match(rf"({_LMON})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s+(\d{{4}}))?", s)
+    if m:
+        mon, day, yr = m.group(1), m.group(2), m.group(3)
+    else:
+        m = re.match(rf"(\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?({_LMON})(?:,?\s+(\d{{4}}))?", s)
+        if not m:
+            return None
+        day, mon, yr = m.group(1), m.group(2), m.group(3)
+    try:
+        return dt.date(int(yr) if yr else default_year, _LMONTHS.index(mon[:3]) + 1, int(day))
+    except ValueError:
+        return None
+
+
+def _only_differ_by(xs, ys, pair):
+    """Lists are equal except at positions where (x, y) == pair (the strike or deadline itself)."""
+    return len(xs) == len(ys) and all(x == y or (x, y) == pair for x, y in zip(xs, ys))
+
+
+def ladder_pairs(markets, r):
+    """[(A, B, kind)] where A's YES implies B's YES, from markets of one event. Conservative on purpose:
+    a family is dropped unless its direction is clear from the words and its prices agree with it."""
+    by_ev, stats = defaultdict(list), Counter()
+    for m in markets:
+        evs = m.get("events") or []
+        ev = evs[0] if evs and isinstance(evs[0], dict) else {}
+        if ev.get("negRisk") or ev.get("enableNegRisk") or m.get("negRisk"):
+            continue  # one-winner lists are every_horse's job, never ladders
+        if m.get("closed") or m.get("acceptingOrders") is False or not yes_no_tokens(m):
+            continue
+        if fnum(m.get("bestBid"), None) is None or fnum(m.get("bestAsk"), None) is None:
+            continue
+        k = str(ev.get("id") or ev.get("slug") or "")
+        if k:
+            by_ev[k].append(m)
+    out = []
+    for group in by_ev.values():
+        if len(group) < 2:
+            continue
+        fams = defaultdict(list)
+        for m in group:
+            tq, dq, nq = ladder_template(m.get("question"))
+            td, dd, nd = ladder_template(m.get("description"))
+            fams[(tq, td)].append({"m": m, "dq": dq, "nq": nq, "dd": dd, "nd": nd,
+                                   "end": parse_iso(m.get("endDateIso") or m.get("endDate"))})
+        for (tq, td), fam in fams.items():
+            if len(fam) < 2 or any(x["end"] is None for x in fam):
+                continue
+            words = tq.replace("<n>", " ").replace("<d>", " ")
+            pairs, kind = [], None
+            if all(len(x["nq"]) == 1 for x in fam) and len({x["nq"][0] for x in fam}) == len(fam) \
+                    and len({tuple(x["dq"]) for x in fam}) == 1 and len({x["end"].date() for x in fam}) == 1:
+                # strike ladder: only the strike differs (same dates, same deadline)
+                if "between" in words or re.search(r"<n> ?(-|to) ?<n>|\bexactly\b|\btop\b", tq):
+                    stats["skip range/rank"] += 1
+                    continue
+                if _LTOUCH.search(words):  # "hit X" can mean up or down: only the outcome arrows say which
+                    labels = " ".join(str(x["m"].get("groupItemTitle") or "") for x in fam)
+                    up, down = "↑" in labels or "(high)" in tq, "↓" in labels or "(low)" in tq
+                else:
+                    up, down = bool(_LUP.search(words)), bool(_LDOWN.search(words))
+                if up == down:
+                    stats["skip direction unclear"] += 1
+                    continue
+                kind = "strike"
+                fam.sort(key=lambda x: x["nq"][0])
+                for i, lo in enumerate(fam):
+                    for hi in fam[i + 1:]:
+                        a, b = (hi, lo) if up else (lo, hi)
+                        pair = (a["nq"][0], b["nq"][0])
+                        if _only_differ_by(a["nd"], b["nd"], pair) and a["dd"] == b["dd"]:
+                            pairs.append((a, b))
+                        else:
+                            stats["skip rules text differs"] += 1
+            elif len({tuple(x["nq"]) for x in fam}) == 1 and all(len(x["dq"]) == 1 for x in fam) \
+                    and re.search(r"\b(by|before|until|prior to|no later than) <d>", tq):
+                # deadline ladder: "X by <date>", only the date differs
+                kind = "deadline"
+                for x in fam:
+                    x["dl"] = _ldate_value(x["dq"][0], x["end"].year)
+                if any(x["dl"] is None for x in fam) or len({x["dl"] for x in fam}) != len(fam):
+                    stats["skip dates unreadable"] += 1
+                    continue
+                fam.sort(key=lambda x: x["dl"])
+                for i, a in enumerate(fam):
+                    for b in fam[i + 1:]:
+                        if a["end"] > b["end"]:
+                            stats["skip end dates disagree"] += 1  # question and market end disagree: don't guess
+                            continue
+                        if _only_differ_by(a["dd"], b["dd"], (a["dq"][0], b["dq"][0])) and a["nd"] == b["nd"]:
+                            pairs.append((a, b))
+                        else:
+                            stats["skip rules text differs"] += 1
+            else:
+                continue
+            # Sanity check against the crowd: the stricter market should never trade far ABOVE the looser one.
+            # A real mispricing is a few cents; a big gap means we read the family wrong.
+            mid = lambda x: (fnum(x["m"]["bestBid"]) + fnum(x["m"]["bestAsk"])) / 2
+            if any(mid(a) > mid(b) + r["max_price_disagree"] for a, b in pairs):
+                stats[f"skip {kind} family, prices disagree"] += 1
+                continue
+            stats[f"{kind} families"] += 1
+            out += [(a["m"], b["m"], kind) for a, b in pairs]
+    return out, stats
+
+
+def ladder_discover():
+    """Daily: find the ladder families and save their pairs for the watch job."""
+    name, r = ladder_rules()
+    if not name:
+        return
+    ms = scan_markets({"end_date_min": iso(now() + dt.timedelta(days=r["min_days"])),
+                       "end_date_max": iso(now() + dt.timedelta(days=r["max_days"])),
+                       "liquidity_num_min": r["min_liquidity"]})
+    pairs, stats = ladder_pairs(ms, r)
+    rows = []
+    for a, b, kind in pairs:
+        evs = a.get("events") or [{}]
+        rows.append({"id": f"{a.get('slug')}>{b.get('slug')}", "kind": kind,
+                     "event": str((evs[0] if isinstance(evs[0], dict) else {}).get("slug") or ""),
+                     "a": {"mid": str(a.get("id")), "slug": a.get("slug"), "q": a.get("question"),
+                           "no_token": yes_no_tokens(a)[1]},
+                     "b": {"mid": str(b.get("id")), "slug": b.get("slug"), "q": b.get("question"),
+                           "yes_token": yes_no_tokens(b)[0]},
+                     "end": max(a.get("endDateIso") or a.get("endDate") or "", b.get("endDateIso") or b.get("endDate") or "")})
+    rows = rows[: r["max_pairs"]]
+    save("ladder_pairs.json", {"generated": iso(), "markets_scanned": len(ms), "stats": dict(stats),
+                               "pairs": len(rows), "list": rows})
+    print(f"ladder: {len(rows)} pairs from {len(ms)} markets; {dict(stats)}")
+
+
+def ladder_due():
+    _, r = ladder_rules()
+    last = parse_iso(load("scan_state.json", {}).get("last_ladder_check"))
+    return r is not None and (not last or (now() - last).total_seconds() >= r["check_every_min"] * 60 - 30)
+
+
+def gamma_markets_by_id(ids, batch=50):
+    """Fresh listed prices for many markets at once."""
+    ids, out = sorted(set(ids)), {}
+
+    def one(chunk):
+        try:
+            res = http_json(f"{GAMMA}/markets", [("id", i) for i in chunk] + [("limit", len(chunk))])
+            return [m for m in envelope_rows(res, "markets", "data") if isinstance(m, dict)]
+        except Exception as e:
+            print(f"ladder: market batch failed: {e}")
+            return []
+    with ThreadPoolExecutor(6) as ex:
+        for ms in ex.map(one, [ids[i:i + batch] for i in range(0, len(ids), batch)]):
+            for m in ms:
+                out[str(m.get("id"))] = m
+    return out
+
+
+def ladder_check(tracks, force=False):
+    name, r = ladder_rules()
+    if not name or not (force or ladder_due()):
+        return
+    st = load("scan_state.json", {})
+    st["last_ladder_check"] = iso()
+    save("scan_state.json", st)
+    tr = tracks[name]
+    lp = load("ladder_pairs.json", {}).get("list", [])
+    if not lp:
+        return
+    fresh = gamma_markets_by_id([p["a"]["mid"] for p in lp] + [p["b"]["mid"] for p in lp])
+    print(f"ladder: {len(lp)} pairs, fresh prices for {len(fresh)} markets")
+    rate_guess = lambda m: fee_rate(m)
+    short = []
+    for p in lp:
+        a, b = fresh.get(p["a"]["mid"]), fresh.get(p["b"]["mid"])
+        if not a or not b or a.get("closed") or b.get("closed") or a.get("acceptingOrders") is False \
+                or b.get("acceptingOrders") is False:
+            continue
+        bb_a, ba_b = fnum(a.get("bestBid"), None), fnum(b.get("bestAsk"), None)
+        if bb_a is None or ba_b is None or ba_b <= 0:
+            continue
+        pa, pb = 1 - bb_a, ba_b  # listed NO ask of A, YES ask of B
+        est = 1 - pa - pb - rate_guess(a) * pa * (1 - pa) - rate_guess(b) * pb * (1 - pb)
+        if est >= r["min_edge"] - 0.005:
+            short.append((est, p, a, b))
+    short.sort(key=lambda x: -x[0])
+    print(f"ladder: {len(short)} pairs look cheap on listed prices")
+    bought = []
+    for est, p, a, b in short[: r["books_per_check"]]:
+        if len(bought) >= r["picks_per_check"] or len(tr["sets"]) >= r["max_open"]:
+            break
+        sid = p["id"]
+        if sum(1 for k in tr["sets"] if k.split("#")[0] == sid) >= r["max_lots_per_pair"]:
+            continue
+        ka, kb = book(p["a"]["no_token"]), book(p["b"]["yes_token"])
+        if not ka or not kb:
+            continue
+        shares = max(r["shares"], ka["min_size"], kb["min_size"])
+        xa, xb = walk(ka["asks"], shares), walk(kb["asks"], shares)
+        if xa is None or xb is None:
+            continue
+        fa, fb = taker_fee(shares, xa, fee_rate(a)), taker_fee(shares, xb, fee_rate(b))
+        cost = shares * (xa + xb) + fa + fb
+        net = shares - cost
+        end = max(d for d in (parse_iso(a.get("endDateIso") or a.get("endDate")),
+                              parse_iso(b.get("endDateIso") or b.get("endDate")), now()) if d)
+        days = max(1.0, (end - now()).total_seconds() / 86400) + 3
+        edge = net / shares
+        annual = (net / cost) * 365 / days if cost > 0 else 0
+        seen = tr["seen"].get(sid, {})
+        ok_now = edge >= r["min_edge"] and annual >= r["min_annual"]
+        tr["seen"][sid] = {"ts": iso(), "edge": round(edge, 4), "opportunity": ok_now}
+        if not ok_now:
+            continue
+        if not seen.get("opportunity"):
+            tr["opportunities"] += 1
+        if tr["cash"] + EPS < cost:
+            tr["skipped_no_cash"] += 1
+            log_event({"type": "skip_no_cash", "track": name, "title": p["a"]["q"], "cost": round(cost, 4)})
+            continue
+        tr["cash"] = round(tr["cash"] - cost, 6)
+        tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+        legs = [{"slug": p["a"]["slug"], "token": p["a"]["no_token"], "name": f"NO: {p['a']['q']}",
+                 "price": round(xa, 4), "fee": round(fa, 4)},
+                {"slug": p["b"]["slug"], "token": p["b"]["yes_token"], "name": f"YES: {p['b']['q']}",
+                 "price": round(xb, 4), "fee": round(fb, 4)}]
+        title = f"{p['a']['q']} / {p['b']['q']}"
+        tr["sets"][f"{sid}#{len(tr['closed']) + len(tr['sets']) + 1}"] = {
+            "title": title, "kind": p["kind"], "n": 2, "shares": shares, "legs": legs, "cost": round(cost, 4),
+            "guaranteed": shares, "expected_profit": round(net, 4), "edge": round(edge, 4),
+            "annual": round(annual, 3), "end": end.strftime("%Y-%m-%d"), "opened": iso(), "event": p.get("event")}
+        tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(s["cost"] for s in tr["sets"].values())), 6)
+        log_event({"type": "set_open", "track": name, "title": title, "kind": p["kind"], "n": 2,
+                   "price": round(cost / shares, 4), "edge": round(edge, 4)})
+        bought.append(f"NO {cents(xa)} on \"{p['a']['q']}\" + YES {cents(xb)} on \"{p['b']['q']}\": "
+                      f"pays at least ${shares:.2f} for ${cost:.2f}")
+    if bought and CFG["push"].get("on_fullset"):
+        push(f"[ladder] locked {len(bought)} pair(s)", "\n".join(bought), tags="ladder", track=name)
+
+
+def ladder_summary(name, tr):
+    pr = sets_proof(tr, ladder_rules()[1])
+    locked = sum(s["cost"] for s in tr["sets"].values())
+    expected = sum(s["expected_profit"] for s in tr["sets"].values())
+    wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr["sets"]), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": 0,
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "locked": round(locked, 4),
+             "expected_locked_profit": round(expected, 4), "gap_episodes": tr["opportunities"], "proof": pr}
+    lp = load("ladder_pairs.json", {})
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr['sets'])} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) "
+           f"| ${tr['cash']:.2f} | locked ${locked:.2f} (+${expected:.2f} at least); watching {lp.get('pairs', 0)} pairs; "
+           f"cheap pairs found {tr['opportunities']}; short payouts {tr['incomplete']} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n", f"**Proof status:** {pr['verdict']}\n"]
+    if tr["sets"]:
+        lines.append("| Pair | Kind | Cost | Pays at end | Ends |\n|---|---|---|---|---|")
+        for s in tr["sets"].values():
+            lines.append(f"| {str(s['title'])[:80]} | {s['kind']} | ${s['cost']:.2f} | "
+                         f"${s['guaranteed']:.2f} (or ${2 * s['guaranteed']:.2f}) | {str(s.get('end') or '')[:10]} |")
+    else:
+        lines.append("No open pairs.")
+    near = sorted(tr.get("seen", {}).items(), key=lambda x: -x[1]["edge"])[:5]
+    if near:
+        lines.append("\nClosest pairs at last check (profit per $1 after fees):")
+        lines += [f"- {sid[:90]}: {v['edge'] * 100:+.1f}c ({v['ts'][:16]} UTC)" for sid, v in near]
+    return row, stats, lines
+
+
+# ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
+#
+# These pay out within hours or a day, so they collect finished trades much faster than deadline markets.
+# Each track compares the market's price with a model built from free outside data, and buys only when the model
+# says a side is clearly cheap after the fee:
+#   wx_forecast : daily highest/lowest temperature buckets. The market settles on the airport's hourly METAR reports
+#                 (aviationweather.gov). Model = ECMWF ensemble (51 forecasts, Open-Meteo), corrected by how far
+#                 it was off at that station over the last day, plus what has already been observed today.
+#   crypto_late : the last 45 minutes of Binance-settled hourly "Up or Down" candles and noon-ET "above $X" ladders.
+#                 Prices them with the coin's own hourly volatility of the last week (x1.5 for fat tails); buys the
+#                 side the model gives 97%+ when it still costs 96c or less.
+# Tested and left out (2026-11-08 dry run): the same crypto model 3-30h out. The ladders matched it within about 1c
+# at every strike, so there was nothing to buy.
+
+WX_ENSEMBLE = "https://ensemble-api.open-meteo.com/v1/ensemble"
+METAR = "https://aviationweather.gov/api/data/metar"
+BINANCE = "https://data-api.binance.vision/api/v3"  # Binance's public market-data mirror (the .com API blocks US IPs)
+CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSDT", "xrp": "XRPUSDT",
+                  "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
+MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
+          "november", "december"]
+FAST_SOURCES = ("weather", "crypto")
+VERBOSE = False  # fasttest prints near misses
+
+
+def fast_tracks(kind=None):
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] in FAST_SOURCES and (kind is None or tc["source"] == kind)]
+
+
+def gamma_events(params, max_pages=10):
+    """Events list, 100 per page (the API's cap), with nested markets."""
+    out, off = [], 0
+    for _ in range(max_pages):
+        rows = envelope_rows(http_json(f"{GAMMA}/events", {**params, "limit": 100, "offset": off}), "events", "data")
+        out += [e for e in rows if isinstance(e, dict)]
+        if len(rows) < 100:
+            break
+        off += 100
+    return out
+
+
+def event_by_slug(slug):
+    try:
+        rows = envelope_rows(http_json(f"{GAMMA}/events", {"slug": slug}), "events", "data")
+        return rows[0] if rows and isinstance(rows[0], dict) else None
+    except Exception as e:
+        print(f"event lookup failed for {slug}: {e}")
+        return None
+
+
+def event_markets(e):
+    """Nested markets of an event, tagged with their event so candidate() can group them (one bet per event)."""
+    out = []
+    for m in e.get("markets") or []:
+        if not isinstance(m, dict) or m.get("closed") or m.get("acceptingOrders") is False or not binary(m):
+            continue
+        if len(market_tokens(m)) != 2:
+            continue
+        out.append({**m, "events": [{"id": e.get("id"), "slug": e.get("slug")}]})
+    return out
+
+
+def yes_no_asks(m):
+    """(cost of YES, cost of NO) from the listed best bid/ask; NO costs 1 - best YES bid. None where the book is empty."""
+    ask, bid = fnum(m.get("bestAsk"), None), fnum(m.get("bestBid"), None)
+    return (ask if ask and 0 < ask < 1 else None), (1 - bid if bid and 0 < bid < 1 else None)
+
+
+def model_pick(m, p_yes, r, extra=None):
+    """The side with the biggest model edge after the fee, as a candidate, or None. p_yes = model chance of YES."""
+    best = None
+    for i, (p, ask) in enumerate(zip((p_yes, 1 - p_yes), yes_no_asks(m))):
+        if ask is None or not (r["min_price"] <= ask <= r["max_price"]) or p < r.get("min_model_p", 0):
+            continue
+        edge = p - ask - fee_rate(m) * ask * (1 - ask)
+        if edge > r.get("max_model_edge", 1):
+            if VERBOSE:
+                print(f"   (ignored: model {p * 100:.0f}/100 vs price {cents(ask)} is too far apart to trust) {m.get('question')}")
+            continue  # the crowd isn't that wrong that often; more likely our data is
+        if VERBOSE and edge >= r["min_model_edge"] / 2:
+            print(f"   near: model {p * 100:.0f}/100 vs price {cents(ask)} edge {edge * 100:+.1f}c {m.get('question')}")
+        if edge >= r["min_model_edge"] and (best is None or edge > best[0]):
+            best = (edge, i, p)
+    # bestAsk/bestBid are for the first outcome, which must be the YES side ("Yes" or "Up")
+    if not best or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] not in (["yes"], ["up"]):
+        return None
+    i = best[1]
+    end = parse_iso(m.get("endDateIso") or m.get("endDate")) or now()
+    c = candidate(m, i, max((end - now()).total_seconds() / 86400, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                  {"model_p": round(best[2], 4), "model_edge": round(best[0], 4), **(extra or {})})
+    return c
+
+
+def fast_due(name, minutes):
+    last = parse_iso(load("scan_state.json", {}).get("fast_last", {}).get(name))
+    return last is None or (now() - last).total_seconds() >= minutes * 60 - 90
+
+
+def run_fast(tracks, force=False):
+    """Scan the weather and crypto tracks that are due (each has its own scan_every_minutes)."""
+    due = [n for n in fast_tracks() if force or fast_due(n, rules_for(n).get("scan_every_minutes", 60))]
+    if not due:
+        return {}
+    lists = {}
+    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates)):
+        names = [n for n in due if CFG["tracks"][n]["source"] == kind]
+        if not names:
+            continue
+        try:
+            by_track = fn(names)
+        except Exception as e:
+            print(f"{kind} scan failed: {e}")
+            continue
+        for n in names:
+            cands = by_track.get(n, [])
+            lists[n] = cands
+            r = rules_for(n)
+            print(f"{n}: {len(cands)} candidates" + "".join(
+                f"\n   {c['outcome']} model {c['model_p'] * 100:.0f}/100 vs price {cents(c['price'])} "
+                f"(edge {c['model_edge'] * 100:+.1f}c) - {c['title'][:70]}" for c in cands[:5]))
+            buy_candidates(tracks, n, cands, r.get("picks_per_scan", 3))
+    st = load("scan_state.json", {})
+    for n in due:
+        st.setdefault("fast_last", {})[n] = iso()
+    save("scan_state.json", st)
+    return lists
+
+
+# ---------------------------------------------------------------- weather
+
+BUCKET_RE = re.compile(r"^\s*(-?\d+)\s*(?:-\s*(-?\d+))?\s*°?\s*([CF])\b\s*(or\s+(?:below|lower|less|higher|above|more))?",
+                       re.I)
+
+
+def wx_bucket(label):
+    """Bucket label -> (low, high) in °C on the market's rounded scale, e.g. '7°C' -> [6.5, 7.5),
+    '84-85°F' -> [83.5, 85.5)°F converted, '6°C or below' -> (-inf, 6.5). None if it doesn't parse."""
+    mt = BUCKET_RE.match(str(label or ""))
+    if not mt:
+        return None
+    a = int(mt.group(1))
+    b = int(mt.group(2)) if mt.group(2) else a
+    unit, tail = mt.group(3).upper(), (mt.group(4) or "").lower()
+    lo, hi = a - 0.5, b + 0.5
+    if any(w in tail for w in ("below", "lower", "less")):
+        lo = -math.inf
+    elif tail:
+        hi = math.inf
+    if unit == "F":
+        lo, hi = ((x - 32) / 1.8 for x in (lo, hi))
+    return lo, hi, unit
+
+
+def wx_event_info(e):
+    """(kind 'high'/'low', ICAO station, local day start, local day end) from the event, or None.
+    The rules link the METAR query for the day; its 'date' is local midnight after the day + 3h, 30 hours back."""
+    t = str(e.get("title") or "").lower()
+    kind = "high" if t.startswith("highest temperature") else "low" if t.startswith("lowest temperature") else None
+    src = str(e.get("resolutionSource") or "")
+    if not src:
+        for m in e.get("markets") or []:
+            src = str(m.get("resolutionSource") or "")
+            if src:
+                break
+    mt = re.search(r"aviationweather\.gov/api/data/metar\?ids=([A-Z0-9]{4}).*?date=(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ)", src)
+    if not kind or not mt:
+        return None
+    end = parse_iso(mt.group(2)) - dt.timedelta(hours=3)
+    return kind, mt.group(1), end - dt.timedelta(hours=24), end
+
+
+def metar_obs(icaos, hours=40):
+    """{icao: {"lat", "lon", "obs": [(time, temp °C)], "since": oldest report time}} from routine reports only (SPECI
+    doesn't count for the market), using the tenths-of-a-degree T group when present, as the market rules do.
+    Asked 3 stations at a time: the API cuts long answers short, which would hide the night's low."""
+    out = {}
+    icaos = sorted(set(icaos))
+
+    def fetch(ids):
+        try:
+            rows = http_json(METAR, {"ids": ",".join(ids), "format": "json", "hours": hours})
+            return rows if isinstance(rows, list) else []
+        except Exception as e:
+            print(f"METAR fetch failed for {ids}: {e}")
+            return []
+
+    with ThreadPoolExecutor(6) as ex:
+        batches = list(ex.map(fetch, [icaos[i:i + 3] for i in range(0, len(icaos), 3)]))
+    for rows in batches:
+        for x in rows:
+            raw = str(x.get("rawOb") or "")
+            if not x.get("icaoId") or not x.get("obsTime"):
+                continue
+            t = dt.datetime.fromtimestamp(int(x["obsTime"]), dt.timezone.utc)
+            d = out.setdefault(x["icaoId"], {"lat": x.get("lat"), "lon": x.get("lon"), "obs": [], "since": t})
+            d["since"] = min(d["since"], t)
+            if raw.startswith("SPECI"):
+                continue
+            tg = re.search(r" T([01])(\d{3})[01]\d{3}\b", raw)
+            if tg:
+                temp = (-1 if tg.group(1) == "1" else 1) * int(tg.group(2)) / 10
+            elif x.get("temp") is not None:
+                temp = fnum(x.get("temp"))
+            else:
+                continue
+            d["obs"].append((t, temp))
+    for d in out.values():
+        d["obs"].sort()
+    return out
+
+
+_ens_cache = {}
+
+
+def wx_ensemble(lat, lon, models):
+    """{utc hour: [member temps °C]} for the last day and the next 2, or None."""
+    key = (round(lat, 3), round(lon, 3), models)
+    if key in _ens_cache:
+        return _ens_cache[key]
+    out = None
+    try:
+        res = http_json(WX_ENSEMBLE, {"latitude": lat, "longitude": lon, "hourly": "temperature_2m", "models": models,
+                                      "past_days": 1, "forecast_days": 3, "timezone": "GMT"}, retries=2)
+        h = res.get("hourly") or {}
+        cols = [v for k, v in h.items() if k.startswith("temperature_2m") and isinstance(v, list)]
+        out = {}
+        for j, ts in enumerate(h.get("time") or []):
+            vals = [c[j] for c in cols if j < len(c) and c[j] is not None]
+            if vals:
+                out[dt.datetime.fromisoformat(ts).replace(tzinfo=dt.timezone.utc)] = vals
+    except Exception as e:
+        print(f"ensemble fetch failed for {lat},{lon}: {e}")
+    _ens_cache[key] = out
+    return out
+
+
+def wx_model(kind, start, end, station, ens, r):
+    """Chance per bucket comes from wx_bucket_p; this returns what it needs: the observed extreme so far today,
+    the station bias, and each ensemble member's extreme over the hours still to come. None if it can't calibrate."""
+    obs = station["obs"]
+    if start < now() and station["since"] > start + dt.timedelta(minutes=90):
+        return None  # reports don't reach back to the start of the day: the day's extreme so far is unknown
+    # bias: how far the ensemble mean was off at this station over the last 24h (MOS-lite)
+    diffs = []
+    for t, temp in obs:
+        hr = t.replace(minute=0, second=0, microsecond=0) + (dt.timedelta(hours=1) if t.minute >= 30 else dt.timedelta())
+        if hr in ens and now() - t <= dt.timedelta(hours=24):
+            diffs.append(temp - sum(ens[hr]) / len(ens[hr]))
+    if len(diffs) < r.get("min_bias_obs", 6):
+        return None
+    bias = max(-r.get("max_bias_c", 4), min(r.get("max_bias_c", 4), sum(diffs) / len(diffs)))
+    seen = [temp for t, temp in obs if start <= t < end]
+    observed = (max(seen) if kind == "high" else min(seen)) if seen else None
+    hours = sorted(h for h in ens if max(start, now()) <= h < end)
+    if not hours:
+        return None
+    n = min(len(ens[h]) for h in hours)
+    pick_ext = max if kind == "high" else min
+    members = [pick_ext(ens[h][k] for h in hours) + bias for k in range(n)]
+    lead_h = (hours[-1] - now()).total_seconds() / 3600
+    sigma = r.get("sigma_c", 0.8) + r.get("sigma_per_day_c", 0.4) * max(lead_h, 0) / 24
+    return {"observed": observed, "members": members, "sigma": sigma, "bias": round(bias, 2), "n_obs": len(seen)}
+
+
+def wx_bucket_p(mod, kind, lo, hi):
+    """Chance the day's extreme lands in [lo, hi): final = max(observed so far, rest of day) for 'high' (min for 'low');
+    the rest of the day = each ensemble member + normal error of sigma."""
+    o, s, nd = mod["observed"], mod["sigma"], NormalDist()
+
+    def cdf(x):  # chance the rest-of-day extreme is below x
+        if x == math.inf:
+            return 1.0
+        if x == -math.inf:
+            return 0.0
+        return sum(nd.cdf((x - v) / s) for v in mod["members"]) / len(mod["members"])
+
+    if kind == "high":
+        if o is not None and o >= hi:
+            return 0.0
+        if o is not None and o >= lo:
+            return cdf(hi)              # already in the bucket: stays unless the rest of the day goes higher
+        return cdf(hi) - cdf(lo)
+    if o is not None and o < lo:
+        return 0.0
+    if o is not None and o < hi:
+        return 1 - cdf(lo)              # already in the bucket: stays unless the rest of the day goes lower
+    return cdf(hi) - cdf(lo)
+
+
+def weather_candidates(names):
+    rs = {n: rules_for(n) for n in names}
+    horizon = max(r.get("max_hours_to_end", 40) for r in rs.values())
+    evs = gamma_events({"tag_slug": "daily-temperature", "closed": "false",
+                        "end_date_min": iso(now() - dt.timedelta(hours=36)),
+                        "end_date_max": iso(now() + dt.timedelta(hours=horizon + 24))})
+    infos = [(e, wx_event_info(e)) for e in evs]
+    infos = [(e, i) for e, i in infos if i and i[3] > now() + dt.timedelta(minutes=30)
+             and (i[3] - now()).total_seconds() <= horizon * 3600]
+    stations = metar_obs({i[1] for _, i in infos})
+    models = {r.get("models", "ecmwf_ifs025") for r in rs.values()}
+    with ThreadPoolExecutor(6) as ex:  # warm the forecast cache, 6 at a time
+        list(ex.map(lambda a: wx_ensemble(*a), {(fnum(s["lat"]), fnum(s["lon"]), md) for s in stations.values()
+                                                 if s.get("lat") is not None for md in models}))
+    out = {n: [] for n in names}
+    skipped = Counter()
+    for e, (kind, icao, start, end) in infos:
+        st = stations.get(icao)
+        if not st or st.get("lat") is None:
+            skipped["no METAR"] += 1
+            continue
+        for n in names:
+            r = rs[n]
+            if fnum(e.get("liquidity")) < r.get("min_liquidity", 0):
+                skipped["thin"] += 1
+                continue
+            ens = wx_ensemble(fnum(st["lat"]), fnum(st["lon"]), r.get("models", "ecmwf_ifs025"))
+            if not ens:
+                skipped["no forecast"] += 1
+                continue
+            mod = wx_model(kind, start, end, st, ens, r)
+            if not mod:
+                skipped["can't calibrate"] += 1
+                continue
+            best = None
+            for m in event_markets(e):
+                b = wx_bucket(m.get("groupItemTitle") or m.get("question"))
+                if not b:
+                    continue
+                if VERBOSE and b[2] not in skipped:
+                    skipped[b[2]] = 0  # print one rules text per unit, to check the rounding rule
+                    print(f"   rules ({b[2]}): {str(m.get('description'))[:1800]}")
+                c = model_pick(m, wx_bucket_p(mod, kind, b[0], b[1]), r,
+                               {"signal": f"{kind} {icao} obs {mod['observed']} bias {mod['bias']:+.1f}"})
+                if c and (best is None or c["model_edge"] > best["model_edge"]):
+                    best = c
+            if best:
+                out[n].append(best)
+    for n in names:
+        out[n].sort(key=lambda c: -c["model_edge"])
+    print(f"weather: {len(evs)} events, {len(infos)} in range, {len(stations)} stations; skipped {dict(skipped)}")
+    return out
+
+
+# ---------------------------------------------------------------- crypto
+
+_kline_cache = {}
+
+
+def crypto_state(symbol):
+    """(spot, hourly volatility of log returns over the last week, hourly candles) from Binance, or None."""
+    if symbol not in _kline_cache:
+        try:
+            ks = http_json(f"{BINANCE}/klines", {"symbol": symbol, "interval": "1h", "limit": 170})
+            closes = [fnum(k[4]) for k in ks]
+            rets = [math.log(b / a) for a, b in zip(closes[:-2], closes[1:-1]) if a > 0 and b > 0]  # closed candles only
+            mean = sum(rets) / len(rets)
+            vol = math.sqrt(sum((x - mean) ** 2 for x in rets) / (len(rets) - 1))
+            _kline_cache[symbol] = (closes[-1], vol, ks)
+        except Exception as e:
+            print(f"binance klines failed for {symbol}: {e}")
+            _kline_cache[symbol] = None
+    return _kline_cache[symbol]
+
+
+def p_above(spot, strike, vol_h, hours):
+    """Chance the price ends above the strike: log-normal, no drift."""
+    if hours <= 0:
+        return 1.0 if spot > strike else 0.0
+    return NormalDist().cdf(math.log(spot / strike) / (vol_h * math.sqrt(hours)))
+
+
+def et_now():
+    try:
+        from zoneinfo import ZoneInfo
+        return now().astimezone(ZoneInfo("America/New_York"))
+    except Exception:
+        return now() - dt.timedelta(hours=5)  # EST; only used to build slugs
+
+
+def crypto_events():
+    """Live crypto events worth pricing: noon-ET 'above' ladders for today and tomorrow, and the hourly
+    Up/Down candle that is running now. Built from their slugs (the crypto tag lists thousands of 5-min markets)."""
+    et = et_now()
+    slugs = []
+    for d in (et, et + dt.timedelta(days=1)):
+        for coin in ("bitcoin", "ethereum", "solana", "xrp"):
+            slugs.append((coin, "above", f"{coin}-above-on-{MONTHS[d.month - 1]}-{d.day}-{d.year}"))
+    h = et.hour % 12 or 12
+    for coin in CRYPTO_SYMBOLS:
+        slugs.append((coin, "updown", f"{coin}-up-or-down-{MONTHS[et.month - 1]}-{et.day}-{et.year}-{h}{'am' if et.hour < 12 else 'pm'}-et"))
+    with ThreadPoolExecutor(8) as ex:
+        evs = list(ex.map(lambda s: event_by_slug(s[2]), slugs))
+    return [(coin, kind, e) for (coin, kind, _), e in zip(slugs, evs) if e and not e.get("closed")]
+
+
+def crypto_candidates(names):
+    rs = {n: rules_for(n) for n in names}
+    out = {n: [] for n in names}
+    found = Counter()
+    for coin, kind, e in crypto_events():
+        stt = crypto_state(CRYPTO_SYMBOLS[coin])
+        if not stt:
+            continue
+        spot, vol, ks = stt
+        for m in event_markets(e):
+            end = parse_iso(m.get("endDate") or e.get("endDate"))
+            if not end:
+                continue
+            hours = (end - now()).total_seconds() / 3600
+            if kind == "updown":
+                start = parse_iso(m.get("eventStartTime") or e.get("startTime"))
+                k = next((k for k in ks if start and int(k[0]) == int(start.timestamp() * 1000)), None)
+                if not k or abs((end - start).total_seconds() - 3600) > 60:
+                    continue  # only the 1-hour candle that is running now
+                strike = fnum(k[1])   # Up wins if close >= open
+            else:
+                mt = re.search(r"\$?([\d,]+(?:\.\d+)?)", str(m.get("groupItemTitle") or m.get("question") or ""))
+                if not mt:
+                    continue
+                strike = fnum(mt.group(1).replace(",", ""))
+            if strike <= 0:
+                continue
+            found[kind] += 1
+            for n in names:
+                r = rs[n]
+                if not (r["min_hours"] <= hours <= r["max_hours"]) or kind not in r.get("kinds", ["above", "updown"]):
+                    continue
+                p = p_above(spot, strike, vol * r.get("vol_mult", 1.0), hours)
+                if VERBOSE:
+                    ya, na = yes_no_asks(m)
+                    print(f"   {n} {coin} {kind} {strike:g} in {hours:.1f}h: model YES {p * 100:.1f}/100, YES costs {cents(ya)}, "
+                          f"NO costs {cents(na)} (spot {spot:g}, vol/h {vol * 100:.2f}%)")
+                c = model_pick(m, p, r, {"signal": f"{coin} {kind} spot {spot:g} strike {strike:g} "
+                                                   f"vol/h {vol * 100:.2f}% {hours:.1f}h"})
+                if c:
+                    out[n].append(c)
+    for n in names:
+        out[n].sort(key=lambda c: -c["model_edge"])
+    print(f"crypto: priced {dict(found)}")
+    return out
+
+
+def fasttest():
+    """Live dry run of the weather and crypto tracks (manual probe workflow, saves nothing)."""
+    global save, log_event, VERBOSE
+    save = lambda name, obj: print(f"(not saving {name})")  # noqa: E731
+    log_event = lambda ev: print("EVENT", json.dumps(ev, sort_keys=True)[:300])  # noqa: E731
+    VERBOSE = True
+    t0 = time.time()
+    tracks = load_tracks()
+    run_fast(tracks, force=True)
+    for n in fast_tracks():
+        for p in tracks[n]["positions"].values():
+            print(f"WOULD BUY [{n}] {p['outcome']} @ {cents(p['entry'])} (model {p.get('model_p')}) - {p['title'][:70]} | {p.get('signal')}")
+    print(f"fasttest took {time.time() - t0:.1f}s")
 
 
 # ================================================================ ranking: which strategy can we trust?
@@ -2825,7 +3624,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, run_endgame, maker_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -2874,7 +3673,8 @@ def daily(force=None):
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, lambda t: arb_propose(), arb_check, fullset_settle, fullset_check, run_endgame):
+    for step in (arb_settle, lambda t: arb_propose(), arb_check, fullset_settle, fullset_check,
+                 ladder_settle, lambda t: ladder_discover(), lambda t: ladder_check(t, force=True), run_endgame):
         try:
             step(tracks)
         except Exception as e:
@@ -2912,8 +3712,8 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "maker"):
-            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "maker": maker_summary}[src](name, tr)
+        if src in ("arb", "fullset", "ladder", "maker"):
+            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary, "maker": maker_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -3111,7 +3911,9 @@ def dryrun():
     tracks = load_tracks()
     run_endgame(tracks)
     fullset_check(tracks)
-    for name in ("endgame", "every_horse"):
+    ladder_discover()
+    ladder_check(tracks, force=True)
+    for name in ("endgame", "every_horse", "ladder"):
         tr = tracks.get(name, {})
         for p in tr.get("positions", {}).values():
             print(f"WOULD BUY [{name}] {p.get('tier')}: {p['outcome']} @ {cents(p['entry'])} - {p['title']} (ends {p.get('end')})")
@@ -3288,4 +4090,4 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
-     "depthtest": depthtest, "makertest": makertest}[cmd]()
+     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest}[cmd]()

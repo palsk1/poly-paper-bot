@@ -14,14 +14,15 @@
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
+| `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
-62 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
+64 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
 
-**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 71 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 71 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
+**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 73 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 73 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
 
 **Rules are frozen until 2027-01-01** (bug fixes only, reported), otherwise the evidence resets.
 
@@ -34,6 +35,7 @@
 | Controls | `control_random`, `control_longshot` | A coin flip, and longshots at 3-10c (studies: these lose). If a control ranks high, luck is winning and nothing above it is trustworthy |
 | Price moves | `momentum_week`, `fade_rally`, `panic_fade_4c`, `panic_fade_10c` | Ride a 10c+ weekly rise / bet on a bounce after a 10c+ fall; panic fade with smaller and bigger triggers |
 | Endgame variants | `endgame_strict`, `endgame_ending_soon`, `endgame_97`, `endgame_sell98` | Which endgame signal is safe, and whether selling at 98.5c beats holding |
+| Fast markets (added later on 2026-11-08) | `wx_forecast`, `crypto_late` | Markets that pay out within hours or 2 days, priced with outside data. See "Fast markets" below |
 
 Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discover`): profitable in at least two time windows, 5-400 open positions, mostly not 15-minute crypto up/down bets (a 5-minute bot is too slow for those), profit per dollar traded of at least 3c (traders with a view, not market makers). Weather, mentions and sports specialists are in on purpose, because their markets pay out within days, so they collect finished trades fastest. Four election-month hot hands test whether a hot streak lasts.
 
@@ -82,6 +84,22 @@ Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discov
 
 Check the lab on live data without saving anything: run the `probe` workflow with `copytest`.
 
+## Fast markets: weather and crypto (lab, added 2026-11-08)
+
+Two lab tracks for markets that pay out within hours or two days, so they collect finished trades long before January. Both compare the market's price with a model built from free outside data and buy only when the model says a side is clearly too cheap after the fee. One bet per market group (one per city and day, one per coin candle), because buckets of the same day all move together.
+
+| Track | Markets | Model | Buys when |
+|---|---|---|---|
+| `wx_forecast` | "Highest/lowest temperature in CITY on DATE" (about 50 cities, a high and a low each day). They settle on the airport's hourly METAR reports from aviationweather.gov (SPECI reports don't count) | ECMWF ensemble (51 forecasts, Open-Meteo), shifted by how far it was off at that airport over the last 24h, plus what was already observed today (a day's high can't go back down). Error allowance 1.1°C plus 0.4°C per day ahead | the model's chance beats the price by 12c+ after the fee, price 5-90c. Gaps over 45c are ignored as more likely our data error than the crowd's |
+| `crypto_late` | Last 45 minutes of the hourly "Bitcoin/Ethereum/Solana/XRP/Dogecoin/BNB Up or Down" candles and the noon-ET "above $X" ladders. Both settle on Binance | the coin's hourly volatility over the last week, made 1.5x bigger for sudden jumps (Binance's own price feed) | the model gives a side 97+ in 100 and it still costs 96c or less, with 2c+ left after the fee |
+
+Checked and left out (dry run on live data, 2026-11-08):
+- **The same crypto model 3-30h out** ("the market overprices big moves"): the ladders matched the model within about 1c at every strike, so it would never trade.
+- **Weather buckets the day's reports have already ruled out**: they were already priced at 99.95c, so the bots got there first.
+- **Sports odds**: the free odds feed (ESPN) blocks GitHub's servers. Sports games are covered by the Kalshi vs Polymarket arb work instead.
+
+Check them on live data without saving anything: run the `probe` workflow with `fasttest` (prints the model next to every price, and what it would buy). `fast`/`fast2`/`fast3` print the raw market and data shapes.
+
 ## The arbitrage track, and the known traps it is built to avoid
 
 Research (Nov 2026) found cross-site gaps are real but small: when both prices are fresh, a 3c+ gap shows up about 1 time in 20, break-even after both sites' fees is about 3c at mid prices, and money stays locked until the market ends. Most big "gaps" are stale quotes or markets that only *look* the same (different deadline, resolution source, or death/early-close clause, e.g. the Feb 2026 Khamenei markets settled very differently on the two sites). So:
@@ -92,6 +110,17 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 4. **Only takes it if** it nets >= 2c per share AND >= 15% a year (no locking money for years for pennies). 5 shares per lot, max 4 lots per pair.
 5. **Holds both legs to the end** and flags a **MISMATCH** loudly if the two sites resolve differently.
 6. **Proof line:** a clean arb earns about its edge per share; a mismatch can lose about the whole $1. So arbs only pay if mismatches are rarer than about the edge (2.5c edge -> under 2.5%). The summary shows how many clean finished arbs are needed to be 90% sure of that (about 90 at a 2.5c edge, if none mismatch).
+
+## Ladder pairs (added 2026-11-08)
+
+The arb track needs two *different* sites to describe the same thing, and the review rejects most pairs because they don't. A ladder pair needs no review: both markets sit in the same Polymarket event, with the same rules text except the strike or the deadline, so one can't say YES without the other.
+
+- **Daily** (`state/ladder_pairs.json`): scans ~24,000 yes/no markets and keeps only families where (1) the question and rules text differ only in the strike or the "by <date>" deadline, (2) the direction is clear from the words ("above", "at least", "by"; "hit/reach/dip" only with the ↑/↓ labels), (3) it isn't a range, an exact count or a "top N" rank, (4) the deadline in the question agrees with the market's end date, and (5) the crowd's prices agree with the direction (the stricter market never trades more than 10c above the looser one). One-winner (negRisk) events are left to every_horse. On 2026-11-08 this kept about 6,000 pairs.
+- **Every 30 min** (watch): fresh listed prices for all of them in one batch call; anything close is priced on both live order books for 5 shares plus fees. Buys at >= 2c per share and >= 15% a year, one lot per pair, at most 20 open.
+- **Settles** when both legs have paid; a pair paying less than $1 pushes **SHORT** (it means we misread a family).
+- **First live look (2026-11-08):** of 6,000 pairs, 30 were not overpriced and the best paid 1.3c per share after fees (StandX FDV above $1B / above $100M). So gaps are real but usually below the 2c bar; the track waits for the spikes.
+
+Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` workflow, `hunt_*` inputs): Kalshi vs Polymarket **game winners** (NFL, NBA, NHL, college basketball) match cleanly by team codes but cost more than $1 after both fees on all 160 checks (usually by about 4c, never closer than 0.8c); the **same question listed twice** on Polymarket never had a gap; and the **104 rejected pairs**, priced both ways, showed gaps of at most 2.4c, and in every case checked the gap was on the side the rule difference makes unsafe (the market prices that risk in).
 
 ## Endgame and every horse
 
