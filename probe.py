@@ -210,6 +210,86 @@ def exits_study():
         print("X", json.dumps(out))
 
 
+def lab():
+    """Shapes for the strategy lab: leaderboards, a wallet's closed positions, sports and ladder markets."""
+    D = "https://data-api.polymarket.com"
+    tried = [("v1/leaderboard", {"category": "OVERALL", "timePeriod": "MONTH", "orderBy": "PNL", "limit": 5}),
+             ("v2/leaderboard", {"category": "OVERALL", "timePeriod": "MONTH", "orderBy": "PNL", "limit": 5}),
+             ("v2/leaderboard", {"window": "1m", "limit": 5}),
+             ("leaderboard", {"window": "1m", "limit": 5}),
+             ("v1/leaderboard", {"category": "SPORTS", "timePeriod": "WEEK", "orderBy": "PNL", "limit": 3}),
+             ("v1/leaderboard", {"category": "POLITICS", "timePeriod": "ALL", "orderBy": "PNL", "limit": 3})]
+    first = None
+    for path, params in tried:
+        try:
+            res = get(f"{D}/{path}", params)
+            show(f"/{path} {params}", res, 2500)
+            rows = res if isinstance(res, list) else (res.get("data") or res.get("leaderboard") or [])
+            if rows and not first:
+                first = rows[0]
+        except Exception as e:
+            print(f"/{path} {params} failed: {e}")
+    for url, params in (("https://lb-api.polymarket.com/profit", {"window": "1m", "limit": 3}),
+                        ("https://lb-api.polymarket.com/volume", {"window": "1m", "limit": 3})):
+        try:
+            show(url, get(url, params), 1500)
+        except Exception as e:
+            print(url, "failed:", e)
+    addr = None
+    if isinstance(first, dict):
+        addr = first.get("proxyWallet") or first.get("proxy_wallet") or first.get("address") or first.get("user")
+    addr = addr or json.load(open("config.json"))["leader"]["address"]
+    for path in ("v2/closed-positions", "v1/closed-positions", "closed-positions", "v2/value", "value", "v2/traded", "traded"):
+        try:
+            show(f"/{path} for {addr}", get(f"{D}/{path}", {"user": addr, "limit": 3}), 1500)
+        except Exception as e:
+            print(f"/{path} failed: {e}")
+    try:
+        res = get(f"{D}/v2/positions", {"user": addr, "limit": 500})
+        rows = res.get("data", []) if isinstance(res, dict) else res
+        print("positions page 1 rows:", len(rows), "pagination:", res.get("pagination") if isinstance(res, dict) else None)
+    except Exception as e:
+        print("positions failed:", e)
+    import datetime as dt
+    now = dt.datetime.now(dt.timezone.utc)
+    f = {"closed": "false", "limit": 500, "end_date_min": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+         "end_date_max": (now + dt.timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ"), "liquidity_num_min": 2000}
+    try:
+        res = get("https://gamma-api.polymarket.com/markets/keyset", f)
+        ms = res.get("markets") or res.get("data") or []
+        print("markets ending within 30h:", len(ms), "next:", bool(res.get("next_cursor")))
+        sp = [m for m in ms if m.get("sportsMarketType") or m.get("gameId")]
+        print("sports among them:", len(sp))
+        for m in sp[:3]:
+            show("sports market", {k: m.get(k) for k in ("question", "slug", "sportsMarketType", "gameId", "gameStartTime",
+                 "startDate", "endDate", "endDateIso", "outcomes", "outcomePrices", "liquidityNum", "volumeNum",
+                 "bestBid", "bestAsk", "feesEnabled", "feeSchedule", "events")}, 2000)
+        if sp:
+            show("sports market keys", sorted(sp[0].keys()), 3000)
+        ud = [m for m in ms if "up or down" in str(m.get("question", "")).lower()]
+        print("up-or-down among them:", len(ud))
+    except Exception as e:
+        print("sports scan failed:", e)
+    try:
+        res = get("https://gamma-api.polymarket.com/events/keyset", {"closed": "false", "limit": 100})
+        evs = res.get("events") or res.get("data") or []
+        n = 0
+        for e in evs:
+            ms = e.get("markets") or []
+            if e.get("negRisk") or len(ms) < 2:
+                continue
+            qs = [str(m.get("question")) for m in ms]
+            if sum((" by " in q.lower() or " before " in q.lower()) for q in qs) >= 2 or sum(("above" in q.lower()) for q in qs) >= 2:
+                show("ladder-like event", {"title": e.get("title"), "slug": e.get("slug"),
+                     "markets": [[m.get("question"), m.get("endDate"), m.get("outcomePrices"), m.get("bestAsk")] for m in ms[:8]]}, 2000)
+                n += 1
+                if n >= 4:
+                    break
+        print("ladder-like events shown:", n, "of", len(evs))
+    except Exception as e:
+        print("events scan failed:", e)
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
@@ -226,3 +306,5 @@ if __name__ == "__main__":
         sells()
     if what == "exits":
         exits_study()
+    if what == "lab":
+        lab()
