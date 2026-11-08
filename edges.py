@@ -299,10 +299,145 @@ def holding():
             print("   ", m.get("slug"), {k: m.get(k) for k in hk}, "prices", m.get("outcomePrices"), "ends", str(m.get("endDate"))[:10])
 
 
+# ------------------------------------------------------------ rewards, round 2: filtered + replay of the last day
+
+def price_series(token, fidelity=5):
+    for params in ({"token_id": token, "interval": "1d", "fidelity": fidelity}, {"token_id": token, "interval": "1d"}):
+        r = get(f"{DATA}/v2/prices-history", params)
+        pts = envelope_rows(r, "data", "history", "points")
+        out = []
+        for p in pts:
+            if isinstance(p, dict):
+                t, px = fnum(bot.pick(p, "t", "timestamp", "time"), None), fnum(bot.pick(p, "p", "price", "value"), None)
+            else:
+                t, px = fnum(p[0], None), fnum(p[1], None)
+            if t is not None and px is not None:
+                out.append((t / 1000 if t > 1e11 else t, px))
+        if len(out) >= 20:
+            return sorted(out)
+    return []
+
+
+def replay(series, d_c, shares, step=300, inv_cap=2):
+    """Quote YES bid at p-d and ask at p+d, re-centred every `step` seconds on the last price. A quote fills only
+    if the next price goes THROUGH it (a taker cleared our level). Returns (P&L marked at the last price, fills)."""
+    if len(series) < 3:
+        return None
+    t0, t1 = series[0][0], series[-1][0]
+    grid, j = [], 0
+    t = t0
+    while t <= t1:
+        while j + 1 < len(series) and series[j + 1][0] <= t:
+            j += 1
+        grid.append(series[j][1])
+        t += step
+    cash, q, fills = 0.0, 0.0, 0
+    d = d_c / 100
+    for a, b in zip(grid, grid[1:]):
+        bid, ask = a - d, a + d
+        if b < bid - 1e-9 and q < inv_cap * shares:  # sold into our bid: we bought YES
+            cash -= shares * bid
+            q += shares
+            fills += 1
+        elif b > ask + 1e-9 and q > -inv_cap * shares:  # bought from our ask: we sold YES (= bought NO at 1-ask)
+            cash += shares * ask
+            q -= shares
+            fills += 1
+    return cash + q * grid[-1], fills
+
+
+def rewards2():
+    rms = reward_markets()
+    soon = bot.now() + bot.dt.timedelta(days=3)
+    pre = []
+    for rm in rms:
+        end = bot.parse_iso(rm["end"])
+        if not end or end < soon:
+            continue  # ending soon or past its date: the people trading know the answer, we would get picked off
+        pre.append(rm)
+    pre.sort(key=lambda r: -r["rate"])
+    print(f"rewards2: {len(rms)} reward markets, {len(pre)} end in 3+ days; pool of those ${sum(r['rate'] for r in pre):,.0f}/day")
+    from concurrent.futures import ThreadPoolExecutor
+
+    def one(rm):
+        bk = bot.book(rm["yes"])
+        if not bk or not bk["bids"] or not bk["asks"]:
+            return None
+        e = reward_estimate(rm, bk, 100.0)
+        if not e or e["top"] or not (0.10 <= e["mid"] <= 0.90):
+            return None  # no competitors to hide behind, or outside the two-sided band
+        return rm, e
+    res = []
+    with ThreadPoolExecutor(8) as ex:
+        for x in ex.map(one, pre[:900]):
+            if x:
+                res.append(x)
+    res.sort(key=lambda x: -x[1]["per_day"])
+    print(f"rewards2: {len(res)} have a real two-sided book we can join; snapshot rewards if $100 in each: "
+          f"${sum(e['per_day'] for _, e in res):,.2f}/day")
+    rows, kept = [], 0
+    for rm, e in res[:150]:
+        g = get(f"{GAMMA}/markets", {"condition_ids": rm["cid"]})
+        g = (envelope_rows(g, "markets", "data") or [{}])[0] if not (isinstance(g, dict) and "__error__" in g) else {}
+        if bot.is_sports(g):
+            continue
+        ser = price_series(rm["yes"])
+        rep = replay(ser, max(e["d"]), e["shares"]) if ser else None
+        hours = (ser[-1][0] - ser[0][0]) / 3600 if ser else 0
+        rows.append((rm, e, g, rep, hours, len(ser)))
+        kept += 1
+        if kept >= 45:
+            break
+    tot_r = tot_m = 0.0
+    print("market | pool/day | our share | rewards/day per $100 | replay P&L last day per $100 | fills | d | min size | vol24h")
+    for rm, e, g, rep, hours, npts in rows:
+        scale = 100.0 / max(e["shares"], 100.0)
+        mk = rep[0] * scale * (24 / hours) if rep and hours > 1 else None
+        tot_r += e["per_day"]
+        tot_m += mk or 0
+        print(f"  {rm['slug'][:70]} | ${rm['rate']:.0f} | {e['share']:.2f} | ${e['per_day']:.2f} | "
+              f"{'n/a' if mk is None else f'${mk:+.2f}'} | {rep[1] if rep else '-'} | {max(e['d']):.1f}c | {rm['min_size']:.0f}"
+              f" | ${fnum(g.get('volume24hr')):,.0f} | pts {npts} over {hours:.0f}h | ends {str(rm['end'])[:10]}")
+    print(f"rewards2 TOTAL over {len(rows)} markets ($100 each): rewards ${tot_r:,.2f}/day, replayed pick-off P&L ${tot_m:+,.2f}/day")
+    # which trades endpoint works (for a paper fill model)?
+    if rows:
+        rm = rows[0][0]
+        for url, p in [(f"{DATA}/v2/trades", {"market": rm["cid"], "limit": 5}), (f"{DATA}/v2/trades", {"conditionId": rm["cid"], "limit": 5}),
+                       (f"{DATA}/v2/trades", {"condition_id": rm["cid"], "limit": 5}), (f"{DATA}/v2/trades", {"asset": rm["yes"], "limit": 5}),
+                       (f"{DATA}/v2/trades", {"token_id": rm["yes"], "limit": 5}), (f"{DATA}/trades", {"market": rm["cid"], "limit": 5}),
+                       (f"{CLOB}/trades", {"market": rm["cid"]}), (f"{CLOB}/last-trade-price", {"token_id": rm["yes"]}),
+                       (f"{DATA}/v2/activity", {"market": rm["cid"], "limit": 5})]:
+            r = get(url, p)
+            print("  trades endpoint", url, list(p)[0], "->", short(r, 300))
+
+
+def holding2(pages=200):
+    hits, cur, seen = [], None, 0
+    for _ in range(pages):
+        p = {"closed": "false", "limit": 500}
+        if cur:
+            p["after_cursor"] = cur
+        r = get(f"{GAMMA}/markets/keyset", p)
+        ms = envelope_rows(r, "markets", "data")
+        seen += len(ms)
+        hits += [m for m in ms if m.get("holdingRewardsEnabled") is True]
+        cur = r.get("next_cursor") if isinstance(r, dict) else None
+        if not cur or not ms:
+            break
+    print(f"holding2: {len(hits)} of {seen} open markets pay a holding reward")
+    hits.sort(key=lambda m: -fnum(m.get("volume24hr")))
+    for m in hits[:60]:
+        pr = [fnum(x) for x in jlist(m.get("outcomePrices"))]
+        print(f"   {m.get('slug')[:80]} | prices {pr} | spread {m.get('spread')} | ends {str(m.get('endDate'))[:10]}"
+              f" | liq ${fnum(m.get('liquidityNum')):,.0f} | vol24h ${fnum(m.get('volume24hr')):,.0f} | fees {m.get('feesEnabled')}")
+    ends = Counter(str(m.get("endDate"))[:4] for m in hits)
+    print("   by end year:", dict(ends))
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
-    for name, fn in [("shapes", shapes), ("rewards", rewards), ("negrisk", negrisk), ("holding", holding)]:
-        if what in (name, "all"):
+    for name, fn in [("shapes", shapes), ("rewards", rewards), ("negrisk", negrisk), ("holding", holding), ("rewards2", rewards2), ("holding2", holding2)]:
+        if what == name or (what == "all" and not name.endswith("2")) or (what == "round2" and name.endswith("2")):
             print(f"\n################ {name}")
             try:
                 fn()
