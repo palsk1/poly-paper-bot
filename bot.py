@@ -16,6 +16,7 @@ import datetime as dt
 import json
 import math
 import os
+import random
 import re
 import sys
 import time
@@ -23,6 +24,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from statistics import NormalDist
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATE = os.path.join(ROOT, "state")
@@ -189,12 +192,38 @@ def load_tracks():
 
 def rules_for(name):
     r = CFG["tracks"][name].get("rules")
-    return CFG["rules"].get(r, {}) if r else {}
+    return rule_set(r) if r else {}
+
+
+def rule_set(key):
+    """A rules block; {"inherit": "endgame", ...} starts from another block and overrides some settings."""
+    r = dict(CFG["rules"].get(key, {}))
+    base = r.pop("inherit", None)
+    return {**rule_set(base), **r} if base else r
+
+
+def is_lab(name):
+    return bool(CFG["tracks"].get(name, {}).get("lab"))
 
 
 # ================================================================ push
 
-def push(title, body, click=None, tags=None):
+def push_allowed(track):
+    """Trade pushes only for strategies in the current top 10 (state/top.json, rewritten by the daily scoreboard).
+    Alerts (FLIP, SHORT, MISMATCH) and the scoreboard pass track=None and always go out."""
+    if track is None or not CFG["push"].get("top_only"):
+        return True
+    names = track if isinstance(track, (list, tuple)) else [track]
+    top = load("top.json", None)
+    if top is None:  # before the first ranking: the original tracks keep their pushes, new ones stay quiet
+        return any(not is_lab(n) for n in names)
+    return any(n in top.get("tracks", []) for n in names)
+
+
+def push(title, body, click=None, tags=None, track=None):
+    if not push_allowed(track):
+        print(f"[push muted, not in top {CFG['push'].get('top_n', 10)}] {title}")
+        return
     topic = os.environ.get("NTFY_TOPIC", "").strip()
     if not topic:
         print(f"[push skipped, no NTFY_TOPIC] {title} | {body}")
@@ -240,6 +269,14 @@ def market_by_slug(slug):
         print(f"market lookup failed for {slug}: {e}")
     _market_cache[slug] = m
     return m
+
+
+def prefetch_markets(slugs, workers=8):
+    """Look up many markets at once (8 at a time) so 70 tracks' positions don't take ages one by one."""
+    todo = sorted({s for s in slugs if s and s not in _market_cache})
+    if len(todo) > 1:
+        with ThreadPoolExecutor(workers) as ex:
+            list(ex.map(market_by_slug, todo))
 
 
 def market_tokens(m):
@@ -394,7 +431,7 @@ def paper_close(track, name, token, price, fee, reason):
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
     if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame"):
-        push(f"[endgame] FLIP: a 'sure thing' lost (${pnl:+.2f})",
+        push(f"[{name}] FLIP: a 'sure thing' lost (${pnl:+.2f})",
              f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
              f"{cents(price)}. This is the risk the test is measuring.", tags="rotating_light")
     return rec
@@ -458,12 +495,17 @@ def shadow_summary(tr):
     return f"**Sell-early test** ({len(rows)} finished trades, records only): " + "; ".join(parts) + ".\n"
 
 
-def manage_exits(tracks):
-    """Take-profit / stop-loss / settlement for the rule-based tracks (not the mirrors)."""
-    for name, tr in tracks.items():
-        tc = CFG["tracks"][name]
-        if tc["source"] in ("leader", "arb", "fullset"):
-            continue
+COPY_SOURCES = ("leader", "wallet", "consensus")
+
+
+def manage_exits(tracks, lab=True):
+    """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
+    lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset")
+            and (lab or not is_lab(n))]
+    prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
+    for name in todo:
+        tr, tc = tracks[name], CFG["tracks"][name]
         rules = rules_for(name)
         for tok in list(tr["positions"]):
             pos = tr["positions"][tok]
@@ -483,7 +525,7 @@ def manage_exits(tracks):
                 except Exception as e:
                     print(f"shadow check failed: {e}")
             target = pos.get("target") or rules.get("take_profit")
-            stop = rules.get("stop_loss")
+            stop = pos.get("stop") or rules.get("stop_loss")
             reason = None
             if target and px_now >= target:
                 reason = f"take profit (now {cents(px_now)})"
@@ -498,7 +540,7 @@ def manage_exits(tracks):
             if rec and CFG["push"].get("on_claude_trades"):
                 push(f"[{name}] SELL {pos.get('outcome')} @ {cents(fill)} ({rec['pnl']:+.2f})",
                      f"{pos.get('title')}\nReason: {reason}",
-                     click=market_link(pos.get("slug", ""), pos.get("event_slug", "")), tags="moneybag")
+                     click=market_link(pos.get("slug", ""), pos.get("event_slug", "")), tags="moneybag", track=name)
 
 
 # ================================================================ leader wallet (mirror tracks)
@@ -715,7 +757,8 @@ def follow_leader(tracks):
     for tok, p in cur.items():
         if prev.get(tok, {}).get("size", 0) >= 1 or p["redeemable"] or p["size"] < 5:
             continue
-        if p["size"] * max(p["avg"], 0.01) < lead["min_open_usd"]:
+        if p["size"] * max(p["avg"], 0.01) < min(CFG["tracks"][n].get("min_open_usd", lead["min_open_usd"])
+                                                 for n in leader_tracks()):
             continue
         m = market_by_slug(p["slug"])
         if m and m.get("closed"):
@@ -730,6 +773,8 @@ def follow_leader(tracks):
             tc, tr = CFG["tracks"][name], tracks[name]
             if px is None or tok in tr["positions"] or not (tc["min_price"] <= px <= tc["max_price"]):
                 continue
+            if p["size"] * max(p["avg"], 0.01) < tc.get("min_open_usd", lead["min_open_usd"]):
+                continue  # e.g. sab_big: only his $1,000+ bets
             if paper_buy(tr, name, tok, shares, px, taker_fee(shares, px, rate),
                          {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"],
                           "event_slug": p["event_slug"], "end": p["end"], "source": lead["name"],
@@ -742,7 +787,7 @@ def follow_leader(tracks):
             push(f"{lead['name']} BUY {p['outcome']} @ {cents(p['avg'])}",
                  f"{p['title']}\nHe holds {p['size']:.0f} sh (${p['size'] * p['avg']:,.0f}). "
                  f"Your price now: {cents(px)}.\nPaper copied by: {', '.join(took) or 'none'}",
-                 click=market_link(p["slug"], p["event_slug"]), tags="chart_with_upwards_trend")
+                 click=market_link(p["slug"], p["event_slug"]), tags="chart_with_upwards_trend", track=leader_tracks())
 
     # ---- positions he exited (sold, merged or redeemed)
     for tok, q in prev.items():
@@ -759,8 +804,8 @@ def follow_leader(tracks):
                 continue
             if payout is not None:
                 paper_close(tr, name, tok, payout, 0.0, "resolved")
-            elif resolved:
-                continue  # resolved but final price not published yet; daily run settles it
+            elif resolved or CFG["tracks"][name].get("hold_to_end"):
+                continue  # resolved but final price not published yet (daily run settles it), or a hold-to-the-end track
             else:
                 sh = tr["positions"][tok]["shares"]
                 px, _, how = quote(tok, "sell", sh, m)
@@ -785,7 +830,8 @@ def follow_leader(tracks):
                        f"{xr.get('days_left', '?')} days before the end date.\n")
             push(f"{lead['name']} EXIT {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} sh)",
                  f"{q.get('title')}\n{how}Paper closed in: {', '.join(closed_by) or 'none'}",
-                 click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend")
+                 click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend",
+                 track=leader_tracks())
 
     new_snap = {"positions": {t: slim(p, prev.get(t, {}).get("first_seen") or (None if t in prev else iso()))
                               for t, p in cur.items()}}
@@ -807,22 +853,205 @@ def his_book_estimate():
     }
 
 
+# ================================================================ lab: copying many wallets (and the "smart-money crowd")
+#
+# Each wallet track copies one wallet's NEW positions (5 shares) and sells when the wallet sells. Unlike the
+# sabsabinxz mirror it keeps only a compact snapshot (the token ids it holds), so 40 wallets don't bloat the repo.
+# The consensus tracks buy what several of these wallets hold at once.
+
+def wallet_tracks():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "wallet"]
+
+
+def tkey(tok):
+    return str(tok)[-16:]  # token ids are ~77 digits; the tail is unique enough and keeps the snapshot small
+
+
+def wallet_positions(addr, max_pages):
+    """(positions, complete?) for one wallet, or (None, False) if the API failed."""
+    rows, cursor = [], None
+    try:
+        for _ in range(max_pages):
+            params = {"user": addr, "limit": 500}
+            if cursor:
+                params["cursor"] = cursor
+            res = http_json(f"{DATA}/v2/positions", params)
+            rows += envelope_rows(res, "data")
+            cursor = ((res.get("pagination") or {}) if isinstance(res, dict) else {}).get("next_cursor")
+            if not cursor:
+                break
+    except Exception as e:
+        print(f"wallet positions failed for {addr[:10]}: {e}")
+        return None, False
+    return [norm_pos(r) for r in rows], not cursor
+
+
+def copy_open(tracks, name, p, r, extra=None):
+    """Paper-buy one position for a copy track. Returns True if bought."""
+    tr = tracks[name]
+    if p["token"] in tr["positions"]:
+        return False
+    if len(tr["positions"]) >= r.get("max_open", 999):
+        tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+        return False
+    m = market_by_slug(p["slug"])
+    if not m or m.get("closed") or m.get("acceptingOrders") is False:
+        return False
+    end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
+    if end and end < now():
+        return False
+    px, shares, how = quote(p["token"], "buy", CFG["shares_per_trade"], m)
+    if px is None or not (r.get("min_price", 0.02) <= px <= r.get("max_price", 0.97)):
+        return False
+    if r.get("max_chase") is not None and p["avg"] and px > p["avg"] + r["max_chase"]:
+        tr["skipped_chase"] = tr.get("skipped_chase", 0) + 1  # we'd be paying well above what they paid: too late
+        return False
+    meta = {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"], "event_slug": p["event_slug"],
+            "end": p["end"], "source": name, "their_avg": p["avg"], "their_size": p["size"], "price_source": how}
+    meta.update(extra or {})
+    return paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta)
+
+
+def copy_close(tracks, name, tok, why):
+    """Close a copy position: pay out if resolved, else sell at the bid. Returns True if closed."""
+    tr = tracks[name]
+    pos = tr["positions"].get(tok)
+    if not pos:
+        return False
+    m = market_by_slug(pos.get("slug"))
+    payout = resolved_payout(m, tok)
+    if payout is not None:
+        return bool(paper_close(tr, name, tok, payout, 0.0, "resolved"))
+    if not m or m.get("closed"):
+        return False  # resolved but no final price yet: the daily settle picks it up
+    px, _, how = quote(tok, "sell", pos["shares"], m)
+    if px is None:
+        return False
+    return bool(paper_close(tr, name, tok, px, taker_fee(pos["shares"], px, fee_rate(m)), f"{why} ({how})"))
+
+
+def follow_wallets(tracks):
+    names = wallet_tracks()
+    if not names:
+        return {}
+    r = rule_set("wallet_copy")
+    addrs = sorted({CFG["tracks"][n]["address"].lower() for n in names})
+    with ThreadPoolExecutor(8) as ex:
+        got = dict(zip(addrs, ex.map(lambda a: wallet_positions(a, r.get("max_pages", 4)), addrs)))
+    snaps = load("wallet_snaps.json", {})
+    today = today_utc()
+    live = {}  # addr -> {token: position} for this run (used by the consensus tracks)
+    for name in names:
+        addr = CFG["tracks"][name]["address"].lower()
+        rows, complete = got.get(addr, (None, False))
+        if rows is None:
+            continue
+        cur = {p["token"]: p for p in rows if p["token"] and p["size"] >= 1}
+        prev = set(snaps.get(addr, {}).get("held", []))
+        if addr not in snaps:
+            snaps[addr] = {"held": sorted(tkey(t) for t in cur), "since": iso()}
+            log_event({"type": "wallet_baseline", "track": name, "positions": len(cur)})
+            live[addr] = cur
+            continue
+        if not cur and len(prev) > 3:
+            print(f"{name}: empty positions while we expected {len(prev)}; skipping this run")
+            continue
+        live[addr] = cur
+        tr = tracks[name]
+        day = tr.setdefault("day_opens", {})
+        if day.get("date") != today:
+            day.clear()
+            day.update({"date": today, "n": 0})
+        # new positions
+        for tok, p in cur.items():
+            if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+                continue
+            if day["n"] >= r.get("max_new_per_day", 999):
+                tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+                continue
+            if copy_open(tracks, name, p, r):
+                day["n"] += 1
+        # exits: the wallet sold (or redeemed) most of what it had when we copied
+        for tok in list(tr["positions"]):
+            q = cur.get(tok)
+            pos = tr["positions"][tok]
+            if q and q["redeemable"]:
+                copy_close(tracks, name, tok, "resolved")
+                continue
+            if q is None and not complete:
+                continue  # beyond the pages we read; can't tell
+            if q is None or q["size"] <= 0.2 * pos.get("their_size", q["size"]):
+                copy_close(tracks, name, tok, "wallet exit")
+        held = {tkey(t) for t in cur}
+        if not complete:
+            held |= prev
+        snaps[addr] = {"held": sorted(held), "since": snaps[addr].get("since")}
+    save("wallet_snaps.json", snaps)
+    return live
+
+
+def follow_consensus(tracks, live):
+    """Buy what several copied wallets hold right now; sell when none of them holds it any more."""
+    names = [n for n, tc in CFG["tracks"].items() if tc["source"] == "consensus"]
+    if not names or len(live) < 3:
+        return
+    for name in names:
+        r, tr = rules_for(name), tracks[name]
+        count, sample, redeem = Counter(), {}, set()
+        for cur in live.values():
+            for tok, p in cur.items():
+                if p["redeemable"]:
+                    redeem.add(tok)
+                    continue
+                if p["size"] * (p["cur"] or p["avg"]) >= r["min_usd_each"] and p["cur"] and \
+                        r["min_price"] <= p["cur"] <= r["max_price"]:
+                    count[tok] += 1
+                    sample.setdefault(tok, p)
+        holders = Counter(tok for cur in live.values() for tok, p in cur.items() if not p["redeemable"])
+        for tok in list(tr["positions"]):
+            if tok in redeem:
+                copy_close(tracks, name, tok, "resolved")
+            elif holders.get(tok, 0) == 0:
+                copy_close(tracks, name, tok, "all wallets left")
+        done = set(tr.setdefault("seen", []))
+        tried = 0
+        for tok, k in count.most_common():
+            if k < r["min_wallets"] or tried >= r.get("picks_per_run", 5) or len(tr["positions"]) >= r.get("max_open", 999):
+                break
+            if tkey(tok) in done:
+                continue
+            tried += 1
+            tr["seen"].append(tkey(tok))  # one try per token: no re-buying after an exit, no retrying every 5 min
+            copy_open(tracks, name, dict(sample[tok], avg=0), r, {"wallets": k})  # avg=0: no chase rule for a crowd
+
+
 # ================================================================ strategies on the whole market
 
 def scan_filters():
     """Server-side pre-filter covering the screener/panic strategies' widest settings (deadline window, liquidity).
     The arb track scans separately with its own window."""
-    rs = [rules_for(n) for n, tc in CFG["tracks"].items() if tc["source"] in ("screener", "panic")]
+    rs = [rules_for(n) for n, tc in CFG["tracks"].items() if tc["source"] in ("screener", "panic", "random", "momentum")]
     lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs))
     hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs))
     return {"end_date_min": iso(lo), "end_date_max": iso(hi),
             "liquidity_num_min": min(r["min_liquidity"] for r in rs)}
 
 
+_scan_cache = {}
+
+
 def scan_markets(filters=None):
-    """Open markets (one pass). Tries server-side filters first;
+    """Open markets (one pass, cached per run so the endgame variants share one scan). Tries server-side filters first;
     falls back to the unfiltered list if the API rejects them."""
     filters = filters or scan_filters()
+    # dates rounded to the hour: one full scan takes 1-2 minutes, so minute-level keys would never match
+    key = json.dumps({k: v[:13] if isinstance(v, str) else v for k, v in filters.items()}, sort_keys=True)
+    if key not in _scan_cache:
+        _scan_cache[key] = _scan_markets(filters)
+    return _scan_cache[key]
+
+
+def _scan_markets(filters):
     for filtered in (True, False):
         out, cursor, ok = [], None, True
         for page in range(400):
@@ -898,8 +1127,22 @@ def binary(m):
     return prices
 
 
-def boring_side_candidates(markets, r):
-    """Likely outcome priced in [min_price, max_price] on deadline markets."""
+def pick_side(m, prices, side, rng=None):
+    """Which outcome a rule track buys: 'favorite' (default), 'underdog', 'no' / 'yes' (that side only, if it is the
+    favorite), or 'random' (a coin flip; the control track)."""
+    fav = 0 if prices[0] >= prices[1] else 1
+    if side == "underdog":
+        return 1 - fav
+    if side == "random":
+        return (rng or random).randrange(2)
+    if side in ("no", "yes"):
+        outs = [str(o).lower() for o in jlist(m.get("outcomes"))]
+        return fav if len(outs) == 2 and outs[fav] == side else None
+    return fav
+
+
+def boring_side_candidates(markets, r, rng=None):
+    """Likely outcome priced in [min_price, max_price] on deadline markets (or another side, see pick_side)."""
     out = []
     for m in markets:
         prices = binary(m)
@@ -908,9 +1151,14 @@ def boring_side_candidates(markets, r):
         b = base_filter(m, r)
         if not b:
             continue
-        i = 0 if prices[0] >= prices[1] else 1
-        if r["min_price"] <= prices[i] <= r["max_price"]:
+        if r.get("fee_free_only") and fee_rate(m) > 0:
+            continue
+        i = pick_side(m, prices, r.get("side", "favorite"), rng)
+        if i is not None and r["min_price"] <= prices[i] <= r["max_price"]:
             out.append(candidate(m, i, b[0], b[1]))
+    if r.get("side") == "random":
+        (rng or random).shuffle(out)
+        return out
     # "No, nothing happens" first, then fee-free if wanted, then sooner deadlines, then deepest markets
     out.sort(key=lambda c: (not c["nothing_happens"],
                             (c["fee_rate"] > 0) if r.get("prefer_fee_free") else 0,
@@ -919,8 +1167,18 @@ def boring_side_candidates(markets, r):
     return out
 
 
+_day_change_cache = {}
+
+
 def day_change(token):
-    """(price ~24h ago, price now) for a token from Polymarket's price history, or None."""
+    """(price ~24h ago, price now) for a token from Polymarket's price history, or None. Cached per run, since
+    the panic-fade variants look at the same markets."""
+    if token not in _day_change_cache:
+        _day_change_cache[token] = _day_change(token)
+    return _day_change_cache[token]
+
+
+def _day_change(token):
     try:
         res = http_json(f"{DATA}/v2/prices-history", {"token_id": token, "interval": "1d"})
     except Exception as e:
@@ -982,6 +1240,29 @@ def panic_candidates(markets, r):
     return out
 
 
+def momentum_candidates(markets, r):
+    """direction 'up': the side that rose >= min_move this week (ride it); 'down': the side that fell (bet on a bounce).
+    Uses the market list's one-week change, so it costs no extra API calls."""
+    out = []
+    for m in markets:
+        prices = binary(m)
+        chg = pick(m, "oneWeekPriceChange")
+        if not prices or chg is None:
+            continue
+        chg = fnum(chg)  # change of outcome 0's price
+        if abs(chg) < r["min_move"]:
+            continue
+        rose = 0 if chg > 0 else 1
+        i = rose if r.get("direction", "up") == "up" else 1 - rose
+        if not (r["min_price"] <= prices[i] <= r["max_price"]):
+            continue
+        b = base_filter(m, r)
+        if b:
+            out.append(candidate(m, i, b[0], b[1], {"move": round(abs(chg), 4)}))
+    out.sort(key=lambda c: (-c["move"], -c["liquidity"]))
+    return out
+
+
 def buy_candidates(tracks, name, cands, limit):
     tc, tr, r = CFG["tracks"][name], tracks[name], rules_for(name)
     held_events = {p.get("event_key") for p in tr["positions"].values()}
@@ -1011,6 +1292,10 @@ def buy_candidates(tracks, name, cands, limit):
         for k in ("target", "tier"):
             if c.get(k):
                 meta[k] = c[k]
+        if r.get("tp_rel"):
+            meta["target"] = round(min(0.99, px + r["tp_rel"]), 4)  # sell at entry + tp_rel
+        if r.get("sl_rel"):
+            meta["stop"] = round(max(0.01, px - r["sl_rel"]), 4)    # cut at entry - sl_rel
         if not paper_buy(tr, name, c["token"], shares, px, fee, meta):
             break
         held_events.add(c["event_key"])
@@ -1018,7 +1303,7 @@ def buy_candidates(tracks, name, cands, limit):
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
-        push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag")
+        push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag", track=name)
     return bought
 
 
@@ -1038,8 +1323,11 @@ def run_strategies(tracks, markets, panic_only=False):
     today = now().strftime("%Y-%m-%d")
     for name, tc in CFG["tracks"].items():
         r = rules_for(name)
-        if tc["source"] == "screener" and not panic_only:
-            cands = boring_side_candidates(markets, r)
+        if tc["source"] in ("screener", "random", "momentum") and not panic_only:
+            if tc["source"] == "momentum":
+                cands = momentum_candidates(markets, r)
+            else:  # the random control is seeded by date + name, so a re-run picks the same coin flips
+                cands = boring_side_candidates(markets, r, random.Random(f"{today}-{name}"))
             if picked.get(name) != today:  # one round of daily picks, even if the job is re-run
                 buy_candidates(tracks, name, cands, r.get("picks_per_day", 1))
                 picked[name] = today
@@ -1580,6 +1868,8 @@ def endgame_candidates(r):
             tier, days = "ending_soon", (end - now()).total_seconds() / 86400 + 1
         else:
             continue
+        if tier not in order:
+            continue  # variants that only trust some signals
         if tier in ("past_deadline", "ending_soon") and is_sports(m):
             continue  # a live game past its start time is not "decided"
         if tier in ("past_deadline", "ending_soon") and any(w in q.lower() for w in r.get("weak_tier_skip_words", [])):
@@ -1596,8 +1886,11 @@ def endgame_candidates(r):
 def run_endgame(tracks):
     for name, tc in CFG["tracks"].items():
         if tc["source"] == "endgame":
-            r = rules_for(name)
-            buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
+            try:
+                r = rules_for(name)
+                buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
+            except Exception as e:
+                print(f"endgame {name} failed: {e}")
 
 
 def endgame_tier_stats(tr):
@@ -1863,10 +2156,82 @@ def arb_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ ranking: which strategy can we trust?
+#
+# Raw P&L after a few weeks is mostly luck, and with ~70 strategies some will look great by chance. So the board
+# ranks by "worst plausible profit per $100 bet":
+#   1. every finished trade's profit per $1 it cost,
+#   2. plus one imaginary trade that lost everything (the disaster a 'boring' strategy may not have hit yet),
+#   3. the low end of the confidence range, with the bar raised for testing many strategies at once (90% for the
+#      whole family, not per strategy).
+# A strategy counts as PROVEN when that worst case is above $0 after at least min_trades_proven finished trades.
+
+def trade_returns(tr):
+    out = []
+    for c in tr["closed"]:
+        basis = c.get("cost") or (c.get("shares", 0) * c.get("entry", 0) + c.get("entry_fee", 0.0))
+        if basis and basis > 0:
+            out.append((c["pnl"], basis))
+    return out
+
+
+def trust(tr, n_tracks=None):
+    rk = CFG.get("ranking", {})
+    rows = trade_returns(tr)
+    n = len(rows)
+    rets = [p / b for p, b in rows] + [-1.0] * int(rk.get("phantom_losses", 1))
+    m = len(rets)
+    mean = sum(rets) / m
+    sd = math.sqrt(sum((x - mean) ** 2 for x in rets) / (m - 1)) if m > 1 else 1.0
+    alpha = (1 - rk.get("family_confidence", 0.9)) / max(n_tracks or len(CFG["tracks"]), 1)
+    worst = max(-1.0, mean - NormalDist().inv_cdf(1 - alpha) * sd / math.sqrt(m))  # can't lose more than the bet
+    avg = sum(p / b for p, b in rows) / n if n else 0.0
+    proven = n >= rk.get("min_trades_proven", 30) and worst > 0
+    return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
+            "worst_per_100": round(worst * 100, 2), "proven": proven}
+
+
+def usd(x):
+    return f"{'+' if x >= 0 else '-'}${abs(x):.2f}"
+
+
+def ranked(stats):
+    return sorted(stats, key=lambda n: (-stats[n]["trust"]["worst_per_100"], -stats[n]["pnl"]))
+
+
+def leaderboard_md(stats):
+    out = ["\n## All strategies, ranked by trust\n",
+           "Ranked by the worst profit per $100 bet that is still plausible (one imaginary total loss added, bar raised "
+           "for testing many strategies at once). Only finished trades count. **PROVEN** = that worst case is above $0 "
+           f"after {CFG.get('ranking', {}).get('min_trades_proven', 30)}+ finished trades. Controls show what luck looks like.\n",
+           "| # | Strategy | Finished | Profit (done) | Avg per $100 | Worst per $100 | P&L incl. open | Today | Open |",
+           "|---|---|---|---|---|---|---|---|---|"]
+    for i, n in enumerate(ranked(stats), 1):
+        s, t = stats[n], stats[n]["trust"]
+        out.append(f"| {i} | {n}{' **PROVEN**' if t['proven'] else ''} | {t['finished']} | ${t['profit']:+.2f} | "
+                   f"${t['avg_per_100']:+.2f} | ${t['worst_per_100']:+.2f} | ${s['pnl']:+.2f} | ${s.get('today', 0):+.2f} | "
+                   f"{s['open']} |")
+    return out
+
+
 # ================================================================ commands
 
 def today_utc():
     return now().strftime("%Y-%m-%d")
+
+
+def lab_exits_due():
+    mins = CFG.get("ranking", {}).get("lab_exit_minutes", 30)
+    last = parse_iso(load("scan_state.json", {}).get("last_lab_exits"))
+    return last is None or (now() - last).total_seconds() >= mins * 60 - 120
+
+
+def run_copy_tracks(tracks):
+    try:
+        live = follow_wallets(tracks)
+        follow_consensus(tracks, live)
+    except Exception as e:
+        print(f"wallet copy failed: {e}")
 
 
 def watch():
@@ -1875,7 +2240,13 @@ def watch():
         follow_leader(tracks)
     except Exception as e:
         print(f"leader check failed: {e}")
-    manage_exits(tracks)  # also pays out resolved endgame positions
+    run_copy_tracks(tracks)
+    lab_due = lab_exits_due()
+    manage_exits(tracks, lab=lab_due)  # also pays out resolved endgame positions
+    if lab_due:
+        st = load("scan_state.json", {})
+        st["last_lab_exits"] = iso()
+        save("scan_state.json", st)
     for step in (arb_settle, arb_check, fullset_settle, run_endgame):
         try:
             step(tracks)
@@ -1900,6 +2271,7 @@ def watch():
 
 
 def settle_resolved(tracks):
+    prefetch_markets(p.get("slug") for tr in tracks.values() for p in tr["positions"].values())
     for name, tr in tracks.items():
         for tok in list(tr["positions"]):
             payout = resolved_payout(market_by_slug(tr["positions"][tok].get("slug")), tok)
@@ -1916,6 +2288,7 @@ def daily(force=None):
     tracks = load_tracks()
     settle_resolved(tracks)
     manage_exits(tracks)
+    run_copy_tracks(tracks)
     markets = scan_markets()
     if markets:
         lists = run_strategies(tracks, markets)
@@ -1954,8 +2327,11 @@ def write_summary(tracks):
     stats, md, detail = {}, [], []
     md.append(f"# Paper bot summary - {iso()}\n")
     md.append(f"Following **{CFG['leader']['name']}** (`{CFG['leader']['address']}`). Paper money only.\n")
+    md.append("Main tracks below; all " + str(len(tracks)) + " strategies (incl. the lab) are ranked at the end.\n")
     md.append("| Track | P&L | Open | Closed (W/L) | Cash | Notes |")
     md.append("|---|---|---|---|---|---|")
+    prefetch_markets(p.get("slug") for tr in tracks.values() for p in tr["positions"].values())
+    lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
         if src in ("arb", "fullset"):
@@ -1980,13 +2356,15 @@ def write_summary(tracks):
             cash = f"${tr['cash']:.2f}"
             notes = f"refills {tr['refills']}; " if CFG["tracks"][name].get("refill") else ""
             notes += f"skipped (no cash) {tr['skipped_no_cash']}"
-        md.append(f"| {name} | {pnl:+.2f} | {len(tr['positions'])} | {len(tr['closed'])} ({wins}/{losses}) | "
-                  f"{cash} | {notes} |")
+        (lab_rows if is_lab(name) else md).append(
+            f"| {name} | {pnl:+.2f} | {len(tr['positions'])} | {len(tr['closed'])} ({wins}/{losses}) | {cash} | {notes} |")
         stats[name] = {"pnl": round(pnl, 4), "realized": round(tr["realized"], 4), "unrealized": round(unreal, 4),
                        "open": len(tr["positions"]), "closed": len(tr["closed"]), "wins": wins, "losses": losses,
                        "cash": None if tr["unlimited"] else round(tr["cash"], 4), "deposited": tr["deposited"],
                        "refills": tr["refills"], "money_needed": round(max(0.0, -tr["min_cash"]), 4),
                        "peak_open_cost": tr["peak_open_cost"], "skipped_no_cash": tr["skipped_no_cash"]}
+        if is_lab(name):
+            continue  # lab tracks: one row each in the lab table + the ranking, no per-position detail
         detail.append(f"\n## {name}\n{CFG['tracks'].get(name, {}).get('label', '')}\n")
         if src == "endgame":
             pr = endgame_proof(tr)
@@ -2012,7 +2390,23 @@ def write_summary(tracks):
                   f"Holding all of them at the {CFG['shares_per_trade']}-share minimum would cost "
                   f"${hb['cost_min_size_each']:,.2f}. Biggest single position = "
                   f"{hb['biggest_position_share'] * 100:.0f}% of his book.\n")
+    hist = os.path.join(STATE, "history.csv")
+    before = {}
+    if os.path.exists(hist):
+        with open(hist) as fh:
+            for row in fh.read().splitlines()[1:]:
+                f = row.split(",")
+                if len(f) >= 3 and f[0] < today:
+                    before[f[1]] = fnum(f[2])  # rows are in date order: the last one before today wins
+    for n, s_ in stats.items():
+        s_["trust"] = trust(tracks[n], len(stats))
+        s_["today"] = round(s_["pnl"] - before.get(n, 0.0), 4)
+    if lab_rows:
+        md.append("\n**Lab** (added 2026-11-08: 40 copied wallets, crowd, sabsabinxz and rule variants; frozen until "
+                  "2027-01-01 so the test stays clean):\n")
+        md += ["| Track | P&L | Open | Closed (W/L) | Cash | Notes |", "|---|---|---|---|---|---|"] + lab_rows
     md += detail
+    md += leaderboard_md(stats)
     try:
         md += his_exit_summary()
     except Exception as e:
@@ -2047,7 +2441,6 @@ def write_summary(tracks):
         fh.write("\n".join(md) + "\n")
     save("summary.json", {"generated": iso(), "tracks": stats, "his_book": hb})
 
-    hist = os.path.join(STATE, "history.csv")
     rows = []
     if os.path.exists(hist):
         with open(hist) as fh:
@@ -2061,27 +2454,23 @@ def write_summary(tracks):
 
 
 def push_scoreboard(stats):
-    """One line per strategy, sent to ntfy after the morning run (backup for the Claude review)."""
-    lines = []
-    for name, s in stats.items():
-        money = f"{'+' if s['pnl'] >= 0 else '-'}${abs(s['pnl']):.2f}"
-        if "proof" in s:  # arb / endgame / full-set tracks: show progress toward the 90% proof
-            pr = s["proof"]
-            locked = f" (${s['locked']:.0f} locked)" if "locked" in s else ""
-            lines.append(f"{name}: {money} | {s['open']} open{locked} | "
-                         f"proof {pr['finished']}/{pr['finished'] + pr['more_needed']} clean"
-                         f"{', ' + str(pr['mismatches']) + ' BAD' if pr['mismatches'] else ''}")
-            continue
-        extra = ""
-        if s.get("refills"):
-            extra = f", refilled {s['refills']}x"
-        if CFG["tracks"][name]["start_cash"] is None:
-            extra = f", needed ${s['money_needed']:.2f} so far"
-        lines.append(f"{name}: {money} | {s['open']} open | {s['wins']}W {s['losses']}L{extra}")
-    hb = load("his_book.json", None)
-    if hb:
-        lines.append(f"Copying his whole book at min size: ${hb['cost_min_size_each']:.0f}")
-    push("Paper scoreboard", "\n".join(lines), tags="bar_chart")
+    """Daily ntfy scoreboard: only the top 10 by trust (all strategies are still tracked; summary.md ranks them all).
+    Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
+    n = CFG["push"].get("top_n", 10)
+    order = [x for x in ranked(stats) if stats[x]["trust"]["finished"] >= 3 and stats[x]["trust"]["avg_per_100"] > 0]
+    top = order[:n]  # only strategies that are actually ahead on 3+ finished trades can make the list
+    save("top.json", {"generated": iso(), "tracks": top})
+    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
+    for i, name in enumerate(top, 1):
+        s, t = stats[name], stats[name]["trust"]
+        lines.append(f"{i}. {name}{' PROVEN' if t['proven'] else ''}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}) | "
+                     f"{t['finished']} done | worst case {usd(t['worst_per_100'])[:-3]} per $100")
+    best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)
+    if best and best not in top and stats[best].get("today", 0) > 0:
+        lines.append(f"Best day (probably luck): {best} +${stats[best]['today']:.2f}")
+    proven = sum(1 for x in stats.values() if x["trust"]["proven"])
+    lines.append(f"{len(stats)} strategies tracked, {proven} proven. Full ranking in summary.md")
+    push("Paper top 10", "\n".join(lines), tags="bar_chart")
 
 
 def selftest():
@@ -2144,6 +2533,40 @@ def dryrun():
             print(f"WOULD BUY [{name}] {sid}: cost ${st['cost']:.2f} pays ${st['guaranteed']:.2f}, edge {st['edge'] * 100:.1f}c")
         for sid, v in sorted(tr.get("seen", {}).items(), key=lambda x: -x[1]["edge"])[:8]:
             print(f"  closest set: {sid} {v['edge'] * 100:+.1f}c")
+
+
+def copytest():
+    """Live check of the lab copy tracks (manual probe workflow, saves nothing): positions per wallet, what the
+    crowd holds, and how many rule-variant candidates each track sees today."""
+    global save, log_event
+    save = lambda name, obj: print(f"(not saving {name})")  # noqa: E731
+    log_event = lambda ev: print("EVENT", json.dumps(ev, sort_keys=True)[:200])  # noqa: E731
+    t0 = time.time()
+    r = rule_set("wallet_copy")
+    for n in wallet_tracks():
+        rows, complete = wallet_positions(CFG["tracks"][n]["address"], r.get("max_pages", 4))
+        live = [p for p in rows or [] if p["size"] >= 5 and not p["redeemable"]]
+        big = [p for p in live if p["size"] * max(p["avg"], 0.01) >= r["min_open_usd"]]
+        print(f"{n}: {None if rows is None else len(rows)} rows (complete={complete}), {len(live)} live, {len(big)} >= ${r['min_open_usd']}"
+              + (f", e.g. {big[0]['outcome']} @ {cents(big[0]['cur'])} {big[0]['title'][:50]}" if big else ""))
+    print(f"wallet fetch took {time.time() - t0:.1f}s")
+    tracks = load_tracks()
+    live = follow_wallets(tracks)
+    follow_consensus(tracks, live)
+    for n in ("consensus_2", "consensus_3"):
+        for p in tracks.get(n, {}).get("positions", {}).values():
+            print(f"WOULD BUY [{n}] {p['outcome']} @ {cents(p['entry'])} ({p.get('wallets')} wallets) - {p['title'][:70]}")
+    markets = scan_markets()
+    for n, tc in CFG["tracks"].items():
+        if tc.get("lab") and tc["source"] in ("screener", "random", "momentum"):
+            rr = rules_for(n)
+            c = momentum_candidates(markets, rr) if tc["source"] == "momentum" else \
+                boring_side_candidates(markets, rr, random.Random(f"{today_utc()}-{n}"))
+            print(f"{n}: {len(c)} candidates" + (f", top: {c[0]['outcome']} @ {cents(c[0]['price'])} {c[0]['title'][:60]}" if c else ""))
+    for n, tc in CFG["tracks"].items():
+        if tc.get("lab") and tc["source"] == "endgame":
+            print(f"{n}: {len(endgame_candidates(rules_for(n)))} candidates")
+    print(f"copytest took {time.time() - t0:.1f}s")
 
 
 # ================================================================ lab: finding wallets worth following
@@ -2236,4 +2659,4 @@ def discover():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
-     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover}[cmd]()
+     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest}[cmd]()
