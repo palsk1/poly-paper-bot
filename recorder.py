@@ -40,7 +40,7 @@ from bot import CLOB, DATA, GAMMA, KALSHI, fnum, http_json, envelope_rows
 
 CFG = bot.CFG.get("recorder", {})
 FAST_HOURS = CFG.get("fast_hours", 3)
-FAST_MAX_KALSHI = CFG.get("fast_max_kalshi", 400)
+FAST_MAX_KALSHI = CFG.get("fast_max_kalshi", 300)
 FAST_MAX_POLY = CFG.get("fast_max_poly", 300)
 LEVELS = CFG.get("levels", 15)
 WIDE_EVERY = CFG.get("wide_every_min", 5)
@@ -285,6 +285,7 @@ def run(minutes, upload_files=True):
     n = 0
     stats = {"kbook": 0, "pbook": 0, "ktrade": 0, "ptrade": 0, "err": 0}
     pool = cf.ThreadPoolExecutor(8)
+    kpool = cf.ThreadPoolExecutor(CFG.get("kalshi_threads", 4))  # Kalshi answers 429 above ~4 at once
     while ts() - start < minutes * 60:
         t = ts()
         w.roll(t)
@@ -317,7 +318,7 @@ def run(minutes, upload_files=True):
 
         # Kalshi books
         ktk = [m["tk"] for m in kf] + ([m["tk"] for m in kw] if wide else [])
-        futs = {pool.submit(kalshi_book, tk): tk for tk in dict.fromkeys(ktk)}
+        futs = {kpool.submit(kalshi_book, tk): tk for tk in dict.fromkeys(ktk)}
         for fu in cf.as_completed(futs):
             tk = futs[fu]
             try:
@@ -378,6 +379,7 @@ def run(minutes, upload_files=True):
         time.sleep(max(1, nxt - ts()))
     w.close()
     pool.shutdown(wait=False)
+    kpool.shutdown(wait=False)
     print(f"done after {n} passes: {stats}")
     return stats
 
