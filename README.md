@@ -29,6 +29,7 @@
 | Group | Tracks | What it tests |
 |---|---|---|
 | Copied wallets (40) | `w_*` | Each copies one wallet's new positions, 5 shares, sells when it sells. No cash limit (shows money needed). Skips positions under $20, copies more than 5c above the wallet's own price (too late), max 10 new copies a day per wallet. |
+| Copied wallets, filled up (40, added 2026-11-08 evening) | `wb_*` | Twin of each `w_*`: starts by buying 5 shares of each of the wallet's (up to 30 biggest) open positions at that day's price, 10 per run, then copies new ones the same way. `w_*` vs `wb_*` answers: does it pay to jump into their existing book, or only to follow fresh trades? |
 | Smart-money crowd | `consensus_2`, `consensus_3` | Buys when 2+ / 3+ of the 40 wallets hold the same side ($50+ each), sells when all of them have left |
 | sabsabinxz variants | `sab_big`, `sab_hold` | Only his $1,000+ bets / copies his entries but ignores his early exits |
 | Favorite bands | `fav_short_90_95`, `fav_short_95_98`, `fav_mid_80_90`, `fav_bigvol_85_95`, `no_only_90_97`, `yes_fav_85_95`, `fav_fee_free`, `fav_cut_losses` | Which price band, deadline and market size makes "buy the likely side" pay after fees. Studies of Polymarket (588M trades, 2022-2026) find favorites at 90c+ earn only a few tenths of a cent per dollar before fees, so most of these should hover near zero. $500 paper each |

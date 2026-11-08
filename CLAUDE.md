@@ -18,7 +18,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
    - Do **not** change how these tracks trade (rules, budgets, thresholds) without Jan's OK: `mirror`, `favorites`, `mirror_unlimited`, `screener`, `arb`, `endgame` and `every_horse`. The `leader` settings need his OK too. Suggest changes and let him decide.
    - `claude` and `panic_fade` belong to Claude. Their rules may be tweaked from 2026-11-10 on, at most 1–2 small changes a day, each reported.
    - Approving or rejecting arb pairs in `arb_pairs.json` is allowed and must be reported.
-   - **Lab tracks** (`"lab": true` in config: the 40 `w_*` wallets, `consensus_*`, `sab_*` and the rule variants, added 2026-11-08) are **frozen until 2027-01-01**: bug fixes only, each reported. Changing their rules resets their evidence. Adding or removing lab tracks needs Jan's OK (he chose "about 60, not 100" on 2026-11-08).
+   - **Lab tracks** (`"lab": true` in config: the 40 `w_*` wallets and their 40 filled-up `wb_*` twins (added on Jan's ask, 2026-11-08 evening), `consensus_*`, `sab_*` and the rule variants, added 2026-11-08) are **frozen until 2027-01-01**: bug fixes only, each reported. Changing their rules resets their evidence. Adding or removing lab tracks needs Jan's OK (he chose "about 60, not 100" on 2026-11-08).
 5. Commits end with the Co-Authored-By trailer the session gives you.
 
 ## How it runs
