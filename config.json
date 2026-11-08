@@ -82,6 +82,12 @@
       "source": "fullset",
       "rules": "every_horse"
     },
+    "maker": {
+      "label": "Maker (added 2026-11-08): gets paid Polymarket's liquidity rewards for leaving buy and sell orders near the middle price, and pays for every time someone better informed picks those orders off. Fills from the real trade tape, back of the queue. $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker"
+    },
     "fav_short_90_95": {
       "label": "Favorite side at 90-95c, ending in 2-14 days (fast payouts). $500 paper",
       "start_cash": 500,
@@ -624,6 +630,21 @@
     }
   },
   "rules": {
+    "maker": {
+      "why": "Polymarket pays about $190k a day to market makers. A slow bot can only keep it if the rewards beat the losses from getting picked off; this measures both.",
+      "shares": 50,
+      "max_shares": 100,
+      "max_markets": 4,
+      "min_days_left": 7,
+      "max_days": 3,
+      "min_mid": 0.15,
+      "max_mid": 0.85,
+      "max_inventory_lots": 2,
+      "max_credit_minutes": 15,
+      "pick_every_minutes": 60,
+      "scan_books": 400,
+      "skip_words": ["up or down", "temperature", "tweets", "weather"]
+    },
     "screener": {
       "min_price": 0.8,
       "max_price": 0.95,

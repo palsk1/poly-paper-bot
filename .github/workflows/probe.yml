@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what:
-        description: "all | kalshi | poly | endgame | events (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' for bot dry runs; edges_shapes|edges_rewards|edges_negrisk|edges_holding|edges_rewards2|edges_holding2|edges_round2|edges_all for edges.py research)"
+        description: "all | kalshi | poly | endgame | events (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' / 'makertest' for bot dry runs; edges_shapes|edges_rewards|edges_negrisk|edges_holding|edges_rewards2|edges_holding2|edges_round2|edges_all for edges.py research)"
         default: all
 
 jobs:
@@ -16,4 +16,4 @@ jobs:
       - name: Probe APIs
         run: |
           case "${{ inputs.what }}" in edges_*) python3 edges.py "$(echo '${{ inputs.what }}' | sed 's/^edges_//')"; exit $?;; esac
-          if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ] || [ "${{ inputs.what }}" = "copytest" ] || [ "${{ inputs.what }}" = "depthtest" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
+          if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ] || [ "${{ inputs.what }}" = "copytest" ] || [ "${{ inputs.what }}" = "depthtest" ] || [ "${{ inputs.what }}" = "makertest" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
