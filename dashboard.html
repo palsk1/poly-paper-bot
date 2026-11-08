@@ -84,7 +84,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <div class="tiles" id="tiles"></div>
 
   <h2>Top 10 today</h2>
-  <p class="note">Ranked by trust: the worst profit per $100 that's still believable after the finished trades. Only strategies ahead on 3+ finished trades make the list. These are the ones that send you pushes. Tap one for details.</p>
+  <p class="note">Ranked by trust: the worst profit per $100 that's still believable after the finished trades. Only strategies ahead on 3+ finished trades, and still ahead with open bets counted at today's price, make the list. These are the ones that send you pushes. Tap one for details.</p>
   <div id="top"></div>
 
   <h2>Real or luck?</h2>
@@ -220,7 +220,7 @@ function curveChart(el, t) {
 
 // ---------- top 10
 (function top() {
-  if (!D.top.length) { $("top").innerHTML = `<div class="card">Nobody is ahead on 3+ finished trades yet. Patience.</div>`; return; }
+  if (!D.top.length) { $("top").innerHTML = `<div class="card">Nobody is ahead on 3+ finished trades (with open bets counted) yet. Patience.</div>`; return; }
   $("top").innerHTML = D.top.map((n, i) => {
     const t = byName[n];
     return `<div class="card top" data-n="${esc(n)}"><div class="row">
@@ -228,7 +228,7 @@ function curveChart(el, t) {
       <div class="grow"><div class="name">${esc(n)}${t.trust.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.lab ? '<span class="tag">lab</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
         <div class="meta">${M(t.pnl)} total · today ${M(t.today)} · ${t.trust.finished} done · worst case ${M(t.trust.worst_per_100)} per $100</div></div>
       <div>${spark(t)}</div></div></div>`;
-  }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies are ahead on 3+ finished trades so far.</p>` : "");
+  }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies qualify so far.</p>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
 })();
 
