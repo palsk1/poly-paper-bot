@@ -1044,7 +1044,8 @@ def scan_markets(filters=None):
     """Open markets (one pass, cached per run so the endgame variants share one scan). Tries server-side filters first;
     falls back to the unfiltered list if the API rejects them."""
     filters = filters or scan_filters()
-    key = json.dumps({k: v[:16] if isinstance(v, str) else v for k, v in filters.items()}, sort_keys=True)
+    # dates rounded to the hour: one full scan takes 1-2 minutes, so minute-level keys would never match
+    key = json.dumps({k: v[:13] if isinstance(v, str) else v for k, v in filters.items()}, sort_keys=True)
     if key not in _scan_cache:
         _scan_cache[key] = _scan_markets(filters)
     return _scan_cache[key]
