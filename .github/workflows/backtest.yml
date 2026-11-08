@@ -1,0 +1,52 @@
+name: backtest
+# Manual only: replays the strategies on past, already-finished Polymarket markets (paper, no trades, no pushes)
+# and saves backtest/report.md. The download is cached between runs, so a re-run only fetches what's new.
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "first end date to include (YYYY-MM-DD)"
+        default: "2026-03-01"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: backtest   # not bot-state: a backtest takes ~1h and must not hold up the 5-minute watcher
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/cache/restore@v4
+        with:
+          path: bt_cache
+          key: bt-cache-${{ github.run_id }}
+          restore-keys: bt-cache-
+      - name: Backtest
+        env:
+          BT_START: ${{ inputs.start }}
+        run: PYTHONUNBUFFERED=1 python3 backtest.py all
+      - uses: actions/cache/save@v4   # also after a failure or timeout, so a long download isn't lost
+        if: always()
+        with:
+          path: bt_cache
+          key: bt-cache-${{ github.run_id }}
+      - name: Save report
+        run: |
+          git config user.name "poly-paper-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backtest
+          if ! git diff --cached --quiet; then
+            git commit -m "backtest: $(date -u +%Y-%m-%d)"
+            for i in 1 2 3 4; do
+              git pull --rebase -X theirs origin main && git push && exit 0
+              echo "push attempt $i failed, retrying"; git rebase --abort 2>/dev/null || true; sleep $((i * 10))
+            done
+            exit 1
+          fi

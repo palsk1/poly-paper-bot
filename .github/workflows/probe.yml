@@ -10,9 +10,27 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4   # the branch it was started on (main by default), so a PR branch can be tried live
+      - uses: actions/cache/restore@v4
+        if: startsWith(inputs.what, 'bt')
+        with:
+          path: bt_cache
+          key: bt-cache-${{ github.run_id }}
+          restore-keys: bt-cache-
       - name: Probe APIs
         run: |
+          case "${{ inputs.what }}" in bt*) PYTHONUNBUFFERED=1 python3 backtest.py "${{ inputs.what }}"; exit $?;; esac
           if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ] || [ "${{ inputs.what }}" = "copytest" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
+      - uses: actions/cache/save@v4   # also after a failure or timeout, so a long download isn't lost
+        if: always() && startsWith(inputs.what, 'bt')
+        with:
+          path: bt_cache
+          key: bt-cache-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always() && startsWith(inputs.what, 'bt')
+        with:
+          name: backtest
+          path: backtest/
+          if-no-files-found: ignore
