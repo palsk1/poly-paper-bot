@@ -73,6 +73,12 @@
       "source": "fullset",
       "rules": "every_horse"
     },
+    "ladder": {
+      "label": "Ladder pairs inside Polymarket: two markets of one event where the stricter one can only say YES if the looser one does (higher strike, earlier deadline). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser one comes true. Same site and rules, so no cross-site mismatch. $100 paper",
+      "start_cash": 100,
+      "source": "ladder",
+      "rules": "ladder"
+    },
     "fav_short_90_95": {
       "label": "Favorite side at 90-95c, ending in 2-14 days (fast payouts). $500 paper",
       "start_cash": 500,
@@ -802,6 +808,22 @@
         "no change",
         "tie"
       ]
+    },
+    "ladder": {
+      "why": "If market A's YES can only happen when market B's YES does (same event, same rules text, only the strike or deadline differs), NO(A) + YES(B) always pays at least $1. Families are found daily and kept only if the words give a clear direction and the crowd's prices agree with it.",
+      "shares": 5,
+      "min_edge": 0.02,
+      "min_annual": 0.15,
+      "min_days": 0,
+      "max_days": 400,
+      "min_liquidity": 500,
+      "check_every_min": 30,
+      "max_pairs": 8000,
+      "books_per_check": 25,
+      "picks_per_check": 3,
+      "max_open": 20,
+      "max_lots_per_pair": 1,
+      "max_price_disagree": 0.1
     },
     "wallet_copy": {
       "why": "Copy a wallet's new positions 5 shares each, sell when it sells. Skips crumbs (< $20 positions), late copies (our price more than 5c above its average) and caps at 10 new copies a day per wallet so one hyperactive wallet can't flood the file.",

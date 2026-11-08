@@ -114,71 +114,17 @@ def scan_poly(max_days=400):
 # ------------------------------------------------------------------ ladders (inside Polymarket)
 
 def ladder_pairs(ms):
-    """[(stricter A, looser B, kind)] where A YES implies B YES, from markets of one event."""
-    by_ev = defaultdict(list)
-    for m in ms:
-        k, _ = ev_key(m)
-        if k:
-            by_ev[k].append(m)
-    pairs, stats = [], Counter()
-    for k, group in by_ev.items():
-        if len(group) < 2:
-            continue
-        stats["events_2plus"] += 1
-        fams = defaultdict(list)
-        for m in group:
-            q = f"{m.get('question') or ''} | {m.get('groupItemTitle') or ''}"
-            tq, nq = template(m.get("question"))
-            td, nd = template(m.get("description"))
-            dq = DATE_RE.findall(str(m.get("question") or "").lower())
-            stats["q_only_" + tq[:0]] += 0
-            fams[(tq, td)].append({"m": m, "nums": nq, "dnums": nd, "has_date": bool(dq), "q": q})
-        for (tq, td), fam in fams.items():
-            if len(fam) < 2:
-                continue
-            words = tq.replace("<n>", " ").replace("<d>", " ").replace("<N>", " ").replace("<D>", " ")
-            gtitles = " ".join(str(x["m"].get("groupItemTitle") or "") for x in fam)
-            nsets = {tuple(x["nums"]) for x in fam}
-            # strike ladder: one number in the question differs, same deadline, direction unambiguous
-            if all(len(x["nums"]) == 1 for x in fam) and len(nsets) == len(fam):
-                touch = bool(re.search(r"\b(hit|hits|reach|reaches|dip|dips)\b", words))
-                if touch:  # "hit X" can mean up or down: trust only the arrows in the outcome labels
-                    up_arrow, down_arrow = "↑" in gtitles, "↓" in gtitles
-                    up, down = up_arrow and not down_arrow, down_arrow and not up_arrow
-                else:
-                    up, down = bool(UP.search(words)), bool(DOWN.search(words))
-                ends = {(end_of(x["m"]) or now()).date() for x in fam}
-                if up == down or "between" in words or len(ends) != 1:
-                    why = "direction unclear" if up == down else ("ends differ" if len(ends) != 1 else "range")
-                    stats["strike_skipped_" + why] += 1
-                    if stats["strike_skipped_" + why] <= 8:
-                        print("  skip", why, "|", tq[:110], "|", len(fam), gtitles[:80])
-                    continue
-                stats["strike_families_" + ("touch" if touch else "level")] += 1
-                fam.sort(key=lambda x: x["nums"][0])
-                for i, a in enumerate(fam):
-                    for b in fam[i + 1:]:
-                        pairs.append((b["m"], a["m"], "strike_up") if up else (a["m"], b["m"], "strike_down"))
-            # deadline ladder: question differs only by its date, phrased "by/before <date>" (numbers, if any, equal)
-            elif len(nsets) == 1 and all(x["has_date"] for x in fam) \
-                    and re.search(r"\b(by|before|until|prior to|no later than) <d>", tq.replace("<D>", "<d>")):
-                stats["deadline_families"] += 1
-                fam.sort(key=lambda x: end_of(x["m"]) or now())
-                for i, a in enumerate(fam):
-                    for b in fam[i + 1:]:
-                        if (end_of(a["m"]) or now()).date() < (end_of(b["m"]) or now()).date():
-                            pairs.append((a["m"], b["m"], "deadline"))
-            else:
-                stats["family_other"] += 1
-                if stats["family_other"] <= 12:
-                    print("  other |", tq[:110], "|", [x["nums"] for x in fam][:4], [x["has_date"] for x in fam][:4])
-    return pairs, stats
+    """Same detector the ladder track uses (bot.ladder_pairs), so this probe measures exactly what it would trade."""
+    return bot.ladder_pairs(ms, bot.ladder_rules()[1])
 
 
 def hunt_ladders(ms=None):
     ms = ms if ms is not None else scan_poly()
     pairs, stats = ladder_pairs(ms)
     print(f"ladders: {len(ms)} yes/no markets, stats {dict(stats)}, implied pairs {len(pairs)}")
+    ids = sorted({str(m.get("id")) for a, b, _ in pairs[:150] for m in (a, b)})
+    fresh = bot.gamma_markets_by_id(ids)
+    print(f"batch price fetch: asked {len(ids)} markets, got {len(fresh)}")
     by_kind = Counter(k for _, _, k in pairs)
     print("implied pairs by kind:", dict(by_kind))
     # listed check first: NO ask(A) ~ 1 - bestBid(A); YES ask(B) = bestAsk(B)
