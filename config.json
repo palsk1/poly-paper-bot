@@ -1207,10 +1207,9 @@
       "min_edge": 0.008,
       "tiers": [
         "resolved",
-        "proposed",
-        "past_deadline"
+        "proposed"
       ],
-      "tiers_note": "ending_soon dropped 2026-11-08 (Jan's OK): the backtest (backtest/report.md) lost about $5-6 per $100 on it, mostly weather, crypto-price and tweet-count buckets at 95c a day before the end. Lab variants keep their own frozen tier lists.",
+      "tiers_note": "2026-11-08 (Jan's OK, after backtest/report.md): ending_soon dropped (lost about $5-6 per $100, mostly weather, crypto-price and tweet-count buckets at 95c a day before the end), then past_deadline dropped (lost $167 on 709 bets). Lab variants keep their own frozen tier lists.",
       "ending_soon_hours": 24,
       "past_deadline_max_days": 30,
       "min_liquidity": 2000,
