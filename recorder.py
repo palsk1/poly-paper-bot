@@ -93,12 +93,13 @@ def kalshi_fast():
     vol = lambda m: fnum(m.get("volume_24h_fp") or m.get("volume_24h"), 0)
     # 15-minute markets first (they're the point), then the busiest of the rest
     out.sort(key=lambda m: ("15M" not in str(m.get("event_ticker")), -vol(m)))
+    out = [m for m in out if not str(m.get("ticker", "")).startswith("KXMVE")]  # multi-leg combos
     return [{"tk": m.get("ticker"), "ev": m.get("event_ticker"), "t": m.get("title"), "st": m.get("yes_sub_title"),
              "cl": m.get("close_time"), "v24": vol(m)} for m in out[:FAST_MAX_KALSHI] if m.get("ticker")]
 
 
 def poly_fast():
-    """Open Polymarket markets ending within FAST_HOURS, busiest first."""
+    """Open Polymarket markets ending within FAST_HOURS, busiest first, sports left out (they'd fill the list)."""
     now = dt.datetime.now(dt.timezone.utc)
     end = now + dt.timedelta(hours=FAST_HOURS)
     out, off = [], 0
@@ -115,7 +116,7 @@ def poly_fast():
     res = []
     for m in out:
         toks = bot.market_tokens(m)
-        if len(toks) != 2 or m.get("acceptingOrders") is False:
+        if len(toks) != 2 or m.get("acceptingOrders") is False or bot.is_sports(m):
             continue
         res.append({"tok": toks[0], "cid": m.get("conditionId"), "slug": m.get("slug"), "q": m.get("question"),
                     "end": m.get("endDate"), "v24": fnum(m.get("volume24hr"), 0)})
@@ -283,7 +284,7 @@ def run(minutes, upload_files=True):
     p_seen = set()
     n = 0
     stats = {"kbook": 0, "pbook": 0, "ktrade": 0, "ptrade": 0, "err": 0}
-    pool = cf.ThreadPoolExecutor(5)
+    pool = cf.ThreadPoolExecutor(8)
     while ts() - start < minutes * 60:
         t = ts()
         w.roll(t)
@@ -390,7 +391,7 @@ if __name__ == "__main__":
         kf, pf = kalshi_fast(), poly_fast()
         print("kalshi fast series:", collections.Counter(str(m["ev"]).rsplit("-", 1)[0] for m in kf).most_common(40))
         print("poly fast sample:", [m["q"][:60] for m in pf[:40]], len(pf))
-        st = run(0.5, upload_files=False)
+        st = run(float(sys.argv[2]) if len(sys.argv) > 2 else 0.5, upload_files=False)
         for p in sorted(os.listdir(OUT_DIR)):
             fp = f"{OUT_DIR}/{p}"
             kinds = {}
