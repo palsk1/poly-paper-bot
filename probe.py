@@ -579,3 +579,27 @@ if __name__ == "__main__":
         fast()
     if what == "lab":
         lab()
+
+
+def marks(what):
+    """marks_<track>: every open position of one track with its live mark, market state and best bid/ask."""
+    import bot
+    name = what[len("marks_"):] or "endgame_sell98"
+    tr = bot.load_tracks()[name]
+    bot.prefetch_markets(p.get("slug") for p in tr["positions"].values())
+    tot = 0.0
+    for tok, p in tr["positions"].items():
+        m = bot.market_by_slug(p.get("slug"))
+        px = bot.mark(p, tok)
+        u = p["shares"] * px - (p["shares"] * p["entry"] + p.get("entry_fee", 0.0))
+        tot += u
+        bk = bot.book(tok) or {}
+        bid = (bk.get("bids") or [[None]])[0][0]
+        ask = (bk.get("asks") or [[None]])[0][0]
+        print(f"{u:+7.2f} entry {p['entry']:.3f} mark {px:.3f} bid {bid} ask {ask} closed {m and m.get('closed')} "
+              f"uma {m and m.get('umaResolutionStatus')} prices {m and m.get('outcomePrices')} | {p.get('tier')} | {p.get('title','')[:70]} [{p.get('outcome')}]")
+    print(f"total unrealized {tot:+.2f} on {len(tr['positions'])} open")
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1].startswith("marks"):
+    marks(sys.argv[1])
