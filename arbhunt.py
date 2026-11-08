@@ -136,30 +136,37 @@ def ladder_pairs(ms):
         for (tq, td), fam in fams.items():
             if len(fam) < 2:
                 continue
+            words = tq.replace("<n>", " ").replace("<d>", " ").replace("<N>", " ").replace("<D>", " ")
+            gtitles = " ".join(str(x["m"].get("groupItemTitle") or "") for x in fam)
+            nsets = {tuple(x["nums"]) for x in fam}
             # strike ladder: one number in the question differs, same deadline, direction unambiguous
-            if all(len(x["nums"]) == 1 for x in fam) and len({x["nums"][0] for x in fam}) == len(fam):
-                up, down = bool(UP.search(tq)), bool(DOWN.search(tq))
+            if all(len(x["nums"]) == 1 for x in fam) and len(nsets) == len(fam):
+                touch = bool(re.search(r"\b(hit|hits|reach|reaches|dip|dips)\b", words))
+                if touch:  # "hit X" can mean up or down: trust only the arrows in the outcome labels
+                    up_arrow, down_arrow = "↑" in gtitles, "↓" in gtitles
+                    up, down = up_arrow and not down_arrow, down_arrow and not up_arrow
+                else:
+                    up, down = bool(UP.search(words)), bool(DOWN.search(words))
                 ends = {(end_of(x["m"]) or now()).date() for x in fam}
-                if up == down or "between" in tq or "<n> -" in tq or len(ends) != 1:
-                    why = "up==down" if up == down else ("ends differ" if len(ends) != 1 else "range")
+                if up == down or "between" in words or len(ends) != 1:
+                    why = "direction unclear" if up == down else ("ends differ" if len(ends) != 1 else "range")
                     stats["strike_skipped_" + why] += 1
-                    if stats["strike_skipped_" + why] <= 6:
-                        print("  skip", why, "|", tq[:110], "|", len(fam), sorted(ends)[:3])
+                    if stats["strike_skipped_" + why] <= 8:
+                        print("  skip", why, "|", tq[:110], "|", len(fam), gtitles[:80])
                     continue
-                stats["strike_families"] += 1
+                stats["strike_families_" + ("touch" if touch else "level")] += 1
                 fam.sort(key=lambda x: x["nums"][0])
                 for i, a in enumerate(fam):
                     for b in fam[i + 1:]:
-                        lo, hi = a, b
-                        pairs.append((hi["m"], lo["m"], "strike_up") if up else (lo["m"], hi["m"], "strike_down"))
-            # deadline ladder: question differs only by its date, phrased "by/before <date>"
-            elif all(not x["nums"] for x in fam) and all(x["has_date"] for x in fam) and CUMUL.search(tq) \
-                    and re.search(r"\b(by|before|until|prior to|no later than) <d>", tq):
+                        pairs.append((b["m"], a["m"], "strike_up") if up else (a["m"], b["m"], "strike_down"))
+            # deadline ladder: question differs only by its date, phrased "by/before <date>" (numbers, if any, equal)
+            elif len(nsets) == 1 and all(x["has_date"] for x in fam) \
+                    and re.search(r"\b(by|before|until|prior to|no later than) <d>", tq.replace("<D>", "<d>")):
                 stats["deadline_families"] += 1
                 fam.sort(key=lambda x: end_of(x["m"]) or now())
                 for i, a in enumerate(fam):
                     for b in fam[i + 1:]:
-                        if (end_of(a["m"]) or now()) < (end_of(b["m"]) or now()):
+                        if (end_of(a["m"]) or now()).date() < (end_of(b["m"]) or now()).date():
                             pairs.append((a["m"], b["m"], "deadline"))
             else:
                 stats["family_other"] += 1
