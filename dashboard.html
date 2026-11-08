@@ -50,6 +50,8 @@ p { margin: 4px 0 10px; }
 .tag.luck { border-color: var(--s2); color: var(--ink); }
 .tag.proven { border-color: var(--good); color: var(--good); }
 .top { cursor: pointer; }
+.pot { font-weight: 650; font-size: 15px; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.pot.big { font-size: 20px; margin: 6px 0 4px; }
 .top .meta { font-size: 12px; color: var(--ink2); }
 button, select, input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 8px; padding: 6px 10px; }
 button { cursor: pointer; }
@@ -118,7 +120,15 @@ const money = (x, sign = true) => x == null ? "–" : (x < 0 ? "−" : (sign ? "
 const cls = x => x == null ? "" : x > 0.004 ? "pos" : x < -0.004 ? "neg" : "";
 const M = (x, sign = true) => `<span class="num ${sign ? cls(x) : ""}">${money(x, sign)}</span>`;
 const cents = x => x == null ? "–" : (Math.round(x * 10) / 10) + "c";
-const byName = Object.fromEntries(D.tracks.map(t => [t.name, t]));
+// one plain line: what went in, what it's worth now (paper money)
+function pot(t) {
+  const start = t.cash == null ? (t.needed || 0) : (t.deposited || 0);
+  const now = start + (t.pnl || 0);
+  const what = t.cash == null ? "Put in" : "Started with";
+  if (t.cash == null && start < 0.005) return `No money in yet`;
+  return `${what} ${money(start, false).replace(".00", "")} → now ${money(now, false)} <span class="${cls(t.pnl)}">(${money(t.pnl)})</span>`;
+}
+const byName =Object.fromEntries(D.tracks.map(t => [t.name, t]));
 const NS = "http://www.w3.org/2000/svg";
 const tip = $("tip");
 function showTip(html, x, y) {
@@ -226,7 +236,8 @@ function curveChart(el, t) {
     return `<div class="card top" data-n="${esc(n)}"><div class="row">
       <div class="rank">${i + 1}</div>
       <div class="grow"><div class="name">${esc(n)}${t.trust.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.lab ? '<span class="tag">lab</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
-        <div class="meta">${M(t.pnl)} total · today ${M(t.today)} · ${t.trust.finished} done · worst case ${M(t.trust.worst_per_100)} per $100</div></div>
+        <div class="pot">${pot(t)}</div>
+        <div class="meta">today ${M(t.today)} · ${t.trust.finished} done · worst case ${M(t.trust.worst_per_100)} per $100</div></div>
       <div>${spark(t)}</div></div></div>`;
   }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies qualify so far.</p>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
@@ -276,8 +287,8 @@ luck();
 // ---------- main tracks
 (function main() {
   const rows = D.tracks.filter(t => !t.lab);
-  $("main").innerHTML = `<table><thead><tr><th>Track</th><th class="r">Total</th><th class="r">Today</th><th class="r">Open</th><th class="r">Won / lost</th></tr></thead><tbody>` +
-    rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td><a href="#detail-h">${esc(t.name)}</a></td><td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.open}</td><td class="r num">${t.wins} / ${t.losses}</td></tr>`).join("") +
+  $("main").innerHTML = `<table><thead><tr><th>Track</th><th class="r">Started</th><th class="r">Total</th><th class="r">Open</th><th class="r">W / L</th></tr></thead><tbody>` +
+    rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td><a href="#detail-h">${esc(t.name)}</a></td><td class="r num">${t.cash == null ? "no limit" : money(t.deposited, false).replace(".00", "")}</td><td class="r">${M(t.pnl)}</td><td class="r num">${t.open}</td><td class="r num">${t.wins} / ${t.losses}</td></tr>`).join("") +
     `</tbody></table>`;
   document.querySelectorAll("#main tr[data-n]").forEach(r => r.onclick = ev => { ev.preventDefault(); openDetail(r.dataset.n); });
 })();
@@ -293,9 +304,10 @@ function detail(n) {
   const cash = t.cash == null ? `no cash limit, needed so far ${money(t.needed, false)}` : `cash left ${money(t.cash, false)} of ${money(t.deposited, false)}`;
   const tr = t.trust;
   let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tr.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
+    <div class="pot big">${pot(t)}</div>
     <p class="sub">${esc(t.label)}</p>
     <div class="tiles" style="margin-top:6px">
-      <div class="tile"><div class="v ${cls(t.pnl)}">${money(t.pnl)}</div><div class="k">total incl. open bets</div></div>
+      <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
       <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
       <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
       <div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>
