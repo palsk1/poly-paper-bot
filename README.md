@@ -147,6 +147,14 @@ Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estima
 - **negRisk conversion** (sell a whole multi-outcome set right now for more than $1, by turning one NO into a YES of every other outcome): 5,681 events checked; on the real books with fees the best was -0.05c a share. Market makers keep this shut.
 - **Holding rewards**: real (Polymarket pays $3.25 a year per $100 held, sampled hourly) but only on 255 long-dated markets (2028 elections, "before 2027" markets). On a $300 stake that is about $10 a year, so it is a small bonus for whichever strategy holds those markets, not a strategy.
 
+## Backtest (past data)
+
+`backtest.py` replays the rule tracks on finished Polymarket markets (default: everything that ended since 2026-03-01, volume over $20,000, no sports), hour by hour, using the bot's own picking code and only prices known at that moment. Fills are the history price plus 1c (also run at 0c and 2c), plus the market's taker fee. Copy tracks replay the wallets' real trades a few minutes late at their price plus 1c. Results: `backtest/report.md`.
+
+- Run it with the `backtest` workflow (manual, commits the report to main) or the `probe` workflow with `btrun` (report in the run log and artifact). The download (~2 hours the first time) is cached between runs.
+- Can't be replayed: arb and every horse (no old order books), endgame's resolved/proposed tiers (no proposal history), consensus.
+- The 40 copied wallets were picked because they won in this same period, so their backtest flatters them.
+
 ## How it runs
 
 - `watch` workflow, every 5 min: an outside timer (cron-job.org) starts it through GitHub's API, because GitHub's own timer often skips runs for hours (its own ~10 min schedule stays as a backup). checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, endgame scan, panic and every-horse scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
@@ -181,6 +189,7 @@ Not modeled: our own orders moving the price for the next 5-minute check (the pa
 - `state/wallet_snaps.json`: which tokens each copied wallet held at the last check (compact, used to spot new positions)
 - `state/top.json`: today's top 10 by trust (only these send trade pushes)
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
+- `backtest/report.md`: last backtest on past markets (`backtest.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup
