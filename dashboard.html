@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Paper bot dashboard</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --good: #006300; --bad: #d03b3b; --band: rgba(235,104,52,0.12);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --good: #0ca30c; --bad: #e66767; --band: rgba(217,89,38,0.18);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --good: #0ca30c; --bad: #e66767; --band: rgba(217,89,38,0.18);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-text-size-adjust: 100%; }
+main { max-width: 760px; margin: 0 auto; padding: 16px 16px 48px; }
+h1 { font-size: 22px; margin: 4px 0 2px; }
+h2 { font-size: 18px; margin: 28px 0 6px; }
+p { margin: 4px 0 10px; }
+.sub, .note { color: var(--ink2); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 8px 0; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+@media (min-width: 560px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.tile .v { font-size: 22px; font-weight: 650; }
+.tile .k { font-size: 12px; color: var(--ink2); }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row { display: flex; align-items: center; gap: 10px; }
+.grow { flex: 1; min-width: 0; }
+.name { font-weight: 600; overflow-wrap: anywhere; }
+.rank { width: 22px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border); color: var(--ink2); margin-left: 4px; vertical-align: 1px; }
+.tag.luck { border-color: var(--s2); color: var(--ink); }
+.tag.proven { border-color: var(--good); color: var(--good); }
+.top { cursor: pointer; }
+.pot { font-weight: 650; font-size: 15px; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.pot.big { font-size: 20px; margin: 6px 0 4px; }
+.top .meta { font-size: 12px; color: var(--ink2); }
+button, select, input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 8px; padding: 6px 10px; }
+button { cursor: pointer; }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+.controls select { flex: 1; min-width: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--ink2); font-weight: 600; }
+td.r, th.r { text-align: right; }
+#all td.allname { max-width: 8.5em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#all td, #all th { padding: 7px 3px; }
+#all .tag { margin-left: 2px; padding: 0 3px; }
+#late td:first-child, #rs td:first-child { max-width: 11em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+a { color: var(--s1); }
+.bet { padding: 8px 0; border-bottom: 1px solid var(--grid); font-size: 13px; }
+.bet:last-child { border-bottom: 0; }
+.bet .t { color: var(--ink); }
+.bet .m { color: var(--ink2); }
+svg text { fill: var(--muted); font-size: 11px; font-family: inherit; }
+.luckrow { display: grid; grid-template-columns: 128px 1fr; gap: 8px; align-items: center; padding: 3px 0; cursor: pointer; }
+.luckrow .n { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 8px; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.15); display: none; z-index: 9; max-width: 240px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink2); margin: 6px 0; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 6px 0; }
+.warn { border-left: 3px solid var(--s2); padding-left: 10px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Paper bot</h1>
+  <div class="sub" id="updated"></div>
+  <div class="tiles" id="tiles"></div>
+  <p class="note" style="margin-top:8px"><a href="#all-h">Jump to all strategies ↓</a></p>
+
+  <h2>Top 10 today</h2>
+  <p class="note">Ranked by trust: the worst profit per $100 that's still believable after the finished trades. Only strategies ahead on 3+ finished trades, and still ahead with open bets counted at today's price, make the list. These are the ones that send you pushes. Tap one for details.</p>
+  <div id="top"></div>
+
+  <h2>Real or luck?</h2>
+  <p class="note">Each bar runs from the believable worst case (left end) to the average so far (dot), per $100 bet. The orange rows are the <b>control</b> tracks, which buy at random. They show what pure luck looks like. A strategy is only interesting if its whole bar sits right of $0, and it should clearly beat the controls.</p>
+  <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>strategy</span><span><span class="sw" style="background:var(--s2)"></span>control (luck)</span><span><span class="sw" style="background:var(--band)"></span>range of the luck tracks' averages</span></div>
+  <div class="card" id="luck"></div>
+  <div class="controls"><button id="luckmore">Show all</button></div>
+
+  <h2>Main tracks</h2>
+  <div class="card scroll" id="main"></div>
+
+  <h2 id="detail-h">Look at one strategy</h2>
+  <div class="controls">
+    <select id="pick" aria-label="Strategy"></select>
+  </div>
+  <div id="detail"></div>
+
+  <h2>Cost of being late, and of betting bigger</h2>
+  <p class="note"><b>Copying late:</b> the copy tracks buy after the wallet did, usually at a worse price. This is how much more we paid than they did, in total. <b>Bigger bets:</b> every trade is also priced at real stakes on the same order book. "Paper" is our 5-share bet. A $25 or $100 bet goes deeper into the book, so the profit per $100 shrinks, and sometimes only part of a $100 order fills.</p>
+  <div class="card scroll" id="late"></div>
+  <div class="card scroll" id="rs"></div>
+
+  <h2 id="all-h">All strategies</h2>
+  <p class="note">Everything at a glance. "Total" counts open bets at today's price. Tap a column name to sort, tap a row for details.</p>
+  <div class="controls" id="allfilter"></div>
+  <div class="tiles" id="allsum" style="margin:4px 0 8px"></div>
+  <div class="card scroll" id="all"></div>
+
+  <p class="note" style="margin-top:28px">Paper money only. Rebuilt after every bot run. Full numbers: <a id="summary-link" href="#">summary.md</a>. With this few trades, most results are luck.</p>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const D = /*DATA*/null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = (x, sign = true) => x == null ? "–" : (x < 0 ? "−" : (sign ? "+" : "")) + "$" + Math.abs(x).toFixed(2);
+const cls = x => x == null ? "" : x > 0.004 ? "pos" : x < -0.004 ? "neg" : "";
+const M = (x, sign = true) => `<span class="num ${sign ? cls(x) : ""}">${money(x, sign)}</span>`;
+const cents = x => x == null ? "–" : (Math.round(x * 10) / 10) + "c";
+// one plain line: what went in, what it's worth now (paper money)
+function pot(t) {
+  const start = t.cash == null ? (t.needed || 0) : (t.deposited || 0);
+  const now = start + (t.pnl || 0);
+  const what = t.cash == null ? "Put in" : "Started with";
+  if (t.cash == null && start < 0.005) return `No money in yet`;
+  return `${what} ${money(start, false).replace(".00", "")} → now ${money(now, false)} <span class="${cls(t.pnl)}">(${money(t.pnl)})</span>`;
+}
+const byName =Object.fromEntries(D.tracks.map(t => [t.name, t]));
+const NS = "http://www.w3.org/2000/svg";
+const tip = $("tip");
+function showTip(html, x, y) {
+  tip.innerHTML = html; tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)) + "px";
+  tip.style.top = Math.max(8, y - h - 14) + "px";
+}
+const hideTip = () => tip.style.display = "none";
+const stockholm = iso => new Date(iso.length <= 16 ? iso + ":00Z" : iso)
+  .toLocaleString("en-GB", {timeZone: "Europe/Stockholm", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"});
+
+// ---------- header + tiles
+(function header() {
+  const gen = new Date(D.generated);
+  const mins = Math.round((Date.now() - gen) / 60000);
+  const ago = mins < 2 ? "just now" : mins < 120 ? mins + " min ago" : Math.round(mins / 60) + " hours ago";
+  $("updated").innerHTML = `Updated ${esc(stockholm(D.generated))} Stockholm time (${ago}).` +
+    (mins > 90 ? ` <b class="neg">That's old, the bot may be stuck.</b>` : "") +
+    (D.offline ? " Test build: open bets valued at their buy price." : "");
+  $("summary-link").href = D.repo + "/blob/main/state/summary.md";
+  const days = Math.max(0, Math.ceil((new Date(D.trial_end + "T00:00:00Z") - Date.now()) / 864e5));
+  const proven = D.tracks.filter(t => t.trust.proven).length;
+  const finished = D.tracks.reduce((a, t) => a + t.trust.finished, 0);
+  const lead = D.top[0] ? byName[D.top[0]] : null;
+  const tiles = [
+    [days, "days until the January pick"],
+    [`${proven} of ${D.tracks.length}`, "strategies proven"],
+    [finished.toLocaleString("en"), "finished paper trades"],
+    [lead ? esc(lead.name) : "nobody", "on top right now"],
+  ];
+  $("tiles").innerHTML = tiles.map(([v, k]) => `<div class="tile"><div class="v" style="${String(v).length > 12 ? "font-size:16px" : ""}">${v}</div><div class="k">${k}</div></div>`).join("");
+})();
+
+// ---------- charts
+function points(t) { return t.curve.map(([ts, v]) => [new Date(ts + ":00Z").getTime(), v]); }
+
+function spark(t, w = 96, h = 32) {
+  const p = points(t);
+  const xs = p.map(a => a[0]), ys = p.map(a => a[1]).concat([0]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs) || x0 + 1, y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const X = x => 2 + (x - x0) / ((x1 - x0) || 1) * (w - 6), Y = y => h - 3 - (y - y0) / ((y1 - y0) || 1) * (h - 6);
+  const d = p.map((a, i) => (i ? "L" : "M") + X(a[0]).toFixed(1) + " " + Y(a[1]).toFixed(1)).join("");
+  const last = p[p.length - 1];
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">
+    <line x1="0" x2="${w}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--axis)" stroke-dasharray="2 3"/>
+    <path d="${d}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="${X(last[0])}" cy="${Y(last[1])}" r="3" fill="var(--s1)"/></svg>`;
+}
+
+function niceTicks(lo, hi, n = 4) {
+  const span = hi - lo || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0);
+  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(6));
+  return out;
+}
+
+function curveChart(el, t) {
+  const p = points(t);
+  const W = Math.max(300, el.clientWidth || 320), H = 200, L = 46, R = 10, T = 10, B = 24;
+  const xs = p.map(a => a[0]), ys = p.map(a => a[1]).concat([0]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); if (y1 - y0 < 0.5) { y0 -= 0.25; y1 += 0.25; }
+  const pad = (y1 - y0) * 0.08; y0 -= pad; y1 += pad;
+  const X = x => L + (x - x0) / ((x1 - x0) || 1) * (W - L - R), Y = y => T + (y1 - y) / (y1 - y0) * (H - T - B);
+  let g = "";
+  for (const v of niceTicks(y0, y1)) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--grid)"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${money(v, false).replace(".00", "")}</text>`;
+  g += `<line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--axis)"/>`;
+  const span = x1 - x0, short = span < 2.5 * 864e5;
+  const unit = short ? 36e5 * Math.max(1, Math.ceil(span / 36e5 / 5)) : 864e5 * Math.ceil(span / 864e5 / 5);
+  for (let d = Math.ceil(x0 / unit) * unit; d <= x1; d += unit) {
+    const lab = short ? new Date(d).toLocaleTimeString("en-GB", {timeZone: "Europe/Stockholm", hour: "2-digit", minute: "2-digit"})
+                      : new Date(d).toLocaleDateString("en-GB", {day: "numeric", month: "short"});
+    if (X(d) > L + 14 && X(d) < W - R - 14) g += `<text x="${X(d)}" y="${H - 6}" text-anchor="middle">${lab}</text>`;
+  }
+  // realized profit is a step line (changes only when a trade finishes); the last segment goes to today's total incl. open bets
+  const real = p.slice(0, -1);
+  let d = ""; real.forEach((a, i) => { d += i ? `H${X(a[0]).toFixed(1)}V${Y(a[1]).toFixed(1)}` : `M${X(a[0]).toFixed(1)} ${Y(a[1]).toFixed(1)}`; });
+  const lr = real[real.length - 1], now = p[p.length - 1];
+  g += `<path d="${d}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>`;
+  g += `<path d="M${X(lr[0])} ${Y(lr[1])}L${X(now[0])} ${Y(now[1])}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-dasharray="4 3"/>`;
+  g += `<circle cx="${X(now[0])}" cy="${Y(now[1])}" r="4.5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>`;
+  g += `<line id="xh" y1="${T}" y2="${H - B}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/><circle id="xd" r="4" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
+  el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="Profit over time for ${esc(t.name)}">${g}<rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/></svg>
+    <div class="legend"><span>— profit from finished trades</span><span>- - - today incl. open bets (${money(now[1])})</span></div>`;
+  const svg = el.querySelector("svg"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
+  const move = ev => {
+    const r = svg.getBoundingClientRect(), mx = (ev.clientX - r.left) * W / r.width;
+    let best = 0; p.forEach((a, i) => { if (Math.abs(X(a[0]) - mx) < Math.abs(X(p[best][0]) - mx)) best = i; });
+    const a = p[best];
+    xh.setAttribute("x1", X(a[0])); xh.setAttribute("x2", X(a[0])); xh.setAttribute("visibility", "visible");
+    xd.setAttribute("cx", X(a[0])); xd.setAttribute("cy", Y(a[1])); xd.setAttribute("visibility", "visible");
+    const label = best === p.length - 1 ? "now, incl. open bets" : best === 0 ? "start" : "after a finished trade";
+    showTip(`<b>${money(a[1])}</b><br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
+  };
+  svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
+  svg.addEventListener("pointerleave", () => { hideTip(); xh.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); });
+}
+
+// ---------- top 10
+(function top() {
+  if (!D.top.length) { $("top").innerHTML = `<div class="card">Nobody is ahead on 3+ finished trades (with open bets counted) yet. Patience.</div>`; return; }
+  $("top").innerHTML = D.top.map((n, i) => {
+    const t = byName[n];
+    return `<div class="card top" data-n="${esc(n)}"><div class="row">
+      <div class="rank">${i + 1}</div>
+      <div class="grow"><div class="name">${esc(n)}${t.trust.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.lab ? '<span class="tag">lab</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
+        <div class="pot">${pot(t)}</div>
+        <div class="meta">today ${M(t.today)} · ${t.trust.finished} done · worst case ${M(t.trust.worst_per_100)} per $100</div></div>
+      <div>${spark(t)}</div></div></div>`;
+  }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies qualify so far.</p>` : "");
+  document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
+})();
+
+// ---------- real or luck
+let luckAll = false;
+function luck() {
+  const el = $("luck");
+  const rows = D.order.map(n => byName[n]).filter(t => t.trust.finished >= 3);
+  const ctrl = D.order.map(n => byName[n]).filter(t => t.control && t.trust.finished >= 1);
+  const shown = luckAll ? rows : rows.filter(t => !t.control).slice(0, 15).concat(ctrl);
+  if (!shown.length) { el.innerHTML = "No strategy has 3 finished trades yet."; $("luckmore").style.display = "none"; return; }
+  const vals = shown.flatMap(t => [t.trust.worst_per_100, t.trust.avg_per_100]).concat([0]);
+  const lo = Math.max(-40, Math.min(...vals)), hi = Math.max(5, ...vals);  // worse than -$40 is drawn to the left edge with an arrow
+  const W = 300, H = 18, X = v => 4 + (Math.max(lo, v) - lo) / (hi - lo) * (W - 8);
+  const cAvg = ctrl.map(t => t.trust.avg_per_100);
+  const band = cAvg.length ? [Math.min(...cAvg), Math.max(...cAvg)] : null;
+  const ticks = niceTicks(lo, hi, 4);
+  const axis = `<div class="luckrow" style="cursor:default"><div class="n sub">per $100 bet</div><div style="position:relative;height:16px;font-size:11px;color:var(--muted)">${ticks.map(v => {
+    const pc = X(v) / W * 100, tx = pc < 8 ? "0" : pc > 92 ? "-100%" : "-50%";
+    return `<span class="num" style="position:absolute;left:${pc}%;transform:translateX(${tx})">${(v < lo + 0.01 && lo <= -40 ? "≤" : "") + money(v, false).replace(".00", "")}</span>`;
+  }).join("")}</div></div>`;
+  el.innerHTML = axis + shown.map(t => {
+    const w = t.trust.worst_per_100, a = t.trust.avg_per_100, c = t.control ? "var(--s2)" : "var(--s1)";
+    return `<div class="luckrow" data-n="${esc(t.name)}" data-tip="${esc(`<b>${t.name}</b>${t.control ? " (luck)" : ""}<br>${t.trust.finished} finished, average ${money(a)} per $100<br>worst believable ${money(w)} per $100`)}">
+      <div class="n">${esc(t.name)}</div>
+      <svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none">
+        ${band ? `<rect x="${X(band[0])}" width="${Math.max(2, X(band[1]) - X(band[0]))}" y="0" height="${H}" fill="var(--band)"/>` : ""}
+        <line x1="${X(0)}" x2="${X(0)}" y1="0" y2="${H}" stroke="var(--axis)"/>
+        <line x1="${X(w)}" x2="${X(a)}" y1="${H / 2}" y2="${H / 2}" stroke="${c}" stroke-width="3" stroke-linecap="round"/>
+        ${w < lo ? `<path d="M1 ${H / 2}l7 -5v10z" fill="${c}"/>` : ""}
+        <circle cx="${X(a)}" cy="${H / 2}" r="4.5" fill="${c}" stroke="var(--surface)" stroke-width="2"/>
+      </svg></div>`;
+  }).join("");
+  $("luckmore").textContent = luckAll ? "Show fewer" : `Show all ${rows.length}`;
+  $("luckmore").style.display = rows.length > shown.length || luckAll ? "" : "none";
+  el.querySelectorAll(".luckrow[data-n]").forEach(r => {
+    r.onclick = () => openDetail(r.dataset.n);
+    r.onpointermove = ev => showTip(r.dataset.tip, ev.clientX, ev.clientY);
+    r.onpointerleave = hideTip;
+  });
+}
+$("luckmore").onclick = () => { luckAll = !luckAll; luck(); };
+luck();
+
+// ---------- main tracks
+(function main() {
+  const rows = D.tracks.filter(t => !t.lab);
+  $("main").innerHTML = `<table><thead><tr><th>Track</th><th class="r">Started</th><th class="r">Total</th><th class="r">Open</th><th class="r">W / L</th></tr></thead><tbody>` +
+    rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td><a href="#detail-h">${esc(t.name)}</a></td><td class="r num">${t.cash == null ? "no limit" : money(t.deposited, false).replace(".00", "")}</td><td class="r">${M(t.pnl)}</td><td class="r num">${t.open}</td><td class="r num">${t.wins} / ${t.losses}</td></tr>`).join("") +
+    `</tbody></table>`;
+  document.querySelectorAll("#main tr[data-n]").forEach(r => r.onclick = ev => { ev.preventDefault(); openDetail(r.dataset.n); });
+})();
+
+// ---------- detail
+const pick = $("pick");
+pick.innerHTML = `<optgroup label="Main tracks">` + D.tracks.filter(t => !t.lab).map(t => `<option>${esc(t.name)}</option>`).join("") +
+  `</optgroup><optgroup label="Lab (ranked)">` + D.order.filter(n => byName[n].lab).map(n => `<option>${esc(n)}</option>`).join("") + `</optgroup>`;
+pick.onchange = () => detail(pick.value);
+function openDetail(n) { pick.value = n; detail(n); $("detail-h").scrollIntoView({behavior: "smooth"}); }
+function detail(n) {
+  const t = byName[n]; if (!t) return;
+  const cash = t.cash == null ? `no cash limit, needed so far ${money(t.needed, false)}` : `cash left ${money(t.cash, false)} of ${money(t.deposited, false)}`;
+  const tr = t.trust;
+  let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tr.proven ? '<span class="tag proven">✓ proven</span>' : ""}${t.control ? '<span class="tag luck">luck</span>' : ""}</div>
+    <div class="pot big">${pot(t)}</div>
+    <p class="sub">${esc(t.label)}</p>
+    <div class="tiles" style="margin-top:6px">
+      <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
+      <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
+      <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
+      <div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>
+    </div>
+    <p class="sub" style="margin-top:8px">${tr.finished} finished, average ${money(tr.avg_per_100)} per $100${D.rank_size ? ` (at $${D.rank_size} a bet)` : ""}. ${cash}. ${tr.proven ? "" : `Proven needs ${D.min_proven}+ finished trades and a worst case above $0.`}</p>
+    ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
+    <div id="curve"></div></div>`;
+  if (t.late && t.late.n) h += `<div class="card"><b>Copying late</b><p class="sub">${t.late.n} copied buys cost ${M(t.late.usd, true)} more than the wallet paid (about ${cents(t.late.c_per_share)} a share).</p></div>`;
+  h += `<h2 style="font-size:16px">Open bets (${t.n_bets})</h2><div class="card">` + (t.bets.length ? t.bets.map(b =>
+    `<div class="bet"><div class="t"><a href="${esc(b.u)}" target="_blank" rel="noopener">${esc(b.t)}</a></div>
+     <div class="m">${esc(b.o)}${b.e != null ? ` · bought ${cents(b.e)}` : ""}${b.n != null ? ` · now ${cents(b.n)}` : ""} · cost ${money(b.c, false)} · ${b.locked ? "expected" : "P&L"} ${M(b.pnl)}${b.end ? ` · ends ${esc(b.end)}` : ""}</div></div>`).join("") +
+    (t.n_bets > t.bets.length ? `<p class="note">Showing the ${t.bets.length} biggest movers.</p>` : "") : "No open bets.") + `</div>`;
+  if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished trades</summary><div class="card">` + t.recent.map(c =>
+    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)} · ${cents(c.e)} → ${cents(c.x)} · ${M(c.pnl)} · ${esc(c.why)} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
+  $("detail").innerHTML = h;
+  curveChart($("curve"), t);
+}
+detail(D.top[0] || D.tracks[0].name);
+pick.value = D.top[0] || D.tracks[0].name;
+addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("curve")) curveChart($("curve"), t); });
+
+// ---------- all strategies
+(function all() {
+  const groups = [
+    ["all", "All", t => true],
+    ["main", "Main", t => !t.lab],
+    ["wallets", "Wallets", t => /^wb?_/.test(t.name)],
+    ["rules", "Lab rules", t => t.lab && !/^wb?_/.test(t.name)],
+    ["up", "Ahead", t => t.pnl > 0.004],
+    ["down", "Behind", t => t.pnl < -0.004],
+  ];
+  const cols = [
+    ["name", "Strategy", t => t.name, false],
+    ["pnl", "Total", t => t.pnl, true],
+    ["today", "Today", t => t.today, true],
+    ["wl", "W / L", t => t.wins - t.losses, true],
+    ["open", "Open", t => t.open, true],
+  ];
+  let g = "all", sortBy = "pnl", desc = true;
+  $("allfilter").innerHTML = groups.map(([k, l]) => `<button data-g="${k}">${l}</button>`).join("");
+  $("allfilter").querySelectorAll("button").forEach(b => b.onclick = () => { g = b.dataset.g; draw(); });
+  function draw() {
+    const f = groups.find(x => x[0] === g)[2];
+    const rows = D.tracks.filter(f);
+    const c = cols.find(x => x[0] === sortBy);
+    rows.sort((a, b) => { const x = c[2](a), y = c[2](b); return (typeof x === "string" ? x.localeCompare(y) : x - y) * (desc ? -1 : 1); });
+    $("allfilter").querySelectorAll("button").forEach(b => b.style.borderColor = b.dataset.g === g ? "var(--s1)" : "");
+    const sum = rows.reduce((a, t) => a + (t.pnl || 0), 0), today = rows.reduce((a, t) => a + (t.today || 0), 0);
+    const up = rows.filter(t => t.pnl > 0.004).length, down = rows.filter(t => t.pnl < -0.004).length;
+    $("allsum").innerHTML = [
+      [`<span class="${cls(sum)}">${money(sum)}</span>`, `all ${rows.length} together`],
+      [`<span class="${cls(today)}">${money(today)}</span>`, "today"],
+      [`${up} / ${down}`, "ahead / behind"],
+      [rows.reduce((a, t) => a + t.open, 0), "open bets"],
+    ].map(([v, k]) => `<div class="tile"><div class="v" style="font-size:18px">${v}</div><div class="k">${k}</div></div>`).join("");
+    $("all").innerHTML = `<table><thead><tr>${cols.map(([k, l]) => `<th class="${k === "name" ? "" : "r"}" data-k="${k}" style="cursor:pointer;white-space:nowrap">${l}${k === sortBy ? (desc ? " ▾" : " ▴") : ""}</th>`).join("")}</tr></thead><tbody>` +
+      rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td class="allname">${esc(t.name)}${t.control ? '<span class="tag luck">luck</span>' : ""}${t.trust.proven ? '<span class="tag proven">✓</span>' : ""}</td>` +
+        `<td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.wins} / ${t.losses}</td><td class="r num">${t.open}</td></tr>`).join("") +
+      `</tbody></table>`;
+    $("all").querySelectorAll("th[data-k]").forEach(th => th.onclick = () => {
+      if (sortBy === th.dataset.k) desc = !desc; else { sortBy = th.dataset.k; desc = sortBy !== "name"; }
+      draw();
+    });
+    $("all").querySelectorAll("tr[data-n]").forEach(r => r.onclick = () => openDetail(r.dataset.n));
+  }
+  draw();
+})();
+
+// ---------- late + bigger
+(function late() {
+  const rows = D.tracks.filter(t => t.late && t.late.n >= 3).sort((a, b) => b.late.n - a.late.n);
+  $("late").innerHTML = rows.length ? `<b>Copying late</b><table><thead><tr><th>Copy track</th><th class="r">Buys</th><th class="r">Extra paid</th><th class="r">Per share</th></tr></thead><tbody>` +
+    rows.slice(0, 20).map(t => `<tr data-n="${esc(t.name)}"><td>${esc(t.name)}</td><td class="r num">${t.late.n}</td><td class="r"><span class="num ${cls(-t.late.usd)}">${t.late.usd < 0 ? "saved " : ""}$${Math.abs(t.late.usd).toFixed(2)}</span></td><td class="r num">${cents(t.late.c_per_share)}</td></tr>`).join("") +
+    `</tbody></table><p class="note">The wb_ twins also bought each wallet's old positions at today's price, so a big gap there is expected.</p>${rows.length > 20 ? `<p class="note">Top 20 of ${rows.length} by number of buys.</p>` : ""}` : "<b>Copying late</b><p class='sub'>No copied buys yet.</p>";
+  const rs = D.tracks.filter(t => t.rs && t.rs.n >= 1).sort((a, b) => b.rs.n - a.rs.n);
+  const sizes = ["25", "100"];
+  $("rs").innerHTML = rs.length ? `<b>Bigger bets: profit per $100 on finished trades</b><table><thead><tr><th>Strategy</th><th class="r">Done</th><th class="r">Paper</th>${sizes.map(s => `<th class="r">$${s}</th>`).join("")}</tr></thead><tbody>` +
+    rs.slice(0, 25).map(t => `<tr><td>${esc(t.name)}</td><td class="r num">${t.rs.n}</td><td class="r">${M(t.rs.paper)}</td>${sizes.map(s => `<td class="r">${M(t.rs[s])}</td>`).join("")}</tr>`).join("") +
+    `</tbody></table><p class="note">How much of a $100 order the book could take, on average: ${rs.slice(0, 8).filter(t => t.rs.fits != null).map(t => `${esc(t.name)} $${Math.round(t.rs.fits)}`).join(", ")}.</p>` : "<b>Bigger bets</b><p class='sub'>No finished trades with real-size prices yet (started 8 Nov).</p>";
+  document.querySelectorAll("#late tr[data-n]").forEach(r => { r.style.cursor = "pointer"; r.onclick = () => openDetail(r.dataset.n); });
+})();
+</script>
+</body>
+</html>

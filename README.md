@@ -17,7 +17,7 @@
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
-| `fade_sure` | The mirror image of the dropped endgame signal: in weather, crypto-price and post-count markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
+| `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -132,7 +132,7 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 
 ## Fade the sure thing (added 2026-11-08)
 
-The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
+The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. Backtest (`backtest/fade.md`, 2026-11-08): weather 2,103 bets, the cheap side won 350 times at about 6c each, +$121 per $100 staked at +1c slippage, +$73 at +3c, about the same in the older and newer half. Crypto-price and post-count buckets came out about even, so the track is weather only. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
 
 ## Maker: get paid to quote (added 2026-11-08)
 
@@ -164,6 +164,7 @@ Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estima
 
 - `watch` workflow, every 5 min: an outside timer (cron-job.org) starts it through GitHub's API, because GitHub's own timer often skips runs for hours (its own ~10 min schedule stays as a backup). checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, endgame scan, panic and every-horse scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
 - `daily` workflow, ~06:17 Stockholm (backup 07:47): settles resolved markets, picks for the rule tracks, proposes arb pairs, writes `state/summary.md`, pushes the top 10 by trust. Runs once per day; a manual run forces a re-run.
+- `dashboard` workflow, after every watch/daily run: rebuilds the phone dashboard (`dashboard.py` + `dashboard.html`) and publishes it on GitHub Pages at https://palsk1.github.io/poly-paper-bot/. It reads `state/` and never writes it, and uses the same scoreboard code as `summary.md`. Shows the top 10, a profit curve per strategy, trust vs the luck (control) tracks, open bets, and the cost of copying late and of bigger bets. One-time setup: Settings > Pages > Source: GitHub Actions (until then it skips the deploy). Test locally with `python3 dashboard.py --offline` and open `site/index.html`.
 - `selftest` workflow (manual): checks the APIs and sends a test push. `probe` workflow (manual): prints raw API shapes, no pushes.
 
 Fills are paper fills at the real order book price (taking the ask, selling at the bid), including taker fees.
@@ -181,6 +182,19 @@ Paper trades are 5 shares (about $5), which nearly always fit at the best price.
 - **Live check now:** the `probe` workflow with `depthtest` re-prices every open position at each stake on today's books.
 
 Not modeled: our own orders moving the price for the next 5-minute check (the paper bot never moves it), and deposit/withdrawal costs.
+
+## Late fill check (added 2026-11-08)
+
+Paper fills happen at the exact moment the bot reads the book. A real order lands a little later, and a fast market may have moved by then (Jan's earlier bot looked great on paper and lost live for exactly this reason). At the end of every run, each buy from that run is priced again on a fresh book, with the same shares, at least 30 seconds later (`config.json` > `late_fill`). The result is stored on the position as `late` (`s` = seconds later, `px` = the price then, or null if the book was empty). `summary.md` shows per strategy how much more (or less) the late fill would have cost per $100. Records only: no trade or rule changes. Kalshi legs aren't re-checked.
+
+## Market data recorder (added 2026-11-08)
+
+`recorder.py` saves live market data so future backtests can replay real order books instead of guessing slippage. The idea is from a Reddit bot builder who recorded data for 3 months before testing strategies. The `recorder` workflow runs nonstop, about 5h40m per run, with the next run queued, and saves:
+
+- **every minute:** the books (top 15 levels) of every Kalshi and Polymarket market closing within 3 hours (15-minute and hourly crypto, commodities, weather; no sports), the Kalshi trade tape for them, and Binance spot prices
+- **every 5 minutes:** the Polymarket books of every open position of every track, the reviewed Kalshi arb tickers, and the Polymarket trades of the fast markets
+
+A book is saved only when it changed. One gzipped JSON-lines file per UTC hour is uploaded to a GitHub release `data-YYYYMMDD`, so the repo itself stays small. Records only, no trading. Test it with the `probe` workflow `rec_once` (one pass) or `rec_6` (6 minutes).
 
 ## Files
 

@@ -20,6 +20,11 @@
     "max_price": 0.99,
     "thin_exit_haircut": 0.5
   },
+  "late_fill": {
+    "why": "Each buy is re-priced on a fresh book this many seconds later, as if the order had landed late. Records only.",
+    "on": true,
+    "seconds": 30
+  },
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
@@ -77,7 +82,7 @@
       "rules": "endgame"
     },
     "fade_sure": {
-      "label": "Fade the sure thing: in weather, crypto-price and post-count markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
+      "label": "Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
       "start_cash": 25,
       "source": "endgame",
       "rules": "fade_sure"
@@ -1603,7 +1608,8 @@
       "min_price": 0.02,
       "max_price": 0.10,
       "min_edge": null,
-      "only_words": ["temperature", "rain", "snow", "bitcoin", "ethereum", "solana", "xrp", "btc", "eth ", "tweets", " posts "],
+      "only_words": ["temperature", "rain", "snow"],
+      "only_words_note": "Weather only: in backtest/fade.md crypto-price and post-count buckets came out about even at +1c and lost at +2c.",
       "max_open": 40,
       "picks_per_scan": 3,
       "shadow_sell_at": []

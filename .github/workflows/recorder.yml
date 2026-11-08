@@ -1,0 +1,31 @@
+name: recorder
+# Records live order books, trades and spot prices for later backtests (recorder.py).
+# Records only: no trades, no state changes. Each run loops for ~5h40m and uploads one gzipped
+# file per hour to a GitHub release "data-YYYYMMDD". The cron fires every 20 min; with the
+# concurrency group one run always waits in line, so the next one starts as soon as one ends.
+on:
+  schedule:
+    - cron: "7-59/20 * * * *"
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "how long to record (max ~345)"
+        default: "340"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recorder
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: PYTHONUNBUFFERED=1 python3 recorder.py loop "${{ inputs.minutes || '340' }}"

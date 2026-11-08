@@ -529,6 +529,7 @@ def paper_buy(track, name, token, shares, price, fee, meta):
     except Exception as e:
         print(f"real-size buy failed: {e}")
     track["peak_open_cost"] = round(max(track["peak_open_cost"], open_cost(track)), 6)
+    LATE_PENDING.append((time.time(), name, token))
     log_event({"type": "paper_buy", "track": name, "token": token, "title": meta.get("title"),
                "outcome": meta.get("outcome"), "shares": shares, "price": round(price, 4), "fee": round(fee, 4)})
     return True
@@ -559,7 +560,7 @@ def paper_close(track, name, token, price, fee, reason):
     track["closed"].append(rec)
     log_event({"type": "paper_close", "track": name, "token": token, "title": pos.get("title"),
                "outcome": pos.get("outcome"), "price": round(price, 4), "pnl": round(pnl, 4), "reason": reason})
-    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and CFG["push"].get("on_endgame") \
+    if CFG["tracks"].get(name, {}).get("source") == "endgame" and pnl < 0 and reason == "resolved" and CFG["push"].get("on_endgame") \
             and not rules_for(name).get("fade"):  # fade_sure loses most bets by design: no FLIP alert for those
         push(f"[{name}] FLIP: a 'sure thing' lost (${pnl:+.2f})",
              f"{pos.get('title')}\nBought {pos.get('outcome')} at {cents(pos['entry'])} ({pos.get('tier')}), paid out "
@@ -665,6 +666,11 @@ def manage_exits(tracks, lab=True):
                 continue
             fill, _, how = quote(tok, "sell", pos["shares"], m)
             if fill is None:
+                continue
+            if reason.startswith("take profit") and fill < target - 0.01:
+                # bug fix 2026-11-08: the listed price can say 100c while the real bid on a finished match is 80c.
+                # Taking profit means the bid is really there; otherwise keep holding (it pays out at the end).
+                tr["tp_thin_skips"] = tr.get("tp_thin_skips", 0) + 1
                 continue
             rec = paper_close(tr, name, tok, fill, taker_fee(pos["shares"], fill, fee_rate(m)), f"{reason}, {how}")
             if rec and CFG["push"].get("on_claude_trades"):
@@ -3619,6 +3625,63 @@ def real_money_md(tracks, stats):
     return out
 
 
+# ================================================================ late fill check (what if our order landed later?)
+#
+# Paper fills happen at the very moment the bot reads the book. A real order lands a bit later, and in a fast
+# market the price may have moved. At the end of each run, every buy from that run is re-priced on a fresh book
+# (same shares, at least `late_fill.seconds` after the buy) and stored on the position as "late". Records only:
+# it never changes a trade. Kalshi legs (arb) aren't re-checked.
+
+LATE_PENDING = []  # (time of buy, track name, token) for this run
+
+
+def late_fill_check(tracks):
+    cfg = CFG.get("late_fill", {})
+    if not cfg.get("on", True) or not LATE_PENDING:
+        return
+    wait = cfg.get("seconds", 30)
+    todo, LATE_PENDING[:] = list(LATE_PENDING), []
+    last = max(t for t, _, _ in todo)  # every buy gets at least `wait` seconds
+    if time.time() - last < wait:
+        time.sleep(wait - (time.time() - last))
+    seen = {}
+    for t0, name, tok in todo:
+        pos = (tracks.get(name) or {}).get("positions", {}).get(tok)
+        if not pos or "late" in pos or not str(tok).isdigit():
+            continue
+        if tok not in seen:
+            bk = book(tok)
+            seen[tok] = (time.time(), bk)
+        t1, bk = seen[tok]
+        px = walk(bk["asks"], pos["shares"]) if bk and bk["asks"] else None
+        pos["late"] = {"s": round(t1 - t0), "px": None if px is None else round(px, 6)}
+    print(f"late fill check: re-priced {len(todo)} buys ({len(seen)} books)")
+
+
+def late_md(tracks):
+    rows = []
+    for name, tr in tracks.items():
+        fills = [p for p in list(tr["positions"].values()) + tr["closed"] if isinstance(p, dict) and p.get("late")]
+        priced = [p for p in fills if p["late"].get("px") is not None]
+        if not fills:
+            continue
+        paid = sum(p["shares"] * p["entry"] for p in priced)
+        extra = sum(p["shares"] * (p["late"]["px"] - p["entry"]) for p in priced)
+        worse = sum(1 for p in priced if p["late"]["px"] > p["entry"] + 1e-9)
+        secs = sum(p["late"]["s"] for p in fills) / len(fills)
+        rows.append((-len(fills), f"| {name} | {len(fills)} | {worse} | {len(fills) - len(priced)} | "
+                     f"${extra / paid * 100 if paid > EPS else 0:+.2f} | {secs:.0f}s |"))
+    out = ["\n## Late fill check\n",
+           "Each buy is priced again on a fresh book about half a minute later, as if our order had landed late. "
+           "Extra cost per $100 bought (plus = later would have cost more; that's money the paper P&L doesn't show). "
+           "Records only, started 2026-11-08.\n"]
+    if not rows:
+        return out + ["No re-priced buys yet."]
+    out += ["| Strategy | Buys checked | Got pricier | Gone (book empty) | Extra cost per $100 | Delay |",
+            "|---|---|---|---|---|---|"]
+    return out + [r for _, r in sorted(rows)]
+
+
 # ================================================================ commands
 
 def today_utc():
@@ -3668,6 +3731,10 @@ def watch():
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
+    try:
+        late_fill_check(tracks)
+    except Exception as e:
+        print(f"late fill check failed: {e}")
     save("tracks.json", tracks)
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
@@ -3716,6 +3783,10 @@ def daily(force=None):
         save("his_book.json", {"generated": iso(), **est})
     except Exception as e:
         print(f"book estimate failed: {e}")
+    try:
+        late_fill_check(tracks)
+    except Exception as e:
+        print(f"late fill check failed: {e}")
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()
@@ -3816,6 +3887,7 @@ def write_summary(tracks):
     md += leaderboard_md(stats)
     try:
         md += real_money_md(tracks, stats)
+        md += late_md(tracks)
     except Exception as e:
         print(f"real money summary failed: {e}")
     try:
@@ -3865,11 +3937,17 @@ def write_summary(tracks):
     return stats
 
 
+def top_eligible(s):
+    """Top 10: ahead on 3+ finished trades AND still ahead once open bets are counted at today's price
+    (2026-11-08: a strategy with a nice finished-trade record but open bets sinking it shouldn't be on top)."""
+    return s["trust"]["finished"] >= 3 and s["trust"]["avg_per_100"] > 0 and s["pnl"] > 0
+
+
 def push_scoreboard(stats):
     """Daily ntfy scoreboard: only the top 10 by trust (all strategies are still tracked; summary.md ranks them all).
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
-    order = [x for x in ranked(stats) if stats[x]["trust"]["finished"] >= 3 and stats[x]["trust"]["avg_per_100"] > 0]
+    order = [x for x in ranked(stats) if top_eligible(stats[x])]
     top = order[:n]  # only strategies that are actually ahead on 3+ finished trades can make the list
     save("top.json", {"generated": iso(), "tracks": top})
     lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
