@@ -621,6 +621,22 @@
       "group": "wallet",
       "address": "0x7ea7bcd658a253bfa78618a8e127cc73b54879ac",
       "rules": "wallet_copy"
+    },
+    "wx_forecast": {
+      "label": "Weather: daily highest/lowest temperature buckets, priced with the ECMWF 51-forecast ensemble corrected to the airport's own reports, plus what was already observed today. Buys the side the model says is 10c+ too cheap after the fee. Pays out within 2 days. $500 paper",
+      "source": "weather",
+      "rules": "wx_forecast",
+      "start_cash": 500,
+      "lab": true,
+      "group": "rule"
+    },
+    "crypto_late": {
+      "label": "Crypto: last 45 minutes of the hourly Up/Down candle and the noon ladders. Buys the side the model (volatility x1.5 for fat tails) gives 97+ in 100 when it still costs 96c or less. $500 paper",
+      "source": "crypto",
+      "rules": "crypto_late",
+      "start_cash": 500,
+      "lab": true,
+      "group": "rule"
     }
   },
   "rules": {
@@ -778,13 +794,29 @@
         "up or down"
       ],
       "weak_tier_skip_words": [
-        "election", "midterm", "house seat", "senate", "governor", "congressional", "speaker of the house",
-        "majority leader", "popular vote", "attorney general", "mayor", "primary", "referendum", "ballot",
-        "parliament", "seats in"
+        "election",
+        "midterm",
+        "house seat",
+        "senate",
+        "governor",
+        "congressional",
+        "speaker of the house",
+        "majority leader",
+        "popular vote",
+        "attorney general",
+        "mayor",
+        "primary",
+        "referendum",
+        "ballot",
+        "parliament",
+        "seats in"
       ],
       "take_profit": null,
       "stop_loss": null,
-      "shadow_sell_at": [0.98, 0.99]
+      "shadow_sell_at": [
+        0.98,
+        0.99
+      ]
     },
     "every_horse": {
       "why": "Exactly one outcome of a complete list wins, so one share of every YES pays exactly $1; one share of every NO pays (n-1) dollars, or n if an unlisted outcome wins, so the NO version needs no completeness.",
@@ -1136,6 +1168,47 @@
       "take_profit": 0.985,
       "max_open": 40,
       "picks_per_scan": 3
+    },
+    "wx_forecast": {
+      "why": "Weather specialists are among Polymarket's steadiest earners, and a 51-member ensemble corrected to the station is a real forecasting edge over a thin crowd. Settles on hourly METAR reports, so what's observed so far today is fixed. One bet per city-day.",
+      "models": "ecmwf_ifs025",
+      "sigma_c": 1.1,
+      "sigma_per_day_c": 0.4,
+      "min_bias_obs": 6,
+      "max_bias_c": 4,
+      "min_price": 0.05,
+      "max_price": 0.9,
+      "min_model_edge": 0.12,
+      "max_hours_to_end": 48,
+      "min_liquidity": 2000,
+      "scan_every_minutes": 120,
+      "picks_per_scan": 6,
+      "max_open": 60,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "max_model_edge": 0.45
+    },
+    "crypto_late": {
+      "why": "Endgame with live data: near the close, a coin that is well past the strike rarely comes back. Volatility is inflated 1.5x so a sudden jump is priced in. Hourly candles give many chances a day.",
+      "kinds": [
+        "above",
+        "updown"
+      ],
+      "min_hours": 0.05,
+      "max_hours": 0.75,
+      "vol_mult": 1.5,
+      "min_model_p": 0.97,
+      "min_price": 0.6,
+      "max_price": 0.96,
+      "min_model_edge": 0.02,
+      "scan_every_minutes": 5,
+      "picks_per_scan": 3,
+      "max_open": 20,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "max_model_edge": 0.3
     }
   },
   "themes": {
