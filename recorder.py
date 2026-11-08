@@ -281,7 +281,7 @@ def run(minutes, upload_files=True):
     kf = pf = kw = pw = []
     last_refresh = last_wide_refresh = -10 ** 9
     k_since = start - 60
-    p_seen = set()
+    p_seen, k_seen = set(), set()
     n = 0
     stats = {"kbook": 0, "pbook": 0, "ktrade": 0, "ptrade": 0, "err": 0}
     pool = cf.ThreadPoolExecutor(8)
@@ -340,8 +340,14 @@ def run(minutes, upload_files=True):
         try:
             rows = kalshi_trades(k_since, set(m["tk"] for m in kf) | set(m["tk"] for m in kw))
             for r in rows:
+                tid = r.get("trade_id") or json.dumps(r, sort_keys=True)
+                if tid in k_seen:
+                    continue
+                k_seen.add(tid)
                 w.put("ktrade", t, r)
-            stats["ktrade"] += len(rows)
+                stats["ktrade"] += 1
+            if len(k_seen) > 1_000_000:
+                k_seen = set()
             k_since = t
         except Exception as e:
             err("ktrades", e)
