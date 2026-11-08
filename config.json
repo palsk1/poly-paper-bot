@@ -20,6 +20,11 @@
     "max_price": 0.99,
     "thin_exit_haircut": 0.5
   },
+  "late_fill": {
+    "why": "Each buy is re-priced on a fresh book this many seconds later, as if the order had landed late. Records only.",
+    "on": true,
+    "seconds": 30
+  },
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
