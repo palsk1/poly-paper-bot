@@ -18,12 +18,13 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
    - Do **not** change how these tracks trade (rules, budgets, thresholds) without Jan's OK: `mirror`, `favorites`, `mirror_unlimited`, `screener`, `arb`, `endgame` and `every_horse`. The `leader` settings need his OK too. Suggest changes and let him decide.
    - `claude` and `panic_fade` belong to Claude. Their rules may be tweaked from 2026-11-10 on, at most 1–2 small changes a day, each reported.
    - Approving or rejecting arb pairs in `arb_pairs.json` is allowed and must be reported.
+   - **Lab tracks** (`"lab": true` in config: the 40 `w_*` wallets, `consensus_*`, `sab_*` and the rule variants, added 2026-11-08) are **frozen until 2027-01-01**: bug fixes only, each reported. Changing their rules resets their evidence. Adding or removing lab tracks needs Jan's OK (he chose "about 60, not 100" on 2026-11-08).
 5. Commits end with the Co-Authored-By trailer the session gives you.
 
 ## How it runs
 - **GitHub Actions** (public repo, so it's free): `watch.yml` runs every 5 min, `daily.yml` once a day. Both write `state/` back to `main` and share a concurrency group, `bot-state`. The save step retries the push up to 4 times, because GitHub sometimes rejects a push with a server error.
 - **The 5-minute timer is cron-job.org**, set up by Jan under his own account. Job "poly bot watch": POST to `.../actions/workflows/watch.yml/dispatches`, body `{"ref":"main"}`. Its auth is a fine-grained GitHub token, Actions read/write on this repo only, **expiring 2027-11-03**, and it emails Jan on failure. GitHub's own cron in `watch.yml` is only a backup, since GitHub's scheduler skips many runs. One-off 500/502 failure emails are normal blips.
-- **ntfy pushes** go to Jan's phone: trades, FLIP/SHORT/MISMATCH alerts and a daily scoreboard.
+- **ntfy pushes** go to Jan's phone. Since 2026-11-08 (Jan's ask, not to be overwhelmed): the daily push is a **top 10 by trust** (see README "The lab"), and only those 10 strategies send trade pushes until the next scoreboard (`state/top.json`). FLIP/SHORT/MISMATCH alerts always go out. Every strategy is still tracked and ranked in `summary.md`.
 - **Morning review:** a scheduled task named "Poly paper review" runs at 08:14 Stockholm in the cloud (it doesn't need Jan's PC). It reads the state, health-checks runs, reviews proposed arb pairs, writes Jan a short report and may make allowed fixes. Jan often replies to that report in its own chat, so other chats change this repo too. Check `git log` for recent non-`watch:`/`daily:` commits.
 - **Claude's workspace cannot reach Polymarket, Kalshi or ntfy.** GitHub works. To see live data, start the `probe` workflow (`gh api -X POST repos/palsk1/poly-paper-bot/actions/workflows/probe.yml/dispatches -f ref=main -f inputs[what]=...`) and read its log. Its inputs are `all|kalshi|poly|endgame|events|activity|sells|exits|lab` (probe.py) and `arbtest|dryrun|discover` (bot.py); check `probe.yml`, since the list grows.
 
@@ -37,6 +38,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 | arb | $300 | Kalshi × Polymarket, **reviewed twin pairs only**. Holds to the end and flags MISMATCH. |
 | endgame | $100 | 95–99c on markets already decided or nearly decided. Tiers: resolved, proposed, past_deadline, ending_soon. Includes a sell-early shadow test (records only). |
 | every_horse | $100 | Buys the full outcome set when it costs less than the guaranteed payout |
+| lab (62 tracks) | $500 each, or no limit for copy tracks | 40 copied wallets, smart-money crowd, sabsabinxz variants, favorite bands, controls, momentum, panic and endgame variants. Listed in README "The lab". |
 
 ## Decisions and findings so far
 - **Hosting:** stay on GitHub + cron-job.org while it's paper. A small always-on server (e.g. Hetzner, about €4/month) is only worth it once a strategy proves itself and real money is in play, mainly so the trading key lives somewhere private. Racing co-located high-frequency firms isn't winnable or needed: our edges last minutes to hours. **Before any real money:** check that Jan may legally trade on each site from Sweden (Kalshi especially).
@@ -44,6 +46,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 - **Every horse:** it scans about 15,000 events every 2 hours. 3–5 sets a scan look cheap on the listed price, but **none is cheap on the real order book for 5 shares plus fees**. Only one ever passed 1c (Brazil central bank, January), and it failed the 15%-a-year bar. Conclusion so far: this trick doesn't pay for a slow bot. **Open question for Jan:** keep it as is, scan every 30 min, or repurpose the $100. He hasn't decided.
 - **Arb:** the first real paper arb was Satoshi (Kalshi NO 94c + Polymarket Yes 2.9c, edge 2.5c). The pair review rejects most proposals: different deadlines, sources, "announced" vs "happened", and Kalshi rule text missing definitions.
 - **Polymarket API:** the data-api `v1` activity endpoints return HTTP 410. Use `v2` (`/v2/positions`, `/v2/trades`, `/v2/activity`).
+- **Real money plan (2026-11-08):** trial runs until 2027-01-01, then Jan puts $300-500 into **one** strategy, depending on how sure we are. Rank by evidence (the trust score), not raw P&L. With 71 strategies, expect a few lucky fakes; the two `control_*` tracks show what luck looks like.
 - **Proof math:** after k bad outcomes in n trades, the one-sided 90% Clopper-Pearson upper bound must be below the edge per share. With 0 bad outcomes you need about 2.3 / edge trades (≈90 at 2.5c, ≈230 at 1c). `summary.md` prints a proof line per track.
 
 ## Snapshot at handover (2026-11-08, from `state/summary.md`; check the file for the latest)

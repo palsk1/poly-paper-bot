@@ -4,6 +4,13 @@
     "address": "0xd3ecb2aee0d65622da559ff356b00e8c2e626603",
     "min_open_usd": 50
   },
+  "ranking": {
+    "why": "Rank by the worst profit per $100 that is still plausible, not by raw P&L. One imaginary total loss is added to every track (the disaster we may not have seen yet), and the bar is raised for testing many tracks at once, so lucky streaks do not top the board.",
+    "family_confidence": 0.9,
+    "phantom_losses": 1,
+    "min_trades_proven": 30,
+    "lab_exit_minutes": 30
+  },
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
@@ -65,6 +72,546 @@
       "start_cash": 100,
       "source": "fullset",
       "rules": "every_horse"
+    },
+    "fav_short_90_95": {
+      "label": "Favorite side at 90-95c, ending in 2-14 days (fast payouts). $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_short_90_95"
+    },
+    "fav_short_95_98": {
+      "label": "Favorite side at 95-98c, ending in 1-7 days. Tiny profit, fast. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_short_95_98"
+    },
+    "fav_mid_80_90": {
+      "label": "Favorite side at 80-90c, ending in 7-45 days. More profit per win, more risk. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_mid_80_90"
+    },
+    "fav_bigvol_85_95": {
+      "label": "Favorite side at 85-95c, only in the busiest markets ($1M+ traded). $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_bigvol_85_95"
+    },
+    "no_only_90_97": {
+      "label": "'Nothing happens' only: the No side at 90-97c, ending in 3-30 days. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "no_only_90_97"
+    },
+    "yes_fav_85_95": {
+      "label": "'Something happens' favorites: the Yes side at 85-95c, ending in 3-30 days. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "yes_fav_85_95"
+    },
+    "fav_fee_free": {
+      "label": "Favorite side at 88-96c in fee-free markets only, ending in 3-30 days. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_fee_free"
+    },
+    "fav_cut_losses": {
+      "label": "Favorite side at 85-93c, sells at 97c or cuts at 75c. Same as fav_mid but with exits. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "fav_cut_losses"
+    },
+    "control_random": {
+      "label": "CONTROL: a coin flip picks a side in a random market (20-80c). Shows what pure luck looks like. $500 paper",
+      "start_cash": 500,
+      "source": "random",
+      "lab": true,
+      "group": "rule",
+      "rules": "control_random"
+    },
+    "control_longshot": {
+      "label": "CONTROL: buys longshots at 3-10c. Studies say this loses; if it tops the board, luck is winning. $500 paper",
+      "start_cash": 500,
+      "source": "screener",
+      "lab": true,
+      "group": "rule",
+      "rules": "control_longshot"
+    },
+    "momentum_week": {
+      "label": "Momentum: buys the side that rose 10c+ this week (now 55-85c), sells at +8c or cuts at -12c. $500 paper",
+      "start_cash": 500,
+      "source": "momentum",
+      "lab": true,
+      "group": "rule",
+      "rules": "momentum_week"
+    },
+    "fade_rally": {
+      "label": "Fade the drop: buys the side that fell 10c+ this week (now 40-80c), sells at +8c or cuts at -15c. $500 paper",
+      "start_cash": 500,
+      "source": "momentum",
+      "lab": true,
+      "group": "rule",
+      "rules": "fade_rally"
+    },
+    "panic_fade_4c": {
+      "label": "Panic fade with a smaller trigger: a 4c+ one-day scare instead of 6c. $500 paper",
+      "start_cash": 500,
+      "source": "panic",
+      "lab": true,
+      "group": "rule",
+      "rules": "panic_fade_4c"
+    },
+    "panic_fade_10c": {
+      "label": "Panic fade, big scares only: 10c+ one-day drop from 75c+. $500 paper",
+      "start_cash": 500,
+      "source": "panic",
+      "lab": true,
+      "group": "rule",
+      "rules": "panic_fade_10c"
+    },
+    "endgame_strict": {
+      "label": "Endgame, strongest signals only: result already resolved or proposed, 95-99.5c. $500 paper",
+      "start_cash": 500,
+      "source": "endgame",
+      "lab": true,
+      "group": "rule",
+      "rules": "endgame_strict"
+    },
+    "endgame_ending_soon": {
+      "label": "Endgame, 'ends within a day' signal only, 93-98c. $500 paper",
+      "start_cash": 500,
+      "source": "endgame",
+      "lab": true,
+      "group": "rule",
+      "rules": "endgame_ending_soon"
+    },
+    "endgame_97": {
+      "label": "Endgame at 97-99c only (safer, smaller profit). $500 paper",
+      "start_cash": 500,
+      "source": "endgame",
+      "lab": true,
+      "group": "rule",
+      "rules": "endgame_97"
+    },
+    "endgame_sell98": {
+      "label": "Endgame at 95-97c that sells as soon as the bid hits 98.5c instead of waiting for payout. $500 paper",
+      "start_cash": 500,
+      "source": "endgame",
+      "lab": true,
+      "group": "rule",
+      "rules": "endgame_sell98"
+    },
+    "sab_big": {
+      "label": "sabsabinxz, big bets only: copies his entries only when he puts $1,000+ in. No cash limit",
+      "start_cash": null,
+      "source": "leader",
+      "lab": true,
+      "group": "wallet",
+      "min_price": 0.02,
+      "max_price": 0.97,
+      "min_open_usd": 1000
+    },
+    "sab_hold": {
+      "label": "sabsabinxz, hold to the end: copies his entries but ignores his early exits. No cash limit",
+      "start_cash": null,
+      "source": "leader",
+      "lab": true,
+      "group": "wallet",
+      "min_price": 0.02,
+      "max_price": 0.97,
+      "hold_to_end": true
+    },
+    "consensus_2": {
+      "label": "Smart-money crowd: buys when 2+ of the 40 copied wallets hold the same side ($50+ each), sells when all of them leave. No cash limit",
+      "start_cash": null,
+      "source": "consensus",
+      "lab": true,
+      "group": "wallet",
+      "rules": "consensus_2"
+    },
+    "consensus_3": {
+      "label": "Smart-money crowd: same, but needs 3+ wallets to agree. No cash limit",
+      "start_cash": null,
+      "source": "consensus",
+      "lab": true,
+      "group": "wallet",
+      "rules": "consensus_3"
+    },
+    "w_tokor": {
+      "label": "Copy wallet Tokor: crypto (not up/down), profitable all-time. Leaderboard profit this month $557,962, all-time $785,114. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xa19cbababc312f9df185e49d7004c249ed1ade6b",
+      "rules": "wallet_copy"
+    },
+    "w_flawfence": {
+      "label": "Copy wallet flawfence: politics, profitable all-time. Leaderboard profit this month $631,549, all-time $948,022. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x23d81ba9371e576015c1e562db09c689f56b0288",
+      "rules": "wallet_copy"
+    },
+    "w_thereturnofdarthmaul": {
+      "label": "Copy wallet TheReturnOfDarthMaul: economics, profitable all-time. Leaderboard profit this month $529,705, all-time $1,522,581. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3a8aa345d5db7ec5138298c8c4f4540259be7699",
+      "rules": "wallet_copy"
+    },
+    "w_underperformingforal": {
+      "label": "Copy wallet UnderperformingForALiving: crypto + politics whale, profitable all-time. Leaderboard profit this month $603,309, all-time $514,811. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xdbf16bcffa41bd95faec2640daa2c95ab2bd86b5",
+      "rules": "wallet_copy"
+    },
+    "w_tunatyler": {
+      "label": "Copy wallet tunatyler: mentions + politics, profitable all-time. Leaderboard profit this month $176,190, all-time $37,829. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xf1f9a438f2697381b4ac8eb283d6f4dd772d1245",
+      "rules": "wallet_copy"
+    },
+    "w_dromedaryy": {
+      "label": "Copy wallet dromedaryy: finance + tech, profitable all-time. Leaderboard profit this month $484,477, all-time $173,642. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6575759174ad221bba9947bc3f18750ec769b198",
+      "rules": "wallet_copy"
+    },
+    "w_debased": {
+      "label": "Copy wallet debased: economics + tech, profitable all-time. Leaderboard profit this month $354,996, all-time $185,879. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x24c8cf69a0e0a17eee21f69d29752bfa32e823e1",
+      "rules": "wallet_copy"
+    },
+    "w_jsram": {
+      "label": "Copy wallet Jsram: sports, profitable all-time. Leaderboard profit this month $701,731, all-time $2,338,558. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x83720820a8aa6c3f20ad71850e7a1a17d16c5223",
+      "rules": "wallet_copy"
+    },
+    "w_0x448861": {
+      "label": "Copy wallet 0x448861155279dbf833d041b963e3ac854599e319: politics, profitable all-time. Leaderboard profit this month $768,861, all-time $1,411,865. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x448861155279dbf833d041b963e3ac854599e319",
+      "rules": "wallet_copy"
+    },
+    "w_cigarettes": {
+      "label": "Copy wallet cigarettes: economics, profitable all-time. Leaderboard profit this month $302,844, all-time $135,385. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xd218e474776403a330142299f7796e8ba32eb5c9",
+      "rules": "wallet_copy"
+    },
+    "w_rememberamalek": {
+      "label": "Copy wallet RememberAmalek: economics + mentions, profitable all-time. Leaderboard profit this month $145,677, all-time $178,287. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6139c42e48cf190e67a0a85d492413b499336b7a",
+      "rules": "wallet_copy"
+    },
+    "w_lava_lava": {
+      "label": "Copy wallet lava-lava: politics, profitable all-time. Leaderboard profit this month $358,209, all-time $1,316,464. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x629bc4a1e53e1d475beb7ea3d388791e96dd995a",
+      "rules": "wallet_copy"
+    },
+    "w_dropper": {
+      "label": "Copy wallet Dropper: all-rounder, profitable all-time in 5 categories. Leaderboard profit this month $203,271, all-time $457,895. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6bab41a0dc40d6dd4c1a915b8c01969479fd1292",
+      "rules": "wallet_copy"
+    },
+    "w_wan123": {
+      "label": "Copy wallet wan123: politics + sports, profitable all-time. Leaderboard profit this month $198,737, all-time $1,828,202. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xde7be6d489bce070a959e0cb813128ae659b5f4b",
+      "rules": "wallet_copy"
+    },
+    "w_anoin123": {
+      "label": "Copy wallet anoin123: economics + finance, profitable all-time. Leaderboard profit this month $196,039, all-time $283,464. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x96489abcb9f583d6835c8ef95ffc923d05a86825",
+      "rules": "wallet_copy"
+    },
+    "w_hauchn": {
+      "label": "Copy wallet Hauchn: finance, profitable all-time. Leaderboard profit this month $178,512, all-time $295,988. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xf0ca28d5b0141f0a8e7b251dea80fd881cb166ed",
+      "rules": "wallet_copy"
+    },
+    "w_betwick": {
+      "label": "Copy wallet betwick: finance + mentions, profitable all-time. Leaderboard profit this month $117,415, all-time $65,310. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc851cd9bee7d262afd78674f861f9f576a12cd2a",
+      "rules": "wallet_copy"
+    },
+    "w_aghy": {
+      "label": "Copy wallet aghy: economics, profitable all-time. Leaderboard profit this month $27,559, all-time $203,780. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc3daa1bb9ce85866fb1a7c3a5d02816798e641fe",
+      "rules": "wallet_copy"
+    },
+    "w_ecash": {
+      "label": "Copy wallet eCash: tech, profitable all-time. Leaderboard profit this month $13,820, all-time $43,633. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x62cf46cd4c3af254dccfc37a7f93de265b4b5826",
+      "rules": "wallet_copy"
+    },
+    "w_pako": {
+      "label": "Copy wallet pako: economics, profitable all-time. Leaderboard profit this month $47,219, all-time $600,877. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x71edffd0d70a1da823ff07a3c6fc81457294d338",
+      "rules": "wallet_copy"
+    },
+    "w_bertapotamous": {
+      "label": "Copy wallet Bertapotamous: economics + mentions, profitable all-time. Leaderboard profit this month $19,271, all-time $196,092. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x134a63b764ac7b008356e8db1857db94e6b09e42",
+      "rules": "wallet_copy"
+    },
+    "w_hell0pia": {
+      "label": "Copy wallet hell0pia: finance + tech, profitable all-time. Leaderboard profit this month $7,956, all-time $86,000. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xbf93328f8b69273453228a82c913207731822fd7",
+      "rules": "wallet_copy"
+    },
+    "w_eightpenguins": {
+      "label": "Copy wallet eightpenguins: mentions + tech, profitable all-time. Leaderboard profit this month $5,194, all-time $45,363. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3c593aeb73ebdadbc9ce76d4264a6a2af4011766",
+      "rules": "wallet_copy"
+    },
+    "w_new_jeans": {
+      "label": "Copy wallet New.Jeans: economics + culture, profitable all-time. Leaderboard profit this month $13,673, all-time $160,117. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xe2b1fc269d0c2e27da11fadd1d9596fe28227d2a",
+      "rules": "wallet_copy"
+    },
+    "w_vilgefortz": {
+      "label": "Copy wallet Vilgefortz: economics, profitable all-time. Leaderboard profit this month $20,602, all-time $326,036. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3c918a8ef8c379304f744592120cbb4d76149af7",
+      "rules": "wallet_copy"
+    },
+    "w_albert_1953": {
+      "label": "Copy wallet Albert 1953: finance, profitable all-time. Leaderboard profit this month $6,963, all-time $190,620. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x777fae71d2ff9ec48a1213d48ba1d9d91024a1bb",
+      "rules": "wallet_copy"
+    },
+    "w_youngalphagoat": {
+      "label": "Copy wallet YoungAlphaGoat: economics + finance, profitable all-time. Leaderboard profit this month $11,504, all-time $73,489. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x9e88f359b9803e41420fbb13385c5ae1765c301c",
+      "rules": "wallet_copy"
+    },
+    "w_the_joker": {
+      "label": "Copy wallet The-Joker: tech + economics, profitable all-time. Leaderboard profit this month $12,773, all-time $45,031. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x9aeb534c42b58b21673d5e03e9da14fbd15b2729",
+      "rules": "wallet_copy"
+    },
+    "w_balerinacapuchina": {
+      "label": "Copy wallet balerinacapuchina: weather specialist (pays out daily). Leaderboard profit this month $6,904. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xd86d87914387111b47355e87aca7c032dbe5648d",
+      "rules": "wallet_copy"
+    },
+    "w_sbel": {
+      "label": "Copy wallet sbel: weather specialist (pays out daily). Leaderboard profit this month $8,683. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xb22682e5efaaa5ae3f48c3b727cf78ae57c04163",
+      "rules": "wallet_copy"
+    },
+    "w_hellyeahtrader": {
+      "label": "Copy wallet HellYeahTrader: weather specialist (pays out daily). Leaderboard profit this month $21,376. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x1076773fc4639a7ad88bcfa5dbfee1dd3aa7c0aa",
+      "rules": "wallet_copy"
+    },
+    "w_dominus": {
+      "label": "Copy wallet -Dominus-: mentions specialist (pays out in days). Leaderboard profit this month $10,745. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x5415c298dde8c84f4ba726d36b411df6e9a72a6e",
+      "rules": "wallet_copy"
+    },
+    "w_blondbeast": {
+      "label": "Copy wallet BlondBeast: mentions specialist (pays out in days). Leaderboard profit this month $10,028. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x852a61deac7872fff2c6a80ee82c059d6a8d3188",
+      "rules": "wallet_copy"
+    },
+    "w_groth": {
+      "label": "Copy wallet groth: finance specialist, best profit per dollar traded. Leaderboard profit this month $21,800. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x71abe97b83eaba3f06cb04fd4d9a03ee37d2f015",
+      "rules": "wallet_copy"
+    },
+    "w_jjo": {
+      "label": "Copy wallet JJo: finance specialist. Leaderboard profit this month $65,317. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc4086b708cd3a50880b7069add1a1a80000f4675",
+      "rules": "wallet_copy"
+    },
+    "w_rabbitfoot1": {
+      "label": "Copy wallet rabbitfoot1: sports specialist (pays out in hours). Leaderboard profit this month $162,393. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x10a6fadcbacd66330862206f6199b197e3ad4d8b",
+      "rules": "wallet_copy"
+    },
+    "w_bigggggggg": {
+      "label": "Copy wallet Bigggggggg: election-month hot hand: does it last?. Leaderboard profit this month $1,866,419. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x511f9c771449162349795d17becf8b37031acbe1",
+      "rules": "wallet_copy"
+    },
+    "w_lpgb": {
+      "label": "Copy wallet lpgb: election-month hot hand: does it last?. Leaderboard profit this month $979,268. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x1f5f9fa318fbda8350ac143b4df657287df850fa",
+      "rules": "wallet_copy"
+    },
+    "w_railcool": {
+      "label": "Copy wallet Railcool: election-month hot hand: does it last?. Leaderboard profit this month $447,239. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x94c4fe3b18435aa92024c7c1589537fcda3f43ca",
+      "rules": "wallet_copy"
+    },
+    "w_monopoly_money": {
+      "label": "Copy wallet Monopoly_Money: election-month hot hand: does it last?. Leaderboard profit this month $130,537. 5 shares per copy, no cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x7ea7bcd658a253bfa78618a8e127cc73b54879ac",
+      "rules": "wallet_copy"
     }
   },
   "rules": {
@@ -255,6 +802,331 @@
         "no change",
         "tie"
       ]
+    },
+    "wallet_copy": {
+      "why": "Copy a wallet's new positions 5 shares each, sell when it sells. Skips crumbs (< $20 positions), late copies (our price more than 5c above its average) and caps at 10 new copies a day per wallet so one hyperactive wallet can't flood the file.",
+      "min_open_usd": 20,
+      "min_price": 0.03,
+      "max_price": 0.97,
+      "max_chase": 0.05,
+      "max_new_per_day": 10,
+      "max_open": 80,
+      "max_pages": 4
+    },
+    "consensus_2": {
+      "min_wallets": 2,
+      "min_usd_each": 50,
+      "min_price": 0.05,
+      "max_price": 0.95,
+      "picks_per_run": 5,
+      "max_open": 60
+    },
+    "consensus_3": {
+      "min_wallets": 3,
+      "min_usd_each": 50,
+      "min_price": 0.05,
+      "max_price": 0.95,
+      "picks_per_run": 5,
+      "max_open": 60
+    },
+    "fav_short_90_95": {
+      "side": "favorite",
+      "min_price": 0.9,
+      "max_price": 0.95,
+      "min_days": 2,
+      "max_days": 14,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 40,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "fav_short_95_98": {
+      "side": "favorite",
+      "min_price": 0.95,
+      "max_price": 0.98,
+      "min_days": 1,
+      "max_days": 7,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 40,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null,
+      "min_edge": 0.01
+    },
+    "fav_mid_80_90": {
+      "side": "favorite",
+      "min_price": 0.8,
+      "max_price": 0.9,
+      "min_days": 7,
+      "max_days": 45,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "fav_bigvol_85_95": {
+      "side": "favorite",
+      "min_price": 0.85,
+      "max_price": 0.95,
+      "min_days": 7,
+      "max_days": 60,
+      "min_liquidity": 50000,
+      "min_volume": 1000000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "no_only_90_97": {
+      "side": "no",
+      "min_price": 0.9,
+      "max_price": 0.97,
+      "min_days": 3,
+      "max_days": 30,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 40,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "yes_fav_85_95": {
+      "side": "yes",
+      "min_price": 0.85,
+      "max_price": 0.95,
+      "min_days": 3,
+      "max_days": 30,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "fav_fee_free": {
+      "side": "favorite",
+      "min_price": 0.88,
+      "max_price": 0.96,
+      "min_days": 3,
+      "max_days": 30,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 40,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null,
+      "fee_free_only": true
+    },
+    "fav_cut_losses": {
+      "side": "favorite",
+      "min_price": 0.85,
+      "max_price": 0.93,
+      "min_days": 7,
+      "max_days": 60,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": 0.97,
+      "stop_loss": 0.75
+    },
+    "control_longshot": {
+      "side": "underdog",
+      "min_price": 0.03,
+      "max_price": 0.1,
+      "min_days": 3,
+      "max_days": 30,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 3,
+      "max_open": 40,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "control_random": {
+      "side": "random",
+      "min_price": 0.2,
+      "max_price": 0.8,
+      "min_days": 3,
+      "max_days": 30,
+      "min_liquidity": 5000,
+      "min_volume": 50000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down"
+      ],
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "momentum_week": {
+      "side": "favorite",
+      "min_price": 0.55,
+      "max_price": 0.85,
+      "min_days": 7,
+      "max_days": 60,
+      "min_liquidity": 10000,
+      "min_volume": 100000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down",
+        "bitcoin",
+        "ethereum",
+        "solana",
+        "btc",
+        "eth ",
+        "xrp",
+        "dogecoin",
+        "price of",
+        "dip to",
+        "reach $",
+        "above $",
+        "below $"
+      ],
+      "take_profit": null,
+      "stop_loss": null,
+      "direction": "up",
+      "min_move": 0.1,
+      "tp_rel": 0.08,
+      "sl_rel": 0.12
+    },
+    "fade_rally": {
+      "side": "favorite",
+      "min_price": 0.4,
+      "max_price": 0.8,
+      "min_days": 7,
+      "max_days": 60,
+      "min_liquidity": 10000,
+      "min_volume": 100000,
+      "picks_per_day": 2,
+      "max_open": 30,
+      "max_per_theme": 99,
+      "prefer_fee_free": false,
+      "skip_words": [
+        "up or down",
+        "bitcoin",
+        "ethereum",
+        "solana",
+        "btc",
+        "eth ",
+        "xrp",
+        "dogecoin",
+        "price of",
+        "dip to",
+        "reach $",
+        "above $",
+        "below $"
+      ],
+      "take_profit": null,
+      "stop_loss": null,
+      "direction": "down",
+      "min_move": 0.1,
+      "tp_rel": 0.08,
+      "sl_rel": 0.15
+    },
+    "panic_fade_4c": {
+      "inherit": "panic_fade",
+      "min_drop": 0.04,
+      "max_open": 20
+    },
+    "panic_fade_10c": {
+      "inherit": "panic_fade",
+      "min_drop": 0.1,
+      "min_pre_price": 0.75,
+      "min_price": 0.45,
+      "max_open": 20
+    },
+    "endgame_strict": {
+      "inherit": "endgame",
+      "tiers": [
+        "resolved",
+        "proposed"
+      ],
+      "max_price": 0.995,
+      "min_edge": 0.004,
+      "max_open": 40,
+      "picks_per_scan": 3
+    },
+    "endgame_ending_soon": {
+      "inherit": "endgame",
+      "tiers": [
+        "ending_soon"
+      ],
+      "min_price": 0.93,
+      "max_price": 0.98,
+      "max_open": 40,
+      "picks_per_scan": 3
+    },
+    "endgame_97": {
+      "inherit": "endgame",
+      "min_price": 0.97,
+      "max_price": 0.99,
+      "min_edge": 0.005,
+      "max_open": 40,
+      "picks_per_scan": 3
+    },
+    "endgame_sell98": {
+      "inherit": "endgame",
+      "min_price": 0.95,
+      "max_price": 0.97,
+      "take_profit": 0.985,
+      "max_open": 40,
+      "picks_per_scan": 3
     }
   },
   "themes": {
@@ -334,6 +1206,8 @@
     "on_claude_trades": true,
     "on_arb": true,
     "on_endgame": true,
-    "on_fullset": true
+    "on_fullset": true,
+    "top_only": true,
+    "top_n": 10
   }
 }

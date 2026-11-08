@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what:
-        description: "all | kalshi | poly | endgame | events (or 'arbtest' / 'dryrun' for bot dry runs)"
+        description: "all | kalshi | poly | endgame | events (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' for bot dry runs)"
         default: all
 
 jobs:
@@ -12,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
+      - uses: actions/checkout@v4   # the branch it was started on (main by default), so a PR branch can be tried live
       - name: Probe APIs
         run: |
-          if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
+          if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ] || [ "${{ inputs.what }}" = "copytest" ]; then python3 bot.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
