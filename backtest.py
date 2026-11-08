@@ -955,7 +955,102 @@ def diag():
             print(f"  path (our side): {pts[:40]}")
 
 
+def fade():
+    """Mirror test (2026-11-08): the endgame 'ends within a day' favorites lost money (they flipped more often than
+    their price said), so what if we buy the CHEAP side of those same markets instead? Replays the ending_soon picks
+    with a wide favorite band, then prices the other side at (1 - favorite price) + slippage + fee. Writes
+    backtest/fade.md. A history price is not a real ask: the live `fade_sure` track checks the real books."""
+    markets = rjson(os.path.join(CACHE, "markets.json.gz"), {})["markets"]
+    hist = rjson(os.path.join(CACHE, "hist.json.gz"), {})
+    Clock.real_now = Clock.real_now or bot.now()
+    feed = Feed(hist)
+    name = "endgame_ending_soon"
+    saved = json.loads(json.dumps(bot.CFG["rules"]))
+    bot.CFG["rules"][name].update({"min_price": 0.85, "max_price": 0.99, "picks_per_scan": 100000, "min_edge": None})
+    bot.CFG["rules"]["endgame"]["min_liquidity"] = 0
+    try:
+        trs = replay_rules(markets, feed, 0.0, True, [name])
+    finally:
+        bot.CFG["rules"] = saved
+    by_tok = {tok: (m, i) for m in markets.values() for i, tok in enumerate(m["toks"])}
+    rows = []
+    for c in trs[name]["closed"]:
+        if c.get("reason") != "resolved":
+            continue
+        m, i = by_tok[c["token"]]
+        p = c["entry"]
+        t0 = ts(bot.parse_iso(c["opened"]))
+        rows.append({"fav": p, "cheap": round(1 - p, 4), "pay": round(1 - c["exit"], 4), "fee": m["fee"],
+                     "topic": topic(m["q"]), "h": (m["end"] - t0) / 3600, "t": t0, "q": m["q"]})
+    rows.sort(key=lambda r: r["t"])
+    mid_t = rows[len(rows) // 2]["t"] if rows else 0
+
+    def agg(rs, slip):
+        n = len(rs)
+        won = sum(1 for r in rs if r["pay"] >= 0.5)
+        cost = pnl = 0.0
+        for r in rs:
+            q = min(0.99, r["cheap"] + slip)
+            f = bot.taker_fee(1, q, r["fee"])
+            cost += q + f
+            pnl += r["pay"] - q - f
+        return n, won, pnl, (100 * pnl / cost if cost else 0.0)
+
+    def line(label, rs):
+        if not rs:
+            return f"| {label} | 0 | | | | | |"
+        n, won, _, _ = agg(rs, 0.0)
+        avg = sum(r["cheap"] for r in rs) / n
+        cells = []
+        for s in (0.01, 0.02, 0.03):
+            _, _, pnl, per = agg(rs, s)
+            cells.append(f"{money(pnl * 5)} ({money(per)})")
+        return f"| {label} | {n} | {won} | {avg * 100:.1f}c | " + " | ".join(cells) + " |"
+
+    head = ["| Slice | Bets | Cheap side won | Avg cheap price | Profit at +1c (per $100) | at +2c | at +3c |",
+            "|---|---|---|---|---|---|---|"]
+    L = [f"# Fade test: buy the cheap side of 'sure' markets that end within a day", "",
+         f"Generated {bot.iso(Clock.real_now)}. Same picks as `endgame_ending_soon` with the favorite at 85-99c, but we "
+         "buy the OTHER side, 5 shares each, held to the result. Price = 1 - favorite's history price + slippage + "
+         "taker fee. Profit is for 5 shares a bet; '(per $100)' is per $100 staked. Paper only.", "",
+         "**Big caveat:** history has no order book. On thin bucket markets the real ask on the cheap side can be "
+         "several cents above (1 - favorite price). That is why the slippage columns go to 3c, and why the live "
+         "`fade_sure` track fills on the real book.", "", "## All", ""] + head + [line("all", rows)]
+    L += ["", "## By topic", ""] + head
+    for tp in sorted({r["topic"] for r in rows}):
+        L.append(line(tp, [r for r in rows if r["topic"] == tp]))
+    L += ["", "## By cheap-side price", ""] + head
+    for lo, hi in ((0.0, 0.02), (0.02, 0.04), (0.04, 0.06), (0.06, 0.08), (0.08, 0.10), (0.10, 0.16)):
+        L.append(line(f"{lo * 100:.0f}-{hi * 100:.0f}c", [r for r in rows if lo <= r["cheap"] < hi]))
+    L += ["", "## By hours left", ""] + head
+    for lo, hi in ((0, 6), (6, 12), (12, 18), (18, 25)):
+        L.append(line(f"{lo}-{hi}h", [r for r in rows if lo <= r["h"] < hi]))
+    L += ["", "## Older half vs newer half (does it last?)", ""] + head
+    L.append(line("older", [r for r in rows if r["t"] < mid_t]))
+    L.append(line("newer", [r for r in rows if r["t"] >= mid_t]))
+    for tp in ("weather", "crypto price", "post counts"):
+        sub = [r for r in rows if r["topic"] == tp]
+        L.append(line(f"{tp} older", [r for r in sub if r["t"] < mid_t]))
+        L.append(line(f"{tp} newer", [r for r in sub if r["t"] >= mid_t]))
+    L += ["", "## Candidate live rule: weather + crypto price + post counts, cheap side 2-10c", ""] + head
+    rule = [r for r in rows if r["topic"] in ("weather", "crypto price", "post counts") and 0.02 <= r["cheap"] <= 0.10]
+    L.append(line("rule", rule))
+    for tp in ("weather", "crypto price", "post counts"):
+        L.append(line(f"rule, {tp}", [r for r in rule if r["topic"] == tp]))
+    rng = random.Random(3)
+    wins = [r for r in rule if r["pay"] >= 0.5]
+    L += ["", "## Sample of cheap-side wins (sanity check)", ""]
+    L += [f"- {r['q'][:100]} | cheap {r['cheap'] * 100:.1f}c | {r['h']:.0f}h left | {iso_t(r['t'])}"
+          for r in rng.sample(wins, min(15, len(wins)))]
+    os.makedirs(OUT, exist_ok=True)
+    txt = "\n".join(L) + "\n"
+    with open(os.path.join(OUT, "fade.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
     {"fetch": fetch, "run": run, "all": lambda: (fetch(), run()), "selftest": selftest,
-     "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag}[cmd]()
+     "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag,
+     "btfade": lambda: (fetch(), fade()), "fade": fade}[cmd]()
