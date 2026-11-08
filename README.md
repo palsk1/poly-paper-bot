@@ -106,6 +106,20 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 
 Fills are paper fills at the real order book price (taking the ask, selling at the bid), including taker fees.
 
+## Real money check (added 2026-11-08)
+
+Paper trades are 5 shares (about $5), which nearly always fit at the best price. The $300-500 in January means $10-$100 a trade, which eats deeper into the order book. So every paper fill is **also priced at $10, $25, $50 and $100** on the same live book (`config.json` > `real_size`). It is records only: it never changes what a track buys or sells, so the frozen lab rules and their evidence are untouched.
+
+- **Buying:** a limit order that never pays more than the best ask + 2c (and never 99c+). In a thin book only part of the stake fills; that is recorded, not hidden.
+- **Fees:** the same taker fee as the paper fill, on the bigger amount (Kalshi's rounds up per order).
+- **Selling early:** walks the real bids; shares the bids can't take are valued at half the worst bid.
+- **Payout:** a resolved market pays the same per share at any size.
+- **Arb and every horse:** the same number of shares on every leg, as many as the stake allows while the edge stays above `min_edge` after both books and both fees.
+- **Ranking:** the trust ranking (and so the top 10 on the phone) uses the $25 numbers (`rank_size_usd`). Trades from before this change have no book data and count with their paper numbers. `summary.md` shows paper vs each stake, and how much of a $100 order the book held on average.
+- **Live check now:** the `probe` workflow with `depthtest` re-prices every open position at each stake on today's books.
+
+Not modeled: our own orders moving the price for the next 5-minute check (the paper bot never moves it), and deposit/withdrawal costs.
+
 ## Files
 
 - `state/summary.md`: human-readable daily report (start here)
