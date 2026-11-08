@@ -184,7 +184,7 @@ def load_tracks():
         if tc["source"] == "arb":
             for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
                 tracks[name].setdefault(k, v)
-        if tc["source"] == "fullset":
+        if tc["source"] in ("fullset", "ladder"):
             for k, v in (("sets", {}), ("opportunities", 0), ("incomplete", 0), ("seen", {})):
                 tracks[name].setdefault(k, v)
     return tracks
@@ -630,7 +630,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -2205,9 +2205,20 @@ def fullset_check(tracks):
 
 
 def fullset_settle(tracks):
-    name, r = fullset_rules()
-    if not name:
-        return
+    name, _ = fullset_rules()
+    if name:
+        sets_settle(tracks, name, "every_horse", "incomplete list?")
+
+
+def ladder_settle(tracks):
+    name, _ = ladder_rules()
+    if name:
+        sets_settle(tracks, name, "ladder", "the two markets resolved in a way that should be impossible")
+
+
+def sets_settle(tracks, name, tag, why):
+    """Pays out finished multi-leg sets (every_horse full sets, ladder pairs). A set that pays less than its
+    guaranteed amount is flagged loudly: that is the disaster these strategies bet against."""
     tr = tracks[name]
     for sid in list(tr["sets"]):
         s = tr["sets"][sid]
@@ -2226,10 +2237,10 @@ def fullset_settle(tracks):
         tr["closed"].append(rec)
         del tr["sets"][sid]
         log_event({"type": "set_close", "track": name, "title": s["title"], "pnl": round(pnl, 4),
-                   "reason": "PAID LESS THAN GUARANTEED (incomplete list?)" if bad else "paid as expected"})
+                   "reason": f"PAID LESS THAN GUARANTEED ({why})" if bad else "paid as expected"})
         if bad:
             tr["incomplete"] += 1
-            push("[every_horse] set paid less than guaranteed",
+            push(f"[{tag}] SHORT: paid less than guaranteed",
                  f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
                  tags="rotating_light")
 
@@ -2238,6 +2249,13 @@ def fullset_proof(tr):
     closed = tr["closed"]
     edges = [c["edge"] for c in closed] + [s["edge"] for s in tr["sets"].values()]
     e = sum(edges) / len(edges) if edges else fullset_rules()[1]["min_edge"]
+    return proof(len(closed), sum(1 for c in closed if c.get("incomplete")), e, tr["realized"], "sets", "short payouts")
+
+
+def sets_proof(tr, r):
+    closed = tr["closed"]
+    edges = [c["edge"] for c in closed] + [s["edge"] for s in tr["sets"].values()]
+    e = sum(edges) / len(edges) if edges else r["min_edge"]
     return proof(len(closed), sum(1 for c in closed if c.get("incomplete")), e, tr["realized"], "sets", "short payouts")
 
 
@@ -2305,6 +2323,328 @@ def arb_summary(name, tr):
         lines.append("\nLast check of approved pairs (best net edge per share after fees):")
         for pid, c in watching[:15]:
             lines.append(f"- {pid}: {c['edge'] * 100:+.1f}c ({c['ts'][:16]} UTC)")
+    return row, stats, lines
+
+
+# ================================================================ ladder: two markets of one Polymarket event that can't disagree
+#
+# Some events list the same question with different strikes or deadlines ("BTC above 110k / 120k on Dec 31",
+# "ceasefire by Dec 31 / by Mar 31"). If the stricter one (A) says YES, the looser one (B) must say YES too.
+# So NO on A + YES on B pays at least $1 whatever happens, and $2 if only B comes true. When the two together
+# cost less than $1 after fees, that is a locked-in profit inside one site: same rules, same resolver, no
+# cross-site mismatch. The daily job finds the families (state/ladder_pairs.json); the watch job prices them.
+
+_LMON = "january|february|march|april|may|june|july|august|september|october|november|december|" \
+        "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec"
+_LDATE = re.compile(rf"\b({_LMON})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s+(\d{{4}}))?\b"
+                    rf"|\b(\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?({_LMON})\b(?:,?\s+(\d{{4}}))?"
+                    rf"|\b({_LMON})\s+(\d{{4}})\b|\bq[1-4]\s+\d{{4}}\b|\b(?:end of|in)\s+\d{{4}}\b|\b\d{{4}}-\d{{2}}-\d{{2}}\b")
+_LNUM = re.compile(r"[$€£]?\d[\d,]*(?:\.\d+)?\s*(?:k|m|b|bn|million|billion|trillion|%|bps|c)?\b", re.I)
+_LUP = re.compile(r"\b(above|over|more than|at least|exceed|exceeds|or more|or higher|greater than|surpass)\b|\+")
+_LDOWN = re.compile(r"\b(below|under|less than|at most|or lower|or less|fewer than)\b")
+_LTOUCH = re.compile(r"\b(hit|hits|reach|reaches|dip|dips|fall to|falls to|drop to|drops to)\b")
+_LMONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+
+
+def ladder_rules():
+    for n, tc in CFG["tracks"].items():
+        if tc["source"] == "ladder":
+            return n, rules_for(n)
+    return None, None
+
+
+def _lnum(s):
+    s = s.lower().replace(",", "").strip()
+    m = re.match(r"[$€£]?(\d+(?:\.\d+)?)\s*(.*)$", s)
+    if not m:
+        return None
+    mult = {"k": 1e3, "m": 1e6, "million": 1e6, "b": 1e9, "bn": 1e9, "billion": 1e9, "trillion": 1e12}
+    return float(m.group(1)) * mult.get(m.group(2).strip(), 1)
+
+
+def ladder_template(text):
+    """(text with dates -> <d> and numbers -> <n>, [date strings], [numbers]). Years alone stay text."""
+    t = str(text or "").lower()
+    dates = [m.group(0) for m in _LDATE.finditer(t)]
+    t = _LDATE.sub(" <d> ", t)
+    nums = []
+
+    def rep(m):
+        v = _lnum(m.group(0))
+        if v is None or (1990 <= v <= 2100 and "." not in m.group(0) and "$" not in m.group(0)):
+            return m.group(0)
+        nums.append(v)
+        return " <n> "
+    t = _LNUM.sub(rep, t)
+    return re.sub(r"\s+", " ", t).strip(), dates, nums
+
+
+def _ldate_value(s, default_year):
+    """'march 31, 2027' / '31 march' -> date, or None."""
+    m = re.match(rf"({_LMON})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s+(\d{{4}}))?", s)
+    if m:
+        mon, day, yr = m.group(1), m.group(2), m.group(3)
+    else:
+        m = re.match(rf"(\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?({_LMON})(?:,?\s+(\d{{4}}))?", s)
+        if not m:
+            return None
+        day, mon, yr = m.group(1), m.group(2), m.group(3)
+    try:
+        return dt.date(int(yr) if yr else default_year, _LMONTHS.index(mon[:3]) + 1, int(day))
+    except ValueError:
+        return None
+
+
+def _only_differ_by(xs, ys, pair):
+    """Lists are equal except at positions where (x, y) == pair (the strike or deadline itself)."""
+    return len(xs) == len(ys) and all(x == y or (x, y) == pair for x, y in zip(xs, ys))
+
+
+def ladder_pairs(markets, r):
+    """[(A, B, kind)] where A's YES implies B's YES, from markets of one event. Conservative on purpose:
+    a family is dropped unless its direction is clear from the words and its prices agree with it."""
+    by_ev, stats = defaultdict(list), Counter()
+    for m in markets:
+        evs = m.get("events") or []
+        ev = evs[0] if evs and isinstance(evs[0], dict) else {}
+        if ev.get("negRisk") or ev.get("enableNegRisk") or m.get("negRisk"):
+            continue  # one-winner lists are every_horse's job, never ladders
+        if m.get("closed") or m.get("acceptingOrders") is False or not yes_no_tokens(m):
+            continue
+        if fnum(m.get("bestBid"), None) is None or fnum(m.get("bestAsk"), None) is None:
+            continue
+        k = str(ev.get("id") or ev.get("slug") or "")
+        if k:
+            by_ev[k].append(m)
+    out = []
+    for group in by_ev.values():
+        if len(group) < 2:
+            continue
+        fams = defaultdict(list)
+        for m in group:
+            tq, dq, nq = ladder_template(m.get("question"))
+            td, dd, nd = ladder_template(m.get("description"))
+            fams[(tq, td)].append({"m": m, "dq": dq, "nq": nq, "dd": dd, "nd": nd,
+                                   "end": parse_iso(m.get("endDateIso") or m.get("endDate"))})
+        for (tq, td), fam in fams.items():
+            if len(fam) < 2 or any(x["end"] is None for x in fam):
+                continue
+            words = tq.replace("<n>", " ").replace("<d>", " ")
+            pairs, kind = [], None
+            if all(len(x["nq"]) == 1 for x in fam) and len({x["nq"][0] for x in fam}) == len(fam) \
+                    and len({tuple(x["dq"]) for x in fam}) == 1 and len({x["end"].date() for x in fam}) == 1:
+                # strike ladder: only the strike differs (same dates, same deadline)
+                if "between" in words or re.search(r"<n> ?(-|to) ?<n>|\bexactly\b|\btop\b", tq):
+                    stats["skip range/rank"] += 1
+                    continue
+                if _LTOUCH.search(words):  # "hit X" can mean up or down: only the outcome arrows say which
+                    labels = " ".join(str(x["m"].get("groupItemTitle") or "") for x in fam)
+                    up, down = "↑" in labels or "(high)" in tq, "↓" in labels or "(low)" in tq
+                else:
+                    up, down = bool(_LUP.search(words)), bool(_LDOWN.search(words))
+                if up == down:
+                    stats["skip direction unclear"] += 1
+                    continue
+                kind = "strike"
+                fam.sort(key=lambda x: x["nq"][0])
+                for i, lo in enumerate(fam):
+                    for hi in fam[i + 1:]:
+                        a, b = (hi, lo) if up else (lo, hi)
+                        pair = (a["nq"][0], b["nq"][0])
+                        if _only_differ_by(a["nd"], b["nd"], pair) and a["dd"] == b["dd"]:
+                            pairs.append((a, b))
+                        else:
+                            stats["skip rules text differs"] += 1
+            elif len({tuple(x["nq"]) for x in fam}) == 1 and all(len(x["dq"]) == 1 for x in fam) \
+                    and re.search(r"\b(by|before|until|prior to|no later than) <d>", tq):
+                # deadline ladder: "X by <date>", only the date differs
+                kind = "deadline"
+                for x in fam:
+                    x["dl"] = _ldate_value(x["dq"][0], x["end"].year)
+                if any(x["dl"] is None for x in fam) or len({x["dl"] for x in fam}) != len(fam):
+                    stats["skip dates unreadable"] += 1
+                    continue
+                fam.sort(key=lambda x: x["dl"])
+                for i, a in enumerate(fam):
+                    for b in fam[i + 1:]:
+                        if a["end"] > b["end"]:
+                            stats["skip end dates disagree"] += 1  # question and market end disagree: don't guess
+                            continue
+                        if _only_differ_by(a["dd"], b["dd"], (a["dq"][0], b["dq"][0])) and a["nd"] == b["nd"]:
+                            pairs.append((a, b))
+                        else:
+                            stats["skip rules text differs"] += 1
+            else:
+                continue
+            # Sanity check against the crowd: the stricter market should never trade far ABOVE the looser one.
+            # A real mispricing is a few cents; a big gap means we read the family wrong.
+            mid = lambda x: (fnum(x["m"]["bestBid"]) + fnum(x["m"]["bestAsk"])) / 2
+            if any(mid(a) > mid(b) + r["max_price_disagree"] for a, b in pairs):
+                stats[f"skip {kind} family, prices disagree"] += 1
+                continue
+            stats[f"{kind} families"] += 1
+            out += [(a["m"], b["m"], kind) for a, b in pairs]
+    return out, stats
+
+
+def ladder_discover():
+    """Daily: find the ladder families and save their pairs for the watch job."""
+    name, r = ladder_rules()
+    if not name:
+        return
+    ms = scan_markets({"end_date_min": iso(now() + dt.timedelta(days=r["min_days"])),
+                       "end_date_max": iso(now() + dt.timedelta(days=r["max_days"])),
+                       "liquidity_num_min": r["min_liquidity"]})
+    pairs, stats = ladder_pairs(ms, r)
+    rows = []
+    for a, b, kind in pairs:
+        evs = a.get("events") or [{}]
+        rows.append({"id": f"{a.get('slug')}>{b.get('slug')}", "kind": kind,
+                     "event": str((evs[0] if isinstance(evs[0], dict) else {}).get("slug") or ""),
+                     "a": {"mid": str(a.get("id")), "slug": a.get("slug"), "q": a.get("question"),
+                           "no_token": yes_no_tokens(a)[1]},
+                     "b": {"mid": str(b.get("id")), "slug": b.get("slug"), "q": b.get("question"),
+                           "yes_token": yes_no_tokens(b)[0]},
+                     "end": max(a.get("endDateIso") or a.get("endDate") or "", b.get("endDateIso") or b.get("endDate") or "")})
+    rows = rows[: r["max_pairs"]]
+    save("ladder_pairs.json", {"generated": iso(), "markets_scanned": len(ms), "stats": dict(stats),
+                               "pairs": len(rows), "list": rows})
+    print(f"ladder: {len(rows)} pairs from {len(ms)} markets; {dict(stats)}")
+
+
+def ladder_due():
+    _, r = ladder_rules()
+    last = parse_iso(load("scan_state.json", {}).get("last_ladder_check"))
+    return r is not None and (not last or (now() - last).total_seconds() >= r["check_every_min"] * 60 - 30)
+
+
+def gamma_markets_by_id(ids, batch=50):
+    """Fresh listed prices for many markets at once."""
+    ids, out = sorted(set(ids)), {}
+
+    def one(chunk):
+        try:
+            res = http_json(f"{GAMMA}/markets", [("id", i) for i in chunk] + [("limit", len(chunk))])
+            return [m for m in envelope_rows(res, "markets", "data") if isinstance(m, dict)]
+        except Exception as e:
+            print(f"ladder: market batch failed: {e}")
+            return []
+    with ThreadPoolExecutor(6) as ex:
+        for ms in ex.map(one, [ids[i:i + batch] for i in range(0, len(ids), batch)]):
+            for m in ms:
+                out[str(m.get("id"))] = m
+    return out
+
+
+def ladder_check(tracks, force=False):
+    name, r = ladder_rules()
+    if not name or not (force or ladder_due()):
+        return
+    st = load("scan_state.json", {})
+    st["last_ladder_check"] = iso()
+    save("scan_state.json", st)
+    tr = tracks[name]
+    lp = load("ladder_pairs.json", {}).get("list", [])
+    if not lp:
+        return
+    fresh = gamma_markets_by_id([p["a"]["mid"] for p in lp] + [p["b"]["mid"] for p in lp])
+    print(f"ladder: {len(lp)} pairs, fresh prices for {len(fresh)} markets")
+    rate_guess = lambda m: fee_rate(m)
+    short = []
+    for p in lp:
+        a, b = fresh.get(p["a"]["mid"]), fresh.get(p["b"]["mid"])
+        if not a or not b or a.get("closed") or b.get("closed") or a.get("acceptingOrders") is False \
+                or b.get("acceptingOrders") is False:
+            continue
+        bb_a, ba_b = fnum(a.get("bestBid"), None), fnum(b.get("bestAsk"), None)
+        if bb_a is None or ba_b is None or ba_b <= 0:
+            continue
+        pa, pb = 1 - bb_a, ba_b  # listed NO ask of A, YES ask of B
+        est = 1 - pa - pb - rate_guess(a) * pa * (1 - pa) - rate_guess(b) * pb * (1 - pb)
+        if est >= r["min_edge"] - 0.005:
+            short.append((est, p, a, b))
+    short.sort(key=lambda x: -x[0])
+    print(f"ladder: {len(short)} pairs look cheap on listed prices")
+    bought = []
+    for est, p, a, b in short[: r["books_per_check"]]:
+        if len(bought) >= r["picks_per_check"] or len(tr["sets"]) >= r["max_open"]:
+            break
+        sid = p["id"]
+        if sum(1 for k in tr["sets"] if k.split("#")[0] == sid) >= r["max_lots_per_pair"]:
+            continue
+        ka, kb = book(p["a"]["no_token"]), book(p["b"]["yes_token"])
+        if not ka or not kb:
+            continue
+        shares = max(r["shares"], ka["min_size"], kb["min_size"])
+        xa, xb = walk(ka["asks"], shares), walk(kb["asks"], shares)
+        if xa is None or xb is None:
+            continue
+        fa, fb = taker_fee(shares, xa, fee_rate(a)), taker_fee(shares, xb, fee_rate(b))
+        cost = shares * (xa + xb) + fa + fb
+        net = shares - cost
+        end = max(d for d in (parse_iso(a.get("endDateIso") or a.get("endDate")),
+                              parse_iso(b.get("endDateIso") or b.get("endDate")), now()) if d)
+        days = max(1.0, (end - now()).total_seconds() / 86400) + 3
+        edge = net / shares
+        annual = (net / cost) * 365 / days if cost > 0 else 0
+        seen = tr["seen"].get(sid, {})
+        ok_now = edge >= r["min_edge"] and annual >= r["min_annual"]
+        tr["seen"][sid] = {"ts": iso(), "edge": round(edge, 4), "opportunity": ok_now}
+        if not ok_now:
+            continue
+        if not seen.get("opportunity"):
+            tr["opportunities"] += 1
+        if tr["cash"] + EPS < cost:
+            tr["skipped_no_cash"] += 1
+            log_event({"type": "skip_no_cash", "track": name, "title": p["a"]["q"], "cost": round(cost, 4)})
+            continue
+        tr["cash"] = round(tr["cash"] - cost, 6)
+        tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+        legs = [{"slug": p["a"]["slug"], "token": p["a"]["no_token"], "name": f"NO: {p['a']['q']}",
+                 "price": round(xa, 4), "fee": round(fa, 4)},
+                {"slug": p["b"]["slug"], "token": p["b"]["yes_token"], "name": f"YES: {p['b']['q']}",
+                 "price": round(xb, 4), "fee": round(fb, 4)}]
+        title = f"{p['a']['q']} / {p['b']['q']}"
+        tr["sets"][f"{sid}#{len(tr['closed']) + len(tr['sets']) + 1}"] = {
+            "title": title, "kind": p["kind"], "n": 2, "shares": shares, "legs": legs, "cost": round(cost, 4),
+            "guaranteed": shares, "expected_profit": round(net, 4), "edge": round(edge, 4),
+            "annual": round(annual, 3), "end": end.strftime("%Y-%m-%d"), "opened": iso(), "event": p.get("event")}
+        tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(s["cost"] for s in tr["sets"].values())), 6)
+        log_event({"type": "set_open", "track": name, "title": title, "kind": p["kind"], "n": 2,
+                   "price": round(cost / shares, 4), "edge": round(edge, 4)})
+        bought.append(f"NO {cents(xa)} on \"{p['a']['q']}\" + YES {cents(xb)} on \"{p['b']['q']}\": "
+                      f"pays at least ${shares:.2f} for ${cost:.2f}")
+    if bought and CFG["push"].get("on_fullset"):
+        push(f"[ladder] locked {len(bought)} pair(s)", "\n".join(bought), tags="ladder", track=name)
+
+
+def ladder_summary(name, tr):
+    pr = sets_proof(tr, ladder_rules()[1])
+    locked = sum(s["cost"] for s in tr["sets"].values())
+    expected = sum(s["expected_profit"] for s in tr["sets"].values())
+    wins = sum(1 for c in tr["closed"] if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr["sets"]), "closed": len(tr["closed"]), "wins": wins, "losses": len(tr["closed"]) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": 0,
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "locked": round(locked, 4),
+             "expected_locked_profit": round(expected, 4), "gap_episodes": tr["opportunities"], "proof": pr}
+    lp = load("ladder_pairs.json", {})
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr['sets'])} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) "
+           f"| ${tr['cash']:.2f} | locked ${locked:.2f} (+${expected:.2f} at least); watching {lp.get('pairs', 0)} pairs; "
+           f"cheap pairs found {tr['opportunities']}; short payouts {tr['incomplete']} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n", f"**Proof status:** {pr['verdict']}\n"]
+    if tr["sets"]:
+        lines.append("| Pair | Kind | Cost | Pays at end | Ends |\n|---|---|---|---|---|")
+        for s in tr["sets"].values():
+            lines.append(f"| {str(s['title'])[:80]} | {s['kind']} | ${s['cost']:.2f} | "
+                         f"${s['guaranteed']:.2f} (or ${2 * s['guaranteed']:.2f}) | {str(s.get('end') or '')[:10]} |")
+    else:
+        lines.append("No open pairs.")
+    near = sorted(tr.get("seen", {}).items(), key=lambda x: -x[1]["edge"])[:5]
+    if near:
+        lines.append("\nClosest pairs at last check (profit per $1 after fees):")
+        lines += [f"- {sid[:90]}: {v['edge'] * 100:+.1f}c ({v['ts'][:16]} UTC)" for sid, v in near]
     return row, stats, lines
 
 
@@ -2918,7 +3258,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, run_endgame, run_fast):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast):
         try:
             step(tracks)
         except Exception as e:
@@ -2967,7 +3307,8 @@ def daily(force=None):
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, lambda t: arb_propose(), arb_check, fullset_settle, fullset_check, run_endgame):
+    for step in (arb_settle, lambda t: arb_propose(), arb_check, fullset_settle, fullset_check,
+                 ladder_settle, lambda t: ladder_discover(), lambda t: ladder_check(t, force=True), run_endgame):
         try:
             step(tracks)
         except Exception as e:
@@ -3005,8 +3346,8 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset"):
-            row, stats[name], lines = (arb_summary if src == "arb" else fullset_summary)(name, tr)
+        if src in ("arb", "fullset", "ladder"):
+            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -3203,7 +3544,9 @@ def dryrun():
     tracks = load_tracks()
     run_endgame(tracks)
     fullset_check(tracks)
-    for name in ("endgame", "every_horse"):
+    ladder_discover()
+    ladder_check(tracks, force=True)
+    for name in ("endgame", "every_horse", "ladder"):
         tr = tracks.get(name, {})
         for p in tr.get("positions", {}).values():
             print(f"WOULD BUY [{name}] {p.get('tier')}: {p['outcome']} @ {cents(p['entry'])} - {p['title']} (ends {p.get('end')})")
