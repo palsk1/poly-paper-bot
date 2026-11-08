@@ -11,6 +11,15 @@
     "min_trades_proven": 30,
     "lab_exit_minutes": 30
   },
+  "real_size": {
+    "why": "Paper trades are 5 shares (~$5). Real money ($300-500 in one strategy) means $10-$100 a trade, which eats deeper into the order book. Every paper fill is also re-priced on the same live book at these stakes (records only, never changes what a track trades). The trust ranking uses rank_size_usd.",
+    "sizes_usd": [10, 25, 50, 100],
+    "rank_size_usd": 25,
+    "rank_on_real_size": true,
+    "max_slip": 0.02,
+    "max_price": 0.99,
+    "thin_exit_haircut": 0.5
+  },
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
@@ -72,6 +81,18 @@
       "start_cash": 100,
       "source": "fullset",
       "rules": "every_horse"
+    },
+    "maker": {
+      "label": "Maker (added 2026-11-08): gets paid Polymarket's liquidity rewards for leaving buy and sell orders near the middle price, and pays for every time someone better informed picks those orders off. Fills from the real trade tape, back of the queue. $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker"
+    },
+    "ladder": {
+      "label": "Ladder pairs inside Polymarket: two markets of one event where the stricter one can only say YES if the looser one does (higher strike, earlier deadline). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser one comes true. Same site and rules, so no cross-site mismatch. $100 paper",
+      "start_cash": 100,
+      "source": "ladder",
+      "rules": "ladder"
     },
     "fav_short_90_95": {
       "label": "Favorite side at 90-95c, ending in 2-14 days (fast payouts). $500 paper",
@@ -612,9 +633,440 @@
       "group": "wallet",
       "address": "0x7ea7bcd658a253bfa78618a8e127cc73b54879ac",
       "rules": "wallet_copy"
+    },
+    "wx_forecast": {
+      "label": "Weather: daily highest/lowest temperature buckets, priced with the ECMWF 51-forecast ensemble corrected to the airport's own reports, plus what was already observed today. Buys the side the model says is 10c+ too cheap after the fee. Pays out within 2 days. $500 paper",
+      "source": "weather",
+      "rules": "wx_forecast",
+      "start_cash": 500,
+      "lab": true,
+      "group": "rule"
+    },
+    "crypto_late": {
+      "label": "Crypto: last 45 minutes of the hourly Up/Down candle and the noon ladders. Buys the side the model (volatility x1.5 for fat tails) gives 97+ in 100 when it still costs 96c or less. $500 paper",
+      "source": "crypto",
+      "rules": "crypto_late",
+      "start_cash": 500,
+      "lab": true,
+      "group": "rule"
+    },
+    "wb_tokor": {
+      "label": "Copy wallet Tokor, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_tokor. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xa19cbababc312f9df185e49d7004c249ed1ade6b",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_flawfence": {
+      "label": "Copy wallet flawfence, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_flawfence. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x23d81ba9371e576015c1e562db09c689f56b0288",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_thereturnofdarthmaul": {
+      "label": "Copy wallet TheReturnOfDarthMaul, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_thereturnofdarthmaul. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3a8aa345d5db7ec5138298c8c4f4540259be7699",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_underperformingforal": {
+      "label": "Copy wallet UnderperformingForALiving, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_underperformingforal. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xdbf16bcffa41bd95faec2640daa2c95ab2bd86b5",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_tunatyler": {
+      "label": "Copy wallet tunatyler, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_tunatyler. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xf1f9a438f2697381b4ac8eb283d6f4dd772d1245",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_dromedaryy": {
+      "label": "Copy wallet dromedaryy, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_dromedaryy. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6575759174ad221bba9947bc3f18750ec769b198",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_debased": {
+      "label": "Copy wallet debased, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_debased. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x24c8cf69a0e0a17eee21f69d29752bfa32e823e1",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_jsram": {
+      "label": "Copy wallet Jsram, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_jsram. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x83720820a8aa6c3f20ad71850e7a1a17d16c5223",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_0x448861": {
+      "label": "Copy wallet 0x448861155279dbf833d041b963e3ac854599e319, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_0x448861. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x448861155279dbf833d041b963e3ac854599e319",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_cigarettes": {
+      "label": "Copy wallet cigarettes, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_cigarettes. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xd218e474776403a330142299f7796e8ba32eb5c9",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_rememberamalek": {
+      "label": "Copy wallet RememberAmalek, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_rememberamalek. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6139c42e48cf190e67a0a85d492413b499336b7a",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_lava_lava": {
+      "label": "Copy wallet lava-lava, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_lava_lava. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x629bc4a1e53e1d475beb7ea3d388791e96dd995a",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_dropper": {
+      "label": "Copy wallet Dropper, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_dropper. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x6bab41a0dc40d6dd4c1a915b8c01969479fd1292",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_wan123": {
+      "label": "Copy wallet wan123, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_wan123. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xde7be6d489bce070a959e0cb813128ae659b5f4b",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_anoin123": {
+      "label": "Copy wallet anoin123, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_anoin123. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x96489abcb9f583d6835c8ef95ffc923d05a86825",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_hauchn": {
+      "label": "Copy wallet Hauchn, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_hauchn. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xf0ca28d5b0141f0a8e7b251dea80fd881cb166ed",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_betwick": {
+      "label": "Copy wallet betwick, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_betwick. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc851cd9bee7d262afd78674f861f9f576a12cd2a",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_aghy": {
+      "label": "Copy wallet aghy, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_aghy. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc3daa1bb9ce85866fb1a7c3a5d02816798e641fe",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_ecash": {
+      "label": "Copy wallet eCash, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_ecash. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x62cf46cd4c3af254dccfc37a7f93de265b4b5826",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_pako": {
+      "label": "Copy wallet pako, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_pako. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x71edffd0d70a1da823ff07a3c6fc81457294d338",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_bertapotamous": {
+      "label": "Copy wallet Bertapotamous, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_bertapotamous. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x134a63b764ac7b008356e8db1857db94e6b09e42",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_hell0pia": {
+      "label": "Copy wallet hell0pia, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_hell0pia. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xbf93328f8b69273453228a82c913207731822fd7",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_eightpenguins": {
+      "label": "Copy wallet eightpenguins, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_eightpenguins. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3c593aeb73ebdadbc9ce76d4264a6a2af4011766",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_new_jeans": {
+      "label": "Copy wallet New.Jeans, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_new_jeans. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xe2b1fc269d0c2e27da11fadd1d9596fe28227d2a",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_vilgefortz": {
+      "label": "Copy wallet Vilgefortz, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_vilgefortz. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x3c918a8ef8c379304f744592120cbb4d76149af7",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_albert_1953": {
+      "label": "Copy wallet Albert 1953, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_albert_1953. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x777fae71d2ff9ec48a1213d48ba1d9d91024a1bb",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_youngalphagoat": {
+      "label": "Copy wallet YoungAlphaGoat, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_youngalphagoat. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x9e88f359b9803e41420fbb13385c5ae1765c301c",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_the_joker": {
+      "label": "Copy wallet The-Joker, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_the_joker. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x9aeb534c42b58b21673d5e03e9da14fbd15b2729",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_balerinacapuchina": {
+      "label": "Copy wallet balerinacapuchina, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_balerinacapuchina. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xd86d87914387111b47355e87aca7c032dbe5648d",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_sbel": {
+      "label": "Copy wallet sbel, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_sbel. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xb22682e5efaaa5ae3f48c3b727cf78ae57c04163",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_hellyeahtrader": {
+      "label": "Copy wallet HellYeahTrader, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_hellyeahtrader. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x1076773fc4639a7ad88bcfa5dbfee1dd3aa7c0aa",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_dominus": {
+      "label": "Copy wallet -Dominus-, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_dominus. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x5415c298dde8c84f4ba726d36b411df6e9a72a6e",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_blondbeast": {
+      "label": "Copy wallet BlondBeast, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_blondbeast. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x852a61deac7872fff2c6a80ee82c059d6a8d3188",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_groth": {
+      "label": "Copy wallet groth, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_groth. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x71abe97b83eaba3f06cb04fd4d9a03ee37d2f015",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_jjo": {
+      "label": "Copy wallet JJo, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_jjo. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0xc4086b708cd3a50880b7069add1a1a80000f4675",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_rabbitfoot1": {
+      "label": "Copy wallet rabbitfoot1, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_rabbitfoot1. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x10a6fadcbacd66330862206f6199b197e3ad4d8b",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_bigggggggg": {
+      "label": "Copy wallet Bigggggggg, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_bigggggggg. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x511f9c771449162349795d17becf8b37031acbe1",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_lpgb": {
+      "label": "Copy wallet lpgb, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_lpgb. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x1f5f9fa318fbda8350ac143b4df657287df850fa",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_railcool": {
+      "label": "Copy wallet Railcool, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_railcool. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x94c4fe3b18435aa92024c7c1589537fcda3f43ca",
+      "rules": "wallet_copy",
+      "backfill": true
+    },
+    "wb_monopoly_money": {
+      "label": "Copy wallet Monopoly_Money, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_monopoly_money. No cash limit",
+      "start_cash": null,
+      "source": "wallet",
+      "lab": true,
+      "group": "wallet",
+      "address": "0x7ea7bcd658a253bfa78618a8e127cc73b54879ac",
+      "rules": "wallet_copy",
+      "backfill": true
     }
   },
   "rules": {
+    "maker": {
+      "why": "Polymarket pays about $190k a day to market makers. A slow bot can only keep it if the rewards beat the losses from getting picked off; this measures both.",
+      "shares": 50,
+      "max_shares": 100,
+      "max_markets": 4,
+      "min_days_left": 7,
+      "max_days": 3,
+      "min_mid": 0.15,
+      "max_mid": 0.85,
+      "max_inventory_lots": 2,
+      "max_credit_minutes": 15,
+      "pick_every_minutes": 60,
+      "scan_books": 400,
+      "skip_words": ["up or down", "temperature", "tweets", "weather"]
+    },
     "screener": {
       "min_price": 0.8,
       "max_price": 0.95,
@@ -769,13 +1221,29 @@
         "up or down"
       ],
       "weak_tier_skip_words": [
-        "election", "midterm", "house seat", "senate", "governor", "congressional", "speaker of the house",
-        "majority leader", "popular vote", "attorney general", "mayor", "primary", "referendum", "ballot",
-        "parliament", "seats in"
+        "election",
+        "midterm",
+        "house seat",
+        "senate",
+        "governor",
+        "congressional",
+        "speaker of the house",
+        "majority leader",
+        "popular vote",
+        "attorney general",
+        "mayor",
+        "primary",
+        "referendum",
+        "ballot",
+        "parliament",
+        "seats in"
       ],
       "take_profit": null,
       "stop_loss": null,
-      "shadow_sell_at": [0.98, 0.99]
+      "shadow_sell_at": [
+        0.98,
+        0.99
+      ]
     },
     "every_horse": {
       "why": "Exactly one outcome of a complete list wins, so one share of every YES pays exactly $1; one share of every NO pays (n-1) dollars, or n if an unlisted outcome wins, so the NO version needs no completeness.",
@@ -803,6 +1271,22 @@
         "tie"
       ]
     },
+    "ladder": {
+      "why": "If market A's YES can only happen when market B's YES does (same event, same rules text, only the strike or deadline differs), NO(A) + YES(B) always pays at least $1. Families are found daily and kept only if the words give a clear direction and the crowd's prices agree with it.",
+      "shares": 5,
+      "min_edge": 0.02,
+      "min_annual": 0.15,
+      "min_days": 0,
+      "max_days": 400,
+      "min_liquidity": 500,
+      "check_every_min": 30,
+      "max_pairs": 8000,
+      "books_per_check": 25,
+      "picks_per_check": 3,
+      "max_open": 20,
+      "max_lots_per_pair": 1,
+      "max_price_disagree": 0.1
+    },
     "wallet_copy": {
       "why": "Copy a wallet's new positions 5 shares each, sell when it sells. Skips crumbs (< $20 positions), late copies (our price more than 5c above its average) and caps at 10 new copies a day per wallet so one hyperactive wallet can't flood the file.",
       "min_open_usd": 20,
@@ -811,7 +1295,9 @@
       "max_chase": 0.05,
       "max_new_per_day": 10,
       "max_open": 80,
-      "max_pages": 4
+      "max_pages": 4,
+      "max_backfill": 30,
+      "backfill_per_run": 10
     },
     "consensus_2": {
       "min_wallets": 2,
@@ -1127,6 +1613,47 @@
       "take_profit": 0.985,
       "max_open": 40,
       "picks_per_scan": 3
+    },
+    "wx_forecast": {
+      "why": "Weather specialists are among Polymarket's steadiest earners, and a 51-member ensemble corrected to the station is a real forecasting edge over a thin crowd. Settles on hourly METAR reports, so what's observed so far today is fixed. One bet per city-day.",
+      "models": "ecmwf_ifs025",
+      "sigma_c": 1.1,
+      "sigma_per_day_c": 0.4,
+      "min_bias_obs": 6,
+      "max_bias_c": 4,
+      "min_price": 0.05,
+      "max_price": 0.9,
+      "min_model_edge": 0.12,
+      "max_hours_to_end": 48,
+      "min_liquidity": 2000,
+      "scan_every_minutes": 120,
+      "picks_per_scan": 6,
+      "max_open": 60,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "max_model_edge": 0.45
+    },
+    "crypto_late": {
+      "why": "Endgame with live data: near the close, a coin that is well past the strike rarely comes back. Volatility is inflated 1.5x so a sudden jump is priced in. Hourly candles give many chances a day.",
+      "kinds": [
+        "above",
+        "updown"
+      ],
+      "min_hours": 0.05,
+      "max_hours": 0.75,
+      "vol_mult": 1.5,
+      "min_model_p": 0.97,
+      "min_price": 0.6,
+      "max_price": 0.96,
+      "min_model_edge": 0.02,
+      "scan_every_minutes": 5,
+      "picks_per_scan": 3,
+      "max_open": 20,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "max_model_edge": 0.3
     }
   },
   "themes": {

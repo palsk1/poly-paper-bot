@@ -119,6 +119,7 @@ Favorite-style tracks by topic (trades / lost / profit): `endgame_97` box office
 - `arb`, `every_horse`: need old order books (and Kalshi pairs). No history for those.
 - `endgame_strict` and the resolved/proposed tiers: Polymarket doesn't keep when a result was proposed. Only the past-deadline and ending-soon signals are replayed for the endgame tracks.
 - `consensus_2/3`: need all 40 wallets' full books at each moment; not rebuilt yet.
+- `wb_*` (filled-up twins), `maker`, `ladder`, `wx_forecast`, `crypto_late`: added after this backtest, or need order books / outside data.
 
 ## What can make this look better than reality
 

@@ -14,25 +14,29 @@
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
+| `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
+| `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
-62 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
+64 extra paper strategies run next to the main tracks, so that by January we can pick **one** to put $300-500 into. They never push per trade; the morning ntfy is a **top 10 by trust**, and only those 10 send trade pushes the next day (alerts like FLIP / SHORT / MISMATCH always go out).
 
-**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 71 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 71 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
+**How "trust" is ranked** (`config.json` > `ranking`): raw P&L over a few weeks is mostly luck, and with 73 strategies a few will look great by chance. So each strategy is scored by the *worst profit per $100 bet that is still plausible*: every finished trade's profit per dollar, plus one imaginary trade that lost everything (the disaster a "boring" strategy may simply not have hit yet), taking the low end of the confidence range with the bar raised for testing 73 strategies at once (90% for the whole family). **PROVEN** = that worst case is above $0 after 30+ finished trades. Only strategies ahead on 3+ finished trades can appear in the top 10. `summary.md` ends with the full ranking.
 
 **Rules are frozen until 2027-01-01** (bug fixes only, reported), otherwise the evidence resets.
 
 | Group | Tracks | What it tests |
 |---|---|---|
 | Copied wallets (40) | `w_*` | Each copies one wallet's new positions, 5 shares, sells when it sells. No cash limit (shows money needed). Skips positions under $20, copies more than 5c above the wallet's own price (too late), max 10 new copies a day per wallet. |
+| Copied wallets, filled up (40, added 2026-11-08 evening) | `wb_*` | Twin of each `w_*`: starts by buying 5 shares of each of the wallet's (up to 30 biggest) open positions at that day's price, 10 per run, then copies new ones the same way. `w_*` vs `wb_*` answers: does it pay to jump into their existing book, or only to follow fresh trades? |
 | Smart-money crowd | `consensus_2`, `consensus_3` | Buys when 2+ / 3+ of the 40 wallets hold the same side ($50+ each), sells when all of them have left |
 | sabsabinxz variants | `sab_big`, `sab_hold` | Only his $1,000+ bets / copies his entries but ignores his early exits |
 | Favorite bands | `fav_short_90_95`, `fav_short_95_98`, `fav_mid_80_90`, `fav_bigvol_85_95`, `no_only_90_97`, `yes_fav_85_95`, `fav_fee_free`, `fav_cut_losses` | Which price band, deadline and market size makes "buy the likely side" pay after fees. Studies of Polymarket (588M trades, 2022-2026) find favorites at 90c+ earn only a few tenths of a cent per dollar before fees, so most of these should hover near zero. $500 paper each |
 | Controls | `control_random`, `control_longshot` | A coin flip, and longshots at 3-10c (studies: these lose). If a control ranks high, luck is winning and nothing above it is trustworthy |
 | Price moves | `momentum_week`, `fade_rally`, `panic_fade_4c`, `panic_fade_10c` | Ride a 10c+ weekly rise / bet on a bounce after a 10c+ fall; panic fade with smaller and bigger triggers |
 | Endgame variants | `endgame_strict`, `endgame_ending_soon`, `endgame_97`, `endgame_sell98` | Which endgame signal is safe, and whether selling at 98.5c beats holding |
+| Fast markets (added later on 2026-11-08) | `wx_forecast`, `crypto_late` | Markets that pay out within hours or 2 days, priced with outside data. See "Fast markets" below |
 
 Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discover`): profitable in at least two time windows, 5-400 open positions, mostly not 15-minute crypto up/down bets (a 5-minute bot is too slow for those), profit per dollar traded of at least 3c (traders with a view, not market makers). Weather, mentions and sports specialists are in on purpose, because their markets pay out within days, so they collect finished trades fastest. Four election-month hot hands test whether a hot streak lasts.
 
@@ -81,6 +85,22 @@ Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discov
 
 Check the lab on live data without saving anything: run the `probe` workflow with `copytest`.
 
+## Fast markets: weather and crypto (lab, added 2026-11-08)
+
+Two lab tracks for markets that pay out within hours or two days, so they collect finished trades long before January. Both compare the market's price with a model built from free outside data and buy only when the model says a side is clearly too cheap after the fee. One bet per market group (one per city and day, one per coin candle), because buckets of the same day all move together.
+
+| Track | Markets | Model | Buys when |
+|---|---|---|---|
+| `wx_forecast` | "Highest/lowest temperature in CITY on DATE" (about 50 cities, a high and a low each day). They settle on the airport's hourly METAR reports from aviationweather.gov (SPECI reports don't count) | ECMWF ensemble (51 forecasts, Open-Meteo), shifted by how far it was off at that airport over the last 24h, plus what was already observed today (a day's high can't go back down). Error allowance 1.1°C plus 0.4°C per day ahead | the model's chance beats the price by 12c+ after the fee, price 5-90c. Gaps over 45c are ignored as more likely our data error than the crowd's |
+| `crypto_late` | Last 45 minutes of the hourly "Bitcoin/Ethereum/Solana/XRP/Dogecoin/BNB Up or Down" candles and the noon-ET "above $X" ladders. Both settle on Binance | the coin's hourly volatility over the last week, made 1.5x bigger for sudden jumps (Binance's own price feed) | the model gives a side 97+ in 100 and it still costs 96c or less, with 2c+ left after the fee |
+
+Checked and left out (dry run on live data, 2026-11-08):
+- **The same crypto model 3-30h out** ("the market overprices big moves"): the ladders matched the model within about 1c at every strike, so it would never trade.
+- **Weather buckets the day's reports have already ruled out**: they were already priced at 99.95c, so the bots got there first.
+- **Sports odds**: the free odds feed (ESPN) blocks GitHub's servers. Sports games are covered by the Kalshi vs Polymarket arb work instead.
+
+Check them on live data without saving anything: run the `probe` workflow with `fasttest` (prints the model next to every price, and what it would buy). `fast`/`fast2`/`fast3` print the raw market and data shapes.
+
 ## The arbitrage track, and the known traps it is built to avoid
 
 Research (Nov 2026) found cross-site gaps are real but small: when both prices are fresh, a 3c+ gap shows up about 1 time in 20, break-even after both sites' fees is about 3c at mid prices, and money stays locked until the market ends. Most big "gaps" are stale quotes or markets that only *look* the same (different deadline, resolution source, or death/early-close clause, e.g. the Feb 2026 Khamenei markets settled very differently on the two sites). So:
@@ -92,11 +112,40 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 5. **Holds both legs to the end** and flags a **MISMATCH** loudly if the two sites resolve differently.
 6. **Proof line:** a clean arb earns about its edge per share; a mismatch can lose about the whole $1. So arbs only pay if mismatches are rarer than about the edge (2.5c edge -> under 2.5%). The summary shows how many clean finished arbs are needed to be 90% sure of that (about 90 at a 2.5c edge, if none mismatch).
 
+## Ladder pairs (added 2026-11-08)
+
+The arb track needs two *different* sites to describe the same thing, and the review rejects most pairs because they don't. A ladder pair needs no review: both markets sit in the same Polymarket event, with the same rules text except the strike or the deadline, so one can't say YES without the other.
+
+- **Daily** (`state/ladder_pairs.json`): scans ~24,000 yes/no markets and keeps only families where (1) the question and rules text differ only in the strike or the "by <date>" deadline, (2) the direction is clear from the words ("above", "at least", "by"; "hit/reach/dip" only with the ↑/↓ labels), (3) it isn't a range, an exact count or a "top N" rank, (4) the deadline in the question agrees with the market's end date, and (5) the crowd's prices agree with the direction (the stricter market never trades more than 10c above the looser one). One-winner (negRisk) events are left to every_horse. On 2026-11-08 this kept about 6,000 pairs.
+- **Every 30 min** (watch): fresh listed prices for all of them in one batch call; anything close is priced on both live order books for 5 shares plus fees. Buys at >= 2c per share and >= 15% a year, one lot per pair, at most 20 open.
+- **Settles** when both legs have paid; a pair paying less than $1 pushes **SHORT** (it means we misread a family).
+- **First live look (2026-11-08):** of 6,000 pairs, 30 were not overpriced and the best paid 1.3c per share after fees (StandX FDV above $1B / above $100M). So gaps are real but usually below the 2c bar; the track waits for the spikes.
+
+Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` workflow, `hunt_*` inputs): Kalshi vs Polymarket **game winners** (NFL, NBA, NHL, college basketball) match cleanly by team codes but cost more than $1 after both fees on all 160 checks (usually by about 4c, never closer than 0.8c); the **same question listed twice** on Polymarket never had a gap; and the **104 rejected pairs**, priced both ways, showed gaps of at most 2.4c, and in every case checked the gap was on the side the rule difference makes unsafe (the market prices that risk in).
+
 ## Endgame and every horse
 
 - **Endgame** earns 1-5c per share on things that are already decided, in hours or days instead of months. The only way to lose is a "sure thing" flipping (a disputed result, a misread rule); the bot pushes **FLIP** when that happens. Results are kept per tier (resolved, proposed, past_deadline, ending_soon) so we can see which kind is actually safe. Proof line: a flip costs about the whole price, so flips must be rarer than the edge (about 2c -> under 1 in 50).
 - **Sell-early test (endgame, records only):** for each open endgame position the bot notes the first time the bid would have filled us at 98c and at 99c (`shadow_sell_at` in config), and the bid after 24h held. When the trade pays out, it compares what each rule would have made vs holding, and how many days sooner the money would have come back. Nothing is actually sold; this is to decide later whether selling early is worth it.
 - **Every horse** is pure math: if buying every candidate costs 96c and exactly one must win, that is 4c locked in. The catch is lists that are not complete (someone unlisted wins and every YES pays 0), so all-YES is only bought when the list has a catch-all outcome and is marked closed; open lists are skipped. The bot pushes **SHORT** if a set ever pays less than expected. Needs >= 1c per share after fees and >= 15% a year.
+
+## Maker: get paid to quote (added 2026-11-08)
+
+Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
+
+- Up to 4 markets at a time, picked every hour by estimated reward per dollar. Skips markets ending within 7 days or already past their date (insiders know the answer), sports, middle price outside 15-85c, and markets where nobody else is quoting near the middle (we would be first in line to get run over).
+- Posts a YES bid and a YES ask (= a NO bid) of 50 shares at the current best prices, at the **back of the queue**. Re-posts every run.
+- **Fills come from the real trade tape:** an order fills only if a trade went through our price, or more traded at our price than was queued ahead of us. Quotes sit unchanged between runs, so news in between hits us like it would hit a real slow bot.
+- **Rewards** use Polymarket's own formula against everyone else in the public book, assuming the others are as two-sided as possible (gives us the smaller share), credited only for the minutes since the last run (max 15).
+- A YES from one fill and a NO from the other merge back into $1. Holding stops growing at 2 lots per side. After 3 days, or when a market leaves the list, leftovers are sold at the bid with the taker fee: that is one finished trade for the ranking.
+- `summary.md` splits the result into **rewards earned** and **trading result** (getting picked off, spreads, leftovers). It only works if the first number stays bigger.
+
+Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estimated about $35 a day of rewards per $100 of quotes, but replaying the last day of prices said a slow bot would have lost about $44 per $100 to getting picked off. Both numbers are rough (one is a snapshot, the other a price replay without the order book), so this track is the real test. Rewards may also have payout minimums or limits we can't see from the public data.
+
+## Ideas tested and dropped (2026-11-08, `edges.py`)
+
+- **negRisk conversion** (sell a whole multi-outcome set right now for more than $1, by turning one NO into a YES of every other outcome): 5,681 events checked; on the real books with fees the best was -0.05c a share. Market makers keep this shut.
+- **Holding rewards**: real (Polymarket pays $3.25 a year per $100 held, sampled hourly) but only on 255 long-dated markets (2028 elections, "before 2027" markets). On a $300 stake that is about $10 a year, so it is a small bonus for whichever strategy holds those markets, not a strategy.
 
 ## Backtest (past data)
 
@@ -113,6 +162,20 @@ Research (Nov 2026) found cross-site gaps are real but small: when both prices a
 - `selftest` workflow (manual): checks the APIs and sends a test push. `probe` workflow (manual): prints raw API shapes, no pushes.
 
 Fills are paper fills at the real order book price (taking the ask, selling at the bid), including taker fees.
+
+## Real money check (added 2026-11-08)
+
+Paper trades are 5 shares (about $5), which nearly always fit at the best price. The $300-500 in January means $10-$100 a trade, which eats deeper into the order book. So every paper fill is **also priced at $10, $25, $50 and $100** on the same live book (`config.json` > `real_size`). It is records only: it never changes what a track buys or sells, so the frozen lab rules and their evidence are untouched.
+
+- **Buying:** a limit order that never pays more than the best ask + 2c (and never 99c+). In a thin book only part of the stake fills; that is recorded, not hidden.
+- **Fees:** the same taker fee as the paper fill, on the bigger amount (Kalshi's rounds up per order).
+- **Selling early:** walks the real bids; shares the bids can't take are valued at half the worst bid.
+- **Payout:** a resolved market pays the same per share at any size.
+- **Arb and every horse:** the same number of shares on every leg, as many as the stake allows while the edge stays above `min_edge` after both books and both fees.
+- **Ranking:** the trust ranking (and so the top 10 on the phone) uses the $25 numbers (`rank_size_usd`). Trades from before this change have no book data and count with their paper numbers. `summary.md` shows paper vs each stake, and how much of a $100 order the book held on average.
+- **Live check now:** the `probe` workflow with `depthtest` re-prices every open position at each stake on today's books.
+
+Not modeled: our own orders moving the price for the next 5-minute check (the paper bot never moves it), and deposit/withdrawal costs.
 
 ## Files
 

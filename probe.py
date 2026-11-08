@@ -290,6 +290,271 @@ def lab():
         print("events scan failed:", e)
 
 
+def fast():
+    """Fast-resolving markets (weather, daily crypto, sports games) and the free outside data that could price them."""
+    import datetime as dt
+    G = "https://gamma-api.polymarket.com"
+    now = dt.datetime.now(dt.timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    for tag in ("weather", "temperature", "daily-temperature", "crypto", "bitcoin", "crypto-prices", "sports", "nba",
+                "nfl", "nhl", "soccer", "games"):
+        try:
+            r = get(f"{G}/events", {"tag_slug": tag, "closed": "false", "limit": 100,
+                                    "end_date_max": (now + dt.timedelta(days=3)).strftime(fmt)})
+            evs = r if isinstance(r, list) else (r.get("events") or r.get("data") or [])
+            print(f"== tag {tag}: {len(evs)} events ending within 3 days")
+            for e in evs[:8]:
+                print("   ", e.get("endDate"), "|", e.get("title"), "|", e.get("slug"), "| markets", len(e.get("markets") or []))
+        except Exception as e:
+            print(f"tag {tag} failed: {e}")
+    # one weather event in full
+    try:
+        r = get(f"{G}/events", {"tag_slug": "weather", "closed": "false", "limit": 50})
+        evs = r if isinstance(r, list) else (r.get("events") or [])
+        wx = [e for e in evs if "temperature" in str(e.get("title")).lower()]
+        print("== weather temperature events:", len(wx))
+        for e in wx[:40]:
+            print("   ", e.get("endDate"), "|", e.get("title"), "|", e.get("slug"))
+        if wx:
+            e = wx[0]
+            print("event keys:", sorted(e.keys()))
+            show("event (no markets)", {k: v for k, v in e.items() if k != "markets"}, 3000)
+            for m in (e.get("markets") or [])[:12]:
+                print("   ", {k: m.get(k) for k in ("question", "groupItemTitle", "outcomes", "outcomePrices", "bestAsk", "bestBid",
+                                                 "feesEnabled", "feeSchedule", "endDate", "liquidityNum", "volumeNum",
+                                                 "acceptingOrders", "negRisk", "clobTokenIds")})
+            show("market description", (e.get("markets") or [{}])[0].get("description"), 2000)
+            show("market resolutionSource", (e.get("markets") or [{}])[0].get("resolutionSource"), 500)
+    except Exception as e:
+        print("weather detail failed:", e)
+    # markets ending within 48h: what kinds exist
+    try:
+        out, cur = [], None
+        for _ in range(20):
+            p = {"closed": "false", "limit": 500, "end_date_min": now.strftime(fmt),
+                 "end_date_max": (now + dt.timedelta(hours=48)).strftime(fmt)}
+            if cur:
+                p["after_cursor"] = cur
+            r = get(f"{G}/markets/keyset", p)
+            ms = r.get("markets") or []
+            out += ms
+            cur = r.get("next_cursor")
+            if not cur or not ms:
+                break
+        print("== markets ending within 48h:", len(out))
+        kinds = {}
+        for m in out:
+            q = str(m.get("question") or "").lower()
+            k = ("temperature" if "temperature" in q else "updown" if "up or down" in q else
+                 "crypto_strike" if any(w in q for w in ("bitcoin", "ethereum", "solana", "xrp")) else
+                 "sports" if (m.get("sportsMarketType") or m.get("gameId")) else "other")
+            kinds.setdefault(k, []).append(m)
+        for k, ms in kinds.items():
+            liq = sorted((float(m.get("liquidityNum") or 0) for m in ms), reverse=True)
+            print(f"-- {k}: {len(ms)} markets, liquidity top/median {liq[:1]} {liq[len(liq)//2] if liq else 0}")
+            for m in ms[:6]:
+                print("   ", {x: m.get(x) for x in ("question", "endDate", "outcomePrices", "bestAsk", "feesEnabled",
+                                                  "feeSchedule", "liquidityNum", "volumeNum", "sportsMarketType",
+                                                  "gameStartTime", "gameId", "eventStartTime")})
+        for k in ("crypto_strike", "sports"):
+            if kinds.get(k):
+                show(f"{k} full market sample", kinds[k][0], 5000)
+    except Exception as e:
+        print("48h scan failed:", e)
+    outside = [
+        ("open-meteo forecast", "https://api.open-meteo.com/v1/forecast",
+         {"latitude": 40.7769, "longitude": -73.874, "daily": "temperature_2m_max", "temperature_unit": "fahrenheit",
+          "timezone": "America/New_York", "forecast_days": 3, "models": "gfs_seamless,ecmwf_ifs025,icon_seamless"}),
+        ("open-meteo ensemble", "https://ensemble-api.open-meteo.com/v1/ensemble",
+         {"latitude": 40.7769, "longitude": -73.874, "daily": "temperature_2m_max", "temperature_unit": "fahrenheit",
+          "timezone": "America/New_York", "forecast_days": 3, "models": "gfs025,ecmwf_ifs025"}),
+        ("metar KLGA", "https://aviationweather.gov/api/data/metar", {"ids": "KLGA,EGLC", "format": "json", "hours": 6}),
+        ("espn nba", "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard", None),
+        ("espn nfl", "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard", None),
+        ("coinbase candles", "https://api.exchange.coinbase.com/products/BTC-USD/candles", {"granularity": 3600}),
+        ("binance vision klines", "https://data-api.binance.vision/api/v3/klines", {"symbol": "BTCUSDT", "interval": "1h", "limit": 3}),
+        ("kalshi KXHIGHNY", BASES[1] + "/markets", {"series_ticker": "KXHIGHNY", "status": "open", "limit": 3}),
+    ]
+    for label, url, params in outside:
+        try:
+            res = get(url, params)
+            if label.startswith("espn"):
+                evs = res.get("events") or []
+                print(f"== {label}: {len(evs)} games")
+                for e in evs[:3]:
+                    c = (e.get("competitions") or [{}])[0]
+                    print("   ", e.get("date"), e.get("name"), "| status", (e.get("status") or {}).get("type", {}).get("state"))
+                    show("   odds", c.get("odds"), 1500)
+                    show("   competitors", [{k: x.get(k) for k in ("homeAway", "team")} for x in c.get("competitors", [])], 800)
+            else:
+                show(label, res, 2500)
+        except Exception as e:
+            print(label, "failed:", e)
+
+
+def fast2():
+    """Current fast markets only: weather and crypto events ending in the next 3 days, plus METAR history."""
+    import datetime as dt
+    from collections import Counter
+    G = "https://gamma-api.polymarket.com"
+    now = dt.datetime.now(dt.timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    for tag in ("daily-temperature", "weather", "crypto", "bitcoin", "ethereum", "crypto-prices", "up-or-down", "nba", "nfl",
+                "nhl", "soccer", "tennis", "esports"):
+        evs, off = [], 0
+        try:
+            while off < 1500:
+                r = get(f"{G}/events", {"tag_slug": tag, "closed": "false", "limit": 500, "offset": off,
+                                        "end_date_min": now.strftime(fmt),
+                                        "end_date_max": (now + dt.timedelta(days=3)).strftime(fmt)})
+                rows = r if isinstance(r, list) else (r.get("events") or r.get("data") or [])
+                evs += rows
+                if len(rows) < 500:
+                    break
+                off += 500
+        except Exception as e:
+            print(f"tag {tag} failed: {e}")
+        kinds = Counter()
+        for e in evs:
+            t = str(e.get("title") or "")
+            import re
+            kinds[re.sub(r"[0-9]+", "#", re.sub(r" (in|on) [A-Z][^?]*", " in X", t))[:60]] += 1
+        print(f"== tag {tag}: {len(evs)} events ending within 3 days; title shapes:")
+        for k, n in kinds.most_common(15):
+            print(f"    {n:4d}  {k}")
+        liq = sorted(((float(e.get("liquidity") or 0), e.get("title"), e.get("endDate"), e.get("slug")) for e in evs), reverse=True)
+        for x in liq[:6]:
+            print("    top liq:", x)
+        if tag == "daily-temperature" and evs:
+            cities = Counter(re.sub(r" on .*", "", str(e.get("title"))) for e in evs)
+            print("    cities:", dict(cities))
+            e = sorted(evs, key=lambda e: e.get("endDate") or "")[0]
+            print("    soonest:", e.get("title"), e.get("endDate"), e.get("slug"), "tags", [t.get("slug") for t in e.get("tags") or []])
+            print("    resolutionSource:", e.get("resolutionSource"), "| desc:", str(e.get("description"))[:400])
+            for m in e.get("markets") or []:
+                print("     ", {k: m.get(k) for k in ("groupItemTitle", "outcomePrices", "bestAsk", "bestBid", "lastTradePrice",
+                                                     "liquidityNum", "volumeNum", "acceptingOrders", "closed", "endDate",
+                                                     "umaResolutionStatuses", "feeSchedule")})
+            srcs = Counter(re.sub(r".*/", "", str(x.get("resolutionSource") or "")) for x in evs)
+            print("    stations:", dict(srcs))
+            urls = {}
+            for x in evs:
+                urls.setdefault(re.sub(r" on .*", "", str(x.get("title"))), x.get("resolutionSource") or
+                                (re.findall(r"https://www.wunderground.com/\S+", str(x.get("description"))) or [""])[0])
+            for k, v in urls.items():
+                print("     ", k, "->", v)
+        if tag in ("crypto", "bitcoin") and evs:
+            for e in evs:
+                t = str(e.get("title")).lower()
+                if "up or down" not in t and ("above" in t or "price" in t):
+                    print("    strike event:", e.get("title"), e.get("endDate"), e.get("slug"), "liq", e.get("liquidity"))
+                    for m in (e.get("markets") or [])[:4]:
+                        print("      ", {k: m.get(k) for k in ("question", "groupItemTitle", "outcomePrices", "bestAsk", "bestBid",
+                                                             "liquidityNum", "feeSchedule")})
+                    print("      desc:", str((e.get("markets") or [{}])[0].get("description"))[:700])
+                    break
+            ud = [e for e in evs if "up or down" in str(e.get("title")).lower()]
+            durs = Counter(re.sub(r".*-(5m|15m|1h|4h|daily|hourly).*", r"\1", str(e.get("slug"))) if re.search(r"-(5m|15m|1h|4h)-", str(e.get("slug"))) else "other" for e in ud)
+            print("    up/down by length:", dict(durs))
+            for e in sorted(ud, key=lambda e: -float(e.get("liquidity") or 0))[:5]:
+                print("     ", e.get("title"), e.get("slug"), "liq", e.get("liquidity"))
+    try:
+        res = get("https://aviationweather.gov/api/data/metar", {"ids": "KLGA", "format": "json", "hours": 24})
+        print("== METAR KLGA 24h rows:", len(res), "keys:", sorted(res[0].keys()) if res else None)
+        for x in res[:30]:
+            print("   ", x.get("reportTime"), x.get("temp"), x.get("maxT"), x.get("minT"), x.get("maxT24"), "|", x.get("rawOb"))
+    except Exception as e:
+        print("metar failed:", e)
+
+
+def fast3():
+    """Weather rules text, today's (past endDate, not closed) weather buckets vs METAR so far, crypto ladders vs Binance."""
+    import datetime as dt
+    import re
+    G = "https://gamma-api.polymarket.com"
+    now = dt.datetime.now(dt.timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    evs = []
+    for off in (0, 500):
+        r = get(f"{G}/events", {"tag_slug": "daily-temperature", "closed": "false", "limit": 500, "offset": off,
+                                "end_date_min": (now - dt.timedelta(hours=40)).strftime(fmt),
+                                "end_date_max": (now + dt.timedelta(hours=60)).strftime(fmt)})
+        rows = r if isinstance(r, list) else (r.get("events") or [])
+        evs += rows
+        if len(rows) < 500:
+            break
+    print("== weather events:", len(evs))
+    for slug in ("highest-temperature-in-nyc-on-november-9-2026", "highest-temperature-in-london-on-november-9-2026"):
+        for e in evs:
+            if e.get("slug") == slug:
+                m = (e.get("markets") or [{}])[0]
+                print("== full rules", slug)
+                print(m.get("description"))
+                print("buckets:", [x.get("groupItemTitle") for x in e.get("markets") or []])
+                print("market keys:", sorted(m.keys()))
+    past = [e for e in evs if (e.get("endDate") or "") < now.strftime(fmt)]
+    print("== past endDate, still open:", len(past))
+    ids = sorted({re.search(r"ids=([A-Z0-9]+)", str(e.get("resolutionSource"))).group(1) for e in past
+                  if re.search(r"ids=([A-Z0-9]+)", str(e.get("resolutionSource")))})
+    obs = {}
+    for i in range(0, len(ids), 30):
+        try:
+            for x in get("https://aviationweather.gov/api/data/metar", {"ids": ",".join(ids[i:i + 30]), "format": "json", "hours": 30}):
+                obs.setdefault(x.get("icaoId"), []).append(x)
+        except Exception as ex:
+            print("metar failed", ex)
+    for e in sorted(past, key=lambda e: -float(e.get("liquidity") or 0))[:25]:
+        src = str(e.get("resolutionSource"))
+        mm = re.search(r"ids=([A-Z0-9]+).*date=([0-9T:-]+Z)", src)
+        if not mm:
+            print("  no source:", e.get("title"))
+            continue
+        icao, end = mm.group(1), dt.datetime.strptime(mm.group(2), fmt).replace(tzinfo=dt.timezone.utc)
+        lo, hi = end - dt.timedelta(hours=27), end - dt.timedelta(hours=3)
+        vals = []
+        for x in obs.get(icao, []):
+            raw = str(x.get("rawOb") or "")
+            t = re.search(r" T([01])(\d{3})([01])(\d{3})", raw)
+            ts = dt.datetime.fromtimestamp(x.get("obsTime") or 0, dt.timezone.utc)
+            if t and raw.startswith("METAR") and lo <= ts < hi:
+                vals.append((-1 if t.group(1) == "1" else 1) * int(t.group(2)) / 10)
+        hi_c = max(vals) if vals else None
+        lo_c = min(vals) if vals else None
+        print(f"-- {e.get('title')} | {icao} local day {lo:%m-%d %H}Z..{hi:%m-%d %H}Z | obs {len(vals)} max {hi_c} min {lo_c} "
+              f"| liq {float(e.get('liquidity') or 0):.0f} | closed {e.get('closed')}")
+        for m in e.get("markets") or []:
+            print("     ", m.get("groupItemTitle"), "| prices", m.get("outcomePrices"), "| ask", m.get("bestAsk"), "bid", m.get("bestBid"),
+                  "| liq", round(float(m.get("liquidityNum") or 0)), "| uma", m.get("umaResolutionStatuses"), "| closed", m.get("closed"))
+    # crypto ladders
+    try:
+        px = get("https://data-api.binance.vision/api/v3/ticker/price", {"symbols": '["BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT"]'})
+        print("== binance spot", px)
+    except Exception as ex:
+        print("binance failed", ex)
+    for slug in ("bitcoin-above-on-november-9-2026", "bitcoin-price-on-november-9-2026", "ethereum-above-on-november-9-2026"):
+        try:
+            r = get(f"{G}/events", {"slug": slug})
+            e = (r if isinstance(r, list) else r.get("events") or [])[0]
+            print("== crypto", slug, "end", e.get("endDate"), "liq", e.get("liquidity"))
+            for m in e.get("markets") or []:
+                print("     ", m.get("groupItemTitle"), "| prices", m.get("outcomePrices"), "| ask", m.get("bestAsk"), "bid", m.get("bestBid"),
+                      "| liq", round(float(m.get("liquidityNum") or 0)), "| spread", m.get("spread"))
+        except Exception as ex:
+            print(slug, "failed", ex)
+    try:
+        r = get(f"{G}/events", {"tag_slug": "up-or-down", "closed": "false", "limit": 200,
+                                "end_date_min": now.strftime(fmt), "end_date_max": (now + dt.timedelta(hours=3)).strftime(fmt)})
+        rows = r if isinstance(r, list) else (r.get("events") or [])
+        for e in rows[:12]:
+            m = (e.get("markets") or [{}])[0]
+            print("  updown:", e.get("title"), e.get("endDate"), "| start", m.get("eventStartTime") or e.get("startTime"),
+                  "| prices", m.get("outcomePrices"), "| ask", m.get("bestAsk"), "bid", m.get("bestBid"), "| fee", m.get("feeSchedule"))
+        if rows:
+            print("  updown rules:", str((rows[0].get("markets") or [{}])[0].get("description"))[:900])
+    except Exception as ex:
+        print("updown failed", ex)
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "kalshi"):
@@ -306,5 +571,11 @@ if __name__ == "__main__":
         sells()
     if what == "exits":
         exits_study()
+    if what == "fast3":
+        fast3()
+    if what == "fast2":
+        fast2()
+    if what == "fast":
+        fast()
     if what == "lab":
         lab()
