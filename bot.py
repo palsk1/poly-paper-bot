@@ -2146,7 +2146,94 @@ def dryrun():
             print(f"  closest set: {sid} {v['edge'] * 100:+.1f}c")
 
 
+# ================================================================ lab: finding wallets worth following
+
+def leaderboard(category="OVERALL", period="MONTH", order="PNL", limit=50, pages=2):
+    rows, cursor = [], None
+    for _ in range(pages):
+        params = {"category": category, "timePeriod": period, "orderBy": order, "limit": limit}
+        if cursor:
+            params["cursor"] = cursor
+        res = http_json(f"{DATA}/v2/leaderboard", params)
+        rows += envelope_rows(res, "data")
+        cursor = ((res.get("pagination") or {}) if isinstance(res, dict) else {}).get("next_cursor")
+        if not cursor:
+            break
+    return rows
+
+
+def discover():
+    """Prints leaderboard wallets with copy-ability stats (run from the manual probe workflow; saves nothing)."""
+    seen = {}
+    for cat in ("OVERALL", "POLITICS", "SPORTS", "CRYPTO", "CULTURE", "ECONOMICS", "TECH", "FINANCE", "WEATHER", "MENTIONS"):
+        for period in ("WEEK", "MONTH", "ALL"):
+            try:
+                rows = leaderboard(cat, period, "PNL", 50, 2 if period == "MONTH" else 1)
+            except Exception as e:
+                print(f"leaderboard {cat}/{period} failed: {e}")
+                continue
+            print(f"leaderboard {cat}/{period}: {len(rows)} rows")
+            for r in rows:
+                a = str(r.get("user_id") or "").lower()
+                if not a:
+                    continue
+                d = seen.setdefault(a, {"name": r.get("user_name"), "cats": set(), "pnl": {}, "vol": {}})
+                d["cats"].add(cat)
+                k = f"{cat[:3]}_{period[0]}"
+                d["pnl"][k], d["vol"][k] = round(fnum(r.get("pnl"))), round(fnum(r.get("volume")))
+    for order in ("VOL",):
+        try:
+            rows = leaderboard("OVERALL", "MONTH", order, 5, 1)
+            print("orderBy VOL sample:", [(r.get("user_name"), round(fnum(r.get("pnl")))) for r in rows])
+        except Exception as e:
+            print("orderBy VOL failed:", e)
+    try:
+        res = http_json(f"{DATA}/v2/leaderboard", {"user": CFG["leader"]["address"], "timePeriod": "ALL", "category": "OVERALL"})
+        print("leaderboard user filter:", json.dumps(res)[:400])
+    except Exception as e:
+        print("leaderboard user filter failed:", e)
+    print(f"unique wallets: {len(seen)}")
+    out = []
+    for a, d in seen.items():
+        mon = [v for k, v in d["pnl"].items() if k.endswith("_M")]
+        tot_pnl = max(d["pnl"].values())
+        best_k = max(d["pnl"], key=d["pnl"].get)
+        ratio = d["pnl"][best_k] / max(d["vol"][best_k], 1)
+        npos, value, acts, recent, kinds = None, None, None, None, Counter()
+        try:
+            res = http_json(f"{DATA}/v2/positions", {"user": a, "limit": 500})
+            rows = [norm_pos(x) for x in envelope_rows(res, "data")]
+            live = [p for p in rows if p["size"] >= 1 and not p["redeemable"] and p["cur"] and 0.01 < p["cur"] < 0.99]
+            npos = len(live)
+            value = round(sum(p["size"] * p["cur"] for p in live))
+            for p in live:
+                t = p["title"].lower()
+                kinds["updown" if "up or down" in t else "sports" if " vs" in t or "o/u" in t else "other"] += 1
+            more = bool(((res.get("pagination") or {}) if isinstance(res, dict) else {}).get("next_cursor"))
+        except Exception as e:
+            print(f"positions failed for {a}: {e}")
+            more = None
+        try:
+            res = http_json(f"{DATA}/v2/activity", {"user": a, "limit": 200})
+            ar = envelope_rows(res, "data", "activity")
+            ts = [act_time(x) for x in ar]
+            ts = [t for t in ts if t]
+            acts = len(ar)
+            recent = sum(1 for t in ts if (now() - t).days < 7)
+            buys = [x for x in ar if str(pick(x, "side", default="")).upper() == "BUY"]
+            avg_usd = (sum(fnum(pick(x, "usdc_size", "usdcSize")) or fnum(pick(x, "size")) * fnum(pick(x, "price")) for x in buys)
+                       / max(len(buys), 1))
+        except Exception as e:
+            print(f"activity failed for {a}: {e}")
+            avg_usd = None
+        row = {"addr": a, "name": d["name"], "cats": sorted(d["cats"]), "pnl": d["pnl"], "ratio": round(ratio, 3),
+               "open": npos, "more_pages": more, "value": value, "kinds": dict(kinds), "acts200": acts,
+               "acts_7d": recent, "avg_buy_usd": None if avg_usd is None else round(avg_usd)}
+        out.append(row)
+        print("W", json.dumps(row, sort_keys=True))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
-     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun}[cmd]()
+     "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover}[cmd]()
