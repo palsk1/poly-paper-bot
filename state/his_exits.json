@@ -589,5 +589,25 @@
   "title": "Will there be between 25 and 29 average daily transits of the Bab el-Mandeb Strait on October 31?",
   "token": "6951748019944267457340977919999635495635553300507854159007268627444555282625",
   "ts": "2026-11-07T21:25:17Z"
+ },
+ {
+  "days_left": -7.1,
+  "early": false,
+  "end": "2026-11-01",
+  "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-october-31",
+  "exit_price": 1.0,
+  "first_seen": null,
+  "his_avg": 0.9184,
+  "kind": "redeemed",
+  "left_on_table_per_share": 0.0,
+  "outcome": "No",
+  "price_source": "settled price",
+  "profit_per_share": 0.0816,
+  "profit_usd": 19.34,
+  "shares": 236.99,
+  "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-october-31-2026",
+  "title": "Will at least 10 ships transit the Strait of Hormuz on any day by October 31, 2026?",
+  "token": "52802506667868504339931612703803735835409307518376598441687039242828749241841",
+  "ts": "2026-11-08T02:35:18Z"
  }
 ]
