@@ -53,17 +53,10 @@ def is_esport(msg):
     return str(msg.get("status") or "") in ESPORT_STATUS
 
 
-def event_markets(slug):
-    """All open markets of one Polymarket event: [(label, yes_token, question, type)]."""
-    try:
-        evs = http_json(f"{GAMMA}/events", {"slug": slug})
-    except Exception as e:
-        print(f"  gamma error for {slug}: {e}")
+def event_markets(ev):
+    """All open markets of one Polymarket event: [{tok, outcome, q, type, cid}]."""
+    if not ev:
         return None, []
-    evs = evs if isinstance(evs, list) else [evs]
-    if not evs:
-        return None, []
-    ev = evs[0]
     out = []
     for m in ev.get("markets") or []:
         if m.get("closed"):
@@ -73,9 +66,54 @@ def event_markets(slug):
         if not toks:
             continue
         out.append({"tok": str(toks[0]), "outcome": outs[0] if outs else "?", "q": m.get("question"),
-                    "type": m.get("sportsMarketType"), "cid": m.get("conditionId"),
-                    "fee_delay": m.get("secondsDelay") or m.get("seconds_delay")})
+                    "type": m.get("sportsMarketType"), "cid": m.get("conditionId")})
     return ev, out
+
+
+TAGS = ["esports", "counter-strike", "cs2", "dota-2", "league-of-legends", "lol", "valorant"]
+_IDX = {"t": 0, "by_gid": {}, "by_team": {}}
+
+
+def game_index(force=False):
+    """Open esports events on Gamma, by gameId (the sports feed has no slug). Refreshed every 10 min."""
+    if not force and now() - _IDX["t"] < 600:
+        return _IDX
+    by_gid, by_team, seen = {}, {}, set()
+    for tag in TAGS:
+        for off in range(0, 2000, 500):
+            try:
+                evs = http_json(f"{GAMMA}/events", {"tag_slug": tag, "closed": "false", "limit": 500, "offset": off})
+            except Exception as e:
+                print(f"  gamma {tag}: {e}")
+                break
+            evs = evs if isinstance(evs, list) else []
+            for ev in evs:
+                if ev.get("id") in seen:
+                    continue
+                seen.add(ev.get("id"))
+                gids = {ev.get("gameId")} | {m.get("gameId") for m in ev.get("markets") or []}
+                for g in gids:
+                    if g:
+                        by_gid[str(g)] = ev
+                by_team[(ev.get("title") or "").lower()] = ev
+            if len(evs) < 500:
+                break
+    _IDX.update(t=now(), by_gid=by_gid, by_team=by_team)
+    print(f"  gamma: {len(seen)} open esports events, {len(by_gid)} with a gameId")
+    return _IDX
+
+
+def find_event(msg):
+    idx = game_index()
+    ev = idx["by_gid"].get(str(msg.get("gameId")))
+    if ev:
+        return ev
+    h, a = (msg.get("homeTeam") or "").lower(), (msg.get("awayTeam") or "").lower()
+    if h and a:
+        for title, ev in idx["by_team"].items():
+            if h in title and a in title:
+                return ev
+    return None
 
 
 class Rec:
@@ -110,9 +148,9 @@ class Rec:
             if okey != key:
                 self.changes.append((t, gid, okey, key))
         self.games[gid] = msg
-        if msg.get("live") and gid not in self.slug_of and msg.get("slug"):
-            self.slug_of[gid] = msg["slug"]
-            self.want.put_nowait(gid)
+        if msg.get("live") and gid not in self.slug_of:
+            self.slug_of[gid] = msg.get("slug") or f"{msg.get('leagueAbbreviation')}: {msg.get('homeTeam')} vs {msg.get('awayTeam')}"
+            self.want.put_nowait(msg)
 
     # ---------- market ----------
     def mid_point(self, tok, bid, ask, t):
@@ -218,9 +256,11 @@ async def market_loop(rec, until):
                 while now() < until:
                     # new games to follow
                     while not rec.want.empty():
-                        gid = rec.want.get_nowait()
+                        smsg = rec.want.get_nowait()
+                        gid = smsg.get("gameId")
                         slug = rec.slug_of[gid]
-                        ev, mk = await asyncio.get_running_loop().run_in_executor(None, event_markets, slug)
+                        ev = await asyncio.get_running_loop().run_in_executor(None, find_event, smsg)
+                        ev, mk = event_markets(ev)
                         if not mk:
                             print(f"  no Polymarket markets for live game {gid} {slug}")
                             continue
@@ -398,20 +438,36 @@ async def scan():
         tag = "ESPORT" if is_esport(x) else "sport"
         print(f"  {tag} {x.get('leagueAbbreviation')} {x.get('slug')} | {x.get('status')} live={x.get('live')} "
               f"score={x.get('score')} period={x.get('period')} | {len(xs)} msgs | keys {sorted(x.keys())}")
+    game_index(force=True)
+    shown = 0
     for gid, xs in seen.items():
         x = xs[-1][1]
-        if is_esport(x) and x.get("live") and x.get("slug"):
-            ev, mk = event_markets(x["slug"])
-            print(f"  -> {x['slug']}: {(ev or {}).get('title')} | {len(mk)} markets")
-            for m in mk[:12]:
-                print(f"       {m['type']} | {m['q']} | {m['outcome']}")
-            if ev:
-                print(f"       event keys: {sorted(ev.keys())[:80]}")
-            break
+        if not is_esport(x):
+            continue
+        print(f"  {x.get('leagueAbbreviation')} {x.get('homeTeam')} vs {x.get('awayTeam')} | {x.get('score')} | gameId {gid}")
+        ev, mk = event_markets(find_event(x))
+        print(f"    -> {(ev or {}).get('title')} | {(ev or {}).get('slug')} | {len(mk)} markets")
+        for m in mk[:12]:
+            print(f"       {m['type']} | {m['q']} | {m['outcome']}")
+        if ev and not shown:
+            shown = 1
+            print(f"       event keys: {sorted(ev.keys())[:80]}")
+    # what starts soon (by gameStartTime / startTime) so we know when to record
+    soon = []
+    for ev in {id(e): e for e in _IDX["by_team"].values()}.values():
+        st = ev.get("startTime") or next((m.get("gameStartTime") for m in ev.get("markets") or [] if m.get("gameStartTime")), None)
+        if st:
+            soon.append((str(st), ev.get("title"), ev.get("volume24hr") or ev.get("volume")))
+    soon.sort()
+    nowiso = time.strftime("%Y-%m-%dT%H", time.gmtime(now() - 3 * 3600))
+    print("  starting soon (UTC):")
+    for st, title, vol in [x for x in soon if x[0] >= nowiso][:40]:
+        print(f"    {st} | {title} | vol {vol}")
 
 
 def selftest():
     rec = Rec(path=os.path.join(OUT_DIR, "selftest.jsonl.gz"))
+    _IDX["t"] = now()
     rec.mkts["A"] = {"game": 1, "q": "Team X vs Team Y", "outcome": "X", "tok": "A"}
     rec.slug_of[1] = "cs2-x-y"
     base = 1000.0
