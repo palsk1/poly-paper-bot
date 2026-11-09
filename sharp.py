@@ -121,6 +121,36 @@ def probe2():
             print("   ", json.dumps(r)[:900])
 
 
+def probe3():
+    """Raw shapes needed for matching: Pinnacle matchups + moneyline prices; Polymarket game events in the next 2 days."""
+    for sid in (29, 4):
+        mus = pin(f"/sports/{sid}/matchups")
+        mks = pin(f"/sports/{sid}/markets/straight", {"primaryOnly": "true"})
+        print(f"\n== pinnacle sport {sid}: {len(mus)} matchups, {len(mks)} markets; types",
+              sorted({(m.get('type'), m.get('key')) for m in mks})[:12])
+        reg = [m for m in mus if m.get("type") == "matchup" and not m.get("isLive")][:2]
+        for m in reg:
+            print("  MATCHUP", json.dumps({k: m.get(k) for k in ("id", "type", "startTime", "isLive", "parentId", "units",
+                                                               "participants", "status")})[:700],
+                  "| league", (m.get("league") or {}).get("name"))
+            for mk in mks:
+                if mk.get("matchupId") == m.get("id") and mk.get("type") == "moneyline":
+                    print("    ML", json.dumps(mk)[:500])
+    now = bot.now()
+    import datetime as dt
+    evs = bot.gamma_events({"tag_id": 100639, "closed": "false", "end_date_min": bot.iso(now),
+                            "end_date_max": bot.iso(now + dt.timedelta(days=2))}, max_pages=3)
+    print(f"\n== polymarket game events ending within 2 days: {len(evs)}")
+    soc = [e for e in evs if any("win on" in str(m.get("question", "")) for m in e.get("markets") or [])][:2]
+    for e in evs[:2] + soc:
+        print(f"  EVENT {e.get('slug')} | {e.get('title')} | startTime {e.get('startTime')} | series "
+              f"{[s.get('slug') for s in e.get('series') or []]} | tags {[t.get('slug') for t in e.get('tags') or []][:6]}")
+        for m in (e.get("markets") or []):
+            if m.get("sportsMarketType") == "moneyline":
+                print("    ", {k: m.get(k) for k in ("question", "outcomes", "outcomePrices", "bestAsk", "bestBid",
+                                                    "gameStartTime", "groupItemTitle", "liquidityNum", "feeSchedule")})
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "probe"
-    {"probe": probe, "probe2": probe2}[what]()
+    {"probe": probe, "probe2": probe2, "probe3": probe3}[what]()
