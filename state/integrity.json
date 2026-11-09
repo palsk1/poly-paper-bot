@@ -1,0 +1,13 @@
+{
+ "alerted": {},
+ "checked": "2026-11-09T10:11:48Z",
+ "deep_checked": null,
+ "deep_problems": [],
+ "problems": [
+  {
+   "key": "maker_rewards_high",
+   "track": "maker",
+   "what": "modelled rewards ~$24/day per $100: unverified, likely optimistic"
+  }
+ ]
+}
