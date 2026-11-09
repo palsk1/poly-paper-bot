@@ -44,6 +44,7 @@ and you read the result in the run log. All of it is paper only.
 | `probe.py egcheck`, `marks_<track>` | Endgame fill check; open bets marked at bid vs ask | probe `egcheck`, `marks_<track>` |
 | `walletcheck.py` | Full profile of one Polymarket wallet (what, at what price, how long, where the profit comes from) | probe `wallet_<0xaddress>` |
 | `arbhunt.py` | Hunts new safe pair kinds: strike/deadline ladders, duplicate listings, rejected pairs, sports | probe `hunt`, `hunt_ladders`, `hunt_dupes`, `hunt_rejected`, `hunt_sports2` |
+| `logichunt.py` | Markets that contradict each other: champion vs conference vs playoffs lists, plain yes/no groups (all-NO / all-YES), ladders across two events, Kalshi exclusive sets and strike ladders; `lh_watch_<min>` re-prices the near misses every 3 min (findings `backtest/logic.md`) | probe `lh_all`, `lh_nested`, `lh_groups`, `lh_cross`, `lh_kalshi`, `lh_watch_<min>`, `lh_kevent_<TICKER>` |
 | `edges.py` | Liquidity rewards, negRisk conversion, holding rewards | probe `edges_rewards`, `edges_negrisk`, `edges_holding`, `edges_all` (PR #5) |
 | `bot.py` dry runs | `arbtest, dryrun, discover, copytest, depthtest, fasttest, makertest, kmakertest` | probe `<name>` |
 
