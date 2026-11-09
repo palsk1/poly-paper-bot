@@ -1077,4 +1077,9 @@ if __name__ == "__main__":
      "btkcfetch": lambda: __import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)),
      "btkcrun": lambda: __import__("kcrypto").run(),
      "btkc2": lambda: (__import__("kcrypto").fetch(2), __import__("kcrypto").run()),
+     "btrulespeek": lambda: __import__("rules").peek(),
+     "btrulesfetch": lambda: __import__("rules").fetch(),
+     "btrulessmall": lambda: (__import__("rules").fetch_small(), __import__("rules").run()),
+     "btrulesrun": lambda: __import__("rules").run(),
+     "btrules": lambda: (__import__("rules").fetch(), __import__("rules").run()),
      "btcalibsmall": lambda: (__import__("calib").fetch_small(), __import__("calib").run())}[cmd]()

@@ -150,6 +150,18 @@ What it found (profit per $100 staked at +2c slippage):
 - Weather long shots at 10-25c, 1-7 days out, also came out ahead (+$28): the same effect `fade_sure` already trades at 2-10c.
 - 272 slices were tested, so about 13 could pass by luck. A pass is a lead, not proof. Final market volume was NOT used as a rule: it knows the outcome (surprises draw volume).
 
+## Fine-print hunt (added 2026-11-09, `rules.py`, `fineprint.py`)
+
+Does the crowd trade the title and miss the rules? `rules.py` pulls the rule text and UMA history (proposed, disputed, resolved) for the 124,260 finished markets in the backtest cache (395 were disputed) and flags text a trader could read before the end: "official" only, "announced", "plans don't count", "consensus of credible reporting", room for judgment, 2+ things that don't count, a date the title doesn't name, very long rules. `fineprint.py` holds the flags, so the bot and the backtest use the same code. Results in `backtest/rules.md`; rerun with probe input `btrulesrun` (`btrulesfetch` refreshes the rule text, `btrulespeek` shows raw fields).
+
+What it found (profit per $100 staked at +2c):
+- **The flags predict disputes very well.** No flags: 0.4 disputes per 1,000 markets. 4+ flags: 51 per 1,000. Useful as a warning light, and `fineprint.trouble_score()` is there for any track that wants one.
+- **But the prices are already right.** Buying YES or NO in flagged markets loses about the spread, like everything else. The guess "strict rules make YES too dear" is wrong: if anything YES does slightly better in "official only" markets than in look-alikes.
+- **Disputed markets are where long shots win** (in hindsight: +$108 per $100 on 2-25c tickets). You can't know a dispute in advance.
+- **The one lead died on the volume-bias check.** 1-3 days after the end date, unpaid, 2+ flags, underdog at 10-30c looked like +$20 per $100 on the $20k+ cache. Adding every $1k-20k market that sat unpaid (probe `btrulessmall`, 10,510 markets) turns it into **-$18 per $100** (band -$31 to -$6). The cache keeps a market only if its final volume passed $20k, and a late surprise draws volume, so winning long shots were over-represented (they won 1.38x what their prices said there, 0.63x in the small markets). No track was added.
+- 204 rows were tested, so about 10 could pass by luck. One did ("rules name a date the title doesn't", buy YES 1-3 days out), but its markets are a grab bag (earthquake counts, Trump-says-this-week, Hormuz shipping) and it is on the same biased cache, so it is treated as luck.
+- Limits: Gamma shows today's rule text. Polymarket's later clarifications don't appear in it (none were found), so the flags read close to what traders saw.
+
 ## Sharp bookie price (added 2026-11-09, `sharp.py`)
 
 Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.
@@ -264,6 +276,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
 - `backtest/checks.md`, `backtest/PROTOCOL.md`: backtest sanity checks and the test-before-results rules (`btcheck.py`)
 - `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
+- `backtest/rules.md`: fine-print hunt, rule-text flags vs disputes and prices (`rules.py`, `fineprint.py`)
 - `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
