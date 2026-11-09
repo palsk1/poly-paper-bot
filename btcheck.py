@@ -592,6 +592,70 @@ def mention_bets(markets, hist, side_rule="no", lo=0.25, hi=0.90, days=7, slip=0
     return [(v[1], v[2], v[0]) for v in first.values()]
 
 
+QUIET_SKIP = ("up or down", "temperature")
+
+
+def quiet_bets(markets, hist, lo=0.50, hi=0.75, max_range=0.02, d_from=3, d_to=1, slip=0.02, t_from=None, t_to=None,
+               complete=None):
+    """quiet_no, as the live track trades it (bot.quiet_candidates): scanning hourly from d_from to d_to days before
+    the end, the first hour the second answer is priced lo..hi and the first answer's price moved less than max_range
+    over the 7 days before. Buy 1 hour later at the history price + slip + fee, hold. One bet per event (earliest).
+    complete: event ids to keep (whole events, ideas.load_full), or None for all."""
+    first = {}
+    for mk in markets.values():
+        if mk.get("sports") or any(w in mk["q"].lower() for w in QUIET_SKIP) or len(mk.get("toks") or []) != 2:
+            continue
+        if t_from is not None and mk["end"] < t_from or t_to is not None and mk["end"] >= t_to:
+            continue
+        ev = mk.get("ev") or mk["id"]
+        if complete is not None and ev not in complete:
+            continue
+        h = hist.get(mk["id"])
+        if not h or not h[0]:
+            continue
+        pay = settle_value(mk, 1)
+        if pay not in (0.0, 1.0):
+            continue
+        T_, P_ = h
+        t = mk["end"] - d_from * DAY
+        t -= t % 3600
+        stop_t = min(mk["end"] - d_to * DAY, (mk["closed_t"] or mk["end"]) - 2 * 3600)
+        hit = None
+        while t < stop_t:
+            p0, tp = price_at(h, t, 0)
+            if p0 is not None and t - tp <= 3 * DAY and lo <= 1 - p0 <= hi:
+                a, _ = price_at(h, t - 7 * DAY, 0)
+                k0, k1 = bisect.bisect_right(T_, t - 7 * DAY), bisect.bisect_right(T_, t)
+                w = P_[k0:k1] + ([a] if a is not None else [])
+                if a is not None and max(w) - min(w) < max_range:
+                    hit = t
+                    break
+            t += 3600
+        if hit is None:
+            continue
+        p, _ = price_at(h, hit + 3600, 1)
+        if p is None or (ev in first and first[ev][0] <= hit):
+            continue
+        e = min(0.99, p + slip)
+        f = fee_of(1, e, mk["fee"])
+        first[ev] = (hit, pay - e - f, e + f, mk["q"])
+    return [(v[1], v[2], v[0]) for v in first.values()]
+
+
+def quiet_check():
+    """In-sample reference for quiet_no with the exact live rule (markets ending before HOLDOUT_FROM, whole events)."""
+    import ideas
+    markets, hist, complete = ideas.load_full()
+    cut = T(HOLDOUT_FROM)
+    print(f"whole events: {'yes' if complete is not None else 'NO (run btideasfetch)'}")
+    for label, kw in (("+2c", {}), ("+5c", {"slip": 0.05})):
+        rows = quiet_bets(markets, hist, t_to=cut, complete=complete, **kw)
+        s = ratio_stats([(a, b) for a, b, _ in rows])
+        a, b = halves_of(rows)
+        print(f"quiet_no in-sample {label}: {s['n'] if s else 0} events, {m100(s and s['per100'])} per $100, band {band(s)}, "
+              f"halves {m100(a and a['per100'])} / {m100(b and b['per100'])}")
+
+
 def mention_table(markets, hist, t_to):
     L = ["| Test | Events | Per $100 | 90% band | 1st half / 2nd half |", "|---|---|---|---|---|"]
 
@@ -841,5 +905,5 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = (sys.argv[1] if len(sys.argv) > 1 else "run").replace("btcheck", "").replace("bt", "") or "run"
-    {"run": run, "self": selftest, "selftest": selftest, "holdout": holdout,
+    {"quiet": quiet_check, "run": run, "self": selftest, "selftest": selftest, "holdout": holdout,
      "holdout_force": lambda: holdout(True)}[cmd]()
