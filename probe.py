@@ -654,3 +654,188 @@ def egcheck():
 
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "egcheck":
     egcheck()
+
+
+def audit():
+    """audit: data-integrity check of past paper trades against Polymarket's own records (read-only, saves nothing).
+    A) fills: was there a real trade at or below our buy price near our buy time? (all non-endgame tracks)
+    B) copy timing: did the copied wallet really BUY that token shortly before we copied it, or was it a split
+       (both sides at 50c) / an old position that only looked new?
+    C) payouts: do 'resolved' closes match the market's final price today?
+    D) stuck: open positions whose market is closed but never settled.
+    E) marks: open P&L at the listed price vs what the best bid would pay right now."""
+    import bot, datetime as dt, random as rnd
+    from collections import defaultdict
+    T = bot.load_tracks()
+    C = bot.CFG["tracks"]
+    rnd.seed(7)
+
+    def ts_of(x):
+        t = x.get("timestamp")
+        try:
+            t = float(t)
+            return dt.datetime.fromtimestamp(t / 1000 if t > 1e11 else t, dt.timezone.utc)
+        except (TypeError, ValueError):
+            return None
+
+    tape_cache = {}
+
+    def tape(cid):
+        if cid not in tape_cache:
+            try:
+                tape_cache[cid] = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"condition_id": cid, "limit": 500}), "data", "trades")
+            except Exception as e:
+                print("  tape failed", cid[:10], e)
+                tape_cache[cid] = []
+        return tape_cache[cid]
+
+    # ---- A) fills
+    print("== A) buy fills vs the real trade tape (+-60 min)")
+    by_src = defaultdict(list)
+    for n, tr in T.items():
+        src = C[n]["source"]
+        if src in ("endgame", "arb", "fullset", "ladder", "maker"):
+            continue
+        for tok, p in list(tr["positions"].items()) + [(c.get("token"), c) for c in tr["closed"]]:
+            if tok and p.get("slug"):
+                by_src[src].append((n, tok, p))
+    tot = defaultdict(lambda: [0, 0, 0])
+    for src, rows in by_src.items():
+        for n, tok, p in rnd.sample(rows, min(12, len(rows))):
+            m = bot.market_by_slug(p["slug"]) or {}
+            cid = m.get("conditionId")
+            t0 = bot.parse_iso(p["opened"])
+            tp = tape(cid) if cid else []
+            near = [(float(x.get("price", 0)), ts_of(x)) for x in tp if str(x.get("asset")) == tok and ts_of(x)
+                    and abs((ts_of(x) - t0).total_seconds()) <= 3600]
+            cheap = [x for x in near if x[0] <= p["entry"] + 0.01]
+            oldest = min((ts_of(x) for x in tp if ts_of(x)), default=None)
+            covered = oldest is not None and oldest <= t0
+            s = tot[src]
+            s[0] += 1
+            s[1] += bool(cheap)
+            s[2] += covered
+            print(f"  {src:9} {n:22} {p.get('price_source')} entry {p['entry']:.3f} at {p['opened'][5:16]} | tape covers "
+                  f"{covered} near {len(near)} at/below+1c {len(cheap)} min {min((x[0] for x in near), default=None)} | "
+                  f"{p.get('title', '')[:50]} [{p.get('outcome')}]")
+    for src, (k, h, cov) in tot.items():
+        print(f"  -> {src}: {h} of {k} sampled buys had a real trade at/below our price +1c within 60 min ({cov} with tape covering the time)")
+
+    # ---- B) copy timing
+    print("== B) copy tracks: did the wallet really buy it just before us?")
+    act = {}
+
+    def acts(addr):
+        if addr not in act:
+            rows = []
+            for pth in ("v2/activity", "v2/trades"):
+                try:
+                    rows = bot.envelope_rows(bot.http_json(f"{bot.DATA}/{pth}", {"user": addr, "limit": 500}), "data", "activity", "trades")
+                except Exception as e:
+                    print("  activity failed", addr[:10], e)
+                if rows:
+                    break
+            act[addr] = rows
+        return act[addr]
+    rows = []
+    for n, tr in T.items():
+        if C[n]["source"] != "wallet":
+            continue
+        for tok, p in list(tr["positions"].items()) + [(c.get("token"), c) for c in tr["closed"]]:
+            if tok and not p.get("backfill"):
+                rows.append((n, tok, p))
+    split_like = old_like = ok = unknown = 0
+    for n, tok, p in rnd.sample(rows, min(45, len(rows))):
+        addr = C[n]["address"].lower()
+        a = acts(addr)
+        t0 = bot.parse_iso(p["opened"])
+        mine = [x for x in a if str(bot.pick(x, "asset", "asset_id", "token_id", default="")) == tok]
+        buys = [x for x in mine if str(x.get("type", "TRADE")).upper() == "TRADE" and str(x.get("side", "")).upper() == "BUY"]
+        kinds = sorted({str(x.get("type", "TRADE")).upper() for x in mine})
+        oldest = min((ts_of(x) for x in a if ts_of(x)), default=None)
+        before = [ts_of(x) for x in buys if ts_of(x) and ts_of(x) <= t0 + dt.timedelta(minutes=5)]
+        lag = (t0 - max(before)).total_seconds() / 60 if before else None
+        cid = ((bot.market_by_slug(p.get("slug")) or {}).get("conditionId"))
+        splits = [x for x in a if str(x.get("type", "")).upper() in ("SPLIT", "MERGE", "CONVERSION")
+                  and (str(x.get("conditionId") or x.get("condition_id") or "") == str(cid))]
+        if splits or (0.495 <= (p.get("their_avg") or 0) <= 0.505 and not buys):
+            verdict = "SPLIT"
+            split_like += 1
+        elif lag is not None and lag <= 30:
+            verdict = "ok"
+            ok += 1
+        elif oldest and oldest > t0:
+            verdict = "unknown (activity too short)"
+            unknown += 1
+        else:
+            verdict = "OLD/NO BUY FOUND"
+            old_like += 1
+        print(f"  {n:24} {verdict:28} lag {None if lag is None else round(lag)} min, kinds {kinds}, their avg "
+              f"{p.get('their_avg')} ours {p['entry']:.3f} | {p.get('title', '')[:50]} [{p.get('outcome')}]")
+    print(f"  -> copies: {ok} ok (wallet bought <=30 min before us), {split_like} split-like, {old_like} no matching buy, {unknown} can't tell")
+
+    # ---- C) payouts
+    print("== C) resolved closes vs the final price today")
+    res = [(n, c) for n, tr in T.items() for c in tr["closed"] if c.get("reason") == "resolved" and c.get("token")]
+    bad = 0
+    for n, c in rnd.sample(res, min(40, len(res))):
+        m = bot.market_by_slug(c.get("slug"))
+        now_p = bot.resolved_payout(m, c["token"])
+        flag = "" if now_p is not None and abs(now_p - c["exit"]) < 1e-6 else "  <-- MISMATCH"
+        bad += bool(flag)
+        print(f"  {n:22} paid {c['exit']} now {now_p} uma {m and m.get('umaResolutionStatus')}{flag} | {c.get('title', '')[:55]}")
+    print(f"  -> {bad} of {min(40, len(res))} sampled payouts differ from today's final price")
+
+    # ---- D + E) stuck positions and marks vs bid
+    print("== D/E) open positions: stuck after close, and listed mark vs best bid")
+    bot.prefetch_markets(p.get("slug") for tr in T.values() for p in tr["positions"].values())
+    gap = defaultdict(lambda: [0.0, 0.0, 0])
+    stuck = 0
+    for n, tr in T.items():
+        for tok, p in tr["positions"].items():
+            m = bot.market_by_slug(p.get("slug"))
+            if not m:
+                print(f"  NO MARKET {n} {p.get('slug')}")
+                stuck += 1
+                continue
+            if m.get("closed") and bot.resolved_payout(m, tok) is None:
+                stuck += 1
+                print(f"  STUCK {n} closed but unsettled: prices {m.get('outcomePrices')} uma {m.get('umaResolutionStatus')} | {p.get('title', '')[:60]}")
+            mk = bot.mark(p, tok)
+            toks = bot.market_tokens(m)
+            bb, ba = bot.fnum(m.get("bestBid"), None), bot.fnum(m.get("bestAsk"), None)
+            bid = None
+            if toks and tok == toks[0]:
+                bid = bb
+            elif toks and ba is not None:
+                bid = 1 - ba
+            g = gap[n]
+            g[0] += p["shares"] * mk
+            g[1] += p["shares"] * (bid if bid is not None else mk)
+            g[2] += 1
+    print(f"  -> {stuck} open positions stuck or without a market")
+    worst = sorted(gap.items(), key=lambda kv: kv[1][1] - kv[1][0])[:25]
+    for n, (a, b, k) in worst:
+        print(f"  {n:24} {k:3} open: worth ${a:7.2f} at listed price, ${b:7.2f} at the best bid (gap ${b - a:+.2f})")
+    print(f"  -> all tracks: ${sum(v[0] for v in gap.values()):.2f} at listed vs ${sum(v[1] for v in gap.values()):.2f} at bid")
+
+    # ---- F) arb lots reusing the same depth
+    print("== F) arb: depth behind repeated lots")
+    tr = T.get("arb", {})
+    lots = defaultdict(list)
+    for a in tr.get("arbs", {}).values():
+        lots[a["pair_id"]].append(a)
+    for pid, ls in lots.items():
+        a = ls[0]
+        k = bot.kalshi_asks(a["kalshi"])
+        pb = bot.book(a["poly_token"])
+        kl = (k[0] if a["k_side"] == "yes" else k[1]) if k else []
+        need = sum(x["shares"] for x in ls)
+        kd = sum(s for p, s in kl if p <= a["k_price"] + 1e-9)
+        pd = sum(s for p, s in (pb or {}).get("asks", []) if p <= a["p_price"] + 1e-9)
+        print(f"  {pid[:40]} {len(ls)} lots = {need} shares; now Kalshi {a['k_side']} depth at <= {a['k_price']}: {kd:.0f}, "
+              f"Poly depth at <= {a['p_price']}: {pd:.0f}; opened {[x['opened'][5:16] for x in ls]}")
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "audit":
+    audit()
