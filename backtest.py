@@ -1051,6 +1051,12 @@ def fade():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if cmd == "btideasvolbias":
+        __import__("ideas").volbias()
+        sys.exit(0)
+    if cmd.startswith("btideasdrill_"):  # idea machine drill-down (ideas.py)
+        __import__("ideas").drill(cmd[len("btideasdrill_"):])
+        sys.exit(0)
     if cmd.startswith("btcheck") or cmd == "btholdout":  # sanity checks of this backtester (btcheck.py)
         sys.argv[1] = {"btcheck": "run", "btcheckself": "selftest", "btholdout": "holdout"}.get(cmd, cmd)
         import runpy
@@ -1060,6 +1066,8 @@ if __name__ == "__main__":
      "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag,
      "btfade": lambda: (fetch(), fade()), "fade": fade,
      "btcalib": lambda: __import__("calib").run(),
+     "btideas": lambda: __import__("ideas").run(),
+     "btideasself": lambda: __import__("ideas").selftest(),
      "btkc": lambda: (__import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)), __import__("kcrypto").run()),
      "btkcfetch": lambda: __import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)),
      "btkcrun": lambda: __import__("kcrypto").run(),
