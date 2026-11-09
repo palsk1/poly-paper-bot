@@ -105,6 +105,30 @@
       "source": "maker",
       "rules": "maker"
     },
+    "maker_tp": {
+      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells what it holds at the real bid once it is up 3c a share after the fee, then keeps quoting. $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker_tp"
+    },
+    "maker_tpsl": {
+      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells at the real bid once up 3c a share (take profit) or down 5c a share (stop loss), then keeps quoting. $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker_tpsl"
+    },
+    "maker_flat": {
+      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: never keeps a bet: whatever fills is sold at the real bid on the next run. Pays the spread each time, but a price move can't hurt it much. $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker_flat"
+    },
+    "maker_short": {
+      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: only quotes markets that end within 30 days (and not within 7). $200 paper",
+      "start_cash": 200,
+      "source": "maker",
+      "rules": "maker_short"
+    },
     "ladder": {
       "label": "Ladder pairs inside Polymarket: two markets of one event where the stricter one can only say YES if the looser one does (higher strike, earlier deadline). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser one comes true. Same site and rules, so no cross-site mismatch. $100 paper",
       "start_cash": 100,
@@ -1084,6 +1108,10 @@
       "scan_books": 400,
       "skip_words": ["up or down", "temperature", "tweets", "weather"]
     },
+    "maker_tp": {"inherit": "maker", "take_profit_c": 3},
+    "maker_tpsl": {"inherit": "maker", "take_profit_c": 3, "stop_loss_c": 5},
+    "maker_flat": {"inherit": "maker", "flatten": true},
+    "maker_short": {"inherit": "maker", "max_days_left": 30},
     "screener": {
       "min_price": 0.8,
       "max_price": 0.95,

@@ -16,6 +16,7 @@
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
+| `maker_tp`, `maker_tpsl`, `maker_flat`, `maker_short` | Maker with a twist (2026-11-09): same quoting, plus take profit, take profit + stop loss, never hold, or short-dated markets only (see "Maker" below) | $200 each |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
@@ -156,7 +157,13 @@ Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone w
 - **Fills come from the real trade tape:** an order fills only if a trade went through our price, or more traded at our price than was queued ahead of us. Quotes sit unchanged between runs, so news in between hits us like it would hit a real slow bot.
 - **Rewards** use Polymarket's own formula against everyone else in the public book, assuming the others are as two-sided as possible (gives us the smaller share), credited only for the minutes since the last run (max 15).
 - A YES from one fill and a NO from the other merge back into $1. Holding stops growing at 2 lots per side. After 3 days, or when a market leaves the list, leftovers are sold at the bid with the taker fee: that is one finished trade for the ranking.
-- `summary.md` splits the result into **rewards earned** and **trading result** (getting picked off, spreads, leftovers). It only works if the first number stays bigger.
+- `summary.md` and the dashboard split the result into **rewards** (a model, likely too high) and **price moves** (getting picked off, spreads, leftovers: real order-book money), the latter as *locked in* and *on what it still holds*. It only works if the rewards beat the price moves.
+- **Variants (2026-11-09, Jan: "can't we exit with profit?")**, $200 each, `maker` stays the control. All sell at the real bid with the taker fee, never on an empty book, and keep quoting afterwards:
+  - `maker_tp`: sells what it holds once it is up 3c a share after the fee.
+  - `maker_tpsl`: the same, plus a stop loss at 5c a share down.
+  - `maker_flat`: never keeps a bet, sells every fill on the next run. Pays the spread each time, but a big price move can't hurt it.
+  - `maker_short`: only markets ending within 30 days (not within 7).
+  Every variant scores its rewards as if it were alone in the book, so the reward numbers are as optimistic as `maker`'s; compare the price-move numbers.
 
 Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estimated about $35 a day of rewards per $100 of quotes, but replaying the last day of prices said a slow bot would have lost about $44 per $100 to getting picked off. Both numbers are rough (one is a snapshot, the other a price replay without the order book), so this track is the real test. Rewards may also have payout minimums or limits we can't see from the public data.
 

@@ -3225,11 +3225,31 @@ def fasttest():
 #  - A YES bought on one side and a NO bought on the other merge back into $1. Leftovers are sold at the bid (taker
 #    fee) when the market leaves our list or after max_days, which ends one finished "trade" for the ranking.
 
+def maker_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "maker"]
+
+
 def maker_rules():
-    for n, tc in CFG["tracks"].items():
-        if tc["source"] == "maker":
-            return n, rules_for(n)
-    return None, None
+    names = maker_names()
+    return (names[0], rules_for(names[0])) if names else (None, None)
+
+
+# Several maker tracks (variants, 2026-11-09) look at the same markets in one run: share the lookups for a minute.
+_maker_cache = {}
+
+
+def maker_cached(key, fn, ttl=60):
+    hit = _maker_cache.get(key)
+    if hit and time.time() - hit[0] < ttl:
+        return hit[1]
+    val = fn()
+    if val is not None:
+        _maker_cache[key] = (time.time(), val)
+    return val
+
+
+def maker_book(tok):
+    return maker_cached(("book", tok), lambda: book(tok))
 
 
 def reward_score(v, s):
@@ -3238,6 +3258,10 @@ def reward_score(v, s):
 
 
 def reward_markets(max_pages=40):
+    return maker_cached(("reward_markets", max_pages), lambda: _reward_markets(max_pages), ttl=600)
+
+
+def _reward_markets(max_pages=40):
     out, cur = [], ""
     for _ in range(max_pages):
         try:
@@ -3263,6 +3287,10 @@ def reward_markets(max_pages=40):
 
 
 def reward_config(cid):
+    return maker_cached(("reward_config", cid), lambda: _reward_config(cid), ttl=600)
+
+
+def _reward_config(cid):
     """Today's live reward pool for one market: {"rate", "v", "min_size"}, rate 0 when no pool runs today.
     None when the lookup fails. /sampling-markets can lag; this per-market answer is the one Polymarket pays on."""
     try:
@@ -3311,6 +3339,8 @@ def maker_pick(tr, r):
         end = parse_iso(rm["end"])
         if rm["cid"] in held or not end or end < soon or rm["min_size"] > r["max_shares"] or rm["v"] <= 0:
             continue
+        if r.get("max_days_left") and end > now() + dt.timedelta(days=r["max_days_left"]):
+            continue  # variant: short-dated markets only
         if any(w in str(rm["title"]).lower() for w in r.get("skip_words", [])):
             continue
         pre.append(rm)
@@ -3322,7 +3352,7 @@ def maker_pick(tr, r):
             if cfg["rate"] <= 0 or cfg["v"] <= 0 or cfg["min_size"] > r["max_shares"]:
                 return None
             rm = {**rm, **cfg}
-        bk = book(rm["yes"])
+        bk = maker_book(rm["yes"])
         sc = book_scores(bk, rm["v"], rm["min_size"]) if bk else None
         if not sc:
             return None
@@ -3351,13 +3381,17 @@ def maker_pick(tr, r):
 
 
 def maker_trades(cid, since):
-    try:
-        res = http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500})
-    except Exception as e:
-        print(f"maker: trades failed for {cid[:10]}: {e}")
+    def fetch():
+        try:
+            return envelope_rows(http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500}), "data", "trades")
+        except Exception as e:
+            print(f"maker: trades failed for {cid[:10]}: {e}")
+            return None
+    rows = maker_cached(("trades", cid), fetch)
+    if rows is None:
         return None
     out = []
-    for t in envelope_rows(res, "data", "trades"):
+    for t in rows:
         ts = fnum(pick(t, "timestamp", "time"))
         ts = ts / 1000 if ts > 1e11 else ts
         if ts > since:
@@ -3392,29 +3426,72 @@ def maker_close(tr, name, key, why, payout=None):
         if payout is not None:
             px = payout if side == "yes" else 1 - payout
         else:
-            bk = book(tok)
+            bk = maker_book(tok)
             px = walk(bk["bids"], sh) if bk else None
             if px is None:  # nobody to sell to: count it at half the best bid (or nothing)
                 px = (bk["bids"][0][0] / 2) if bk and bk["bids"] else 0.0
             fee += taker_fee(sh, px, b.get("fee_rate", 0.0))
         proceeds += sh * px
     proceeds -= fee
-    pnl = b["rewards"] + b["merged_pnl"] + proceeds - b["yes_cost"] - b["no_cost"]
+    exit_pnl = b.get("exit_pnl", 0.0)
+    pnl = b["rewards"] + b["merged_pnl"] + exit_pnl + proceeds - b["yes_cost"] - b["no_cost"]
     tr["cash"] = round(tr["cash"] + proceeds, 6)
-    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"], 6)  # rewards/merges booked already
+    # rewards, merges and early sales were booked when they happened
+    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"] - exit_pnl, 6)
     rec = {"title": b["title"], "slug": b["slug"], "cid": b["cid"], "opened": b["opened"], "closed_at": iso(),
            "reason": why, "cost": round(b["size"], 4), "pnl": round(pnl, 4), "rewards": round(b["rewards"], 4),
            "merged_pnl": round(b["merged_pnl"], 4), "leftover_pnl": round(proceeds - b["yes_cost"] - b["no_cost"], 4),
+           "exit_pnl": round(exit_pnl, 4), "exits": b.get("exits", 0),
            "fills": b["fills"], "minutes_quoted": round(b["minutes"], 1)}
     tr["closed"].append(rec)
     log_event({"type": "maker_close", "track": name, "title": b["title"], "pnl": round(pnl, 4), "reason": why})
     return rec
 
 
-def maker_cycle(tracks, pick_new=True):
-    name, r = maker_rules()
-    if not name:
+def maker_exits(tr, name, b, r):
+    """Variants (2026-11-09, Jan: "can't we exit with profit?"): sell what we hold at the real bid, taker fee paid,
+    when it is up take_profit_c cents a share (after the fee), down stop_loss_c cents, or always (flatten). No buyer
+    on the book for all our shares = no sale (no estimate fills). Quoting goes on, so rewards keep coming."""
+    tp, sl, flat = r.get("take_profit_c"), r.get("stop_loss_c"), r.get("flatten")
+    if tp is None and sl is None and not flat:
         return
+    for side, tok in (("yes", b["yes_tok"]), ("no", b["no_tok"])):
+        sh = b[side]
+        if sh <= EPS:
+            continue
+        bk = maker_book(tok)
+        px = walk(bk["bids"], sh) if bk else None
+        if px is None:
+            continue
+        fee = taker_fee(sh, px, b.get("fee_rate", 0.0))
+        cost = b[side + "_cost"]
+        per = (sh * px - fee - cost) / sh * 100  # cents a share
+        why = ("flatten" if flat else "take profit" if tp is not None and per >= tp
+               else "stop loss" if sl is not None and per <= -sl else None)
+        if not why:
+            continue
+        gain = sh * px - fee - cost
+        tr["cash"] = round(tr["cash"] + sh * px - fee, 6)
+        tr["realized"] = round(tr["realized"] + gain, 6)
+        b["exit_pnl"] = b.get("exit_pnl", 0.0) + gain
+        b["exits"] = b.get("exits", 0) + 1
+        tr["exits"] = tr.get("exits", 0) + 1
+        b[side], b[side + "_cost"] = 0.0, 0.0
+        log_event({"type": "maker_exit", "track": name, "title": b["title"], "price": round(px, 4),
+                   "pnl": round(gain, 4), "reason": f"{why}: sold {sh:.0f} {side.upper()} at {px * 100:.1f}c"})
+
+
+def maker_cycle(tracks, pick_new=True):
+    for name in maker_names():
+        if name not in tracks:
+            continue
+        try:
+            maker_cycle_one(tracks, name, rules_for(name), pick_new)
+        except Exception as e:
+            print(f"maker {name} failed: {e}")
+
+
+def maker_cycle_one(tracks, name, r, pick_new=True):
     tr = tracks[name]
     tr.setdefault("books", {})
     for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
@@ -3439,7 +3516,7 @@ def maker_cycle(tracks, pick_new=True):
                 if cfg["v"] > 0:
                     b["v"] = cfg["v"]
                 b["cfg_ts"] = t_now
-        bk = book(b["yes_tok"])
+        bk = maker_book(b["yes_tok"])
         sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
         q = b.get("q") or {}
         elapsed = max(0.0, t_now - b["last_ts"])
@@ -3492,6 +3569,7 @@ def maker_cycle(tracks, pick_new=True):
             b["yes"] -= pairs
             b["no"] -= pairs
             tr["merges"] += 1
+        maker_exits(tr, name, b, r)
         # 3) rewards for the minutes our (old) quotes were resting, scored against today's book
         if sc and elapsed > 0:
             mid, qb, qa, bb, ba = sc
@@ -3536,7 +3614,7 @@ def maker_cycle(tracks, pick_new=True):
             if tr["cash"] - maker_locked(tr) - need < -EPS:
                 tr["skipped_no_cash"] += 1
                 continue
-            bk = book(c["yes"])
+            bk = maker_book(c["yes"])
             sc = book_scores(bk, c["v"], c["min_size"]) if bk else None
             if not sc:
                 continue
@@ -3566,12 +3644,17 @@ def maker_summary(name, tr):
              "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
              "skipped_no_cash": tr["skipped_no_cash"], "rewards": round(tr.get("rewards", 0.0), 4),
              "fills": tr.get("fills", 0)}
-    picked_off = pnl - tr.get("rewards", 0.0)
+    rew = tr.get("rewards", 0.0)
+    locked = tr["realized"] - rew  # merges, early sales and finished leftovers: real order-book money
+    stats.update({"maker_rewards": round(rew, 4), "maker_locked": round(locked, 4), "maker_open": round(unreal, 4),
+                  "exits": tr.get("exits", 0)})
     row = (f"| {name} | {pnl:+.2f} | {len(books)} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) | "
-           f"${tr['cash']:.2f} | rewards +${tr.get('rewards', 0.0):.2f}, trading {picked_off:+.2f}; fills {tr.get('fills', 0)} |")
+           f"${tr['cash']:.2f} | rewards +${rew:.2f} (model), trading {locked:+.2f} locked {unreal:+.2f} open; "
+           f"fills {tr.get('fills', 0)}, sold early {tr.get('exits', 0)} |")
     lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
-             f"Rewards earned **${tr.get('rewards', 0.0):.2f}**, buying and selling (getting picked off, spreads, "
-             f"leftovers) **{picked_off:+.2f}**. It only works if the first number stays bigger.\n"]
+             f"Rewards **${rew:.2f}** (a model, not checked against real payouts, likely too high). Price moves, "
+             f"the real-ish part: **{locked:+.2f}** locked in (pairs merged, sold, finished) and **{unreal:+.2f}** on "
+             f"what it still holds at today's middle price. It only works if the rewards beat the price moves.\n"]
     if books:
         lines.append("| Market | Pool/day | Quotes (YES bid / ask) | Holding | Rewards | Fills | Ends |\n|---|---|---|---|---|---|---|")
         for b in books.values():
