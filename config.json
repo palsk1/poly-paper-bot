@@ -28,6 +28,27 @@
   "shares_per_trade": 5,
   "fallback_slippage": 0.01,
   "tracks": {
+    "kc_maker": {
+      "label": "Kalshi late favorite (Reddit bot): in the last ~5 minutes of Kalshi's 15-minute BTC/ETH/SOL/XRP/DOGE/HYPE/BNB up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+), held to the result. Maker, no fee. Fills from the real trade tape, back of the queue. $10 an order, $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker"
+    },
+    "kc_maker_97": {
+      "label": "Kalshi late favorite, fixed 97c: same, but the order sits at 97c while the winning side trades at 97c or more (fills only if it dips). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_97"
+    },
+    "kc_maker_join": {
+      "label": "Kalshi late favorite, join the line: same, but the order joins the best bid (97c+) at the back of the queue. $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_join"
+    },
     "mirror": {
       "label": "Mirror: copies every position he opens and closes ($20 paper)",
       "start_cash": 20,
@@ -1099,6 +1120,33 @@
     }
   },
   "rules": {
+    "kc_maker": {
+      "why": "2026-11-09, Jan's ask: test the Reddit '$50 to $3,000 on Kalshi 15-minute crypto' bot. Inferred method: a few minutes before a 15-minute window closes, rest a buy order on the side that's winning and hold it to the result. Makers pay no fee on these series (fee_type quadratic, checked 2026-11-09). Paper fills from the real trade tape after the close: a full fill only if something traded below our price, otherwise only sells at our price after the queue that was ahead of us. Backtest: kcrypto.py, backtest/kcrypto.md. Claude's track, rule changes reported.",
+      "series": [
+        "KXBTC15M",
+        "KXETH15M",
+        "KXSOL15M",
+        "KXXRP15M",
+        "KXDOGE15M",
+        "KXHYPE15M",
+        "KXBNB15M"
+      ],
+      "min_minutes_left": 0.75,
+      "max_minutes_left": 5.5,
+      "usd_per_order": 10,
+      "kind": "improve",
+      "level": 0.95
+    },
+    "kc_maker_97": {
+      "inherit": "kc_maker",
+      "kind": "level",
+      "level": 0.97
+    },
+    "kc_maker_join": {
+      "inherit": "kc_maker",
+      "kind": "join",
+      "level": 0.97
+    },
     "maker": {
       "why": "Polymarket pays about $190k a day to market makers. A slow bot can only keep it if the rewards beat the losses from getting picked off; this measures both.",
       "shares": 50,

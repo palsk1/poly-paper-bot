@@ -194,6 +194,8 @@ def candles_batch(ms):
                                         "period_interval": 1})
     rows = res.get("markets") if isinstance(res, dict) else None
     if not isinstance(rows, list):
+        if _BATCH_OK[0] is None:
+            print("  batch candles: unexpected answer:", json.dumps(res)[:600])
         return None
     out = {}
     for r in rows:
@@ -227,6 +229,8 @@ def fetch_candles(series, ms, store):
         try:
             first = candles_batch(chunks[0])
             _BATCH_OK[0] = bool(first) and any(first.values())
+            if not _BATCH_OK[0]:
+                print("  batch candles gave nothing; one call per window instead", str(first)[:300])
         except Exception as e:
             print(f"  batch candles endpoint failed ({e}); one call per window instead")
             _BATCH_OK[0] = False

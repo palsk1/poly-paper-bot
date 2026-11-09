@@ -75,6 +75,11 @@ def open_bets(name, tr):
                      "e": None, "n": r2(b.get("mid", 0) * 100),  # P&L = price move only, rewards shown apart
                      "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
                      "end": str(b.get("end", ""))[:10], "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
+    for o in tr.get("orders", {}).values():  # kmaker: resting Kalshi bids, settled from the trade tape after the close
+        rows.append({"t": str(o.get("title", ""))[:90], "o": f"bid {str(o.get('side', '')).upper()} (resting, Kalshi)",
+                     "e": r2(o.get("price", 0) * 100), "n": None, "pnl": 0.0, "c": r2(o.get("cost")),
+                     "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",
+                     "locked": True})
     rows.sort(key=lambda r: -abs(r["pnl"] or 0))
     return rows[:MAX_OPEN], len(rows)
 
