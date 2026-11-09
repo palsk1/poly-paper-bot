@@ -1051,6 +1051,9 @@ def fade():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if cmd.startswith("btideasdrill_"):  # idea machine drill-down (ideas.py)
+        __import__("ideas").drill(cmd[len("btideasdrill_"):])
+        sys.exit(0)
     if cmd.startswith("btcheck") or cmd == "btholdout":  # sanity checks of this backtester (btcheck.py)
         sys.argv[1] = {"btcheck": "run", "btcheckself": "selftest", "btholdout": "holdout"}.get(cmd, cmd)
         import runpy

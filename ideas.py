@@ -621,6 +621,56 @@ def run(out_name="ideas.md"):
     return survivors
 
 
+# ================================================================ drill-down of one survivor
+
+DRILLS = {  # name: (question regex, side, band, horizons)
+    "wx": (r"temperature", 0, (0.25, 0.50), (1, 2, 3)),
+    "wx_all": (r"temperature", 0, (0.02, 0.98), (1, 2, 3)),
+    "superl_nowx": (r"^(?!.*temperature).*(\bmost\b|\bhighest\b|\blowest\b|\bfirst\b|\btop\b|\bbest\b|\blargest\b|\bbiggest\b|#1)", 0, (0.25, 0.50), (1, 2, 3)),
+}
+
+
+def drill(name):
+    """Split one idea every way we can think of: by month, days before the end, price, and its twins."""
+    rx_s, side, band, hzs = DRILLS[name]
+    rx = re.compile(rx_s, re.I)
+    markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
+    hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
+    markets = {k: m for k, m in in_sample(markets_all).items() if not m.get("sports")}
+    FEATURES[:] = []          # no features needed: just rows
+    rows = build_rows(markets, hist, horizons=hzs)
+    half_of, cut = split_events(rows)
+    base = twins(rows, half_of)
+    sel = []
+    for r in rows:
+        q = r["pe"] if side == 0 else 1 - r["pe"]
+        pay = r["y"] if side == 0 else 1 - r["y"]
+        if rx.search(r["q"]) and band[0] <= q < band[1]:
+            sel.append((r, q, pay))
+    print(f"drill {name}: {len(sel)} bets")
+
+    def tab(title, keyf):
+        groups = defaultdict(lambda: defaultdict(list))
+        for r, q, pay in sel:
+            g = keyf(r, q)
+            groups[g][r["ev"]].append((roi(q, pay, r["fee"], SLIP), roi(q, pay, r["fee"], SLIP_HARD),
+                                       roi(q, pay, r["fee"], SLIP) - base[(half_of[r["ev"]], side, int(q * 50), r["h"])], pay))
+        print(f"\n{title}\n| group | events | bets | won | +2c | +5c | vs twins |\n|---|---|---|---|---|---|---|")
+        for g in sorted(groups):
+            evs = groups[g]
+            em = [[sum(x[i] for x in v) / len(v) for i in range(4)] for v in evs.values()]
+            n = len(em)
+            print(f"| {g} | {n} | {sum(len(v) for v in evs.values())} | {sum(1 for v in evs.values() for x in v if x[3] >= 0.5)} | "
+                  f"{m100(sum(e[0] for e in em) / n)} | {m100(sum(e[1] for e in em) / n)} | {m100(sum(e[2] for e in em) / n)} |")
+
+    tab("by month (end date)", lambda r, q: bt.iso_t(r["end"])[:7])
+    tab("by half", lambda r, q: half_of[r["ev"]])
+    tab("by days before the end", lambda r, q: r["h"])
+    tab("by price", lambda r, q: f"{int(q * 20) * 5:02d}-{int(q * 20) * 5 + 5}c")
+    tab("by city / first words", lambda r, q: " ".join(re.sub(r"[^a-z ]", " ", r["q"].lower()).split()[:7])[-28:])
+    tab("all", lambda r, q: "all")
+
+
 def list_ideas():
     for n, s, _, cross in FEATURES:
         print(f"- {n}{' (x topics)' if cross and TOPIC_CROSS else ''}: {s}")
@@ -667,4 +717,7 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"run": run, "list": list_ideas, "selftest": selftest}[cmd]()
+    if cmd.startswith("drill_"):
+        drill(cmd[len("drill_"):])
+    else:
+        {"run": run, "list": list_ideas, "selftest": selftest}[cmd]()
