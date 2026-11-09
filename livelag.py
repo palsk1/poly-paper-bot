@@ -63,8 +63,8 @@ def event_markets(ev):
             continue
         toks = jl(m.get("clobTokenIds"))
         outs = jl(m.get("outcomes"))
-        if not toks:
-            continue
+        if not toks or m.get("sportsMarketType") not in ("moneyline", "child_moneyline"):
+            continue  # match winner + game/map winners only
         out.append({"tok": str(toks[0]), "outcome": outs[0] if outs else "?", "q": m.get("question"),
                     "type": m.get("sportsMarketType"), "cid": m.get("conditionId")})
     return ev, out
@@ -319,6 +319,12 @@ def mid_at(series, t):
     return best
 
 
+def big_part(score):
+    """'21-11|0-1|Bo3' -> '0-1' (maps won). Plain scores stay as they are."""
+    parts = str(score or "").split("|")
+    return parts[1] if len(parts) >= 2 else str(score)
+
+
 def move_time(series, t0, before=60, after=60):
     """When, around t0, did the mid make its move? Returns (time_of_biggest_step, total_move, step)."""
     a, b = mid_at(series, t0 - before), mid_at(series, t0 + after)
@@ -354,19 +360,26 @@ def report(rec, minutes):
     L.append("lead = when the price made its biggest step minus when Polymarket's score feed told us. "
              "Negative = the price moved first.")
     L.append("")
+    small = []   # kills / rounds: (lead, move)
     for t, gid, old, new in rec.changes:
         toks = by_game.get(gid) or []
         if not toks:
             continue
-        L.append(f"- {time.strftime('%H:%M:%S', time.gmtime(t))} {rec.slug_of.get(gid, gid)}: "
-                 f"{old[0]} {old[1]} -> {new[0]} {new[1]} ({new[2]})")
+        is_big = big_part(old[0]) != big_part(new[0]) or old[1] != new[1] or old[2] != new[2]
+        if is_big:
+            L.append(f"- {time.strftime('%H:%M:%S', time.gmtime(t))} {rec.slug_of.get(gid, gid)}: "
+                     f"{old[0]} {old[1]} -> {new[0]} {new[1]} ({new[2]})")
         for tok in toks:
             s = rec.mids.get(tok) or []
-            mt, tot, step = move_time(s, t)
-            if mt is None or abs(tot) < 0.02:
+            win = 60 if is_big else 15
+            mt, tot, step = move_time(s, t, win, win)
+            if mt is None or abs(tot) < (0.02 if is_big else 0.01):
                 continue
             m = rec.mkts[tok]
             lead = mt - t
+            if not is_big:
+                small.append((lead, abs(step)))
+                continue
             leads.append(lead)
             path = " ".join(f"{dt:+d}s:{mid_at(s, t + dt) * 100:.1f}" if mid_at(s, t + dt) is not None else f"{dt:+d}s:-"
                             for dt in (-30, -10, -3, 0, 3, 10, 30))
@@ -375,8 +388,25 @@ def report(rec, minutes):
     if leads:
         xs = sorted(leads)
         L.append("")
-        L.append(f"Leads: n={len(xs)}, median {xs[len(xs)//2]:+.1f}s, price first in {sum(x < 0 for x in xs)}, "
+        L.append(f"Map/game ends: n={len(xs)}, median lead {xs[len(xs)//2]:+.1f}s, price first in {sum(x < 0 for x in xs)}, "
                  f"feed first in {sum(x >= 0 for x in xs)}.")
+    if small:
+        xs = sorted(x[0] for x in small)
+        q = lambda f: xs[min(len(xs) - 1, int(len(xs) * f))]
+        L.append("")
+        L.append(f"Kills/rounds inside a game (window +-15s, moves of 1c+): n={len(xs)}, lead 10th pct {q(0.1):+.1f}s, "
+                 f"median {q(0.5):+.1f}s, 90th pct {q(0.9):+.1f}s; price first in {sum(x < 0 for x in xs)}, "
+                 f"feed first in {sum(x >= 0 for x in xs)}. Big ones (3c+ step):")
+        bigs = sorted(x[0] for x in small if x[1] >= 0.03)
+        if bigs:
+            L.append(f"    n={len(bigs)}, median lead {bigs[len(bigs)//2]:+.1f}s, price first in {sum(x < 0 for x in bigs)}")
+    # how often does the free score feed update?
+    gaps = {}
+    for t, gid, old, new in rec.changes:
+        gaps.setdefault(gid, []).append(t)
+    g = sorted(b - a for ts in gaps.values() for a, b in zip(ts, ts[1:]))
+    if g:
+        L.append(f"\nScore feed: {len(rec.changes)} changes, median gap between updates {g[len(g)//2]:.0f}s.")
     L.append("")
     L.append(f"## Big jumps ({JUMP_C * 100:.0f}c+ within {JUMP_S:.0f}s) and the nearest score change")
     jumps = []
