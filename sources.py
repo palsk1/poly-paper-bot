@@ -399,7 +399,66 @@ def gas(arg="KXAAAGASD"):
         print(f"{name:28s} {hr:4d} {edge:4.2f} {len(tr):5d} {sum(x[3] for x in tr):5d} {cost:8.2f} {pnl:8.2f} {per(tr):8.2f} {per(tr[:h]):8.2f} {per(tr[h:]):8.2f}")
 
 
-MODES = {"map": mapping, "kdaily": kdaily, "precur": precurring}
+# ---------------------------------------------------------------- earthquakes: USGS vs KXBIGGESTQUAKE
+def quake(arg=""):
+    """For each day with a big quake: minutes from the quake (and from USGS first posting it) to the Kalshi
+    price of the 'at least M' rungs it decided going to 90c+."""
+    import kcrypto
+    ev = ladder("KXBIGGESTQUAKE")
+    print(f"{len(ev)} quake days with a ladder")
+    rows = []
+    for k, e in sorted(ev.items(), key=lambda kv: kv[1]["close"]):
+        t0, t1 = e["close"] - 86400 - 6 * 3600, e["close"] + 3600
+        try:
+            q = bot.http_json("https://earthquake.usgs.gov/fdsnws/event/1/query",
+                              {"format": "geojson", "starttime": time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(t0)),
+                               "endtime": time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(t1)), "minmagnitude": 5.8,
+                               "orderby": "magnitude"})
+        except Exception as ex:
+            print(" usgs failed", ex)
+            continue
+        feats = q.get("features") or []
+        if not feats:
+            continue
+        top = feats[0]
+        mag, ot = f(top["properties"].get("mag")), top["properties"]["time"] / 1000
+        first = None
+        try:
+            d = bot.http_json(top["properties"]["detail"])
+            ups = [p.get("updateTime") for kind in ("origin", "phase-data", "moment-tensor")
+                   for p in (d["properties"].get("products") or {}).get(kind, [])]
+            ups = [u / 1000 for u in ups if u]
+            first = min(ups) if ups else None
+        except Exception:
+            pass
+        # 1-minute candles around the quake for rungs at or below the magnitude
+        rungs = [(tk, K) for tk, K, res, vol in e["mk"] if K <= mag + 1e-9 and K >= mag - 0.6]
+        if not rungs:
+            continue
+        try:
+            res = kcrypto.get("/markets/candlesticks", {"market_tickers": ",".join(t for t, _ in rungs),
+                              "start_ts": int(ot - 1800), "end_ts": int(ot + 4 * 3600), "period_interval": 1})
+        except Exception as ex:
+            print(" candles failed", ex)
+            continue
+        cs = {r.get("market_ticker"): [kcrypto.candle_row(c) for c in r.get("candlesticks") or []]
+              for r in res.get("markets") or []}
+        for tk, K in rungs:
+            c = cs.get(tk) or []
+            before = [x for x in c if x[0] <= ot]
+            pre_bid = before[-1][1] if before else None
+            pre_ask = before[-1][2] if before else None
+            hit = next((x for x in c if x[0] > ot and x[1] is not None and x[1] >= 0.9), None)
+            cheap = [x for x in c if x[0] > (first or ot) and x[2] is not None and x[2] <= 0.85]
+            rows.append((k, mag, K, ot, first, pre_bid, pre_ask, hit[0] if hit else None,
+                         cheap[-1][0] if cheap else None, cheap[0][2] if cheap else None))
+    print(f"\n{'day':24s} {'mag':>4s} {'rung':>4s} {'posted':>7s} {'pre bid/ask':>11s} {'bid>=90c':>8s} {'last ask<=85c':>13s}  (minutes after the quake)")
+    for k, mag, K, ot, first, pb, pa, hit, cheap, cheap_px in rows:
+        mm = lambda t: f"{(t - ot) / 60:7.1f}" if t else "      -"
+        print(f"{k:24s} {mag:4.1f} {K:4.1f} {mm(first)} {str(pb):>5s}/{str(pa):<5s} {mm(hit):>8s} {mm(cheap):>13s} {cheap_px if cheap_px is not None else ''}")
+
+
+MODES = {"quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
