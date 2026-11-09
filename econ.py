@@ -886,6 +886,33 @@ def drill():
                           ", ".join(f"{b['t'].split('-')[-1]}:{'Y' if b['side'] else 'N'}@{b['cost']:.2f}{'+' if b['won'] else 'x'}" for b in x))
 
 
+def drill2():
+    """Is the 80-100c result the forecast, or just Kalshi's well-known cheap-favorite pattern? Same band, no forecast."""
+    models = Models()
+    pts, _ = build_points(models)
+    for h in (1, 6, 24, 72):
+        sub = [r for r in pts if r["h"] == h]
+        for lo, hi in ((0.80, 1.0), (0.90, 1.0), (0.50, 0.80), (0.0, 0.20)):
+            allb = []
+            for r in sub:
+                for side in (1, 0):
+                    px = r["ask"] if side else 1 - r["bid"]
+                    if side == 0 and r["bid"] <= 0:
+                        continue
+                    cost = px + kfee(px)
+                    if lo <= cost < hi:
+                        won = r["y"] == side
+                        agree = (r["p"] if side else 1 - r["p"]) - cost >= 0.03
+                        allb.append(dict(r, cost=cost, pnl=(1.0 if won else 0.0) - cost, won=won, agree=agree,
+                                         twin_pnl=0, twin_cost=1))
+            ag = [b for b in allb if b["agree"]]
+            dis = [b for b in allb if not b["agree"]]
+            gd = [b for b in allb if b["s"] == "KXGDP"]
+            print(f"{h}h, paid {int(lo*100)}-{int(hi*100)}c: ANY side {money(per100(allb))} per $100 ({len(allb)} bets, "
+                  f"{len({b['e'] for b in allb})} releases, band {band90(allb)}); forecast agrees {money(per100(ag))} ({len(ag)}); "
+                  f"forecast doesn't {money(per100(dis))} ({len(dis)}); GDP only any side {money(per100(gd))} ({len(gd)})")
+
+
 def fetch_run():
     fetch()
     run()
@@ -893,4 +920,4 @@ def fetch_run():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill}[cmd]()
+    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill, "drill2": drill2}[cmd]()
