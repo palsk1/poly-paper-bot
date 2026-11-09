@@ -512,8 +512,20 @@ def poly_soccer_closed():
     print("Polymarket series:", [(x.get("sport"), x.get("series"), x.get("resolution")) for x in series])
     games = []
     for x in series:
-        evs = bot.gamma_events({"series_id": x.get("series"), "closed": "true", "start_date_min": "2025-07-01"},
-                               max_pages=25)
+        evs, off = [], 0
+        while off < 2000:  # Gamma refuses offsets past ~2000
+            try:
+                rows = bot.envelope_rows(bot.http_json(f"{G}/events", {
+                    "series_id": x.get("series"), "closed": "true", "end_date_min": "2025-08-01",
+                    "limit": 100, "offset": off}), "events", "data")
+            except Exception as e:
+                print(f"  series {x.get('sport')} offset {off}: {e}")
+                break
+            evs += [e for e in rows if isinstance(e, dict)]
+            if len(rows) < 100:
+                break
+            off += 100
+        print(f"  {x.get('sport')}: {len(evs)} closed events")
         for e in evs:
             ms = [m for m in e.get("markets") or [] if m.get("sportsMarketType") == "moneyline"
                   and [o.lower() for o in bot.jlist(m.get("outcomes"))] == ["yes", "no"]]

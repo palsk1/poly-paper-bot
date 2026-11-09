@@ -2757,7 +2757,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto")
+FAST_SOURCES = ("weather", "crypto", "sharp")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -2840,7 +2840,7 @@ def run_fast(tracks, force=False):
     if not due:
         return {}
     lists = {}
-    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates)):
+    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -2862,6 +2862,12 @@ def run_fast(tracks, force=False):
         st.setdefault("fast_last", {})[n] = iso()
     save("scan_state.json", st)
     return lists
+
+
+def sharp_candidates(names):
+    """Polymarket game outcomes priced below Pinnacle's fair odds (sharp.py does the matching and de-vig)."""
+    import sharp
+    return sharp.sharp_candidates(names)
 
 
 # ---------------------------------------------------------------- weather

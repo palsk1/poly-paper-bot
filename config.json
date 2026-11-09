@@ -87,6 +87,12 @@
       "source": "endgame",
       "rules": "fade_sure"
     },
+    "sharp_pinnacle": {
+      "label": "Sharp bookie price: buys a Polymarket game outcome (soccer, NBA/NHL/NFL, baseball, esports, MMA) when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and paying the fee. Pre-game only, holds to the end. Real order-book fills. $100 paper",
+      "start_cash": 100,
+      "source": "sharp",
+      "rules": "sharp_pinnacle"
+    },
     "every_horse": {
       "label": "Buy every horse: buys every outcome of one multi-candidate market when together they cost less than the guaranteed payout after fees. All-YES only on provably complete lists; all-NO is safe either way. $100 paper",
       "start_cash": 100,
@@ -1613,6 +1619,24 @@
       "max_open": 40,
       "picks_per_scan": 3,
       "shadow_sell_at": []
+    },
+    "sharp_pinnacle": {
+      "why": "Jan's idea (2026-11-09): Pinnacle is the bookie the pros bet with, so its odds minus its margin are a strong fair price. Polymarket market makers mostly copy Pinnacle, so gaps should be rare and short; this measures how often a 15-minute bot catches one. Fair = the lower of two de-vig methods (sharp.py). One bet per game. Claude's track, rule changes reported.",
+      "sports": ["soccer", "basketball", "hockey", "football", "baseball", "esports", "mma"],
+      "sports_note": "Tennis left out: retirement rules differ between Pinnacle and Polymarket.",
+      "min_price": 0.05,
+      "max_price": 0.95,
+      "min_model_edge": 0.03,
+      "max_model_edge": 0.15,
+      "min_pinnacle_limit": 250,
+      "min_minutes_to_start": 10,
+      "max_hours_to_start": 24,
+      "scan_every_minutes": 15,
+      "picks_per_scan": 5,
+      "max_open": 40,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
     },
     "endgame_ending_soon": {
       "inherit": "endgame",
