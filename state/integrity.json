@@ -2,7 +2,7 @@
  "alerted": {
   "both_sides:consensus_3": "2026-11-09T12:21:46Z"
  },
- "checked": "2026-11-09T13:16:37Z",
+ "checked": "2026-11-09T13:21:29Z",
  "deep_checked": null,
  "deep_problems": [],
  "problems": [
@@ -14,7 +14,7 @@
   {
    "key": "maker_rewards_high",
    "track": "maker",
-   "what": "modelled rewards ~$22/day per $100: unverified, likely optimistic"
+   "what": "modelled rewards ~$21/day per $100: unverified, likely optimistic"
   }
  ]
 }
