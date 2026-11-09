@@ -3024,3 +3024,5 @@
 {"outcome": "No", "pnl": 2.4875, "price": 1.0, "reason": "resolved", "title": "Will the highest temperature in Paris be 10\u00b0C on November 9?", "token": "78174027257382948465149726849188372147533280115455673937554825022789638019331", "track": "wx_forecast", "ts": "2026-11-09T23:35:38Z", "type": "paper_close"}
 {"minutes_left": 8.09, "price": 0.915, "queue": 421.03, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV091845-45", "track": "kc_maker_early", "ts": "2026-11-09T23:36:55Z", "type": "kmaker_order"}
 {"minutes_left": 8.09, "price": 0.905, "queue": 0, "shares": 11, "side": "no", "ticker": "KXETH15M-26NOV091845-45", "track": "kc_maker_early", "ts": "2026-11-09T23:36:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.54, "price": 0.954, "queue": 182.41, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV091845-45", "track": "kc_maker", "ts": "2026-11-09T23:41:28Z", "type": "kmaker_order"}
+{"minutes_left": 3.54, "price": 0.964, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV091845-45", "track": "kc_maker", "ts": "2026-11-09T23:41:29Z", "type": "kmaker_order"}
