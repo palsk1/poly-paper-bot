@@ -466,6 +466,175 @@ def selftest():
     print("sharp selftest ok")
 
 
+# ================================================================ backtest: Polymarket soccer vs Betfair Exchange closing odds
+#
+# Pinnacle has no free history. football-data.co.uk publishes, for free, the closing odds of every match in the big
+# European leagues, including Betfair Exchange (a betting exchange where pros trade, the other sharp benchmark).
+# Pinnacle's columns there went blank when its API closed in July 2025, so this uses Betfair.
+#
+# For each match: Polymarket's price 15 minutes before kickoff (price history), Betfair's closing price at kickoff
+# with the margin removed (the lower of the two de-vig estimates), and the result from Polymarket's own settlement.
+# Rule: buy when fair - (price + slippage) - fee >= threshold. Slippage 1c is the main case (no old order books).
+# This FLATTERS the strategy a bit: Betfair's closing price is 15 minutes newer than the Polymarket price we buy at.
+
+FD_LEAGUES = {"E0": "premierleague.com", "SP1": "laliga.com", "D1": "bundesliga.com", "I1": "legaseriea.it",
+              "F1": "ligue1.com"}
+FD_SEASONS = ("2526", "2627")
+BT_OUT = "backtest/sharp.md"
+
+
+def fd_matches():
+    out = []
+    for season in FD_SEASONS:
+        for div in FD_LEAGUES:
+            st, body = raw(f"https://www.football-data.co.uk/mmz4281/{season}/{div}.csv")
+            if st != 200:
+                print(f"football-data {season}/{div}: HTTP {st}")
+                continue
+            for r in csv.DictReader(io.StringIO(body.decode("utf-8-sig", "replace"))):
+                try:
+                    d = dt.datetime.strptime(r["Date"], "%d/%m/%Y").date()
+                    odds = [float(r[k]) for k in ("BFECH", "BFECD", "BFECA")]
+                except (KeyError, ValueError, TypeError):
+                    continue
+                if min(odds) <= 1.0:
+                    continue
+                out.append({"div": div, "date": d, "home": r["HomeTeam"], "away": r["AwayTeam"], "ftr": r.get("FTR"),
+                            "fair": devig([1 / o for o in odds]), "over": sum(1 / o for o in odds) - 1})
+    print(f"football-data: {len(out)} matches with Betfair closing odds")
+    return out
+
+
+def poly_soccer_closed():
+    sp = bot.http_json(f"{G}/sports")
+    doms = set(FD_LEAGUES.values())
+    series = [x for x in sp if any(dm in str(x.get("resolution") or "") for dm in doms)]
+    print("Polymarket series:", [(x.get("sport"), x.get("series"), x.get("resolution")) for x in series])
+    games = []
+    for x in series:
+        evs = bot.gamma_events({"series_id": x.get("series"), "closed": "true", "start_date_min": "2025-07-01"},
+                               max_pages=25)
+        for e in evs:
+            ms = [m for m in e.get("markets") or [] if m.get("sportsMarketType") == "moneyline"
+                  and [o.lower() for o in bot.jlist(m.get("outcomes"))] == ["yes", "no"]]
+            if len(ms) != 3:
+                continue
+            start = bot.parse_iso(str(ms[0].get("gameStartTime") or "").replace(" ", "T").replace("+00", "Z"))
+            if not start:
+                continue
+            games.append({"event": e, "start": start, "markets": ms, "sport": x.get("sport")})
+    print(f"Polymarket: {len(games)} closed 3-way soccer games")
+    return games
+
+
+def price_before(token, t_end, minutes=15):
+    try:
+        res = bot.http_json(f"{bot.CLOB}/prices-history", {"market": token, "startTs": int(t_end.timestamp()) - 4 * 3600,
+                                                        "endTs": int(t_end.timestamp()), "fidelity": 5})
+    except Exception as e:
+        return None
+    cut = int(t_end.timestamp()) - minutes * 60
+    pts = [(bot.pick(x, "t"), bot.fnum(bot.pick(x, "p"), None)) for x in bot.envelope_rows(res, "history", "data")]
+    pts = [(t, p) for t, p in pts if t is not None and p is not None and t <= cut and t >= cut - 3 * 3600]
+    return max(pts)[1] if pts else None
+
+
+def bt():
+    from concurrent.futures import ThreadPoolExecutor
+    fd = fd_matches()
+    games = poly_soccer_closed()
+    by_date = {}
+    for m in fd:
+        by_date.setdefault(m["date"], []).append(m)
+    pairs = []
+    for g in games:
+        sides = side_names(g)
+        teams = [nm for _, _, nm, _ in sides if nm != "draw"]
+        if len(teams) != 2:
+            continue
+        cands = [m for dd in (-1, 0, 1) for m in by_date.get(g["start"].date() + dt.timedelta(days=dd), [])]
+        best, second = None, 0
+        for m in cands:
+            s1 = min(name_score(teams[0], m["home"]), name_score(teams[1], m["away"]))
+            s2 = min(name_score(teams[0], m["away"]), name_score(teams[1], m["home"]))
+            sc, amap = (s1, {teams[0]: 0, teams[1]: 2}) if s1 >= s2 else (s2, {teams[0]: 2, teams[1]: 0})
+            if not best or sc > best[0]:
+                second = best[0] if best else 0
+                best = (sc, m, amap)
+            elif sc > second:
+                second = sc
+        if best and best[0] >= 0.6 and best[0] - second >= 0.15:
+            best[2]["draw"] = 1
+            pairs.append((g, best[1], best[2]))
+    print(f"matched {len(pairs)} games")
+
+    jobs = []
+    for g, m, amap in pairs:
+        for mk, _, nm, _ in side_names(g):
+            final = [bot.fnum(x, None) for x in bot.jlist(mk.get("outcomePrices"))]
+            if len(final) != 2 or None in final or max(final) < 0.99:
+                continue  # not cleanly settled
+            jobs.append((g, m, amap[nm], mk, final[0] > 0.5))
+    with ThreadPoolExecutor(10) as ex:
+        px = list(ex.map(lambda j: price_before(bot.market_tokens(j[3])[0], j[0]["start"]), jobs))
+    rows = []
+    for (g, m, k, mk, won_yes), p in zip(jobs, px):
+        if p is None or not (0.01 < p < 0.99):
+            continue
+        mult, pw = m["fair"][k]
+        rate = bot.fee_rate(mk)
+        rows.append({"title": g["event"].get("title"), "date": str(m["date"]), "k": k, "poly": p,
+                     "fair_yes": min(mult, pw), "fair_no": 1 - max(mult, pw), "mid_fair": (mult + pw) / 2,
+                     "won_yes": won_yes, "rate": rate})
+    print(f"{len(rows)} outcomes with a Polymarket price 15 min before kickoff")
+    lines = ["# Sharp fair price backtest: Polymarket soccer vs Betfair Exchange closing odds", "",
+             f"Run {bot.iso()}. Leagues: {', '.join(FD_LEAGUES)}; seasons {', '.join(FD_SEASONS)}. "
+             f"{len(pairs)} games matched, {len(rows)} outcomes (home/draw/away) priced.", "",
+             "Polymarket price = price history 15 min before kickoff. Fair = Betfair closing odds with the margin "
+             "removed, the less favorable of two methods. Fee = the market's taker fee. Result = Polymarket's settlement.",
+             "Betfair's closing price is 15 minutes newer than the price we buy at, so this flatters the strategy.", ""]
+    if not rows:
+        lines.append("No data.")
+    else:
+        import statistics as stx
+        gaps = [r["poly"] - r["mid_fair"] for r in rows]
+        brier_p = stx.mean((r["poly"] - r["won_yes"]) ** 2 for r in rows)
+        brier_f = stx.mean((r["mid_fair"] - r["won_yes"]) ** 2 for r in rows)
+        lines += ["## How close the two prices are", "",
+                  f"- Polymarket minus Betfair fair: median {stx.median(gaps) * 100:+.1f}c, "
+                  f"middle half between {stx.quantiles(gaps, n=4)[0] * 100:+.1f}c and {stx.quantiles(gaps, n=4)[2] * 100:+.1f}c",
+                  f"- Prediction error (Brier, lower is better): Polymarket {brier_p:.4f}, Betfair fair {brier_f:.4f}", "",
+                  "## Rule results (buy 1 share each time the edge clears the bar)", "",
+                  "| slippage | bar | bets | won | cost | paid out | profit | per $100 |", "|---|---|---|---|---|---|---|---|"]
+        for slip in (0.0, 0.01, 0.02):
+            for bar in (0.01, 0.02, 0.03, 0.05):
+                n = w = 0
+                cost = paid = 0.0
+                for r in rows:
+                    for yes in (True, False):
+                        ask = (r["poly"] if yes else 1 - r["poly"]) + slip
+                        if not (0.02 <= ask <= 0.98):
+                            continue
+                        fair = r["fair_yes"] if yes else r["fair_no"]
+                        fee = r["rate"] * ask * (1 - ask)
+                        if fair - ask - fee < bar:
+                            continue
+                        win = r["won_yes"] if yes else not r["won_yes"]
+                        n += 1
+                        w += win
+                        cost += ask + fee
+                        paid += 1.0 if win else 0.0
+                if n:
+                    lines.append(f"| {slip * 100:.0f}c | {bar * 100:.0f}c | {n} | {w} | ${cost:.2f} | ${paid:.2f} | "
+                                 f"${paid - cost:+.2f} | ${(paid - cost) / cost * 100:+.2f} |")
+                else:
+                    lines.append(f"| {slip * 100:.0f}c | {bar * 100:.0f}c | 0 | - | - | - | - | - |")
+    import os
+    os.makedirs("backtest", exist_ok=True)
+    open(BT_OUT, "w").write("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "selftest": selftest}[what]()
+    {"probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "selftest": selftest, "bt": bt}[what]()
