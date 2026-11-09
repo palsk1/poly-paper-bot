@@ -123,12 +123,29 @@ def slim_market(m, series):
             "vol": bot.fnum(m.get("volume_fp") or m.get("volume"), 0)}
 
 
+_CUTOFF = [None]
+
+
+def hist_cutoff():
+    """Markets that settled before this moved to /historical endpoints."""
+    if _CUTOFF[0] is None:
+        try:
+            _CUTOFF[0] = tsec(get("/historical/cutoff").get("market_settled_ts")) or 0
+        except Exception as e:
+            print(f"historical cutoff failed: {e}")
+            _CUTOFF[0] = 0
+    return _CUTOFF[0]
+
+
 def list_markets(series, t0, t1):
     """Settled windows closing in [t0, t1]: the live endpoint, then /historical for anything older than its cutoff."""
     out, seen = [], set()
+    cut = hist_cutoff()
     for path in ("/markets", "/historical/markets"):
-        cur = None
-        for _ in range(400):
+        if path == "/historical/markets" and (not cut or t0 >= cut):
+            continue
+        cur, pages, t_s = None, 0, time.time()
+        for _ in range(200):
             p = {"series_ticker": series, "min_close_ts": t0, "max_close_ts": t1, "limit": 1000}
             if path == "/markets":
                 p["status"] = "settled"
@@ -139,14 +156,18 @@ def list_markets(series, t0, t1):
             except Exception as e:
                 print(f"  {series} {path} failed: {e}")
                 break
-            for m in res.get("markets") or []:
+            pages += 1
+            rows = res.get("markets") or []
+            for m in rows:
                 sm = slim_market(m, series)
-                if sm["t"] and sm["t"] not in seen and sm["res"] in ("yes", "no") and sm["close"]:
+                if sm["t"] and sm["t"] not in seen and sm["res"] in ("yes", "no") and sm["close"] and t0 <= sm["close"] <= t1:
                     seen.add(sm["t"])
                     out.append(sm)
             cur = res.get("cursor")
-            if not cur or not res.get("markets"):
+            oldest = min((tsec(m.get("close_time")) or 0 for m in rows), default=0)
+            if not cur or not rows or oldest < t0:   # in case the endpoint ignores the time filter
                 break
+        print(f"  {series} {path}: {pages} pages, {len(out)} windows so far ({time.time() - t_s:.0f}s)")
     return sorted(out, key=lambda m: m["close"])
 
 
@@ -228,7 +249,7 @@ def fetch_candles(series, ms, store):
         with ThreadPoolExecutor(WORKERS) as ex:
             for i, (m, cs) in enumerate(zip(todo, ex.map(candles_one, todo))):
                 store[m["t"]] = cs
-                if i % 1000 == 0:
+                if i % 500 == 0:
                     print(f"   {series} single {i}/{len(todo)} ({time.time() - t_start:.0f}s)")
 
 
