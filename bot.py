@@ -3953,6 +3953,10 @@ def watch():
         print(f"late fill check failed: {e}")
     integrity_run(tracks)
     save("tracks.json", tracks)
+    try:
+        refresh_top(tracks)
+    except Exception as e:
+        print(f"top list refresh failed: {e}")
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
         print("daily job hasn't run today (GitHub skipped it?); catching up now")
@@ -4177,13 +4181,32 @@ def top_eligible(s):
     return s["trust"]["finished"] >= 3 and s["trust"]["avg_per_100"] > 0 and s["pnl"] > 0
 
 
+def save_top(stats):
+    """Pick the top 10 (only strategies actually ahead on 3+ finished trades) and save it to state/top.json."""
+    n = CFG["push"].get("top_n", 10)
+    top = [x for x in ranked(stats) if top_eligible(stats[x])][:n]
+    save("top.json", {"generated": iso(), "tracks": top})
+    return top
+
+
+def refresh_top(tracks):
+    """Hourly from watch (2026-11-09 fix): re-rank and rewrite top.json + summary.md without the scoreboard push.
+    Before this the list was only rebuilt by the daily run, so a strategy that went from winning to losing
+    (endgame_sell98 after the phantom-fill cleanup) kept its trade pushes all day while new leaders stayed muted."""
+    last = parse_iso(load("top.json", {}).get("generated"))
+    if last and now() - last < dt.timedelta(minutes=CFG["push"].get("top_refresh_min", 60)):
+        return
+    old = load("top.json", {}).get("tracks", [])
+    top = save_top(write_summary(tracks))
+    if top != old:
+        print(f"top list refreshed: +{[x for x in top if x not in old]} -{[x for x in old if x not in top]}")
+
+
 def push_scoreboard(stats):
     """Daily ntfy scoreboard: only the top 10 by trust (all strategies are still tracked; summary.md ranks them all).
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
-    order = [x for x in ranked(stats) if top_eligible(stats[x])]
-    top = order[:n]  # only strategies that are actually ahead on 3+ finished trades can make the list
-    save("top.json", {"generated": iso(), "tracks": top})
+    top = save_top(stats)
     lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
     for i, name in enumerate(top, 1):
         s, t = stats[name], stats[name]["trust"]
