@@ -106,6 +106,65 @@ def scan():
                                                                                          "ascending": "false"})], 2500)
 
 
+def scan2():
+    base = "https://www.clevelandfed.org/-/media/files/webcharts/inflationnowcasting/"
+    for f in ("nowcast_month.json", "nowcast_year.json"):
+        st, b, ct = raw(base + f + "?sc_lang=en")
+        print(f"\n== {f}: HTTP {st} {len(b)} bytes")
+        try:
+            j = json.loads(b.decode("utf-8-sig"))
+        except Exception as e:
+            print("not json", e, b[:300]); continue
+        def walk(o, path="", depth=0):
+            if depth > 5: return
+            if isinstance(o, dict):
+                print("  " * depth + f"{path} dict keys={list(o.keys())[:15]}")
+                for k in list(o.keys())[:4]:
+                    walk(o[k], f"{path}.{k}", depth + 1)
+            elif isinstance(o, list):
+                print("  " * depth + f"{path} list len={len(o)} first={json.dumps(o[0], default=str)[:300] if o else None}")
+                if o: walk(o[0], path + "[0]", depth + 1)
+                if len(o) > 1: print("  " * depth + f"   last={json.dumps(o[-1], default=str)[:300]}")
+        walk(j)
+        print("  head:", json.dumps(j)[:1500])
+    for url in ("https://www.atlantafed.org/-/media/Project/Atlanta/FRBA/Documents/research-and-data/data/gdpnow/GDPTrackingModelDataAndForecasts.xlsx",
+                "https://www.frbatlanta.org/-/media/Documents/cqer/researchcq/gdpnow/GDPTrackingModelDataAndForecasts.xlsx",
+                "https://www.atlantafed.org/-/media/Project/Atlanta/FRBA/Documents/research-and-data/data/gdpnow/GDPNowcastDataReleaseDates.xlsx"):
+        st, b, ct = raw(url)
+        print(f"\n== {url}: HTTP {st} {len(b)} bytes {ct}")
+        if st == 200 and b[:2] == b"PK":
+            import openpyxl
+            wb = openpyxl.load_workbook(io.BytesIO(b), read_only=True, data_only=True)
+            for ws in wb.worksheets:
+                rows = list(ws.iter_rows(max_row=6, values_only=True))
+                print(f"  sheet {ws.title!r} dims={ws.max_row}x{ws.max_column}")
+                for r in rows:
+                    print("    ", [str(x)[:22] for x in r[:14]])
+    # Kalshi candles on an old CPI market, hourly
+    for tk, ser in (("KXCPI-25JUN-T0.3", "KXCPI"), ("KXJOBLESSCLAIMS-26NOV05-220000", "KXJOBLESSCLAIMS")):
+        for path in (f"/series/{ser}/markets/{tk}/candlesticks", f"/historical/markets/{tk}/candlesticks"):
+            show(f"candles {path}", lambda path=path: (lambda r: {"n": len(r.get("candlesticks") or []),
+                 "first": (r.get("candlesticks") or [None])[0], "last": (r.get("candlesticks") or [None])[-1]})(
+                 kget(path, {"start_ts": int(time.time()) - 86400 * 600, "end_ts": int(time.time()), "period_interval": 60})), 2500)
+    # how far back each series goes
+    for s in ("KXCPI", "KXCPICORE", "KXCPIYOY", "KXGDP", "KXJOBLESSCLAIMS", "KXU3", "KXPAYROLLS", "KXECONSTATCPI"):
+        evs, cur = set(), None
+        oldest = None
+        for _ in range(30):
+            p = {"series_ticker": s, "limit": 1000}
+            if cur: p["cursor"] = cur
+            r = kget("/historical/markets", p)
+            for m in r.get("markets") or []:
+                evs.add(m.get("event_ticker"))
+                c = m.get("close_time")
+                oldest = c if oldest is None or (c and c < oldest) else oldest
+            cur = r.get("cursor")
+            if not cur or not r.get("markets"): break
+        print(f"\n== {s} historical: {len(evs)} events, oldest close {oldest}")
+    ev = kget("/markets", {"event_ticker": "KXJOBLESSCLAIMS-26OCT29"}).get("markets") or []
+    print("\n== claims event strikes:", [(m.get("ticker"), m.get("strike_type"), m.get("floor_strike"), m.get("result"), m.get("volume_fp")) for m in ev])
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"scan": scan}[cmd]()
+    {"scan": scan, "scan2": scan2}[cmd]()
