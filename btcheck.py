@@ -624,10 +624,11 @@ def quiet_bets(markets, hist, lo=0.50, hi=0.75, max_range=0.02, d_from=3, d_to=1
         while t < stop_t:
             p0, tp = price_at(h, t, 0)
             if p0 is not None and t - tp <= 3 * DAY and lo <= 1 - p0 <= hi:
-                a, _ = price_at(h, t - 7 * DAY, 0)
-                k0, k1 = bisect.bisect_right(T_, t - 7 * DAY), bisect.bisect_right(T_, t)
-                w = P_[k0:k1] + ([a] if a is not None else [])
-                if a is not None and max(w) - min(w) < max_range:
+                # same as the screen's "swing size last 7 days": recorded prices in the last 7 days (also for markets
+                # younger than a week), at least 2 of them, high - low under max_range
+                k0, k1 = bisect.bisect_left(T_, t - 7 * DAY), bisect.bisect_right(T_, t)
+                w = P_[k0:k1]
+                if len(w) >= 2 and max(w) - min(w) < max_range:
                     hit = t
                     break
             t += 3600
