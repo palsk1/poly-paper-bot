@@ -142,7 +142,7 @@ EV_PATH = os.path.join(CACHE, "events.json.gz")
 HOLDOUT_T = 1794268800  # 2026-11-10 00:00 UTC: markets ending later are never used (backtest/PROTOCOL.md)
 MIN_USD = 100           # trades kept in full; smaller ones only feed the price path and volume counts
 FETCH_MIN = float(os.environ.get("INF_FETCH_MIN", "200"))
-N_MARKETS = int(os.environ.get("INF_MARKETS", "9000"))
+N_MARKETS = int(os.environ.get("INF_MARKETS", "20000"))
 T0 = time.time()
 
 
@@ -350,7 +350,8 @@ def buys(tapes):
             p5 = po(mk.p0(t + 300), oi)
             fin = mk.f0 if oi == 0 else 1 - mk.f0
             r = {"mid": mid, "ev": x.get("ev") or mid, "t": t, "w": w, "oi": oi, "px": px, "usd": px * sh, "v24": v24,
-                 "cp": cp, "fin": fin, "fee": x.get("fee") or 0.0, "p5": p5, "end": x["end"], "q": x["q"]}
+                 "cp": cp, "fin": fin, "fee": x.get("fee") or 0.0, "p5": p5, "end": x["end"], "q": x["q"],
+                 "last": mk.last, "vol": x.get("vol") or 0}
             for h in H:
                 ph = po(mk.p0(t + h), oi)
                 r[f"m{h}"] = None if ph is None else ph - pb            # move from just before the trade
@@ -417,6 +418,24 @@ def wallet_scores(rows, t_lo, t_hi, h=86400):
     return out
 
 
+def wallet_pnl_scores(rows, t_lo, t_hi):
+    """Per wallet: what copying it (5-min delay, real fill, costs) made, only on markets finished before t_hi."""
+    per = collections.defaultdict(lambda: collections.defaultdict(list))
+    for r in rows:
+        if t_lo <= r["t"] < t_hi and r["last"] < t_hi:
+            v = copy_pnl(r)
+            if v is not None:
+                per[r["w"]][r["mid"]].append(v)
+    out = {}
+    for w, mk in per.items():
+        vals = [statistics.mean(v) for v in mk.values()]
+        n = len(vals)
+        m = statistics.mean(vals)
+        sd = statistics.pstdev(vals) if n > 1 else 0.0
+        out[w] = {"n": n, "mean": m, "t": m / (sd / n ** 0.5) if sd > 0 and n > 1 else 0.0}
+    return out
+
+
 def spearman(a, b):
     def rank(v):
         o = sorted(range(len(v)), key=lambda i: v[i])
@@ -439,6 +458,10 @@ RULES = {  # wallet picks, fixed before looking at the test half
     "S3 3+ markets, avg +10c": lambda s: s["n"] >= 3 and s["mean"] >= 0.10,
     "S4 5+ markets, avg +5c, t>=2.5": lambda s: s["n"] >= 5 and s["mean"] >= 0.05 and s["t"] >= 2.5,
 }
+PNL_RULES = {  # picked on what copying them actually made (finished markets only), not on price moves
+    "P1 copy profit: 5+ markets, +$5 per $100, t>=2": lambda s: s["n"] >= 5 and s["mean"] >= 0.05 and s["t"] >= 2,
+    "P2 copy profit: 10+ markets, t>=2": lambda s: s["n"] >= 10 and s["mean"] > 0 and s["t"] >= 2,
+}
 
 
 def split_test(rows, L):
@@ -448,6 +471,7 @@ def split_test(rows, L):
     L += [f"Split at {bt.iso_t(mid_t)} (middle trade). Picks use only moves seen 24h after the trade and before the split.", ""]
     halves = {"A": (lo_t, mid_t), "B": (mid_t, hi_t)}
     sc = {k: wallet_scores(rows, *v) for k, v in halves.items()}
+    scp = {k: wallet_pnl_scores(rows, *v) for k, v in halves.items()}
     both = [w for w in sc["A"] if w in sc["B"] and sc["A"][w]["n"] >= 5 and sc["B"][w]["n"] >= 5]
     rho = spearman([sc["A"][w]["mean"] for w in both], [sc["B"][w]["mean"] for w in both])
     L += [f"**Does 'early' repeat?** {len(both)} wallets have 5+ markets in both halves. Rank correlation of their "
@@ -464,30 +488,40 @@ def split_test(rows, L):
               f"- Everyone in both halves: half B {100 * statistics.mean(sc['B'][w]['mean'] for w in both):+.2f}c", ""]
     L += ["| Pick rule | direction | wallets | copies in the other half | same-size random wallets (median, 20 draws) |", "|---|---|---|---|---|"]
     res = {}
-    for name, fn in RULES.items():
+    allr = [(n, f, sc) for n, f in RULES.items()] + [(n, f, scp) for n, f in PNL_RULES.items()]
+    for name, fn, scx in allr:
         for a, b in (("A", "B"), ("B", "A")):
-            pick = {w for w, s in sc[a].items() if fn(s)}
+            pick = {w for w, s in scx[a].items() if fn(s)}
             test = [r for r in rows if halves[b][0] <= r["t"] < halves[b][1]]
             mine = [r for r in test if r["w"] in pick]
             s = summarize(mine)
             # random twins: wallets with a similar number of markets in the pick half
             pool = collections.defaultdict(list)
-            for w, x in sc[a].items():
+            for w, x in scx[a].items():
                 pool[min(x["n"], 30) // 3].append(w)
             rng = random.Random(5)
             tw = []
             for _ in range(20):
                 twins = set()
                 for w in pick:
-                    cand = pool[min(sc[a][w]["n"], 30) // 3]
+                    cand = pool[min(scx[a][w]["n"], 30) // 3]
                     twins.add(rng.choice(cand))
                 ss = summarize([r for r in test if r["w"] in twins], boot=50)
                 if ss.get("n"):
                     tw.append(ss["per100"])
             res[(name, a)] = (pick, s)
-            L.append(f"| {name} | pick {a}, test {b} | {len(pick)} | {fmt(s)} | "
+            niche = summarize([r for r in mine if r["vol"] < 250e3], boot=100)
+            L.append(f"| {name} | pick {a}, test {b} | {len(pick)} | {fmt(s)}; niche markets (<$250k): {fmt(niche)} | "
                      f"{'-' if not tw else f'${statistics.median(tw):+.2f} per $100'} |")
     L.append("")
+    # wallets that pass in BOTH halves (a live watch list would look like this)
+    keep = {}
+    for name, fn, scx in allr:
+        both_ = [w for w in scx["A"] if fn(scx["A"][w]) and w in scx["B"] and fn(scx["B"][w])]
+        keep[name] = both_
+        L.append(f"- Pass {name} in both halves: {len(both_)} wallets")
+    L.append("")
+    split_test.both = keep
     return res, halves, sc
 
 
@@ -631,6 +665,8 @@ def run():
         L.append("")
     txt = "\n".join(L) + "\n"
     os.makedirs(OUT, exist_ok=True)
+    with open(os.path.join(OUT, "informed_wallets.json"), "w") as fh:
+        json.dump({k: [Wl[w] for w in v] for k, v in getattr(split_test, "both", {}).items()}, fh, indent=1)
     with open(os.path.join(OUT, "informed.md"), "w") as fh:
         fh.write(txt)
     print(txt)
