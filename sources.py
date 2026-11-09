@@ -511,7 +511,65 @@ def reach():
             print(f"ERR {type(e).__name__}: {str(e)[:80]}  {name}")
 
 
-MODES = {"reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
+# ---------------------------------------------------------------- executive orders: White House/Fed Register vs KXEOWEEK
+def fr_eos(year_from="2026-01-01"):
+    out, url = [], ("https://www.federalregister.gov/api/v1/documents.json?conditions[presidential_document_type]=executive_order"
+                    f"&conditions[signing_date][gte]={year_from}&per_page=200&order=oldest"
+                    "&fields[]=executive_order_number&fields[]=signing_date&fields[]=publication_date&fields[]=title"
+                    "&fields[]=public_inspection_pdf_url")
+    while url:
+        r = bot.http_json(url)
+        out += r.get("results") or []
+        url = r.get("next_page_url")
+    return out
+
+
+def eo(arg=""):
+    import datetime as dt
+    import kcrypto
+    eos = fr_eos()
+    print(f"Federal Register: {len(eos)} executive orders signed since 2026-01-01")
+    lag = [(dt.date.fromisoformat(x["publication_date"]) - dt.date.fromisoformat(x["signing_date"])).days for x in eos
+           if x.get("publication_date") and x.get("signing_date")]
+    if lag:
+        lag.sort()
+        print(f"days from signing to Federal Register: median {lag[len(lag) // 2]}, 90th pct {lag[int(len(lag) * .9)]}, max {lag[-1]}")
+    ms = kmarkets("KXEOWEEK", pages=3)
+    evs = collections.defaultdict(list)
+    for m in ms:
+        evs[m["event_ticker"]].append(m)
+    print(f"KXEOWEEK: {len(ms)} settled rungs in {len(evs)} weeks")
+    print(f"\n{'week':20s} {'EOs':>3s} {'rung':>6s} {'res':>4s}  price (yes bid/ask) at: week end, +1d, +2d, +4d, +7d, close-1h")
+    for et, rungs in sorted(evs.items()):
+        r0 = rungs[0]
+        mt = re.search(r"between (\w+ \d+, \d{4}) and (\w+ \d+, \d{4})", r0.get("title") or "")
+        if not mt:
+            print(et, "no week in title:", r0.get("title"))
+            continue
+        a, b = (dt.datetime.strptime(x, "%b %d, %Y").date() for x in mt.groups())
+        n = sum(1 for x in eos if a.isoformat() <= x["signing_date"] <= b.isoformat())
+        # week end = end of day b, US Eastern (05:00 UTC next day)
+        wend = dt.datetime(b.year, b.month, b.day, tzinfo=dt.timezone.utc).timestamp() + 86400 + 5 * 3600
+        close = bot.parse_iso(r0["close_time"]).timestamp()
+        tks = [m["ticker"] for m in rungs]
+        try:
+            res = kcrypto.get("/markets/candlesticks", {"market_tickers": ",".join(tks), "start_ts": int(wend - 3 * 86400),
+                              "end_ts": int(close), "period_interval": 60})
+        except Exception as ex:
+            print(et, "candles failed", ex)
+            continue
+        cs = {r.get("market_ticker"): [kcrypto.candle_row(c) for c in r.get("candlesticks") or []] for r in res.get("markets") or []}
+        for m in sorted(rungs, key=lambda m: f(m.get("floor_strike"))):
+            c = cs.get(m["ticker"]) or []
+            pts = []
+            for t in (wend, wend + 86400, wend + 2 * 86400, wend + 4 * 86400, wend + 7 * 86400, close - 3600):
+                prev = [x for x in c if x[0] <= t]
+                pts.append(f"{prev[-1][1]:.2f}/{prev[-1][2]:.2f}" if prev and prev[-1][1] is not None and prev[-1][2] is not None else "   -/-   ")
+            print(f"{et:20s} {n:3d} {'>' + str(m.get('floor_strike')):>6s} {m.get('result'):>4s}  " + "  ".join(pts)
+                  + f"   vol {f(m.get('volume_fp')):.0f}")
+
+
+MODES = {"eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
