@@ -194,6 +194,8 @@ Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estima
 - Can't be replayed: arb and every horse (no old order books), endgame's resolved/proposed tiers (no proposal history), consensus.
 - The 40 copied wallets were picked because they won in this same period, so their backtest flatters them.
 
+**Sanity checks (`btcheck.py`, added 2026-11-09).** Every engine change has to pass them first (`python3 btcheck.py selftest` offline, `btcheck` probe on real data, results in `backtest/checks.md`): fake fair markets where every strategy must lose only its costs (a planted stop-loss bug must be caught), a second small simulator that re-walks every trade and must agree, random entries that should lose about the costs, each strategy vs random twins with the same exits, pessimistic costs (+2c, entry an hour later, take-profits sold at the target because 12-hourly history overstates them), a panic sweep with walk-forward halves, and mention_no rebuilt from scratch. Markets ending 2026-11-10 or later are a holdout, scored once from 2026-12-21 (`btholdout`). The rules: `backtest/PROTOCOL.md`.
+
 ## How it runs
 
 - `watch` workflow, every 5 min: an outside timer (cron-job.org) starts it through GitHub's API, because GitHub's own timer often skips runs for hours (its own ~10 min schedule stays as a backup). checks his wallet, copies opens/exits, take-profit/stop-loss, arb checks on approved pairs, endgame scan, panic and every-horse scan every 2 hours. If GitHub skipped the daily job, the watcher runs it. Sends ntfy pushes.
@@ -249,6 +251,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `state/top.json`: the current top 10 by trust (only these send trade pushes). The daily scoreboard sets it and watch re-ranks it every hour (also rewriting `summary.md`), so a strategy that turns into a loser loses its pushes within the hour.
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
+- `backtest/checks.md`, `backtest/PROTOCOL.md`: backtest sanity checks and the test-before-results rules (`btcheck.py`)
 - `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
