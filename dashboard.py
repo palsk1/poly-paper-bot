@@ -52,7 +52,8 @@ def curve(tr, pnl_now):
 
 
 def open_bets(name, tr):
-    rows = []
+    """Open bets (largest moves first), the count, and maker quotes that hold nothing yet (shown apart)."""
+    rows, waiting = [], []
     for tok, p in tr.get("positions", {}).items():
         px = bot.mark(p, tok)
         cost = p["shares"] * p["entry"] + p.get("entry_fee", 0.0)
@@ -70,7 +71,11 @@ def open_bets(name, tr):
                      "u": bot.market_link(s.get("slug", ""), s.get("event_slug", "")), "locked": True})
     for b in tr.get("books", {}).values():
         held = b.get("yes_cost", 0) + b.get("no_cost", 0)
-        hold = f"holding {b.get('yes', 0):.0f} YES, {b.get('no', 0):.0f} NO" if held > bot.EPS else "holding nothing"
+        if held <= bot.EPS:  # only quoting: nothing bought, nothing at stake
+            waiting.append({"t": b.get("title", "")[:90], "n": r2(b.get("mid", 0) * 100), "end": str(b.get("end", ""))[:10],
+                            "bonus": r2(b.get("rewards", 0)), "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
+            continue
+        hold = f"holding {b.get('yes', 0):.0f} YES, {b.get('no', 0):.0f} NO"
         rows.append({"t": b.get("title", "")[:90], "o": f"offering to buy and sell, {hold}, bonus ${b.get('rewards', 0):.2f} (estimate)",
                      "e": None, "n": r2(b.get("mid", 0) * 100),  # P&L = price move only, rewards shown apart
                      "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
@@ -81,7 +86,7 @@ def open_bets(name, tr):
                      "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",
                      "locked": True})
     rows.sort(key=lambda r: -abs(r["pnl"] or 0))
-    return rows[:MAX_OPEN], len(rows)
+    return rows[:MAX_OPEN], len(rows), waiting
 
 
 def recent_closed(tr):
@@ -135,11 +140,11 @@ def build(offline=False):
     rows = []
     for n in names:
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
-        ob, n_open = open_bets(n, tr)
+        ob, n_open, waiting = open_bets(n, tr)
         rows.append({
             "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "control": n.startswith("control_"),
             "pnl": r2(s["pnl"]), "today": r2(s.get("today", 0)), "realized": r2(s.get("realized")),
-            "open": s["open"], "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
+            "open": s["open"] - len(waiting), "waiting": waiting, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),

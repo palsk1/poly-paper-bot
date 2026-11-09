@@ -334,6 +334,10 @@ function detail(n) {
     `<div class="bet"><div class="t"><a href="${esc(b.u)}" target="_blank" rel="noopener">${esc(b.t)}</a></div>
      <div class="m">${esc(b.o)}${b.e != null ? ` · bought ${cents(b.e)}` : ""}${b.n != null ? ` · now ${cents(b.n)}` : ""} · cost ${money(b.c, false)} · ${b.locked ? "expected P&L" : "P&L"} ${M(b.pnl)}${b.end ? ` · ends ${esc(b.end)}` : ""}</div></div>`).join("") +
     (t.n_bets > t.bets.length ? `<p class="note">Showing the ${t.bets.length} that moved most.</p>` : "") : "No open bets.") + `</div>`;
+  if (t.waiting && t.waiting.length) h += `<h2 style="font-size:16px">Waiting offers, nothing bought yet (${t.waiting.length})</h2>
+    <p class="note">Here we only have offers up. Nobody has traded with us yet, so nothing is spent and nothing can be lost. The bonus is what Polymarket pays (our estimate) just for keeping the offers there.</p><div class="card">` +
+    t.waiting.map(w => `<div class="bet"><div class="t"><a href="${esc(w.u)}" target="_blank" rel="noopener">${esc(w.t)}</a></div>
+     <div class="m">price now ${cents(w.n)} · bonus so far ${money(w.bonus, false)}${w.end ? ` · ends ${esc(w.end)}` : ""}</div></div>`).join("") + `</div>`;
   if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished bets</summary><div class="card">` + t.recent.map(c =>
     `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)} · bought ${cents(c.e)}, ended ${cents(c.x)} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
   $("detail").innerHTML = h;
