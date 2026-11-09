@@ -19,6 +19,12 @@ jobs:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
           restore-keys: bt-cache-
+      - uses: actions/cache/restore@v4
+        if: startsWith(inputs.what, 'econ')
+        with:
+          path: econ_cache
+          key: econ-cache-${{ github.run_id }}
+          restore-keys: econ-cache-
       - name: Probe APIs
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
@@ -36,6 +42,11 @@ jobs:
         with:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
+      - uses: actions/cache/save@v4
+        if: always() && startsWith(inputs.what, 'econ')
+        with:
+          path: econ_cache
+          key: econ-cache-${{ github.run_id }}
       - uses: actions/upload-artifact@v4
         if: always() && startsWith(inputs.what, 'bt')
         with:
