@@ -359,145 +359,145 @@
     "annual": -0.004,
     "edge": -0.0006,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:53Z"
+    "ts": "2026-11-09T08:55:36Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.119,
     "edge": 0.018,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:54Z"
+    "ts": "2026-11-09T08:55:37Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": 0.038,
     "edge": 0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:55Z"
+    "ts": "2026-11-09T08:55:38Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
-    "annual": 0.172,
-    "edge": 0.0258,
-    "opportunity": true,
-    "ts": "2026-11-09T08:50:56Z"
+    "annual": 0.096,
+    "edge": 0.0146,
+    "opportunity": false,
+    "ts": "2026-11-09T08:55:38Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": 0.014,
     "edge": 0.0021,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:57Z"
+    "ts": "2026-11-09T08:55:38Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.045,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:54Z"
+    "ts": "2026-11-09T08:55:37Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.009,
     "edge": 0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:37Z"
+    "ts": "2026-11-09T08:55:27Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
-    "annual": -0.28,
-    "edge": -0.0447,
+    "annual": -0.217,
+    "edge": -0.0344,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:52Z"
+    "ts": "2026-11-09T08:55:36Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.114,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:48Z"
+    "ts": "2026-11-09T08:55:34Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.14,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:40Z"
+    "ts": "2026-11-09T08:55:28Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": 0.03,
     "edge": 0.0045,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:44Z"
+    "ts": "2026-11-09T08:55:31Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:38Z"
+    "ts": "2026-11-09T08:55:27Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.069,
     "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:50Z"
+    "ts": "2026-11-09T08:55:35Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": 0.01,
     "edge": 0.0016,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:39Z"
+    "ts": "2026-11-09T08:55:28Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:47Z"
+    "ts": "2026-11-09T08:55:33Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:48Z"
+    "ts": "2026-11-09T08:55:33Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.018,
-    "edge": -0.0028,
+    "annual": -0.038,
+    "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:46Z"
+    "ts": "2026-11-09T08:55:32Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.082,
     "edge": -0.0128,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:49Z"
+    "ts": "2026-11-09T08:55:34Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:42Z"
+    "ts": "2026-11-09T08:55:30Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:41Z"
+    "ts": "2026-11-09T08:55:29Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
-    "annual": -0.158,
-    "edge": -0.0247,
+    "annual": -0.156,
+    "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:51Z"
+    "ts": "2026-11-09T08:55:35Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.172,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:43Z"
+    "ts": "2026-11-09T08:55:30Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
-    "annual": -0.032,
-    "edge": -0.0049,
+    "annual": -0.038,
+    "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:45Z"
+    "ts": "2026-11-09T08:55:31Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.13,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-09T08:50:41Z"
+    "ts": "2026-11-09T08:55:29Z"
    }
   },
   "min_cash": 0.0,
@@ -50746,11 +50746,11 @@
     "event_slug": "next-muse-spark-1pt4-released-byptptpt",
     "fee_rate": 0.04,
     "fills": 0,
-    "last_ts": 1794214304.459998,
+    "last_ts": 1794214568.555573,
     "merged_pnl": 0.0,
     "mid": 0.33999999999999997,
     "min_size": 50.0,
-    "minutes": 888.7459800640739,
+    "minutes": 893.147572982311,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "102711183723971553014446089198171554075948362164960607882172198841105260477579",
@@ -50766,7 +50766,7 @@
      }
     },
     "rate": 50.0,
-    "rewards": 6.760922070673253,
+    "rewards": 6.774262123294458,
     "size": 50.0,
     "slug": "next-muse-spark-1pt4-released-by-december-31-2026",
     "title": "Next Muse Spark (1.4+) released by December 31, 2026?",
@@ -50782,11 +50782,11 @@
     "event_slug": "second-best-ai-agent-lab-end-of-november",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794214304.459998,
+    "last_ts": 1794214568.555573,
     "merged_pnl": 0.0,
-    "mid": 0.29500000000000004,
+    "mid": 0.32,
     "min_size": 20.0,
-    "minutes": 888.7459800640739,
+    "minutes": 893.147572982311,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "57578799226333514029600121405127999797167672358214792171105979303153501104898",
@@ -50797,12 +50797,12 @@
       "queue": 196.55
      },
      "bid": {
-      "px": 0.26,
-      "queue": 39.0
+      "px": 0.31,
+      "queue": 40.0
      }
     },
     "rate": 80.0,
-    "rewards": 13.486944897823602,
+    "rewards": 13.507588524768764,
     "size": 50,
     "slug": "will-openai-be-the-second-best-ai-agent-lab-at-the-end-of-november-2026",
     "title": "Will OpenAI be the second-best AI Agent Lab at the end of November 2026?",
@@ -50818,11 +50818,11 @@
     "event_slug": "next-muse-spark-model-1pt4-released-onptptpt",
     "fee_rate": 0.04,
     "fills": 10,
-    "last_ts": 1794214304.459998,
+    "last_ts": 1794214568.555573,
     "merged_pnl": -19.25,
     "mid": 0.705,
     "min_size": 20.0,
-    "minutes": 888.7459800640739,
+    "minutes": 893.147572982311,
     "no": 100.0,
     "no_cost": 35.75,
     "no_tok": "930240453980728514582345056527710676387794047069932511128144020003604546411",
@@ -50835,7 +50835,7 @@
      }
     },
     "rate": 119.0,
-    "rewards": 4.203607951615435,
+    "rewards": 4.212624574710704,
     "size": 50,
     "slug": "will-there-be-no-next-meta-muse-spark-model-release-by-november-30-2026",
     "title": "Will there be no next Meta Muse Spark model release by November 30, 2026?",
@@ -50851,11 +50851,11 @@
     "event_slug": "which-companies-will-have-a-1-ai-model-by-december-31",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794214304.459998,
+    "last_ts": 1794214568.555573,
     "merged_pnl": 0.0,
     "mid": 0.345,
     "min_size": 20.0,
-    "minutes": 888.7459800640739,
+    "minutes": 893.147572982311,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "3351280184394629167493284830212813001116956262089727901595103690299967605966",
@@ -50871,7 +50871,7 @@
      }
     },
     "rate": 40.0,
-    "rewards": 5.915783989278217,
+    "rewards": 5.978544821844962,
     "size": 50,
     "slug": "will-anthropic-have-a-1-ai-model-by-december-31-2026",
     "title": "Will Anthropic have a #1 AI model by December 31, 2026?",
@@ -50881,7 +50881,7 @@
     "yes_tok": "39151630359758158771259377340938128482300804394191692685363363632091865533103"
    }
   },
-  "cash": 138.367254,
+  "cash": 138.473016,
   "closed": [],
   "created": "2026-11-08T18:00:56Z",
   "deposited": 200.0,
@@ -50889,11 +50889,11 @@
   "last_pick": "2026-11-08T18:02:59Z",
   "merges": 4,
   "min_cash": 0.0,
-  "peak_open_cost": 247.75,
+  "peak_open_cost": 250.25,
   "positions": {},
-  "realized": 11.117254,
+  "realized": 11.223016,
   "refills": 0,
-  "rewards": 30.367254,
+  "rewards": 30.473016,
   "skipped_no_cash": 0,
   "start_cash": 200,
   "unlimited": false
@@ -54828,16 +54828,16 @@
   "unlimited": true
  },
  "w_jjo": {
-  "cash": -6.168008,
+  "cash": -10.734388,
   "closed": [],
   "created": "2026-11-08T15:15:28Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 2
+   "n": 3
   },
   "deposited": 0.0,
-  "min_cash": -6.168008,
-  "peak_open_cost": 6.168008,
+  "min_cash": -10.734388,
+  "peak_open_cost": 10.734388,
   "positions": {
    "110102705199530588976777616718115948005824665233400132417374621750887344831757": {
     "end": "2028-11-08",
@@ -54883,6 +54883,51 @@
     "their_avg": 0.4999,
     "their_size": 60000.01,
     "title": "Will Jon Ossoff win the 2028 US Presidential Election?"
+   },
+   "111879023992805727427888007395202674359981965399934800914169457259690591042100": {
+    "end": "2027-01-01",
+    "entry": 0.91,
+    "entry_fee": 0.01638,
+    "event_slug": "jensen-huang-divorce-in-2026",
+    "late": {
+     "px": 0.91,
+     "s": 46
+    },
+    "opened": "2026-11-09T08:55:24Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       10.989,
+       10.036,
+       true
+      ],
+      "100": [
+       109.89,
+       100.36,
+       true
+      ],
+      "25": [
+       27.473,
+       25.09,
+       true
+      ],
+      "50": [
+       54.945,
+       50.18,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "jensen-huang-divorce-in-2026",
+    "source": "w_jjo",
+    "their_avg": 0.8999,
+    "their_size": 8679.82,
+    "title": "Jensen Huang divorce in 2026?"
    },
    "16040015440196279900485035793550429453516625694844857319147506590755961451627": {
     "end": "2028-11-08",
@@ -56877,7 +56922,7 @@
   "unlimited": true
  },
  "w_underperformingforal": {
-  "cash": -4.422383,
+  "cash": 0.455367,
   "closed": [
    {
     "closed_at": "2026-11-08T18:20:34Z",
@@ -57162,29 +57207,24 @@
     "their_size": 22803.78,
     "title": "Will T1 win Worlds 2026?",
     "token": "56360910151195441905859355697297471571491885496299657191480344412119595418796"
-   }
-  ],
-  "created": "2026-11-08T15:15:28Z",
-  "day_opens": {
-   "date": "2026-11-09",
-   "n": 1
-  },
-  "deposited": 0.0,
-  "min_cash": -9.422383,
-  "peak_open_cost": 9.522383,
-  "positions": {
-   "101156861859248010272982388611860996032700684150053028417361465335294418301847": {
+   },
+   {
+    "closed_at": "2026-11-09T08:55:23Z",
     "end": "2026-11-29",
     "entry": 0.249,
     "entry_fee": 0.04675,
     "event_slug": "worlds-2026-winner",
+    "exit": 0.375,
+    "exit_fee": 0.058594,
     "late": {
      "px": 0.247,
      "s": 78
     },
     "opened": "2026-11-08T23:25:25Z",
     "outcome": "Yes",
+    "pnl": 0.524656,
     "price_source": "book",
+    "reason": "wallet exit (book)",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -57211,25 +57251,53 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.3755,
+      4.2142,
+      true
+     ],
+     "100": [
+      103.7414,
+      40.5837,
+      true
+     ],
+     "25": [
+      25.9385,
+      10.5066,
+      true
+     ],
+     "50": [
+      51.8739,
+      20.6567,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "will-bilibili-gaming-win-worlds-2026",
     "source": "w_underperformingforal",
     "their_avg": 0.263,
     "their_size": 6485.91,
-    "title": "Will Bilibili Gaming win Worlds 2026?"
+    "title": "Will Bilibili Gaming win Worlds 2026?",
+    "token": "101156861859248010272982388611860996032700684150053028417361465335294418301847"
    },
-   "869171973276415956635131341744431858844932704288749717904028189815261072106": {
+   {
+    "closed_at": "2026-11-09T08:55:23Z",
     "end": "2026-11-29",
     "entry": 0.713,
     "entry_fee": 0.051158,
     "event_slug": "worlds-2026-winner",
+    "exit": 0.624,
+    "exit_fee": 0.058656,
     "late": {
      "px": 0.709,
      "s": 131
     },
     "opened": "2026-11-08T23:15:36Z",
     "outcome": "No",
+    "pnl": -0.554814,
     "price_source": "book",
+    "reason": "wallet exit (book)",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -57256,15 +57324,47 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.1435,
+      -1.5564,
+      true
+     ],
+     "100": [
+      101.4284,
+      -15.7862,
+      true
+     ],
+     "25": [
+      25.3588,
+      -3.8908,
+      true
+     ],
+     "50": [
+      50.7166,
+      -7.8033,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "will-bilibili-gaming-win-worlds-2026",
     "source": "w_underperformingforal",
     "their_avg": 0.692,
     "their_size": 50000.0,
-    "title": "Will Bilibili Gaming win Worlds 2026?"
+    "title": "Will Bilibili Gaming win Worlds 2026?",
+    "token": "869171973276415956635131341744431858844932704288749717904028189815261072106"
    }
+  ],
+  "created": "2026-11-08T15:15:28Z",
+  "day_opens": {
+   "date": "2026-11-09",
+   "n": 1
   },
-  "realized": 0.485525,
+  "deposited": 0.0,
+  "min_cash": -9.422383,
+  "peak_open_cost": 9.522383,
+  "positions": {},
+  "realized": 0.455367,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": null,
@@ -73039,16 +73139,16 @@
    "6961475455101064",
    "3384874929102170"
   ],
-  "cash": -55.837868,
+  "cash": -60.404248,
   "closed": [],
   "created": "2026-11-08T18:40:25Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 2
+   "n": 3
   },
   "deposited": 0.0,
-  "min_cash": -55.837868,
-  "peak_open_cost": 55.837868,
+  "min_cash": -60.404248,
+  "peak_open_cost": 60.404248,
   "positions": {
    "10127954609132392083705707240208084573872164908801954773912779163086022872767": {
     "backfill": true,
@@ -73178,6 +73278,51 @@
     "their_avg": 0.4999,
     "their_size": 60000.01,
     "title": "Will Jon Ossoff win the 2028 US Presidential Election?"
+   },
+   "111879023992805727427888007395202674359981965399934800914169457259690591042100": {
+    "end": "2027-01-01",
+    "entry": 0.91,
+    "entry_fee": 0.01638,
+    "event_slug": "jensen-huang-divorce-in-2026",
+    "late": {
+     "px": 0.91,
+     "s": 46
+    },
+    "opened": "2026-11-09T08:55:24Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       10.989,
+       10.036,
+       true
+      ],
+      "100": [
+       109.89,
+       100.36,
+       true
+      ],
+      "25": [
+       27.473,
+       25.09,
+       true
+      ],
+      "50": [
+       54.945,
+       50.18,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "jensen-huang-divorce-in-2026",
+    "source": "wb_jjo",
+    "their_avg": 0.8999,
+    "their_size": 8679.82,
+    "title": "Jensen Huang divorce in 2026?"
    },
    "111988618077786263362718284278451225707405623288593888751575373086664059387290": {
     "backfill": true,
@@ -82135,7 +82280,7 @@
    "3282278589829144",
    "3007539308268810"
   ],
-  "cash": -4.467257,
+  "cash": 0.410493,
   "closed": [
    {
     "backfill": true,
@@ -82352,29 +82497,24 @@
     "their_size": 22803.78,
     "title": "Will T1 win Worlds 2026?",
     "token": "56360910151195441905859355697297471571491885496299657191480344412119595418796"
-   }
-  ],
-  "created": "2026-11-08T18:40:25Z",
-  "day_opens": {
-   "date": "2026-11-09",
-   "n": 1
-  },
-  "deposited": 0.0,
-  "min_cash": -9.467257,
-  "peak_open_cost": 9.517257,
-  "positions": {
-   "101156861859248010272982388611860996032700684150053028417361465335294418301847": {
+   },
+   {
+    "closed_at": "2026-11-09T08:55:24Z",
     "end": "2026-11-29",
     "entry": 0.248,
     "entry_fee": 0.046624,
     "event_slug": "worlds-2026-winner",
+    "exit": 0.375,
+    "exit_fee": 0.058594,
     "late": {
      "px": 0.247,
      "s": 78
     },
     "opened": "2026-11-08T23:25:26Z",
     "outcome": "Yes",
+    "pnl": 0.529782,
     "price_source": "book",
+    "reason": "wallet exit (book)",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -82401,25 +82541,53 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.3759,
+      4.2574,
+      true
+     ],
+     "100": [
+      103.7391,
+      40.3194,
+      true
+     ],
+     "25": [
+      25.9389,
+      10.5494,
+      true
+     ],
+     "50": [
+      51.8741,
+      20.6724,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "will-bilibili-gaming-win-worlds-2026",
     "source": "wb_underperformingforal",
     "their_avg": 0.263,
     "their_size": 6485.91,
-    "title": "Will Bilibili Gaming win Worlds 2026?"
+    "title": "Will Bilibili Gaming win Worlds 2026?",
+    "token": "101156861859248010272982388611860996032700684150053028417361465335294418301847"
    },
-   "869171973276415956635131341744431858844932704288749717904028189815261072106": {
+   {
+    "closed_at": "2026-11-09T08:55:24Z",
     "end": "2026-11-29",
     "entry": 0.713,
     "entry_fee": 0.051158,
     "event_slug": "worlds-2026-winner",
+    "exit": 0.624,
+    "exit_fee": 0.058656,
     "late": {
      "px": 0.709,
      "s": 130
     },
     "opened": "2026-11-08T23:15:37Z",
     "outcome": "No",
+    "pnl": -0.554814,
     "price_source": "book",
+    "reason": "wallet exit (book)",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -82446,15 +82614,47 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.1435,
+      -1.5564,
+      true
+     ],
+     "100": [
+      101.4284,
+      -15.7862,
+      true
+     ],
+     "25": [
+      25.3588,
+      -3.8908,
+      true
+     ],
+     "50": [
+      50.7166,
+      -7.8033,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "will-bilibili-gaming-win-worlds-2026",
     "source": "wb_underperformingforal",
     "their_avg": 0.692,
     "their_size": 50000.0,
-    "title": "Will Bilibili Gaming win Worlds 2026?"
+    "title": "Will Bilibili Gaming win Worlds 2026?",
+    "token": "869171973276415956635131341744431858844932704288749717904028189815261072106"
    }
+  ],
+  "created": "2026-11-08T18:40:25Z",
+  "day_opens": {
+   "date": "2026-11-09",
+   "n": 1
   },
-  "realized": 0.435525,
+  "deposited": 0.0,
+  "min_cash": -9.467257,
+  "peak_open_cost": 9.517257,
+  "positions": {},
+  "realized": 0.410493,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": null,
