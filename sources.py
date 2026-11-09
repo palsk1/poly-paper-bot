@@ -294,8 +294,12 @@ def gas(arg="KXAAAGASD"):
     ev = ladder(series)
     keys = sorted(ev, key=lambda k: ev[k]["close"])
     print(f"{series}: {len(keys)} settled events with a ladder")
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(3) as ex:
         cand = dict(zip(keys, ex.map(lambda k: hourly(series, ev[k]), keys)))
+    for k in keys[-3:]:
+        c = cand[k]
+        print("  debug", k, "open", ev[k]["open"], "close", ev[k]["close"], "markets", len(ev[k]["mk"]), "with candles",
+              sum(1 for v in c.values() if v), "sample", (next((v for v in c.values() if v), [None]) or [None])[-3:])
     vals = [(ev[k]["close"], ev[k]["v"]) for k in keys]
     # days between settles (weekly series compare to the latest DAILY value if available)
     daily = {}
