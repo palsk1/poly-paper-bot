@@ -691,6 +691,11 @@ def audit():
 
     # ---- A) fills
     print("== A) buy fills vs the real trade tape (+-60 min)")
+    try:
+        smp = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"limit": 1}), "data", "trades")
+        print("  trade row keys:", sorted(smp[0].keys()) if smp else None)
+    except Exception as e:
+        print("  sample trade failed", e)
     by_src = defaultdict(list)
     for n, tr in T.items():
         src = C[n]["source"]
@@ -706,7 +711,7 @@ def audit():
             cid = m.get("conditionId")
             t0 = bot.parse_iso(p["opened"])
             tp = tape(cid) if cid else []
-            near = [(float(x.get("price", 0)), ts_of(x)) for x in tp if str(x.get("asset")) == tok and ts_of(x)
+            near = [(float(x.get("price", 0)), ts_of(x)) for x in tp if str(bot.pick(x, "token_id", "asset", "asset_id", default="")) == tok and ts_of(x)
                     and abs((ts_of(x) - t0).total_seconds()) <= 3600]
             cheap = [x for x in near if x[0] <= p["entry"] + 0.01]
             oldest = min((ts_of(x) for x in tp if ts_of(x)), default=None)
@@ -756,8 +761,8 @@ def audit():
         before = [ts_of(x) for x in buys if ts_of(x) and ts_of(x) <= t0 + dt.timedelta(minutes=5)]
         lag = (t0 - max(before)).total_seconds() / 60 if before else None
         cid = ((bot.market_by_slug(p.get("slug")) or {}).get("conditionId"))
-        splits = [x for x in a if str(x.get("type", "")).upper() in ("SPLIT", "MERGE", "CONVERSION")
-                  and (str(x.get("conditionId") or x.get("condition_id") or "") == str(cid))]
+        splits = [x for x in a if cid and str(x.get("type", "")).upper() in ("SPLIT", "MERGE", "CONVERSION")
+                  and str(x.get("conditionId") or x.get("condition_id") or "") == str(cid)]
         if splits or (0.495 <= (p.get("their_avg") or 0) <= 0.505 and not buys):
             verdict = "SPLIT"
             split_like += 1
@@ -839,3 +844,33 @@ def audit():
 
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "audit":
     audit()
+
+
+def watchtest():
+    """watchtest: one full watch run + summary on live data with saving and pushes switched off (tests a branch)."""
+    import bot
+    saved = {}
+    bot.save = lambda name, obj: saved.__setitem__(name, obj)
+    bot.load_orig = bot.load
+    bot.load = lambda name, default: saved[name] if name in saved else bot.load_orig(name, default)
+    bot.log_event = lambda ev: None
+    bot.push = lambda title, body, **k: print("PUSH (not sent):", title, "|", body[:600])
+    bot.daily = lambda force=None: print("(daily catch-up skipped in test)")
+    bot.watch()
+    tr = saved.get("tracks.json") or bot.load_tracks()
+    bot.integrity_run(tr, deep=True)
+    print("\n".join(bot.integrity_md()))
+    import os
+    st = bot.write_summary.__globals__
+    os.makedirs("/tmp/st", exist_ok=True)
+    st["STATE"] = "/tmp/st"
+    import shutil
+    for f in ("events.jsonl", "history.csv"):
+        shutil.copy(os.path.join(bot.ROOT, "state", f), "/tmp/st/" + f)
+    stats = bot.write_summary(tr)
+    print("top eligible:", [n for n in bot.ranked(stats) if bot.top_eligible(stats[n])][:10])
+    print("open P&L all tracks:", round(sum(s.get("unrealized", 0) for s in stats.values()), 2))
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "watchtest":
+    watchtest()
