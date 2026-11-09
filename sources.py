@@ -187,8 +187,66 @@ def precurring():
         src = a["src"].most_common(1)[0][0] if a["src"] else "-"
         print(f"{sl[:40]:40s} {rc[:8]:8s} {a['n']:6d} {a['vol24']:10.0f}  {src} | {a['ex']}")
 
+def kmarkets(series, status="settled", pages=10, **extra):
+    out, cursor = [], None
+    for _ in range(pages):
+        p = {"series_ticker": series, "status": status, "limit": 1000, **extra}
+        if cursor:
+            p["cursor"] = cursor
+        try:
+            r = bot.http_json(f"{KAL}/markets", p)
+        except Exception as e:
+            print(" markets failed", series, e)
+            break
+        out += r.get("markets") or []
+        cursor = r.get("cursor")
+        if not cursor or not r.get("markets"):
+            break
+    return out
+
+
+def kcandles(series, ticker, start, end, period=1):
+    r = bot.http_json(f"{KAL}/series/{series}/markets/{ticker}/candlesticks",
+                      {"start_ts": int(start), "end_ts": int(end), "period_interval": period})
+    return r.get("candlesticks") or []
+
+
+def kseries(arg):
+    """Look at a few Kalshi families: rules, how many settled, settle values, volume, candle shape."""
+    for s in arg.split(","):
+        ms = kmarkets(s, pages=3)
+        print(f"\n######## {s}: {len(ms)} settled markets (first 3000)")
+        if not ms:
+            continue
+        m = ms[0]
+        print("keys:", sorted(m.keys()))
+        for k in ("ticker", "event_ticker", "title", "subtitle", "yes_sub_title", "rules_primary", "rules_secondary",
+                  "open_time", "close_time", "expiration_time", "expiration_value", "result", "strike_type",
+                  "floor_strike", "cap_strike", "volume_fp", "volume", "last_price_dollars"):
+            print(f"  {k}: {str(m.get(k))[:700]}")
+        vol = sum(f(x.get("volume_fp") or x.get("volume")) for x in ms)
+        evs = collections.Counter(x.get("event_ticker") for x in ms)
+        print(f"  events {len(evs)}, markets/event ~{len(ms)/max(1,len(evs)):.1f}, total contracts {vol:.0f}")
+        seen = []
+        for x in ms:
+            if x.get("event_ticker") not in [e for e, _ in seen]:
+                seen.append((x.get("event_ticker"), x.get("expiration_value")))
+            if len(seen) >= 12:
+                break
+        print("  recent settle values:", seen)
+        try:
+            ct = bot.parse_iso(m.get("close_time")).timestamp()
+            c = kcandles(s, m["ticker"], ct - 6 * 3600, ct, 1)
+            print(f"  candles last 6h at 1-min: {len(c)}; sample: {json.dumps(c[-1])[:600] if c else None}")
+        except Exception as e:
+            print("  candles failed:", e)
+
 
 MODES = {"map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
-    MODES[sys.argv[1] if len(sys.argv) > 1 else "map"]()
+    a = sys.argv[1] if len(sys.argv) > 1 else "map"
+    if a.startswith("ks_"):
+        kseries(a[3:])
+    else:
+        MODES[a]()
