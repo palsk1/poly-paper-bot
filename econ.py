@@ -840,6 +840,52 @@ def run():
         print({k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()})
 
 
+def drill():
+    """Look inside the leads: per-release results, wrong-month per series, calibration, and blend vs market."""
+    models = Models()
+    pts, _ = build_points(models)
+    placebo, _ = build_points(models, placebo=True)
+    print("\n== blend test: does adding the forecast to the market price help? (score, lower is better)")
+    for s in SERIES:
+        for h in (1, 24):
+            sub = sorted([r for r in pts if r["s"] == s and r["h"] == h], key=lambda r: r["close"])
+            if len(sub) < 40:
+                continue
+            cut = sub[len(sub) // 2]["close"]
+            out = []
+            for part in ([r for r in sub if r["close"] < cut], [r for r in sub if r["close"] >= cut]):
+                mk = sum(((r["bid"] + r["ask"]) / 2 - r["y"]) ** 2 for r in part) / len(part)
+                bl = sum((0.7 * (r["bid"] + r["ask"]) / 2 + 0.3 * r["p"] - r["y"]) ** 2 for r in part) / len(part)
+                out.append(f"market {mk:.4f} vs 70/30 blend {bl:.4f}")
+            print(f"  {s} {h}h: first half {out[0]}; second half {out[1]}")
+    print("\n== forecast calibration (chance said vs how often YES), 24h")
+    for s in SERIES:
+        sub = [r for r in pts if r["s"] == s and r["h"] == 24]
+        row = []
+        for lo, hi in ((0, .1), (.1, .3), (.3, .7), (.7, .9), (.9, 1.01)):
+            b = [r for r in sub if lo <= r["p"] < hi]
+            if b:
+                row.append(f"{lo:.1f}-{min(hi, 1):.1f}: said {sum(r['p'] for r in b) / len(b):.2f} got {sum(r['y'] for r in b) / len(b):.2f} (n={len(b)})")
+        print(f"  {s}: " + " | ".join(row))
+    for s in ("KXGDP", "KXCPICORE", "KXJOBLESSCLAIMS"):
+        for h in (1, 6, 24, 72):
+            bs = bets([r for r in pts if r["s"] == s and r["h"] == h], 0.03)
+            pl = bets([r for r in placebo if r["s"] == s and r["h"] == h], 0.03)
+            print(f"\n== {s} {h}h 3c+: {line(bs)}")
+            print(f"   wrong month: {line(pl)}")
+            print(f"   1c worse: {money(per100(bets([r for r in pts if r['s'] == s and r['h'] == h], 0.03, 0.01)))} per $100;"
+                  f" {halves(bs)}")
+            if h in (1, 24):
+                ev = defaultdict(list)
+                for b in bs:
+                    ev[b["e"]].append(b)
+                for e in sorted(ev, key=lambda e: ev[e][0]["close"]):
+                    x = ev[e]
+                    print(f"   {e}: forecast {x[0]['mu']:.2f}, {len(x)} bets, cost ${sum(b['cost'] for b in x):.2f}, "
+                          f"P&L {money(sum(b['pnl'] for b in x))}  " +
+                          ", ".join(f"{b['t'].split('-')[-1]}:{'Y' if b['side'] else 'N'}@{b['cost']:.2f}{'+' if b['won'] else 'x'}" for b in x))
+
+
 def fetch_run():
     fetch()
     run()
@@ -847,4 +893,4 @@ def fetch_run():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run}[cmd]()
+    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill}[cmd]()
