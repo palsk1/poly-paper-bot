@@ -467,7 +467,51 @@ def quake(arg=""):
         print(f"{k:24s} {mag:4.1f} {K:4.1f} {mm(first)} {str(pb):>5s}/{str(pa):<5s} {mm(hit):>8s} {mm(cheap):>13s} {cheap_px if cheap_px is not None else ''}")
 
 
-MODES = {"quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
+# ---------------------------------------------------------------- can GitHub read the early sources?
+EARLY = [
+    ("gasbuddy live US average", "https://www.gasbuddy.com/usa"),
+    ("AAA gas page", "https://gasprices.aaa.com/"),
+    ("White House presidential actions", "https://www.whitehouse.gov/presidential-actions/"),
+    ("WH actions feed", "https://www.whitehouse.gov/presidential-actions/feed/"),
+    ("Federal Register EOs", "https://www.federalregister.gov/api/v1/documents.json?conditions[presidential_document_type]=executive_order&order=newest&per_page=5&fields[]=executive_order_number&fields[]=signing_date&fields[]=publication_date&fields[]=title"),
+    ("Federal Register public inspection", "https://www.federalregister.gov/api/v1/public-inspection-documents/current.json"),
+    ("Truth Social API", "https://truthsocial.com/api/v1/accounts/107780257626128497/statuses?limit=5"),
+    ("Roll Call factba.se", "https://rollcall.com/factbase/trump/topic/social/"),
+    ("xtracker", "https://xtracker.polymarket.com/api/users"),
+    ("ERCOT dashboard", "https://www.ercot.com/api/1/services/read/dashboards/loadForecastVsActual.json"),
+    ("USGS live feed", "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson"),
+    ("Apple top free apps", "https://rss.marketingtools.apple.com/api/v2/us/apps/top-free/10/apps.json"),
+    ("TSA throughput", "https://www.tsa.gov/travel/passenger-volumes"),
+    ("Netflix top 10", "https://www.netflix.com/tudum/top10/united-states/tv"),
+    ("FlixPatrol", "https://flixpatrol.com/top10/netflix/united-states/"),
+    ("Mortgage News Daily", "https://www.mortgagenewsdaily.com/mortgage-rates"),
+    ("Spotify charts (kworb)", "https://kworb.net/spotify/country/us_daily.html"),
+    ("NY Fed SOFR", "https://markets.newyorkfed.org/api/rates/secured/sofr/last/3.json"),
+    ("IMF PortWatch", "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0/query?where=portname%3D%27Strait%20of%20Hormuz%27&outFields=*&orderByFields=date%20desc&resultRecordCount=3&f=json"),
+    ("LMArena leaderboard", "https://lmarena.ai/leaderboard"),
+    ("Box Office Mojo daily", "https://www.boxofficemojo.com/date/"),
+    ("RealClearPolling", "https://www.realclearpolling.com/polls/approval/donald-trump/approval-rating"),
+    ("Yahoo RBOB futures", "https://query1.finance.yahoo.com/v8/finance/chart/RB=F?interval=1h&range=5d"),
+    ("Pyth hermes", "https://hermes.pyth.network/v2/updates/price/latest?ids[]=0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43"),
+]
+
+
+def reach():
+    for name, url in EARLY:
+        t = time.time()
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)",
+                                                       "Accept": "text/html,application/json"})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                body = r.read(400000).decode("utf-8", "replace")
+                print(f"OK  {r.status} {len(body):7d}B {time.time() - t:4.1f}s  {name}: {re.sub(r'\s+', ' ', body[:200])}")
+        except urllib.error.HTTPError as e:
+            print(f"BAD {e.code}            {name}")
+        except Exception as e:
+            print(f"ERR {type(e).__name__}: {str(e)[:80]}  {name}")
+
+
+MODES = {"reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
