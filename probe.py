@@ -915,3 +915,115 @@ def rewardcheck():
 
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "rewardcheck":
     rewardcheck()
+
+
+def rewardpay():
+    """rewardpay (2026-11-09, Jan): what do REAL market makers get paid in liquidity rewards? Finds the wallets that
+    trade most in today's reward markets, sums their REWARD (and maker rebate) payouts from the public activity feed
+    over the last 30 days, and compares that with what they hold. Prints raw shapes first so field names can be
+    fixed from the log. Saves nothing."""
+    import time
+    from collections import Counter
+    import bot
+    t30 = time.time() - 30 * 86400
+    rms = sorted(bot.reward_markets(), key=lambda x: -x["rate"])
+    print(f"{len(rms)} reward markets, pools total ${sum(m['rate'] for m in rms):,.0f}/day; top: "
+          f"{[(m['slug'][:35], round(m['rate'])) for m in rms[:8]]}")
+    held = [b["cid"] for b in bot.load_tracks().get("maker", {}).get("books", {}).values()]
+    cids = held + [m["cid"] for m in rms[:40] if m["cid"] not in held]
+    who, shown, _acts = Counter(), False, {}
+    for cid in cids:
+        try:
+            rows = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"condition_id": cid, "limit": 500}), "data", "trades")
+        except Exception as e:
+            print("trades failed", cid[:10], e)
+            continue
+        if rows and not shown:
+            show("trade row sample", rows[0], 1200)
+            shown = True
+        for t in rows:
+            w = bot.pick(t, "proxy_wallet", "proxyWallet", "maker", "user", "wallet", default="")
+            if w:
+                who[str(w).lower()] += 1
+    print(f"{len(who)} wallets traded in {len(cids)} reward markets")
+
+    def page(params):
+        try:
+            res = bot.http_json(f"{bot.DATA}/v2/activity", params)
+        except Exception as e:
+            print(f"  activity {params.get('type', 'all')} failed for {params['user'][:10]}: {str(e)[:160]}")
+            return None, None
+        cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
+        return bot.envelope_rows(res, "data"), cur
+
+    def walk_pages(params, max_pages=20):
+        out, cur = [], None
+        for _ in range(max_pages):
+            q = dict(params, **({"cursor": cur} if cur else {}))
+            rows, cur = page(q)
+            if rows is None:
+                return None if not out else out
+            out += rows
+            ts = [bot.fnum(r.get("timestamp")) for r in rows]
+            if not rows or not cur or (ts and min(ts) < t30):
+                break
+        return out
+
+    def acts(w, typ):
+        """Payout rows of these types in the last 30 days: try the type filter, else scan all activity."""
+        out = []
+        for ty in typ:
+            rows = walk_pages({"user": w, "type": ty, "limit": 500})
+            if rows:
+                out += [r for r in rows if str(r.get("type")).upper() == ty]
+        if out or ("scan", w) in _acts:
+            return out
+        _acts[("scan", w)] = True
+        allr = walk_pages({"user": w, "limit": 500}) or []
+        print(f"  {w[:10]} activity types (scan of {len(allr)} rows, back to "
+              f"{min((bot.fnum(r.get('timestamp')) for r in allr), default=0):.0f}): {dict(Counter(str(r.get('type')) for r in allr))}")
+        return [r for r in allr if str(r.get("type")).upper() in typ]
+
+    if who:
+        w0 = who.most_common(1)[0][0]
+        try:
+            show("any activity sample", bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/activity", {"user": w0, "limit": 5}), "data"), 1500)
+        except Exception as e:
+            print("activity sample failed", e)
+    first = True
+    table = []
+    for w, n in who.most_common(25):
+        rew = acts(w, ("REWARD", "REWARDS", "LIQUIDITY_REWARD"))
+        if first and rew:
+            show("REWARD activity sample", rew[:2], 1500)
+            first = False
+        r30 = [r for r in rew if bot.fnum(r.get("timestamp")) >= t30]
+        usd = sum(bot.fnum(bot.pick(r, "usdc_size", "usdcSize", "usdc_size", "amount", "size")) for r in r30)
+        days = 30.0
+        if r30:
+            oldest = min(bot.fnum(r.get("timestamp")) for r in r30)
+            days = max(1.0, min(30.0, (time.time() - oldest) / 86400 + 1))
+        reb = acts(w, ("MAKER_REBATE", "REBATE"))
+        rb = sum(bot.fnum(bot.pick(r, "usdc_size", "usdcSize", "usdc_size", "amount", "size")) for r in reb if bot.fnum(r.get("timestamp")) >= t30)
+        try:
+            v = bot.http_json(f"{bot.DATA}/v2/value", {"user": w})
+            v = v.get("data", v) if isinstance(v, dict) else (v[0] if isinstance(v, list) and v else {})
+            value = bot.fnum((v or {}).get("value")) if isinstance(v, dict) else bot.fnum(v)
+        except Exception as e:
+            value = 0.0
+            print(f"  value failed for {w[:10]}: {str(e)[:100]}")
+        table.append((w, n, len(r30), usd, days, rb, value))
+        print(f"  {w} trades {n:4} | rewards 30d ${usd:9.2f} ({len(r30)} payouts, ~${usd / days:7.2f}/day) | "
+              f"rebates ${rb:8.2f} | holds ${value:11.2f} | per $100 held: ${usd / days / value * 100 if value > 1 else 0:6.2f}/day")
+    paid = [x for x in table if x[3] > 0 and x[6] > 50]
+    if paid:
+        per = sorted(x[3] / x[4] / x[6] * 100 for x in paid)
+        print(f"\n{len(paid)} wallets got rewards. Rewards per day per $100 held in positions: median ${per[len(per) // 2]:.2f}, "
+              f"range ${per[0]:.2f}-${per[-1]:.2f}. (Held = open positions only, not cash sitting in orders, so this is "
+              f"on the HIGH side.) Our maker model: ~$8/day per $100.")
+    else:
+        print("\nno wallet with rewards found (check the field names in the samples above)")
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "rewardpay":
+    rewardpay()
