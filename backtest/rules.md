@@ -1,6 +1,8 @@
 # Fine-print hunt: does the crowd misprice markets with tricky rules?
 
-Generated 2026-11-09T20:38:31Z. 124,260 finished binary non-sports Polymarket markets since 2026-03-01 with their rule text. 395 were disputed at UMA, 0 got a clarification added, 7,982 needed a second proposal. Paper only.
+Generated 2026-11-09T20:55:09Z. 124,260 finished binary non-sports Polymarket markets since 2026-03-01 with their rule text. 395 were disputed at UMA, 0 got a clarification added, 7,982 needed a second proposal. Paper only.
+
+**Verdict:** the text flags predict UMA disputes very well (0.4 vs 51 per 1,000), but prices in those markets are about fair. The one lead (limbo underdogs, section 6b) disappears once small markets are added (section 7): no track.
 
 How to read: same as calib.md. Buy one side at the history price +1-5c plus the taker fee, hold to the result, profit per $100 staked, grouped by event. **<-** = 90% band at +2c above $0, 30+ events, both halves ahead. The 'vs look-alikes' tables compare flagged markets with unflagged ones in the same price band and time slot: an edge has to come from the flag, not the band.
 
@@ -431,3 +433,42 @@ Every event (first market shown, price, won?):
 - date_gap yes 1-3 days before the end: +$21 per $100 at +2c, band +$7 to +$35, 87 events, halves +$11 / +$31
 
 About 204 rows were tested; at a 90% band roughly 10 pass by luck alone.
+
+## 7. Volume-bias check: the limbo lead with small markets added
+
+bt_cache only has markets with $20k+ final volume, which flatters long shots (a surprise draws volume). Here every finished $1k-20k market that sat unpaid 1+ day past its end is added: 10,510 markets, 3,822 limbo snapshots.
+
+Expected vs real wins of the long shot (10-30c), as ideas.py's volbias check: with no bias they match.
+
+| Set | Bets | Prices added up (expected wins) | Real wins | Ratio |
+|---|---|---|---|---|
+| $20k+ only, score 2+ | 414 | 76.7 | 106 | 1.38 |
+| $1k-20k only, score 2+ | 639 | 119.0 | 75 | 0.63 |
+| $20k+ only, score 0-1 | 93 | 18.5 | 20 | 1.08 |
+| $1k-20k only, score 0-1 | 407 | 76.7 | 47 | 0.61 |
+
+| Slice | Events | Bets (won) | Avg price | +1c | +2c | 90% band at +2c | +3c | +5c | 1st half / 2nd half (+2c) |
+|---|---|---|---|---|---|---|---|---|---|
+| ALL $1k+, score 2+ (the track's rule): long shot 10-30c | 468 | 1053 (181) | 19c | -$14 | -$18 | -$31 to -$6 | -$22 | -$29 | -$25 / -$11 |
+| ALL $1k+, score 2+ (the track's rule): leader 70-90c | 466 | 1048 (866) | 81c | +$0 | -$1 | -$4 to +$2 | -$2 | -$4 | +$1 / -$3 |
+| ALL $1k+, score 2+, no weather: long shot 10-30c | 468 | 1053 (181) | 19c | -$14 | -$18 | -$31 to -$6 | -$22 | -$29 | -$25 / -$11 |
+| ALL $1k+, score 2+, no weather: leader 70-90c | 466 | 1048 (866) | 81c | +$0 | -$1 | -$4 to +$2 | -$2 | -$4 | +$1 / -$3 |
+| ALL $1k+, score 0-1: long shot 10-30c | 247 | 500 (67) | 19c | -$35 | -$38 | -$51 to -$25 | -$41 | -$45 | -$44 / -$32 |
+| ALL $1k+, score 0-1: leader 70-90c **<-** | 245 | 500 (432) | 81c | +$5 | +$4 | +$1 to +$7 | +$3 | +$0 | +$6 / +$2 |
+| $1k-20k only, score 2+: long shot 10-30c | 306 | 639 (75) | 19c | -$41 | -$44 | -$57 to -$31 | -$47 | -$51 | -$50 / -$38 |
+| $1k-20k only, score 2+: leader 70-90c **<-** | 306 | 638 (561) | 81c | +$7 | +$5 | +$2 to +$9 | +$4 | +$2 | +$7 / +$3 |
+| $20k+ only, score 2+: long shot 10-30c **<-** | 209 | 414 (106) | 19c | +$29 | +$22 | +$1 to +$44 | +$17 | +$7 | +$15 / +$31 |
+| $20k+ only, score 2+: leader 70-90c | 207 | 410 (305) | 81c | -$10 | -$11 | -$16 to -$5 | -$12 | -$14 | -$9 / -$13 |
+
+Topics in the track's rule (all $1k+, score 2+, long shot 10-30c, +2c):
+
+| Topic | Events | Per $100 |
+|---|---|---|
+| apps/tech | 4 | +$89.5 |
+| economics | 2 | +$387.0 |
+| elections | 206 | -$3.3 |
+| entertainment | 2 | +$251.3 |
+| geopolitics | 30 | -$1.4 |
+| mentions | 31 | -$42.7 |
+| other | 177 | -$40.5 |
+| stocks | 22 | +$14.0 |
