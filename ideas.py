@@ -671,6 +671,45 @@ def drill(name):
     tab("all", lambda r, q: "all")
 
 
+def volbias():
+    """Selection-bias detector. The cache only keeps markets with FINAL volume over $20k, and the market that wins
+    tends to draw volume late. In an event with many choices (weather buckets, 'most seats'), that drops losing
+    choices and keeps winners. Test: 1 day before the end, add up the YES prices of the choices we have. With no
+    bias, the number of choices that win should match that sum on average. More wins than the sum = biased data."""
+    markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
+    hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
+    markets = {k: m for k, m in in_sample(markets_all).items() if not m.get("sports")}
+    by_ev = defaultdict(list)
+    for m in markets.values():
+        if hist.get(m["id"]) and hist[m["id"]][0] and calib.outcome0(m) is not None:
+            by_ev[m.get("ev") or m["id"]].append(m)
+    g = defaultdict(lambda: [0, 0.0, 0, 0])   # events, sum of prices, wins, markets
+    for ev, ms in by_ev.items():
+        t = min(m["end"] for m in ms) - DAY
+        ps, wins = 0.0, 0
+        for m in ms:
+            T, P = hist[m["id"]]
+            k = bisect.bisect_right(T, t) - 1
+            if k < 0 or t - T[k] > 3 * DAY or (m.get("closed_t") and t >= m["closed_t"]):
+                break
+            ps += P[k]
+            wins += calib.outcome0(m)
+        else:
+            n = len(ms)
+            key = (calib.topic(ms[0]["q"]), "1" if n == 1 else "2-4" if n <= 4 else "5+")
+            a = g[key]
+            a[0] += 1
+            a[1] += ps
+            a[2] += wins
+            a[3] += n
+    print("| topic | markets we have per event | events | avg markets | YES prices added up (expected wins) | real wins | wins / expected |")
+    print("|---|---|---|---|---|---|---|")
+    for key in sorted(g):
+        n, ps, w, nm = g[key]
+        if n >= 20:
+            print(f"| {key[0]} | {key[1]} | {n} | {nm / n:.1f} | {ps:.0f} | {w} | {w / max(ps, 1e-9):.2f} |")
+
+
 def list_ideas():
     for n, s, _, cross in FEATURES:
         print(f"- {n}{' (x topics)' if cross and TOPIC_CROSS else ''}: {s}")
@@ -717,7 +756,9 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    if cmd.startswith("drill_"):
+    if cmd == "volbias":
+        volbias()
+    elif cmd.startswith("drill_"):
         drill(cmd[len("drill_"):])
     else:
         {"run": run, "list": list_ideas, "selftest": selftest}[cmd]()

@@ -1051,6 +1051,9 @@ def fade():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if cmd == "btideasvolbias":
+        __import__("ideas").volbias()
+        sys.exit(0)
     if cmd.startswith("btideasdrill_"):  # idea machine drill-down (ideas.py)
         __import__("ideas").drill(cmd[len("btideasdrill_"):])
         sys.exit(0)
