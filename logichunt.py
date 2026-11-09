@@ -103,64 +103,68 @@ def annual(edge, cost, end):
 
 # ------------------------------------------------------------------ nested lists across events
 
+LEAGUE = [("football", r"\b(nfl|pro football|super bowl|afc|nfc)\b"), ("basketball", r"\b(nba|pro basketball)\b"),
+          ("hockey", r"\b(nhl|pro hockey|stanley cup)\b"), ("baseball", r"\b(mlb|pro baseball|world series)\b"),
+          ("wnba", r"\bwnba\b")]
+CONF = r"\b(afc|nfc|eastern|western|east|west|american league|national league|al|nl)\b"
+SKIP_T = r"\b(mvp|player|coach|rookie|trophy|award|division|cup winner|nba cup|record|leader|seed|draft|next team|2nd|3rd|worst|fewest)\b" \
+         r"|\b(afc|nfc|al|nl|american league|national league) (north|south|east|west|central)\b" \
+         r"|\b(atlantic|metropolitan|pacific|central|southeast|northwest|southwest)\b"
+
+
+def level(title):
+    """(league, level) for sports futures lists: 3 = league champion, 2 = conference champion, 1 = makes the playoffs.
+    A team at level 3 must also be at levels 2 and 1, so P(3) <= P(2) <= P(1)."""
+    t = str(title or "").lower()
+    lg = next((k for k, rx in LEAGUE if re.search(rx, t)), None)
+    if not lg or re.search(SKIP_T, t):
+        return None
+    if re.search(r"make (the )?playoffs|playoff teams|qualify for (the )?playoffs|reach (the )?playoffs", t):
+        return lg, 1
+    if re.search(r"champion|winner", t):
+        return lg, (2 if re.search(CONF, t) else 3)
+    return None
+
+
 def hunt_nested(ms):
-    events, by_name = {}, defaultdict(set)
+    """Polymarket, across events: league champion -> conference champion -> makes the playoffs, team by team."""
+    lists = {}
     for m in ms:
-        if not is_negrisk(m):
-            continue
-        name = norm_name(m.get("groupItemTitle"))
-        if not name or name in GENERIC or re.search(r"\d", name):
-            continue  # numbers = buckets/ranges, not names
         e = ev_of(m)
+        lv = level(e.get("title"))
+        name = norm_name(m.get("groupItemTitle"))
+        if not lv or not name or name in GENERIC:
+            continue
         k = str(e.get("id") or "")
-        if not k:
-            continue
-        ev = events.setdefault(k, {"title": e.get("title") or m.get("question"), "slug": e.get("slug"), "m": {}})
-        ev["m"][name] = m
-        by_name[name].add(k)
-    pair_shared = Counter()
-    for name, ks in by_name.items():
-        ks = sorted(ks)
-        if len(ks) > 40:
-            continue  # very common names ("trump") would explode the pairs
-        for i, a in enumerate(ks):
-            for b in ks[i + 1:]:
-                pair_shared[(a, b)] += 1
-    cands, rows = [], []
-    for (a, b), n in pair_shared.items():
-        if n < 3:
-            continue
-        A, B = events[a], events[b]
-        names = [x for x in A["m"] if x in B["m"] and max(mid(A["m"][x]), mid(B["m"][x])) >= 0.03]
-        if len(names) < 3:
-            continue
-        lo = sum(mid(A["m"][x]) <= mid(B["m"][x]) + 0.01 for x in names)  # A never above B
-        hi = sum(mid(A["m"][x]) >= mid(B["m"][x]) - 0.01 for x in names)
-        strict = sum(abs(mid(A["m"][x]) - mid(B["m"][x])) >= 0.02 for x in names)
-        if strict < max(2, len(names) // 3):
-            continue  # basically equal lists: duplicates, not nested
-        need = 0.75 if len(names) >= 4 else 1.0  # a real mispricing is a name or two the wrong way round
-        if lo / len(names) >= need and lo > hi:
-            s, l = A, B
-        elif hi / len(names) >= need and hi > lo:
-            s, l = B, A
-        else:
-            continue
-        cands.append((s, l, names))
-    print(f"nested: {len(events)} one-winner lists with names, {len(cands)} list pairs where one sits under the other")
-    for s, l, names in sorted(cands, key=lambda c: -len(c[2]))[:80]:
-        print(f"  PAIR [{len(names)} names] stricter: {s['title']!r}  ->  looser: {l['title']!r}")
-    for s, l, names in cands:
-        for x in s["m"]:
-            if x not in l["m"]:
-                continue
-            ms_, ml = s["m"][x], l["m"][x]
-            listed = 1 - ((1 - fnum(ms_["bestBid"])) + fnum(ml["bestAsk"]))
-            if listed > -0.003:
-                rows.append({"kind": "nested", "name": x, "stricter": s["title"], "looser": l["title"],
-                             "s_slug": ms_.get("slug"), "l_slug": ml.get("slug"), "listed": round(listed, 4),
-                             "legs": [(bot.yes_no_tokens(ms_)[1], bot.fee_rate(ms_)), (bot.yes_no_tokens(ml)[0], bot.fee_rate(ml))],
-                             "payout": 1.0, "end": max(end_of(ms_) or now(), end_of(ml) or now())})
+        lists.setdefault(k, {"title": e.get("title"), "lv": lv, "end": end_of(m), "m": {}})["m"][name] = m
+    by_lg = defaultdict(list)
+    for L in lists.values():
+        by_lg[L["lv"][0]].append(L)
+    rows, npairs = [], 0
+    for lg, Ls in by_lg.items():
+        for s in Ls:
+            for l in Ls:
+                if s["lv"][1] <= l["lv"][1]:
+                    continue
+                if abs(((s["end"] or now()) - (l["end"] or now())).days) > 200:
+                    continue  # different seasons
+                if s["lv"][1] == 3 and l["lv"][1] == 2 and len(set(s["m"]) & set(l["m"])) < 3:
+                    continue
+                names = set(s["m"]) & set(l["m"])
+                if not names:
+                    continue
+                npairs += 1
+                bad = sum(mid(s["m"][x]) > mid(l["m"][x]) + 0.005 for x in names)
+                print(f"  PAIR {lg}: {s['title']!r} -> {l['title']!r}: {len(names)} teams, {bad} priced the wrong way round")
+                for x in names:
+                    a, b = s["m"][x], l["m"][x]
+                    listed = 1 - ((1 - fnum(a["bestBid"])) + fnum(b["bestAsk"]))
+                    if listed > -0.01:
+                        rows.append({"kind": "nested", "name": x, "stricter": s["title"], "looser": l["title"],
+                                     "s_slug": a.get("slug"), "l_slug": b.get("slug"), "listed": round(listed, 4),
+                                     "legs": [(bot.yes_no_tokens(a)[1], bot.fee_rate(a)), (bot.yes_no_tokens(b)[0], bot.fee_rate(b))],
+                                     "payout": 1.0, "end": max(end_of(a) or now(), end_of(b) or now())})
+    print(f"nested: {len(lists)} sports futures lists, {npairs} champion/conference/playoff pairs, {len(rows)} near or under $1 listed")
     return rows
 
 
@@ -256,6 +260,23 @@ def kalshi_events():
     return out
 
 
+def k_complete(ms):
+    """True when the markets tile the whole number line: one '< low', buckets with no gaps, one '> high'."""
+    lo = [m for m in ms if m.get("strike_type") in ("less", "less_or_equal")]
+    hi = [m for m in ms if m.get("strike_type") in ("greater", "greater_or_equal")]
+    mid_ = sorted((m for m in ms if m.get("strike_type") == "between"), key=lambda m: fnum(m.get("floor_strike")))
+    if len(lo) != 1 or len(hi) != 1 or len(mid_) + 2 != len(ms):
+        return False
+    edges = [fnum(lo[0].get("cap_strike"))] + [x for m in mid_ for x in (fnum(m.get("floor_strike")), fnum(m.get("cap_strike")))] \
+        + [fnum(hi[0].get("floor_strike"))]
+    ints = all(float(x).is_integer() for x in edges)
+    for i in range(0, len(edges) - 1, 2):
+        gap = edges[i + 1] - edges[i]
+        if gap < -1e-9 or gap > (1.0 if ints else 0.011):
+            return False
+    return True
+
+
 def kq(m, side):
     return bot.kpx(m, f"{side}_ask")
 
@@ -277,9 +298,11 @@ def hunt_kalshi():
             st["ladders"] += 1
             key = "floor_strike" if up else "cap_strike"
             lad.sort(key=lambda m: fnum(m.get(key)))
+            subj = lambda m: (re.sub(r"-?[\d.]+$", "", str(m.get("ticker"))),
+                              re.sub(r"[\d.,]+", "#", str(m.get("yes_sub_title") or m.get("subtitle") or "")))
             for i, lo in enumerate(lad):
                 for hi in lad[i + 1:]:
-                    if fnum(hi.get(key)) == fnum(lo.get(key)):
+                    if fnum(hi.get(key)) == fnum(lo.get(key)) or subj(hi) != subj(lo):
                         continue
                     if lo.get("close_time") != hi.get("close_time"):
                         continue
@@ -300,7 +323,7 @@ def hunt_kalshi():
                 rows.append({"kind": "k_all_no", "event": e.get("event_ticker"), "title": e.get("title"), "n": n,
                              "listed": round(no_listed / max(n - 1, 1), 4), "payout": n - 1.0, "end": end,
                              "klegs": [(m.get("ticker"), "no") for m in ms]})
-            if yes_listed > -0.003 * n:
+            if yes_listed > -0.003 * n and k_complete(ms):
                 rows.append({"kind": "k_all_yes", "event": e.get("event_ticker"), "title": e.get("title"), "n": n,
                              "listed": round(yes_listed, 4), "payout": 1.0, "end": end, "needs": "list must be complete",
                              "klegs": [(m.get("ticker"), "yes") for m in ms]})
