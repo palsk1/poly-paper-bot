@@ -45,7 +45,7 @@ import kcrypto as kc
 CACHE = os.path.join(bot.ROOT, "bt_cache", "kf")
 OUT = os.path.join(bot.ROOT, "backtest")
 TAPE_SEC = 330            # trade tape kept per window: the last 5.5 minutes
-WORKERS = int(os.environ.get("KF_WORKERS", "10"))
+WORKERS = int(os.environ.get("KF_WORKERS", "16"))
 BIN_ZIP = "https://data.binance.vision/data/spot/daily/klines/{s}/1s/{s}-1s-{d}.zip"
 NAN = float("nan")
 EPS = 1e-9
@@ -81,6 +81,35 @@ def tape_row(t):
     return [round(ts, 3), round(yp, 4), 1 if str(t.get("taker_side")).lower() == "yes" else 0, round(n, 2)]
 
 
+def compact(tape):
+    """Squeeze a raw tape [[ts, yes_price, taker_yes, count], ...] to at most 5 rows a second that keep everything
+    the replay asks: per second the highest and lowest YES price paid by YES takers, the lowest and highest by NO
+    takers (worst prices first, so 'next buy' sees the dearest fill), then the second's last trade.
+    Rows become [second, yes_price, taker_yes]. Already compact tapes pass through."""
+    if not tape or len(tape[0]) == 3:
+        return tape
+    by = {}
+    for ts, yp, tk, _ in tape:
+        sec = int(ts)
+        d = by.setdefault(sec, {"y": [], "n": [], "last": None})
+        d["y" if tk else "n"].append(yp)
+        d["last"] = (yp, tk)
+    out = []
+    for sec in sorted(by):
+        d, rows = by[sec], []
+        if d["y"]:
+            rows += [(max(d["y"]), 1), (min(d["y"]), 1)]
+        if d["n"]:
+            rows += [(min(d["n"]), 0), (max(d["n"]), 0)]
+        rows.append(d["last"])
+        seen = []
+        for r in rows:
+            if r not in seen or r is rows[-1]:
+                seen.append(r)
+        out += [[sec, yp, tk] for yp, tk in seen]
+    return out
+
+
 def fetch_tape(m):
     """Trades in the last TAPE_SEC of one window, oldest first. None if the download failed."""
     t1, t0 = m["close"], m["close"] - TAPE_SEC
@@ -107,7 +136,7 @@ def fetch_tape(m):
                 break
         if ok:
             out = [r for r in (tape_row(t) for t in rows) if r and t0 - 1 <= r[0] <= t1 + 1]
-            return sorted(out)
+            return compact(sorted(out))
     return None
 
 
@@ -116,7 +145,7 @@ def fetch_tapes(days):
     t0 = t_end - int(days) * 86400
     for s in kc.SERIES:
         path = os.path.join(CACHE, f"tape_{s}.json.gz")
-        store = kc.rjson(path, {})
+        store = {k: compact(v) for k, v in kc.rjson(path, {}).items()}
         ms = [m for m in kc.rjson(os.path.join(kc.CACHE, f"markets_{s}.json.gz"), [])
               if m["close"] >= t0]
         todo = [m for m in ms if m["t"] not in store]
@@ -338,7 +367,7 @@ LATENCY = (1, 3, 10)
 A_MINUTES = (1, 2, 3, 5)
 B_SECONDS = (45, 30, 20, 10, 5)
 B_ZMIN = (2.0, 3.0, 4.0, 6.0)
-B_MAKER = (0.97, 0.98, 0.99)
+B_MAKER = (0.98, 0.99, 0.995, 0.998)
 
 
 def replay(windows, tapes, spots):
@@ -404,11 +433,10 @@ def replay(windows, tapes, spots):
                     continue
                 # taker: the next real trade where someone bought our side, 1-4 s after we decide
                 buy = next((r for r in tape if t + 1 <= r[0] <= t + 4 and (r[2] == 1) == (side == "yes")), None)
-                if buy:
-                    p = side_px(buy, side)
-                    if p < 0.995:
-                        add(("Bt", L, zmin), {**base, "t": t, "price": p, "fee": taker_fee(p), "won": won,
-                                              "fills": (True, True, True)})
+                p = side_px(buy, side) if buy else None
+                ok = p is not None and p <= 0.999 + EPS
+                add(("Bt", L, zmin), {**base, "t": t, "price": p if ok else 0.99, "fee": taker_fee(p) if ok else 0.0,
+                                      "won": won, "fills": (ok, ok, ok)})
                 # maker: a bid at a fixed price from t+1 to the close, only if the last trade was at or above it
                 last = next((r for r in reversed(tape) if r[0] <= t), None)
                 if last:
@@ -427,7 +455,7 @@ def replay(windows, tapes, spots):
                 buy = next((r for r in tape if t + 1 <= r[0] <= t + 4 and (r[2] == 1) == (ms == "yes")), None)
                 if buy:
                     p = side_px(buy, ms)
-                    if 0.90 <= p < 0.995:
+                    if 0.90 <= p <= 0.999 + EPS:
                         add(("Bmkt", L), {**base, "t": t, "price": p, "fee": taker_fee(p), "won": w["res"] == ms,
                                           "fills": (True, True, True)})
     return rows, diag
@@ -440,7 +468,7 @@ def run():
     windows = kc.load_windows()
     tapes = {}
     for s in kc.SERIES:
-        tapes.update(kc.rjson(os.path.join(CACHE, f"tape_{s}.json.gz"), {}))
+        tapes.update({k: compact(v) for k, v in kc.rjson(os.path.join(CACHE, f"tape_{s}.json.gz"), {}).items()})
     windows = [w for w in windows if w["t"] in tapes]
     for w in windows:
         w["spot"] = None   # the minute spot isn't needed here
@@ -510,14 +538,14 @@ def run():
             for lv in B_MAKER:
                 key = ("Bm", Ls, zmin, lv)
                 if key in rows:
-                    L.append(kc.line(f"bid {lv * 100:.0f}c, {Ls}s left, z {zmin}+", kc.stats(rows[key], 1)))
+                    L.append(kc.line(f"bid {lv * 100:g}c, {Ls}s left, z {zmin}+", kc.stats(rows[key], 1)))
     L += ["", "Same, touch fills (optimistic: any trade at our price fills us):", ""] + kc.HEAD
     for Ls in (30, 10):
         for zmin in (3.0,):
             for lv in B_MAKER:
                 key = ("Bm", Ls, zmin, lv)
                 if key in rows:
-                    L.append(kc.line(f"bid {lv * 100:.0f}c, {Ls}s left, z {zmin}+", kc.stats(rows[key], 2)))
+                    L.append(kc.line(f"bid {lv * 100:g}c, {Ls}s left, z {zmin}+", kc.stats(rows[key], 2)))
     L += ["", "## By coin (A: 95c+, 3 min, cancel z<1, 3s; B: taker 20s left, z 3+)", "", "| Coin | A | B |",
           "|---|---|---|"]
     for s in kc.SERIES:
@@ -537,20 +565,35 @@ def run():
 # ================================================================ incentives
 
 def incentives():
-    for path, p in (("/incentive_programs", {"limit": 200}), ("/incentive_programs", {"status": "active", "limit": 200})):
-        try:
-            res = kc.get(path, p)
-        except Exception as e:
-            print(path, p, "FAILED", e)
-            continue
-        progs = res.get("incentive_programs") or res.get("programs") or []
-        print(f"{path} {p}: {len(progs)} programs, keys {list(res)[:6]}")
-        if progs:
-            print("example:", json.dumps(progs[0])[:800])
-        hit = [x for x in progs if "15M" in json.dumps(x).upper()]
-        print(f"15-minute crypto programs: {len(hit)}")
-        for x in hit[:20]:
-            print(" ", json.dumps(x)[:400])
+    """Kalshi's public incentive programs (liquidity / volume rewards), all pages, filtered to the 15-minute crypto
+    series. Rewards are for US members only (help.kalshi.com), so for Jan in Sweden this is context, not income."""
+    for status in ("active", "upcoming", None):
+        progs, cur = [], None
+        for _ in range(100):
+            p = {"limit": 1000}
+            if status:
+                p["status"] = status
+            if cur:
+                p["cursor"] = cur
+            try:
+                res = kc.get("/incentive_programs", p)
+            except Exception as e:
+                print(status, "FAILED", e)
+                break
+            progs += res.get("incentive_programs") or []
+            cur = res.get("next_cursor") or res.get("cursor")
+            if not cur or not res.get("incentive_programs"):
+                break
+        kinds = {}
+        for x in progs:
+            k = (x.get("market_ticker") or "?").split("-")[0]
+            kinds[k] = kinds.get(k, 0) + 1
+        hit = [x for x in progs if (x.get("market_ticker") or "").split("-")[0] in kc.SERIES]
+        crypto = sorted((k, n) for k, n in kinds.items() if "BTC" in k or "ETH" in k or "SOL" in k)
+        print(f"status={status}: {len(progs)} programs over {len(kinds)} series; crypto series: {crypto[:30]}")
+        print(f"  15-minute crypto programs: {len(hit)}")
+        for x in hit[:10]:
+            print("   ", json.dumps(x)[:400])
 
 
 # ================================================================ selftest
@@ -575,6 +618,9 @@ def selftest():
     assert m2 and not m2["est_yes"] and m2["z"][10] < -3
     # fills: a YES bid at 95c; a NO-taker trade at 95c (front) fills fair; a 94c print fills strict; cancel before it
     tape = [[close - 100, 0.96, 1, 5], [close - 50, 0.95, 0, 5], [close - 20, 0.94, 0, 5]]
+    raw = [[close - 9.5, 0.97, 1, 1], [close - 9.4, 0.99, 1, 1], [close - 9.2, 0.96, 0, 1], [close - 9.1, 0.98, 1, 1]]
+    assert compact(raw) == [[close - 10, 0.99, 1], [close - 10, 0.97, 1], [close - 10, 0.96, 0], [close - 10, 0.98, 1]], compact(raw)
+    assert compact(compact(raw)) == compact(raw)
     assert maker_fill(tape, "yes", 0.95, True, close - 120, close + 1) == (True, True, True)
     assert maker_fill(tape, "yes", 0.95, True, close - 120, close - 30) == (False, True, True)
     assert maker_fill(tape, "yes", 0.95, False, close - 120, close - 30) == (False, False, True)
@@ -589,6 +635,7 @@ def selftest():
     # replay end to end on one made-up window
     w["c"] = {close - 180: [0.96, 0.97, 0.96, 0.97, 10]}
     spots = {"KXBTC15M": up}
+    tape = compact(tape)
     rows, diag = replay([w], {"X": tape}, spots)
     assert diag["modelled"] == 1 and diag["agree"] == 1, diag
     a = rows[("A", 0.95, 3, None, 0)][0]
@@ -599,7 +646,7 @@ def selftest():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
     if cmd == "fetch":
-        fetch(sys.argv[2] if len(sys.argv) > 2 else os.environ.get("KF_DAYS", 30))
+        fetch(sys.argv[2] if len(sys.argv) > 2 else os.environ.get("KF_DAYS", 14))
     elif cmd.startswith("fetch_"):
         fetch(cmd.split("_", 1)[1])
     else:
