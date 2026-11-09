@@ -225,7 +225,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `state/arb_candidates.json`: proposed Kalshi/Polymarket twin pairs waiting for review
 - `state/his_book.json`: his current book and what holding all of it at minimum size would cost
 - `state/wallet_snaps.json`: which tokens each copied wallet held at the last check (compact, used to spot new positions)
-- `state/top.json`: today's top 10 by trust (only these send trade pushes)
+- `state/top.json`: the current top 10 by trust (only these send trade pushes). The daily scoreboard sets it and watch re-ranks it every hour (also rewriting `summary.md`), so a strategy that turns into a loser loses its pushes within the hour.
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
