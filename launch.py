@@ -477,8 +477,606 @@ def fetch_kalshi():
     bt.wjson(K_H, hist)
 
 
+# ================================================================ analysis
+
+AGES = (("10 min", 600), ("1 hour", 3600), ("6 hours", 6 * 3600))
+BANDS = ((0.02, 0.10), (0.10, 0.25), (0.25, 0.50), (0.50, 0.75), (0.75, 0.90), (0.90, 0.98))
+SLIP, SLIP_HARD = 0.02, 0.05
+SEASON_AGE = DAY            # "seasoned" twins: the same kind of market, at least a day old
+MIN_EV = 30
+DISC_T, ALPHA = 2.0, 0.10
+
+
+def band_of(q):
+    for i, (a, b) in enumerate(BANDS):
+        if a <= q < b:
+            return i
+    return None
+
+
+def bname(i):
+    a, b = BANDS[i]
+    return f"{a * 100:.0f}-{b * 100:.0f}c"
+
+
+def dte_bucket(secs):
+    d = secs / DAY
+    return 0 if d < 1 else 1 if d < 3 else 2 if d < 14 else 3
+
+
+def price_at(T, P, t, stale=2 * 3600):
+    import bisect
+    k = bisect.bisect_right(T, t) - 1
+    if k < 0 or t - T[k] > stale:
+        return None
+    return P[k]
+
+
+def poly_rows():
+    """Launch rows and seasoned rows. Row: (venue, cat, label, side, q_entry_mid, pay, fee_rate, t, ev, dte, kind)."""
+    mk = bt.rjson(P_MK, {}).get("markets", {})
+    hist = bt.rjson(P_H, {}) or {}
+    L, S, info = [], [], defaultdict(lambda: defaultdict(float))
+    rng = random.Random(7)
+    for mid, m in mk.items():
+        h = hist.get(mid)
+        pay0 = bt.payout(m, 0)
+        if not h or pay0 not in (0.0, 1.0):
+            continue
+        cat, t0 = m["cat"], m["t0"]
+        stop = min(m["end"], m.get("closed_t") or m["end"]) - 3600
+        T, P = h["l"]
+        tr = h.get("tr") or []
+        I = info[cat]
+        I["markets"] += 1
+        I["traded_1h"] += 1 if any(t <= t0 + 3600 for t, *_ in tr) else 0
+        I["traded_48h"] += 1 if tr else 0
+        p10 = price_at(T, P, t0 + 600)
+        p24 = price_at(T, P, t0 + DAY, 6 * 3600) or price_at(*h["w"], t0 + DAY, 6 * 3600) if h.get("w") else None
+        if p10 is not None and abs(p10 - 0.5) <= 0.015:
+            I["at50_10m"] += 1
+        if p10 is not None and p24 is not None and t0 + DAY < stop:
+            I["n_move"] += 1
+            I["abs_move"] += abs(p24 - p10)
+            I["brier10"] += (pay0 - p10) ** 2
+            I["brier24"] += (pay0 - p24) ** 2
+        for lab, a in AGES:
+            t = t0 + a
+            if t >= stop:
+                continue
+            p = price_at(T, P, t)
+            if p is None or not 0.01 < p < 0.99:
+                continue
+            real = any(t0 - 600 <= x[0] <= t + 3600 for x in tr)   # someone traded by then: the price was a real book
+            if not real:
+                continue
+            p_prev = price_at(T, P, t0 + 300) if a > 600 else None
+            at50 = abs(p - 0.5) <= 0.015 and (p_prev is None or abs(p_prev - 0.5) <= 0.015)
+            for side in (0, 1):
+                q = p if side == 0 else 1 - p
+                pay = pay0 if side == 0 else 1 - pay0
+                L.append(("poly", cat, lab, side, q, pay, m["fee"], t, m.get("ev") or mid, dte_bucket(m["end"] - t), at50))
+        W = h.get("w") or [[], []]
+        pts = [k for k, t in enumerate(W[0]) if t >= t0 + SEASON_AGE and t < stop]
+        for k in rng.sample(pts, min(3, len(pts))):
+            p, t = W[1][k], W[0][k]
+            if not 0.01 < p < 0.99:
+                continue
+            for side in (0, 1):
+                q = p if side == 0 else 1 - p
+                pay = pay0 if side == 0 else 1 - pay0
+                S.append(("poly", cat, "seasoned", side, q, pay, m["fee"], t, m.get("ev") or mid, dte_bucket(m["end"] - t), False))
+    return L, S, info
+
+
+def kalshi_rows():
+    mk = bt.rjson(K_MK, {}).get("markets", {})
+    hist = bt.rjson(K_H, {}) or {}
+    L, S, info = [], [], defaultdict(lambda: defaultdict(float))
+    rng = random.Random(8)
+    for tk, m in mk.items():
+        h = hist.get(tk)
+        if not h:
+            continue
+        pay0 = 1.0 if m["res"] == "yes" else 0.0
+        cat, t0, stop = m["cat"], m["open"], m["close"] - 3600
+        I = info[cat]
+        I["markets"] += 1
+        C = h.get("l") or []
+        Ct = [c[0] for c in C]
+
+        def quote(Cs, Cts, t):
+            import bisect
+            k = bisect.bisect_right(Cts, t) - 1
+            if k < 0:
+                return None
+            b, a = Cs[k][1], Cs[k][2]
+            if b is None or a is None or b <= 0 or a >= 1 or a <= b:
+                return None
+            return b, a
+        q10 = quote(C, Ct, t0 + 600)
+        I["two_sided_10m"] += 1 if q10 else 0
+        if q10:
+            I["spread10"] += q10[1] - q10[0]
+            I["n_spread10"] += 1
+        W = h.get("w") or []
+        Wt = [c[0] for c in W]
+        q24 = quote(W, Wt, t0 + DAY)
+        if q10 and q24 and t0 + DAY < stop:
+            m10, m24 = sum(q10) / 2, sum(q24) / 2
+            I["n_move"] += 1
+            I["abs_move"] += abs(m24 - m10)
+            I["brier10"] += (pay0 - m10) ** 2
+            I["brier24"] += (pay0 - m24) ** 2
+        for lab, a in AGES:
+            t = t0 + a
+            if t >= stop:
+                continue
+            qa = quote(C, Ct, t) if a <= 6 * 3600 else None
+            if not qa:
+                continue
+            b, ask = qa
+            for side in (0, 1):
+                q = ask if side == 0 else 1 - b        # real buy price: the ask (Kalshi lists bids only: NO ask = 1 - YES bid)
+                pay = pay0 if side == 0 else 1 - pay0
+                L.append(("kalshi", cat, lab, side, q, pay, "k", t, m["ev"], dte_bucket(m["close"] - t), False))
+        pts = [k for k, t in enumerate(Wt) if t >= t0 + SEASON_AGE and t < stop]
+        for k in rng.sample(pts, min(3, len(pts))):
+            qa = quote(W, Wt, Wt[k])
+            if not qa:
+                continue
+            b, ask = qa
+            for side in (0, 1):
+                q = ask if side == 0 else 1 - b
+                pay = pay0 if side == 0 else 1 - pay0
+                S.append(("kalshi", cat, "seasoned", side, q, pay, "k", Wt[k], m["ev"], dte_bucket(m["close"] - Wt[k]), False))
+    return L, S, info
+
+
+def ret(row, slip):
+    """(profit, stake) for one share. Poly: mid + slip + fee. Kalshi: the real ask + (slip - 2c) + fee."""
+    v, cat, lab, side, q, pay, fee, t, ev, dte, at50 = row
+    e = min(0.99, q + (slip if v == "poly" else max(0.0, slip - SLIP)))
+    f = 0.07 * e * (1 - e) if fee == "k" else fee * e * (1 - e)
+    return pay - e - f, e + f
+
+
+def twin_rates(S):
+    """Return per $1 staked of seasoned bets, by (venue, cat, side, band, dte), at +2c. Falls back to (venue, side, band, dte)."""
+    acc, acc2 = defaultdict(lambda: [0.0, 0.0]), defaultdict(lambda: [0.0, 0.0])
+    for r in S:
+        b = band_of(r[4])
+        if b is None:
+            continue
+        p, s = ret(r, SLIP)
+        for a, k in ((acc, (r[0], r[1], r[3], b, r[9])), (acc2, (r[0], r[3], b, r[9]))):
+            a[k][0] += p
+            a[k][1] += s
+    out = {}
+    for k, (p, s) in acc.items():
+        if s >= 20:
+            out[k] = p / s
+    for k, (p, s) in acc2.items():
+        out[("*",) + k] = p / s if s else 0.0
+    return out
+
+
+def twin_of(rates, r, b):
+    return rates.get((r[0], r[1], r[3], b, r[9]), rates.get(("*", r[0], r[3], b, r[9]), 0.0))
+
+
+def cells(L, rates, split):
+    """Per cell: per half, per event sums of (profit2, stake, excess, profit5)."""
+    acc = defaultdict(lambda: defaultdict(lambda: [0.0, 0.0, 0.0, 0.0, 0]))
+    for r in L:
+        b = band_of(r[4])
+        if b is None:
+            continue
+        p2, s = ret(r, SLIP)
+        p5, s5 = ret(r, SLIP_HARD)
+        x = p2 - twin_of(rates, r, b) * s
+        half = "A" if r[7] < split else "B"
+        keys = [(r[0], r[1], r[2], r[3], b), (r[0], "ALL", r[2], r[3], b)]
+        if r[10]:
+            keys += [(r[0], r[1], r[2] + " still at 50c", r[3], -1), (r[0], "ALL", r[2] + " still at 50c", r[3], -1)]
+        for k in keys:
+            e = acc[(half,) + k][r[8]]
+            e[0] += p2
+            e[1] += s
+            e[2] += x
+            e[3] += p5 * s / s5 if s5 else 0
+            e[4] += 1
+    return acc
+
+
+def cstat(evs):
+    """Events as units: mean excess per $1, its t, return +2c, +5c."""
+    if not evs or len(evs) < 2:
+        return None
+    rows = list(evs.values())
+    n = len(rows)
+    S = sum(e[1] for e in rows)
+    xs = [e[2] / e[1] for e in rows if e[1] > 0]
+    mx = sum(e[2] for e in rows) / S
+    var = sum((e[2] - mx * e[1]) ** 2 for e in rows) / (S * S) * n / max(1, n - 1)
+    se = math.sqrt(var) or 1e-9
+    r2 = sum(e[0] for e in rows) / S
+    var2 = sum((e[0] - r2 * e[1]) ** 2 for e in rows) / (S * S) * n / max(1, n - 1)
+    return {"n": n, "x": mx, "t": mx / se, "r2": r2, "lo2": r2 - 1.645 * math.sqrt(var2), "r5": sum(e[3] for e in rows) / S,
+            "bets": sum(e[4] for e in rows)}
+
+
+def norm_sf(z):
+    return 0.5 * math.erfc(z / math.sqrt(2))
+
+
+def select(acc):
+    keys = {k[1:] for k in acc}
+    out, info = {}, {"cells": len(keys)}
+    for disc, conf in (("A", "B"), ("B", "A")):
+        cand = [k for k in keys if (lambda s: s and s["n"] >= MIN_EV and s["t"] >= DISC_T)(cstat(acc.get((disc,) + k)))]
+        K = max(1, len(cand))
+        info[f"cand_{disc}"] = len(cand)
+        for k in cand:
+            s, sd = cstat(acc.get((conf,) + k)), cstat(acc.get((disc,) + k))
+            if s and s["n"] >= MIN_EV and norm_sf(s["t"]) < ALPHA / K and s["r2"] > 0 and sd["r2"] > 0:
+                out.setdefault(k, []).append(disc)
+    return out, info
+
+
+def m100(x):
+    return f"{'+' if x >= 0 else '-'}${abs(x) * 100:.2f}"
+
+
+def describe(k):
+    v, cat, lab, side, b = k
+    sd = "Yes" if side == 0 else "No"
+    return f"{v} {cat}, {lab} after launch, buy {sd}" + (f" at {bname(b)}" if b >= 0 else " (price still at 50c)")
+
+
+def run(out_name="launch.md"):
+    L, S, info, split = [], [], {}, None
+    for name, fn in (("poly", poly_rows), ("kalshi", kalshi_rows)):
+        try:
+            l, s, i = fn()
+        except Exception as e:
+            print(f"{name} rows failed: {e}")
+            continue
+        L += l
+        S += s
+        info[name] = i
+        print(f"{name}: {len(l)} launch bets, {len(s)} seasoned bets, {sum(int(v['markets']) for v in i.values())} markets")
+    if not L:
+        print("no data")
+        return
+    rates = twin_rates(S)
+    accs, sels = {}, {}
+    for v in ("poly", "kalshi"):
+        Lv = [r for r in L if r[0] == v]
+        if not Lv:
+            continue
+        split = sorted(r[7] for r in Lv)[len(Lv) // 2]
+        accs[v] = cells(Lv, rates, split)
+        sels[v] = select(accs[v])
+    W = ["# Brand-new markets: are they mispriced in their first hours?", "",
+         f"Made by `launch.py run` (probe `btlaunchrun`) on {bot.iso()[:16]}Z. Paper research only.", "",
+         "How it works: markets are sampled by the day they **started** (no volume floor, so small markets that died "
+         "quiet are in, unlike bt_cache). For each market we look at the price 10 minutes, 1 hour and 6 hours after "
+         "launch, and buy one side, held to the end. Polymarket: history price + 2c + fee, and only if someone had "
+         "already traded the market by then (so the price was a real book, not the empty 50c placeholder). "
+         "Kalshi: the real ask from the minute candles + fee. Each bet is compared with **seasoned twins**: bets on the "
+         "same kind of market, same side, same price band, same time left, but at least one day old. Events count once. "
+         "Discovery on one half (by date), confirm on the other, both ways, corrected for the number of tries.", ""]
+    for v, I in info.items():
+        W += [f"## {v.title()}: what launch looks like", "",
+              "| Kind | Markets | Traded in 1st hour | Still at 50c after 10 min | Avg move launch -> 24h | Error at launch | Error at 24h |"
+              if v == "poly" else
+              "| Kind | Markets | Real two-sided quote after 10 min | Avg gap bid/ask after 10 min | Avg move launch -> 24h | Error at launch | Error at 24h |",
+              "|---|---|---|---|---|---|---|"]
+        for cat, x in sorted(I.items(), key=lambda kv: -kv[1]["markets"]):
+            n = x["markets"] or 1
+            nm = x["n_move"] or 0
+            mv_ = f"{100 * x['abs_move'] / nm:.1f}c" if nm else "-"
+            b10 = f"{x['brier10'] / nm:.3f}" if nm else "-"
+            b24 = f"{x['brier24'] / nm:.3f}" if nm else "-"
+            if v == "poly":
+                W.append(f"| {cat} | {int(x['markets'])} | {x['traded_1h'] / n * 100:.0f} in 100 | {x['at50_10m'] / n * 100:.0f} in 100 | {mv_} | {b10} | {b24} |")
+            else:
+                sp = f"{100 * x['spread10'] / x['n_spread10']:.1f}c" if x["n_spread10"] else "-"
+                W.append(f"| {cat} | {int(x['markets'])} | {x['two_sided_10m'] / n * 100:.0f} in 100 | {sp} | {mv_} | {b10} | {b24} |")
+        W += ["", "Error = average squared miss of the price vs the result (0 = perfect, 0.25 = coin flip). It always "
+              "shrinks with time because news arrives; a launch edge needs launch prices that are wrong in a direction "
+              "you can bet on, which the tables below test.", ""]
+    for v, acc in accs.items():
+        out, si = sels[v]
+        W += [f"## {v.title()}: which launch bets beat their seasoned twins", "",
+              f"{si['cells']} cells tried (kind x launch age x side x price band, plus 'still at 50c'). "
+              f"Candidates: {si['cand_A']} on the first half, {si['cand_B']} on the second. **Survivors: {len(out)}.**", ""]
+        rows = []
+        for k in {kk[1:] for kk in acc}:
+            a, b = cstat(acc.get(("A",) + k)), cstat(acc.get(("B",) + k))
+            if a and b and a["n"] >= MIN_EV and b["n"] >= MIN_EV:
+                rows.append((min(a["t"], b["t"]), k, a, b))
+        rows.sort(key=lambda r: -r[0])
+        W += ["Top 25 by the weaker half (per $100 staked):", "",
+              "| Bet | Events A / B | vs twins A / B | +2c A / B | +5c A / B | Survived |", "|---|---|---|---|---|---|"]
+        for _, k, a, b in rows[:25]:
+            W.append(f"| {describe(k)} | {a['n']} / {b['n']} | {m100(a['x'])} / {m100(b['x'])} | {m100(a['r2'])} / {m100(b['r2'])} | "
+                     f"{m100(a['r5'])} / {m100(b['r5'])} | {'yes' if k in out else ''} |")
+        W += ["", "All launch bets together, by kind (both halves, +2c):", "",
+              "| Kind | Launch age | Side | Events | Per $100 | vs twins |", "|---|---|---|---|---|---|"]
+        tot = defaultdict(lambda: defaultdict(lambda: [0.0, 0.0, 0.0, 0.0, 0]))
+        for (half, vv, cat, lab, side, b), evs in acc.items():
+            if b == -1 or "50c" in lab:
+                continue
+            for ev, e in evs.items():
+                t = tot[(cat, lab, side)][ev]
+                for i in range(5):
+                    t[i] += e[i]
+        for (cat, lab, side), evs in sorted(tot.items()):
+            s = cstat(evs)
+            if s and s["n"] >= MIN_EV and lab == "1 hour":
+                W.append(f"| {cat} | {lab} | {'Yes' if side == 0 else 'No'} | {s['n']} | {m100(s['r2'])} | {m100(s['x'])} |")
+        W.append("")
+        # still at 50c
+        W += ["Still sitting at the 50c opening price (nobody has moved it yet):", "",
+              "| Kind | Age | Side | Events | Per $100 at +2c | +5c |", "|---|---|---|---|---|---|"]
+        for (half, vv, cat, lab, side, b) in sorted({k for k in acc if k[5] == -1 and k[0] == "A"}):
+            evs = dict(acc.get(("A", vv, cat, lab, side, b), {}))
+            for ev, e in acc.get(("B", vv, cat, lab, side, b), {}).items():
+                evs[ev] = e
+            s = cstat(evs)
+            if s and s["n"] >= 20:
+                W.append(f"| {cat} | {lab} | {'Yes' if side == 0 else 'No'} | {s['n']} | {m100(s['r2'])} | {m100(s['r5'])} |")
+        W.append("")
+    txt = "\n".join(W) + "\n"
+    os.makedirs(bt.OUT, exist_ok=True)
+    with open(os.path.join(bt.OUT, out_name), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
+
+
+def selftest():
+    """Offline: fake markets priced right, plus one planted launch edge. The edge must survive, nothing else."""
+    import tempfile
+    global P_MK, P_H, K_MK, K_H
+    tmp = tempfile.mkdtemp()
+    P_MK, P_H = os.path.join(tmp, "pm.json.gz"), os.path.join(tmp, "ph.json.gz")
+    K_MK, K_H = os.path.join(tmp, "km.json.gz"), os.path.join(tmp, "kh.json.gz")
+    rng = random.Random(1)
+    mk, hist = {}, {}
+    base = 1780000000
+    for i in range(12000):
+        cat = rng.choice(["sports", "weather", "other (one-off questions)", "planted"])
+        t0 = base + i * 1800
+        life = rng.choice([2, 5, 20]) * DAY
+        truth = rng.uniform(0.05, 0.95)
+        y = 1.0 if rng.random() < truth else 0.0
+        p_launch = truth
+        if cat == "planted":            # launch price is 15c too low; fixed within a day
+            p_launch = max(0.03, truth - 0.15)
+        T = [t0 + k * 300 for k in range(0, 576)]
+        P = [round(p_launch if t < t0 + 12 * 3600 else truth, 3) for t in T]
+        WT = [t0 + k * 3600 for k in range(0, int(life // 3600))]
+        WP = [round(p_launch if t < t0 + 12 * 3600 else truth, 3) for t in WT]   # a fair price after the first day
+        mid = str(i)
+        mk[mid] = {"id": mid, "q": "x", "cat": cat, "t0": t0, "start": t0, "end": t0 + life, "closed": True,
+                   "closed_t": t0 + life, "final": [y, 1 - y], "uma": "resolved", "fee": 0.0, "ev": mid}
+        hist[mid] = {"l": [T, P], "w": [WT, WP], "tr": [[t0 + 60, 0, 1, p_launch, 5]], "trc": True}
+    bt.wjson(P_MK, {"markets": mk})
+    bt.wjson(P_H, hist)
+    bt.wjson(K_MK, {"markets": {}})
+    bt.wjson(K_H, {})
+    run(out_name="launch_selftest.md")
+    txt = open(os.path.join(bt.OUT, "launch_selftest.md")).read()
+    surv = [l for l in txt.splitlines() if l.endswith("| yes |")]
+    print("\nsurvivor lines:", len(surv))
+    bad = [l for l in surv if "planted" not in l and "ALL" not in l]
+    good = [l for l in surv if "planted" in l and "buy Yes" in l]
+    assert good, "planted edge not found"
+    assert not bad, f"noise survived: {bad[:3]}"
+    os.remove(os.path.join(bt.OUT, "launch_selftest.md"))
+    print("selftest OK")
+
+
+
+# ================================================================ live: watch brand-new listings (the "fast bot" check)
+
+LIVE_AGES_MIN = (1, 3, 5, 10, 20, 30, 60, 90, 120)
+
+
+def walk_cost(asks, dollars):
+    """Average price paid per share to spend `dollars` walking the asks [(p, size)], or None if the book is too thin."""
+    left, sh, spent = dollars, 0.0, 0.0
+    for p, sz in asks:
+        take = min(sz, left / p) if p > 0 else 0
+        sh += take
+        spent += take * p
+        left -= take * p
+        if left <= 1e-6:
+            return spent / sh
+    return None
+
+
+def poly_book(tok):
+    b = bot.http_json(f"{C}/book", {"token_id": tok})
+    bids = sorted(((float(x["price"]), float(x["size"])) for x in b.get("bids") or []), reverse=True)
+    asks = sorted((float(x["price"]), float(x["size"])) for x in b.get("asks") or [])
+    return bids, asks
+
+
+def snap_poly(m):
+    bids, asks = poly_book(m["tok"])
+    no_asks = sorted((round(1 - p, 4), s) for p, s in bids)          # one mirrored book: NO ask = 1 - YES bid
+    bb, ba = (bids[0][0] if bids else None), (asks[0][0] if asks else None)
+    return {"bb": bb, "ba": ba, "y10": walk_cost(asks, 10), "y25": walk_cost(asks, 25), "n10": walk_cost(no_asks, 10),
+            "n25": walk_cost(no_asks, 25), "depth5": round(sum(s * p for p, s in asks if ba and p <= ba + 0.05), 2)}
+
+
+def snap_kalshi(m):
+    r = bot.kalshi_asks(m["tok"])
+    if r is None:
+        return None
+    ya, na = r
+    ba = ya[0][0] if ya else None
+    bb = round(1 - na[0][0], 4) if na else None
+    return {"bb": bb, "ba": ba, "y10": walk_cost(ya, 10), "y25": walk_cost(ya, 25), "n10": walk_cost(na, 10),
+            "n25": walk_cost(na, 25), "depth5": round(sum(s * p for p, s in ya if ba and p <= ba + 0.05), 2)}
+
+
+def new_poly(seen, now_t):
+    rows = bot.envelope_rows(bot.http_json(f"{G}/markets", {"limit": 200, "order": "createdAt", "ascending": "false",
+                                                          "closed": "false"}), "markets", "data")
+    out = []
+    for m in rows:
+        mid = str(m.get("id"))
+        c = tsec(m.get("createdAt"))
+        if mid in seen or not c or now_t - c > 900:
+            continue
+        seen.add(mid)
+        toks = bot.market_tokens(m)
+        if len(toks) != 2:
+            continue
+        out.append({"v": "poly", "id": mid, "tok": toks[0], "q": str(m.get("question") or ""), "born": c,
+                    "cat": category(str(m.get("question") or ""), bot.is_sports(m)), "end": tsec(m.get("endDate")), "snaps": {}})
+    return out
+
+
+_KNEW = [None]
+
+
+def new_kalshi(seen, now_t):
+    if _KNEW[0] is False:
+        return []
+    try:
+        r = bot.http_json(f"{K}/markets", {"status": "open", "min_created_ts": now_t - 900, "limit": 1000, "mve_filter": "exclude"})
+        _KNEW[0] = True
+    except Exception as e:
+        print(f"kalshi new-market list failed ({e}); Kalshi left out")
+        _KNEW[0] = False
+        return []
+    out = []
+    for m in r.get("markets") or []:
+        tk = str(m.get("ticker") or "")
+        c = tsec(m.get("created_time")) or tsec(m.get("open_time"))
+        if tk in seen or not c or now_t - c > 900 or tk.startswith("KXMVE"):
+            continue
+        seen.add(tk)
+        ser = str(m.get("event_ticker") or "").split("-")[0]
+        out.append({"v": "kalshi", "id": tk, "tok": tk, "q": f"{m.get('title') or ''} {m.get('yes_sub_title') or ''}".strip(),
+                    "born": c, "cat": kcategory(ser, str(m.get("title") or "")), "end": tsec(m.get("close_time")), "snaps": {}})
+    return out
+
+
+def live(minutes=120, follow=120, cap_per_cat=40):
+    """Spot new listings every minute for `minutes`, then keep snapping each one's book until it is `follow` minutes old.
+    Writes backtest/launch_live.md and launch_live.json (records only, never trades)."""
+    minutes, follow = int(minutes), int(follow)
+    t_end_new, seen, track = time.time() + minutes * 60, set(), []
+    per_cat = defaultdict(int)
+    t_stop = t_end_new + follow * 60
+    ex = ThreadPoolExecutor(8)
+    while time.time() < t_stop:
+        t_loop = time.time()
+        now_t = int(t_loop)
+        if t_loop < t_end_new:
+            got = []
+            for fn in (new_poly, new_kalshi):
+                try:
+                    got += fn(seen, now_t)
+                except Exception as e:
+                    print(f"listing failed: {e}")
+            for m in got:
+                key = (m["v"], m["cat"])
+                if per_cat[key] < cap_per_cat:
+                    per_cat[key] += 1
+                    track.append(m)
+        due = []
+        for m in track:
+            age = (now_t - m["born"]) / 60
+            for a in LIVE_AGES_MIN:
+                if a not in m["snaps"] and age >= a and age < a + 10:
+                    due.append((m, a))
+                    break
+        def one(x):
+            m, a = x
+            try:
+                return m, a, (snap_poly(m) if m["v"] == "poly" else snap_kalshi(m))
+            except Exception as e:
+                return m, a, {"err": str(e)[:80]}
+        for m, a, sn in ex.map(one, due):
+            m["snaps"][a] = sn
+        if int(t_loop) % 600 < 60:
+            print(f"{bot.iso()[:16]} tracking {len(track)} ({dict(per_cat)}), {len(due)} snaps this minute")
+        time.sleep(max(1, 60 - (time.time() - t_loop)))
+    with open(os.path.join(bt.OUT, "launch_live.json"), "w") as fh:
+        json.dump(track, fh)
+    live_report(track)
+
+
+def live_report(track):
+    import statistics as st
+    W = ["# Brand-new listings, watched live", "", f"`launch.py live` on {bot.iso()[:16]}Z: every new market spotted within "
+         "a minute or two, then its order book checked at set ages. Cost = cents per share paid above the middle of the "
+         "book when buying $10 or $25 of the cheaper side by walking the asks. Records only.", ""]
+    for v in ("poly", "kalshi"):
+        ms = [m for m in track if m["v"] == v]
+        if not ms:
+            continue
+        W += [f"## {v.title()} ({len(ms)} new markets)", "",
+              "| Kind | Age | Markets checked | Any seller at all | Both sides quoted | Gap bid/ask (median) | Extra cost $10 | Extra cost $25 | $ on sale within 5c of best |",
+              "|---|---|---|---|---|---|---|---|---|"]
+        for cat in sorted({m["cat"] for m in ms}):
+            for a in LIVE_AGES_MIN:
+                sn = [m["snaps"].get(a) or m["snaps"].get(str(a)) for m in ms if m["cat"] == cat]
+                sn = [x for x in sn if x and "err" not in x]
+                if len(sn) < 3:
+                    continue
+                anyask = sum(1 for x in sn if x["ba"] is not None)
+                two = [x for x in sn if x["ba"] is not None and x["bb"] is not None]
+                gaps = [x["ba"] - x["bb"] for x in two]
+                c10, c25 = [], []
+                for x in two:
+                    mid = (x["ba"] + x["bb"]) / 2
+                    cheap_yes = mid <= 0.5
+                    for lst, ky, kn in ((c10, "y10", "n10"), (c25, "y25", "n25")):
+                        cost = x[ky] if cheap_yes else x[kn]
+                        ref = mid if cheap_yes else 1 - mid
+                        lst.append(None if cost is None else cost - ref)
+                f10 = [c for c in c10 if c is not None]
+                f25 = [c for c in c25 if c is not None]
+                dep = [x["depth5"] for x in two]
+                W.append(f"| {cat} | {a} min | {len(sn)} | {anyask * 100 // len(sn)} in 100 | {len(two) * 100 // len(sn)} in 100 | "
+                         f"{(f'{100 * st.median(gaps):.1f}c' if gaps else '-')} | "
+                         f"{(f'{100 * st.median(f10):.1f}c' if f10 else '-')} ({len(c10) - len(f10)} too thin) | "
+                         f"{(f'{100 * st.median(f25):.1f}c' if f25 else '-')} ({len(c25) - len(f25)} too thin) | "
+                         f"{(f'${st.median(dep):.0f}' if dep else '-')} |")
+        # how much the middle moves after the first two-sided quote
+        W += ["", "How far the middle price moved from the first two-sided quote to 2 hours old (median, by kind):", ""]
+        for cat in sorted({m["cat"] for m in ms}):
+            mv = []
+            for m in ms:
+                if m["cat"] != cat:
+                    continue
+                q = [(a, m["snaps"].get(a) or m["snaps"].get(str(a))) for a in LIVE_AGES_MIN]
+                q = [(a, x) for a, x in q if x and "err" not in x and x.get("ba") is not None and x.get("bb") is not None]
+                if len(q) >= 2 and q[-1][0] >= 60:
+                    f, l = q[0][1], q[-1][1]
+                    mv.append(abs((l["ba"] + l["bb"]) / 2 - (f["ba"] + f["bb"]) / 2))
+            if len(mv) >= 3:
+                W.append(f"- {cat}: {100 * st.median(mv):.1f}c (n={len(mv)}, a quarter moved {100 * sorted(mv)[3 * len(mv) // 4]:.1f}c or more)")
+        W.append("")
+    txt = "\n".join(W) + "\n"
+    with open(os.path.join(bt.OUT, "launch_live.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
+
 CMDS = {"peek": peek, "peek2": peek2, "fetchpoly": fetch_poly, "fetchkalshi": fetch_kalshi,
-        "fetch": lambda: (fetch_kalshi(), fetch_poly())}
+        "fetch": lambda: (fetch_kalshi(), fetch_poly()), "run": run, "selftest": selftest,
+        "live": lambda: live(*(sys.argv[2:4] or [120, 120])),
+        "all": lambda: (fetch_kalshi(), fetch_poly(), run())}
 
 if __name__ == "__main__":
     CMDS[sys.argv[1] if len(sys.argv) > 1 else "run"]()
