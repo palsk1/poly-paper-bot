@@ -240,6 +240,9 @@ def load_tracks():
         if tc["source"] == "kmaker":
             for k, v in (("orders", {}), ("unfilled", 0), ("unfilled_log", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
+        if tc["source"] == "econ":
+            for k, v in (("orders", {}), ("done", []), ("last_check", {})):
+                tracks[name].setdefault(k, v)
     return tracks
 
 
@@ -683,7 +686,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -3125,6 +3128,166 @@ def kmaker_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ econ_fav: forecast backs the favorite (added 2026-11-09)
+#
+# Kalshi data-release markets (CPI, core CPI, CPI year-on-year, jobless claims, unemployment, payrolls). 20-76 hours
+# before the release, buy the side that costs 80-99c (with the fee) when a free forecast says it is worth at least 3c
+# more: Cleveland Fed inflation nowcast for CPI, 'same as last time' from FRED for the jobs numbers (econ.py).
+# Backtest (backtest/econ.md, 2021-2026): +$6.73 per $100 at 24h and +$7.75 at 72h, both halves ahead, still ahead at
+# 2c worse prices; the same price band WITHOUT the forecast lost about $5 per $100. Held to the result. Real book fills.
+
+def econ_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "econ"]
+
+
+def econ_settle(tracks, names):
+    for n in names:
+        tr = tracks[n]
+        for tk in list(tr["orders"]):
+            o = tr["orders"][tk]
+            close = parse_iso(o["close"])
+            if now() < close + dt.timedelta(seconds=60):
+                continue
+            m = kalshi_market(tk)
+            res = str((m or {}).get("result") or "").lower()
+            if res not in ("yes", "no"):
+                if now() - close > dt.timedelta(hours=12):
+                    print(f"{n}: {tk} still has no result 12h after the close")
+                continue
+            pay = 1.0 if res == o["side"] else 0.0
+            pnl = o["shares"] * pay - o["cost"]
+            tr["cash"] = round(tr["cash"] + o["shares"] * pay, 6)
+            tr["realized"] = round(tr["realized"] + pnl, 6)
+            del tr["orders"][tk]
+            tr["done"] = (tr.get("done", []) + [tk])[-500:]
+            rs = {k: [v[0], round(v[1] * pay - v[0], 4), v[2]] for k, v in (o.get("rs") or {}).items()}
+            tr["closed"].append({**o, "exit": pay, "exit_fee": 0.0, "pnl": round(pnl, 6), "reason": "resolved",
+                                 "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs})
+            log_event({"type": "econ_settle", "track": n, "ticker": tk, "side": o["side"], "pnl": round(pnl, 4)})
+            print(f"{n}: {tk} {o['side'].upper()} result {res}, P&L {pnl:+.2f}")
+            if pnl < 0 and push_allowed(n):
+                push(f"[{n}] FLIP: a forecast-backed favorite lost (${pnl:+.2f})",
+                     f"{o['title']}\nBought {o['side'].upper()} at {cents(o['entry'])}, forecast said {o['chance'] * 100:.0f} in 100.",
+                     tags="rotating_light", track=n)
+
+
+def econ_place(tracks, names, force=False):
+    t_now = now()
+    due = [n for n in names if force or not tracks[n].get("last_scan")
+           or t_now - parse_iso(tracks[n]["last_scan"]) >= dt.timedelta(minutes=rules_for(n).get("scan_minutes", 55))]
+    if not due:
+        return
+    import econ
+    cands = []
+    for series in sorted({s for n in due for s in rules_for(n).get("series", [])}):
+        try:
+            rows = kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 200}).get("markets") or []
+        except Exception as e:
+            print(f"econ: {series} list failed: {e}")
+            continue
+        for m in rows:
+            close = parse_iso(m.get("close_time"))
+            if close:
+                hrs = (close - t_now).total_seconds() / 3600
+                if min(rules_for(n).get("min_hours", 20) for n in due) <= hrs <= max(rules_for(n).get("max_hours", 76) for n in due):
+                    cands.append(dict(m, _series=series, _hours=hrs))
+    for n in due:
+        tracks[n]["last_scan"] = iso()
+        tracks[n]["last_check"] = {"ts": iso(), "markets_in_window": len(cands)}
+    if not cands:
+        return
+    try:
+        ch = econ.live_chances(cands, int(t_now.timestamp()))
+    except Exception as e:
+        print(f"econ: forecasts failed: {e}")
+        return
+    for n in due:
+        tracks[n]["last_check"]["with_forecast"] = len(ch)
+    for m in cands:
+        tk = m.get("ticker")
+        if tk not in ch:
+            continue
+        p, mu, sd = ch[tk]
+        bk = kalshi_asks(tk)
+        if not bk:
+            continue
+        for n in due:
+            r, tr = rules_for(n), tracks[n]
+            if m["_series"] not in r.get("series", []) or not (r.get("min_hours", 20) <= m["_hours"] <= r.get("max_hours", 76)):
+                continue
+            if tk in tr["orders"] or tk in tr.get("done", []):
+                continue
+            for side, asks, val in (("yes", bk[0], p), ("no", bk[1], 1 - p)):
+                if not asks:
+                    continue
+                shares = max(1, int(r.get("usd_per_bet", 5) / max(asks[0][0], 0.01)))
+                px = walk(asks, shares)
+                if px is None:
+                    continue
+                fee = kalshi_fee(shares, px)
+                cost = shares * px + fee
+                per = cost / shares
+                if not (r.get("min_cost", 0.80) <= per <= r.get("max_cost", 0.99)) or val - per < r.get("min_edge", 0.03):
+                    continue
+                maybe_refill(tr, n, cost)
+                if cost > tr["cash"] + EPS:
+                    tr["skipped_no_cash"] += 1
+                    continue
+                rs = {}
+                for usd_ in rs_sizes():
+                    want = max(1, int(usd_ / max(asks[0][0], 0.01)))
+                    p2 = walk(asks, want)
+                    if p2 is None:   # not all fits: take what the book has
+                        got = sum(sz for _, sz in asks)
+                        p2 = walk(asks, got) if got >= 1 else None
+                        want = got
+                    if p2 is not None:
+                        c2 = want * p2 + kalshi_fee(want, p2)
+                        rs[str(usd_)] = [round(c2, 4), round(want, 4), round(min(1.0, want * p2 / usd_), 4)]
+                tr["cash"] = round(tr["cash"] - cost, 6)
+                tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+                tr["orders"][tk] = {"ticker": tk, "series": m["_series"], "title": f"{m.get('title')} ({m.get('yes_sub_title', '')})",
+                                    "outcome": side, "side": side, "shares": shares, "entry": round(px, 6), "price": round(px, 6),
+                                    "entry_fee": round(fee, 6), "cost": round(cost, 6), "placed": iso(), "close": m.get("close_time"),
+                                    "hours_left": round(m["_hours"], 1), "chance": round(val, 4), "forecast": round(mu, 4),
+                                    "spread": round(sd, 4), "price_source": "book", "rs": rs}
+                tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+                log_event({"type": "econ_buy", "track": n, "ticker": tk, "side": side, "price": round(px, 4),
+                           "shares": shares, "chance": round(val, 4)})
+                print(f"{n}: bought {side.upper()} {shares} x {px * 100:.1f}c (+fee {fee:.2f}) on {tk}, forecast "
+                      f"{mu:g} says {val * 100:.0f} in 100, {m['_hours']:.0f}h before the release")
+                if push_allowed(n):
+                    push(f"[{n}] BUY {side.upper()} at {cents(per)}", f"{m.get('title')} ({m.get('yes_sub_title', '')})\n"
+                         f"Forecast says it wins {val * 100:.0f} times in 100. Result in {m['_hours']:.0f} hours.", track=n)
+                break
+
+
+def econ_cycle(tracks):
+    names = econ_names()
+    if not names:
+        return
+    econ_settle(tracks, names)
+    econ_place(tracks, names)
+
+
+def econ_summary(name, tr):
+    closed = tr["closed"]
+    wins = sum(1 for c in closed if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr.get("orders", {})), "closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": tr["refills"],
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"]}
+    lc = tr.get("last_check", {})
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr.get('orders', {}))} | {len(closed)} ({wins}/{len(closed) - wins}) "
+           f"| ${tr['cash']:.2f} | last look {str(lc.get('ts', '-'))[:16]}: {lc.get('markets_in_window', 0)} markets near a release |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
+    for o in tr.get("orders", {}).values():
+        lines.append(f"- waiting: {o['title']} {o['side'].upper()} {o['shares']} at {cents(o['entry'])}, forecast says "
+                     f"{o['chance'] * 100:.0f} in 100, release {str(o['close'])[:16]}")
+    return row, stats, lines
+
+
 # ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
 #
 # These pay out within hours or a day, so they collect finished trades much faster than deadline markets.
@@ -4412,7 +4575,7 @@ def _track_open_cost(tr, src):
         return sum(a["cost"] for a in tr.get("arbs", {}).values())
     if src in ("fullset", "ladder"):
         return sum(x["cost"] for x in tr.get("sets", {}).values())
-    if src == "kmaker":
+    if src in ("kmaker", "econ"):
         return sum(o["cost"] for o in tr.get("orders", {}).values())
     return open_cost(tr)
 
@@ -4554,7 +4717,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -4670,9 +4833,9 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker", "kmaker"):
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ"):
             row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
-                                       "maker": maker_summary, "kmaker": kmaker_summary}[src](name, tr)
+                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -5076,6 +5239,31 @@ def discover():
         print("W", json.dumps(row, sort_keys=True))
 
 
+def econtest():
+    """Dry run of econ_fav on live data: what it would buy now (nothing is saved)."""
+    tracks = load_tracks()
+    names = econ_names()
+    for n in names:   # look further ahead than the real rule so the dry run has something to price
+        CFG["rules"][CFG["tracks"][n]["rules"]].update({"min_hours": 0, "max_hours": 24 * 20})
+    econ_place(tracks, names, force=True)
+    for n in names:
+        print(n, tracks[n].get("last_check"), list(tracks[n]["orders"]))
+    import econ
+    rows = []
+    for s_ in econ.LIVE_SERIES:
+        for m in kalshi_get("/markets", {"series_ticker": s_, "status": "open", "limit": 200}).get("markets") or []:
+            rows.append(dict(m, _series=s_))
+    ch = econ.live_chances(rows, int(now().timestamp()))
+    for m in rows:
+        if m["ticker"] in ch:
+            p, mu, sd = ch[m["ticker"]]
+            bk = kalshi_asks(m["ticker"]) or ([], [])
+            ya = bk[0][0][0] if bk[0] else None
+            na = bk[1][0][0] if bk[1] else None
+            print(f"  {m['ticker']:34} closes {str(m.get('close_time'))[:16]} forecast {mu:g} (+-{sd:.3g}) "
+                  f"YES chance {p:.3f}  YES ask {ya}  NO ask {na}")
+
+
 def kmakertest():
     """Dry run of the Kalshi late-favorite maker (no state saved): place on the live windows with any minutes left,
     then replay the fill check on the last closed BTC/ETH window as if we had bid 3 minutes before its close."""
@@ -5115,4 +5303,4 @@ if __name__ == "__main__":
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
      "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
-     "kmakertest": kmakertest}[cmd]()
+     "kmakertest": kmakertest, "econtest": econtest}[cmd]()

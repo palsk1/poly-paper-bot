@@ -163,6 +163,17 @@ What it found (profit per $100 staked at +2c):
 - 204 rows were tested, so about 10 could pass by luck. One did ("rules name a date the title doesn't", buy YES 1-3 days out), but its markets are a grab bag (earthquake counts, Trump-says-this-week, Hormuz shipping) and it is on the same biased cache, so it is treated as luck.
 - Limits: Gamma shows today's rule text. Polymarket's later clarifications don't appear in it (none were found), so the flags read close to what traders saw.
 
+## Economic data releases: forecast backs the favorite (added 2026-11-09, `econ.py`)
+
+Kalshi's "will CPI / jobless claims / unemployment / payrolls be above X?" markets, checked against free forecasts:
+the Cleveland Fed inflation nowcast and plain "same as last time" numbers from FRED. On 340 finished releases
+(2021-2026, `backtest/econ.md`) the market guessed better than the forecasts, so betting the forecast everywhere
+doesn't pay. One rule held up: `econ_fav` ($50) buys the side that costs 80-99c, 20-76 hours before the release,
+only when the forecast says it is worth at least 3c more. Backtest: +$6.73 per $100 (141 bets, 7 lost); the same
+price band without the forecast lost about $5. Real order-book fills (Kalshi), one bet per market, held to the
+result, the forecast scan runs about once an hour. GDP (GDPNow) also looked good but had only 19 releases.
+Dry run: probe `econtest`.
+
 ## Sharp bookie price (added 2026-11-09, `sharp.py`)
 
 Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.

@@ -81,7 +81,9 @@ def open_bets(name, tr):
                      "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
                      "end": str(b.get("end", ""))[:10], "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
     for o in tr.get("orders", {}).values():  # kmaker: resting Kalshi bids, settled from the trade tape after the close
-        rows.append({"t": str(o.get("title", ""))[:90], "o": f"waiting order to buy {str(o.get('side', '')).upper()} on Kalshi",
+        what = (f"bought {str(o.get('side', '')).upper()} on Kalshi, waiting for the release" if o.get("chance") is not None
+                else f"waiting order to buy {str(o.get('side', '')).upper()} on Kalshi")   # econ_fav holds real buys
+        rows.append({"t": str(o.get("title", ""))[:90], "o": what,
                      "e": r2(o.get("price", 0) * 100), "n": None, "pnl": 0.0, "c": r2(o.get("cost")),
                      "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",
                      "locked": True})
