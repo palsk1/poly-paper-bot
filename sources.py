@@ -574,6 +574,9 @@ def gaspages():
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)"})
         body = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "replace")
         print("####", url, len(body))
+        mm = re.search(r"\b3\.\d{3}\b", body)
+        if mm:
+            print("  CTX:", body[max(0, mm.start() - 900):mm.start() + 600])
         for m in re.finditer(r"(?i)national", body):
             print("  N:", re.sub(r"\s+", " ", body[max(0, m.start() - 150):m.start() + 350]))
         for m in re.finditer(r"(?i)(apollo|__next_data__|window\.__)", body):
