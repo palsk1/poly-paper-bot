@@ -429,13 +429,16 @@ def fetch_events():
                 have["events"][eid] = {"neg": bool(e.get("negRisk") or e.get("enableNegRisk")), "mids": mids}
             have["days"][bot.iso(d)[:10]] = len(evs)
             print(f"  {d:%Y-%m-%d}: {len(evs)} events, {nm} markets not in the main cache ({time.time() - t0:.0f}s)")
-    bt.wjson(EV_PATH, have)
-    print(f"events: {len(have['events'])} events, {len(have['markets'])} extra markets")
-
-    # history for the missing choices, only in events that have at least one main-cache market
+    # history for the missing choices, only in events that have at least one main-cache market.
+    # Everything else is dropped (the full list is ~1M events / 4.5M markets, a 600MB cache nobody needs).
     in_main = defaultdict(int)
     for m in main.values():
         in_main[m.get("ev") or m["id"]] += 1
+    have["events"] = {k: v for k, v in have["events"].items() if in_main.get(k)}
+    keep = {mid for e in have["events"].values() for mid, _ in e["mids"]}
+    have["markets"] = {k: v for k, v in have["markets"].items() if k in keep}
+    bt.wjson(EV_PATH, have)
+    print(f"events: {len(have['events'])} events with a main-cache market, {len(have['markets'])} extra markets kept")
     hist = bt.rjson(FILL_HIST, {}) or {}
     todo = []
     for eid, e in have["events"].items():
