@@ -3491,11 +3491,44 @@ def maker_cycle(tracks, pick_new=True):
             print(f"maker {name} failed: {e}")
 
 
+def maker_reward_cap(r, size, minutes):
+    """Most reward we believe for `size` shares quoted (about $size tied up) over `minutes`. Bug fix 2026-11-09:
+    the share-of-pool model paid ~$8 a day per $100, but real reward payouts of the busiest maker wallets
+    (probe rewardpay) were 1-38c a day per $100 they hold, so credit at most reward_cap_per_100_day."""
+    cap = r.get("reward_cap_per_100_day")
+    return float("inf") if cap is None else cap * size / 100 * minutes / 1440
+
+
+def maker_recap_rewards(tr, r):
+    """One-time: cut rewards already credited down to the cap (keeps the old number as rewards_model)."""
+    if tr.get("reward_cap_applied") or r.get("reward_cap_per_100_day") is None:
+        return
+    cut = 0.0
+    for b in tr["books"].values():
+        new = min(b["rewards"], maker_reward_cap(r, b["size"], b["minutes"]))
+        b.setdefault("rewards_model", b["rewards"])
+        cut += b["rewards"] - new
+        b["rewards"] = new
+    for c in tr["closed"]:
+        new = min(c.get("rewards", 0.0), maker_reward_cap(r, c.get("cost", 0.0), c.get("minutes_quoted", 0.0)))
+        d = c.get("rewards", 0.0) - new
+        c.setdefault("rewards_model", c.get("rewards", 0.0))
+        c["rewards"], c["pnl"] = round(new, 4), round(c["pnl"] - d, 4)
+        cut += d
+    tr["rewards_model"] = tr.get("rewards", 0.0)
+    tr["rewards"] = round(tr["rewards"] - cut, 6)
+    tr["realized"] = round(tr["realized"] - cut, 6)
+    tr["cash"] = round(tr["cash"] - cut, 6)
+    tr["reward_cap_applied"] = {"on": iso(), "cut": round(cut, 4)}
+    print(f"maker: rewards capped, removed ${cut:.2f} of modelled rewards")
+
+
 def maker_cycle_one(tracks, name, r, pick_new=True):
     tr = tracks[name]
     tr.setdefault("books", {})
     for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
         tr.setdefault(k, v)
+    maker_recap_rewards(tr, r)
     t_now = time.time()
     for key in list(tr["books"]):
         b = tr["books"][key]
@@ -3577,10 +3610,13 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
             if b["size"] < b["min_size"]:
                 sh = 0.0  # orders below the minimum size earn nothing
             mins = min(elapsed / 60, r["max_credit_minutes"])
-            earned = b["rate"] * sh * mins / 1440
+            model = b["rate"] * sh * mins / 1440
+            b["rewards_model"] = b.get("rewards_model", 0.0) + model
+            earned = min(model, maker_reward_cap(r, b["size"], mins))
             b["rewards"] += earned
             b["minutes"] += mins
             tr["rewards"] = round(tr["rewards"] + earned, 6)
+            tr["rewards_model"] = round(tr.get("rewards_model", 0.0) + model, 6)
             tr["realized"] = round(tr["realized"] + earned, 6)
             tr["cash"] = round(tr["cash"] + earned, 6)
         b["last_ts"] = t_now
@@ -3649,10 +3685,11 @@ def maker_summary(name, tr):
     stats.update({"maker_rewards": round(rew, 4), "maker_locked": round(locked, 4), "maker_open": round(unreal, 4),
                   "exits": tr.get("exits", 0)})
     row = (f"| {name} | {pnl:+.2f} | {len(books)} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) | "
-           f"${tr['cash']:.2f} | rewards +${rew:.2f} (model), trading {locked:+.2f} locked {unreal:+.2f} open; "
+           f"${tr['cash']:.2f} | rewards +${rew:.2f} (capped), trading {locked:+.2f} locked {unreal:+.2f} open; "
            f"fills {tr.get('fills', 0)}, sold early {tr.get('exits', 0)} |")
     lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
-             f"Rewards **${rew:.2f}** (a model, not checked against real payouts, likely too high). Price moves, "
+             f"Rewards **${rew:.2f}** (capped at what real makers get paid, 40c a day per $100; the raw pool-share "
+             f"model said ${tr.get('rewards_model', rew):.2f}). Price moves, "
              f"the real-ish part: **{locked:+.2f}** locked in (pairs merged, sold, finished) and **{unreal:+.2f}** on "
              f"what it still holds at today's middle price. It only works if the rewards beat the price moves.\n"]
     if books:
