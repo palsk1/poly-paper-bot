@@ -19,6 +19,7 @@
 | `maker_tp`, `maker_tpsl`, `maker_flat`, `maker_short` | Maker with a twist (2026-11-09): same quoting, plus take profit, take profit + stop loss, never hold, or short-dated markets only (see "Maker" below) | $200 each |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
+| `mention_no` | "Will X say Y" markets (earnings calls, speeches, podcasts) that end within 7 days: buys **NO** at 25-90c, one word per event, real order-book fills, skips thin books where the ask is 5c+ above the listed price. Added 2026-11-09 (see "Calibration hunt" below) | $50 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
@@ -136,6 +137,18 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 
 The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. Backtest (`backtest/fade.md`, 2026-11-08): weather 2,103 bets, the cheap side won 350 times at about 6c each, +$121 per $100 staked at +1c slippage, +$73 at +3c, about the same in the older and newer half. Crypto-price and post-count buckets came out about even, so the track is weather only. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
 
+## Calibration hunt (added 2026-11-09, `calib.py`)
+
+Are some KINDS of markets priced wrong in a steady way? `calib.py` takes 138,000 finished Polymarket markets (the backtest cache plus a sample of 11,771 tiny $1k-20k ones), looks at the price 1 day to 4 months before the end, pretends we bought one side 1-5c worse than that plus the fee, and holds to the result. Markets of one event count as one bet. Results in `backtest/calib.md`; rerun with probe input `btcalib` (or `btcalibsmall` to refresh the tiny-market sample).
+
+What it found (profit per $100 staked at +2c slippage):
+- **Almost everything loses about the spread.** Buying any side at a fair-looking price loses $1-7 per $100. No free lunch in big, boring categories.
+- **Long shots are overpriced, the more so the further out.** 5c tickets lose $26 per $100 a day out and $68 four months out. "Bored traders sell long-dated markets cheap" is false: they buy hope. The flip side (95c favorites 4 months out) only makes about $1 per $100 over 4 months, too little for the money it ties up.
+- **Weekend vs weekday:** no difference. **Quiet vs busy markets** (price moves in the week before): no usable difference. **Tiny markets:** long shots lose even more there.
+- **"Will X say Y" mention markets:** buying YES at 10-90c lost about $30 per $100, buying NO won about $15 per $100 (band +$4 to +$26, 89 events, both halves ahead). This is the one new lead, so `mention_no` paper-tests it on real books.
+- Weather long shots at 10-25c, 1-7 days out, also came out ahead (+$28): the same effect `fade_sure` already trades at 2-10c.
+- 272 slices were tested, so about 13 could pass by luck. A pass is a lead, not proof. Final market volume was NOT used as a rule: it knows the outcome (surprises draw volume).
+
 ## Sharp bookie price (added 2026-11-09, `sharp.py`)
 
 Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.
@@ -236,6 +249,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `state/top.json`: the current top 10 by trust (only these send trade pushes). The daily scoreboard sets it and watch re-ranks it every hour (also rewriting `summary.md`), so a strategy that turns into a loser loses its pushes within the hour.
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
+- `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup

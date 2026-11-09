@@ -1480,6 +1480,8 @@ def buy_candidates(tracks, name, cands, limit):
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
             continue
+        if r.get("max_over_listed") is not None and px > c["price"] + r["max_over_listed"]:
+            continue  # thin book: the real ask is far above the listed price, so the backtest edge isn't there
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
             continue  # too little left after paying the price and the fee
@@ -2757,7 +2759,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -2840,7 +2842,8 @@ def run_fast(tracks, force=False):
     if not due:
         return {}
     lists = {}
-    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates)):
+    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
+                     ("mentions", mention_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -2854,14 +2857,47 @@ def run_fast(tracks, force=False):
             lists[n] = cands
             r = rules_for(n)
             print(f"{n}: {len(cands)} candidates" + "".join(
-                f"\n   {c['outcome']} model {c['model_p'] * 100:.0f}/100 vs price {cents(c['price'])} "
-                f"(edge {c['model_edge'] * 100:+.1f}c) - {c['title'][:70]}" for c in cands[:5]))
+                (f"\n   {c['outcome']} model {c['model_p'] * 100:.0f}/100 vs price {cents(c['price'])} "
+                 f"(edge {c['model_edge'] * 100:+.1f}c) - {c['title'][:70]}" if c.get("model_p") is not None else
+                 f"\n   {c['outcome']} listed {cents(c['price'])}, {c['days']}d left - {c['title'][:70]}")
+                for c in cands[:5]))
             buy_candidates(tracks, n, cands, r.get("picks_per_scan", 3))
     st = load("scan_state.json", {})
     for n in due:
         st.setdefault("fast_last", {})[n] = iso()
     save("scan_state.json", st)
     return lists
+
+
+def mention_candidates(names):
+    """'Will X say Y' markets: the side named in rule `side` (No by default) priced in [min_price, max_price].
+    calib.py (backtest/calib.md, 2026-11-09) found YES in these markets wins less often than its price says."""
+    rs = {n: rules_for(n) for n in names}
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
+    markets = scan_markets({"end_date_min": iso(now()), "end_date_max": iso(hi),
+                            "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
+    out = {}
+    for n, r in rs.items():
+        rx = re.compile(r["only_regex"], re.I)
+        cands = []
+        for m in markets:
+            q = str(m.get("question") or "")
+            if not rx.search(q):
+                continue
+            prices = binary(m)
+            b = base_filter(m, r) if prices else None
+            if not b:
+                continue
+            outs = [str(o).lower() for o in jlist(m.get("outcomes"))]
+            side = r.get("side", "no")
+            if side not in outs:
+                continue
+            i = outs.index(side)
+            if r["min_price"] <= prices[i] <= r["max_price"]:
+                cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
+        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+        out[n] = cands
+    return out
 
 
 def sharp_candidates(names):

@@ -81,6 +81,12 @@
       "source": "endgame",
       "rules": "endgame"
     },
+    "mention_no": {
+      "label": "Won't say it: in 'Will X say Y' markets ending within 7 days, buys NO at 25-90c. YES in these markets won less often than its price said (backtest/calib.md). One bet per event, real order-book fills. $50 paper",
+      "start_cash": 50,
+      "source": "mentions",
+      "rules": "mention_no"
+    },
     "fade_sure": {
       "label": "Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
       "start_cash": 25,
@@ -1632,6 +1638,26 @@
       "min_edge": 0.004,
       "max_open": 40,
       "picks_per_scan": 3
+    },
+    "mention_no": {
+      "why": "2026-11-09 calibration hunt (calib.py, backtest/calib.md): in 89 finished 'will X say Y' events, buying YES at 10-90c lost about $30 per $100 and buying NO won about $15 per $100 at +2c slippage, in both halves of the period. Fans overrate the chance of a given word. Claude's track, rule changes reported.",
+      "side": "no",
+      "only_regex": "\\bsays?\\b|\\bsaid\\b|\\bmention",
+      "skip_words": ["tweets", " posts ", "truth social post", "up or down"],
+      "min_price": 0.25,
+      "max_price": 0.9,
+      "max_over_listed": 0.05,
+      "max_over_listed_note": "Skip when the real ask is 5c+ above the listed price (thin book). Live dry run 2026-11-09: one listed 26c asked 47c.",
+      "min_days": 0.04,
+      "max_days": 7,
+      "min_liquidity": 200,
+      "min_volume": 0,
+      "scan_every_minutes": 60,
+      "picks_per_scan": 5,
+      "max_open": 40,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
     },
     "fade_sure": {
       "inherit": "endgame",
