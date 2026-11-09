@@ -13,10 +13,14 @@ tag data-YYYYMMDD, so the repo itself stays small):
   every 5 min    wide set: the Polymarket books of every open position of every track,
                  plus the reviewed Kalshi arb tickers; Polymarket trades of the fast set
   every minute   the Kalshi public trade tape for the tickers above
+  every 5 min    gas: AAA's national average and GasBuddy's live state averages, plus (in the wide set) every
+                 open Kalshi market of the `watch_series` (default the AAA gas ladders), to test whether the
+                 live pump prices predict AAA's next number better than the Kalshi price does (2026-11-09)
 A book is written only when it changed since the last write (and in full at the start of each
 file, so every hour file stands on its own).
 
-Line kinds ("k"): meta, kbook, pbook, ktrade, ptrade, spot, err.  Prices in dollars (0-1).
+Line kinds ("k"): meta, kbook, pbook, ktrade, ptrade, spot, gas, err.
+  gas:   {"aaa": 4.0093, "aaa_asof": "11/9/26", "gb": {"NC": [3.223, -0.012], ...}}  (GasBuddy price, change)  Prices in dollars (0-1).
   kbook: {"tk": ticker, "yb": [[p, size], ...] YES bids, "nb": NO bids, "cl": close_time}
   pbook: {"tok": yes token, "cid": condition id, "b": bids, "a": asks, "end": end date}
   meta:  the markets in each set (titles, slugs, tickers), written when a set is refreshed
@@ -30,6 +34,7 @@ import gzip
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -148,10 +153,44 @@ def wide_sets():
                 toks.setdefault(tok, {"tok": tok, "slug": p.get("slug"), "q": p.get("title"), "o": p.get("outcome")})
     pairs = git_state("arb_pairs.json", {})
     ktk = sorted({p.get("kalshi") for p in pairs.get("approved") or [] if p.get("kalshi")})
-    return list(toks.values()), [{"tk": t} for t in ktk]
+    kw = [{"tk": t} for t in ktk]
+    for series in CFG.get("watch_series", ["KXAAAGASD", "KXAAAGASW"]):
+        try:
+            res = http_json(f"{KALSHI}/markets", {"series_ticker": series, "status": "open", "limit": 200})
+            kw += [{"tk": m["ticker"], "ev": m.get("event_ticker"), "k": m.get("floor_strike"), "cl": m.get("close_time")}
+                   for m in res.get("markets") or [] if m.get("ticker")]
+        except Exception as e:
+            print(f"watch_series {series}: {e}")
+    return list(toks.values()), kw
 
 
 # ---------- fetching ----------
+
+def _page(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+GB_ROW = re.compile(r'<a id="([A-Z]{2})" href="/usa/[a-z]{2}">.*?text-right">\s*([\d.]+)\s*</div>'
+                    r'.*?<span class="\w+">\s*([-+]?[\d.]+)\s*</span>', re.S)
+
+
+def gas_live():
+    """AAA national average (the Kalshi settle source) and GasBuddy's live state averages."""
+    out = {}
+    try:
+        body = _page("https://gasprices.aaa.com/")
+        m = re.search(r"National Average\s*\$([\d.]+).*?Price as of\s*([\d/]+)", re.sub(r"<[^>]+>", " ", body), re.S)
+        if m:
+            out["aaa"], out["aaa_asof"] = float(m.group(1)), m.group(2)
+    except Exception as e:
+        out["aaa_err"] = str(e)[:200]
+    try:
+        out["gb"] = {st: [float(p), float(c)] for st, p, c in GB_ROW.findall(_page("https://www.gasbuddy.com/usa"))}
+    except Exception as e:
+        out["gb_err"] = str(e)[:200]
+    return out
 
 def kalshi_book(tk):
     res = http_json(f"{KALSHI}/markets/{tk}/orderbook", None, retries=2)
@@ -369,6 +408,14 @@ def run(minutes, upload_files=True):
             if len(p_seen) > 500_000:
                 p_seen = set()
 
+        if wide:
+            try:
+                g = gas_live()
+                w.put("gas", t, g)
+                stats["gas"] = stats.get("gas", 0) + (1 if g.get("gb") and g.get("aaa") else 0)
+            except Exception as e:
+                err("gas", e)
+
         try:
             w.put("spot", t, {"px": spot()})
         except Exception as e:
@@ -408,6 +455,10 @@ if __name__ == "__main__":
                     k = json.loads(line)["k"]
                     kinds[k] = kinds.get(k, 0) + 1
             print(fp, f"{os.path.getsize(fp) / 1e3:.0f} kB", kinds)
+            with gzip.open(fp, "rt") as f:
+                for line in f:
+                    if '"k":"gas"' in line[:20]:
+                        print("GAS", line[:3000])
             with gzip.open(fp, "rt") as f:
                 for i, line in enumerate(f):
                     if i < 3 or '"k":"kbook"' in line[:20] and i < 400:

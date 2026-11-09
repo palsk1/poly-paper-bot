@@ -14,7 +14,7 @@ and you read the result in the run log. All of it is paper only.
 | small-market sample | ~12k tiny markets ($1k-20k volume), 12-hourly history | `calib.py fetch_small` (probe `btcalibsmall`, PR #30) |
 | rule text + UMA statuses | rule text, resolution source and proposed/disputed history for all ~124k cached markets (`bt_cache/rules_meta.json.gz`), plus every $1k-20k market that sat unpaid 1+ day past its end with hourly history (`rules_small_*.json.gz`) | `rules.py fetch` / `fetch_small` (probes `btrulesfetch`, `btrulessmall`) |
 | Kalshi 15-min crypto | Kalshi 15-minute crypto windows, trades and history | `kcrypto.py fetch [days]` (probe `kc_fetch`, `btkcfetch`, PR #31) |
-| Live recordings | Order books, trades, spot prices every minute for fast markets, hourly files on GitHub releases `data-YYYYMMDD` | `recorder.yml` / `recorder.py` (PR #12). Use it to replace guessed slippage once enough is recorded |
+| Live recordings | Order books, trades, spot prices every minute for fast markets; every 5 min also AAA + GasBuddy live gas prices and the Kalshi AAA gas ladders (`gas` lines, PR #40), hourly files on GitHub releases `data-YYYYMMDD` | `recorder.yml` / `recorder.py` (PR #12). Use it to replace guessed slippage once enough is recorded |
 | Holdout | Markets ending **2026-11-10 or later**. Never look at them before 2026-12-21 | `btcheck.py holdout` (probe `btholdout`), see `backtest/PROTOCOL.md` |
 
 ## Testing ideas on history
@@ -29,6 +29,7 @@ and you read the result in the run log. All of it is paper only.
 | `informed.py` | **Informed-trader hunt**: full trade lists of ~20k finished markets from whole events; scores wallets on how far the price moves their way 1h/6h/24h after our 5-min delay, split-half test vs same-size random wallets, copy test at the real next buy + 1c + fee, and the "new wallet, big bet, quiet market" pattern with real wallet age. Report `backtest/informed.md`, wallets that pass in both halves `backtest/informed_wallets.json`. Cache `bt_cache/inf_tapes.json.gz` | probe `btinf_fetch`, `btinf_run`, `btinf_all` (ref=main), `btinf_peek` (API shapes) |
 | `kcrypto.py` | Backtest of Kalshi 15-min crypto maker bids; report `backtest/kcrypto.md` | probe `kc_run`, `btkc` (PR #31) |
 | `sharp.py` | Pinnacle fair price vs Polymarket sports (live scan and backtest); report `backtest/sharp.md` | probe `sharp_*` (PR #24) |
+| `sources.py` | Who reads the settle source first: map of every open market by the website its rules settle on, Kalshi family explorer (rules, settle values, candles), which early sources GitHub can read, and lag tests for gas (AAA), earthquakes (USGS), executive orders. Report `backtest/sources.md` | probe `src_map`, `src_kdaily`, `src_precur`, `src_ks_<SERIES,...>`, `src_reach`, `src_gas[_SERIES]`, `src_quake`, `src_eo` |
 | `livelag.py` | Live esports score feed vs Polymarket price, who moves first; report `backtest/livelag.md` | probe `lag_scan`, `lag_<minutes>` (PR #25) |
 
 ## Live research probes (read-only)
