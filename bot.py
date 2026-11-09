@@ -1437,6 +1437,8 @@ def buy_candidates(tracks, name, cands, limit):
         if c["theme"] and themes.get(c["theme"], 0) >= r.get("max_per_theme", 999):
             continue
         px, shares, how = quote(c["token"], "buy", n, c["market"])
+        if how != "book" and tc["source"] == "endgame":
+            continue  # bug fix 2026-11-09: a decided market with no asks on the book can't be bought; the listed price is stale
         lo = r.get("min_price", 0.0)
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
