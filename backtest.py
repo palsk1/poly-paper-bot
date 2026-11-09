@@ -1051,6 +1051,11 @@ def fade():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if cmd == "btideasfetch":   # whole events for the idea machine, then volbias + the screen
+        __import__("ideas").fetch_events()
+        __import__("ideas").volbias()
+        __import__("ideas").run()
+        sys.exit(0)
     if cmd == "btideasvolbias":
         __import__("ideas").volbias()
         sys.exit(0)
