@@ -52,7 +52,15 @@ Most ideas are noise, and with this many some will look great by pure luck. So:
 A survivor is a lead, not proof. Next step for a survivor: a paper track (or a Claude-track tweak), judged live,
 and a pre-registered line in PROTOCOL.md's holdout table if it's worth it.
 
-## 3. Ideas I'd like to add when data allows
+## 3. First run (2026-11-09)
+
+30,632 ideas without weather (32,498 with): **no survivor, no placebo survivor.** The only survivor with weather in
+it was a data flaw: our cache drops weather buckets that lost (details and the check in `ideas.md`). Best honest near
+misses, worth re-screening once the cache holds whole events: crypto price markets at their highest price so far ->
+NO at 25-50c, 1-3 days out (beat its twins by about $21-26 per $100 in both halves, ~250 events); threshold questions
+("above", "at least") -> NO at 25-50c, 30 days out (small, 75 events).
+
+## 4. Ideas I'd like to add when data allows
 
 Not testable on today's cache (it has no rule text, holder lists or order books):
 - **Holder concentration**: markets where one wallet holds most of one side (a whale propping a price).
