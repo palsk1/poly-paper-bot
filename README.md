@@ -21,6 +21,7 @@
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 | `mention_no` | "Will X say Y" markets (earnings calls, speeches, podcasts) that end within 7 days: buys **NO** at 25-90c, one word per event, real order-book fills, skips thin books where the ask is 5c+ above the listed price. Added 2026-11-09 (see "Calibration hunt" below) | $50 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
+| `kc_maker`, `kc_maker_safe`, `kc_maker_early` | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -161,6 +162,16 @@ Jan's idea: big bookmakers spend a fortune on models and on taking bets from pro
 - **Backtest:** `python3 sharp.py bt` (probe input `sharp_bt`) replays the rule on finished Polymarket soccer games in the top 5 European leagues against Betfair Exchange closing odds from football-data.co.uk (free; Pinnacle's columns there went blank in July 2025). Result (2026-11-09, 1,230 games): Polymarket was within half a cent of Betfair fair on most outcomes and just as accurate; the 3c rule found 14 bets and came out -$0.04 at 1c slippage. No edge for a slow bot. Details: `backtest/sharp.md`.
 - **Probe inputs:** `sharp_scan` (live gaps, no trades), `sharp_bt`, `sharp_probe*` (raw API shapes), `fasttest` (dry run of all fast tracks incl. this one).
 
+## Kalshi 15-minute crypto: the late favorite maker (added 2026-11-09, `kcrypto.py`)
+
+Kalshi lists a new "BTC (ETH, SOL, XRP, DOGE, HYPE, BNB) price up in next 15 mins?" market every 15 minutes. It settles on the 60-second average of CF Benchmarks' index before the close vs the one before the open. These series charge takers 0.07 x p x (1-p) a contract and **makers nothing** (series `fee_type` "quadratic", checked 2026-11-09).
+
+The idea, inferred from a Reddit post: a few minutes before the close, rest a buy order at 90-99c on the side that's winning and hold it. It wins a few cents most of the time and loses the whole price when the coin flips at the end. The only real question is the fills: a resting bid fills only when someone sells into it, and the sellers may know something (they're dumping because the price is about to cross).
+
+- **Backtest:** `kcrypto.py` downloads every settled window's last 11 one-minute candles (best bid/ask + traded low/high) and Binance 1-minute spot into `bt_cache/kc/`, then replays fixed prices, joining the best bid, one tick in front of it, and a taker comparison, by minutes left. Three fill models: strict (only if a trade printed below our price), fair (front of line: a trade at our price counts), touch (optimistic). Report: `backtest/kcrypto.md`. Run with the `probe` workflow: `btkc` (fetch + run, 60 days, cached), `btkcrun` (replay only), `btkc2` (2-day smoke test). `kcrypto.load_windows()` hands the cached windows to any other 15-minute idea.
+- **Backtest result (60 days, 39,820 windows, 2026-09-10 to 11-09):** fixed-price bids lose ($0.30-5.30 per $100) because the fills come when the coin is about to flip. Joining or improving the best bid in the last 1-5 minutes is about break-even (-$0.30 to +$0.20 per $100, one loss eats 60-200 wins). Taker is about $0. Only a Binance spot check (z = distance to strike / typical move until the close, z >= 2) helped: +$0.56 per $100 over 8,663 fills, both halves ahead. 7-10 minutes left did a bit better too. About 105 variants were tried, so treat single lines with care.
+- **Live paper tracks:** each watch run looks at the current window of each coin. With 0.75-5.5 minutes left it notes a virtual bid and how many contracts were already waiting at that price. After the close it reads the real trade tape: if anything traded below our price, we filled in full; otherwise only sells at our price after the queue ahead of us count. Unfilled orders cost nothing. The summary prints a "picked-off check": how often filled orders won vs how often the unfilled ones would have. `probe kmakertest` is a dry run.
+
 ## Maker: get paid to quote (added 2026-11-08)
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
@@ -250,6 +261,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
 - `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
+- `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup

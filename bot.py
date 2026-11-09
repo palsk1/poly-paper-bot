@@ -206,6 +206,9 @@ def load_tracks():
         if tc["source"] in ("fullset", "ladder"):
             for k, v in (("sets", {}), ("opportunities", 0), ("incomplete", 0), ("seen", {})):
                 tracks[name].setdefault(k, v)
+        if tc["source"] == "kmaker":
+            for k, v in (("orders", {}), ("unfilled", 0), ("unfilled_log", []), ("last_check", {})):
+                tracks[name].setdefault(k, v)
     return tracks
 
 
@@ -649,7 +652,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -2738,6 +2741,304 @@ def ladder_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ Kalshi 15-minute crypto: late favorite maker (2026-11-09)
+#
+# From a Reddit post ("$50 to $3,000 on Kalshi 15-minute crypto with maker orders"). A few minutes before a window
+# closes, rest a buy order on the side that's winning and hold it to the result. Makers pay no fee on these series
+# (fee_type "quadratic", checked 2026-11-09). Backtest: kcrypto.py, backtest/kcrypto.md.
+# Paper fills, conservative: we place a virtual bid and note how many contracts were already waiting at our price.
+# After the close we read the real trade tape: if anything traded BELOW our price, every bid at our price (ours
+# too) was used up, so we filled in full. Otherwise only sells AT our price count, and only after the queue that was
+# ahead of us. Orders that never fill cost nothing. Cash for a resting order is set aside until it settles.
+
+KMAKER_SOURCES = ("kmaker",)
+
+
+def kmaker_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "kmaker"]
+
+
+def kalshi_book_sides(ticker):
+    """{'yes': [(price, size)...], 'no': [...]} bids, best first, or None."""
+    try:
+        res = kalshi_get(f"/markets/{urllib.parse.quote(ticker)}/orderbook")
+    except Exception as e:
+        print(f"kalshi book failed for {ticker}: {e}")
+        return None
+    ob = (res.get("orderbook_fp") or res.get("orderbook") or {}) if isinstance(res, dict) else {}
+    out = {}
+    for side in ("yes", "no"):
+        lv = ob.get(f"{side}_dollars") or ob.get(side) or []
+        rows = []
+        for x in lv:
+            if isinstance(x, (list, tuple)) and len(x) >= 2:
+                p, sz = fnum(x[0], None), fnum(x[1], 0)
+                if p is not None and sz > 0:
+                    rows.append((round(p / 100 if p > 1 else p, 4), sz))
+        out[side] = sorted(rows, key=lambda r: -r[0])
+    return out
+
+
+KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "KXXRP15M": "XRPUSDT",
+               "KXDOGE15M": "DOGEUSDT", "KXHYPE15M": "HYPEUSDT", "KXBNB15M": "BNBUSDT"}
+_kmaker_spot = {}
+
+
+def kmaker_z(series, strike, minutes_left, side):
+    """How many 'typical moves until the close' Binance spot sits on our side of the strike (same formula as the
+    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data."""
+    sym = KMAKER_SPOT.get(series)
+    if not sym or not strike:
+        return None
+    if sym not in _kmaker_spot:
+        try:
+            ks = http_json(f"{BINANCE}/klines", {"symbol": sym, "interval": "1m", "limit": 62})
+            closes = [fnum(k[4]) for k in ks]
+            rets = [math.log(b / a) for a, b in zip(closes[:-1], closes[1:]) if a > 0 and b > 0][-60:]
+            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets))) if len(rets) >= 30 else None
+        except Exception as e:
+            print(f"binance 1m klines failed for {sym}: {e}")
+            _kmaker_spot[sym] = None
+    got = _kmaker_spot[sym]
+    if not got or got[1] <= 0:
+        return None
+    px, sd1 = got
+    z = (px - strike) / (sd1 * px * math.sqrt(max(minutes_left, 0.5)))
+    return z if side == "yes" else -z
+
+
+def kmaker_tick(p):
+    return 0.001 if p >= 0.9 - 1e-9 or p < 0.1 else 0.01
+
+
+def kmaker_price(r, bid, ask):
+    """(our bid price, front_of_line) for the rule kind, or None to skip."""
+    kind, lvl = r.get("kind", "improve"), r.get("level", 0.95)
+    if kind == "level":
+        if (bid + ask) / 2 < lvl - EPS or ask <= lvl + EPS:
+            return None
+        return lvl, lvl > bid + EPS
+    if bid < lvl - EPS:
+        return None
+    if kind == "join":
+        return bid, False
+    p = round(bid + kmaker_tick(bid), 4)
+    return (p, True) if p < ask - EPS else (bid, False)
+
+
+def kmaker_open_markets(series):
+    try:
+        rows = kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 10}).get("markets") or []
+    except Exception as e:
+        print(f"kalshi {series} list failed: {e}")
+        return []
+    return rows
+
+
+def kmaker_place(tracks, names):
+    t_now = now()
+    books = {}
+    for series in sorted({s for n in names for s in rules_for(n).get("series", [])}):
+        for m in kmaker_open_markets(series):
+            close = parse_iso(m.get("close_time"))
+            if not close:
+                continue
+            left = (close - t_now).total_seconds() / 60
+            for n in names:
+                r = rules_for(n)
+                if series not in r.get("series", []) or not (r.get("min_minutes_left", 0.75) <= left <= r.get("max_minutes_left", 5.5)):
+                    continue
+                tr = tracks[n]
+                tk = m.get("ticker")
+                if tk in tr["orders"] or tk in tr.get("done", []):
+                    continue
+                if tk not in books:
+                    books[tk] = kalshi_book_sides(tk)
+                bk = books[tk]
+                if not bk or not bk["yes"] or not bk["no"]:
+                    continue
+                yb, ya = bk["yes"][0][0], round(1 - bk["no"][0][0], 4)
+                if not (0 < yb < ya < 1):
+                    continue
+                side = "yes" if (yb + ya) / 2 >= 0.5 else "no"
+                bid, ask = (yb, ya) if side == "yes" else (round(1 - ya, 4), round(1 - yb, 4))
+                got = kmaker_price(r, bid, ask)
+                if not got:
+                    tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                               "bid": bid, "ask": ask, "placed": False}
+                    continue
+                price, front = got
+                z = None
+                if r.get("min_spot_z") is not None:
+                    z = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side)
+                    if z is None or z < r["min_spot_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z": None if z is None else round(z, 2)}
+                        continue
+                queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
+                shares = max(1, int(r.get("usd_per_order", 10) / price))
+                cost = round(shares * price, 6)
+                maybe_refill(tr, n, cost)
+                if cost > tr["cash"] + EPS:
+                    tr["skipped_no_cash"] += 1
+                    continue
+                tr["cash"] = round(tr["cash"] - cost, 6)
+                tr["orders"][tk] = {"ticker": tk, "series": series, "title": f"{m.get('title')} ({m.get('yes_sub_title', '')})",
+                                    "outcome": side, "side": side, "price": price, "front": front, "queue": round(queue, 2),
+                                    "shares": shares, "cost": cost, "placed": iso(), "close": iso(close),
+                                    "minutes_left": round(left, 2), "bid": bid, "ask": ask,
+                                    "strike": fnum(m.get("floor_strike"), None),
+                                    "spot_z": None if z is None else round(z, 2)}
+                tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+                tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                           "bid": bid, "ask": ask, "placed": True}
+                log_event({"type": "kmaker_order", "track": n, "ticker": tk, "side": side, "price": price,
+                           "shares": shares, "queue": round(queue, 2), "minutes_left": round(left, 2)})
+                print(f"{n}: bid {side.upper()} {price * 100:.1f}c x{shares} on {tk} ({left:.1f} min left, "
+                      f"queue ahead {queue:.0f}, best bid {bid * 100:.1f}c ask {ask * 100:.1f}c)")
+
+
+def kalshi_trades(ticker, t0, t1, max_pages=40):
+    """Trades in [t0, t1] (epoch seconds), newest first; (rows, complete)."""
+    out, cur = [], None
+    for _ in range(max_pages):
+        p = {"ticker": ticker, "min_ts": int(t0), "max_ts": int(t1) + 1, "limit": 1000}
+        if cur:
+            p["cursor"] = cur
+        res = kalshi_get("/markets/trades", p)
+        out += res.get("trades") or []
+        cur = res.get("cursor")
+        if not cur or not res.get("trades"):
+            return out, True
+    return out, False
+
+
+def kmaker_fill(o, trades, shares=None):
+    """Contracts filled for a resting bid, from the real tape. -> (filled, through)."""
+    shares = o["shares"] if shares is None else shares
+    t0 = parse_iso(o["placed"])
+    sold_at, through = 0.0, False
+    for t in trades:
+        ts = parse_iso(t.get("created_time"))
+        if ts is None or ts <= t0:
+            continue
+        yp = fnum(t.get("yes_price_dollars"), None)
+        if yp is None:
+            yp = fnum(t.get("yes_price"), 0) / 100
+        px = yp if o["side"] == "yes" else round(1 - yp, 6)
+        if px < o["price"] - 1e-6:
+            through = True
+            break
+        # a taker selling our side = buying the other side
+        if abs(px - o["price"]) < 1e-6 and str(t.get("taker_side")) != o["side"]:
+            sold_at += fnum(t.get("count_fp") or t.get("count"), 0)
+    if through:
+        return float(shares), True
+    return max(0.0, min(float(shares), sold_at - o["queue"])), False
+
+
+def kmaker_settle(tracks, names):
+    tapes, first = {}, {}
+    for n in names:
+        for tk, o in tracks[n]["orders"].items():
+            first[tk] = min(first.get(tk, o["placed"]), o["placed"])
+    for n in names:
+        tr = tracks[n]
+        for tk in list(tr["orders"]):
+            o = tr["orders"][tk]
+            close = parse_iso(o["close"])
+            if now() < close + dt.timedelta(seconds=60):
+                continue
+            m = kalshi_market(tk)
+            res = str((m or {}).get("result") or "").lower()
+            if res not in ("yes", "no"):
+                if now() - close > dt.timedelta(hours=6):
+                    print(f"{n}: {tk} still has no result 6h after the close")
+                continue
+            if tk not in tapes:
+                try:
+                    tapes[tk] = kalshi_trades(tk, parse_iso(first[tk]).timestamp(), close.timestamp())
+                except Exception as e:
+                    print(f"{n}: trades for {tk} failed: {e}")
+                    continue
+            trades, complete = tapes[tk]
+            filled, through = kmaker_fill(o, trades)
+            tr["cash"] = round(tr["cash"] + o["cost"], 6)   # release the money set aside
+            del tr["orders"][tk]
+            tr["done"] = (tr.get("done", []) + [tk])[-300:]
+            if filled <= EPS:
+                tr["unfilled"] = tr.get("unfilled", 0) + 1
+                tr.setdefault("unfilled_log", []).append({"ticker": tk, "won": res == o["side"], "price": o["price"]})
+                tr["unfilled_log"] = tr["unfilled_log"][-500:]
+                continue
+            pay = 1.0 if res == o["side"] else 0.0
+            cost = filled * o["price"]
+            pnl = filled * pay - cost
+            tr["cash"] = round(tr["cash"] - cost + filled * pay, 6)
+            tr["realized"] = round(tr["realized"] + pnl, 6)
+            rs = {}
+            for usd_ in rs_sizes():
+                want = usd_ / o["price"]
+                f2 = want if through else max(0.0, min(want, kmaker_fill(o, trades, want)[0]))
+                rs[str(usd_)] = [round(f2 * o["price"], 4), round(f2 * pay - f2 * o["price"], 4), round(f2 / want, 4)]
+            rec = {**o, "shares": round(filled, 4), "entry": o["price"], "entry_fee": 0.0, "exit": pay, "exit_fee": 0.0,
+                   "pnl": round(pnl, 6), "cost": round(cost, 6), "through": through, "tape_complete": complete,
+                   "price_source": "book", "reason": "resolved", "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs}
+            tr["closed"].append(rec)
+            log_event({"type": "kmaker_fill", "track": n, "ticker": tk, "side": o["side"], "price": o["price"],
+                       "filled": round(filled, 2), "through": through, "pnl": round(pnl, 4)})
+            print(f"{n}: {tk} {o['side'].upper()} {o['price'] * 100:.1f}c filled {filled:.0f}/{o['shares']} "
+                  f"({'traded through' if through else 'at our price'}), result {res}, P&L {pnl:+.2f}")
+            if pnl < 0 and push_allowed(n):
+                push(f"[{n}] FLIP: a late favorite lost (${pnl:+.2f})",
+                     f"{o['title']}\nBought {o['side'].upper()} at {cents(o['price'])} with {o['minutes_left']:.1f} min "
+                     f"left. This is the risk the test is measuring.", tags="rotating_light", track=n)
+
+
+def kmaker_cycle(tracks):
+    names = kmaker_names()
+    if not names:
+        return
+    for n in names:
+        tracks[n].setdefault("orders", {})
+    kmaker_settle(tracks, names)
+    kmaker_place(tracks, names)
+
+
+def kmaker_summary(name, tr):
+    closed = tr["closed"]
+    wins = sum(1 for c in closed if c["pnl"] > 0)
+    locked = sum(o["cost"] for o in tr.get("orders", {}).values())
+    un = tr.get("unfilled_log", [])
+    filled_won = wins / len(closed) if closed else None
+    unf_won = sum(1 for u in un if u["won"]) / len(un) if un else None
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr.get("orders", {})), "closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": tr["refills"],
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "unfilled": tr.get("unfilled", 0)}
+    fr = f"{len(closed)} of {len(closed) + tr.get('unfilled', 0)} orders filled"
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr.get('orders', {}))} | {len(closed)} ({wins}/{len(closed) - wins}) "
+           f"| ${tr['cash']:.2f} | {fr}; refills {tr['refills']} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
+    if closed or un:
+        a = f"{filled_won * 100:.0f}" if filled_won is not None else "-"
+        b = f"{unf_won * 100:.0f}" if unf_won is not None else "-"
+        lines.append(f"Picked-off check: filled orders won {a} in 100, unfilled ones would have won {b} in 100. "
+                     "If filled orders win clearly less often, the fills are being picked off.\n")
+        losses = [c for c in closed if c["pnl"] < 0]
+        if losses:
+            lines.append(f"Worst loss ${min(c['pnl'] for c in losses):+.2f}; average win "
+                         f"${sum(c['pnl'] for c in closed if c['pnl'] > 0) / max(wins, 1):+.2f}.\n")
+    last = tr.get("last_check", {})
+    if last:
+        lines.append("Last look per coin: " + "; ".join(
+            f"{s.replace('KX', '').replace('15M', '')} {v['side']} {v['bid'] * 100:.1f}/{v['ask'] * 100:.1f}c "
+            f"{v['left']}m {'bid' if v['placed'] else 'skip'}" for s, v in sorted(last.items())))
+    return row, stats, lines
+
+
 # ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
 #
 # These pay out within hours or a day, so they collect finished trades much faster than deadline markets.
@@ -3947,6 +4248,8 @@ def _track_open_cost(tr, src):
         return sum(a["cost"] for a in tr.get("arbs", {}).values())
     if src in ("fullset", "ladder"):
         return sum(x["cost"] for x in tr.get("sets", {}).values())
+    if src == "kmaker":
+        return sum(o["cost"] for o in tr.get("orders", {}).values())
     return open_cost(tr)
 
 
@@ -4087,7 +4390,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -4201,8 +4504,9 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker"):
-            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary, "maker": maker_summary}[src](name, tr)
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker"):
+            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
+                                       "maker": maker_summary, "kmaker": kmaker_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -4605,8 +4909,43 @@ def discover():
         print("W", json.dumps(row, sort_keys=True))
 
 
+def kmakertest():
+    """Dry run of the Kalshi late-favorite maker (no state saved): place on the live windows with any minutes left,
+    then replay the fill check on the last closed BTC/ETH window as if we had bid 3 minutes before its close."""
+    names = kmaker_names()
+    tracks = {n: {"unlimited": False, "cash": 100.0, "start_cash": 100, "deposited": 100.0, "refills": 0, "min_cash": 0,
+                  "peak_open_cost": 0, "positions": {}, "closed": [], "realized": 0.0, "skipped_no_cash": 0,
+                  "orders": {}, "unfilled": 0, "unfilled_log": [], "last_check": {}} for n in names}
+    for n in names:
+        CFG["rules"][CFG["tracks"][n]["rules"]]["max_minutes_left"] = 15
+    kmaker_place(tracks, names)
+    for n in names:
+        print(n, "last look:", json.dumps(tracks[n]["last_check"]))
+    for series in ("KXBTC15M", "KXETH15M"):
+        rows = kalshi_get("/markets", {"series_ticker": series, "status": "settled", "limit": 1}).get("markets") or []
+        if not rows:
+            continue
+        m = rows[0]
+        close = parse_iso(m["close_time"])
+        trades, complete = kalshi_trades(m["ticker"], (close - dt.timedelta(minutes=3)).timestamp(), close.timestamp())
+        print(f"{m['ticker']} result {m.get('result')}: {len(trades)} trades in the last 3 min (complete {complete})")
+        if not trades:
+            continue
+        early = sorted(trades, key=lambda t: t["created_time"])[0]
+        yp = fnum(early.get("yes_price_dollars"), 0.5)
+        side = "yes" if yp >= 0.5 else "no"
+        px = yp if side == "yes" else round(1 - yp, 4)
+        for off in (0.0, -0.01, -0.03):
+            o = {"side": side, "price": round(px + off, 4), "queue": 0.0, "shares": 10,
+                 "placed": iso(close - dt.timedelta(minutes=3))}
+            got, through = kmaker_fill(o, trades)
+            print(f"  bid {side.upper()} {o['price'] * 100:.1f}c 3 min before close: filled {got:.0f}/10 "
+                  f"({'through' if through else 'at price'}), {'won' if m.get('result') == side else 'lost'}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
-     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest}[cmd]()
+     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
+     "kmakertest": kmakertest}[cmd]()

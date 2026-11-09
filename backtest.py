@@ -1055,4 +1055,8 @@ if __name__ == "__main__":
      "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag,
      "btfade": lambda: (fetch(), fade()), "fade": fade,
      "btcalib": lambda: __import__("calib").run(),
+     "btkc": lambda: (__import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)), __import__("kcrypto").run()),
+     "btkcfetch": lambda: __import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)),
+     "btkcrun": lambda: __import__("kcrypto").run(),
+     "btkc2": lambda: (__import__("kcrypto").fetch(2), __import__("kcrypto").run()),
      "btcalibsmall": lambda: (__import__("calib").fetch_small(), __import__("calib").run())}[cmd]()
