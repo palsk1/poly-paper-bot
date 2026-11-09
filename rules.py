@@ -327,6 +327,53 @@ def report(rows, lab, fl, markets):
             L.append(calib.line(f"  ...of them later disputed", calib.side_rows(fd, b, side)))
     L.append("")
 
+    # 6. follow-ups on what sections 1-5 showed
+    TROUBLE = ("official", "announce", "intent_not_enough", "consensus", "exclusions_2plus", "date_gap", "long_rules")
+
+    def score_n(r):
+        return sum(1 for x in TROUBLE if x in r["fl"])
+
+    L += ["## 6. Follow-ups", "", "### 6a. Trouble score (how many of the 7 dispute-predicting flags) vs disputes", "",
+          "| Flags | Markets | Disputed per 1,000 |", "|---|---|---|"]
+    for k_ in (0, 1, 2, 3, 4):
+        ids = [k for k, v in fl.items() if (sum(1 for x in TROUBLE if x in v) >= k_ if k_ == 4 else
+                                            sum(1 for x in TROUBLE if x in v) == k_)]
+        if ids:
+            L.append(f"| {k_}{'+' if k_ == 4 else ''} | {len(ids):,} | {1000 * sum(lab[k]['disputed'] for k in ids) / len(ids):.1f} |")
+    L += ["", "### 6b. Long shot 10-30c, by trouble score (same topic mix is NOT controlled here; see 6c)", ""] + calib.HEAD
+    for hz_set, hn in (((1, 3), "1-3d before"), ((7, 14, 30), "7-30d before"), ((-1, -3), "1-3d after end (limbo)")):
+        for lo_, hi_ in ((0, 0), (1, 1), (2, 3), (4, 9)):
+            fs = [r for r in rows if r["h"] in hz_set and lo_ <= score_n(r) <= hi_]
+            L.append(calib.line(f"{hn}, score {lo_}{'-' + str(hi_) if hi_ != lo_ else ''}: long shot 10-30c",
+                                calib.side_rows(fs, (0.10, 0.30), "cheap"), f"long shot 10-30c {hn} score {lo_}-{hi_}"))
+    L += ["", "### 6c. Same, flagged (score 2+) vs unflagged in the SAME topic, long shot 10-30c, +2c", "",
+          "| Topic / time | Events | Flagged | Not flagged | Difference (90% band) |", "|---|---|---|---|---|"]
+    for hz_set, hn in (((1, 3), "1-3d"), ((7, 14, 30), "7-30d"), ((-1, -3), "limbo")):
+        for tp in [n_ for n_, _ in calib.TOPICS] + ["other"]:
+            sub = [r for r in rows if r["h"] in hz_set and r["topic"] == tp]
+            fs = [r for r in sub if score_n(r) >= 2]
+            rs = [r for r in sub if score_n(r) == 0]
+            if len(fs) >= 20 and len(rs) >= 20:
+                L.append(gap_line(f"{tp}, {hn}", calib.side_rows(fs, (0.10, 0.30), "cheap"),
+                                  calib.side_rows(rs, (0.10, 0.30), "cheap")))
+    dg = [x for x in calib.side_rows([r for r in yn if r["h"] in (1, 3) and "date_gap" in r["fl"]], (0.10, 0.90), "yes")]
+    L += ["", "### 6d. The one pass: 'rules name a date the title doesn't', buy YES 1-3 days out", "",
+          "By topic (+2c):", "", "| Topic | Events | Per $100 |", "|---|---|---|"]
+    for tp in sorted({r["topic"] for r, _, _ in dg}):
+        sc = calib.score([x for x in dg if x[0]["topic"] == tp], 0.02)
+        if sc:
+            L.append(f"| {tp} | {sc['events']} | {m2(sc['per100'])} |")
+    by_ev = defaultdict(list)
+    for r, q, pay in dg:
+        by_ev[r["ev"]].append((r, q, pay))
+    L += ["", "Every event (first market shown, price, won?):", ""]
+    for ev, xs in sorted(by_ev.items(), key=lambda kv: kv[1][0][0]["t"]):
+        r, q, pay = xs[0]
+        dd = DATE_RX.findall(lab[r["mid"]]["pre"])[:4]
+        L.append(f"- {bt.iso_t(r['t'])[:10]} {r['q'][:90]} | {q * 100:.0f}c | {'WON' if pay else 'lost'} | "
+                 f"{len(xs)} bets | rule dates {dd}")
+    L.append("")
+
     rng = random.Random(4)
     L += ["## Samples (to check the word filters by eye)", ""]
     for f in ("intent_not_enough", "discretion", "date_gap", "tricky_3plus"):
