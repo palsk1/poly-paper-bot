@@ -942,7 +942,7 @@ def rewardpay():
             show("trade row sample", rows[0], 1200)
             shown = True
         for t in rows:
-            w = bot.pick(t, "proxyWallet", "maker", "user", "wallet", default="")
+            w = bot.pick(t, "proxy_wallet", "proxyWallet", "maker", "user", "wallet", default="")
             if w:
                 who[str(w).lower()] += 1
     print(f"{len(who)} wallets traded in {len(cids)} reward markets")
@@ -963,6 +963,12 @@ def rewardpay():
             off += 500
         return out
 
+    if who:
+        w0 = who.most_common(1)[0][0]
+        try:
+            show("any activity sample", bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/activity", {"user": w0, "limit": 5}), "data"), 1500)
+        except Exception as e:
+            print("activity sample failed", e)
     first = True
     table = []
     for w, n in who.most_common(30):
