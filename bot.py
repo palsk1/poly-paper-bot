@@ -1480,6 +1480,8 @@ def buy_candidates(tracks, name, cands, limit):
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
             continue
+        if r.get("max_over_listed") is not None and px > c["price"] + r["max_over_listed"]:
+            continue  # thin book: the real ask is far above the listed price, so the backtest edge isn't there
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
             continue  # too little left after paying the price and the fee

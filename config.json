@@ -1646,6 +1646,8 @@
       "skip_words": ["tweets", " posts ", "truth social post", "up or down"],
       "min_price": 0.25,
       "max_price": 0.9,
+      "max_over_listed": 0.05,
+      "max_over_listed_note": "Skip when the real ask is 5c+ above the listed price (thin book). Live dry run 2026-11-09: one listed 26c asked 47c.",
       "min_days": 0.04,
       "max_days": 7,
       "min_liquidity": 200,
