@@ -947,25 +947,42 @@ def rewardpay():
                 who[str(w).lower()] += 1
     print(f"{len(who)} wallets traded in {len(cids)} reward markets")
 
+    def page(params):
+        try:
+            return bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/activity", params), "data")
+        except Exception as e:
+            print(f"  activity {params.get('type', 'all')} failed for {params['user'][:10]}: {str(e)[:160]}")
+            return None
+
     def acts(w, typ):
-        """All activity (the type filter gives HTTP 400), newest first, back to 30 days; keep rows of this type."""
-        key = ("acts", w)
-        if key not in _acts:
-            out, off = [], 0
-            while off < 5000:
-                try:
-                    rows = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/activity", {"user": w, "limit": 500, "offset": off}), "data")
-                except Exception as e:
-                    print(f"  activity failed for {w[:10]}: {str(e)[:120]}")
+        """Payout rows of these types in the last 30 days: try the type filter, else scan all activity."""
+        out = []
+        for ty in typ:
+            off = 0
+            while off < 2000:
+                rows = page({"user": w, "type": ty, "limit": 100, "offset": off})
+                if rows is None:
                     break
-                out += rows
+                out += [r for r in rows if str(r.get("type")).upper() == ty]
                 ts = [bot.fnum(r.get("timestamp")) for r in rows]
-                if len(rows) < 500 or (ts and min(ts) < t30):
+                if len(rows) < 100 or (ts and min(ts) < t30):
                     break
-                off += 500
-            _acts[key] = out
-            print(f"  {w[:10]} activity types: {dict(Counter(str(r.get('type')) for r in out))}")
-        return [r for r in _acts[key] if str(r.get("type")).upper() in typ]
+                off += 100
+        if out or ("scan", w) in _acts:
+            return out
+        _acts[("scan", w)] = True
+        allr, off = [], 0
+        while off < 3000:
+            rows = page({"user": w, "limit": 100, "offset": off})
+            if not rows:
+                break
+            allr += rows
+            ts = [bot.fnum(r.get("timestamp")) for r in rows]
+            if len(rows) < 100 or (ts and min(ts) < t30):
+                break
+            off += 100
+        print(f"  {w[:10]} activity types (scan of {len(allr)} rows): {dict(Counter(str(r.get('type')) for r in allr))}")
+        return [r for r in allr if str(r.get("type")).upper() in typ]
 
     if who:
         w0 = who.most_common(1)[0][0]
@@ -975,7 +992,7 @@ def rewardpay():
             print("activity sample failed", e)
     first = True
     table = []
-    for w, n in who.most_common(30):
+    for w, n in who.most_common(25):
         rew = acts(w, ("REWARD", "REWARDS", "LIQUIDITY_REWARD"))
         if first and rew:
             show("REWARD activity sample", rew[:2], 1500)
@@ -990,10 +1007,8 @@ def rewardpay():
         rb = sum(bot.fnum(bot.pick(r, "usdc_size", "usdcSize", "usdc_size", "amount", "size")) for r in reb if bot.fnum(r.get("timestamp")) >= t30)
         try:
             v = bot.http_json(f"{bot.DATA}/v2/value", {"user": w})
-            if first:
-                show("value sample", v, 400)
-            v = bot.envelope_rows(v, "data")[0] if isinstance(v, (list, dict)) and bot.envelope_rows(v, "data") else v
-            value = bot.fnum(bot.pick(v, "value", default=0)) if isinstance(v, dict) else bot.fnum(v)
+            v = v.get("data", v) if isinstance(v, dict) else (v[0] if isinstance(v, list) and v else {})
+            value = bot.fnum((v or {}).get("value")) if isinstance(v, dict) else bot.fnum(v)
         except Exception as e:
             value = 0.0
             print(f"  value failed for {w[:10]}: {str(e)[:100]}")
