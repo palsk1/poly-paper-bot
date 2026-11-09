@@ -54,12 +54,13 @@ def f(x, *keys):
 
 def cat(slug, title):
     s = f"{slug} {title}".lower()
-    rules = [("esports", ("lol-", "cs2", "csgo", "dota", "valorant", "league of legends", "counter-strike", "lck", "lpl", "worlds")),
+    rules = [("geopolitics", ("strait", "ceasefire", "iran", "putin", "russia", "ukraine", "israel", "hamas", "houthi", "war ", "invade", "nuclear", "npt", "china", "taiwan", "venezuela", "maduro")),
+             ("esports", ("lol-", "cs2", "csgo", "dota", "valorant", "league of legends", "counter-strike", "lck", "lpl", "worlds")),
              ("mentions", ("mention", " say ", "says", "said")),
              ("economics", ("fed ", "fed-", "rate", "cpi", "inflation", "gdp", "jobs", "unemployment", "payroll", "recession", "powell", "fomc")),
              ("crypto", ("bitcoin", "btc", "eth", "solana", "xrp", "crypto")),
              ("sports", ("nba", "nfl", "nhl", "mlb", "epl", "ufc", "soccer", "football", "tennis", "-vs-", " vs. ")),
-             ("politics", ("election", "trump", "president", "senate", "house", "governor", "mayor", "vote"))]
+             ("politics", ("nomination", "election", "trump", "win the", "out as", "secretary", "president", "senate", "house", "governor", "mayor", "vote"))]
     for name, words in rules:
         if any(w in s for w in words):
             return name
@@ -94,8 +95,17 @@ def day(t):
 def main(addr):
     print("wallet", addr)
     trades = paged("v2/trades", addr)
-    closed = paged("v2/closed-positions", addr, pages=40, limit=50)
-    openp = paged("v2/positions", addr, pages=4)
+    openp = paged("v2/positions", addr, pages=10)
+    closed = []
+    for st in ("CLOSED", "RESOLVED", "ALL"):
+        rows = paged("v2/positions", addr, pages=20, status=st)
+        if rows and any(r.get("status") != "OPEN" for r in rows):
+            print("using status", st, collections.Counter(r.get("status") for r in rows))
+            closed = rows
+            break
+    seen = {r.get("token_id") for r in closed}
+    allpos = closed + [r for r in openp if r.get("token_id") not in seen]
+    print("positions total", len(allpos), collections.Counter(r.get("status") for r in allpos))
 
     # ---- trades: what, at what price, how big
     buys = [t for t in trades if str(t.get("side")).upper() == "BUY"]
@@ -137,16 +147,17 @@ def main(addr):
 
     # ---- closed positions: where the profit comes from
     pn = []
-    for c in closed:
-        p = f(c, "realizedPnl", "realized_pnl", "pnl", "cashPnl")
+    for c in allpos:
+        p = f(c, "total_pnl", "realized_pnl")
         if not isinstance(p, float):
             continue
-        avg = f(c, "avgPrice", "avg_price")
-        bought = f(c, "totalBought", "total_bought", "initialValue", "size")
+        avg = f(c, "avg_price")
+        bought = f(c, "total_cost_usdc")
         pn.append({"pnl": p, "avg": avg if isinstance(avg, float) else None, "bought": bought if isinstance(bought, float) else None,
-                   "t": ts(c), "cat": cat(c.get("slug") or c.get("eventSlug") or "", c.get("title") or ""),
+                   "t": f(c, "last_event_at") if isinstance(f(c, "last_event_at"), float) else None, "st": c.get("status"),
+                   "hold": ((f(c, "last_event_at") or 0) - (f(c, "first_entry_at") or 0)) / 86400 if isinstance(f(c, "first_entry_at"), float) else None, "cat": cat(c.get("slug") or c.get("eventSlug") or "", c.get("title") or ""),
                    "title": (c.get("title") or "")[:60], "o": c.get("outcome")})
-    print(f"\n== CLOSED POSITIONS {len(pn)}")
+    print(f"\n== ALL POSITIONS (total_pnl = realized + unrealized) {len(pn)}")
     if pn:
         tot = sum(x["pnl"] for x in pn)
         w = [x for x in pn if x["pnl"] > 0]
@@ -155,10 +166,17 @@ def main(addr):
         top = sorted(pn, key=lambda x: -x["pnl"])
         for n in (1, 5, 10, 20):
             print(f"  top {n} wins = ${sum(x['pnl'] for x in top[:n]):.0f}")
-        print("  biggest wins:", [(round(x["pnl"]), x["avg"], x["title"], x["o"]) for x in top[:8]])
-        print("  biggest losses:", [(round(x["pnl"]), x["avg"], x["title"], x["o"]) for x in top[-8:]])
+        for x in top[:15]:
+            print("  WIN", round(x["pnl"]), "avg", x["avg"], "cost", round(x["bought"] or 0), "days", round(x["hold"] or 0), x["st"], x["title"], x["o"])
+        for x in top[-10:]:
+            print("  LOSS", round(x["pnl"]), "avg", x["avg"], "cost", round(x["bought"] or 0), "days", round(x["hold"] or 0), x["st"], x["title"], x["o"])
+        hs = sorted(x["hold"] for x in pn if x["hold"] is not None)
+        if hs:
+            print(f"  position life days: median {statistics.median(hs):.1f}, p10 {hs[len(hs)//10]:.2f}, p90 {hs[int(.9*len(hs))]:.0f}")
+        es = [x for x in pn if x["cat"] == "esports"]
+        print("  esports:", len(es), "won", sum(1 for x in es if x["pnl"] > 0), "pnl", round(sum(x["pnl"] for x in es)), "cost", round(sum(x["bought"] or 0 for x in es)))
         for key, fn in (("by entry band", lambda x: band(x["avg"])), ("by category", lambda x: x["cat"]),
-                        ("by month", lambda x: day(x["t"])[:7])):
+                        ("by month of last activity", lambda x: day(x["t"])[:7]), ("by status", lambda x: x["st"])):
             g = collections.defaultdict(list)
             for x in pn:
                 g[fn(x)].append(x["pnl"])
@@ -170,11 +188,11 @@ def main(addr):
         print("  by week:", {k: round(v) for k, v in sorted(wk.items())})
 
     # ---- open positions
-    ov = sum(f(p, "currentValue", "current_value") or 0 for p in openp if isinstance(f(p, "currentValue", "current_value"), float))
-    oc = sum(f(p, "initialValue", "initial_value") or 0 for p in openp if isinstance(f(p, "initialValue", "initial_value"), float))
+    ov = sum(f(p, "current_value") or 0 for p in openp if isinstance(f(p, "current_value"), float))
+    oc = sum(f(p, "total_cost_usdc") or 0 for p in openp if isinstance(f(p, "total_cost_usdc"), float))
     print(f"\n== OPEN POSITIONS {len(openp)}: cost ${oc:.0f}, value now ${ov:.0f}")
-    for p in sorted(openp, key=lambda p: -(f(p, "currentValue") or 0) if isinstance(f(p, "currentValue"), float) else 0)[:10]:
-        print("  ", f(p, "avgPrice"), f(p, "curPrice"), round(f(p, "currentValue") or 0), p.get("outcome"), (p.get("title") or "")[:70])
+    for p in openp[:10]:
+        print("  ", f(p, "avg_price"), f(p, "current_price"), round(f(p, "current_value") or 0), round(f(p, "total_pnl") or 0), p.get("outcome"), (p.get("title") or "")[:70])
 
 
 if __name__ == "__main__":
