@@ -47,20 +47,16 @@ def peek():
     picks = [vals[int(q * (len(vals) - 1))] for q in (0.05, 0.3, 0.6, 0.9, 0.99)] if vals else []
     for m in picks:
         print(f"\n== {m['q'][:80]} vol ${m.get('vol') or 0:,.0f} start {bt.iso_t(m['start']) if m.get('start') else '?'} end {bt.iso_t(m['end']) if m.get('end') else '?'}")
-        try:
-            g = bot.http_json(f"{G}/markets", {"clob_token_ids": m["toks"][0]})
-            g = bot.envelope_rows(g, "data", "markets")
-            cid = g[0].get("conditionId") if g else None
-            print("  gamma by token ->", cid, "rows", len(g))
-        except Exception as e:
-            print("  gamma by token failed", e)
-            cid = None
-        for p in ({"asset": m["toks"][0], "limit": 3}, {"token_id": m["toks"][0], "limit": 3}):
+        cid = None
+        for url, p in ((f"{G}/markets/{m['id']}", None), (f"{G}/markets", {"id": [m["id"], picks[0]["id"]], "closed": "true"}),
+                       (f"{G}/markets", {"clob_token_ids": m["toks"][0], "closed": "true"})):
             try:
-                rows, cur, res = trades_page(p)
-                print("  trades by", list(p)[0], "->", len(rows), short(rows[:1], 300))
+                g = bot.http_json(url, p)
+                g = [g] if isinstance(g, dict) and g.get("conditionId") else bot.envelope_rows(g, "data", "markets")
+                print("  gamma", url[-30:], p and list(p), "->", len(g), [x.get("conditionId", "")[:12] for x in g])
+                cid = cid or (g[0].get("conditionId") if g else None)
             except Exception as e:
-                print("  trades by", list(p)[0], "failed", str(e)[:150])
+                print("  gamma failed", url[-30:], str(e)[:120])
         if not cid:
             continue
         allr, cur, t0, pages = [], None, time.time(), 0
@@ -104,7 +100,38 @@ def peek():
             print(" ", p, "->", len(rows), "cursor", bool(cur), [(r.get("price"), r.get("size"), (r.get("title") or "")[:40]) for r in rows[:5]])
         except Exception as e:
             print(" ", p, "failed", str(e)[:150])
-    print("\n== wallet first-trade lookup (fresh-wallet check) for 3 wallets")
+    print("\n== global big-trade feed depth")
+    for amt in (1000, 5000, 20000):
+        cur, n, t_last, t0 = None, 0, None, time.time()
+        for i in range(60):
+            p = {"limit": 500, "filterType": "CASH", "filterAmount": amt}
+            if cur:
+                p["cursor"] = cur
+            try:
+                rows, cur, _ = trades_page(p)
+            except Exception as e:
+                print("   page", i, "failed", str(e)[:150])
+                break
+            n += len(rows)
+            tt = [bot.act_time(r).timestamp() for r in rows if bot.act_time(r)]
+            if tt:
+                t_last = min(tt)
+            if not cur or not rows:
+                break
+        print(f"  >= ${amt}: {n} trades in {i + 1} pages back to {bt.iso_t(t_last) if t_last else '-'} ({time.time() - t0:.0f}s)")
+    print("\n== wallet first-trade lookup (fresh-wallet check)")
+    for p in ({"user": "0xd3ecb2aee0d65622da559ff356b00e8c2e626603", "limit": 1, "sortDirection": "ASC"}, {"user": "0xd3ecb2aee0d65622da559ff356b00e8c2e626603", "limit": 1, "order": "asc"}):
+        try:
+            rows, cur, _ = trades_page(p)
+            print(" ", list(p)[2:], "->", [bt.iso_t(bot.act_time(r).timestamp()) for r in rows])
+        except Exception as e:
+            print(" ", p, "failed", str(e)[:150])
+    for path in ("v2/positions", "v1/user-stats", "v2/user-stats", "v2/profile"):
+        try:
+            r = bot.http_json(f"{D}/{path}", {"user": "0xd3ecb2aee0d65622da559ff356b00e8c2e626603", "limit": 1})
+            print(" ", path, short(r, 300))
+        except Exception as e:
+            print(" ", path, "failed", str(e)[:100])
 
 
 if __name__ == "__main__":
