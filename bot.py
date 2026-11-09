@@ -162,6 +162,37 @@ def log_event(ev):
     print("EVENT", json.dumps(ev, sort_keys=True))
 
 
+# ---- "alive but waiting": what each strategy saw on its last check and why it didn't buy (records only)
+_STATUS = {}
+
+
+def saw(name, msg):
+    """One plain line about this run's check for a track, e.g. '0 of 11,236 markets match its rules'."""
+    _STATUS.setdefault(name, {"skips": Counter()})["msg"] = msg
+
+
+def why(name, reason):
+    """Count one skip reason for a track this run."""
+    _STATUS.setdefault(name, {"skips": Counter()})["skips"][reason] += 1
+
+
+def stamp_status(tracks):
+    """Copy this run's notes into tracks[name]['status'] (shown on the dashboard). Tracks not checked this run keep
+    their last note; the paced rule tracks get a 'next pick' note so a quiet day doesn't look dead."""
+    picked = load("scan_state.json", {}).get("picked_on", {})
+    for name, tc in CFG["tracks"].items():
+        tr = tracks.get(name)
+        if tr is None:
+            continue
+        st = _STATUS.get(name)
+        if st:
+            tr["status"] = {"at": iso(), "msg": st.get("msg", ""), "skips": dict(st["skips"].most_common(5))}
+        elif tc["source"] in ("screener", "random", "momentum") and picked.get(name) != today_utc():
+            tr["status"] = {"at": iso(), "msg": "Picks once a day at the morning run (about 06:00 Stockholm); "
+                                                "no pick yet today.", "skips": {}}
+    _STATUS.clear()
+
+
 def drop_phantom_fills(tr):
     """One-time cleanup (Jan's OK, 2026-11-09): endgame paper buys made on an empty order book ('estimate' fills at
     the stale listed price) could never have happened, so they are taken out of the score and their money put back.
@@ -694,7 +725,7 @@ def manage_exits(tracks, lab=True):
                 continue
             rec = paper_close(tr, name, tok, fill, taker_fee(pos["shares"], fill, fee_rate(m)), f"{reason}, {how}")
             if rec and CFG["push"].get("on_claude_trades"):
-                push(f"[{name}] SELL {pos.get('outcome')} @ {cents(fill)} ({rec['pnl']:+.2f})",
+                push(f"[{name}] sold {pos.get('outcome')} at {cents(fill)} ({usd(rec['pnl'])})",
                      f"{pos.get('title')}\nReason: {reason}",
                      click=market_link(pos.get("slug", ""), pos.get("event_slug", "")), tags="moneybag", track=name)
 
@@ -908,6 +939,9 @@ def follow_leader(tracks):
         print("Empty positions response while we expected some; skipping leader check this run.")
         return
     n = CFG["shares_per_trade"]
+    newest = max((v.get("first_seen") or "" for v in prev.values()), default="")
+    for name in leader_tracks():
+        saw(name, f"Watching his {len(cur)} open positions. Last new one seen: {newest[:10] or 'none since the start'}.")
 
     # ---- new positions he opened
     both = split_tokens(cur)
@@ -929,8 +963,10 @@ def follow_leader(tracks):
         for name in leader_tracks():
             tc, tr = CFG["tracks"][name], tracks[name]
             if px is None or tok in tr["positions"] or not (tc["min_price"] <= px <= tc["max_price"]):
+                why(name, "his new bet's price is outside its range")
                 continue
             if p["size"] * max(p["avg"], 0.01) < tc.get("min_open_usd", lead["min_open_usd"]):
+                why(name, "his new bet was too small")
                 continue  # e.g. sab_big: only his $1,000+ bets
             if paper_buy(tr, name, tok, shares, px, taker_fee(shares, px, rate),
                          {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"],
@@ -942,7 +978,7 @@ def follow_leader(tracks):
                    "our_price": None if px is None else round(px, 4), "price_source": how, "copied_by": took})
         if CFG["push"]["on_leader_trades"]:
             push(f"{lead['name']} BUY {p['outcome']} @ {cents(p['avg'])}",
-                 f"{p['title']}\nHe holds {p['size']:.0f} sh (${p['size'] * p['avg']:,.0f}). "
+                 f"{p['title']}\nHe holds {p['size']:.0f} shares (${p['size'] * p['avg']:,.0f}). "
                  f"Your price now: {cents(px)}.\nPaper copied by: {', '.join(took) or 'none'}",
                  click=market_link(p["slug"], p["event_slug"]), tags="chart_with_upwards_trend", track=leader_tracks())
 
@@ -985,7 +1021,7 @@ def follow_leader(tracks):
                 how = (f"Sold at ~{cents(xr['exit_price'])} (his avg {cents(q.get('avg'))}, "
                        f"{xr['profit_per_share'] * 100:+.0f}c/sh, ~${xr['profit_usd']:,.0f}), "
                        f"{xr.get('days_left', '?')} days before the end date.\n")
-            push(f"{lead['name']} EXIT {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} sh)",
+            push(f"{lead['name']} sold {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} shares)",
                  f"{q.get('title')}\n{how}Paper closed in: {', '.join(closed_by) or 'none'}",
                  click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend",
                  track=leader_tracks())
@@ -1061,23 +1097,31 @@ def copy_open(tracks, name, p, r, extra=None):
         return False
     if len(tr["positions"]) >= r.get("max_open", 999):
         tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+        why(name, "full (max open bets)")
         return False
     m = market_by_slug(p["slug"])
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
+        why(name, "market closed")
         return False
     end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
     if end and end < now():
+        why(name, "market already past its end date")
         return False
     px, shares, how = quote(p["token"], "buy", CFG["shares_per_trade"], m)
     if px is None or not (r.get("min_price", 0.02) <= px <= r.get("max_price", 0.97)):
+        why(name, "no order book" if px is None else "price under 3c or over 97c")
         return False
     if r.get("max_chase") is not None and p["avg"] and px > p["avg"] + r["max_chase"]:
         tr["skipped_chase"] = tr.get("skipped_chase", 0) + 1  # we'd be paying well above what they paid: too late
+        why(name, "too late (price 5c+ above what they paid)")
         return False
     meta = {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"], "event_slug": p["event_slug"],
             "end": p["end"], "source": name, "their_avg": p["avg"], "their_size": p["size"], "price_source": how}
     meta.update(extra or {})
-    return paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta)
+    if not paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta):
+        why(name, "out of cash")
+        return False
+    return True
 
 
 def copy_close(tracks, name, tok, why):
@@ -1134,10 +1178,12 @@ def follow_wallets(tracks):
         addr = CFG["tracks"][name]["address"].lower()
         rows, complete = got.get(addr, (None, False))
         if rows is None:
+            saw(name, "Wallet lookup failed this run (API error); tries again in 5 minutes.")
             continue
         cur = {p["token"]: p for p in rows if p["token"] and p["size"] >= 1}
         prev = old.get(addr, set())
         if addr not in old:
+            saw(name, f"First look: {len(cur)} positions recorded as the starting point.")
             snaps[addr] = {"held": sorted(tkey(t) for t in cur), "since": iso()}
             log_event({"type": "wallet_baseline", "track": name, "positions": len(cur)})
             live[addr] = cur
@@ -1155,17 +1201,25 @@ def follow_wallets(tracks):
             backfill(tracks, name, cur, r)
         # new positions
         both = split_tokens(cur)
+        fresh = 0
         for tok, p in cur.items():
             if tok in both:
                 tr["skipped_split"] = tr.get("skipped_split", 0) + (tkey(tok) not in prev)
                 continue
-            if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+            if tkey(tok) in prev or p["redeemable"]:
+                continue
+            fresh += 1
+            if p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+                why(name, f"too small (under ${r['min_open_usd']})")
                 continue
             if day["n"] >= r.get("max_new_per_day", 999):
                 tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+                why(name, "daily copy limit reached")
                 continue
             if copy_open(tracks, name, p, r):
                 day["n"] += 1
+        saw(name, f"Watching {len(cur)} open positions of this wallet; {fresh} new since the last check. "
+                  f"Watching since {str(snaps[addr].get('since') or '?')[:10]}.")
         # exits: the wallet sold (or redeemed) most of what it had when we copied
         for tok in list(tr["positions"]):
             q = cur.get(tok)
@@ -1212,6 +1266,8 @@ def follow_consensus(tracks, live):
             elif holders.get(tok, 0) == 0:
                 copy_close(tracks, name, tok, "all wallets left")
         done = set(tr.setdefault("seen", []))
+        hot = sum(1 for _, k in count.items() if k >= r["min_wallets"])
+        saw(name, f"{hot} markets held by {r['min_wallets']}+ of the copied wallets right now ({len(live)} wallets read).")
         tried = 0
         for tok, k in count.most_common():
             if k < r["min_wallets"] or tried >= r.get("picks_per_run", 5) or len(tr["positions"]) >= r.get("max_open", 999):
@@ -1473,8 +1529,10 @@ def buy_candidates(tracks, name, cands, limit):
         if len(bought) >= limit or len(tr["positions"]) >= r.get("max_open", 999):
             break
         if c["token"] in tr["positions"] or c["event_key"] in held_events:
+            why(name, "already holds this market")
             continue
         if c["theme"] and themes.get(c["theme"], 0) >= r.get("max_per_theme", 999):
+            why(name, "too many bets on this theme")
             continue
         px, shares, how = quote(c["token"], "buy", n, c["market"])
         if how != "book" and tc["source"] == "endgame":
@@ -1482,13 +1540,16 @@ def buy_candidates(tracks, name, cands, limit):
         lo = r.get("min_price", 0.0)
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
+            why(name, "no order book" if px is None else "real price outside its range")
             continue
         if r.get("max_over_listed") is not None and px > c["price"] + r["max_over_listed"]:
             continue  # thin book: the real ask is far above the listed price, so the backtest edge isn't there
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
+            why(name, "too little profit after the fee")
             continue  # too little left after paying the price and the fee
         if c.get("model_p") is not None and c["model_p"] - px - fee / shares < r.get("min_model_edge", 0):
+            why(name, "real price ate the model's edge")
             continue  # weather/crypto: the real fill price ate the model's edge
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
@@ -1501,13 +1562,17 @@ def buy_candidates(tracks, name, cands, limit):
         if r.get("sl_rel"):
             meta["stop"] = round(max(0.01, px - r["sl_rel"]), 4)    # cut at entry - sl_rel
         if not paper_buy(tr, name, c["token"], shares, px, fee, meta):
+            why(name, "out of cash")
             break
         held_events.add(c["event_key"])
         if c["theme"]:
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
+    if len(tr["positions"]) >= r.get("max_open", 999):
+        why(name, "full (max open bets)")
+    saw(name, f"{len(cands)} market{'' if len(cands) == 1 else 's'} matched its rules, bought {len(bought)}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
-        push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag", track=name)
+        push(f"[{name}] bought {len(bought)} (practice money)", "\n".join(bought), tags="mag", track=name)
     return bought
 
 
@@ -1746,6 +1811,8 @@ def arb_propose():
     r = arb_rules()
     pairs = load_pairs()
     decided = {p.get("id") for p in pairs["approved"] + pairs["rejected"]}
+    # Whole Kalshi events whose rule text differs from Polymarket's for every choice (one review covers them all).
+    blocked_events = {str(e.get("event") or "") for e in pairs.get("rejected_events", []) if isinstance(e, dict)}
     lo, hi = now() + dt.timedelta(days=r["min_days"]), now() + dt.timedelta(days=r["max_days"])
     poly = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi), "liquidity_num_min": r["min_liquidity"]})
     P = []
@@ -1784,6 +1851,9 @@ def arb_propose():
     tol = r["date_tolerance_days"] * 86400
     max_diff = r.get("max_price_diff", 0.12)
     for k in K:
+        if str(k["m"].get("event_ticker") or "") in blocked_events:
+            dropped["event rejected as a whole"] += 1
+            continue
         pool = Counter()
         for t in k["toks"]:
             for i in index.get(t, ()):
@@ -1850,10 +1920,15 @@ def arb_propose():
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
         })
-    # Most twin-like first; among equals, the ones closest to a real (fee-beating) gap.
-    cands.sort(key=lambda c: (-round(c["match_score"], 1), -c["est_gap_before_fees"]))
+    # Review first the ones that look like twins AND would pay now (text match 0.6+, gap 2c+ before fees), then
+    # the rest by how twin-like they look. Gap alone is a bad guide: the biggest "gaps" are almost all two
+    # different questions (live test 2026-11-09), so the match score still has to vouch for them.
+    min_gap, min_s = r.get("review_first_gap", 0.02), r.get("review_first_score", 0.6)
+    hot = lambda c: c["match_score"] >= min_s and c["est_gap_before_fees"] >= min_gap
+    cands.sort(key=lambda c: (not hot(c), -round(c["match_score"], 1), -c["est_gap_before_fees"]))
     save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
                                  "kalshi_kept": len(K), "matched_unreviewed": len(cands),
+                                 "review_first": sum(hot(c) for c in cands),
                                  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
                                                   "twins into arb_pairs.json (see 'about' there).",
                                  "candidates": cands[: r["max_candidates"]]})
@@ -1964,7 +2039,7 @@ def arb_check_pair(name, tr, pair, r):
     log_event({"type": "arb_open", "track": name, "title": pm.get("question"), "pair": pid,
                "price": round(best["pk"] + best["pp"], 4), "edge": round(best["edge"], 4)})
     if CFG["push"].get("on_arb") and not prev.get("opportunity"):  # one ping per gap, not per lot
-        push(f"[arb] locked {best['edge'] * 100:.1f}c/share",
+        push(f"[arb] locked in {best['edge'] * 100:.1f}c a share",
              f"{pm.get('question')}\nKalshi {best['k_side'].upper()} {cents(best['pk'])} + Polymarket "
              f"{best['p_out']} {cents(best['pp'])}, fees ${best['kf'] + best['pf']:.2f}\n"
              f"{shares:.0f} shares: pays ${shares:.2f} at the end for ${best['cost']:.2f} (paper)",
@@ -2003,7 +2078,7 @@ def arb_settle(tracks):
         if mismatch:
             tr["mismatches"] += 1
             push("[arb] MISMATCH: sites resolved differently",
-                 f"{a['title']}\nKalshi paid {pk:.2f}, Polymarket paid {pp:.2f} per share. P&L ${pnl:+.2f} (paper). "
+                 f"{a['title']}\nKalshi paid ${pk:.2f}, Polymarket paid ${pp:.2f} a share. Result {usd(pnl)} (practice money). "
                  "This is the risk the experiment is measuring.", tags="rotating_light")
 
 
@@ -2041,14 +2116,14 @@ def proof(n, k, e, realized, what="trades", bad="bad outcomes"):
             m += 1
         need = max(m - n, 20 - n, 0)
     if n == 0:
-        verdict = (f"Not proven yet: no finished {what}. At ~{e * 100:.1f}c edge we need about {need} "
-                   f"finished {what} with 0 {bad} to be 90% sure.")
+        verdict = (f"Not proven yet: no finished {what}. Each one earns about {e * 100:.1f}c a share, so it needs about "
+                   f"{need} finished {what} with no {bad} before we can be 90% sure it's not luck.")
     elif proven:
-        verdict = (f"PROVEN at 90%: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. The {bad} rate is "
-                   f"below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
+        verdict = (f"PROVEN: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. That's enough to be 90% sure "
+                   f"the {bad} are too rare to eat the {e * 100:.1f}c a share it earns.")
     else:
-        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit ${realized:+.2f}. Need about "
-                   f"{need} more clean ones to be 90% sure (if no new {bad}).")
+        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit {usd(realized)}. It needs about "
+                   f"{need} more with no {bad} to be 90% sure it's not luck.")
     return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "bad_rate_upper90": round(ub, 4),
             "proven": proven, "more_needed": need, "verdict": verdict}
 
@@ -2235,6 +2310,10 @@ def fullset_check(tracks):
                 shortlist.append(("no", e, live, gap / (n - 1)))
     shortlist.sort(key=lambda x: -x[3])
     print(f"every_horse: {len(shortlist)} sets look cheap on listed prices")
+    near = sorted((v["edge"] for v in tr["seen"].values() if str(v.get("ts", ""))[:10] >= iso(now() - dt.timedelta(days=2))[:10]),
+                  reverse=True)
+    saw(name, f"{len(shortlist)} sets looked cheap on listed prices; none is cheap on the real order book yet"
+              + (f" (closest {near[0] * 100:+.1f}c a share)" if near else "") + ".")
     bought = []
     for kind, e, live, _ in shortlist[:15]:
         if len(bought) >= r["picks_per_scan"] or len(tr["sets"]) >= r["max_open"]:
@@ -2334,7 +2413,7 @@ def sets_settle(tracks, name, tag, why):
         if bad:
             tr["incomplete"] += 1
             push(f"[{tag}] SHORT: paid less than guaranteed",
-                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
+                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. Result {usd(pnl)} (practice money).",
                  tags="rotating_light")
 
 
@@ -2638,7 +2717,13 @@ def ladder_check(tracks, force=False):
     save("scan_state.json", st)
     tr = tracks[name]
     lp = load("ladder_pairs.json", {}).get("list", [])
+    if not lp and not load("ladder_pairs.json", {}).get("generated"):
+        # bug fix: the pair list was only built by the daily job, so a track added after it sat idle until tomorrow
+        print("ladder: no pair list yet; building it now")
+        ladder_discover()
+        lp = load("ladder_pairs.json", {}).get("list", [])
     if not lp:
+        saw(name, "No ladder pairs found in today's markets.")
         return
     fresh = gamma_markets_by_id([p["a"]["mid"] for p in lp] + [p["b"]["mid"] for p in lp])
     print(f"ladder: {len(lp)} pairs, fresh prices for {len(fresh)} markets")
@@ -2658,6 +2743,7 @@ def ladder_check(tracks, force=False):
             short.append((est, p, a, b))
     short.sort(key=lambda x: -x[0])
     print(f"ladder: {len(short)} pairs look cheap on listed prices")
+    saw(name, f"Checked {len(lp)} ladder pairs; {len(short)} looked cheap on listed prices.")
     bought = []
     for est, p, a, b in short[: r["books_per_check"]]:
         if len(bought) >= r["picks_per_check"] or len(tr["sets"]) >= r["max_open"]:
@@ -3060,7 +3146,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3144,7 +3230,7 @@ def run_fast(tracks, force=False):
         return {}
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
-                     ("mentions", mention_candidates)):
+                     ("mentions", mention_candidates), ("quiet", quiet_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3197,6 +3283,60 @@ def mention_candidates(names):
             if r["min_price"] <= prices[i] <= r["max_price"]:
                 cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
         cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+        out[n] = cands
+    return out
+
+
+def week_range(token):
+    """(high - low over the last 7 days, number of points) from the CLOB price history of a token, or None."""
+    try:
+        res = http_json(f"{CLOB}/prices-history", {"market": token, "interval": "1w", "fidelity": 60})
+    except Exception as e:
+        print(f"week history failed for {token[:12]}...: {e}")
+        return None
+    px = []
+    for p in envelope_rows(res, "history", "data"):
+        if isinstance(p, dict):
+            v = fnum(pick(p, "p", "price"), None)
+            if v is not None:
+                px.append(v)
+    if len(px) < 2:
+        return None
+    return max(px) - min(px), len(px)
+
+
+def quiet_candidates(names):
+    """Quiet week, buy NO (idea machine, ideas.py, 2026-11-09): markets ending in 1-3 days whose price moved less than
+    max_week_range over the last 7 days, second answer (No) at min_price-max_price. The only one of 33,823 screened
+    ideas that passed on whole events (backtest/ideas.md). The 7-day range is checked on the first answer's history."""
+    rs = {n: rules_for(n) for n in names}
+    lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs.values()))
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
+    markets = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi),
+                            "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
+    out = {}
+    for n, r in rs.items():
+        short = []
+        for m in markets:
+            prices = binary(m)
+            b = base_filter(m, r) if prices else None
+            if not b or len(prices) != 2:
+                continue
+            q = str(m.get("question") or "").lower()
+            if any(w in q for w in r.get("skip_words", [])):
+                continue
+            i = 1  # second answer, as screened
+            if r["min_price"] <= prices[i] <= r["max_price"]:
+                short.append((m, i, b))
+        short.sort(key=lambda x: -x[2][1])  # most liquid first: the history check costs a call each
+        cands = []
+        for m, i, b in short[: r.get("max_history_checks", 40)]:
+            wr = week_range(market_tokens(m)[0])
+            if not wr or wr[0] >= r["max_week_range"]:
+                continue
+            cands.append(candidate(m, i, b[0], b[1], {"signal": f"moved {wr[0] * 100:.1f}c this week"}))
+        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))
+        print(f"quiet {n}: {len(short)} in the price band, {len(cands)} quiet")
         out[n] = cands
     return out
 
@@ -3887,6 +4027,13 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
                     b["v"] = cfg["v"]
                 b["cfg_ts"] = t_now
         bk = maker_book(b["yes_tok"])
+        if (m is None or bk is None) and b.get("misses", 0) < 6:
+            # bug fix: one failed market/book lookup (an API blip) used to close the book as "market left the list".
+            # Skip it this run instead; last_ts stays, so the next run catches up on fills. 6 misses in a row = gone.
+            b["misses"] = b.get("misses", 0) + 1
+            why(name, "market or order book lookup failed; retrying next run")
+            continue
+        b["misses"] = 0
         sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
         q = b.get("q") or {}
         elapsed = max(0.0, t_now - b["last_ts"])
@@ -4004,6 +4151,7 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
                        "reason": f"pool ${c['rate']:.0f}/day, est. ${c['per_day']:.2f}/day for us"})
     tr["peak_open_cost"] = round(max(tr["peak_open_cost"], maker_locked(tr) + sum(
         b["yes_cost"] + b["no_cost"] for b in tr["books"].values())), 6)
+    saw(name, f"Quoting in {len(tr['books'])} markets; {tr['fills']} fills and ${tr['rewards']:.2f} rewards so far.")
 
 
 def maker_summary(name, tr):
@@ -4103,6 +4251,22 @@ def trust(tr, n_tracks=None, size="rank"):
     proven = n >= rk.get("min_trades_proven", 30) and worst > 0
     return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
             "worst_per_100": round(worst * 100, 2), "proven": proven}
+
+
+def plain_verdict(t, control=False, few=10):
+    """One plain-words verdict per strategy, from its trust numbers (wording only, no new math).
+    Returns (key, text): key is good / maybe / bad / early / luck, used for colors on the dashboard."""
+    if control:
+        return "luck", "Random buyer (shows what luck looks like)"
+    if t["finished"] < few:
+        return "early", f"Too early to tell ({t['finished']} finished, need {few}+)"
+    if t["proven"]:
+        return "good", "Looks real"
+    if t["worst_per_100"] > 0:
+        return "good", "Promising, needs more bets"
+    if t["avg_per_100"] < 0:
+        return "bad", "Losing"
+    return "maybe", "Ahead, but could be luck"
 
 
 def usd(x):
@@ -4411,6 +4575,7 @@ def watch():
     except Exception as e:
         print(f"late fill check failed: {e}")
     integrity_run(tracks)
+    stamp_status(tracks)
     save("tracks.json", tracks)
     try:
         refresh_top(tracks)
@@ -4468,6 +4633,7 @@ def daily(force=None):
     except Exception as e:
         print(f"late fill check failed: {e}")
     integrity_run(tracks, deep=True)
+    stamp_status(tracks)
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()
@@ -4667,18 +4833,19 @@ def push_scoreboard(stats):
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
     top = save_top(stats)
-    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
+    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead after 3+ finished bets so far."]
     for i, name in enumerate(top, 1):
         s, t = stats[name], stats[name]["trust"]
-        lines.append(f"{i}. {name}{' PROVEN' if t['proven'] else ''}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}) | "
-                     f"{t['finished']} done | worst case {usd(t['worst_per_100'])[:-3]} per $100")
+        lines.append(f"{i}. {name}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}), {t['finished']} finished. "
+                     f"{plain_verdict(t, name.startswith('control_'))[1].split(' (')[0]}"
+                     + (f", worst case {usd(t['worst_per_100'])[:-3]} per $100" if t["finished"] >= 10 else ""))
     if rs_rank_size():
-        lines.append(f"(ranked on what ${rs_rank_size()} a trade would really have done)")
+        lines.append(f"(ranked on what a real ${rs_rank_size()} bet would have made)")
     best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)
     if best and best not in top and stats[best].get("today", 0) > 0:
         lines.append(f"Best day (probably luck): {best} +${stats[best]['today']:.2f}")
     proven = sum(1 for x in stats.values() if x["trust"]["proven"])
-    lines.append(f"{len(stats)} strategies tracked, {proven} proven. Full ranking in summary.md")
+    lines.append(f"{len(stats)} strategies tracked, {proven} clearly work so far. Dashboard has the rest.")
     push("Paper top 10", "\n".join(lines), tags="bar_chart")
 
 
