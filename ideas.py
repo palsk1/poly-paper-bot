@@ -708,6 +708,44 @@ def volbias():
             a[1] += ps
             a[2] += wins
             a[3] += n
+    # Part 2, for any kind of market (also not-one-winner events like "will X say Y"): per market, YES price 1 day
+    # before the end vs how often YES won, in the main cache (final volume > $20k) and in the small sample below it.
+    # If the cut bends results, the two rows of a topic differ. Also NO's return at +2c, per event, as mention_no buys.
+    small = bt.rjson(os.path.join(bt.CACHE, "small_markets.json.gz"), {}) or {}
+    shist = bt.rjson(os.path.join(bt.CACHE, "small_hist.json.gz"), {}) or {}
+    small = {k: m for k, m in in_sample(small).items() if k not in markets_all and not m.get("sports")}
+    print("| topic | data | markets | events | YES prices added up | YES won | won / expected | NO 25-90c, +2c, per $100 (events) |")
+    print("|---|---|---|---|---|---|---|---|")
+    for src, mks, hh in (("main (>$20k)", markets, hist), ("small ($1k-20k)", small, shist)):
+        agg = defaultdict(lambda: [0, set(), 0.0, 0, defaultdict(list)])
+        for m in mks.values():
+            y = calib.outcome0(m)
+            h = hh.get(m["id"])
+            if y is None or not h or not h[0]:
+                continue
+            for hz in (1, 3, 7):
+                t = m["end"] - hz * DAY
+                T, P = h
+                k = bisect.bisect_right(T, t) - 1
+                if k < 0 or t - T[k] > 3 * DAY or (m.get("closed_t") and t >= m["closed_t"]) or not 0.02 <= P[k] <= 0.98:
+                    continue
+                a = agg[calib.topic(m["q"])]
+                if hz == 1:
+                    a[0] += 1
+                    a[1].add(m.get("ev") or m["id"])
+                    a[2] += P[k]
+                    a[3] += y
+                if hz <= 7 and 0.25 <= 1 - P[k] < 0.90:
+                    a[4][m.get("ev") or m["id"]].append(roi(1 - P[k], 1 - y, m.get("fee", 0), SLIP))
+                break  # first horizon that has a price = "first time within 7 days", one entry per market
+        for tp in sorted(agg):
+            n, evs, ps, w, no = agg[tp]
+            if n < 30:
+                continue
+            em = [sum(v) / len(v) for v in no.values()]
+            nr = f"{m100(sum(em) / len(em))} ({len(em)})" if em else "-"
+            print(f"| {tp} | {src} | {n} | {len(evs)} | {ps:.0f} | {w} | {w / max(ps, 1e-9):.2f} | {nr} |")
+    print()
     print("| topic | markets we have per event | events | avg markets | YES prices added up (expected wins) | real wins | wins / expected |")
     print("|---|---|---|---|---|---|---|")
     for key in sorted(g):
