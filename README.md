@@ -18,6 +18,7 @@
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
+| `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -133,6 +134,18 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 ## Fade the sure thing (added 2026-11-08)
 
 The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. Backtest (`backtest/fade.md`, 2026-11-08): weather 2,103 bets, the cheap side won 350 times at about 6c each, +$121 per $100 staked at +1c slippage, +$73 at +3c, about the same in the older and newer half. Crypto-price and post-count buckets came out about even, so the track is weather only. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
+
+## Sharp bookie price (added 2026-11-09, `sharp.py`)
+
+Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.
+
+- **Source:** Pinnacle, the sharpest big bookie. Its official API closed to the public in July 2025, but its website reads odds from a public JSON feed (`guest.api.arcadia.pinnacle.com`, no key, no account), which works from GitHub Actions. The bot reads it every 15 minutes, a few calls per sport. Paid alternatives if it ever breaks: The Odds API (free 500 calls a month, Pinnacle "may be delayed"), OddsPapi (free 250 a month, has history), pinnodds.
+- **Removing the margin:** a bookie's chances add up to a bit more than 100 per 100 (Pinnacle about 2-4 extra on a game). We take it out two ways (scale everything down evenly, or the "power" way that trims longshots more) and always use the one that is worse for the side we buy.
+- **Matching:** Polymarket game events (moneyline markets) to Pinnacle matchups by start time (within 75 minutes) and both team names (`sharp.name_score`). Soccer has home/draw/away; Polymarket's "Will X win?" / "draw?" Yes and No shares are both priced. In-play games are skipped. Tennis is left out (retirement rules differ).
+- **Rule:** buy 5 shares when (fair chance) minus (real ask for 5 shares) minus (fee) is at least 3c, and at most 15c (a bigger gap usually means wrong match or late news). Pinnacle's max bet on the game must be at least $250 (low limits mean a soft line). One bet per game, held to the result. Fills are real order-book fills like every other track.
+- **First live look (2026-11-09, `probe sharp_scan`):** 72 games matched (27 soccer, 19 esports, 13 basketball, 12 hockey, 1 NFL), 252 buyable sides. Polymarket's listed asks sat a median 1.3c ABOVE Pinnacle's fair price in every sport, and only 1 side was even 1c cheaper after the fee (0 at 3c). That fits what traders report: the big market makers on Polymarket and Kalshi copy Pinnacle within a second. So expect very few trades; the track measures how often a slow bot still catches a gap.
+- **Backtest:** `python3 sharp.py bt` (probe input `sharp_bt`) replays the rule on finished Polymarket soccer games in the top 5 European leagues against Betfair Exchange closing odds from football-data.co.uk (free; Pinnacle's columns there went blank in July 2025). Results: `backtest/sharp.md`.
+- **Probe inputs:** `sharp_scan` (live gaps, no trades), `sharp_bt`, `sharp_probe*` (raw API shapes), `fasttest` (dry run of all fast tracks incl. this one).
 
 ## Maker: get paid to quote (added 2026-11-08)
 
