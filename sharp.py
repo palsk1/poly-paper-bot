@@ -388,11 +388,11 @@ def sharp_candidates(names):
     return out
 
 
-def scan():
+def scan(hours=36):
     """Live look, no trades: how close Polymarket's listed asks sit to Pinnacle's fair price."""
     board = pinnacle_board()
-    games = poly_games(36)
-    print(f"Pinnacle pre-game moneylines: {len(board)} | Polymarket games starting within 36h: {len(games)}")
+    games = poly_games(hours)
+    print(f"Pinnacle pre-game moneylines: {len(board)} | Polymarket games starting within {hours}h: {len(games)}")
     by_sport, rows, unmatched = {}, [], []
     for g in games:
         b, amap = match_game(g, board)
@@ -418,6 +418,18 @@ def scan():
         print(f"  {sp:10s} n={len(rr):4d} median {stx.median(gaps) * 100:+.1f}c, "
               f"edge>=1c: {sum(r['edge'] >= 0.01 for r in rr)}, >=3c: {sum(r['edge'] >= 0.03 for r in rr)}, "
               f">=5c: {sum(r['edge'] >= 0.05 for r in rr)}")
+    for lo, hi in ((0, 3), (3, 12), (12, 24), (24, 48), (48, 96)):
+        rr = [r for r in rows if lo <= r["hrs"] < hi]
+        if rr:
+            gaps = [r["ask"] - r["fair"] for r in rr]
+            print(f"  starts in {lo:2d}-{hi:2d}h: n={len(rr):4d} median {stx.median(gaps) * 100:+.1f}c, "
+                  f"edge>=1c: {sum(r['edge'] >= 0.01 for r in rr)}, >=3c: {sum(r['edge'] >= 0.03 for r in rr)}")
+    for lo, hi in ((0, 300), (300, 1000), (1000, 10 ** 9)):
+        rr = [r for r in rows if lo <= r["limit"] < hi]
+        if rr:
+            gaps = [r["ask"] - r["fair"] for r in rr]
+            print(f"  Pinnacle limit ${lo}-{hi}: n={len(rr):4d} median {stx.median(gaps) * 100:+.1f}c, "
+                  f"edge>=1c: {sum(r['edge'] >= 0.01 for r in rr)}, >=3c: {sum(r['edge'] >= 0.03 for r in rr)}")
     print("\nPinnacle limit (max bet $) on matched games:", sorted(stx.quantiles([r["limit"] for r in rows], n=4)))
     print("\nbest 40 sides by edge after the fee (listed ask; real fills come from the book):")
     for r in sorted(rows, key=lambda r: -r["edge"])[:40]:
@@ -649,4 +661,4 @@ def bt():
 
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "selftest": selftest, "bt": bt}[what]()
+    {"probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "scan96": lambda: scan(96), "selftest": selftest, "bt": bt}[what]()
