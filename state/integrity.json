@@ -1,9 +1,16 @@
 {
- "alerted": {},
- "checked": "2026-11-09T12:16:34Z",
+ "alerted": {
+  "both_sides:consensus_3": "2026-11-09T12:21:46Z"
+ },
+ "checked": "2026-11-09T12:21:46Z",
  "deep_checked": null,
  "deep_problems": [],
  "problems": [
+  {
+   "key": "both_sides",
+   "track": "consensus_3",
+   "what": "holds both sides of 1 market(s), e.g. us-announces-end-of-iranian-blockade-by-november-1"
+  },
   {
    "key": "maker_rewards_high",
    "track": "maker",
