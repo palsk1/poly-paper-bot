@@ -112,5 +112,76 @@ def peek():
             bot.http_json(f"{K}/markets/trades", {"ticker": m["ticker"], "min_ts": o, "max_ts": o + 3 * 3600, "limit": 1000})), 1500)
 
 
+def peek2():
+    now = int(time.time())
+    lo = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
+    r = bot.http_json(f"{G}/markets/keyset", {"closed": "true", "limit": 500, "start_date_min": bot.iso(lo),
+                                              "start_date_max": bot.iso(lo + dt.timedelta(days=1))})
+    print("keyset keys:", list(r.keys()) if isinstance(r, dict) else type(r), "rows", len(bot.envelope_rows(r, "markets", "data")),
+          "cursor", str(r.get("next_cursor"))[:40] if isinstance(r, dict) else None)
+    n, cur, pages = 0, None, 0
+    qs = []
+    while pages < 80:
+        p = {"closed": "true", "limit": 500, "start_date_min": bot.iso(lo), "start_date_max": bot.iso(lo + dt.timedelta(days=1))}
+        if cur:
+            p["after_cursor"] = cur
+        r = bot.http_json(f"{G}/markets/keyset", p)
+        rows = bot.envelope_rows(r, "markets", "data")
+        n += len(rows)
+        pages += 1
+        qs += [str(m.get("question")) for m in rows]
+        cur = r.get("next_cursor")
+        if not cur or not rows:
+            break
+    print(f"one day by start: {n} markets in {pages} pages")
+    import random
+    random.seed(1)
+    for q in random.sample(qs, min(60, len(qs))):
+        print("  ", q[:90])
+    res = bot.http_json(f"{D}/v2/trades", {"condition_id": "0x6c78c989142c1d38f72780a3fbccef82b95d36e982aeb323f797d0f5c0ef777c", "limit": 500})
+    print("trades pagination:", res.get("pagination"), "rows", len(res.get("data") or []))
+    pg = res.get("pagination") or {}
+    for k in ("next_cursor", "cursor", "nextCursor", "next"):
+        if pg.get(k):
+            r2 = bot.http_json(f"{D}/v2/trades", {"condition_id": "0x6c78c989142c1d38f72780a3fbccef82b95d36e982aeb323f797d0f5c0ef777c",
+                                                  "limit": 500, "cursor": pg[k]})
+            print("page2 via cursor:", r2.get("pagination"), len(r2.get("data") or []),
+                  (r2.get("data") or [{}])[-1].get("timestamp"))
+    for f in ("exclude", None):
+        p = {"status": "settled", "min_close_ts": now - 3 * DAY, "max_close_ts": now - 2 * DAY, "limit": 1000}
+        if f:
+            p["mve_filter"] = f
+        try:
+            r = bot.http_json(f"{K}/markets", p)
+            ms = r.get("markets") or []
+            print(f"kalshi mve_filter={f}: {len(ms)} rows, non-combo {sum(1 for m in ms if not m['ticker'].startswith('KXMVE'))}")
+            if f:
+                import collections
+                print("  series:", collections.Counter(m["event_ticker"].split("-")[0] for m in ms).most_common(25))
+                kms = ms
+        except Exception as e:
+            print("kalshi failed", f, e)
+    ms = [m for m in kms if not m["ticker"].startswith("KXMVE")]
+    ms.sort(key=lambda m: -bot.fnum(m.get("volume_fp") or m.get("volume"), 0))
+    for m in ms[5:7] + ms[len(ms) // 3:len(ms) // 3 + 1]:
+        o = int(bot.parse_iso(m.get("open_time")).timestamp())
+        ser = m.get("series_ticker") or m["event_ticker"].split("-")[0]
+        print("\nkalshi:", m["ticker"], m.get("title"), "open", m.get("open_time"), "close", m.get("close_time"), "vol", m.get("volume_fp"))
+        show("candles", lambda: (lambda r: (r.get("candlesticks") or [])[:3])(
+            bot.http_json(f"{K}/series/{ser}/markets/{m['ticker']}/candlesticks", {"start_ts": o, "end_ts": o + 3 * 3600, "period_interval": 1})), 2500)
+        show("trades", lambda: (lambda r: [(t.get("created_time"), t.get("yes_price_dollars") or t.get("yes_price"), t.get("count_fp") or t.get("count"), t.get("taker_side"))
+                                           for t in (r.get("trades") or [])][-8:])(
+            bot.http_json(f"{K}/markets/trades", {"ticker": m["ticker"], "min_ts": o, "max_ts": o + 3 * 3600, "limit": 1000})), 1200)
+    # live: book of the newest non-crypto listings
+    rows = bot.envelope_rows(bot.http_json(f"{G}/markets", {"limit": 100, "order": "createdAt", "ascending": "false", "closed": "false"}), "markets")
+    print("\nnewest 100 listings age (min):", [round((now - bot.parse_iso(m.get("createdAt")).timestamp()) / 60) for m in rows][::10])
+    for m in [m for m in rows if "Up or Down" not in str(m.get("question"))][:6]:
+        tok = bot.market_tokens(m)[0]
+        b = bot.http_json(f"{C}/book", {"token_id": tok})
+        bids = sorted(((float(x["price"]), float(x["size"])) for x in b.get("bids") or []), reverse=True)[:4]
+        asks = sorted((float(x["price"]), float(x["size"])) for x in b.get("asks") or [])[:4]
+        print(m.get("question")[:70], "| age min", round((now - bot.parse_iso(m.get("createdAt")).timestamp()) / 60), "| bids", bids, "| asks", asks)
+
+
 if __name__ == "__main__":
-    {"peek": peek}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
