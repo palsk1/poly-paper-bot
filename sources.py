@@ -144,4 +144,49 @@ def mapping():
 
 if __name__ == "__main__":
     mode = (sys.argv[1] if len(sys.argv) > 1 else "map")
-    {"map": mapping}[mode]()
+    {"map": mapping, "kdaily": kdaily, "precur": precurring}[mode]()
+
+
+def kdaily():
+    """Kalshi series that repeat often (hourly/daily/weekly), by settle source, with lifetime volume."""
+    ser = kalshi_series()
+    agg = collections.defaultdict(lambda: {"vol": 0.0, "n": 0, "ex": []})
+    for s in ser:
+        fr = s.get("frequency")
+        if fr not in ("hourly", "daily", "weekly", "fifteen_min", "15min", "minutely"):
+            continue
+        names = [(x.get("name") or "") + " " + (x.get("url") or "") for x in (s.get("settlement_sources") or [])]
+        ds = domains(" ".join(names)) or [x.strip().lower()[:40] for x in names if x.strip()] or ["(none)"]
+        k = (ds[0], fr)
+        a = agg[k]
+        v = f(s.get("volume_fp") or s.get("volume"))
+        a["vol"] += v
+        a["n"] += 1
+        a["ex"].append((v, s.get("ticker"), str(s.get("title"))[:35]))
+    print(f"{'source':34s} {'freq':8s} {'series':>6s} {'volume':>14s}  top series")
+    for (d, fr), a in sorted(agg.items(), key=lambda kv: -kv[1]["vol"])[:80]:
+        top = sorted(a["ex"], reverse=True)[:4]
+        print(f"{d[:34]:34s} {str(fr):8s} {a['n']:6d} {a['vol']:14.0f}  " + " | ".join(f"{t}:{ti}({v:.0f})" for v, t, ti in top))
+
+
+def precurring():
+    """Polymarket events that belong to a repeating series, by series, with 24h volume and settle source."""
+    evs = poly_events()
+    agg = collections.defaultdict(lambda: {"n": 0, "vol24": 0.0, "src": collections.Counter(), "ex": ""})
+    for e in evs:
+        ss = e.get("series") or []
+        if not ss:
+            continue
+        s = ss[0] if isinstance(ss, list) else ss
+        k = (s.get("slug") or s.get("title") or "?", s.get("recurrence") or "")
+        a = agg[k]
+        a["n"] += 1
+        a["vol24"] += f(e.get("volume24hr"))
+        text = str(e.get("resolutionSource") or "") + " " + str(e.get("description") or "")
+        for d in domains(text)[:1]:
+            a["src"][d] += 1
+        a["ex"] = a["ex"] or str(e.get("title"))[:50]
+    print(f"{'series':40s} {'recur':8s} {'events':>6s} {'vol24h$':>10s}  source | example")
+    for (sl, rc), a in sorted(agg.items(), key=lambda kv: -kv[1]["vol24"])[:120]:
+        src = a["src"].most_common(1)[0][0] if a["src"] else "-"
+        print(f"{sl[:40]:40s} {rc[:8]:8s} {a['n']:6d} {a['vol24']:10.0f}  {src} | {a['ex']}")
