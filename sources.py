@@ -580,11 +580,11 @@ def gaspages():
             print("  time:", m.group(0)[:120])
 
 
-MODES = {"gaspages": gaspages, "eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
+MODES = {"livegas": gaspages, "eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
-    if a.startswith("gas"):
+    if a == "gas" or a.startswith("gas_"):
         gas(a[4:])
     elif a.startswith("ks_"):
         kseries(a[3:])
