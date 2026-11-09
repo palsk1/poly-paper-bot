@@ -179,127 +179,145 @@
     "annual": -0.004,
     "edge": -0.0006,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:42Z"
+    "ts": "2026-11-09T07:31:08Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.119,
     "edge": 0.018,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:43Z"
+    "ts": "2026-11-09T07:31:09Z"
+   },
+   "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
+    "annual": 0.056,
+    "edge": 0.0086,
+    "opportunity": false,
+    "ts": "2026-11-09T07:31:09Z"
+   },
+   "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
+    "annual": -0.024,
+    "edge": -0.0037,
+    "opportunity": false,
+    "ts": "2026-11-09T07:31:10Z"
+   },
+   "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
+    "annual": 0.014,
+    "edge": 0.0021,
+    "opportunity": false,
+    "ts": "2026-11-09T07:31:10Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.045,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:43Z"
+    "ts": "2026-11-09T07:31:08Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.009,
     "edge": 0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:28Z"
+    "ts": "2026-11-09T07:30:56Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
-    "annual": -0.153,
-    "edge": -0.024,
+    "annual": -0.217,
+    "edge": -0.0344,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:41Z"
+    "ts": "2026-11-09T07:31:07Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.114,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:38Z"
+    "ts": "2026-11-09T07:31:04Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.139,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:31Z"
+    "ts": "2026-11-09T07:30:58Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": 0.03,
     "edge": 0.0045,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:34Z"
+    "ts": "2026-11-09T07:31:01Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:29Z"
+    "ts": "2026-11-09T07:30:57Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.069,
     "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:40Z"
+    "ts": "2026-11-09T07:31:06Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": 0.01,
     "edge": 0.0016,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:30Z"
+    "ts": "2026-11-09T07:30:57Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:37Z"
+    "ts": "2026-11-09T07:31:03Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:38Z"
+    "ts": "2026-11-09T07:31:04Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:36Z"
+    "ts": "2026-11-09T07:31:02Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.096,
     "edge": -0.0149,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:39Z"
+    "ts": "2026-11-09T07:31:05Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:33Z"
+    "ts": "2026-11-09T07:31:00Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:31Z"
+    "ts": "2026-11-09T07:30:59Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.158,
     "edge": -0.0247,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:41Z"
+    "ts": "2026-11-09T07:31:06Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.172,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:34Z"
+    "ts": "2026-11-09T07:31:01Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.032,
     "edge": -0.0049,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:35Z"
+    "ts": "2026-11-09T07:31:02Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.13,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-09T07:25:32Z"
+    "ts": "2026-11-09T07:30:59Z"
    }
   },
   "min_cash": 0.0,
@@ -49963,11 +49981,11 @@
     "event_slug": "next-muse-spark-1pt4-released-byptptpt",
     "fee_rate": 0.04,
     "fills": 0,
-    "last_ts": 1794209185.3706079,
+    "last_ts": 1794209522.4691544,
     "merged_pnl": 0.0,
     "mid": 0.33999999999999997,
     "min_size": 50.0,
-    "minutes": 803.4278235634164,
+    "minutes": 809.0461326718327,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "102711183723971553014446089198171554075948362164960607882172198841105260477579",
@@ -49983,7 +50001,7 @@
      }
     },
     "rate": 50.0,
-    "rewards": 6.45404678523603,
+    "rewards": 6.4828356209324625,
     "size": 50.0,
     "slug": "next-muse-spark-1pt4-released-by-december-31-2026",
     "title": "Next Muse Spark (1.4+) released by December 31, 2026?",
@@ -49999,11 +50017,11 @@
     "event_slug": "second-best-ai-agent-lab-end-of-november",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794209185.3706079,
+    "last_ts": 1794209522.4691544,
     "merged_pnl": 0.0,
     "mid": 0.29500000000000004,
     "min_size": 20.0,
-    "minutes": 803.4278235634164,
+    "minutes": 809.0461326718327,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "57578799226333514029600121405127999797167672358214792171105979303153501104898",
@@ -50019,7 +50037,7 @@
      }
     },
     "rate": 80.0,
-    "rewards": 12.613079859897784,
+    "rewards": 12.664762115606463,
     "size": 50,
     "slug": "will-openai-be-the-second-best-ai-agent-lab-at-the-end-of-november-2026",
     "title": "Will OpenAI be the second-best AI Agent Lab at the end of November 2026?",
@@ -50035,11 +50053,11 @@
     "event_slug": "next-muse-spark-model-1pt4-released-onptptpt",
     "fee_rate": 0.04,
     "fills": 10,
-    "last_ts": 1794209185.3706079,
+    "last_ts": 1794209522.4691544,
     "merged_pnl": -19.25,
     "mid": 0.69,
     "min_size": 20.0,
-    "minutes": 803.4278235634164,
+    "minutes": 809.0461326718327,
     "no": 100.0,
     "no_cost": 35.75,
     "no_tok": "930240453980728514582345056527710676387794047069932511128144020003604546411",
@@ -50052,7 +50070,7 @@
      }
     },
     "rate": 119.0,
-    "rewards": 3.922242088052395,
+    "rewards": 3.9430392725763785,
     "size": 50,
     "slug": "will-there-be-no-next-meta-muse-spark-model-release-by-november-30-2026",
     "title": "Will there be no next Meta Muse Spark model release by November 30, 2026?",
@@ -50068,11 +50086,11 @@
     "event_slug": "which-companies-will-have-a-1-ai-model-by-december-31",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794209185.3706079,
+    "last_ts": 1794209522.4691544,
     "merged_pnl": 0.0,
     "mid": 0.345,
     "min_size": 20.0,
-    "minutes": 803.4278235634164,
+    "minutes": 809.0461326718327,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "3351280184394629167493284830212813001116956262089727901595103690299967605966",
@@ -50088,7 +50106,7 @@
      }
     },
     "rate": 40.0,
-    "rewards": 4.69926109983623,
+    "rewards": 4.779370679211589,
     "size": 50,
     "slug": "will-anthropic-have-a-1-ai-model-by-december-31-2026",
     "title": "Will Anthropic have a #1 AI model by December 31, 2026?",
@@ -50098,7 +50116,7 @@
     "yes_tok": "39151630359758158771259377340938128482300804394191692685363363632091865533103"
    }
   },
-  "cash": 135.688627,
+  "cash": 135.870005,
   "closed": [],
   "created": "2026-11-08T18:00:56Z",
   "deposited": 200.0,
@@ -50108,9 +50126,9 @@
   "min_cash": 0.0,
   "peak_open_cost": 247.25,
   "positions": {},
-  "realized": 8.438627,
+  "realized": 8.620005,
   "refills": 0,
-  "rewards": 27.688627,
+  "rewards": 27.870005,
   "skipped_no_cash": 0,
   "start_cash": 200,
   "unlimited": false
@@ -53994,17 +54012,107 @@
   "unlimited": true
  },
  "w_jjo": {
-  "cash": -4.35,
+  "cash": -6.168008,
   "closed": [],
   "created": "2026-11-08T15:15:28Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 0
+   "n": 2
   },
   "deposited": 0.0,
-  "min_cash": -4.35,
-  "peak_open_cost": 4.35,
+  "min_cash": -6.168008,
+  "peak_open_cost": 6.168008,
   "positions": {
+   "110102705199530588976777616718115948005824665233400132417374621750887344831757": {
+    "end": "2028-11-08",
+    "entry": 0.174,
+    "entry_fee": 0.028745,
+    "event_slug": "presidential-election-winner-2028",
+    "late": {
+     "px": 0.174,
+     "s": 95
+    },
+    "opened": "2026-11-09T07:30:53Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       57.471,
+       10.3304,
+       true
+      ],
+      "100": [
+       574.713,
+       103.304,
+       true
+      ],
+      "25": [
+       143.678,
+       25.826,
+       true
+      ],
+      "50": [
+       287.356,
+       51.652,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-jon-ossoff-win-the-2028-us-presidential-election",
+    "source": "w_jjo",
+    "their_avg": 0.4999,
+    "their_size": 60000.01,
+    "title": "Will Jon Ossoff win the 2028 US Presidential Election?"
+   },
+   "16040015440196279900485035793550429453516625694844857319147506590755961451627": {
+    "end": "2028-11-08",
+    "entry": 0.178,
+    "entry_fee": 0.029263,
+    "event_slug": "presidential-election-winner-2028",
+    "late": {
+     "px": 0.178,
+     "s": 95
+    },
+    "opened": "2026-11-09T07:30:53Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       56.18,
+       10.3288,
+       true
+      ],
+      "100": [
+       561.798,
+       103.288,
+       true
+      ],
+      "25": [
+       140.449,
+       25.822,
+       true
+      ],
+      "50": [
+       280.899,
+       51.644,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-jd-vance-win-the-2028-us-presidential-election",
+    "source": "w_jjo",
+    "their_avg": 0.4999,
+    "their_size": 60000.01,
+    "title": "Will JD Vance win the 2028 US Presidential Election?"
+   },
    "1910830010387565971650098373488592514702818137344973088263643820608151819241": {
     "end": "2027-01-01",
     "entry": 0.87,
@@ -54053,6 +54161,7 @@
   },
   "realized": 0.0,
   "refills": 0,
+  "skipped_chase": 2,
   "skipped_no_cash": 0,
   "start_cash": null,
   "unlimited": true
@@ -55009,7 +55118,7 @@
   "unlimited": true
  },
  "w_tokor": {
-  "cash": -16.796269,
+  "cash": -17.327769,
   "closed": [
    {
     "closed_at": "2026-11-08T22:10:30Z",
@@ -55393,7 +55502,7 @@
   "created": "2026-11-08T15:15:28Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 3
+   "n": 4
   },
   "deposited": 0.0,
   "min_cash": -33.962268,
@@ -55439,6 +55548,51 @@
     "their_avg": 0.87,
     "their_size": 130.0,
     "title": "Will the price of Ethereum be between $2,000 and $2,100 on November 13?"
+   },
+   "115462087336983275104521488923966022755348986822352694745153736621832003960847": {
+    "end": "2027-01-01",
+    "entry": 0.1,
+    "entry_fee": 0.0315,
+    "event_slug": "what-price-will-bitcoin-hit-before-2027",
+    "late": {
+     "px": 0.1,
+     "s": 96
+    },
+    "opened": "2026-11-09T07:30:52Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       100.0,
+       10.63,
+       true
+      ],
+      "100": [
+       1000.0,
+       106.3,
+       true
+      ],
+      "25": [
+       250.0,
+       26.575,
+       true
+      ],
+      "50": [
+       500.0,
+       53.15,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-bitcoin-dip-to-55000-by-december-31-2026-527-627-868-745-188-361-314-673-612-946-821-624-855-557-684-381-884-939-182-939-516",
+    "source": "w_tokor",
+    "their_avg": 0.0899,
+    "their_size": 7338.65,
+    "title": "Will Bitcoin dip to $55,000 by December 31, 2026?"
    },
    "47881698036032339889971110259984139503005801199770749622002349764741983443110": {
     "end": "2026-11-12",
@@ -71738,16 +71892,16 @@
    "6961475455101064",
    "3384874929102170"
   ],
-  "cash": -54.01986,
+  "cash": -55.837868,
   "closed": [],
   "created": "2026-11-08T18:40:25Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 0
+   "n": 2
   },
   "deposited": 0.0,
-  "min_cash": -54.01986,
-  "peak_open_cost": 54.01986,
+  "min_cash": -55.837868,
+  "peak_open_cost": 55.837868,
   "positions": {
    "10127954609132392083705707240208084573872164908801954773912779163086022872767": {
     "backfill": true,
@@ -71832,6 +71986,51 @@
     "their_avg": 0.871,
     "their_size": 1000.0,
     "title": "Weed rescheduled by December 31?"
+   },
+   "110102705199530588976777616718115948005824665233400132417374621750887344831757": {
+    "end": "2028-11-08",
+    "entry": 0.174,
+    "entry_fee": 0.028745,
+    "event_slug": "presidential-election-winner-2028",
+    "late": {
+     "px": 0.174,
+     "s": 94
+    },
+    "opened": "2026-11-09T07:30:54Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       57.471,
+       10.3304,
+       true
+      ],
+      "100": [
+       574.713,
+       103.304,
+       true
+      ],
+      "25": [
+       143.678,
+       25.826,
+       true
+      ],
+      "50": [
+       287.356,
+       51.652,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-jon-ossoff-win-the-2028-us-presidential-election",
+    "source": "wb_jjo",
+    "their_avg": 0.4999,
+    "their_size": 60000.01,
+    "title": "Will Jon Ossoff win the 2028 US Presidential Election?"
    },
    "111988618077786263362718284278451225707405623288593888751575373086664059387290": {
     "backfill": true,
@@ -71958,6 +72157,51 @@
     "their_avg": 0.409,
     "their_size": 3483.87,
     "title": "Netanyahu out by end of 2026?"
+   },
+   "16040015440196279900485035793550429453516625694844857319147506590755961451627": {
+    "end": "2028-11-08",
+    "entry": 0.178,
+    "entry_fee": 0.029263,
+    "event_slug": "presidential-election-winner-2028",
+    "late": {
+     "px": 0.178,
+     "s": 94
+    },
+    "opened": "2026-11-09T07:30:53Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       56.18,
+       10.3288,
+       true
+      ],
+      "100": [
+       561.798,
+       103.288,
+       true
+      ],
+      "25": [
+       140.449,
+       25.822,
+       true
+      ],
+      "50": [
+       280.899,
+       51.644,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-jd-vance-win-the-2028-us-presidential-election",
+    "source": "wb_jjo",
+    "their_avg": 0.4999,
+    "their_size": 60000.01,
+    "title": "Will JD Vance win the 2028 US Presidential Election?"
    },
    "1910830010387565971650098373488592514702818137344973088263643820608151819241": {
     "end": "2027-01-01",
@@ -72385,6 +72629,7 @@
   },
   "realized": 0.0,
   "refills": 0,
+  "skipped_chase": 2,
   "skipped_no_cash": 0,
   "start_cash": null,
   "unlimited": true
@@ -78686,7 +78931,7 @@
    "1076831078702528",
    "4635622153059016"
   ],
-  "cash": -84.911913,
+  "cash": -80.974913,
   "closed": [
    {
     "backfill": true,
@@ -79114,12 +79359,82 @@
     "their_size": 200.0,
     "title": "Will the price of Ethereum be above $2,300 on November 9?",
     "token": "95724507142576655390349043088322139421729021624430736623845895523290912788620"
+   },
+   {
+    "backfill": true,
+    "closed_at": "2026-11-09T07:30:53Z",
+    "end": "2027-01-01",
+    "entry": 0.91,
+    "entry_fee": 0.028665,
+    "event_slug": "what-price-will-bitcoin-hit-before-2027",
+    "exit": 0.9,
+    "exit_fee": 0.0315,
+    "opened": "2026-11-08T18:40:32Z",
+    "outcome": "No",
+    "pnl": -0.110165,
+    "price_source": "book",
+    "reason": "wallet exit (book)",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       10.989,
+       10.063,
+       true
+      ],
+      "100": [
+       109.89,
+       100.63,
+       true
+      ],
+      "25": [
+       27.473,
+       25.1575,
+       true
+      ],
+      "50": [
+       54.945,
+       50.315,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.063,
+      -0.2421,
+      true
+     ],
+     "100": [
+      100.63,
+      -2.4213,
+      true
+     ],
+     "25": [
+      25.1575,
+      -0.6049,
+      true
+     ],
+     "50": [
+      50.315,
+      -1.2107,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-bitcoin-dip-to-55000-by-december-31-2026-527-627-868-745-188-361-314-673-612-946-821-624-855-557-684-381-884-939-182-939-516",
+    "source": "wb_tokor",
+    "their_avg": 0.7552,
+    "their_size": 16009.14,
+    "title": "Will Bitcoin dip to $55,000 by December 31, 2026?",
+    "token": "48849252416222520684793262794712201381742900852794310345084361317209768152557"
    }
   ],
   "created": "2026-11-08T18:40:25Z",
   "day_opens": {
    "date": "2026-11-09",
-   "n": 3
+   "n": 4
   },
   "deposited": 0.0,
   "min_cash": -102.077912,
@@ -79291,6 +79606,51 @@
     "their_avg": 0.87,
     "their_size": 130.0,
     "title": "Will the price of Ethereum be between $2,000 and $2,100 on November 13?"
+   },
+   "115462087336983275104521488923966022755348986822352694745153736621832003960847": {
+    "end": "2027-01-01",
+    "entry": 0.1,
+    "entry_fee": 0.0315,
+    "event_slug": "what-price-will-bitcoin-hit-before-2027",
+    "late": {
+     "px": 0.1,
+     "s": 95
+    },
+    "opened": "2026-11-09T07:30:53Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       100.0,
+       10.63,
+       true
+      ],
+      "100": [
+       1000.0,
+       106.3,
+       true
+      ],
+      "25": [
+       250.0,
+       26.575,
+       true
+      ],
+      "50": [
+       500.0,
+       53.15,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-bitcoin-dip-to-55000-by-december-31-2026-527-627-868-745-188-361-314-673-612-946-821-624-855-557-684-381-884-939-182-939-516",
+    "source": "wb_tokor",
+    "their_avg": 0.0899,
+    "their_size": 7338.65,
+    "title": "Will Bitcoin dip to $55,000 by December 31, 2026?"
    },
    "16795906982274758795629579117648323407087890848036387019110102931380055470723": {
     "backfill": true,
@@ -79717,48 +80077,6 @@
     "their_avg": 0.57,
     "their_size": 215.0,
     "title": "Will the price of Ethereum be above $2,100 on November 12?"
-   },
-   "48849252416222520684793262794712201381742900852794310345084361317209768152557": {
-    "backfill": true,
-    "end": "2027-01-01",
-    "entry": 0.91,
-    "entry_fee": 0.028665,
-    "event_slug": "what-price-will-bitcoin-hit-before-2027",
-    "opened": "2026-11-08T18:40:32Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       10.989,
-       10.063,
-       true
-      ],
-      "100": [
-       109.89,
-       100.63,
-       true
-      ],
-      "25": [
-       27.473,
-       25.1575,
-       true
-      ],
-      "50": [
-       54.945,
-       50.315,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-bitcoin-dip-to-55000-by-december-31-2026-527-627-868-745-188-361-314-673-612-946-821-624-855-557-684-381-884-939-182-939-516",
-    "source": "wb_tokor",
-    "their_avg": 0.7552,
-    "their_size": 16009.14,
-    "title": "Will Bitcoin dip to $55,000 by December 31, 2026?"
    },
    "50397734704545648751774584652134941128346395654798409570597531133003087720370": {
     "backfill": true,
@@ -80315,7 +80633,7 @@
     "title": "Will Apple be the largest company in the world by market cap on December 31?"
    }
   },
-  "realized": 2.040379,
+  "realized": 1.930214,
   "refills": 0,
   "skipped_chase": 3,
   "skipped_no_cash": 0,
@@ -83085,7 +83403,7 @@
   "unlimited": true
  },
  "wx_forecast": {
-  "cash": 406.945225,
+  "cash": 392.677175,
   "closed": [
    {
     "closed_at": "2026-11-09T03:45:41Z",
@@ -83233,7 +83551,7 @@
   "created": "2026-11-08T17:30:45Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 90.0443,
+  "peak_open_cost": 104.050475,
   "positions": {
    "100745764710804217433320509188549902557943045924663223832983681195679898091907": {
     "end": "2026-11-09",
@@ -83517,6 +83835,53 @@
     "theme": null,
     "title": "Will the highest temperature in Jeddah be 32\u00b0C on November 9?"
    },
+   "111782078998072040021706804186707660911531115654412403383087820289810583068709": {
+    "end": "2026-11-10",
+    "entry": 0.46,
+    "entry_fee": 0.0621,
+    "event_key": "1338994",
+    "event_slug": "highest-temperature-in-chicago-on-november-10-2026",
+    "late": {
+     "px": 0.46,
+     "s": 31
+    },
+    "model_p": 0.8577,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       21.739,
+       10.27,
+       true
+      ],
+      "100": [
+       217.373,
+       102.6998,
+       true
+      ],
+      "25": [
+       54.348,
+       25.675,
+       true
+      ],
+      "50": [
+       108.696,
+       51.35,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high KORD obs None bias +0.8",
+    "slug": "highest-temperature-in-chicago-on-november-10-2026-64-65f",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Chicago be between 64-65\u00b0F on November 10?"
+   },
    "115231604506884805438798072153653209417428493657199591086061207471688988630722": {
     "end": "2026-11-09",
     "entry": 0.42,
@@ -83653,6 +84018,147 @@
     "source": "wx_forecast",
     "theme": null,
     "title": "Will the lowest temperature in Chengdu be 12\u00b0C on November 9?"
+   },
+   "1378286605151784791123899129707351415384852645361154493376959357024525064426": {
+    "end": "2026-11-10",
+    "entry": 0.52,
+    "entry_fee": 0.0624,
+    "event_key": "1338323",
+    "event_slug": "highest-temperature-in-munich-on-november-10-2026",
+    "late": {
+     "px": 0.52,
+     "s": 31
+    },
+    "model_p": 0.8154,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       19.231,
+       10.24,
+       true
+      ],
+      "100": [
+       192.308,
+       102.4,
+       true
+      ],
+      "25": [
+       48.077,
+       25.6,
+       true
+      ],
+      "50": [
+       96.154,
+       51.2,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high EDDM obs None bias -0.9",
+    "slug": "highest-temperature-in-munich-on-november-10-2026-9c",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Munich be 9\u00b0C on November 10?"
+   },
+   "13892438797430368459018665681481113873346233872348075189368346073116341237070": {
+    "end": "2026-11-09",
+    "entry": 0.43,
+    "entry_fee": 0.061275,
+    "event_key": "1331428",
+    "event_slug": "highest-temperature-in-toronto-on-november-9-2026",
+    "late": {
+     "px": 0.43,
+     "s": 31
+    },
+    "model_p": 0.7402,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       23.256,
+       10.285,
+       true
+      ],
+      "100": [
+       231.023,
+       102.8357,
+       true
+      ],
+      "25": [
+       58.14,
+       25.7125,
+       true
+      ],
+      "50": [
+       116.279,
+       51.425,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high CYYZ obs 8.0 bias +0.6",
+    "slug": "highest-temperature-in-toronto-on-november-9-2026-10c",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Toronto be 10\u00b0C on November 9?"
+   },
+   "15419289826072130013984810804324219461507520379479974626666018968201296460721": {
+    "end": "2026-11-09",
+    "entry": 0.36,
+    "entry_fee": 0.0576,
+    "event_key": "1330024",
+    "event_slug": "highest-temperature-in-moscow-on-november-9-2026",
+    "late": {
+     "px": 0.37,
+     "s": 31
+    },
+    "model_p": 0.7675,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       27.778,
+       10.32,
+       true
+      ],
+      "100": [
+       85.67,
+       32.3832,
+       false
+      ],
+      "25": [
+       68.676,
+       25.795,
+       true
+      ],
+      "50": [
+       85.67,
+       32.3832,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high UUWW obs 4.0 bias +0.1",
+    "slug": "highest-temperature-in-moscow-on-november-9-2026-5c",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Moscow be 5\u00b0C on November 9?"
    },
    "16568622249586696512812085539939344525848666277633314527214541001820347298442": {
     "end": "2026-11-09",
@@ -84476,6 +84982,53 @@
     "theme": null,
     "title": "Will the highest temperature in Atlanta be between 72-73\u00b0F on November 9?"
    },
+   "48700892699590220731690717708289110971805640946589856893128454474480423419039": {
+    "end": "2026-11-10",
+    "entry": 0.53,
+    "entry_fee": 0.062275,
+    "event_key": "1340042",
+    "event_slug": "highest-temperature-in-toronto-on-november-10-2026",
+    "late": {
+     "px": 0.53,
+     "s": 31
+    },
+    "model_p": 0.8597,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       18.868,
+       10.235,
+       true
+      ],
+      "100": [
+       186.944,
+       102.3254,
+       true
+      ],
+      "25": [
+       47.17,
+       25.5875,
+       true
+      ],
+      "50": [
+       94.34,
+       51.175,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high CYYZ obs None bias +0.6",
+    "slug": "highest-temperature-in-toronto-on-november-10-2026-16c",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Toronto be 16\u00b0C on November 10?"
+   },
    "49163924497951704176899933989152515206834193531002882564817715189276975573678": {
     "end": "2026-11-09",
     "entry": 0.49,
@@ -84565,6 +85118,53 @@
     "source": "wx_forecast",
     "theme": null,
     "title": "Will the highest temperature in Los Angeles be between 86-87\u00b0F on November 8?"
+   },
+   "54902908358155440853404571865408141099721710997761090343414080421560135858572": {
+    "end": "2026-11-10",
+    "entry": 0.48,
+    "entry_fee": 0.0624,
+    "event_key": "1338990",
+    "event_slug": "highest-temperature-in-nyc-on-november-10-2026",
+    "late": {
+     "px": 0.48,
+     "s": 31
+    },
+    "model_p": 0.7762,
+    "opened": "2026-11-09T07:31:57Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       20.833,
+       10.26,
+       true
+      ],
+      "100": [
+       207.449,
+       102.5898,
+       true
+      ],
+      "25": [
+       52.083,
+       25.65,
+       true
+      ],
+      "50": [
+       104.167,
+       51.3,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "signal": "high KLGA obs None bias +2.0",
+    "slug": "highest-temperature-in-nyc-on-november-10-2026-62-63f",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in New York City be between 62-63\u00b0F on November 10?"
    },
    "58772832507537091515974673533905823443786699044286298114044704408810236321553": {
     "end": "2026-11-09",
