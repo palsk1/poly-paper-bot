@@ -359,145 +359,145 @@
     "annual": -0.004,
     "edge": -0.0006,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:43Z"
+    "ts": "2026-11-09T09:15:56Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
-    "annual": 0.078,
-    "edge": 0.0118,
+    "annual": 0.119,
+    "edge": 0.018,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:44Z"
+    "ts": "2026-11-09T09:15:57Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": 0.038,
     "edge": 0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:45Z"
+    "ts": "2026-11-09T09:15:58Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
-    "annual": 0.186,
-    "edge": 0.0278,
-    "opportunity": true,
-    "ts": "2026-11-09T09:10:45Z"
+    "annual": -0.011,
+    "edge": -0.0017,
+    "opportunity": false,
+    "ts": "2026-11-09T09:15:58Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": 0.014,
     "edge": 0.0021,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:45Z"
+    "ts": "2026-11-09T09:15:59Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.045,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:44Z"
+    "ts": "2026-11-09T09:15:57Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.009,
     "edge": 0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:35Z"
+    "ts": "2026-11-09T09:15:45Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
     "annual": -0.28,
     "edge": -0.0447,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:43Z"
+    "ts": "2026-11-09T09:15:56Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.115,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:41Z"
+    "ts": "2026-11-09T09:15:53Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.14,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:37Z"
+    "ts": "2026-11-09T09:15:47Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": 0.044,
     "edge": 0.0066,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:39Z"
+    "ts": "2026-11-09T09:15:50Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:36Z"
+    "ts": "2026-11-09T09:15:46Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.069,
     "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:42Z"
+    "ts": "2026-11-09T09:15:54Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": 0.01,
     "edge": 0.0016,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:36Z"
+    "ts": "2026-11-09T09:15:47Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:40Z"
+    "ts": "2026-11-09T09:15:52Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:41Z"
+    "ts": "2026-11-09T09:15:53Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
-    "annual": -0.052,
-    "edge": -0.008,
+    "annual": -0.038,
+    "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:40Z"
+    "ts": "2026-11-09T09:15:51Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.083,
     "edge": -0.0128,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:42Z"
+    "ts": "2026-11-09T09:15:54Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:38Z"
+    "ts": "2026-11-09T09:15:49Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:37Z"
+    "ts": "2026-11-09T09:15:48Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.158,
     "edge": -0.0247,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:43Z"
+    "ts": "2026-11-09T09:15:55Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.172,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:38Z"
+    "ts": "2026-11-09T09:15:50Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.038,
     "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:39Z"
+    "ts": "2026-11-09T09:15:51Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.13,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-09T09:10:37Z"
+    "ts": "2026-11-09T09:15:48Z"
    }
   },
   "min_cash": 0.0,
@@ -4612,7 +4612,7 @@
   "unlimited": false
  },
  "endgame_97": {
-  "cash": 301.318548,
+  "cash": 296.366568,
   "closed": [
    {
     "closed_at": "2026-11-08T16:15:44Z",
@@ -13192,7 +13192,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 197.506525,
+  "peak_open_cost": 197.541499,
   "positions": {
    "104299387727422045448411555020199708905052990522160588543749492739147154998576": {
     "end": "2026-11-07",
@@ -13577,7 +13577,13 @@
       ]
      }
     },
-    "shadow": {},
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-09T09:15:39Z",
+      "fee": 0.00517,
+      "px": 0.985
+     }
+    },
     "shares": 5,
     "slug": "xrp-above-1-on-november-9-2026",
     "source": "endgame_97",
@@ -13646,6 +13652,11 @@
       "at": "2026-11-08T19:15:36Z",
       "fee": 0.00345,
       "px": 0.986
+     },
+     "bid_0.99": {
+      "at": "2026-11-09T09:15:40Z",
+      "fee": 0.00223,
+      "px": 0.991
      }
     },
     "shares": 5,
@@ -13756,6 +13767,52 @@
     "theme": "us politics",
     "tier": "past_deadline",
     "title": "Will Trump pardon anyone by October 31?"
+   },
+   "26950254760555819878806873179022755811161456644050373435126040092597453137894": {
+    "end": "2026-11-09",
+    "entry": 0.99,
+    "entry_fee": 0.00198,
+    "event_key": "1325003",
+    "event_slug": "wti-closes-above-on-november-9-2026",
+    "late": {
+     "px": 0.99,
+     "s": 30
+    },
+    "opened": "2026-11-09T09:16:31Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       5.0,
+       4.952,
+       false
+      ],
+      "100": [
+       5.0,
+       4.952,
+       false
+      ],
+      "25": [
+       5.0,
+       4.952,
+       false
+      ],
+      "50": [
+       5.0,
+       4.952,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "wti-closes-above-95-on-november-9-2026",
+    "source": "endgame_97",
+    "theme": null,
+    "tier": "past_deadline",
+    "title": "WTI Crude Oil (WTI) closes above $95 on November 9?"
    },
    "27894134110525110222541912377402886885798991982728797154430620359278422156247": {
     "end": "2026-10-25",
@@ -14123,6 +14180,11 @@
       "at": "2026-11-09T05:45:39Z",
       "fee": 0.00381,
       "px": 0.989
+     },
+     "bid_0.99": {
+      "at": "2026-11-09T09:15:41Z",
+      "fee": 0.00243,
+      "px": 0.993
      }
     },
     "shares": 5,
@@ -14237,7 +14299,13 @@
       ]
      }
     },
-    "shadow": {},
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-09T09:15:41Z",
+      "fee": 0.00381,
+      "px": 0.989
+     }
+    },
     "shares": 5,
     "slug": "will-solana-dip-to-80-on-november-9-2026",
     "source": "endgame_97",
@@ -14511,6 +14579,7 @@
       ]
      }
     },
+    "shadow": {},
     "shares": 5,
     "slug": "wta-tournament-winner-2026-136254-competitor-460837",
     "source": "endgame_97",
@@ -15889,6 +15958,11 @@
       "at": "2026-11-08T19:15:39Z",
       "fee": 0.00345,
       "px": 0.986
+     },
+     "bid_0.99": {
+      "at": "2026-11-09T09:15:42Z",
+      "fee": 0.00223,
+      "px": 0.991
      }
     },
     "shares": 5,
@@ -16243,7 +16317,13 @@
       ]
      }
     },
-    "shadow": {},
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-09T09:15:43Z",
+      "fee": 0.00381,
+      "px": 0.989
+     }
+    },
     "shares": 5,
     "slug": "will-solana-dip-to-80-on-november-9-2026",
     "source": "endgame_ending_soon",
@@ -16753,7 +16833,7 @@
   "unlimited": false
  },
  "endgame_sell98": {
-  "cash": 415.418721,
+  "cash": 410.548467,
   "closed": [
    {
     "closed_at": "2026-11-08T15:45:41Z",
@@ -32241,6 +32321,7 @@
       ]
      }
     },
+    "shadow": {},
     "shares": 5,
     "slug": "will-ramayana-opening-weekend-box-office-be-at-least-9m",
     "source": "endgame_sell98",
@@ -32755,6 +32836,52 @@
     "tier": "past_deadline",
     "title": "Will the highest temperature in Mexico City be 23\u00b0C on November 9?"
    },
+   "74161708703262860102684067610709795958149462294228752368296172309634972381153": {
+    "end": "2026-11-09",
+    "entry": 0.973,
+    "entry_fee": 0.005254,
+    "event_key": "1324969",
+    "event_slug": "amzn-close-above-on-november-9-2026",
+    "late": {
+     "px": 0.988,
+     "s": 30
+    },
+    "opened": "2026-11-09T09:16:31Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.04,
+     "s": {
+      "10": [
+       10.277,
+       10.0108,
+       true
+      ],
+      "100": [
+       102.775,
+       100.108,
+       true
+      ],
+      "25": [
+       25.694,
+       25.027,
+       true
+      ],
+      "50": [
+       51.387,
+       50.054,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "amzn-close-above-270-on-november-9-2026",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "past_deadline",
+    "title": "Will Amazon (AMZN) close above $270 on November 9?"
+   },
    "79046534027391915502282038461522840368356031520177639966923740757404760803324": {
     "end": "2026-11-09",
     "entry": 0.96,
@@ -32794,6 +32921,7 @@
       ]
      }
     },
+    "shadow": {},
     "shares": 5,
     "slug": "wta-tournament-winner-2026-136254-competitor-460837",
     "source": "endgame_sell98",
@@ -49433,6 +49561,7 @@
       ]
      }
     },
+    "shadow": {},
     "shares": 5,
     "slug": "wta-tournament-winner-2026-136254-competitor-460837",
     "source": "endgame_strict",
@@ -50792,11 +50921,11 @@
     "event_slug": "next-muse-spark-1pt4-released-byptptpt",
     "fee_rate": 0.04,
     "fills": 0,
-    "last_ts": 1794215475.8291261,
+    "last_ts": 1794215796.7554436,
     "merged_pnl": 0.0,
     "mid": 0.33999999999999997,
     "min_size": 50.0,
-    "minutes": 908.2687988678612,
+    "minutes": 913.6175708254176,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "102711183723971553014446089198171554075948362164960607882172198841105260477579",
@@ -50812,7 +50941,7 @@
      }
     },
     "rate": 50.0,
-    "rewards": 6.8214341034606685,
+    "rewards": 6.835428961366296,
     "size": 50.0,
     "slug": "next-muse-spark-1pt4-released-by-december-31-2026",
     "title": "Next Muse Spark (1.4+) released by December 31, 2026?",
@@ -50828,11 +50957,11 @@
     "event_slug": "second-best-ai-agent-lab-end-of-november",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794215475.8291261,
+    "last_ts": 1794215796.7554436,
     "merged_pnl": 0.0,
     "mid": 0.32,
     "min_size": 20.0,
-    "minutes": 908.2687988678612,
+    "minutes": 913.6175708254176,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "57578799226333514029600121405127999797167672358214792171105979303153501104898",
@@ -50848,7 +50977,7 @@
      }
     },
     "rate": 80.0,
-    "rewards": 13.693519227251603,
+    "rewards": 13.745939473071592,
     "size": 50,
     "slug": "will-openai-be-the-second-best-ai-agent-lab-at-the-end-of-november-2026",
     "title": "Will OpenAI be the second-best AI Agent Lab at the end of November 2026?",
@@ -50864,11 +50993,11 @@
     "event_slug": "next-muse-spark-model-1pt4-released-onptptpt",
     "fee_rate": 0.04,
     "fills": 10,
-    "last_ts": 1794215475.8291261,
+    "last_ts": 1794215796.7554436,
     "merged_pnl": -19.25,
     "mid": 0.705,
     "min_size": 20.0,
-    "minutes": 908.2687988678612,
+    "minutes": 913.6175708254176,
     "no": 100.0,
     "no_cost": 35.75,
     "no_tok": "930240453980728514582345056527710676387794047069932511128144020003604546411",
@@ -50881,7 +51010,7 @@
      }
     },
     "rate": 119.0,
-    "rewards": 4.253687372115147,
+    "rewards": 4.266312386028348,
     "size": 50,
     "slug": "will-there-be-no-next-meta-muse-spark-model-release-by-november-30-2026",
     "title": "Will there be no next Meta Muse Spark model release by November 30, 2026?",
@@ -50897,11 +51026,11 @@
     "event_slug": "which-companies-will-have-a-1-ai-model-by-december-31",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794215475.8291261,
+    "last_ts": 1794215796.7554436,
     "merged_pnl": 0.0,
     "mid": 0.345,
     "min_size": 20.0,
-    "minutes": 908.2687988678612,
+    "minutes": 913.6175708254176,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "3351280184394629167493284830212813001116956262089727901595103690299967605966",
@@ -50917,7 +51046,7 @@
      }
     },
     "rate": 40.0,
-    "rewards": 6.194153294421989,
+    "rewards": 6.270419634245244,
     "size": 50,
     "slug": "will-anthropic-have-a-1-ai-model-by-december-31-2026",
     "title": "Will Anthropic have a #1 AI model by December 31, 2026?",
@@ -50927,7 +51056,7 @@
     "yes_tok": "39151630359758158771259377340938128482300804394191692685363363632091865533103"
    }
   },
-  "cash": 138.962789,
+  "cash": 139.118095,
   "closed": [],
   "created": "2026-11-08T18:00:56Z",
   "deposited": 200.0,
@@ -50937,9 +51066,9 @@
   "min_cash": 0.0,
   "peak_open_cost": 250.25,
   "positions": {},
-  "realized": 11.712789,
+  "realized": 11.868095,
   "refills": 0,
-  "rewards": 30.962789,
+  "rewards": 31.118095,
   "skipped_no_cash": 0,
   "start_cash": 200,
   "unlimited": false
@@ -53685,7 +53814,7 @@
   },
   "realized": 2.510577,
   "refills": 0,
-  "skipped_cap": 560,
+  "skipped_cap": 563,
   "skipped_chase": 9,
   "skipped_no_cash": 0,
   "start_cash": null,
@@ -64759,7 +64888,7 @@
   },
   "realized": -0.497623,
   "refills": 0,
-  "skipped_cap": 260,
+  "skipped_cap": 263,
   "skipped_chase": 10,
   "skipped_no_cash": 0,
   "start_cash": null,
@@ -84976,7 +85105,7 @@
   "unlimited": true
  },
  "wx_forecast": {
-  "cash": 392.677175,
+  "cash": 397.677175,
   "closed": [
    {
     "closed_at": "2026-11-09T03:45:41Z",
@@ -85190,6 +85319,148 @@
     "theme": null,
     "title": "Will the highest temperature in Denver be between 68-69\u00b0F on November 8?",
     "token": "83322896632505727950128436022219177814529458635646558284977180268048794882850"
+   },
+   {
+    "closed_at": "2026-11-09T09:15:43Z",
+    "end": "2026-11-08",
+    "entry": 0.33,
+    "entry_fee": 0.055275,
+    "event_key": "1324420",
+    "event_slug": "highest-temperature-in-seattle-on-november-8-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "model_p": 0.7269,
+    "opened": "2026-11-08T17:32:47Z",
+    "outcome": "No",
+    "pnl": -1.705275,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       30.303,
+       10.335,
+       true
+      ],
+      "100": [
+       296.471,
+       103.3135,
+       true
+      ],
+      "25": [
+       75.758,
+       25.8375,
+       true
+      ],
+      "50": [
+       149.412,
+       51.6634,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.335,
+      -10.335,
+      true
+     ],
+     "100": [
+      103.3135,
+      -103.3135,
+      true
+     ],
+     "25": [
+      25.8375,
+      -25.8375,
+      true
+     ],
+     "50": [
+      51.6634,
+      -51.6634,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "high KSEA obs 12.2 bias -0.1",
+    "slug": "highest-temperature-in-seattle-on-november-8-2026-56-57f",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Seattle be between 56-57\u00b0F on November 8?",
+    "token": "32628621688974400905684075182090784791821588827884343170173955528694382452740"
+   },
+   {
+    "closed_at": "2026-11-09T09:15:43Z",
+    "end": "2026-11-08",
+    "entry": 0.55,
+    "entry_fee": 0.061875,
+    "event_key": "1324422",
+    "event_slug": "highest-temperature-in-los-angeles-on-november-8-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "model_p": 0.9634,
+    "opened": "2026-11-08T17:32:47Z",
+    "outcome": "No",
+    "pnl": 2.188125,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       17.946,
+       10.2214,
+       true
+      ],
+      "100": [
+       92.0,
+       52.6037,
+       false
+      ],
+      "25": [
+       44.732,
+       25.5514,
+       true
+      ],
+      "50": [
+       89.375,
+       51.1014,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.2214,
+      7.7246,
+      true
+     ],
+     "100": [
+      52.6037,
+      39.3963,
+      false
+     ],
+     "25": [
+      25.5514,
+      19.1806,
+      true
+     ],
+     "50": [
+      51.1014,
+      38.2736,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "high KLAX obs 24.4 bias +1.9",
+    "slug": "highest-temperature-in-los-angeles-on-november-8-2026-86-87f",
+    "source": "wx_forecast",
+    "theme": null,
+    "title": "Will the highest temperature in Los Angeles be between 86-87\u00b0F on November 8?",
+    "token": "51038583833624790451564249266632742705384346131576316944797188541882023779430"
    }
   ],
   "created": "2026-11-08T17:30:45Z",
@@ -86262,49 +86533,6 @@
     "theme": null,
     "title": "Will the highest temperature in Milan be 12\u00b0C on November 10?"
    },
-   "32628621688974400905684075182090784791821588827884343170173955528694382452740": {
-    "end": "2026-11-08",
-    "entry": 0.33,
-    "entry_fee": 0.055275,
-    "event_key": "1324420",
-    "event_slug": "highest-temperature-in-seattle-on-november-8-2026",
-    "model_p": 0.7269,
-    "opened": "2026-11-08T17:32:47Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       30.303,
-       10.335,
-       true
-      ],
-      "100": [
-       296.471,
-       103.3135,
-       true
-      ],
-      "25": [
-       75.758,
-       25.8375,
-       true
-      ],
-      "50": [
-       149.412,
-       51.6634,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "high KSEA obs 12.2 bias -0.1",
-    "slug": "highest-temperature-in-seattle-on-november-8-2026-56-57f",
-    "source": "wx_forecast",
-    "theme": null,
-    "title": "Will the highest temperature in Seattle be between 56-57\u00b0F on November 8?"
-   },
    "35901876257060572914430099009147112227158006150123534299937093218193632043158": {
     "end": "2026-11-09",
     "entry": 0.46,
@@ -86719,49 +86947,6 @@
     "source": "wx_forecast",
     "theme": null,
     "title": "Will the highest temperature in Panama City be 33\u00b0C on November 9?"
-   },
-   "51038583833624790451564249266632742705384346131576316944797188541882023779430": {
-    "end": "2026-11-08",
-    "entry": 0.55,
-    "entry_fee": 0.061875,
-    "event_key": "1324422",
-    "event_slug": "highest-temperature-in-los-angeles-on-november-8-2026",
-    "model_p": 0.9634,
-    "opened": "2026-11-08T17:32:47Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       17.946,
-       10.2214,
-       true
-      ],
-      "100": [
-       92.0,
-       52.6037,
-       false
-      ],
-      "25": [
-       44.732,
-       25.5514,
-       true
-      ],
-      "50": [
-       89.375,
-       51.1014,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "high KLAX obs 24.4 bias +1.9",
-    "slug": "highest-temperature-in-los-angeles-on-november-8-2026-86-87f",
-    "source": "wx_forecast",
-    "theme": null,
-    "title": "Will the highest temperature in Los Angeles be between 86-87\u00b0F on November 8?"
    },
    "54902908358155440853404571865408141099721710997761090343414080421560135858572": {
     "end": "2026-11-10",
@@ -87253,7 +87438,7 @@
     "title": "Will the highest temperature in New York City be between 58-59\u00b0F on November 9?"
    }
   },
-  "realized": -5.180625,
+  "realized": -4.697775,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 500,
