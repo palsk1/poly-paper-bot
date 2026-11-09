@@ -479,10 +479,10 @@ def stats(rows, model):
     cost = sum(r["price"] + r["fee"] for r in f)
     wins = [p for p in pnl if p > 0]
     losses = [p for p in pnl if p <= 0]
-    # staking $100 on every fill, in time order: biggest peak-to-trough fall
+    # staking $10 on every fill, in time order: biggest peak-to-trough fall
     eq = peak = dd = 0.0
     for r, p in sorted(zip(f, pnl), key=lambda x: x[0]["t"]):
-        eq += p / (r["price"] + r["fee"]) * 100
+        eq += p / (r["price"] + r["fee"]) * 10
         peak = max(peak, eq)
         dd = max(dd, peak - eq)
     by_day = defaultdict(lambda: [0.0, 0.0])
@@ -507,7 +507,8 @@ def stats(rows, model):
     return {"signals": n_sig, "fills": n, "fill_rate": n / n_sig, "won": len(wins), "lost": len(losses),
             "win_rate": len(wins) / n, "win_rate_all": won_all / n_sig, "avg_price": cost / n,
             "avg_win": avg_win, "worst": min(pnl), "per100": sum(pnl) / cost * 100, "pnl_per_contract": sum(pnl) / n,
-            "band": (boots[20], boots[379]), "halves": half, "dd100": dd,
+            "band": (boots[20], boots[379]), "halves": half, "dd10": dd, "pnl10": sum(p / (r["price"] + r["fee"]) * 10 for r, p in zip(f, pnl)),
+            "days": len(days),
             "wins_per_loss": (abs(sum(losses) / len(losses)) / avg_win) if losses and avg_win else None}
 
 
@@ -596,8 +597,9 @@ def run():
     if best:
         k, v = best
         L.append(f"Best maker variant with 200+ fills: `{k}`: {money(v['per100'])} per $100 over {v['fills']} fills, "
-                 f"band {money(v['band'][0])} to {money(v['band'][1])}. Staking $100 on every fill, the deepest fall "
-                 f"from a high was {money(-v['dd100'])}. With ~{len(res)} variants tried, the best one is "
+                 f"band {money(v['band'][0])} to {money(v['band'][1])}. Staking $10 on every fill it would have made "
+                 f"{money(v['pnl10'])} over {v['days']} days; the deepest fall from a high on the way was "
+                 f"{money(-v['dd10'])}. With ~{len(res)} variants tried, the best one is "
                  "flattered by luck: judge it by its band and halves, not its headline.")
     os.makedirs(OUT, exist_ok=True)
     txt = "\n".join(L) + "\n"
