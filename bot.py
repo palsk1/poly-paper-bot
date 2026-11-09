@@ -356,8 +356,11 @@ def walk(levels, shares):
 
 
 def quote(token, side, shares, m=None):
-    """Paper fill price. 'buy' takes the ask, 'sell' hits the bid.
-    Falls back to the listed price +/- slippage if the book is unavailable."""
+    """Paper fill price. 'buy' takes the ask, 'sell' hits the bid. Only real book fills count: with no book, or a book
+    too thin for our shares, there is no fill (None) and the caller tries again on a later run.
+    Bug fix 2026-11-09 (audit): this used to fall back to the listed price +/- 1c ('estimate'), which let endgame
+    tracks 'buy' on empty books and let exits 'sell' to bids that weren't there. Paper fills must be fills that
+    could really have happened."""
     bk = book(token)
     LAST_BOOK[token] = (time.time(), bk)  # the real-size model re-walks this same book at $10-$100
     if bk:
@@ -365,12 +368,7 @@ def quote(token, side, shares, m=None):
         px = walk(bk["asks"] if side == "buy" else bk["bids"], shares)
         if px is not None:
             return px, shares, "book"
-    mid = token_price_from_market(m, token) if m else None
-    if mid is None:
-        return None, shares, "none"
-    slip = CFG["fallback_slippage"]
-    px = min(0.999, mid + slip) if side == "buy" else max(0.001, mid - slip)
-    return px, shares, "estimate"
+    return None, shares, "none"
 
 
 # ================================================================ real-size check (what $10-$100 a trade would get)
@@ -909,8 +907,9 @@ def follow_leader(tracks):
     n = CFG["shares_per_trade"]
 
     # ---- new positions he opened
+    both = split_tokens(cur)
     for tok, p in cur.items():
-        if prev.get(tok, {}).get("size", 0) >= 1 or p["redeemable"] or p["size"] < 5:
+        if tok in both or prev.get(tok, {}).get("size", 0) >= 1 or p["redeemable"] or p["size"] < 5:
             continue
         if p["size"] * max(p["avg"], 0.01) < min(CFG["tracks"][n].get("min_open_usd", lead["min_open_usd"])
                                                  for n in leader_tracks()):
@@ -1022,6 +1021,17 @@ def tkey(tok):
     return str(tok)[-16:]  # token ids are ~77 digits; the tail is unique enough and keeps the snapshot small
 
 
+def split_tokens(cur):
+    """Tokens of markets where the wallet holds BOTH sides at once (YES and NO, usually 50c each from a 'split' of
+    $1 into a pair). That is market making or a merge-in-waiting, not a bet on one side, so the copy tracks skip it.
+    Bug fix 2026-11-09 (audit): copies used to buy both legs (cost about $1.00 for a pair that pays exactly $1)."""
+    by_market = defaultdict(list)
+    for tok, p in cur.items():
+        if p.get("slug") and not p.get("redeemable") and p.get("size", 0) >= 1:
+            by_market[p["slug"]].append(tok)
+    return {t for toks in by_market.values() if len(toks) >= 2 for t in toks}
+
+
 def wallet_positions(addr, max_pages):
     """(positions, complete?) for one wallet, or (None, False) if the API failed."""
     rows, cursor = [], None
@@ -1091,7 +1101,8 @@ def backfill(tracks, name, cur, r):
     track behaves like its w_* twin (copies new positions, sells when the wallet sells)."""
     tr = tracks[name]
     tried = set(tr.setdefault("bf_tried", []))
-    live = sorted((p for p in cur.values() if not p["redeemable"] and p["size"] >= 5 and p["cur"]
+    both = split_tokens(cur)
+    live = sorted((p for p in cur.values() if p["token"] not in both and not p["redeemable"] and p["size"] >= 5 and p["cur"]
                    and p["size"] * p["cur"] >= r["min_open_usd"]), key=lambda p: -p["size"] * p["cur"])
     todo = [p for p in live[: r.get("max_backfill", 30)] if tkey(p["token"]) not in tried]
     for p in todo[: r.get("backfill_per_run", 10)]:
@@ -1140,7 +1151,11 @@ def follow_wallets(tracks):
         if CFG["tracks"][name].get("backfill") and not tr.get("backfilled"):
             backfill(tracks, name, cur, r)
         # new positions
+        both = split_tokens(cur)
         for tok, p in cur.items():
+            if tok in both:
+                tr["skipped_split"] = tr.get("skipped_split", 0) + (tkey(tok) not in prev)
+                continue
             if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
                 continue
             if day["n"] >= r.get("max_new_per_day", 999):
@@ -1176,10 +1191,13 @@ def follow_consensus(tracks, live):
         r, tr = rules_for(name), tracks[name]
         count, sample, redeem = Counter(), {}, set()
         for cur in live.values():
+            both = split_tokens(cur)
             for tok, p in cur.items():
                 if p["redeemable"]:
                     redeem.add(tok)
                     continue
+                if tok in both:
+                    continue  # holds both sides of this market: not a vote for either
                 if p["size"] * (p["cur"] or p["avg"]) >= r["min_usd_each"] and p["cur"] and \
                         r["min_price"] <= p["cur"] <= r["max_price"]:
                     count[tok] += 1
@@ -1874,9 +1892,24 @@ def arb_check_pair(name, tr, pair, r):
     days = max(1.0, (max(ends) - now()).total_seconds() / 86400 if ends else 30) + r["settle_buffer_days"]
     rate = fee_rate(pm)
     best = None
+    # Bug fix 2026-11-09 (audit): repeat lots on one pair used to re-walk the same book, as if the shares our earlier
+    # paper lots took were still for sale (4 lots in 15 minutes at the same price). Lots bought in the last hour now
+    # count as taken: a new lot pays for the NEXT shares on the book.
+    recent = now() - dt.timedelta(minutes=60)
+
+    def used(k_side, tok):
+        return sum(a["shares"] for a in tr["arbs"].values() if a["pair_id"] == pid and a["k_side"] == k_side
+                   and a["poly_token"] == tok and parse_iso(a["opened"]) > recent)
+
+    def next_px(levels, done, n):
+        tot = walk(levels, done + n)
+        if tot is None:
+            return None
+        return (tot * (done + n) - (walk(levels, done) * done if done > EPS else 0.0)) / n
     # leg A: Kalshi YES + Polymarket outcome that wins when Kalshi NO wins; leg B: the mirror image
     for k_side, k_levels, j in (("yes", kb[0], 1 - iy), ("no", kb[1], iy)):
-        pk, pp = walk(k_levels, shares), walk(pb[j]["asks"], shares)
+        u = used(k_side, toks[j])
+        pk, pp = next_px(k_levels, u, shares), next_px(pb[j]["asks"], u, shares)
         if pk is None or pp is None:
             continue
         kf, pf = kalshi_fee(shares, pk), taker_fee(shares, pp, rate)
@@ -3703,6 +3736,126 @@ def late_md(tracks):
     return out + [r for _, r in sorted(rows)]
 
 
+# ================================================================ data check (audit 2026-11-09)
+#
+# Cheap sanity checks on our own book-keeping that fail loudly. They run after every watch and daily job, write
+# state/integrity.json, add a "Data check" section to summary.md, and push an alert the first time a new kind of
+# problem shows up (at most once a day per problem). Records only: nothing here changes a trade.
+
+def _track_open_cost(tr, src):
+    if src == "maker":
+        return sum(b["yes_cost"] + b["no_cost"] for b in tr.get("books", {}).values())
+    if src == "arb":
+        return sum(a["cost"] for a in tr.get("arbs", {}).values())
+    if src in ("fullset", "ladder"):
+        return sum(x["cost"] for x in tr.get("sets", {}).values())
+    return open_cost(tr)
+
+
+def integrity(tracks, deep=False):
+    """-> list of problems {key, track, what}. deep=True (daily) also looks up markets for stuck positions."""
+    probs = []
+
+    def bad(key, track, what):
+        probs.append({"key": key, "track": track, "what": what})
+    day_ago = iso(now() - dt.timedelta(hours=24))
+    for name, tr in tracks.items():
+        tc = CFG["tracks"].get(name)
+        if not tc:
+            continue
+        src = tc["source"]
+        # 1) money adds up: cash = money put in - money in open bets + realized profit
+        want = (0.0 if tr["unlimited"] else tr["deposited"]) - _track_open_cost(tr, src) + tr["realized"]
+        if abs(tr["cash"] - want) > 0.02:
+            bad("cash", name, f"cash ${tr['cash']:.2f} but deposits - open bets + profit = ${want:.2f}")
+        if src != "maker":
+            s = sum(c.get("pnl", 0.0) for c in tr["closed"])
+            if abs(s - tr["realized"]) > 0.02:
+                bad("realized", name, f"realized ${tr['realized']:.2f} but finished trades add up to ${s:.2f}")
+        if not tr["unlimited"] and tr["cash"] < -0.02:
+            bad("negative_cash", name, f"cash below zero (${tr['cash']:.2f})")
+        rows = list(tr.get("positions", {}).values()) + tr.get("closed", [])
+        # 2) every fill is a real order-book fill with a sane price
+        recent_est = [r for r in rows if r.get("price_source") not in (None, "book")
+                      and r.get("opened", "") >= max(day_ago, "2026-11-09T12")]  # older ones are known (audit)
+        if recent_est:
+            bad("not_book_fill", name, f"{len(recent_est)} buys in the last 24h without a real order-book fill")
+        insane = [r for r in rows if not (0 < r.get("entry", 0.5) < 1) or r.get("shares", 1) <= 0
+                  or not (0 <= r.get("exit", 0.5) <= 1)]
+        if insane:
+            bad("insane_price", name, f"{len(insane)} trades with a price outside 0-100c or no shares")
+        # 3) both sides of one market in one track (pays exactly $1: the copy/split bug)
+        slugs = defaultdict(list)
+        for p in tr.get("positions", {}).values():
+            if p.get("slug"):
+                slugs[p["slug"]].append(p.get("opened", ""))
+        # pairs bought before the fix (2026-11-09) are known and listed in the audit; flag only new ones
+        both = [sl for sl, o in slugs.items() if len(o) >= 2 and max(o) >= "2026-11-09T12"]
+        if both:
+            bad("both_sides", name, f"holds both sides of {len(both)} market(s), e.g. {both[0][:50]}")
+        # 4) a perfect record on many trades is a red flag (endgame_strict's 208/0 was fake fills)
+        n = len(tr.get("closed", []))
+        losses = sum(1 for c in tr.get("closed", []) if c.get("pnl", 0) < 0)
+        if n >= 30 and losses == 0 and src not in ("arb", "fullset", "ladder"):
+            bad("too_good", name, f"{n} finished trades and not one loss: check the fills before trusting it")
+        # 5) maker rewards: a model, flag it if it pays more than $5 a day per $100 tied up
+        if src == "maker" and tr.get("books"):
+            mins = sum(b.get("minutes", 0) for b in tr["books"].values()) + sum(c.get("minutes_quoted", 0) for c in tr["closed"])
+            days = mins / 1440 / max(len(tr["books"]), 1)
+            per = tr.get("rewards", 0.0) / max(days, 0.01) / max(tr["start_cash"], 1) * 100
+            if days >= 0.5 and per > 5:
+                bad("maker_rewards_high", name, f"modelled rewards ~${per:.0f}/day per $100: unverified, likely optimistic")
+    if deep:
+        prefetch_markets(p.get("slug") for tr in tracks.values() for p in tr["positions"].values())
+        for name, tr in tracks.items():
+            stuck = 0
+            for tok, p in tr.get("positions", {}).items():
+                m = market_by_slug(p.get("slug"))
+                if m is None or (m.get("closed") and resolved_payout(m, tok) is None):
+                    stuck += 1
+            if stuck:
+                bad("stuck", name, f"{stuck} open bets whose market is closed (or gone) but never paid out")
+    return probs
+
+
+def integrity_run(tracks, deep=False):
+    try:
+        probs = integrity(tracks, deep)
+    except Exception as e:
+        probs = [{"key": "check_crashed", "track": "-", "what": f"data check failed: {e}"}]
+    old = load("integrity.json", {})
+    if deep:
+        cur = {f"{p['key']}:{p['track']}" for p in probs}
+    else:  # the 'stuck' problems are only looked up daily: keep their alert marks between daily runs
+        cur = {f"{p['key']}:{p['track']}" for p in probs + old.get("deep_problems", [])}
+    alerted = {k: v for k, v in old.get("alerted", {}).items() if k in cur}  # one push per problem while it lasts
+    warn_only = ("maker_rewards_high", "too_good")
+    fresh = [p for p in probs if p["key"] not in warn_only and f"{p['key']}:{p['track']}" not in alerted]
+    if fresh:
+        push("DATA CHECK: something doesn't add up",
+             "\n".join(f"{p['track']}: {p['what']}" for p in fresh[:8]) + "\nDetails in summary.md (Data check).",
+             tags="warning")
+        for p in fresh:
+            alerted[f"{p['key']}:{p['track']}"] = iso()
+    out = {"checked": iso(), "problems": [p for p in probs if p["key"] != "stuck"], "alerted": alerted,
+           "deep_checked": iso() if deep else old.get("deep_checked"),  # the daily 'stuck' check is kept till the next one
+           "deep_problems": [p for p in probs if p["key"] == "stuck"] if deep else old.get("deep_problems", [])}
+    save("integrity.json", out)
+    return probs
+
+
+def integrity_md():
+    d = load("integrity.json", {})
+    probs = d.get("problems", []) + d.get("deep_problems", [])
+    out = ["\n## Data check\n",
+           "Sanity checks on the bot's own numbers after every run: money adds up, every fill was a real order-book "
+           "fill, no track holds both sides of a market, nothing stuck unpaid, and no suspiciously perfect records. "
+           f"Last check {d.get('checked', 'never')}.\n"]
+    if not probs:
+        return out + ["All clear."]
+    return out + [f"- **{p['track']}** ({p['key']}): {p['what']}" for p in probs]
+
+
 # ================================================================ commands
 
 def today_utc():
@@ -3756,6 +3909,7 @@ def watch():
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    integrity_run(tracks)
     save("tracks.json", tracks)
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
@@ -3808,6 +3962,7 @@ def daily(force=None):
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    integrity_run(tracks, deep=True)
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()
@@ -3816,8 +3971,20 @@ def daily(force=None):
 
 
 def mark(pos, tok):
-    p = token_price_from_market(market_by_slug(pos.get("slug")), tok)
-    return pos["entry"] if p is None else p
+    """Value of an open position per share: the listed price, but never more than the best bid while the market is
+    still trading. Bug fix 2026-11-09 (audit): the listed price alone made open bets look about $66 richer (out of
+    $2,890) than selling them would pay, mostly in thin weather and copy-track markets."""
+    m = market_by_slug(pos.get("slug"))
+    p = token_price_from_market(m, tok)
+    if p is None:
+        return pos["entry"]
+    if m and not m.get("closed"):
+        toks = market_tokens(m)
+        bb, ba = fnum(m.get("bestBid"), None), fnum(m.get("bestAsk"), None)
+        bid = bb if toks and tok == toks[0] else (1 - ba if toks and tok in toks and ba is not None else None)
+        if bid is not None and 0 <= bid < p:
+            p = bid
+    return p
 
 
 def write_summary(tracks):
@@ -3911,6 +4078,10 @@ def write_summary(tracks):
         md += late_md(tracks)
     except Exception as e:
         print(f"real money summary failed: {e}")
+    try:
+        md += integrity_md()
+    except Exception as e:
+        print(f"data check summary failed: {e}")
     try:
         md += his_exit_summary()
     except Exception as e:

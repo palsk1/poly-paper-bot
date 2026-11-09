@@ -187,6 +187,12 @@ Not modeled: our own orders moving the price for the next 5-minute check (the pa
 
 Paper fills happen at the exact moment the bot reads the book. A real order lands a little later, and a fast market may have moved by then (Jan's earlier bot looked great on paper and lost live for exactly this reason). At the end of every run, each buy from that run is priced again on a fresh book, with the same shares, at least 30 seconds later (`config.json` > `late_fill`). The result is stored on the position as `late` (`s` = seconds later, `px` = the price then, or null if the book was empty). `summary.md` shows per strategy how much more (or less) the late fill would have cost per $100. Records only: no trade or rule changes. Kalshi legs aren't re-checked.
 
+## Data check (added 2026-11-09)
+
+After the endgame "phantom fills" (paper buys on empty order books), every watch and daily run checks the bot's own numbers: cash = money put in - open bets + profit on every track, realized profit = the finished trades, every buy was a real order-book fill, no track holds both sides of one market, no open bet stuck on a closed market (daily), and no suspiciously perfect record (30+ trades, 0 losses). Results go to `state/integrity.json` and the "Data check" section of `summary.md`; a new problem sends one ntfy alert. Maker rewards are flagged when the model pays more than $5 a day per $100 (it can't be checked against real payouts).
+
+For a deeper look, the `audit` probe compares past trades with Polymarket's own records: buy prices vs the trade tape, copy timing vs each wallet's own trades, payouts vs final prices, open bets at listed price vs best bid, and the depth behind repeated arb lots.
+
 ## Market data recorder (added 2026-11-08)
 
 `recorder.py` saves live market data so future backtests can replay real order books instead of guessing slippage. The idea is from a Reddit bot builder who recorded data for 3 months before testing strategies. The `recorder` workflow runs nonstop, about 5h40m per run, with the next run queued, and saves:
