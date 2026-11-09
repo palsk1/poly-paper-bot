@@ -118,6 +118,82 @@ def fetch():
     print(f"rules: {len(have)} markets with rule text. Status counts: {dict(st)}")
 
 
+# ================================================================ small markets in limbo (volume-bias fix)
+
+SMALL_M = os.path.join(CACHE, "rules_small_markets.json.gz")
+SMALL_H = os.path.join(CACHE, "rules_small_hist.json.gz")
+
+
+def fetch_small(vmin=1000, vmax=20000):
+    """bt_cache only keeps markets whose FINAL volume passed $20k, and a surprise draws volume, so long shots that
+    won are over-represented (ideas.py volbias, 2026-11-09). This adds EVERY finished $1k-20k market that sat unpaid
+    1+ day past its end date (the limbo test), with rule text and hourly history around the end."""
+    have = bt.rjson(SMALL_M, {}) or {}
+    meta = bt.rjson(META, {}) or {}
+    start = dt.datetime.fromisoformat(bt.START).replace(tzinfo=bt.UTC)
+    stop = dt.datetime(2026, 11, 10, tzinfo=bt.UTC)
+    days, d = [], start
+    while d < stop:
+        days.append(d)
+        d += dt.timedelta(days=1)
+
+    def one_day(d):
+        out, cur = [], None
+        for _ in range(40):
+            p = {"closed": "true", "limit": 500, "end_date_min": bot.iso(d), "end_date_max": bot.iso(d + dt.timedelta(days=1)),
+                 "volume_num_min": vmin, "volume_num_max": vmax}
+            if cur:
+                p["after_cursor"] = cur
+            try:
+                res = bot.http_json(f"{bt.G}/markets/keyset", p)
+            except Exception as e:
+                print(f"  {d:%Y-%m-%d} failed: {e}")
+                break
+            rows = [m for m in bot.envelope_rows(res, "markets", "data") if isinstance(m, dict)]
+            out += rows
+            cur = res.get("next_cursor") if isinstance(res, dict) else None
+            if not cur or not rows:
+                break
+        return d, out
+
+    t0 = time.time()
+    n_read = 0
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for d, rows in ex.map(one_day, days):
+            n_read += len(rows)
+            for m in rows:
+                s_ = bt.slim_market(m)
+                if len(s_["toks"]) != 2 or len(s_["final"]) != 2 or not s_["end"] or s_["sports"] or not s_["closed_t"]:
+                    continue
+                if s_["closed_t"] - s_["end"] < DAY or not vmin <= s_["vol"] < vmax:
+                    continue  # never in limbo for a day
+                have[s_["id"]] = s_
+                meta[s_["id"]] = slim_rules(m)
+    print(f"small limbo markets: {n_read} rows read, {len(have)} kept ({time.time() - t0:.0f}s)")
+    bt.wjson(SMALL_M, have)
+    bt.wjson(META, meta)
+    hist = bt.rjson(SMALL_H, {}) or {}
+
+    def h_one(mk):
+        s0, e0 = mk["end"] - 4 * DAY, min(mk["closed_t"], mk["end"] + 8 * DAY)
+        try:
+            res = bot.http_json(f"{bt.C}/prices-history", {"market": mk["toks"][0], "startTs": s0, "endTs": e0, "fidelity": 60})
+            return mk["id"], bt.squeeze(bt.hist_points(res), 0)
+        except Exception:
+            return mk["id"], None
+
+    todo = [m for m in have.values() if m["id"] not in hist]
+    print(f"small limbo history: {len(todo)} to fetch")
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for c in range(0, len(todo), 2000):
+            for mid, h in ex.map(h_one, todo[c:c + 2000]):
+                if h is not None:
+                    hist[mid] = h
+            print(f"  {min(c + 2000, len(todo))}/{len(todo)} ({time.time() - t0:.0f}s)")
+            bt.wjson(SMALL_H, hist)
+    bt.wjson(SMALL_H, hist)
+
+
 # ================================================================ screen (text only, known before the end)
 
 import calib  # noqa: E402  (scoring, snapshots and the pass bar are shared with the calibration hunt)
@@ -340,6 +416,55 @@ def report(rows, lab, fl, markets):
     return "\n".join(L) + "\n"
 
 
+def limbo_check(markets, hist, meta):
+    """Section 7: the limbo lead again, with the $1k-20k markets added (no final-volume cut down to $1k)."""
+    small = bt.rjson(SMALL_M, {}) or {}
+    shist = bt.rjson(SMALL_H, {}) or {}
+    if not small:
+        return "\n## 7. Volume-bias check\n\nNot run yet (probe btrulessmall).\n"
+    small = {k: v for k, v in small.items() if k not in markets}
+    big_rows, _, _ = build(markets, hist, meta)
+    sm_rows, _, _ = build(small, shist, meta)
+    big_rows = [r for r in big_rows if r["h"] in (-1, -3)]
+    sm_rows = [r for r in sm_rows if r["h"] in (-1, -3)]
+    from fineprint import TROUBLE as TR
+
+    def sc(r):
+        return sum(1 for x in TR if x in r["fl"])
+
+    L = ["", "## 7. Volume-bias check: the limbo lead with small markets added", "",
+         f"bt_cache only has markets with $20k+ final volume, which flatters long shots (a surprise draws volume). "
+         f"Here every finished $1k-20k market that sat unpaid 1+ day past its end is added: {len(small):,} markets, "
+         f"{len(sm_rows):,} limbo snapshots.", ""]
+    L += ["Expected vs real wins of the long shot (10-30c), as ideas.py's volbias check: with no bias they match.", "",
+          "| Set | Bets | Prices added up (expected wins) | Real wins | Ratio |", "|---|---|---|---|---|"]
+    for name, rs in (("$20k+ only, score 2+", [r for r in big_rows if sc(r) >= 2]),
+                     ("$1k-20k only, score 2+", [r for r in sm_rows if sc(r) >= 2]),
+                     ("$20k+ only, score 0-1", [r for r in big_rows if sc(r) < 2]),
+                     ("$1k-20k only, score 0-1", [r for r in sm_rows if sc(r) < 2])):
+        tr = calib.side_rows(rs, (0.10, 0.30), "cheap")
+        e = sum(q for _, q, _ in tr)
+        w = sum(pay for _, _, pay in tr)
+        L.append(f"| {name} | {len(tr)} | {e:.1f} | {w} | {w / e if e else 0:.2f} |")
+    L += [""] + calib.HEAD
+    allr = big_rows + sm_rows
+    for name, rs in (("ALL $1k+, score 2+ (the track's rule)", [r for r in allr if sc(r) >= 2]),
+                     ("ALL $1k+, score 2+, no weather", [r for r in allr if sc(r) >= 2 and r["topic"] != "weather"]),
+                     ("ALL $1k+, score 0-1", [r for r in allr if sc(r) < 2]),
+                     ("$1k-20k only, score 2+", [r for r in sm_rows if sc(r) >= 2]),
+                     ("$20k+ only, score 2+", [r for r in big_rows if sc(r) >= 2])):
+        L.append(calib.line(name + ": long shot 10-30c", calib.side_rows(rs, (0.10, 0.30), "cheap")))
+        L.append(calib.line(name + ": leader 70-90c", calib.side_rows(rs, (0.70, 0.90), "dear")))
+    L += ["", "Topics in the track's rule (all $1k+, score 2+, long shot 10-30c, +2c):", "", "| Topic | Events | Per $100 |",
+          "|---|---|---|"]
+    tr = calib.side_rows([r for r in allr if sc(r) >= 2], (0.10, 0.30), "cheap")
+    for tp in sorted({r["topic"] for r, _, _ in tr}):
+        x = calib.score([t for t in tr if t[0]["topic"] == tp], 0.02)
+        if x:
+            L.append(f"| {tp} | {x['events']} | {m2(x['per100'])} |")
+    return "\n".join(L) + "\n"
+
+
 def run():
     markets = bt.rjson(os.path.join(CACHE, "markets.json.gz"), {}).get("markets", {})
     hist = bt.rjson(os.path.join(CACHE, "hist.json.gz"), {})
@@ -349,6 +474,7 @@ def run():
     rows, lab, fl = build(markets, hist, meta)
     print(f"markets {len(markets)}, with rules {len(lab)}, snapshots {len(rows)}")
     txt = report(rows, lab, fl, markets)
+    txt += limbo_check(markets, hist, meta)
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(OUT, "rules.md"), "w") as fh:
         fh.write(txt)
@@ -393,4 +519,4 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"peek": peek, "fetch": fetch, "run": run, "selftest": selftest}[cmd]()
+    {"peek": peek, "fetch": fetch, "fetch_small": fetch_small, "run": run, "selftest": selftest}[cmd]()
