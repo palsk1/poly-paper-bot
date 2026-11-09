@@ -45,10 +45,10 @@ BANDS = ((0.02, 0.10), (0.10, 0.25), (0.25, 0.50), (0.50, 0.75), (0.75, 0.90), (
 SLIPS = (0.01, 0.02, 0.03, 0.05)
 
 TOPICS = (
-    ("mentions", (r"\bsay\b", r"\bsays\b", r"\bmention", r"\bsaid\b", r"\bsay \"", r"\bwill .* post\b")),
+    ("post counts", (r"tweets", r" posts ", r"# of ", r"truth social post")),
+    ("mentions", (r"\bsay\b", r"\bsays\b", r"\bmention", r"\bsaid\b")),
     ("weather", (r"temperature", r"\brain\b", r"\bsnow", r"hurricane", r"\bstorm\b")),
     ("crypto price", (r"bitcoin", r"ethereum", r"solana", r"\bxrp\b", r"\bbtc\b", r"\beth\b", r"dogecoin")),
-    ("post counts", (r"tweets", r" posts ", r"# of ")),
     ("economics", (r"\bcpi\b", r"inflation", r"\bfed\b", r"interest rate", r"unemployment", r"jobs report", r"\bgdp\b",
                    r"payroll", r"rate cut", r"bps", r"recession", r"jobless")),
     ("entertainment", (r"box office", r"opening weekend", r"rotten tomatoes", r"spotify", r"billboard", r"\boscar",
@@ -81,6 +81,18 @@ def size_tier(vol):
         if vol < lim:
             return name
     return "huge (>$1M)"
+
+
+def activity(moves, hz):
+    """How often the price moved in the 7 days before the snapshot. Known at the time, unlike final volume.
+    History is 12-hourly (hourly in the last 2 days), so 1-day snapshots are left out."""
+    if hz < 3:
+        return None
+    if moves <= 2:
+        return "quiet (0-2 moves a week)"
+    if moves <= 7:
+        return "normal (3-7)"
+    return "busy (8+)"
 
 
 def outcome0(mk):
@@ -189,9 +201,10 @@ def snapshots(markets, hist, horizons=HORIZONS):
             p = P[i]
             if not 0.02 <= p <= 0.98:
                 continue
+            moves = i - bisect.bisect_left(T, t - 7 * DAY) + 1
             rows.append({"mid": mk["id"], "ev": mk.get("ev") or mk["id"], "h": hz, "p": p, "y": y, "fee": mk.get("fee", 0),
                          "topic": topic(mk["q"]), "size": size_tier(mk.get("vol") or 0), "t": t, "q": mk["q"],
-                         "wkend": bt.utc(t).weekday() >= 5})
+                         "wkend": bt.utc(t).weekday() >= 5, "act": activity(moves, hz)})
     return rows
 
 
@@ -332,7 +345,18 @@ def report(rows, wrows, n_markets, n_small):
                 L.append(line(tp, side_rows([r for r in sub if r["topic"] == tp], b, side), f"{tp}, {tag}, {bandname(b)}"))
             L.append("")
 
-    L += ["## 4. Market size (all horizons)", ""]
+    L += ["## 4a. Quiet vs busy markets (price moves in the week before, 3+ days out)", "",
+          "Hunt for boring: are markets nobody trades priced worse? Counted from history up to the snapshot only.", ""]
+    acts = ["quiet (0-2 moves a week)", "normal (3-7)", "busy (8+)"]
+    for b in BANDS:
+        side = "cheap" if b[1] <= 0.5 else "dear"
+        L += [f"### {'Long shot' if side == 'cheap' else 'Favorite'} at {bandname(b)}", ""] + HEAD
+        for a in acts:
+            L.append(line(a, side_rows([r for r in rows if r.get("act") == a], b, side), f"{a}, {bandname(b)}"))
+        L.append("")
+    L += ["## 4b. Market size by FINAL volume (all horizons)", "",
+          "**Warning: look-ahead.** Final volume is only known at the end, and surprises draw volume, so long shots "
+          "look good in huge markets and bad in small ones partly BECAUSE they won or lost. Not a usable rule.", ""]
     sizes = ["tiny ($1k-20k)", "small ($20k-50k)", "mid ($50k-250k)", "big ($250k-1M)", "huge (>$1M)"]
     for b in ((0.02, 0.10), (0.10, 0.25), (0.75, 0.90), (0.90, 0.98)):
         side = "cheap" if b[1] <= 0.5 else "dear"
@@ -351,15 +375,15 @@ def report(rows, wrows, n_markets, n_small):
             L.append(line(lab, side_rows([r for r in wrows if r["wkend"] == wk], b, side), f"{lab}, {bandname(b)}"))
         L.append("")
 
-    L += ["## 6. 'Will X say Y' mention markets, every horizon", ""]
+    for tp in ("mentions", "post counts", "economics", "entertainment", "elections", "other"):
+        L += ["", f"## 6. {tp}: buy YES vs buy NO, every horizon", ""] + HEAD
+        sub = [r for r in rows if r["topic"] == tp]
+        for b in BANDS:
+            L.append(line(f"buy YES {bandname(b)}", side_rows(sub, b, "yes"), f"{tp} YES, {bandname(b)}"))
+            L.append(line(f"buy NO {bandname(b)}", side_rows(sub, b, "no"), f"{tp} NO, {bandname(b)}"))
+        L.append(line("ALL YES 10-90c", side_rows(sub, (0.10, 0.90), "yes"), f"{tp} YES 10-90c"))
+        L.append(line("ALL NO 10-90c", side_rows(sub, (0.10, 0.90), "no"), f"{tp} NO 10-90c"))
     men = [r for r in rows if r["topic"] == "mentions"]
-    L += HEAD
-    for b in BANDS:
-        side = "cheap" if b[1] <= 0.5 else "dear"
-        L.append(line(f"{'long shot' if side == 'cheap' else 'favorite'} {bandname(b)}", side_rows(men, b, side),
-                      f"mentions all horizons, {bandname(b)}"))
-        L.append(line(f"  ...buy YES {bandname(b)}", side_rows(men, b, "yes"), f"mentions YES, {bandname(b)}"))
-        L.append(line(f"  ...buy NO {bandname(b)}", side_rows(men, b, "no"), f"mentions NO, {bandname(b)}"))
     rng = random.Random(5)
     L += ["", "Sample of mention questions (to check the word filter):", ""]
     qs = sorted({r["q"] for r in men})
