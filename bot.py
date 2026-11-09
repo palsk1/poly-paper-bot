@@ -2080,7 +2080,7 @@ def endgame_candidates(r):
         if any(w in q.lower() for w in r.get("skip_words", [])):
             continue
         st = [str(s).lower() for s in jlist(m.get("umaResolutionStatuses"))]
-        if any("disput" in s for s in st):
+        if any("disput" in s for s in st) and not r.get("allow_disputed"):
             continue
         i = 0 if prices[0] >= prices[1] else 1
         if not (r.get("fav_min_price", r["min_price"]) <= prices[i] <= r.get("fav_max_price", r["max_price"])):
@@ -2100,6 +2100,12 @@ def endgame_candidates(r):
             continue
         if tier not in order:
             continue  # variants that only trust some signals
+        if r.get("limbo_min_days") is not None and not (end and (now() - end).total_seconds() >= r["limbo_min_days"] * 86400):
+            continue  # fineprint_limbo: only markets at least this long past their end date, still not paid out
+        if r.get("min_fineprint") is not None:
+            import fineprint
+            if fineprint.trouble_score(q, str(m.get("description") or "")) < r["min_fineprint"]:
+                continue  # fineprint_limbo: rules with too few dispute-prone clauses (backtest/rules.md)
         if tier in ("past_deadline", "ending_soon") and is_sports(m):
             continue  # a live game past its start time is not "decided"
         if tier in ("past_deadline", "ending_soon") and any(w in q.lower() for w in r.get("weak_tier_skip_words", [])):
@@ -4753,7 +4759,7 @@ def dryrun():
     fullset_check(tracks)
     ladder_discover()
     ladder_check(tracks, force=True)
-    for name in ("endgame", "every_horse", "ladder"):
+    for name in ("endgame", "every_horse", "ladder", "fineprint_limbo"):
         tr = tracks.get(name, {})
         for p in tr.get("positions", {}).values():
             print(f"WOULD BUY [{name}] {p.get('tier')}: {p['outcome']} @ {cents(p['entry'])} - {p['title']} (ends {p.get('end')})")

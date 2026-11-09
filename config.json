@@ -108,6 +108,12 @@
       "source": "mentions",
       "rules": "mention_no"
     },
+    "fineprint_limbo": {
+      "label": "Fine print, waiting room: a market whose end date passed 1-3 days ago but isn't paid out yet, with rules full of dispute-prone clauses (official only, 'credible reporting', things that don't count). Buys the underdog at 10-30c. Most bets lose; disputes and late surprises pay 3-9x. Real order-book fills. $50 paper",
+      "start_cash": 50,
+      "source": "endgame",
+      "rules": "fineprint_limbo"
+    },
     "fade_sure": {
       "label": "Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
       "start_cash": 25,
@@ -1706,6 +1712,26 @@
       "max_per_theme": 999,
       "take_profit": null,
       "stop_loss": null
+    },
+    "fineprint_limbo": {
+      "inherit": "endgame",
+      "why": "2026-11-09 fine-print hunt (rules.py, backtest/rules.md): rule text flags predict UMA disputes (0.4 per 1,000 markets with no flags, 51 per 1,000 with 4+). 1-3 days after the end date, in markets with 2+ flags, the underdog at 10-30c won about +$20 per $100 at +2c (band -$4 to +$43, 184 events, both halves ahead). Not proven: a lead to paper-test. Claude's track, rule changes reported.",
+      "fade": true,
+      "tiers": ["proposed", "past_deadline"],
+      "fav_min_price": 0.70,
+      "fav_max_price": 0.90,
+      "min_price": 0.10,
+      "max_price": 0.30,
+      "min_edge": null,
+      "limbo_min_days": 1,
+      "past_deadline_max_days": 3,
+      "min_fineprint": 2,
+      "allow_disputed": true,
+      "weak_tier_skip_words": [],
+      "max_over_listed": 0.05,
+      "max_open": 30,
+      "picks_per_scan": 3,
+      "shadow_sell_at": []
     },
     "fade_sure": {
       "inherit": "endgame",
