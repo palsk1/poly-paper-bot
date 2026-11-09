@@ -185,6 +185,12 @@ The idea, inferred from a Reddit post: a few minutes before the close, rest a bu
 - **Backtest result (60 days, 39,820 windows, 2026-09-10 to 11-09):** fixed-price bids lose ($0.30-5.30 per $100) because the fills come when the coin is about to flip. Joining or improving the best bid in the last 1-5 minutes is about break-even (-$0.30 to +$0.20 per $100, one loss eats 60-200 wins). Taker is about $0. Only a Binance spot check (z = distance to strike / typical move until the close, z >= 2) helped: +$0.56 per $100 over 8,663 fills, both halves ahead. 7-10 minutes left did a bit better too. About 105 variants were tried, so treat single lines with care.
 - **Live paper tracks:** each watch run looks at the current window of each coin. With 0.75-5.5 minutes left it notes a virtual bid and how many contracts were already waiting at that price. After the close it reads the real trade tape: if anything traded below our price, we filled in full; otherwise only sells at our price after the queue ahead of us count. Unfilled orders cost nothing. The summary prints a "picked-off check": how often filled orders won vs how often the unfilled ones would have. `probe kmakertest` is a dry run.
 
+- **Could a fast bot do better? (2026-11-09, `kfast.py`, report `backtest/kfast.md`)** 14 days (9,013 windows, 6.4 million trades in their last 5.5 minutes) replayed second by second with Binance 1-second spot. Two ideas a fast (every second) bot could add:
+  - *Pull the bid when the price turns:* cancel when Binance says the lead is in danger, 1/3/10 seconds of delay. Barely moves anything (at best +$0.13 per $100, well inside the noise). The losses aren't visible on Binance in time.
+  - *The last seconds:* settlement is the average of the last 60 seconds, so with 45 seconds left it's three-quarters known. Buying the side the running average favours at the next real trade made +$0.37-0.40 per $100 only when the model was very sure (z 4+), at 99.1-99.3c, ~20-55 fills a day across 7 coins, both halves ahead. Later than 45 seconds the fills you get are the ones the market disagrees with, and it loses. Resting bids at 99.5c/99.8c with 45 seconds left filled 5-15 times in 100 and won 0.2-0.5c a contract with 0-2 losses. One loss eats 150-500 wins, and our Binance estimate disagreed with Kalshi's result on 178 of 8,499 windows (BRTI is not Binance).
+  - Kalshi pays no maker rewards on these series (`kf_incentives`: 0 programs; its incentive programs are US-only anyway), and two Designated Liquidity Providers (paid pro market makers) quote them.
+  - Probe routes: `btkf` (fetch + run, `KF_DAYS` default 14, cached in `bt_cache/kf/`), `btkffetch`, `btkfrun`, `btkf2` (2-day smoke test), `kf_<cmd>`. Trade sizes aren't kept, so "fills" don't say how many contracts.
+
 ## Maker: get paid to quote (added 2026-11-08)
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
@@ -280,6 +286,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
 - `backtest/rules.md`: fine-print hunt, rule-text flags vs disputes and prices (`rules.py`, `fineprint.py`)
 - `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
+- `backtest/kfast.md`: what a fast (every-second) bot could add on Kalshi 15-minute crypto (`kfast.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup
