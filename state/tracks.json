@@ -359,150 +359,150 @@
     "annual": -0.004,
     "edge": -0.0006,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:19Z"
+    "ts": "2026-11-09T08:50:53Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.119,
     "edge": 0.018,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:20Z"
+    "ts": "2026-11-09T08:50:54Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": 0.038,
     "edge": 0.0059,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:20Z"
+    "ts": "2026-11-09T08:50:55Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
-    "annual": 0.137,
-    "edge": 0.0207,
-    "opportunity": false,
-    "ts": "2026-11-09T08:47:20Z"
+    "annual": 0.172,
+    "edge": 0.0258,
+    "opportunity": true,
+    "ts": "2026-11-09T08:50:56Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": 0.014,
     "edge": 0.0021,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:21Z"
+    "ts": "2026-11-09T08:50:57Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.045,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:19Z"
+    "ts": "2026-11-09T08:50:54Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.009,
     "edge": 0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:11Z"
+    "ts": "2026-11-09T08:50:37Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
-    "annual": -0.217,
-    "edge": -0.0344,
+    "annual": -0.28,
+    "edge": -0.0447,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:18Z"
+    "ts": "2026-11-09T08:50:52Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.114,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:17Z"
+    "ts": "2026-11-09T08:50:48Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.14,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:12Z"
+    "ts": "2026-11-09T08:50:40Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": 0.03,
     "edge": 0.0045,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:15Z"
+    "ts": "2026-11-09T08:50:44Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:12Z"
+    "ts": "2026-11-09T08:50:38Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.069,
     "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:18Z"
+    "ts": "2026-11-09T08:50:50Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": 0.01,
     "edge": 0.0016,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:12Z"
+    "ts": "2026-11-09T08:50:39Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:16Z"
+    "ts": "2026-11-09T08:50:47Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:16Z"
+    "ts": "2026-11-09T08:50:48Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.018,
     "edge": -0.0028,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:15Z"
+    "ts": "2026-11-09T08:50:46Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.082,
     "edge": -0.0128,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:17Z"
+    "ts": "2026-11-09T08:50:49Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:14Z"
+    "ts": "2026-11-09T08:50:42Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:13Z"
+    "ts": "2026-11-09T08:50:41Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
-    "annual": -0.156,
-    "edge": -0.0245,
+    "annual": -0.158,
+    "edge": -0.0247,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:18Z"
+    "ts": "2026-11-09T08:50:51Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.172,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:14Z"
+    "ts": "2026-11-09T08:50:43Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.032,
     "edge": -0.0049,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:15Z"
+    "ts": "2026-11-09T08:50:45Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.13,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-09T08:47:13Z"
+    "ts": "2026-11-09T08:50:41Z"
    }
   },
   "min_cash": 0.0,
   "mismatches": 0,
-  "opportunities": 8,
+  "opportunities": 9,
   "peak_open_cost": 58.3835,
   "positions": {},
   "realized": 0.0,
@@ -16707,7 +16707,7 @@
   "unlimited": false
  },
  "endgame_sell98": {
-  "cash": 420.228321,
+  "cash": 415.418721,
   "closed": [
    {
     "closed_at": "2026-11-08T15:45:41Z",
@@ -32709,6 +32709,52 @@
     "tier": "past_deadline",
     "title": "Will the highest temperature in Mexico City be 23\u00b0C on November 9?"
    },
+   "79046534027391915502282038461522840368356031520177639966923740757404760803324": {
+    "end": "2026-11-09",
+    "entry": 0.96,
+    "entry_fee": 0.0096,
+    "event_key": "1296947",
+    "event_slug": "wta-tournament-winner-2026-136254",
+    "late": {
+     "px": null,
+     "s": 30
+    },
+    "opened": "2026-11-09T08:51:40Z",
+    "outcome": "No",
+    "price_source": "estimate",
+    "rs": {
+     "how": "estimate",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.309,
+       10.015,
+       true
+      ],
+      "100": [
+       103.093,
+       100.15,
+       true
+      ],
+      "25": [
+       25.773,
+       25.0375,
+       true
+      ],
+      "50": [
+       51.546,
+       50.075,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "wta-tournament-winner-2026-136254-competitor-460837",
+    "source": "endgame_sell98",
+    "theme": "south asia",
+    "tier": "proposed",
+    "title": "Will Janice Tjen win the 2026 Chennai, India,?"
+   },
    "87446354942937056192011058861489424942714994267914424268611656199642630080863": {
     "end": "2026-11-08",
     "entry": 0.96,
@@ -32846,7 +32892,7 @@
   "unlimited": false
  },
  "endgame_strict": {
-  "cash": 526.88132,
+  "cash": 522.07172,
   "closed": [
    {
     "closed_at": "2026-11-08T16:15:51Z",
@@ -49301,7 +49347,54 @@
   "deposited": 500.0,
   "min_cash": 0.0,
   "peak_open_cost": 174.647633,
-  "positions": {},
+  "positions": {
+   "79046534027391915502282038461522840368356031520177639966923740757404760803324": {
+    "end": "2026-11-09",
+    "entry": 0.96,
+    "entry_fee": 0.0096,
+    "event_key": "1296947",
+    "event_slug": "wta-tournament-winner-2026-136254",
+    "late": {
+     "px": null,
+     "s": 31
+    },
+    "opened": "2026-11-09T08:51:39Z",
+    "outcome": "No",
+    "price_source": "estimate",
+    "rs": {
+     "how": "estimate",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.309,
+       10.015,
+       true
+      ],
+      "100": [
+       103.093,
+       100.15,
+       true
+      ],
+      "25": [
+       25.773,
+       25.0375,
+       true
+      ],
+      "50": [
+       51.546,
+       50.075,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "wta-tournament-winner-2026-136254-competitor-460837",
+    "source": "endgame_strict",
+    "theme": "south asia",
+    "tier": "proposed",
+    "title": "Will Janice Tjen win the 2026 Chennai, India,?"
+   }
+  },
   "realized": 26.88132,
   "refills": 0,
   "skipped_no_cash": 0,
@@ -50653,11 +50746,11 @@
     "event_slug": "next-muse-spark-1pt4-released-byptptpt",
     "fee_rate": 0.04,
     "fills": 0,
-    "last_ts": 1794214067.971312,
+    "last_ts": 1794214304.459998,
     "merged_pnl": 0.0,
     "mid": 0.33999999999999997,
     "min_size": 50.0,
-    "minutes": 884.8045019666351,
+    "minutes": 888.7459800640739,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "102711183723971553014446089198171554075948362164960607882172198841105260477579",
@@ -50673,7 +50766,7 @@
      }
     },
     "rate": 50.0,
-    "rewards": 6.748972308060723,
+    "rewards": 6.760922070673253,
     "size": 50.0,
     "slug": "next-muse-spark-1pt4-released-by-december-31-2026",
     "title": "Next Muse Spark (1.4+) released by December 31, 2026?",
@@ -50689,11 +50782,11 @@
     "event_slug": "second-best-ai-agent-lab-end-of-november",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794214067.971312,
+    "last_ts": 1794214304.459998,
     "merged_pnl": 0.0,
     "mid": 0.29500000000000004,
     "min_size": 20.0,
-    "minutes": 884.8045019666351,
+    "minutes": 888.7459800640739,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "57578799226333514029600121405127999797167672358214792171105979303153501104898",
@@ -50709,7 +50802,7 @@
      }
     },
     "rate": 80.0,
-    "rewards": 13.44819125401263,
+    "rewards": 13.486944897823602,
     "size": 50,
     "slug": "will-openai-be-the-second-best-ai-agent-lab-at-the-end-of-november-2026",
     "title": "Will OpenAI be the second-best AI Agent Lab at the end of November 2026?",
@@ -50725,11 +50818,11 @@
     "event_slug": "next-muse-spark-model-1pt4-released-onptptpt",
     "fee_rate": 0.04,
     "fills": 10,
-    "last_ts": 1794214067.971312,
+    "last_ts": 1794214304.459998,
     "merged_pnl": -19.25,
     "mid": 0.705,
     "min_size": 20.0,
-    "minutes": 884.8045019666351,
+    "minutes": 888.7459800640739,
     "no": 100.0,
     "no_cost": 35.75,
     "no_tok": "930240453980728514582345056527710676387794047069932511128144020003604546411",
@@ -50742,7 +50835,7 @@
      }
     },
     "rate": 119.0,
-    "rewards": 4.195456089464256,
+    "rewards": 4.203607951615435,
     "size": 50,
     "slug": "will-there-be-no-next-meta-muse-spark-model-release-by-november-30-2026",
     "title": "Will there be no next Meta Muse Spark model release by November 30, 2026?",
@@ -50758,11 +50851,11 @@
     "event_slug": "which-companies-will-have-a-1-ai-model-by-december-31",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794214067.971312,
+    "last_ts": 1794214304.459998,
     "merged_pnl": 0.0,
     "mid": 0.345,
     "min_size": 20.0,
-    "minutes": 884.8045019666351,
+    "minutes": 888.7459800640739,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "3351280184394629167493284830212813001116956262089727901595103690299967605966",
@@ -50778,7 +50871,7 @@
      }
     },
     "rate": 40.0,
-    "rewards": 5.859583779142035,
+    "rewards": 5.915783989278217,
     "size": 50,
     "slug": "will-anthropic-have-a-1-ai-model-by-december-31-2026",
     "title": "Will Anthropic have a #1 AI model by December 31, 2026?",
@@ -50788,7 +50881,7 @@
     "yes_tok": "39151630359758158771259377340938128482300804394191692685363363632091865533103"
    }
   },
-  "cash": 138.252198,
+  "cash": 138.367254,
   "closed": [],
   "created": "2026-11-08T18:00:56Z",
   "deposited": 200.0,
@@ -50798,9 +50891,9 @@
   "min_cash": 0.0,
   "peak_open_cost": 247.75,
   "positions": {},
-  "realized": 11.002198,
+  "realized": 11.117254,
   "refills": 0,
-  "rewards": 30.252198,
+  "rewards": 30.367254,
   "skipped_no_cash": 0,
   "start_cash": 200,
   "unlimited": false
