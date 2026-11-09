@@ -65,7 +65,8 @@ TOPIC_CROSS = True
 # Data flaw found by this machine (volbias, 2026-11-09): the cache keeps only markets whose FINAL volume passed $20k.
 # In weather events the winning bucket draws volume late, so losing buckets are missing: weather choices we have won
 # 1.3-1.5 times as often as their prices said (other topics about 1.0). Weather is left out until the data is fixed.
-EXCLUDE_TOPICS = {"weather"}
+EXCLUDE_TOPICS = {"weather"}   # only used while the whole-event data (fetch_events) is missing
+DATA_NOTE = ["old cache"]
 
 FEATURES = []         # (name, story, fn, cross)
 LAB = {}              # label text -> small int (rows keep ints, so 500k rows x 60 labels fit in memory)
@@ -362,6 +363,138 @@ def build_rows(markets, hist, horizons=HORIZONS):
     return rows
 
 
+# ================================================================ whole events (fixes the $20k final-volume hole)
+# bt_cache keeps only markets whose FINAL volume passed $20k. fetch_events() reads every closed event (with all its
+# markets, any volume) day by day, then downloads price history for the choices the cache is missing, in events
+# that have at least one cached market. load_full() merges it all and says which events are COMPLETE: every choice
+# that traded at least MIN_VOL_COMPLETE is in the data with a price history. Screen on complete events only.
+
+EV_PATH = os.path.join(bt.CACHE, "events.json.gz")
+FILL_HIST = os.path.join(bt.CACHE, "fill_hist.json.gz")
+MIN_VOL_COMPLETE = 500.0
+
+
+def fetch_events():
+    from concurrent.futures import ThreadPoolExecutor
+    have = bt.rjson(EV_PATH, {"days": {}, "events": {}, "markets": {}}) or {"days": {}, "events": {}, "markets": {}}
+    main = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
+    start = dt.datetime.fromisoformat(bt.START).replace(tzinfo=dt.timezone.utc)
+    end = bot.now() - dt.timedelta(days=2)
+    days, d = [], start
+    while d < end:
+        if bot.iso(d)[:10] not in have["days"]:
+            days.append(d)
+        d += dt.timedelta(days=1)
+    print(f"events: {len(have['days'])} days cached, {len(days)} to read")
+
+    def one_day(d):
+        out, cur = [], None
+        for _ in range(200):
+            p = {"closed": "true", "limit": 100, "end_date_min": bot.iso(d), "end_date_max": bot.iso(d + dt.timedelta(days=1))}
+            if cur:
+                p["after_cursor"] = cur
+            try:
+                res = bot.http_json(f"{bt.G}/events/keyset", p)
+            except Exception as e:
+                print(f"  {d:%Y-%m-%d} failed: {e}")
+                return d, None
+            rows = [e for e in bot.envelope_rows(res, "events", "data") if isinstance(e, dict)]
+            out += rows
+            cur = res.get("next_cursor") if isinstance(res, dict) else None
+            if not cur or not rows:
+                break
+        return d, out
+
+    t0 = time.time()
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for d, evs in ex.map(one_day, days):
+            if evs is None:
+                continue
+            nm = 0
+            for e in evs:
+                eid = str(e.get("id") or e.get("slug"))
+                mids = []
+                for m in e.get("markets") or []:
+                    if not isinstance(m, dict):
+                        continue
+                    m = dict(m)
+                    m.setdefault("events", [{"id": e.get("id"), "slug": e.get("slug")}])
+                    sm = bt.slim_market(m)
+                    if len(sm["toks"]) != 2 or not sm["end"]:
+                        continue
+                    mids.append([sm["id"], sm["vol"] or 0.0])
+                    if sm["id"] not in main:
+                        have["markets"][sm["id"]] = sm
+                        nm += 1
+                have["events"][eid] = {"neg": bool(e.get("negRisk") or e.get("enableNegRisk")), "mids": mids}
+            have["days"][bot.iso(d)[:10]] = len(evs)
+            print(f"  {d:%Y-%m-%d}: {len(evs)} events, {nm} markets not in the main cache ({time.time() - t0:.0f}s)")
+    bt.wjson(EV_PATH, have)
+    print(f"events: {len(have['events'])} events, {len(have['markets'])} extra markets")
+
+    # history for the missing choices, only in events that have at least one main-cache market
+    in_main = defaultdict(int)
+    for m in main.values():
+        in_main[m.get("ev") or m["id"]] += 1
+    hist = bt.rjson(FILL_HIST, {}) or {}
+    todo = []
+    for eid, e in have["events"].items():
+        if not in_main.get(eid):
+            continue
+        for mid, vol in e["mids"]:
+            if mid in have["markets"] and mid not in hist and vol >= MIN_VOL_COMPLETE:
+                mk = have["markets"][mid]
+                if mk.get("closed") and not mk.get("sports"):
+                    todo.append(mk)
+    print(f"fill history: {len(hist)} cached, {len(todo)} to fetch")
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for c in range(0, len(todo), 2000):
+            if time.time() - bt.FETCH_T0 > bt.FETCH_MIN * 60:
+                print(f"  time budget used up: {len(todo) - c} left for the next run (run btideasfetch again)")
+                break
+            for mid, h in ex.map(bt.fetch_history, todo[c:c + 2000]):
+                hist[mid] = h
+            print(f"  {min(c + 2000, len(todo))}/{len(todo)} ({time.time() - t0:.0f}s)")
+            bt.wjson(FILL_HIST, hist)
+    bt.wjson(FILL_HIST, hist)
+
+
+def load_full():
+    """markets, hist, complete_events. Main cache + filled-in choices. complete_events = event ids where every
+    choice that traded at least MIN_VOL_COMPLETE is present with a history. None if fetch_events() never ran."""
+    markets = dict(bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {}))
+    hist = dict(bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {}))
+    evs = bt.rjson(EV_PATH, None)
+    if not evs:
+        return markets, hist, None
+    fh = bt.rjson(FILL_HIST, {}) or {}
+    for mid, mk in evs["markets"].items():
+        if mid in fh and fh[mid] and fh[mid][0]:
+            markets.setdefault(mid, mk)
+            hist.setdefault(mid, fh[mid])
+    complete = set()
+    for eid, e in evs["events"].items():
+        if e["mids"] and all(mid in hist and hist[mid] and hist[mid][0] for mid, vol in e["mids"]
+                             if vol >= MIN_VOL_COMPLETE and (markets.get(mid) or {}).get("closed", True)):
+            complete.add(eid)
+    return markets, hist, complete
+
+
+def load_screen_set(exclude_topics=None):
+    """What the screen uses: in-sample, non-sports, complete events when known (else the old cache minus
+    EXCLUDE_TOPICS). Importable by other threads."""
+    markets, hist, complete = load_full()
+    ms = in_sample(markets)
+    if complete is not None:
+        out = {k: m for k, m in ms.items() if not m.get("sports") and (m.get("ev") or m["id"]) in complete}
+        note = f"whole events only ({len(complete):,} complete events)"
+    else:
+        ex = EXCLUDE_TOPICS if exclude_topics is None else exclude_topics
+        out = {k: m for k, m in ms.items() if not m.get("sports") and calib.topic(m["q"]) not in ex}
+        note = f"old cache without {sorted(ex)} (run btideasfetch for whole events)"
+    return out, hist, note
+
+
 # ================================================================ screening
 
 def roi(q, pay, fee, slip):
@@ -538,7 +671,7 @@ def report(acc, cut, rows, survivors, info, n_markets):
     stories = {n: s for n, s, _, _ in FEATURES}
     L = ["# Idea machine: hundreds of edge ideas, screened hard", "",
          f"Generated {bot.iso(bot.now())} by `ideas.py` (probe `btideas`). Paper only. {n_markets:,} finished markets "
-         f"that ended before {HOLDOUT_FROM} (the holdout is never read; weather left out, see volbias), {len(rows):,} price snapshots, "
+         f"that ended before {HOLDOUT_FROM} (the holdout is never read; data: {DATA_NOTE[0]}), {len(rows):,} price snapshots, "
          f"{len(FEATURES)} features ({sum(1 for f in FEATURES if 'PLACEBO' in f[0])} of them placebo coin flips). "
          f"Halves split at {bt.iso_t(cut)[:10]}.", "",
          "How to read: each idea buys one side 1 hour after a snapshot at the history price + 2c + fee and holds to the "
@@ -608,12 +741,9 @@ def report(acc, cut, rows, survivors, info, n_markets):
 
 
 def run(out_name="ideas.md"):
-    markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
-    hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
-    markets = {k: m for k, m in in_sample(markets_all).items()
-               if not m.get("sports") and calib.topic(m["q"]) not in EXCLUDE_TOPICS}
-    print(f"markets {len(markets_all)} cached, {len(markets)} in-sample non-sports, without {sorted(EXCLUDE_TOPICS)} "
-          f"(end before {HOLDOUT_FROM})")
+    markets, hist, note = load_screen_set()
+    DATA_NOTE[0] = note
+    print(f"markets {len(markets)} in-sample non-sports, {note} (end before {HOLDOUT_FROM})")
     t0 = time.time()
     rows = build_rows(markets, hist)
     print(f"rows {len(rows)} ({time.time() - t0:.0f}s)")
@@ -682,8 +812,7 @@ def volbias():
     tends to draw volume late. In an event with many choices (weather buckets, 'most seats'), that drops losing
     choices and keeps winners. Test: 1 day before the end, add up the YES prices of the choices we have. With no
     bias, the number of choices that win should match that sum on average. More wins than the sum = biased data."""
-    markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
-    hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
+    markets_all, hist, complete = load_full()
     markets = {k: m for k, m in in_sample(markets_all).items() if not m.get("sports")}
     by_ev = defaultdict(list)
     for m in markets.values():
@@ -702,7 +831,8 @@ def volbias():
             wins += calib.outcome0(m)
         else:
             n = len(ms)
-            key = (calib.topic(ms[0]["q"]), "1" if n == 1 else "2-4" if n <= 4 else "5+")
+            key = (calib.topic(ms[0]["q"]), ("1" if n == 1 else "2-4" if n <= 4 else "5+") +
+                   ("" if complete is None else " whole event" if ev in complete else " partial"))
             a = g[key]
             a[0] += 1
             a[1] += ps
@@ -711,33 +841,46 @@ def volbias():
     # Part 2, for any kind of market (also not-one-winner events like "will X say Y"): per market, YES price 1 day
     # before the end vs how often YES won, in the main cache (final volume > $20k) and in the small sample below it.
     # If the cut bends results, the two rows of a topic differ. Also NO's return at +2c, per event, as mention_no buys.
+    main_ids = set(bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {}))
     small = bt.rjson(os.path.join(bt.CACHE, "small_markets.json.gz"), {}) or {}
     shist = bt.rjson(os.path.join(bt.CACHE, "small_hist.json.gz"), {}) or {}
     small = {k: m for k, m in in_sample(small).items() if k not in markets_all and not m.get("sports")}
-    print("| topic | data | markets | events | YES prices added up | YES won | won / expected | NO 25-90c, +2c, per $100 (events) |")
+    srcs = [("main cache (>$20k)", {k: m for k, m in markets.items() if k in main_ids}, hist)]
+    if complete is not None:
+        srcs.append(("whole events", {k: m for k, m in markets.items() if (m.get("ev") or m["id"]) in complete}, hist))
+    if small:
+        srcs.append(("small sample ($1k-20k)", small, shist))
+    print("| topic | data | markets | events | YES prices added up (1 day out) | YES won | won / expected | "
+          "NO 25-90c first time within 7 days, +2c, per $100 (events) |")
     print("|---|---|---|---|---|---|---|---|")
-    for src, mks, hh in (("main (>$20k)", markets, hist), ("small ($1k-20k)", small, shist)):
+
+    def px(T, P, m, t):
+        k = bisect.bisect_right(T, t) - 1
+        if k < 0 or t - T[k] > 3 * DAY or (m.get("closed_t") and t >= m["closed_t"]) or not 0.02 <= P[k] <= 0.98:
+            return None
+        return P[k]
+
+    for src, mks, hh in srcs:
         agg = defaultdict(lambda: [0, set(), 0.0, 0, defaultdict(list)])
         for m in mks.values():
             y = calib.outcome0(m)
             h = hh.get(m["id"])
             if y is None or not h or not h[0]:
                 continue
-            for hz in (1, 3, 7):
-                t = m["end"] - hz * DAY
-                T, P = h
-                k = bisect.bisect_right(T, t) - 1
-                if k < 0 or t - T[k] > 3 * DAY or (m.get("closed_t") and t >= m["closed_t"]) or not 0.02 <= P[k] <= 0.98:
-                    continue
-                a = agg[calib.topic(m["q"])]
-                if hz == 1:
-                    a[0] += 1
-                    a[1].add(m.get("ev") or m["id"])
-                    a[2] += P[k]
-                    a[3] += y
-                if hz <= 7 and 0.25 <= 1 - P[k] < 0.90:
-                    a[4][m.get("ev") or m["id"]].append(roi(1 - P[k], 1 - y, m.get("fee", 0), SLIP))
-                break  # first horizon that has a price = "first time within 7 days", one entry per market
+            T, P = h
+            a = agg[calib.topic(m["q"])]
+            p1 = px(T, P, m, m["end"] - DAY)
+            if p1 is not None:
+                a[0] += 1
+                a[1].add(m.get("ev") or m["id"])
+                a[2] += p1
+                a[3] += y
+            for hz in (7, 3, 1):   # first time inside the 7-day window, like mention_no
+                p = px(T, P, m, m["end"] - hz * DAY)
+                if p is not None:
+                    if 0.25 <= 1 - p < 0.90:
+                        a[4][m.get("ev") or m["id"]].append(roi(1 - p, 1 - y, m.get("fee", 0), SLIP))
+                    break
         for tp in sorted(agg):
             n, evs, ps, w, no = agg[tp]
             if n < 30:
