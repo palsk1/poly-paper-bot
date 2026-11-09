@@ -573,6 +573,15 @@ def gaspages():
     for url in ("https://www.gasbuddy.com/usa", "https://gasprices.aaa.com/"):
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)"})
         body = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "replace")
+        print("####", url, len(body))
+        for m in re.finditer(r"(?i)national", body):
+            print("  N:", re.sub(r"\s+", " ", body[max(0, m.start() - 150):m.start() + 350]))
+        for m in re.finditer(r"(?i)(apollo|__next_data__|window\.__)", body):
+            print("  S:", re.sub(r"\s+", " ", body[m.start():m.start() + 300]))
+    return
+    for url in ("https://www.gasbuddy.com/usa", "https://gasprices.aaa.com/"):
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)"})
+        body = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "replace")
         print("####", url)
         for m in re.finditer(r"(.{0,160})\$?\b([34]\.\d{2,3})\b(.{0,120})", body):
             print("  ", re.sub(r"\s+", " ", (m.group(1) + " [[" + m.group(2) + "]] " + m.group(3)))[:300])
