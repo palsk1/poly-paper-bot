@@ -1056,6 +1056,11 @@ if __name__ == "__main__":
         __import__("ideas").volbias()
         __import__("ideas").run()
         sys.exit(0)
+    if cmd.startswith("btlaunch"):   # new-listing test (launch.py): btlaunch<sub> -> launch.py <sub>
+        sys.argv[1:] = [cmd[len("btlaunch"):] or "run"] + sys.argv[2:]
+        import runpy
+        runpy.run_path(os.path.join(ROOT, "launch.py"), run_name="__main__")
+        sys.exit(0)
     if cmd == "btideasvolbias":
         __import__("ideas").volbias()
         sys.exit(0)
