@@ -16,8 +16,12 @@
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
 | `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
+| `maker_tp`, `maker_tpsl`, `maker_flat`, `maker_short` | Maker with a twist (2026-11-09): same quoting, plus take profit, take profit + stop loss, never hold, or short-dated markets only (see "Maker" below) | $200 each |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
+| `mention_no` | "Will X say Y" markets (earnings calls, speeches, podcasts) that end within 7 days: buys **NO** at 25-90c, one word per event, real order-book fills, skips thin books where the ask is 5c+ above the listed price. Added 2026-11-09 (see "Calibration hunt" below) | $50 |
+| `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
+| `kc_maker`, `kc_maker_safe`, `kc_maker_early` | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -134,6 +138,52 @@ Research that found nothing (2026-11-08, `arbhunt.py`, run with the `probe` work
 
 The backtest showed "sure" 93-98c favorites in weather, crypto-price and tweet-count buckets a day before the end flip far more often than the price says (weather: 292 flips in 2,104 bets, where 95c implies about 105). An academic study (arXiv 2602.19520) found the same: short-horizon weather prices are too extreme. So `fade_sure` buys the other side, 5 shares on the real order book, held to the result. Backtest (`backtest/fade.md`, 2026-11-08): weather 2,103 bets, the cheap side won 350 times at about 6c each, +$121 per $100 staked at +1c slippage, +$73 at +3c, about the same in the older and newer half. Crypto-price and post-count buckets came out about even, so the track is weather only. `python3 backtest.py btfade` (probe input `btfade`) replays it on history and writes `backtest/fade.md`. History has no order book, so the live track is the real test: thin bucket books may ask several cents more than (1 - favorite price). No FLIP alerts for this track, since losing most bets is the plan.
 
+## Calibration hunt (added 2026-11-09, `calib.py`)
+
+Are some KINDS of markets priced wrong in a steady way? `calib.py` takes 138,000 finished Polymarket markets (the backtest cache plus a sample of 11,771 tiny $1k-20k ones), looks at the price 1 day to 4 months before the end, pretends we bought one side 1-5c worse than that plus the fee, and holds to the result. Markets of one event count as one bet. Results in `backtest/calib.md`; rerun with probe input `btcalib` (or `btcalibsmall` to refresh the tiny-market sample).
+
+What it found (profit per $100 staked at +2c slippage):
+- **Almost everything loses about the spread.** Buying any side at a fair-looking price loses $1-7 per $100. No free lunch in big, boring categories.
+- **Long shots are overpriced, the more so the further out.** 5c tickets lose $26 per $100 a day out and $68 four months out. "Bored traders sell long-dated markets cheap" is false: they buy hope. The flip side (95c favorites 4 months out) only makes about $1 per $100 over 4 months, too little for the money it ties up.
+- **Weekend vs weekday:** no difference. **Quiet vs busy markets** (price moves in the week before): no usable difference. **Tiny markets:** long shots lose even more there.
+- **"Will X say Y" mention markets:** buying YES at 10-90c lost about $30 per $100, buying NO won about $15 per $100 (band +$4 to +$26, 89 events, both halves ahead). This is the one new lead, so `mention_no` paper-tests it on real books.
+- Weather long shots at 10-25c, 1-7 days out, also came out ahead (+$28): the same effect `fade_sure` already trades at 2-10c.
+- 272 slices were tested, so about 13 could pass by luck. A pass is a lead, not proof. Final market volume was NOT used as a rule: it knows the outcome (surprises draw volume).
+
+## Fine-print hunt (added 2026-11-09, `rules.py`, `fineprint.py`)
+
+Does the crowd trade the title and miss the rules? `rules.py` pulls the rule text and UMA history (proposed, disputed, resolved) for the 124,260 finished markets in the backtest cache (395 were disputed) and flags text a trader could read before the end: "official" only, "announced", "plans don't count", "consensus of credible reporting", room for judgment, 2+ things that don't count, a date the title doesn't name, very long rules. `fineprint.py` holds the flags, so the bot and the backtest use the same code. Results in `backtest/rules.md`; rerun with probe input `btrulesrun` (`btrulesfetch` refreshes the rule text, `btrulespeek` shows raw fields).
+
+What it found (profit per $100 staked at +2c):
+- **The flags predict disputes very well.** No flags: 0.4 disputes per 1,000 markets. 4+ flags: 51 per 1,000. Useful as a warning light, and `fineprint.trouble_score()` is there for any track that wants one.
+- **But the prices are already right.** Buying YES or NO in flagged markets loses about the spread, like everything else. The guess "strict rules make YES too dear" is wrong: if anything YES does slightly better in "official only" markets than in look-alikes.
+- **Disputed markets are where long shots win** (in hindsight: +$108 per $100 on 2-25c tickets). You can't know a dispute in advance.
+- **The one lead died on the volume-bias check.** 1-3 days after the end date, unpaid, 2+ flags, underdog at 10-30c looked like +$20 per $100 on the $20k+ cache. Adding every $1k-20k market that sat unpaid (probe `btrulessmall`, 10,510 markets) turns it into **-$18 per $100** (band -$31 to -$6). The cache keeps a market only if its final volume passed $20k, and a late surprise draws volume, so winning long shots were over-represented (they won 1.38x what their prices said there, 0.63x in the small markets). No track was added.
+- 204 rows were tested, so about 10 could pass by luck. One did ("rules name a date the title doesn't", buy YES 1-3 days out), but its markets are a grab bag (earthquake counts, Trump-says-this-week, Hormuz shipping) and it is on the same biased cache, so it is treated as luck.
+- Limits: Gamma shows today's rule text. Polymarket's later clarifications don't appear in it (none were found), so the flags read close to what traders saw.
+
+## Sharp bookie price (added 2026-11-09, `sharp.py`)
+
+Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.
+
+- **Source:** Pinnacle, the sharpest big bookie. Its official API closed to the public in July 2025, but its website reads odds from a public JSON feed (`guest.api.arcadia.pinnacle.com`, no key, no account), which works from GitHub Actions. The bot reads it every 15 minutes, a few calls per sport. Paid alternatives if it ever breaks: The Odds API (free 500 calls a month, Pinnacle "may be delayed"), OddsPapi (free 250 a month, has history), pinnodds.
+- **Removing the margin:** a bookie's chances add up to a bit more than 100 per 100 (Pinnacle about 2-4 extra on a game). We take it out two ways (scale everything down evenly, or the "power" way that trims longshots more) and always use the one that is worse for the side we buy.
+- **Matching:** Polymarket game events (moneyline markets) to Pinnacle matchups by start time (within 75 minutes) and both team names (`sharp.name_score`). Soccer has home/draw/away; Polymarket's "Will X win?" / "draw?" Yes and No shares are both priced. In-play games are skipped. Tennis is left out (retirement rules differ).
+- **Rule:** buy 5 shares when (fair chance) minus (real ask for 5 shares) minus (fee) is at least 3c, and at most 15c (a bigger gap usually means wrong match or late news). Pinnacle's max bet on the game must be at least $250 (low limits mean a soft line). One bet per game, held to the result. Fills are real order-book fills like every other track.
+- **First live look (2026-11-09, `probe sharp_scan`):** 72 games matched (27 soccer, 19 esports, 13 basketball, 12 hockey, 1 NFL), 252 buyable sides. Polymarket's listed asks sat a median 1.3c ABOVE Pinnacle's fair price in every sport, and only 1 side was even 1c cheaper after the fee (0 at 3c). That fits what traders report: the big market makers on Polymarket and Kalshi copy Pinnacle within a second. So expect very few trades; the track measures how often a slow bot still catches a gap.
+- **Backtest:** `python3 sharp.py bt` (probe input `sharp_bt`) replays the rule on finished Polymarket soccer games in the top 5 European leagues against Betfair Exchange closing odds from football-data.co.uk (free; Pinnacle's columns there went blank in July 2025). Result (2026-11-09, 1,230 games): Polymarket was within half a cent of Betfair fair on most outcomes and just as accurate; the 3c rule found 14 bets and came out -$0.04 at 1c slippage. No edge for a slow bot. Details: `backtest/sharp.md`.
+- **Probe inputs:** `sharp_scan` (live gaps, no trades), `sharp_bt`, `sharp_probe*` (raw API shapes), `fasttest` (dry run of all fast tracks incl. this one).
+
+## Kalshi 15-minute crypto: the late favorite maker (added 2026-11-09, `kcrypto.py`)
+
+Kalshi lists a new "BTC (ETH, SOL, XRP, DOGE, HYPE, BNB) price up in next 15 mins?" market every 15 minutes. It settles on the 60-second average of CF Benchmarks' index before the close vs the one before the open. These series charge takers 0.07 x p x (1-p) a contract and **makers nothing** (series `fee_type` "quadratic", checked 2026-11-09).
+
+The idea, inferred from a Reddit post: a few minutes before the close, rest a buy order at 90-99c on the side that's winning and hold it. It wins a few cents most of the time and loses the whole price when the coin flips at the end. The only real question is the fills: a resting bid fills only when someone sells into it, and the sellers may know something (they're dumping because the price is about to cross).
+
+- **Backtest:** `kcrypto.py` downloads every settled window's last 11 one-minute candles (best bid/ask + traded low/high) and Binance 1-minute spot into `bt_cache/kc/`, then replays fixed prices, joining the best bid, one tick in front of it, and a taker comparison, by minutes left. Three fill models: strict (only if a trade printed below our price), fair (front of line: a trade at our price counts), touch (optimistic). Report: `backtest/kcrypto.md`. Run with the `probe` workflow: `btkc` (fetch + run, 60 days, cached), `btkcrun` (replay only), `btkc2` (2-day smoke test). `kcrypto.load_windows()` hands the cached windows to any other 15-minute idea.
+- **Backtest result (60 days, 39,820 windows, 2026-09-10 to 11-09):** fixed-price bids lose ($0.30-5.30 per $100) because the fills come when the coin is about to flip. Joining or improving the best bid in the last 1-5 minutes is about break-even (-$0.30 to +$0.20 per $100, one loss eats 60-200 wins). Taker is about $0. Only a Binance spot check (z = distance to strike / typical move until the close, z >= 2) helped: +$0.56 per $100 over 8,663 fills, both halves ahead. 7-10 minutes left did a bit better too. About 105 variants were tried, so treat single lines with care.
+- **Live paper tracks:** each watch run looks at the current window of each coin. With 0.75-5.5 minutes left it notes a virtual bid and how many contracts were already waiting at that price. After the close it reads the real trade tape: if anything traded below our price, we filled in full; otherwise only sells at our price after the queue ahead of us count. Unfilled orders cost nothing. The summary prints a "picked-off check": how often filled orders won vs how often the unfilled ones would have. `probe kmakertest` is a dry run.
+
 ## Maker: get paid to quote (added 2026-11-08)
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
@@ -143,7 +193,14 @@ Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone w
 - **Fills come from the real trade tape:** an order fills only if a trade went through our price, or more traded at our price than was queued ahead of us. Quotes sit unchanged between runs, so news in between hits us like it would hit a real slow bot.
 - **Rewards** use Polymarket's own formula against everyone else in the public book, assuming the others are as two-sided as possible (gives us the smaller share), credited only for the minutes since the last run (max 15).
 - A YES from one fill and a NO from the other merge back into $1. Holding stops growing at 2 lots per side. After 3 days, or when a market leaves the list, leftovers are sold at the bid with the taker fee: that is one finished trade for the ranking.
-- `summary.md` splits the result into **rewards earned** and **trading result** (getting picked off, spreads, leftovers). It only works if the first number stays bigger.
+- `summary.md` and the dashboard split the result into **rewards** (a model, likely too high) and **price moves** (getting picked off, spreads, leftovers: real order-book money), the latter as *locked in* and *on what it still holds*. It only works if the rewards beat the price moves.
+- **Reward cap (bug fix 2026-11-09):** the pool-share model paid about $8 a day per $100. Real payouts of the 25 busiest wallets in reward markets (`probe rewardpay`, Polymarket's public activity feed) were 1c to 38c a day per $100 they hold, with the pool mostly going to a few fast pro bots. So rewards are now credited at most **40c a day per $100 quoted** (`reward_cap_per_100_day`), and rewards already credited were cut down to that once (the raw number stays as `rewards_model`).
+- **Variants (2026-11-09, Jan: "can't we exit with profit?")**, $200 each, `maker` stays the control. All sell at the real bid with the taker fee, never on an empty book, and keep quoting afterwards:
+  - `maker_tp`: sells what it holds once it is up 3c a share after the fee.
+  - `maker_tpsl`: the same, plus a stop loss at 5c a share down.
+  - `maker_flat`: never keeps a bet, sells every fill on the next run. Pays the spread each time, but a big price move can't hurt it.
+  - `maker_short`: only markets ending within 30 days (not within 7).
+  Every variant scores its rewards as if it were alone in the book, so the reward numbers are as optimistic as `maker`'s; compare the price-move numbers.
 
 Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estimated about $35 a day of rewards per $100 of quotes, but replaying the last day of prices said a slow bot would have lost about $44 per $100 to getting picked off. Both numbers are rough (one is a snapshot, the other a price replay without the order book), so this track is the real test. Rewards may also have payout minimums or limits we can't see from the public data.
 
@@ -159,6 +216,8 @@ Why it might fail: a first live test (`edges.py`, 45 markets, 2026-11-08) estima
 - Run it with the `backtest` workflow (manual, commits the report to main) or the `probe` workflow with `btrun` (report in the run log and artifact). The download (~2 hours the first time) is cached between runs.
 - Can't be replayed: arb and every horse (no old order books), endgame's resolved/proposed tiers (no proposal history), consensus.
 - The 40 copied wallets were picked because they won in this same period, so their backtest flatters them.
+
+**Sanity checks (`btcheck.py`, added 2026-11-09).** Every engine change has to pass them first (`python3 btcheck.py selftest` offline, `btcheck` probe on real data, results in `backtest/checks.md`): fake fair markets where every strategy must lose only its costs (a planted stop-loss bug must be caught), a second small simulator that re-walks every trade and must agree, random entries that should lose about the costs, each strategy vs random twins with the same exits, pessimistic costs (+2c, entry an hour later, take-profits sold at the target because 12-hourly history overstates them), a panic sweep with walk-forward halves, and mention_no rebuilt from scratch. Markets ending 2026-11-10 or later are a holdout, scored once from 2026-12-21 (`btholdout`). The rules: `backtest/PROTOCOL.md`.
 
 ## How it runs
 
@@ -188,6 +247,12 @@ Not modeled: our own orders moving the price for the next 5-minute check (the pa
 
 Paper fills happen at the exact moment the bot reads the book. A real order lands a little later, and a fast market may have moved by then (Jan's earlier bot looked great on paper and lost live for exactly this reason). At the end of every run, each buy from that run is priced again on a fresh book, with the same shares, at least 30 seconds later (`config.json` > `late_fill`). The result is stored on the position as `late` (`s` = seconds later, `px` = the price then, or null if the book was empty). `summary.md` shows per strategy how much more (or less) the late fill would have cost per $100. Records only: no trade or rule changes. Kalshi legs aren't re-checked.
 
+## Data check (added 2026-11-09)
+
+After the endgame "phantom fills" (paper buys on empty order books), every watch and daily run checks the bot's own numbers: cash = money put in - open bets + profit on every track, realized profit = the finished trades, every buy was a real order-book fill, no track holds both sides of one market, no open bet stuck on a closed market (daily), and no suspiciously perfect record (30+ trades, 0 losses). Results go to `state/integrity.json` and the "Data check" section of `summary.md`; a new problem sends one ntfy alert. Maker rewards are flagged when the model pays more than $5 a day per $100 (it can't be checked against real payouts).
+
+For a deeper look, the `audit` probe compares past trades with Polymarket's own records: buy prices vs the trade tape, copy timing vs each wallet's own trades, payouts vs final prices, open bets at listed price vs best bid, and the depth behind repeated arb lots.
+
 ## Market data recorder (added 2026-11-08)
 
 `recorder.py` saves live market data so future backtests can replay real order books instead of guessing slippage. The idea is from a Reddit bot builder who recorded data for 3 months before testing strategies. The `recorder` workflow runs nonstop, about 5h40m per run, with the next run queued, and saves:
@@ -207,9 +272,13 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `state/arb_candidates.json`: proposed Kalshi/Polymarket twin pairs waiting for review
 - `state/his_book.json`: his current book and what holding all of it at minimum size would cost
 - `state/wallet_snaps.json`: which tokens each copied wallet held at the last check (compact, used to spot new positions)
-- `state/top.json`: today's top 10 by trust (only these send trade pushes)
+- `state/top.json`: the current top 10 by trust (only these send trade pushes). The daily scoreboard sets it and watch re-ranks it every hour (also rewriting `summary.md`), so a strategy that turns into a loser loses its pushes within the hour.
 - `state/his_exits.json`: every exit of his: sold early or held to payout, his avg vs sell price, days left before the end date, and (once the market pays) whether selling early helped him
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
+- `backtest/checks.md`, `backtest/PROTOCOL.md`: backtest sanity checks and the test-before-results rules (`btcheck.py`)
+- `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
+- `backtest/rules.md`: fine-print hunt, rule-text flags vs disputes and prices (`rules.py`, `fineprint.py`)
+- `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup

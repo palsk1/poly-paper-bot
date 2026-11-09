@@ -1,14 +1,28 @@
 {
  "fast_last": {
-  "crypto_late": "2026-11-08T22:42:01Z",
-  "wx_forecast": "2026-11-08T21:32:18Z"
+  "crypto_late": "2026-11-09T21:37:10Z",
+  "mention_no": "2026-11-09T20:59:21Z",
+  "sharp_pinnacle": "2026-11-09T21:37:10Z",
+  "wx_forecast": "2026-11-09T21:31:56Z"
  },
- "last_daily": "2026-11-08",
- "last_lab_exits": "2026-11-08T22:15:49Z",
- "last_ladder_check": "2026-11-08T22:31:00Z",
- "last_panic_scan": "2026-11-08T21:05:18Z",
+ "last_daily": "2026-11-09",
+ "last_lab_exits": "2026-11-09T21:35:38Z",
+ "last_ladder_check": "2026-11-09T21:36:02Z",
+ "last_panic_scan": "2026-11-09T21:03:22Z",
  "picked_on": {
-  "claude": "2026-11-08",
-  "screener": "2026-11-08"
+  "claude": "2026-11-09",
+  "control_longshot": "2026-11-09",
+  "control_random": "2026-11-09",
+  "fade_rally": "2026-11-09",
+  "fav_bigvol_85_95": "2026-11-09",
+  "fav_cut_losses": "2026-11-09",
+  "fav_fee_free": "2026-11-09",
+  "fav_mid_80_90": "2026-11-09",
+  "fav_short_90_95": "2026-11-09",
+  "fav_short_95_98": "2026-11-09",
+  "momentum_week": "2026-11-09",
+  "no_only_90_97": "2026-11-09",
+  "screener": "2026-11-09",
+  "yes_fav_85_95": "2026-11-09"
  }
 }

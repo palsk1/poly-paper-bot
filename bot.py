@@ -193,6 +193,23 @@ def stamp_status(tracks):
     _STATUS.clear()
 
 
+def drop_phantom_fills(tr):
+    """One-time cleanup (Jan's OK, 2026-11-09): endgame paper buys made on an empty order book ('estimate' fills at
+    the stale listed price) could never have happened, so they are taken out of the score and their money put back.
+    The old numbers stay in git history."""
+    closed = [c for c in tr["closed"] if c.get("price_source") == "estimate"]
+    opened = {t: p for t, p in tr["positions"].items() if p.get("price_source") == "estimate"}
+    pnl = sum(c.get("pnl", 0.0) for c in closed)
+    back = sum(p["shares"] * p["entry"] + p.get("entry_fee", 0.0) for p in opened.values())
+    tr["closed"] = [c for c in tr["closed"] if c.get("price_source") != "estimate"]
+    for t in opened:
+        del tr["positions"][t]
+    tr["cash"] = round(tr["cash"] - pnl + back, 6)
+    tr["realized"] = round(tr["realized"] - pnl, 6)
+    tr["phantom_removed"] = {"on": iso(), "closed": len(closed), "open": len(opened), "pnl_removed": round(pnl, 4)}
+    print(f"phantom cleanup: removed {len(closed)} closed + {len(opened)} open estimate fills, pnl {pnl:+.2f}")
+
+
 def load_tracks():
     tracks = load("tracks.json", {})
     for name, tc in CFG["tracks"].items():
@@ -212,11 +229,16 @@ def load_tracks():
                 "skipped_no_cash": 0,
                 "created": iso(),
             }
+        if tc["source"] == "endgame" and "phantom_removed" not in tracks[name]:
+            drop_phantom_fills(tracks[name])
         if tc["source"] == "arb":
             for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
                 tracks[name].setdefault(k, v)
         if tc["source"] in ("fullset", "ladder"):
             for k, v in (("sets", {}), ("opportunities", 0), ("incomplete", 0), ("seen", {})):
+                tracks[name].setdefault(k, v)
+        if tc["source"] == "kmaker":
+            for k, v in (("orders", {}), ("unfilled", 0), ("unfilled_log", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
     return tracks
 
@@ -368,8 +390,11 @@ def walk(levels, shares):
 
 
 def quote(token, side, shares, m=None):
-    """Paper fill price. 'buy' takes the ask, 'sell' hits the bid.
-    Falls back to the listed price +/- slippage if the book is unavailable."""
+    """Paper fill price. 'buy' takes the ask, 'sell' hits the bid. Only real book fills count: with no book, or a book
+    too thin for our shares, there is no fill (None) and the caller tries again on a later run.
+    Bug fix 2026-11-09 (audit): this used to fall back to the listed price +/- 1c ('estimate'), which let endgame
+    tracks 'buy' on empty books and let exits 'sell' to bids that weren't there. Paper fills must be fills that
+    could really have happened."""
     bk = book(token)
     LAST_BOOK[token] = (time.time(), bk)  # the real-size model re-walks this same book at $10-$100
     if bk:
@@ -377,12 +402,7 @@ def quote(token, side, shares, m=None):
         px = walk(bk["asks"] if side == "buy" else bk["bids"], shares)
         if px is not None:
             return px, shares, "book"
-    mid = token_price_from_market(m, token) if m else None
-    if mid is None:
-        return None, shares, "none"
-    slip = CFG["fallback_slippage"]
-    px = min(0.999, mid + slip) if side == "buy" else max(0.001, mid - slip)
-    return px, shares, "estimate"
+    return None, shares, "none"
 
 
 # ================================================================ real-size check (what $10-$100 a trade would get)
@@ -663,7 +683,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -705,7 +725,7 @@ def manage_exits(tracks, lab=True):
                 continue
             rec = paper_close(tr, name, tok, fill, taker_fee(pos["shares"], fill, fee_rate(m)), f"{reason}, {how}")
             if rec and CFG["push"].get("on_claude_trades"):
-                push(f"[{name}] SELL {pos.get('outcome')} @ {cents(fill)} ({rec['pnl']:+.2f})",
+                push(f"[{name}] sold {pos.get('outcome')} at {cents(fill)} ({usd(rec['pnl'])})",
                      f"{pos.get('title')}\nReason: {reason}",
                      click=market_link(pos.get("slug", ""), pos.get("event_slug", "")), tags="moneybag", track=name)
 
@@ -924,8 +944,9 @@ def follow_leader(tracks):
         saw(name, f"Watching his {len(cur)} open positions. Last new one seen: {newest[:10] or 'none since the start'}.")
 
     # ---- new positions he opened
+    both = split_tokens(cur)
     for tok, p in cur.items():
-        if prev.get(tok, {}).get("size", 0) >= 1 or p["redeemable"] or p["size"] < 5:
+        if tok in both or prev.get(tok, {}).get("size", 0) >= 1 or p["redeemable"] or p["size"] < 5:
             continue
         if p["size"] * max(p["avg"], 0.01) < min(CFG["tracks"][n].get("min_open_usd", lead["min_open_usd"])
                                                  for n in leader_tracks()):
@@ -957,7 +978,7 @@ def follow_leader(tracks):
                    "our_price": None if px is None else round(px, 4), "price_source": how, "copied_by": took})
         if CFG["push"]["on_leader_trades"]:
             push(f"{lead['name']} BUY {p['outcome']} @ {cents(p['avg'])}",
-                 f"{p['title']}\nHe holds {p['size']:.0f} sh (${p['size'] * p['avg']:,.0f}). "
+                 f"{p['title']}\nHe holds {p['size']:.0f} shares (${p['size'] * p['avg']:,.0f}). "
                  f"Your price now: {cents(px)}.\nPaper copied by: {', '.join(took) or 'none'}",
                  click=market_link(p["slug"], p["event_slug"]), tags="chart_with_upwards_trend", track=leader_tracks())
 
@@ -1000,7 +1021,7 @@ def follow_leader(tracks):
                 how = (f"Sold at ~{cents(xr['exit_price'])} (his avg {cents(q.get('avg'))}, "
                        f"{xr['profit_per_share'] * 100:+.0f}c/sh, ~${xr['profit_usd']:,.0f}), "
                        f"{xr.get('days_left', '?')} days before the end date.\n")
-            push(f"{lead['name']} EXIT {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} sh)",
+            push(f"{lead['name']} sold {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} shares)",
                  f"{q.get('title')}\n{how}Paper closed in: {', '.join(closed_by) or 'none'}",
                  click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend",
                  track=leader_tracks())
@@ -1037,6 +1058,17 @@ def wallet_tracks():
 
 def tkey(tok):
     return str(tok)[-16:]  # token ids are ~77 digits; the tail is unique enough and keeps the snapshot small
+
+
+def split_tokens(cur):
+    """Tokens of markets where the wallet holds BOTH sides at once (YES and NO, usually 50c each from a 'split' of
+    $1 into a pair). That is market making or a merge-in-waiting, not a bet on one side, so the copy tracks skip it.
+    Bug fix 2026-11-09 (audit): copies used to buy both legs (cost about $1.00 for a pair that pays exactly $1)."""
+    by_market = defaultdict(list)
+    for tok, p in cur.items():
+        if p.get("slug") and not p.get("redeemable") and p.get("size", 0) >= 1:
+            by_market[p["slug"]].append(tok)
+    return {t for toks in by_market.values() if len(toks) >= 2 for t in toks}
 
 
 def wallet_positions(addr, max_pages):
@@ -1116,7 +1148,8 @@ def backfill(tracks, name, cur, r):
     track behaves like its w_* twin (copies new positions, sells when the wallet sells)."""
     tr = tracks[name]
     tried = set(tr.setdefault("bf_tried", []))
-    live = sorted((p for p in cur.values() if not p["redeemable"] and p["size"] >= 5 and p["cur"]
+    both = split_tokens(cur)
+    live = sorted((p for p in cur.values() if p["token"] not in both and not p["redeemable"] and p["size"] >= 5 and p["cur"]
                    and p["size"] * p["cur"] >= r["min_open_usd"]), key=lambda p: -p["size"] * p["cur"])
     todo = [p for p in live[: r.get("max_backfill", 30)] if tkey(p["token"]) not in tried]
     for p in todo[: r.get("backfill_per_run", 10)]:
@@ -1167,8 +1200,12 @@ def follow_wallets(tracks):
         if CFG["tracks"][name].get("backfill") and not tr.get("backfilled"):
             backfill(tracks, name, cur, r)
         # new positions
+        both = split_tokens(cur)
         fresh = 0
         for tok, p in cur.items():
+            if tok in both:
+                tr["skipped_split"] = tr.get("skipped_split", 0) + (tkey(tok) not in prev)
+                continue
             if tkey(tok) in prev or p["redeemable"]:
                 continue
             fresh += 1
@@ -1211,10 +1248,13 @@ def follow_consensus(tracks, live):
         r, tr = rules_for(name), tracks[name]
         count, sample, redeem = Counter(), {}, set()
         for cur in live.values():
+            both = split_tokens(cur)
             for tok, p in cur.items():
                 if p["redeemable"]:
                     redeem.add(tok)
                     continue
+                if tok in both:
+                    continue  # holds both sides of this market: not a vote for either
                 if p["size"] * (p["cur"] or p["avg"]) >= r["min_usd_each"] and p["cur"] and \
                         r["min_price"] <= p["cur"] <= r["max_price"]:
                     count[tok] += 1
@@ -1495,11 +1535,15 @@ def buy_candidates(tracks, name, cands, limit):
             why(name, "too many bets on this theme")
             continue
         px, shares, how = quote(c["token"], "buy", n, c["market"])
+        if how != "book" and tc["source"] == "endgame":
+            continue  # bug fix 2026-11-09: a decided market with no asks on the book can't be bought; the listed price is stale
         lo = r.get("min_price", 0.0)
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
             why(name, "no order book" if px is None else "real price outside its range")
             continue
+        if r.get("max_over_listed") is not None and px > c["price"] + r["max_over_listed"]:
+            continue  # thin book: the real ask is far above the listed price, so the backtest edge isn't there
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
             why(name, "too little profit after the fee")
@@ -1528,7 +1572,7 @@ def buy_candidates(tracks, name, cands, limit):
         why(name, "full (max open bets)")
     saw(name, f"{len(cands)} market{'' if len(cands) == 1 else 's'} matched its rules, bought {len(bought)}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
-        push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag", track=name)
+        push(f"[{name}] bought {len(bought)} (practice money)", "\n".join(bought), tags="mag", track=name)
     return bought
 
 
@@ -1918,9 +1962,24 @@ def arb_check_pair(name, tr, pair, r):
     days = max(1.0, (max(ends) - now()).total_seconds() / 86400 if ends else 30) + r["settle_buffer_days"]
     rate = fee_rate(pm)
     best = None
+    # Bug fix 2026-11-09 (audit): repeat lots on one pair used to re-walk the same book, as if the shares our earlier
+    # paper lots took were still for sale (4 lots in 15 minutes at the same price). Lots bought in the last hour now
+    # count as taken: a new lot pays for the NEXT shares on the book.
+    recent = now() - dt.timedelta(minutes=60)
+
+    def used(k_side, tok):
+        return sum(a["shares"] for a in tr["arbs"].values() if a["pair_id"] == pid and a["k_side"] == k_side
+                   and a["poly_token"] == tok and parse_iso(a["opened"]) > recent)
+
+    def next_px(levels, done, n):
+        tot = walk(levels, done + n)
+        if tot is None:
+            return None
+        return (tot * (done + n) - (walk(levels, done) * done if done > EPS else 0.0)) / n
     # leg A: Kalshi YES + Polymarket outcome that wins when Kalshi NO wins; leg B: the mirror image
     for k_side, k_levels, j in (("yes", kb[0], 1 - iy), ("no", kb[1], iy)):
-        pk, pp = walk(k_levels, shares), walk(pb[j]["asks"], shares)
+        u = used(k_side, toks[j])
+        pk, pp = next_px(k_levels, u, shares), next_px(pb[j]["asks"], u, shares)
         if pk is None or pp is None:
             continue
         kf, pf = kalshi_fee(shares, pk), taker_fee(shares, pp, rate)
@@ -1970,7 +2029,7 @@ def arb_check_pair(name, tr, pair, r):
     log_event({"type": "arb_open", "track": name, "title": pm.get("question"), "pair": pid,
                "price": round(best["pk"] + best["pp"], 4), "edge": round(best["edge"], 4)})
     if CFG["push"].get("on_arb") and not prev.get("opportunity"):  # one ping per gap, not per lot
-        push(f"[arb] locked {best['edge'] * 100:.1f}c/share",
+        push(f"[arb] locked in {best['edge'] * 100:.1f}c a share",
              f"{pm.get('question')}\nKalshi {best['k_side'].upper()} {cents(best['pk'])} + Polymarket "
              f"{best['p_out']} {cents(best['pp'])}, fees ${best['kf'] + best['pf']:.2f}\n"
              f"{shares:.0f} shares: pays ${shares:.2f} at the end for ${best['cost']:.2f} (paper)",
@@ -2009,7 +2068,7 @@ def arb_settle(tracks):
         if mismatch:
             tr["mismatches"] += 1
             push("[arb] MISMATCH: sites resolved differently",
-                 f"{a['title']}\nKalshi paid {pk:.2f}, Polymarket paid {pp:.2f} per share. P&L ${pnl:+.2f} (paper). "
+                 f"{a['title']}\nKalshi paid ${pk:.2f}, Polymarket paid ${pp:.2f} a share. Result {usd(pnl)} (practice money). "
                  "This is the risk the experiment is measuring.", tags="rotating_light")
 
 
@@ -2047,14 +2106,14 @@ def proof(n, k, e, realized, what="trades", bad="bad outcomes"):
             m += 1
         need = max(m - n, 20 - n, 0)
     if n == 0:
-        verdict = (f"Not proven yet: no finished {what}. At ~{e * 100:.1f}c edge we need about {need} "
-                   f"finished {what} with 0 {bad} to be 90% sure.")
+        verdict = (f"Not proven yet: no finished {what}. Each one earns about {e * 100:.1f}c a share, so it needs about "
+                   f"{need} finished {what} with no {bad} before we can be 90% sure it's not luck.")
     elif proven:
-        verdict = (f"PROVEN at 90%: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. The {bad} rate is "
-                   f"below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
+        verdict = (f"PROVEN: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. That's enough to be 90% sure "
+                   f"the {bad} are too rare to eat the {e * 100:.1f}c a share it earns.")
     else:
-        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit ${realized:+.2f}. Need about "
-                   f"{need} more clean ones to be 90% sure (if no new {bad}).")
+        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit {usd(realized)}. It needs about "
+                   f"{need} more with no {bad} to be 90% sure it's not luck.")
     return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "bad_rate_upper90": round(ub, 4),
             "proven": proven, "more_needed": need, "verdict": verdict}
 
@@ -2344,7 +2403,7 @@ def sets_settle(tracks, name, tag, why):
         if bad:
             tr["incomplete"] += 1
             push(f"[{tag}] SHORT: paid less than guaranteed",
-                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
+                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. Result {usd(pnl)} (practice money).",
                  tags="rotating_light")
 
 
@@ -2758,6 +2817,304 @@ def ladder_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ Kalshi 15-minute crypto: late favorite maker (2026-11-09)
+#
+# From a Reddit post ("$50 to $3,000 on Kalshi 15-minute crypto with maker orders"). A few minutes before a window
+# closes, rest a buy order on the side that's winning and hold it to the result. Makers pay no fee on these series
+# (fee_type "quadratic", checked 2026-11-09). Backtest: kcrypto.py, backtest/kcrypto.md.
+# Paper fills, conservative: we place a virtual bid and note how many contracts were already waiting at our price.
+# After the close we read the real trade tape: if anything traded BELOW our price, every bid at our price (ours
+# too) was used up, so we filled in full. Otherwise only sells AT our price count, and only after the queue that was
+# ahead of us. Orders that never fill cost nothing. Cash for a resting order is set aside until it settles.
+
+KMAKER_SOURCES = ("kmaker",)
+
+
+def kmaker_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "kmaker"]
+
+
+def kalshi_book_sides(ticker):
+    """{'yes': [(price, size)...], 'no': [...]} bids, best first, or None."""
+    try:
+        res = kalshi_get(f"/markets/{urllib.parse.quote(ticker)}/orderbook")
+    except Exception as e:
+        print(f"kalshi book failed for {ticker}: {e}")
+        return None
+    ob = (res.get("orderbook_fp") or res.get("orderbook") or {}) if isinstance(res, dict) else {}
+    out = {}
+    for side in ("yes", "no"):
+        lv = ob.get(f"{side}_dollars") or ob.get(side) or []
+        rows = []
+        for x in lv:
+            if isinstance(x, (list, tuple)) and len(x) >= 2:
+                p, sz = fnum(x[0], None), fnum(x[1], 0)
+                if p is not None and sz > 0:
+                    rows.append((round(p / 100 if p > 1 else p, 4), sz))
+        out[side] = sorted(rows, key=lambda r: -r[0])
+    return out
+
+
+KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "KXXRP15M": "XRPUSDT",
+               "KXDOGE15M": "DOGEUSDT", "KXHYPE15M": "HYPEUSDT", "KXBNB15M": "BNBUSDT"}
+_kmaker_spot = {}
+
+
+def kmaker_z(series, strike, minutes_left, side):
+    """How many 'typical moves until the close' Binance spot sits on our side of the strike (same formula as the
+    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data."""
+    sym = KMAKER_SPOT.get(series)
+    if not sym or not strike:
+        return None
+    if sym not in _kmaker_spot:
+        try:
+            ks = http_json(f"{BINANCE}/klines", {"symbol": sym, "interval": "1m", "limit": 62})
+            closes = [fnum(k[4]) for k in ks]
+            rets = [math.log(b / a) for a, b in zip(closes[:-1], closes[1:]) if a > 0 and b > 0][-60:]
+            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets))) if len(rets) >= 30 else None
+        except Exception as e:
+            print(f"binance 1m klines failed for {sym}: {e}")
+            _kmaker_spot[sym] = None
+    got = _kmaker_spot[sym]
+    if not got or got[1] <= 0:
+        return None
+    px, sd1 = got
+    z = (px - strike) / (sd1 * px * math.sqrt(max(minutes_left, 0.5)))
+    return z if side == "yes" else -z
+
+
+def kmaker_tick(p):
+    return 0.001 if p >= 0.9 - 1e-9 or p < 0.1 else 0.01
+
+
+def kmaker_price(r, bid, ask):
+    """(our bid price, front_of_line) for the rule kind, or None to skip."""
+    kind, lvl = r.get("kind", "improve"), r.get("level", 0.95)
+    if kind == "level":
+        if (bid + ask) / 2 < lvl - EPS or ask <= lvl + EPS:
+            return None
+        return lvl, lvl > bid + EPS
+    if bid < lvl - EPS:
+        return None
+    if kind == "join":
+        return bid, False
+    p = round(bid + kmaker_tick(bid), 4)
+    return (p, True) if p < ask - EPS else (bid, False)
+
+
+def kmaker_open_markets(series):
+    try:
+        rows = kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 10}).get("markets") or []
+    except Exception as e:
+        print(f"kalshi {series} list failed: {e}")
+        return []
+    return rows
+
+
+def kmaker_place(tracks, names):
+    t_now = now()
+    books = {}
+    for series in sorted({s for n in names for s in rules_for(n).get("series", [])}):
+        for m in kmaker_open_markets(series):
+            close = parse_iso(m.get("close_time"))
+            if not close:
+                continue
+            left = (close - t_now).total_seconds() / 60
+            for n in names:
+                r = rules_for(n)
+                if series not in r.get("series", []) or not (r.get("min_minutes_left", 0.75) <= left <= r.get("max_minutes_left", 5.5)):
+                    continue
+                tr = tracks[n]
+                tk = m.get("ticker")
+                if tk in tr["orders"] or tk in tr.get("done", []):
+                    continue
+                if tk not in books:
+                    books[tk] = kalshi_book_sides(tk)
+                bk = books[tk]
+                if not bk or not bk["yes"] or not bk["no"]:
+                    continue
+                yb, ya = bk["yes"][0][0], round(1 - bk["no"][0][0], 4)
+                if not (0 < yb < ya < 1):
+                    continue
+                side = "yes" if (yb + ya) / 2 >= 0.5 else "no"
+                bid, ask = (yb, ya) if side == "yes" else (round(1 - ya, 4), round(1 - yb, 4))
+                got = kmaker_price(r, bid, ask)
+                if not got:
+                    tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                               "bid": bid, "ask": ask, "placed": False}
+                    continue
+                price, front = got
+                z = None
+                if r.get("min_spot_z") is not None:
+                    z = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side)
+                    if z is None or z < r["min_spot_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z": None if z is None else round(z, 2)}
+                        continue
+                queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
+                shares = max(1, int(r.get("usd_per_order", 10) / price))
+                cost = round(shares * price, 6)
+                maybe_refill(tr, n, cost)
+                if cost > tr["cash"] + EPS:
+                    tr["skipped_no_cash"] += 1
+                    continue
+                tr["cash"] = round(tr["cash"] - cost, 6)
+                tr["orders"][tk] = {"ticker": tk, "series": series, "title": f"{m.get('title')} ({m.get('yes_sub_title', '')})",
+                                    "outcome": side, "side": side, "price": price, "front": front, "queue": round(queue, 2),
+                                    "shares": shares, "cost": cost, "placed": iso(), "close": iso(close),
+                                    "minutes_left": round(left, 2), "bid": bid, "ask": ask,
+                                    "strike": fnum(m.get("floor_strike"), None),
+                                    "spot_z": None if z is None else round(z, 2)}
+                tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+                tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                           "bid": bid, "ask": ask, "placed": True}
+                log_event({"type": "kmaker_order", "track": n, "ticker": tk, "side": side, "price": price,
+                           "shares": shares, "queue": round(queue, 2), "minutes_left": round(left, 2)})
+                print(f"{n}: bid {side.upper()} {price * 100:.1f}c x{shares} on {tk} ({left:.1f} min left, "
+                      f"queue ahead {queue:.0f}, best bid {bid * 100:.1f}c ask {ask * 100:.1f}c)")
+
+
+def kalshi_trades(ticker, t0, t1, max_pages=40):
+    """Trades in [t0, t1] (epoch seconds), newest first; (rows, complete)."""
+    out, cur = [], None
+    for _ in range(max_pages):
+        p = {"ticker": ticker, "min_ts": int(t0), "max_ts": int(t1) + 1, "limit": 1000}
+        if cur:
+            p["cursor"] = cur
+        res = kalshi_get("/markets/trades", p)
+        out += res.get("trades") or []
+        cur = res.get("cursor")
+        if not cur or not res.get("trades"):
+            return out, True
+    return out, False
+
+
+def kmaker_fill(o, trades, shares=None):
+    """Contracts filled for a resting bid, from the real tape. -> (filled, through)."""
+    shares = o["shares"] if shares is None else shares
+    t0 = parse_iso(o["placed"])
+    sold_at, through = 0.0, False
+    for t in trades:
+        ts = parse_iso(t.get("created_time"))
+        if ts is None or ts <= t0:
+            continue
+        yp = fnum(t.get("yes_price_dollars"), None)
+        if yp is None:
+            yp = fnum(t.get("yes_price"), 0) / 100
+        px = yp if o["side"] == "yes" else round(1 - yp, 6)
+        if px < o["price"] - 1e-6:
+            through = True
+            break
+        # a taker selling our side = buying the other side
+        if abs(px - o["price"]) < 1e-6 and str(t.get("taker_side")) != o["side"]:
+            sold_at += fnum(t.get("count_fp") or t.get("count"), 0)
+    if through:
+        return float(shares), True
+    return max(0.0, min(float(shares), sold_at - o["queue"])), False
+
+
+def kmaker_settle(tracks, names):
+    tapes, first = {}, {}
+    for n in names:
+        for tk, o in tracks[n]["orders"].items():
+            first[tk] = min(first.get(tk, o["placed"]), o["placed"])
+    for n in names:
+        tr = tracks[n]
+        for tk in list(tr["orders"]):
+            o = tr["orders"][tk]
+            close = parse_iso(o["close"])
+            if now() < close + dt.timedelta(seconds=60):
+                continue
+            m = kalshi_market(tk)
+            res = str((m or {}).get("result") or "").lower()
+            if res not in ("yes", "no"):
+                if now() - close > dt.timedelta(hours=6):
+                    print(f"{n}: {tk} still has no result 6h after the close")
+                continue
+            if tk not in tapes:
+                try:
+                    tapes[tk] = kalshi_trades(tk, parse_iso(first[tk]).timestamp(), close.timestamp())
+                except Exception as e:
+                    print(f"{n}: trades for {tk} failed: {e}")
+                    continue
+            trades, complete = tapes[tk]
+            filled, through = kmaker_fill(o, trades)
+            tr["cash"] = round(tr["cash"] + o["cost"], 6)   # release the money set aside
+            del tr["orders"][tk]
+            tr["done"] = (tr.get("done", []) + [tk])[-300:]
+            if filled <= EPS:
+                tr["unfilled"] = tr.get("unfilled", 0) + 1
+                tr.setdefault("unfilled_log", []).append({"ticker": tk, "won": res == o["side"], "price": o["price"]})
+                tr["unfilled_log"] = tr["unfilled_log"][-500:]
+                continue
+            pay = 1.0 if res == o["side"] else 0.0
+            cost = filled * o["price"]
+            pnl = filled * pay - cost
+            tr["cash"] = round(tr["cash"] - cost + filled * pay, 6)
+            tr["realized"] = round(tr["realized"] + pnl, 6)
+            rs = {}
+            for usd_ in rs_sizes():
+                want = usd_ / o["price"]
+                f2 = want if through else max(0.0, min(want, kmaker_fill(o, trades, want)[0]))
+                rs[str(usd_)] = [round(f2 * o["price"], 4), round(f2 * pay - f2 * o["price"], 4), round(f2 / want, 4)]
+            rec = {**o, "shares": round(filled, 4), "entry": o["price"], "entry_fee": 0.0, "exit": pay, "exit_fee": 0.0,
+                   "pnl": round(pnl, 6), "cost": round(cost, 6), "through": through, "tape_complete": complete,
+                   "price_source": "book", "reason": "resolved", "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs}
+            tr["closed"].append(rec)
+            log_event({"type": "kmaker_fill", "track": n, "ticker": tk, "side": o["side"], "price": o["price"],
+                       "filled": round(filled, 2), "through": through, "pnl": round(pnl, 4)})
+            print(f"{n}: {tk} {o['side'].upper()} {o['price'] * 100:.1f}c filled {filled:.0f}/{o['shares']} "
+                  f"({'traded through' if through else 'at our price'}), result {res}, P&L {pnl:+.2f}")
+            if pnl < 0 and push_allowed(n):
+                push(f"[{n}] FLIP: a late favorite lost (${pnl:+.2f})",
+                     f"{o['title']}\nBought {o['side'].upper()} at {cents(o['price'])} with {o['minutes_left']:.1f} min "
+                     f"left. This is the risk the test is measuring.", tags="rotating_light", track=n)
+
+
+def kmaker_cycle(tracks):
+    names = kmaker_names()
+    if not names:
+        return
+    for n in names:
+        tracks[n].setdefault("orders", {})
+    kmaker_settle(tracks, names)
+    kmaker_place(tracks, names)
+
+
+def kmaker_summary(name, tr):
+    closed = tr["closed"]
+    wins = sum(1 for c in closed if c["pnl"] > 0)
+    locked = sum(o["cost"] for o in tr.get("orders", {}).values())
+    un = tr.get("unfilled_log", [])
+    filled_won = wins / len(closed) if closed else None
+    unf_won = sum(1 for u in un if u["won"]) / len(un) if un else None
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr.get("orders", {})), "closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": tr["refills"],
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "unfilled": tr.get("unfilled", 0)}
+    fr = f"{len(closed)} of {len(closed) + tr.get('unfilled', 0)} orders filled"
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr.get('orders', {}))} | {len(closed)} ({wins}/{len(closed) - wins}) "
+           f"| ${tr['cash']:.2f} | {fr}; refills {tr['refills']} |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
+    if closed or un:
+        a = f"{filled_won * 100:.0f}" if filled_won is not None else "-"
+        b = f"{unf_won * 100:.0f}" if unf_won is not None else "-"
+        lines.append(f"Picked-off check: filled orders won {a} in 100, unfilled ones would have won {b} in 100. "
+                     "If filled orders win clearly less often, the fills are being picked off.\n")
+        losses = [c for c in closed if c["pnl"] < 0]
+        if losses:
+            lines.append(f"Worst loss ${min(c['pnl'] for c in losses):+.2f}; average win "
+                         f"${sum(c['pnl'] for c in closed if c['pnl'] > 0) / max(wins, 1):+.2f}.\n")
+    last = tr.get("last_check", {})
+    if last:
+        lines.append("Last look per coin: " + "; ".join(
+            f"{s.replace('KX', '').replace('15M', '')} {v['side']} {v['bid'] * 100:.1f}/{v['ask'] * 100:.1f}c "
+            f"{v['left']}m {'bid' if v['placed'] else 'skip'}" for s, v in sorted(last.items())))
+    return row, stats, lines
+
+
 # ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
 #
 # These pay out within hours or a day, so they collect finished trades much faster than deadline markets.
@@ -2779,7 +3136,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -2862,7 +3219,8 @@ def run_fast(tracks, force=False):
     if not due:
         return {}
     lists = {}
-    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates)):
+    for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
+                     ("mentions", mention_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -2876,14 +3234,53 @@ def run_fast(tracks, force=False):
             lists[n] = cands
             r = rules_for(n)
             print(f"{n}: {len(cands)} candidates" + "".join(
-                f"\n   {c['outcome']} model {c['model_p'] * 100:.0f}/100 vs price {cents(c['price'])} "
-                f"(edge {c['model_edge'] * 100:+.1f}c) - {c['title'][:70]}" for c in cands[:5]))
+                (f"\n   {c['outcome']} model {c['model_p'] * 100:.0f}/100 vs price {cents(c['price'])} "
+                 f"(edge {c['model_edge'] * 100:+.1f}c) - {c['title'][:70]}" if c.get("model_p") is not None else
+                 f"\n   {c['outcome']} listed {cents(c['price'])}, {c['days']}d left - {c['title'][:70]}")
+                for c in cands[:5]))
             buy_candidates(tracks, n, cands, r.get("picks_per_scan", 3))
     st = load("scan_state.json", {})
     for n in due:
         st.setdefault("fast_last", {})[n] = iso()
     save("scan_state.json", st)
     return lists
+
+
+def mention_candidates(names):
+    """'Will X say Y' markets: the side named in rule `side` (No by default) priced in [min_price, max_price].
+    calib.py (backtest/calib.md, 2026-11-09) found YES in these markets wins less often than its price says."""
+    rs = {n: rules_for(n) for n in names}
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
+    markets = scan_markets({"end_date_min": iso(now()), "end_date_max": iso(hi),
+                            "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
+    out = {}
+    for n, r in rs.items():
+        rx = re.compile(r["only_regex"], re.I)
+        cands = []
+        for m in markets:
+            q = str(m.get("question") or "")
+            if not rx.search(q):
+                continue
+            prices = binary(m)
+            b = base_filter(m, r) if prices else None
+            if not b:
+                continue
+            outs = [str(o).lower() for o in jlist(m.get("outcomes"))]
+            side = r.get("side", "no")
+            if side not in outs:
+                continue
+            i = outs.index(side)
+            if r["min_price"] <= prices[i] <= r["max_price"]:
+                cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
+        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+        out[n] = cands
+    return out
+
+
+def sharp_candidates(names):
+    """Polymarket game outcomes priced below Pinnacle's fair odds (sharp.py does the matching and de-vig)."""
+    import sharp
+    return sharp.sharp_candidates(names)
 
 
 # ---------------------------------------------------------------- weather
@@ -3241,11 +3638,31 @@ def fasttest():
 #  - A YES bought on one side and a NO bought on the other merge back into $1. Leftovers are sold at the bid (taker
 #    fee) when the market leaves our list or after max_days, which ends one finished "trade" for the ranking.
 
+def maker_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "maker"]
+
+
 def maker_rules():
-    for n, tc in CFG["tracks"].items():
-        if tc["source"] == "maker":
-            return n, rules_for(n)
-    return None, None
+    names = maker_names()
+    return (names[0], rules_for(names[0])) if names else (None, None)
+
+
+# Several maker tracks (variants, 2026-11-09) look at the same markets in one run: share the lookups for a minute.
+_maker_cache = {}
+
+
+def maker_cached(key, fn, ttl=60):
+    hit = _maker_cache.get(key)
+    if hit and time.time() - hit[0] < ttl:
+        return hit[1]
+    val = fn()
+    if val is not None:
+        _maker_cache[key] = (time.time(), val)
+    return val
+
+
+def maker_book(tok):
+    return maker_cached(("book", tok), lambda: book(tok))
 
 
 def reward_score(v, s):
@@ -3254,6 +3671,10 @@ def reward_score(v, s):
 
 
 def reward_markets(max_pages=40):
+    return maker_cached(("reward_markets", max_pages), lambda: _reward_markets(max_pages), ttl=600)
+
+
+def _reward_markets(max_pages=40):
     out, cur = [], ""
     for _ in range(max_pages):
         try:
@@ -3276,6 +3697,27 @@ def reward_markets(max_pages=40):
         if not rows or not cur or cur == "LTE=":
             break
     return out
+
+
+def reward_config(cid):
+    return maker_cached(("reward_config", cid), lambda: _reward_config(cid), ttl=600)
+
+
+def _reward_config(cid):
+    """Today's live reward pool for one market: {"rate", "v", "min_size"}, rate 0 when no pool runs today.
+    None when the lookup fails. /sampling-markets can lag; this per-market answer is the one Polymarket pays on."""
+    try:
+        rows = envelope_rows(http_json(f"{CLOB}/rewards/markets/{cid}"), "data")
+    except Exception as e:
+        print(f"maker: reward config {str(cid)[:10]} failed: {e}")
+        return None
+    rows = [x for x in rows if isinstance(x, dict) and x.get("condition_id") == cid]
+    if not rows:
+        return {"rate": 0.0, "v": 0.0, "min_size": 0.0}
+    m, today = rows[0], now().strftime("%Y-%m-%d")
+    rate = sum(fnum(c.get("rate_per_day")) for c in (m.get("rewards_config") or []) if isinstance(c, dict)
+               and str(c.get("start_date") or "")[:10] <= today <= str(c.get("end_date") or "9999")[:10])
+    return {"rate": rate, "v": fnum(m.get("rewards_max_spread")), "min_size": fnum(m.get("rewards_min_size"))}
 
 
 def book_scores(bk, v, min_size):
@@ -3310,13 +3752,20 @@ def maker_pick(tr, r):
         end = parse_iso(rm["end"])
         if rm["cid"] in held or not end or end < soon or rm["min_size"] > r["max_shares"] or rm["v"] <= 0:
             continue
+        if r.get("max_days_left") and end > now() + dt.timedelta(days=r["max_days_left"]):
+            continue  # variant: short-dated markets only
         if any(w in str(rm["title"]).lower() for w in r.get("skip_words", [])):
             continue
         pre.append(rm)
     pre.sort(key=lambda x: -x["rate"])
 
     def est(rm):
-        bk = book(rm["yes"])
+        cfg = reward_config(rm["cid"])  # the pool list can be stale; trust the per-market answer
+        if cfg is not None:
+            if cfg["rate"] <= 0 or cfg["v"] <= 0 or cfg["min_size"] > r["max_shares"]:
+                return None
+            rm = {**rm, **cfg}
+        bk = maker_book(rm["yes"])
         sc = book_scores(bk, rm["v"], rm["min_size"]) if bk else None
         if not sc:
             return None
@@ -3345,13 +3794,17 @@ def maker_pick(tr, r):
 
 
 def maker_trades(cid, since):
-    try:
-        res = http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500})
-    except Exception as e:
-        print(f"maker: trades failed for {cid[:10]}: {e}")
+    def fetch():
+        try:
+            return envelope_rows(http_json(f"{DATA}/v2/trades", {"condition_id": cid, "limit": 500}), "data", "trades")
+        except Exception as e:
+            print(f"maker: trades failed for {cid[:10]}: {e}")
+            return None
+    rows = maker_cached(("trades", cid), fetch)
+    if rows is None:
         return None
     out = []
-    for t in envelope_rows(res, "data", "trades"):
+    for t in rows:
         ts = fnum(pick(t, "timestamp", "time"))
         ts = ts / 1000 if ts > 1e11 else ts
         if ts > since:
@@ -3386,33 +3839,109 @@ def maker_close(tr, name, key, why, payout=None):
         if payout is not None:
             px = payout if side == "yes" else 1 - payout
         else:
-            bk = book(tok)
+            bk = maker_book(tok)
             px = walk(bk["bids"], sh) if bk else None
             if px is None:  # nobody to sell to: count it at half the best bid (or nothing)
                 px = (bk["bids"][0][0] / 2) if bk and bk["bids"] else 0.0
             fee += taker_fee(sh, px, b.get("fee_rate", 0.0))
         proceeds += sh * px
     proceeds -= fee
-    pnl = b["rewards"] + b["merged_pnl"] + proceeds - b["yes_cost"] - b["no_cost"]
+    exit_pnl = b.get("exit_pnl", 0.0)
+    pnl = b["rewards"] + b["merged_pnl"] + exit_pnl + proceeds - b["yes_cost"] - b["no_cost"]
     tr["cash"] = round(tr["cash"] + proceeds, 6)
-    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"], 6)  # rewards/merges booked already
+    # rewards, merges and early sales were booked when they happened
+    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"] - exit_pnl, 6)
     rec = {"title": b["title"], "slug": b["slug"], "cid": b["cid"], "opened": b["opened"], "closed_at": iso(),
            "reason": why, "cost": round(b["size"], 4), "pnl": round(pnl, 4), "rewards": round(b["rewards"], 4),
            "merged_pnl": round(b["merged_pnl"], 4), "leftover_pnl": round(proceeds - b["yes_cost"] - b["no_cost"], 4),
+           "exit_pnl": round(exit_pnl, 4), "exits": b.get("exits", 0),
            "fills": b["fills"], "minutes_quoted": round(b["minutes"], 1)}
     tr["closed"].append(rec)
     log_event({"type": "maker_close", "track": name, "title": b["title"], "pnl": round(pnl, 4), "reason": why})
     return rec
 
 
-def maker_cycle(tracks, pick_new=True):
-    name, r = maker_rules()
-    if not name:
+def maker_exits(tr, name, b, r):
+    """Variants (2026-11-09, Jan: "can't we exit with profit?"): sell what we hold at the real bid, taker fee paid,
+    when it is up take_profit_c cents a share (after the fee), down stop_loss_c cents, or always (flatten). No buyer
+    on the book for all our shares = no sale (no estimate fills). Quoting goes on, so rewards keep coming."""
+    tp, sl, flat = r.get("take_profit_c"), r.get("stop_loss_c"), r.get("flatten")
+    if tp is None and sl is None and not flat:
         return
+    for side, tok in (("yes", b["yes_tok"]), ("no", b["no_tok"])):
+        sh = b[side]
+        if sh <= EPS:
+            continue
+        bk = maker_book(tok)
+        px = walk(bk["bids"], sh) if bk else None
+        if px is None:
+            continue
+        fee = taker_fee(sh, px, b.get("fee_rate", 0.0))
+        cost = b[side + "_cost"]
+        per = (sh * px - fee - cost) / sh * 100  # cents a share
+        why = ("flatten" if flat else "take profit" if tp is not None and per >= tp
+               else "stop loss" if sl is not None and per <= -sl else None)
+        if not why:
+            continue
+        gain = sh * px - fee - cost
+        tr["cash"] = round(tr["cash"] + sh * px - fee, 6)
+        tr["realized"] = round(tr["realized"] + gain, 6)
+        b["exit_pnl"] = b.get("exit_pnl", 0.0) + gain
+        b["exits"] = b.get("exits", 0) + 1
+        tr["exits"] = tr.get("exits", 0) + 1
+        b[side], b[side + "_cost"] = 0.0, 0.0
+        log_event({"type": "maker_exit", "track": name, "title": b["title"], "price": round(px, 4),
+                   "pnl": round(gain, 4), "reason": f"{why}: sold {sh:.0f} {side.upper()} at {px * 100:.1f}c"})
+
+
+def maker_cycle(tracks, pick_new=True):
+    for name in maker_names():
+        if name not in tracks:
+            continue
+        try:
+            maker_cycle_one(tracks, name, rules_for(name), pick_new)
+        except Exception as e:
+            print(f"maker {name} failed: {e}")
+
+
+def maker_reward_cap(r, size, minutes):
+    """Most reward we believe for `size` shares quoted (about $size tied up) over `minutes`. Bug fix 2026-11-09:
+    the share-of-pool model paid ~$8 a day per $100, but real reward payouts of the busiest maker wallets
+    (probe rewardpay) were 1-38c a day per $100 they hold, so credit at most reward_cap_per_100_day."""
+    cap = r.get("reward_cap_per_100_day")
+    return float("inf") if cap is None else cap * size / 100 * minutes / 1440
+
+
+def maker_recap_rewards(tr, r):
+    """One-time: cut rewards already credited down to the cap (keeps the old number as rewards_model)."""
+    if tr.get("reward_cap_applied") or r.get("reward_cap_per_100_day") is None:
+        return
+    cut = 0.0
+    for b in tr["books"].values():
+        new = min(b["rewards"], maker_reward_cap(r, b["size"], b["minutes"]))
+        b.setdefault("rewards_model", b["rewards"])
+        cut += b["rewards"] - new
+        b["rewards"] = new
+    for c in tr["closed"]:
+        new = min(c.get("rewards", 0.0), maker_reward_cap(r, c.get("cost", 0.0), c.get("minutes_quoted", 0.0)))
+        d = c.get("rewards", 0.0) - new
+        c.setdefault("rewards_model", c.get("rewards", 0.0))
+        c["rewards"], c["pnl"] = round(new, 4), round(c["pnl"] - d, 4)
+        cut += d
+    tr["rewards_model"] = tr.get("rewards", 0.0)
+    tr["rewards"] = round(tr["rewards"] - cut, 6)
+    tr["realized"] = round(tr["realized"] - cut, 6)
+    tr["cash"] = round(tr["cash"] - cut, 6)
+    tr["reward_cap_applied"] = {"on": iso(), "cut": round(cut, 4)}
+    print(f"maker: rewards capped, removed ${cut:.2f} of modelled rewards")
+
+
+def maker_cycle_one(tracks, name, r, pick_new=True):
     tr = tracks[name]
     tr.setdefault("books", {})
     for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
         tr.setdefault(k, v)
+    maker_recap_rewards(tr, r)
     t_now = time.time()
     for key in list(tr["books"]):
         b = tr["books"][key]
@@ -3421,7 +3950,19 @@ def maker_cycle(tracks, pick_new=True):
         if payout is not None:
             maker_close(tr, name, key, "resolved", payout)
             continue
-        bk = book(b["yes_tok"])
+        # the pool can shrink or end at any time: re-read it at most once an hour (bug fix 2026-11-09:
+        # rate/spread/min size used to be frozen at the day the book opened)
+        if t_now - b.get("cfg_ts", 0) > 3600:
+            cfg = reward_config(b["cid"])
+            if cfg is not None:
+                if abs(cfg["rate"] - b["rate"]) > 1e-9 or cfg["min_size"] != b["min_size"]:
+                    print(f"maker: {b['title'][:40]} pool ${b['rate']:.0f}->${cfg['rate']:.0f}/day, "
+                          f"min {b['min_size']:.0f}->{cfg['min_size']:.0f}")
+                b["rate"], b["min_size"] = cfg["rate"], cfg["min_size"]
+                if cfg["v"] > 0:
+                    b["v"] = cfg["v"]
+                b["cfg_ts"] = t_now
+        bk = maker_book(b["yes_tok"])
         if (m is None or bk is None) and b.get("misses", 0) < 6:
             # bug fix: one failed market/book lookup (an API blip) used to close the book as "market left the list".
             # Skip it this run instead; last_ts stays, so the next run catches up on fills. 6 misses in a row = gone.
@@ -3481,15 +4022,21 @@ def maker_cycle(tracks, pick_new=True):
             b["yes"] -= pairs
             b["no"] -= pairs
             tr["merges"] += 1
+        maker_exits(tr, name, b, r)
         # 3) rewards for the minutes our (old) quotes were resting, scored against today's book
         if sc and elapsed > 0:
             mid, qb, qa, bb, ba = sc
             sh = our_share(mid, qb, qa, b["v"], (q.get("bid") or {}).get("px"), (q.get("ask") or {}).get("px"), b["size"])
+            if b["size"] < b["min_size"]:
+                sh = 0.0  # orders below the minimum size earn nothing
             mins = min(elapsed / 60, r["max_credit_minutes"])
-            earned = b["rate"] * sh * mins / 1440
+            model = b["rate"] * sh * mins / 1440
+            b["rewards_model"] = b.get("rewards_model", 0.0) + model
+            earned = min(model, maker_reward_cap(r, b["size"], mins))
             b["rewards"] += earned
             b["minutes"] += mins
             tr["rewards"] = round(tr["rewards"] + earned, 6)
+            tr["rewards_model"] = round(tr.get("rewards_model", 0.0) + model, 6)
             tr["realized"] = round(tr["realized"] + earned, 6)
             tr["cash"] = round(tr["cash"] + earned, 6)
         b["last_ts"] = t_now
@@ -3523,7 +4070,7 @@ def maker_cycle(tracks, pick_new=True):
             if tr["cash"] - maker_locked(tr) - need < -EPS:
                 tr["skipped_no_cash"] += 1
                 continue
-            bk = book(c["yes"])
+            bk = maker_book(c["yes"])
             sc = book_scores(bk, c["v"], c["min_size"]) if bk else None
             if not sc:
                 continue
@@ -3554,12 +4101,18 @@ def maker_summary(name, tr):
              "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
              "skipped_no_cash": tr["skipped_no_cash"], "rewards": round(tr.get("rewards", 0.0), 4),
              "fills": tr.get("fills", 0)}
-    picked_off = pnl - tr.get("rewards", 0.0)
+    rew = tr.get("rewards", 0.0)
+    locked = tr["realized"] - rew  # merges, early sales and finished leftovers: real order-book money
+    stats.update({"maker_rewards": round(rew, 4), "maker_locked": round(locked, 4), "maker_open": round(unreal, 4),
+                  "exits": tr.get("exits", 0)})
     row = (f"| {name} | {pnl:+.2f} | {len(books)} | {len(tr['closed'])} ({wins}/{len(tr['closed']) - wins}) | "
-           f"${tr['cash']:.2f} | rewards +${tr.get('rewards', 0.0):.2f}, trading {picked_off:+.2f}; fills {tr.get('fills', 0)} |")
+           f"${tr['cash']:.2f} | rewards +${rew:.2f} (capped), trading {locked:+.2f} locked {unreal:+.2f} open; "
+           f"fills {tr.get('fills', 0)}, sold early {tr.get('exits', 0)} |")
     lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n",
-             f"Rewards earned **${tr.get('rewards', 0.0):.2f}**, buying and selling (getting picked off, spreads, "
-             f"leftovers) **{picked_off:+.2f}**. It only works if the first number stays bigger.\n"]
+             f"Rewards **${rew:.2f}** (capped at what real makers get paid, 40c a day per $100; the raw pool-share "
+             f"model said ${tr.get('rewards_model', rew):.2f}). Price moves, "
+             f"the real-ish part: **{locked:+.2f}** locked in (pairs merged, sold, finished) and **{unreal:+.2f}** on "
+             f"what it still holds at today's middle price. It only works if the rewards beat the price moves.\n"]
     if books:
         lines.append("| Market | Pool/day | Quotes (YES bid / ask) | Holding | Rewards | Fills | Ends |\n|---|---|---|---|---|---|---|")
         for b in books.values():
@@ -3634,6 +4187,22 @@ def trust(tr, n_tracks=None, size="rank"):
     proven = n >= rk.get("min_trades_proven", 30) and worst > 0
     return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
             "worst_per_100": round(worst * 100, 2), "proven": proven}
+
+
+def plain_verdict(t, control=False, few=10):
+    """One plain-words verdict per strategy, from its trust numbers (wording only, no new math).
+    Returns (key, text): key is good / maybe / bad / early / luck, used for colors on the dashboard."""
+    if control:
+        return "luck", "Random buyer (shows what luck looks like)"
+    if t["finished"] < few:
+        return "early", f"Too early to tell ({t['finished']} finished, need {few}+)"
+    if t["proven"]:
+        return "good", "Looks real"
+    if t["worst_per_100"] > 0:
+        return "good", "Promising, needs more bets"
+    if t["avg_per_100"] < 0:
+        return "bad", "Losing"
+    return "maybe", "Ahead, but could be luck"
 
 
 def usd(x):
@@ -3766,6 +4335,128 @@ def late_md(tracks):
     return out + [r for _, r in sorted(rows)]
 
 
+# ================================================================ data check (audit 2026-11-09)
+#
+# Cheap sanity checks on our own book-keeping that fail loudly. They run after every watch and daily job, write
+# state/integrity.json, add a "Data check" section to summary.md, and push an alert the first time a new kind of
+# problem shows up (at most once a day per problem). Records only: nothing here changes a trade.
+
+def _track_open_cost(tr, src):
+    if src == "maker":
+        return sum(b["yes_cost"] + b["no_cost"] for b in tr.get("books", {}).values())
+    if src == "arb":
+        return sum(a["cost"] for a in tr.get("arbs", {}).values())
+    if src in ("fullset", "ladder"):
+        return sum(x["cost"] for x in tr.get("sets", {}).values())
+    if src == "kmaker":
+        return sum(o["cost"] for o in tr.get("orders", {}).values())
+    return open_cost(tr)
+
+
+def integrity(tracks, deep=False):
+    """-> list of problems {key, track, what}. deep=True (daily) also looks up markets for stuck positions."""
+    probs = []
+
+    def bad(key, track, what):
+        probs.append({"key": key, "track": track, "what": what})
+    day_ago = iso(now() - dt.timedelta(hours=24))
+    for name, tr in tracks.items():
+        tc = CFG["tracks"].get(name)
+        if not tc:
+            continue
+        src = tc["source"]
+        # 1) money adds up: cash = money put in - money in open bets + realized profit
+        want = (0.0 if tr["unlimited"] else tr["deposited"]) - _track_open_cost(tr, src) + tr["realized"]
+        if abs(tr["cash"] - want) > 0.02:
+            bad("cash", name, f"cash ${tr['cash']:.2f} but deposits - open bets + profit = ${want:.2f}")
+        if src != "maker":
+            s = sum(c.get("pnl", 0.0) for c in tr["closed"])
+            if abs(s - tr["realized"]) > 0.02:
+                bad("realized", name, f"realized ${tr['realized']:.2f} but finished trades add up to ${s:.2f}")
+        if not tr["unlimited"] and tr["cash"] < -0.02:
+            bad("negative_cash", name, f"cash below zero (${tr['cash']:.2f})")
+        rows = list(tr.get("positions", {}).values()) + tr.get("closed", [])
+        # 2) every fill is a real order-book fill with a sane price
+        recent_est = [r for r in rows if r.get("price_source") not in (None, "book")
+                      and r.get("opened", "") >= max(day_ago, "2026-11-09T12")]  # older ones are known (audit)
+        if recent_est:
+            bad("not_book_fill", name, f"{len(recent_est)} buys in the last 24h without a real order-book fill")
+        insane = [r for r in rows if not (0 < r.get("entry", 0.5) < 1) or r.get("shares", 1) <= 0
+                  or not (0 <= r.get("exit", 0.5) <= 1)]
+        if insane:
+            bad("insane_price", name, f"{len(insane)} trades with a price outside 0-100c or no shares")
+        # 3) both sides of one market in one track (pays exactly $1: the copy/split bug)
+        slugs = defaultdict(list)
+        for p in tr.get("positions", {}).values():
+            if p.get("slug"):
+                slugs[p["slug"]].append(p.get("opened", ""))
+        # pairs bought before the fix (2026-11-09) are known and listed in the audit; flag only new ones
+        both = [sl for sl, o in slugs.items() if len(o) >= 2 and max(o) >= "2026-11-09T12"]
+        if both:
+            bad("both_sides", name, f"holds both sides of {len(both)} market(s), e.g. {both[0][:50]}")
+        # 4) a perfect record on many trades is a red flag (endgame_strict's 208/0 was fake fills)
+        n = len(tr.get("closed", []))
+        losses = sum(1 for c in tr.get("closed", []) if c.get("pnl", 0) < 0)
+        if n >= 30 and losses == 0 and src not in ("arb", "fullset", "ladder"):
+            bad("too_good", name, f"{n} finished trades and not one loss: check the fills before trusting it")
+        # 5) maker rewards: a model, flag it if it pays more than $5 a day per $100 tied up
+        if src == "maker" and tr.get("books"):
+            mins = sum(b.get("minutes", 0) for b in tr["books"].values()) + sum(c.get("minutes_quoted", 0) for c in tr["closed"])
+            days = mins / 1440 / max(len(tr["books"]), 1)
+            per = tr.get("rewards", 0.0) / max(days, 0.01) / max(tr["start_cash"], 1) * 100
+            if days >= 0.5 and per > 5:
+                bad("maker_rewards_high", name, f"modelled rewards ~${per:.0f}/day per $100: unverified, likely optimistic")
+    if deep:
+        prefetch_markets(p.get("slug") for tr in tracks.values() for p in tr["positions"].values())
+        for name, tr in tracks.items():
+            stuck = 0
+            for tok, p in tr.get("positions", {}).items():
+                m = market_by_slug(p.get("slug"))
+                if m is None or (m.get("closed") and resolved_payout(m, tok) is None):
+                    stuck += 1
+            if stuck:
+                bad("stuck", name, f"{stuck} open bets whose market is closed (or gone) but never paid out")
+    return probs
+
+
+def integrity_run(tracks, deep=False):
+    try:
+        probs = integrity(tracks, deep)
+    except Exception as e:
+        probs = [{"key": "check_crashed", "track": "-", "what": f"data check failed: {e}"}]
+    old = load("integrity.json", {})
+    if deep:
+        cur = {f"{p['key']}:{p['track']}" for p in probs}
+    else:  # the 'stuck' problems are only looked up daily: keep their alert marks between daily runs
+        cur = {f"{p['key']}:{p['track']}" for p in probs + old.get("deep_problems", [])}
+    alerted = {k: v for k, v in old.get("alerted", {}).items() if k in cur}  # one push per problem while it lasts
+    warn_only = ("maker_rewards_high", "too_good")
+    fresh = [p for p in probs if p["key"] not in warn_only and f"{p['key']}:{p['track']}" not in alerted]
+    if fresh:
+        push("DATA CHECK: something doesn't add up",
+             "\n".join(f"{p['track']}: {p['what']}" for p in fresh[:8]) + "\nDetails in summary.md (Data check).",
+             tags="warning")
+        for p in fresh:
+            alerted[f"{p['key']}:{p['track']}"] = iso()
+    out = {"checked": iso(), "problems": [p for p in probs if p["key"] != "stuck"], "alerted": alerted,
+           "deep_checked": iso() if deep else old.get("deep_checked"),  # the daily 'stuck' check is kept till the next one
+           "deep_problems": [p for p in probs if p["key"] == "stuck"] if deep else old.get("deep_problems", [])}
+    save("integrity.json", out)
+    return probs
+
+
+def integrity_md():
+    d = load("integrity.json", {})
+    probs = d.get("problems", []) + d.get("deep_problems", [])
+    out = ["\n## Data check\n",
+           "Sanity checks on the bot's own numbers after every run: money adds up, every fill was a real order-book "
+           "fill, no track holds both sides of a market, nothing stuck unpaid, and no suspiciously perfect records. "
+           f"Last check {d.get('checked', 'never')}.\n"]
+    if not probs:
+        return out + ["All clear."]
+    return out + [f"- **{p['track']}** ({p['key']}): {p['what']}" for p in probs]
+
+
 # ================================================================ commands
 
 def today_utc():
@@ -3799,7 +4490,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -3819,8 +4510,13 @@ def watch():
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    integrity_run(tracks)
     stamp_status(tracks)
     save("tracks.json", tracks)
+    try:
+        refresh_top(tracks)
+    except Exception as e:
+        print(f"top list refresh failed: {e}")
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
         print("daily job hasn't run today (GitHub skipped it?); catching up now")
@@ -3872,6 +4568,7 @@ def daily(force=None):
         late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
+    integrity_run(tracks, deep=True)
     stamp_status(tracks)
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
@@ -3881,8 +4578,20 @@ def daily(force=None):
 
 
 def mark(pos, tok):
-    p = token_price_from_market(market_by_slug(pos.get("slug")), tok)
-    return pos["entry"] if p is None else p
+    """Value of an open position per share: the listed price, but never more than the best bid while the market is
+    still trading. Bug fix 2026-11-09 (audit): the listed price alone made open bets look about $66 richer (out of
+    $2,890) than selling them would pay, mostly in thin weather and copy-track markets."""
+    m = market_by_slug(pos.get("slug"))
+    p = token_price_from_market(m, tok)
+    if p is None:
+        return pos["entry"]
+    if m and not m.get("closed"):
+        toks = market_tokens(m)
+        bb, ba = fnum(m.get("bestBid"), None), fnum(m.get("bestAsk"), None)
+        bid = bb if toks and tok == toks[0] else (1 - ba if toks and tok in toks and ba is not None else None)
+        if bid is not None and 0 <= bid < p:
+            p = bid
+    return p
 
 
 def write_summary(tracks):
@@ -3897,8 +4606,9 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker"):
-            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary, "maker": maker_summary}[src](name, tr)
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker"):
+            row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
+                                       "maker": maker_summary, "kmaker": kmaker_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -3977,6 +4687,10 @@ def write_summary(tracks):
     except Exception as e:
         print(f"real money summary failed: {e}")
     try:
+        md += integrity_md()
+    except Exception as e:
+        print(f"data check summary failed: {e}")
+    try:
         md += his_exit_summary()
     except Exception as e:
         print(f"exit summary failed: {e}")
@@ -4029,25 +4743,45 @@ def top_eligible(s):
     return s["trust"]["finished"] >= 3 and s["trust"]["avg_per_100"] > 0 and s["pnl"] > 0
 
 
+def save_top(stats):
+    """Pick the top 10 (only strategies actually ahead on 3+ finished trades) and save it to state/top.json."""
+    n = CFG["push"].get("top_n", 10)
+    top = [x for x in ranked(stats) if top_eligible(stats[x])][:n]
+    save("top.json", {"generated": iso(), "tracks": top})
+    return top
+
+
+def refresh_top(tracks):
+    """Hourly from watch (2026-11-09 fix): re-rank and rewrite top.json + summary.md without the scoreboard push.
+    Before this the list was only rebuilt by the daily run, so a strategy that went from winning to losing
+    (endgame_sell98 after the phantom-fill cleanup) kept its trade pushes all day while new leaders stayed muted."""
+    last = parse_iso(load("top.json", {}).get("generated"))
+    if last and now() - last < dt.timedelta(minutes=CFG["push"].get("top_refresh_min", 60)):
+        return
+    old = load("top.json", {}).get("tracks", [])
+    top = save_top(write_summary(tracks))
+    if top != old:
+        print(f"top list refreshed: +{[x for x in top if x not in old]} -{[x for x in old if x not in top]}")
+
+
 def push_scoreboard(stats):
     """Daily ntfy scoreboard: only the top 10 by trust (all strategies are still tracked; summary.md ranks them all).
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
-    order = [x for x in ranked(stats) if top_eligible(stats[x])]
-    top = order[:n]  # only strategies that are actually ahead on 3+ finished trades can make the list
-    save("top.json", {"generated": iso(), "tracks": top})
-    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
+    top = save_top(stats)
+    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead after 3+ finished bets so far."]
     for i, name in enumerate(top, 1):
         s, t = stats[name], stats[name]["trust"]
-        lines.append(f"{i}. {name}{' PROVEN' if t['proven'] else ''}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}) | "
-                     f"{t['finished']} done | worst case {usd(t['worst_per_100'])[:-3]} per $100")
+        lines.append(f"{i}. {name}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}), {t['finished']} finished. "
+                     f"{plain_verdict(t, name.startswith('control_'))[1].split(' (')[0]}"
+                     + (f", worst case {usd(t['worst_per_100'])[:-3]} per $100" if t["finished"] >= 10 else ""))
     if rs_rank_size():
-        lines.append(f"(ranked on what ${rs_rank_size()} a trade would really have done)")
+        lines.append(f"(ranked on what a real ${rs_rank_size()} bet would have made)")
     best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)
     if best and best not in top and stats[best].get("today", 0) > 0:
         lines.append(f"Best day (probably luck): {best} +${stats[best]['today']:.2f}")
     proven = sum(1 for x in stats.values() if x["trust"]["proven"])
-    lines.append(f"{len(stats)} strategies tracked, {proven} proven. Full ranking in summary.md")
+    lines.append(f"{len(stats)} strategies tracked, {proven} clearly work so far. Dashboard has the rest.")
     push("Paper top 10", "\n".join(lines), tags="bar_chart")
 
 
@@ -4278,8 +5012,43 @@ def discover():
         print("W", json.dumps(row, sort_keys=True))
 
 
+def kmakertest():
+    """Dry run of the Kalshi late-favorite maker (no state saved): place on the live windows with any minutes left,
+    then replay the fill check on the last closed BTC/ETH window as if we had bid 3 minutes before its close."""
+    names = kmaker_names()
+    tracks = {n: {"unlimited": False, "cash": 100.0, "start_cash": 100, "deposited": 100.0, "refills": 0, "min_cash": 0,
+                  "peak_open_cost": 0, "positions": {}, "closed": [], "realized": 0.0, "skipped_no_cash": 0,
+                  "orders": {}, "unfilled": 0, "unfilled_log": [], "last_check": {}} for n in names}
+    for n in names:
+        CFG["rules"][CFG["tracks"][n]["rules"]]["max_minutes_left"] = 15
+    kmaker_place(tracks, names)
+    for n in names:
+        print(n, "last look:", json.dumps(tracks[n]["last_check"]))
+    for series in ("KXBTC15M", "KXETH15M"):
+        rows = kalshi_get("/markets", {"series_ticker": series, "status": "settled", "limit": 1}).get("markets") or []
+        if not rows:
+            continue
+        m = rows[0]
+        close = parse_iso(m["close_time"])
+        trades, complete = kalshi_trades(m["ticker"], (close - dt.timedelta(minutes=3)).timestamp(), close.timestamp())
+        print(f"{m['ticker']} result {m.get('result')}: {len(trades)} trades in the last 3 min (complete {complete})")
+        if not trades:
+            continue
+        early = sorted(trades, key=lambda t: t["created_time"])[0]
+        yp = fnum(early.get("yes_price_dollars"), 0.5)
+        side = "yes" if yp >= 0.5 else "no"
+        px = yp if side == "yes" else round(1 - yp, 4)
+        for off in (0.0, -0.01, -0.03):
+            o = {"side": side, "price": round(px + off, 4), "queue": 0.0, "shares": 10,
+                 "placed": iso(close - dt.timedelta(minutes=3))}
+            got, through = kmaker_fill(o, trades)
+            print(f"  bid {side.upper()} {o['price'] * 100:.1f}c 3 min before close: filled {got:.0f}/10 "
+                  f"({'through' if through else 'at price'}), {'won' if m.get('result') == side else 'lost'}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
-     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest}[cmd]()
+     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
+     "kmakertest": kmakertest}[cmd]()
