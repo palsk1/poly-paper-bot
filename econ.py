@@ -189,7 +189,7 @@ SERIES = {"KXCPI": ("cpi", 0.1), "KXCPICORE": ("core", 0.1), "KXCPIYOY": ("cpi_y
           "KXECONSTATCPI": ("cpi", 0.1), "KXGDP": ("gdp", 0.1), "KXJOBLESSCLAIMS": ("claims", 1000),
           "KXU3": ("u3", 0.1), "KXPAYROLLS": ("payrolls", 1000)}
 HOURS = (1, 6, 24, 72)
-WORKERS = 8
+WORKERS = 12
 
 
 def tsec(x):
@@ -336,14 +336,32 @@ def kalshi_markets(series):
     return out
 
 
-def candle_row(c):
+def kpx(v, suffixed):
+    """Kalshi price in dollars. '*_dollars' fields are dollars; the old un-suffixed fields are integer cents on the
+    live API but dollar strings like "0.36" on /historical (found 2026-11-09: reading them as cents gave 100x too
+    small prices)."""
+    if v in (None, ""):
+        return None
+    if suffixed:
+        return bot.fnum(v, None)
+    if isinstance(v, str) and "." in v or isinstance(v, float):
+        return bot.fnum(v, None)
+    return bot.fnum(v, 0) / 100
+
+
+_SHOWN = set()
+
+
+def candle_row(c, path=""):
+    if path not in _SHOWN:
+        _SHOWN.add(path)
+        print(f"  raw candle from {path}: {json.dumps(c)[:600]}")
+
     def px(block, key):
         blk = c.get(block) or {}
-        v = blk.get(f"{key}_dollars")
-        if v in (None, ""):
-            v = blk.get(key)
-            return None if v in (None, "") else bot.fnum(v, 0) / 100
-        return bot.fnum(v, None)
+        if blk.get(f"{key}_dollars") not in (None, ""):
+            return kpx(blk.get(f"{key}_dollars"), True)
+        return kpx(blk.get(key), False)
     return [int(c.get("end_period_ts") or 0), px("yes_bid", "close"), px("yes_ask", "close"),
             bot.fnum(c.get("volume_fp") or c.get("volume"), 0)]
 
@@ -359,7 +377,7 @@ def kalshi_candles(m):
             continue
         cs = r.get("candlesticks") if isinstance(r, dict) else None
         if cs:
-            return [candle_row(c) for c in cs]
+            return [candle_row(c, path.split('/')[1]) for c in cs]
     return []
 
 
@@ -404,7 +422,7 @@ def fetch():
                 vint[k] = v
     save("vintages", vint)
     print(f"  vintages cached: {len(vint)} ({time.time() - t0:.0f}s)")
-    cd = load("candles") or {}
+    cd = load("candles2") or {}
     allm = [m for ms in mk.values() for m in ms if m["t"] not in cd]
     print(f"  candles to fetch: {len(allm)}")
     done = 0
@@ -414,8 +432,8 @@ def fetch():
             done += 1
             if done % 500 == 0:
                 print(f"    {done}/{len(allm)} ({time.time() - t0:.0f}s)")
-                save("candles", cd)
-    save("candles", cd)
+                save("candles2", cd)
+    save("candles2", cd)
     print(f"  candles: {sum(1 for v in cd.values() if v)} of {len(cd)} markets have history ({time.time() - t0:.0f}s)")
     for s in SERIES:
         try:
@@ -631,7 +649,7 @@ def quote(cs, t):
 
 def build_points(models, placebo=False):
     """One row per (market, hours before the close): model chance, market quotes, result."""
-    mk, cd = load("markets") or {}, load("candles") or {}
+    mk, cd = load("markets") or {}, load("candles2") or {}
     pts, checks = [], defaultdict(lambda: [0, 0, 0])   # kind -> [events ok, events mismatched, no actual]
     for s, ms in mk.items():
         kind, step = SERIES[s]
