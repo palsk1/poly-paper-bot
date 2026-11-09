@@ -5248,6 +5248,20 @@ def econtest():
     econ_place(tracks, names, force=True)
     for n in names:
         print(n, tracks[n].get("last_check"), list(tracks[n]["orders"]))
+    import econ
+    rows = []
+    for s_ in econ.LIVE_SERIES:
+        for m in kalshi_get("/markets", {"series_ticker": s_, "status": "open", "limit": 200}).get("markets") or []:
+            rows.append(dict(m, _series=s_))
+    ch = econ.live_chances(rows, int(now().timestamp()))
+    for m in rows:
+        if m["ticker"] in ch:
+            p, mu, sd = ch[m["ticker"]]
+            bk = kalshi_asks(m["ticker"]) or ([], [])
+            ya = bk[0][0][0] if bk[0] else None
+            na = bk[1][0][0] if bk[1] else None
+            print(f"  {m['ticker']:34} closes {str(m.get('close_time'))[:16]} forecast {mu:g} (+-{sd:.3g}) "
+                  f"YES chance {p:.3f}  YES ask {ya}  NO ask {na}")
 
 
 def kmakertest():
