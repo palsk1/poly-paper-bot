@@ -1104,6 +1104,7 @@
       "max_mid": 0.85,
       "max_inventory_lots": 2,
       "max_credit_minutes": 15,
+      "reward_cap_per_100_day": 0.40,
       "pick_every_minutes": 60,
       "scan_books": 400,
       "skip_words": ["up or down", "temperature", "tweets", "weather"]
