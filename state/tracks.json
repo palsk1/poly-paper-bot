@@ -175,6 +175,51 @@
     "shares": 5,
     "title": "Will Rahm Emanuel announce a Presidential run before 2027?"
    },
+   "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027#12": {
+    "annual": 0.192,
+    "cost": 4.8559,
+    "edge": 0.0288,
+    "expected_profit": 0.1441,
+    "k_fee": 0.08,
+    "k_price": 0.66,
+    "k_side": "no",
+    "kalshi": "KXEMANUELRUN-28-27JAN01",
+    "kalshi_close": "2027-01-01T15:00:00Z",
+    "opened": "2026-11-09T08:05:52Z",
+    "p_fee": 0.0409,
+    "p_price": 0.287,
+    "pair_id": "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027",
+    "poly_end": "2027-01-01",
+    "poly_outcome": "Yes",
+    "poly_slug": "will-rahm-emanuel-announce-a-presidential-run-before-2027",
+    "poly_token": "39579477725474272503469014118226454398632444358661611481831301604861464986416",
+    "rs": {
+     "s": {
+      "10": [
+       10.56,
+       10.312,
+       true
+      ],
+      "100": [
+       22.145,
+       21.6742,
+       false
+      ],
+      "25": [
+       21.119,
+       20.6641,
+       false
+      ],
+      "50": [
+       21.626,
+       21.1633,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "title": "Will Rahm Emanuel announce a Presidential run before 2027?"
+   },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027#9": {
     "annual": 0.185,
     "cost": 4.861,
@@ -305,7 +350,7 @@
     "title": "Will Satoshi move any Bitcoin in 2026?"
    }
   },
-  "cash": 246.472579,
+  "cash": 241.616653,
   "closed": [],
   "created": "2026-11-04T07:55:55Z",
   "deposited": 300.0,
@@ -314,151 +359,151 @@
     "annual": -0.004,
     "edge": -0.0006,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:27Z"
+    "ts": "2026-11-09T08:05:49Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.119,
     "edge": 0.018,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:28Z"
+    "ts": "2026-11-09T08:05:50Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
-    "annual": 0.057,
-    "edge": 0.0086,
+    "annual": -0.009,
+    "edge": -0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:29Z"
+    "ts": "2026-11-09T08:05:51Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
     "annual": 0.192,
     "edge": 0.0288,
     "opportunity": true,
-    "ts": "2026-11-09T08:01:29Z"
+    "ts": "2026-11-09T08:05:52Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": 0.014,
     "edge": 0.0021,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:30Z"
+    "ts": "2026-11-09T08:05:53Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.045,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:27Z"
+    "ts": "2026-11-09T08:05:50Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.009,
     "edge": 0.0014,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:12Z"
+    "ts": "2026-11-09T08:05:32Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
     "annual": -0.28,
     "edge": -0.0447,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:26Z"
+    "ts": "2026-11-09T08:05:48Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.114,
     "edge": -0.0178,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:23Z"
+    "ts": "2026-11-09T08:05:44Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.14,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:15Z"
+    "ts": "2026-11-09T08:05:35Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": 0.03,
     "edge": 0.0045,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:19Z"
+    "ts": "2026-11-09T08:05:39Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.078,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:13Z"
+    "ts": "2026-11-09T08:05:33Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.069,
     "edge": -0.0106,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:24Z"
+    "ts": "2026-11-09T08:05:46Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": 0.01,
     "edge": 0.0016,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:14Z"
+    "ts": "2026-11-09T08:05:34Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:21Z"
+    "ts": "2026-11-09T08:05:42Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:22Z"
+    "ts": "2026-11-09T08:05:43Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.032,
     "edge": -0.0049,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:20Z"
+    "ts": "2026-11-09T08:05:41Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.096,
     "edge": -0.0149,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:24Z"
+    "ts": "2026-11-09T08:05:45Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:17Z"
+    "ts": "2026-11-09T08:05:38Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.002,
     "edge": 0.0003,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:16Z"
+    "ts": "2026-11-09T08:05:36Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.156,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:25Z"
+    "ts": "2026-11-09T08:05:47Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.166,
     "edge": -0.026,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:18Z"
+    "ts": "2026-11-09T08:05:38Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.032,
     "edge": -0.0049,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:20Z"
+    "ts": "2026-11-09T08:05:40Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.13,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-09T08:01:16Z"
+    "ts": "2026-11-09T08:05:37Z"
    }
   },
   "min_cash": 0.0,
   "mismatches": 0,
   "opportunities": 8,
-  "peak_open_cost": 53.5276,
+  "peak_open_cost": 58.3835,
   "positions": {},
   "realized": 0.0,
   "refills": 0,
@@ -4567,7 +4612,7 @@
   "unlimited": false
  },
  "endgame_97": {
-  "cash": 321.125657,
+  "cash": 316.154166,
   "closed": [
    {
     "closed_at": "2026-11-08T16:15:44Z",
@@ -14349,6 +14394,52 @@
     "theme": null,
     "tier": "past_deadline",
     "title": "Will another result occur for the next governing coalition of New Zealand?"
+   },
+   "84614704564237776846336998173920470859864932473025302164889780855194200285578": {
+    "end": "2026-11-08",
+    "entry": 0.994,
+    "entry_fee": 0.001491,
+    "event_key": "1314390",
+    "event_slug": "wildwood-3rd-weekend-box-office",
+    "late": {
+     "px": 0.994,
+     "s": 30
+    },
+    "opened": "2026-11-09T08:06:43Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.06,
+       10.003,
+       true
+      ],
+      "100": [
+       30.0,
+       29.8289,
+       false
+      ],
+      "25": [
+       25.151,
+       25.0075,
+       true
+      ],
+      "50": [
+       30.0,
+       29.8289,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-wildwood-3rd-weekend-box-office-be-at-least-6m",
+    "source": "endgame_97",
+    "theme": null,
+    "tier": "past_deadline",
+    "title": "Will \"Wildwood\" 3rd Weekend Box Office be at least 6m?"
    },
    "88439368851657880763440340442667889863995183202949088544951221293039644772120": {
     "end": "2026-10-31",
@@ -50256,11 +50347,11 @@
     "event_slug": "next-muse-spark-1pt4-released-byptptpt",
     "fee_rate": 0.04,
     "fills": 0,
-    "last_ts": 1794211335.1720839,
+    "last_ts": 1794211607.341894,
     "merged_pnl": 0.0,
     "mid": 0.33999999999999997,
     "min_size": 50.0,
-    "minutes": 839.2578481634455,
+    "minutes": 843.7940116643903,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "102711183723971553014446089198171554075948362164960607882172198841105260477579",
@@ -50276,7 +50367,7 @@
      }
     },
     "rate": 50.0,
-    "rewards": 6.617409091348288,
+    "rewards": 6.629656474842197,
     "size": 50.0,
     "slug": "next-muse-spark-1pt4-released-by-december-31-2026",
     "title": "Next Muse Spark (1.4+) released by December 31, 2026?",
@@ -50292,11 +50383,11 @@
     "event_slug": "second-best-ai-agent-lab-end-of-november",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794211335.1720839,
+    "last_ts": 1794211607.341894,
     "merged_pnl": 0.0,
     "mid": 0.29500000000000004,
     "min_size": 20.0,
-    "minutes": 839.2578481634455,
+    "minutes": 843.7940116643903,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "57578799226333514029600121405127999797167672358214792171105979303153501104898",
@@ -50312,7 +50403,7 @@
      }
     },
     "rate": 80.0,
-    "rewards": 12.945343531890943,
+    "rewards": 12.988336810493125,
     "size": 50,
     "slug": "will-openai-be-the-second-best-ai-agent-lab-at-the-end-of-november-2026",
     "title": "Will OpenAI be the second-best AI Agent Lab at the end of November 2026?",
@@ -50328,11 +50419,11 @@
     "event_slug": "next-muse-spark-model-1pt4-released-onptptpt",
     "fee_rate": 0.04,
     "fills": 10,
-    "last_ts": 1794211335.1720839,
+    "last_ts": 1794211607.341894,
     "merged_pnl": -19.25,
     "mid": 0.7,
     "min_size": 20.0,
-    "minutes": 839.2578481634455,
+    "minutes": 843.7940116643903,
     "no": 100.0,
     "no_cost": 35.75,
     "no_tok": "930240453980728514582345056527710676387794047069932511128144020003604546411",
@@ -50345,7 +50436,7 @@
      }
     },
     "rate": 119.0,
-    "rewards": 4.017758849390819,
+    "rewards": 4.032146782833097,
     "size": 50,
     "slug": "will-there-be-no-next-meta-muse-spark-model-release-by-november-30-2026",
     "title": "Will there be no next Meta Muse Spark model release by November 30, 2026?",
@@ -50361,11 +50452,11 @@
     "event_slug": "which-companies-will-have-a-1-ai-model-by-december-31",
     "fee_rate": 0.04,
     "fills": 1,
-    "last_ts": 1794211335.1720839,
+    "last_ts": 1794211607.341894,
     "merged_pnl": 0.0,
     "mid": 0.345,
     "min_size": 20.0,
-    "minutes": 839.2578481634455,
+    "minutes": 843.7940116643903,
     "no": 0.0,
     "no_cost": 0.0,
     "no_tok": "3351280184394629167493284830212813001116956262089727901595103690299967605966",
@@ -50381,7 +50472,7 @@
      }
     },
     "rate": 40.0,
-    "rewards": 5.210149366097221,
+    "rewards": 5.274828995328405,
     "size": 50,
     "slug": "will-anthropic-have-a-1-ai-model-by-december-31-2026",
     "title": "Will Anthropic have a #1 AI model by December 31, 2026?",
@@ -50391,7 +50482,7 @@
     "yes_tok": "39151630359758158771259377340938128482300804394191692685363363632091865533103"
    }
   },
-  "cash": 136.790657,
+  "cash": 136.924965,
   "closed": [],
   "created": "2026-11-08T18:00:56Z",
   "deposited": 200.0,
@@ -50401,9 +50492,9 @@
   "min_cash": 0.0,
   "peak_open_cost": 247.25,
   "positions": {},
-  "realized": 9.540657,
+  "realized": 9.674965,
   "refills": 0,
-  "rewards": 28.790657,
+  "rewards": 28.924965,
   "skipped_no_cash": 0,
   "start_cash": 200,
   "unlimited": false
@@ -70720,7 +70811,7 @@
    "7967100785280426",
    "9440641063822446"
   ],
-  "cash": -51.890113,
+  "cash": -46.895363,
   "closed": [
    {
     "backfill": true,
@@ -71500,6 +71591,79 @@
     "their_size": 74.58,
     "title": "Will the highest temperature in Jeddah be 30\u00b0C on November 9?",
     "token": "88810700490250451268627747315784887113551590723840757318488794705089954912796"
+   },
+   {
+    "closed_at": "2026-11-09T08:05:27Z",
+    "end": "2026-11-09",
+    "entry": 0.947,
+    "entry_fee": 0.012548,
+    "event_slug": "highest-temperature-in-cape-town-on-november-9-2026",
+    "exit": 0.999,
+    "exit_fee": 0.00025,
+    "late": {
+     "px": 0.947,
+     "s": 99
+    },
+    "opened": "2026-11-08T22:20:33Z",
+    "outcome": "No",
+    "pnl": 0.247202,
+    "price_source": "book",
+    "reason": "wallet exit (book)",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.49,
+       10.0234,
+       true
+      ],
+      "100": [
+       104.255,
+       100.2041,
+       true
+      ],
+      "25": [
+       26.13,
+       25.0541,
+       true
+      ],
+      "50": [
+       52.172,
+       50.1041,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0234,
+      0.4556,
+      true
+     ],
+     "100": [
+      100.2041,
+      3.9414,
+      true
+     ],
+     "25": [
+      25.0541,
+      1.0485,
+      true
+     ],
+     "50": [
+      50.1041,
+      2.0131,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "highest-temperature-in-cape-town-on-november-9-2026-29c",
+    "source": "wb_hellyeahtrader",
+    "their_avg": 0.9268,
+    "their_size": 25.0,
+    "title": "Will the highest temperature in Cape Town be 29\u00b0C on November 9?",
+    "token": "19100013360717623318537292526136063892623491739147971644122525764423615801420"
    }
   ],
   "created": "2026-11-08T18:40:25Z",
@@ -71687,51 +71851,6 @@
     "their_avg": 0.49,
     "their_size": 90.96,
     "title": "Will the highest temperature in Milan be 10\u00b0C on November 9?"
-   },
-   "19100013360717623318537292526136063892623491739147971644122525764423615801420": {
-    "end": "2026-11-09",
-    "entry": 0.947,
-    "entry_fee": 0.012548,
-    "event_slug": "highest-temperature-in-cape-town-on-november-9-2026",
-    "late": {
-     "px": 0.947,
-     "s": 99
-    },
-    "opened": "2026-11-08T22:20:33Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       10.49,
-       10.0234,
-       true
-      ],
-      "100": [
-       104.255,
-       100.2041,
-       true
-      ],
-      "25": [
-       26.13,
-       25.0541,
-       true
-      ],
-      "50": [
-       52.172,
-       50.1041,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "highest-temperature-in-cape-town-on-november-9-2026-29c",
-    "source": "wb_hellyeahtrader",
-    "their_avg": 0.9268,
-    "their_size": 25.0,
-    "title": "Will the highest temperature in Cape Town be 29\u00b0C on November 9?"
    },
    "23191912783677070170823838008854969468445009689151159599173771918542136258722": {
     "backfill": true,
@@ -72289,7 +72408,7 @@
     "title": "Will the highest temperature in Guangzhou be 23\u00b0C on November 9?"
    }
   },
-  "realized": 6.683901,
+  "realized": 6.931103,
   "refills": 0,
   "skipped_chase": 4,
   "skipped_no_cash": 0,
