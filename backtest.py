@@ -1051,6 +1051,11 @@ def fade():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if cmd.startswith("btcheck") or cmd == "btholdout":  # sanity checks of this backtester (btcheck.py)
+        sys.argv[1] = {"btcheck": "run", "btcheckself": "selftest", "btholdout": "holdout"}.get(cmd, cmd)
+        import runpy
+        runpy.run_path(os.path.join(ROOT, "btcheck.py"), run_name="__main__")
+        sys.exit(0)
     {"fetch": fetch, "run": run, "all": lambda: (fetch(), run()), "selftest": selftest,
      "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag,
      "btfade": lambda: (fetch(), fade()), "fade": fade,
