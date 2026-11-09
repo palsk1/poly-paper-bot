@@ -40,6 +40,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 | endgame | $100 | 95–99c on markets already decided or nearly decided. Tiers: resolved, proposed (past_deadline and ending_soon dropped 2026-11-08 after the backtest). Includes a sell-early shadow test (records only). |
 | every_horse | $100 | Buys the full outcome set when it costs less than the guaranteed payout |
 | ladder | $100 | Added 2026-11-08 (Jan's "scale up arb" ask). NO on the stricter + YES on the looser of two markets in one Polymarket event (strike or deadline ladder). Needs Jan's OK for rule changes, like arb. |
+| sharp_pinnacle | $100 | Added 2026-11-09 (Jan's idea). Buys a Polymarket game outcome 3c+ below Pinnacle's fair price (margin removed, the less favorable of two methods), pre-game, held to the end. Odds from Pinnacle's public website feed, no key (`sharp.py`, README "Sharp bookie price"). First scan: Polymarket sits ~1c above Pinnacle fair, so expect few trades. Claude's track, rule changes reported. |
 | maker | $200 | Quotes both sides for Polymarket's liquidity rewards; fills from the trade tape, back of the queue. Summary splits rewards vs picked-off losses. Added 2026-11-08 (README "Maker"); rule changes need Jan's OK |
 | lab (64 tracks) | $500 each, or no limit for copy tracks | 40 copied wallets, smart-money crowd, sabsabinxz variants, favorite bands, controls, momentum, panic and endgame variants, plus 2 fast-market tracks (`wx_forecast`, `crypto_late`). Listed in README "The lab". |
 
