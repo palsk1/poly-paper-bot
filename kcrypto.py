@@ -187,21 +187,27 @@ _BATCH_OK = [None]   # None = untested, True/False after the first try
 
 
 def candles_batch(ms):
-    """Candles for up to 20 windows in one call (GET /markets/candlesticks); None if that endpoint doesn't work."""
+    """Candles for many windows in one call (GET /markets/candlesticks, up to 100 tickers and 10,000 candles);
+    None if that endpoint doesn't answer as expected. Each window keeps only its own last LOOKBACK_MIN minutes."""
     t0 = min(m["close"] for m in ms) - LOOKBACK_MIN * 60
     t1 = max(m["close"] for m in ms)
     res = get("/markets/candlesticks", {"market_tickers": ",".join(m["t"] for m in ms), "start_ts": t0, "end_ts": t1,
                                         "period_interval": 1})
-    rows = res.get("markets") if isinstance(res, dict) else None
+    rows = None
+    if isinstance(res, dict):
+        rows = next((res[k] for k in ("markets", "market_candlesticks", "candlesticks", "data")
+                     if isinstance(res.get(k), list)), None)
     if not isinstance(rows, list):
         if _BATCH_OK[0] is None:
             print("  batch candles: unexpected answer:", json.dumps(res)[:600])
         return None
+    close = {m["t"]: m["close"] for m in ms}
     out = {}
     for r in rows:
         tk = r.get("market_ticker") or r.get("ticker")
-        if tk:
-            out[tk] = [candle_row(c) for c in r.get("candlesticks") or []]
+        if tk in close:
+            lo = close[tk] - LOOKBACK_MIN * 60
+            out[tk] = [row for row in (candle_row(c) for c in r.get("candlesticks") or []) if lo < row[0] <= close[tk]]
     return out
 
 
@@ -218,43 +224,59 @@ def candles_one(m):
     return []
 
 
-def fetch_candles(series, ms, store):
+def batch_groups(todo, max_tickers=70, max_candles=9000):
+    """Windows grouped for one batch call: neighbours in time (all coins close together), under the API caps."""
+    todo = sorted(todo, key=lambda m: m["close"])
+    groups, cur = [], []
+    for m in todo:
+        cand = cur + [m]
+        span = (cand[-1]["close"] - cand[0]["close"]) // 60 + LOOKBACK_MIN + 1
+        if cur and (len(cand) > max_tickers or span * len(cand) > max_candles):
+            groups.append(cur)
+            cand = [m]
+        cur = cand
+    if cur:
+        groups.append(cur)
+    return groups
+
+
+def fetch_candles(ms, store):
     todo = [m for m in ms if m["t"] not in store]
-    print(f"  {series}: {len(ms)} windows, {len(todo)} need candles")
+    print(f"  candles: {len(ms)} windows, {len(todo)} to download")
     if not todo:
         return
     t_start = time.time()
-    if _BATCH_OK[0] is not False:
-        chunks = [todo[i:i + 20] for i in range(0, len(todo), 20)]
-        try:
-            first = candles_batch(chunks[0])
-            _BATCH_OK[0] = bool(first) and any(first.values())
-            if not _BATCH_OK[0]:
-                print("  batch candles gave nothing; one call per window instead", str(first)[:300])
-        except Exception as e:
-            print(f"  batch candles endpoint failed ({e}); one call per window instead")
-            _BATCH_OK[0] = False
-        if _BATCH_OK[0]:
-            store.update(first)
+    groups = batch_groups(todo)
+    try:
+        first = candles_batch(groups[0])
+        _BATCH_OK[0] = bool(first) and any(first.values())
+        if not _BATCH_OK[0]:
+            print("  batch candles gave nothing; one call per window instead", str(first)[:300])
+    except Exception as e:
+        print(f"  batch candles endpoint failed ({e}); one call per window instead")
+        _BATCH_OK[0] = False
+    if _BATCH_OK[0]:
+        store.update(first)
 
-            def one(ch):
-                try:
-                    return candles_batch(ch) or {}
-                except Exception as e:
-                    print(f"   batch failed: {e}")
-                    return {}
-            with ThreadPoolExecutor(WORKERS) as ex:
-                for i, got in enumerate(ex.map(one, chunks[1:])):
-                    store.update(got)
-                    if i % 100 == 0:
-                        print(f"   {series} batch {i}/{len(chunks)} ({time.time() - t_start:.0f}s)")
-    todo = [m for m in todo if not store.get(m["t"])]
+        def one(g):
+            try:
+                return candles_batch(g) or {}
+            except Exception as e:
+                print(f"   batch failed: {e}")
+                return {}
+        with ThreadPoolExecutor(WORKERS) as ex:
+            for i, got in enumerate(ex.map(one, groups[1:])):
+                store.update(got)
+                if i % 100 == 0:
+                    print(f"   batch {i}/{len(groups)} ({time.time() - t_start:.0f}s)")
+    todo = [m for m in todo if m["t"] not in store]
     if todo:
+        print(f"  {len(todo)} windows one by one")
         with ThreadPoolExecutor(WORKERS) as ex:
             for i, (m, cs) in enumerate(zip(todo, ex.map(candles_one, todo))):
                 store[m["t"]] = cs
                 if i % 500 == 0:
-                    print(f"   {series} single {i}/{len(todo)} ({time.time() - t_start:.0f}s)")
+                    print(f"   single {i}/{len(todo)} ({time.time() - t_start:.0f}s)")
 
 
 def fetch_spot(symbol, t0, t1, have):
@@ -283,29 +305,36 @@ def fetch(days=60):
     t1 = int(time.time()) - 120
     t0 = t1 - days * 86400
     os.makedirs(CACHE, exist_ok=True)
+    all_ms = {}
     for series, sym in SERIES.items():
         t_s = time.time()
         mpath = os.path.join(CACHE, f"markets_{series}.json.gz")
-        cpath = os.path.join(CACHE, f"candles_{series}.json.gz")
         spath = os.path.join(CACHE, f"spot_{series}.json.gz")
-        old = {m["t"]: m for m in rjson(mpath, [])}
+        old = {m["t"]: m for m in rjson(mpath, []) if t0 <= m["close"] <= t1}
         have_t = min((m["close"] for m in old.values()), default=None)
         newest = max((m["close"] for m in old.values()), default=None)
         fresh = []
         if have_t is None or have_t > t0 + 900:
-            fresh += list_markets(series, t0, (have_t or t1))
-        fresh += list_markets(series, max(newest or t0, t0), t1)
+            fresh += list_markets(series, t0, have_t or t1)
+        if newest:
+            fresh += list_markets(series, newest, t1)
         for m in fresh:
             old[m["t"]] = m
         ms = sorted(old.values(), key=lambda m: m["close"])
         wjson(mpath, ms)
-        store = rjson(cpath, {})
-        fetch_candles(series, ms, store)
-        wjson(cpath, store)
+        all_ms[series] = ms
         spot = fetch_spot(sym, t0, t1, rjson(spath, {}))
         wjson(spath, spot)
-        print(f"{series}: {len(ms)} windows, {sum(1 for m in ms if store.get(m['t']))} with candles, "
-              f"{len(spot)} spot minutes ({time.time() - t_s:.0f}s)")
+        print(f"{series}: {len(ms)} windows, {len(spot)} spot minutes ({time.time() - t_s:.0f}s)")
+    stores = {s: rjson(os.path.join(CACHE, f"candles_{s}.json.gz"), {}) for s in SERIES}
+    merged = {}
+    for s in SERIES:
+        merged.update(stores[s])
+    fetch_candles([m for ms in all_ms.values() for m in ms], merged)
+    for s, ms in all_ms.items():
+        keep = {m["t"]: merged[m["t"]] for m in ms if m["t"] in merged}
+        wjson(os.path.join(CACHE, f"candles_{s}.json.gz"), keep)
+        print(f"{s}: {sum(1 for v in keep.values() if v)} of {len(ms)} windows with candles")
 
 
 # ================================================================ replay
