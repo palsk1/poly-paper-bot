@@ -949,39 +949,39 @@ def rewardpay():
 
     def page(params):
         try:
-            return bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/activity", params), "data")
+            res = bot.http_json(f"{bot.DATA}/v2/activity", params)
         except Exception as e:
             print(f"  activity {params.get('type', 'all')} failed for {params['user'][:10]}: {str(e)[:160]}")
-            return None
+            return None, None
+        cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
+        return bot.envelope_rows(res, "data"), cur
+
+    def walk_pages(params, max_pages=20):
+        out, cur = [], None
+        for _ in range(max_pages):
+            q = dict(params, **({"cursor": cur} if cur else {}))
+            rows, cur = page(q)
+            if rows is None:
+                return None if not out else out
+            out += rows
+            ts = [bot.fnum(r.get("timestamp")) for r in rows]
+            if not rows or not cur or (ts and min(ts) < t30):
+                break
+        return out
 
     def acts(w, typ):
         """Payout rows of these types in the last 30 days: try the type filter, else scan all activity."""
         out = []
         for ty in typ:
-            off = 0
-            while off < 2000:
-                rows = page({"user": w, "type": ty, "limit": 100, "offset": off})
-                if rows is None:
-                    break
+            rows = walk_pages({"user": w, "type": ty, "limit": 500})
+            if rows:
                 out += [r for r in rows if str(r.get("type")).upper() == ty]
-                ts = [bot.fnum(r.get("timestamp")) for r in rows]
-                if len(rows) < 100 or (ts and min(ts) < t30):
-                    break
-                off += 100
         if out or ("scan", w) in _acts:
             return out
         _acts[("scan", w)] = True
-        allr, off = [], 0
-        while off < 3000:
-            rows = page({"user": w, "limit": 100, "offset": off})
-            if not rows:
-                break
-            allr += rows
-            ts = [bot.fnum(r.get("timestamp")) for r in rows]
-            if len(rows) < 100 or (ts and min(ts) < t30):
-                break
-            off += 100
-        print(f"  {w[:10]} activity types (scan of {len(allr)} rows): {dict(Counter(str(r.get('type')) for r in allr))}")
+        allr = walk_pages({"user": w, "limit": 500}) or []
+        print(f"  {w[:10]} activity types (scan of {len(allr)} rows, back to "
+              f"{min((bot.fnum(r.get('timestamp')) for r in allr), default=0):.0f}): {dict(Counter(str(r.get('type')) for r in allr))}")
         return [r for r in allr if str(r.get("type")).upper() in typ]
 
     if who:
