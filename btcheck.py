@@ -45,7 +45,7 @@ DAY = 86400
 UTC = dt.timezone.utc
 HOLDOUT_FROM = "2026-11-10"   # markets ending on/after this day are the holdout (see backtest/PROTOCOL.md)
 HOLDOUT_OPEN = "2026-12-21"   # the holdout may be scored once, from this day on
-SPLIT = "2026-07-01"          # walk-forward: first half = entries before this, second half = on/after
+SPLIT = "2026-07-01"          # fallback split; halves normally split at the middle trade
 OUT = bt.OUT
 
 
@@ -408,7 +408,8 @@ def random_vs_strategy(trs, markets, hist, slip, seed=5, k=3):
             tgt_abs, stp_abs = r.get("take_profit"), r.get("stop_loss")
             tgt_gap = (c["target"] - c["entry"]) if c.get("target") else None
             e = c["entry"]
-            res = walk(mk, hist[mk["id"]], side, t0, e, sh, slip, c.get("target") or tgt_abs, c.get("stop") or stp_abs)
+            res = walk(mk, hist[mk["id"]], side, t0, e, sh, slip, c.get("target") or tgt_abs, c.get("stop") or stp_abs,
+                       cap_target=True)
             if res:
                 x, xf, _, _ = res
                 ef = fee_of(sh, e, mk["fee"])
@@ -422,7 +423,7 @@ def random_vs_strategy(trs, markets, hist, slip, seed=5, k=3):
                     mk2, s2, p2 = tw
                     e2 = min(0.999, p2 + slip)
                     tgt = min(0.97, e2 + tgt_gap) if tgt_gap else tgt_abs
-                    res2 = walk(mk2, hist[mk2["id"]], s2, t0, e2, sh, slip, tgt, stp_abs)
+                    res2 = walk(mk2, hist[mk2["id"]], s2, t0, e2, sh, slip, tgt, stp_abs, cap_target=True)
                     if not res2:
                         continue
                     x2, xf2, _, _ = res2
@@ -491,19 +492,29 @@ def drop_sweep_tracks(names):
         bot.CFG["tracks"].pop(k, None)
 
 
-def halves_of(rows):
-    s = T(SPLIT)
+def halves_of(rows, split=None):
+    """Older / newer half. split: a fixed time; default = the middle trade, so both halves have data (the panic
+    rules stop new entries ~4 months before the data ends, so a fixed mid-year date leaves the 2nd half nearly empty)."""
+    if not rows:
+        return None, None
+    s = split if split is not None else sorted(t for _, _, t in rows)[len(rows) // 2]
     a = ratio_stats([(p, b) for p, b, t in rows if t < s])
     b = ratio_stats([(p, b) for p, b, t in rows if t >= s])
     return a, b
 
 
+WF = {}
+
+
 def walk_forward(chk, names):
     L = ["| Variant (drop, lowest price) | Trades | Per $100 (TP capped) | 1st half | 2nd half |", "|---|---|---|---|---|"]
     stats = {}
+    every = sorted(t for n in names for _, _, t in chk[n]["rows_cap"])
+    split = every[len(every) // 2] if every else T(SPLIT)
+    WF["split"] = bt.iso_t(split)[:10]
     for n in names:
         rows = chk[n]["rows_cap"]
-        a, b = halves_of(rows)
+        a, b = halves_of(rows, split)
         allr = ratio_stats([(p, s) for p, s, _ in rows])
         stats[n] = (allr, a, b)
         L.append(f"| {n[4:].replace('_', 'c drop, ', 1)}c | {allr['n'] if allr else 0} | {m100(allr and allr['per100'])} | "
@@ -716,7 +727,7 @@ def run():
     # 4. strategy vs random twins with the same exits
     t0 = time.time()
     rv = random_vs_strategy(trs1, markets, hist, 0.01)
-    L += ["## 4. Each strategy vs random entries with the same exits (+1c)", "",
+    L += ["## 4. Each strategy vs random entries with the same exits (+1c, take-profits at the target)", "",
           "Twins: random markets open at the same hour, same days-to-end window, same take-profit / stop rules. "
           "'Same band' = the twin's side is also in the strategy's price band; 'any' = any side at 5-95c. "
           "Strategy column is the second simulator's own replay of the strategy's trades.", "",
@@ -746,7 +757,8 @@ def run():
     finally:
         drop_sweep_tracks(sw)
     L += ["## 6. Panic family: sweep on one half, test on the other (2c + 1h later, TP capped)", "",
-          f"12 versions of the panic rule (drop size x lowest price). Halves split at {SPLIT}.", ""] + wf + [""] + wl
+          f"12 versions of the panic rule (drop size x lowest price). Halves split at {WF.get('split')} (the middle "
+          "trade of the family).", ""] + wf + [""] + wl
     L += ["", f"({time.time() - t0:.0f}s)", ""]
 
     # 7. mention_no from scratch
@@ -781,9 +793,11 @@ def holdout(force=False):
         print(f"Holdout is closed until {HOLDOUT_OPEN}. Not looking.")
         return
     if os.path.exists(path) and not force:
-        print("The holdout has already been used (backtest/holdout.md). A second look would turn it into in-sample data.")
+        print("The holdout has already been used (backtest/holdout.md in the repo). A second look would turn it into "
+              "in-sample data.")
         return
     bt.Clock.real_now = now_
+    bt.fetch()  # bring the cache up to date: the holdout markets are the newest ones
     markets_all, hist = load_cache()
     cut = T(HOLDOUT_FROM)
     hold = {k: m for k, m in markets_all.items() if m["end"] >= cut}
