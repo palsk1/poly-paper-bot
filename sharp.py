@@ -75,6 +75,52 @@ def probe():
                                                     "bestAsk", "bestBid", "closed", "groupItemTitle")})
 
 
+PIN = "https://guest.api.arcadia.pinnacle.com/0.1"
+
+
+def pin(path, params=None):
+    return bot.http_json(f"{PIN}{path}", params)
+
+
+def probe2():
+    print("== polymarket sport codes")
+    sp = bot.http_json(f"{G}/sports")
+    print(" ".join(f"{s.get('sport')}:{s.get('series')}" for s in sp))
+    want = {s.get("sport"): s.get("series") for s in sp}
+    for code in ("epl", "nba", "nfl", "nhl", "atp"):
+        ser = want.get(code)
+        if not ser:
+            continue
+        for closed in ("true", "false"):
+            try:
+                evs = bot.http_json(f"{G}/events", {"series_id": ser, "closed": closed, "limit": 3, "order": "startDate",
+                                                    "ascending": "false"})
+            except Exception as e:
+                print(code, "events failed", e)
+                continue
+            for ev in evs[:2]:
+                print(f"\n  {code} EVENT {ev.get('slug')} | {ev.get('title')} | startTime {ev.get('startTime')} "
+                      f"| gameId {ev.get('gameId')} | eventMetadata {ev.get('eventMetadata')}")
+                for m in (ev.get("markets") or [])[:5]:
+                    print("    ", {k: m.get(k) for k in ("question", "sportsMarketType", "gameStartTime", "outcomes",
+                                                        "outcomePrices", "feeSchedule", "volumeNum", "bestAsk",
+                                                        "bestBid", "line", "groupItemTitle", "umaResolutionStatus")})
+    print("\n== pinnacle guest api")
+    for path in ("/leagues/1980/matchups", "/leagues/1980/markets/straight", "/sports/29/markets/straight?primaryOnly=true",
+                 "/leagues/487/matchups"):
+        st, body = raw(PIN + path)
+        print(path, "HTTP", st, len(body), "bytes")
+        try:
+            js = json.loads(body)
+        except Exception:
+            print("  ", body[:300])
+            continue
+        rows = js if isinstance(js, list) else [js]
+        print("   rows", len(rows))
+        for r in rows[:3]:
+            print("   ", json.dumps(r)[:900])
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "probe"
-    {"probe": probe}[what]()
+    {"probe": probe, "probe2": probe2}[what]()
