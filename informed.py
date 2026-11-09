@@ -303,6 +303,339 @@ def fetch():
           f"{len(W)} wallets, {sum(1 for x in have['m'].values() if x.get('cut'))} tapes cut short, {time.time() - T0:.0f}s")
 
 
+
+# ================================================================ run: score wallets, test copying them
+
+import bisect
+
+H = (3600, 21600, 86400)
+SLIP, SLIP_STRESS = 0.01, 0.03
+
+
+class Mk:
+    def __init__(self, mid, x):
+        self.id, self.x = mid, x
+        self.pt = [p[0] for p in x["path"]]
+        self.pp = [p[1] for p in x["path"]]
+        self.f0 = x["final"][0]
+        self.last = x.get("last_t") or 0
+
+    def p0(self, t, before=False):
+        """Last traded price (outcome-0 terms) at time t; the final payout once trading is over."""
+        if t >= self.last + 600:
+            return self.f0
+        b = t // 300 * 300
+        i = bisect.bisect_left(self.pt, b) - 1 if before else bisect.bisect_right(self.pt, b) - 1
+        return self.pp[i] if i >= 0 else None
+
+
+def po(p0, oi):
+    return None if p0 is None else (p0 if oi == 0 else 1 - p0)
+
+
+def buys(tapes):
+    """First BUY of each wallet in each market outcome (one copy per idea), with moves and the copy fill."""
+    out = []
+    for mid, x in tapes["m"].items():
+        if x.get("cut"):
+            continue
+        mk = Mk(mid, x)
+        seen = set()
+        for t, w, oi, sd, px, sh, cp, v24 in x["tr"]:
+            if sd != "B" or (w, oi) in seen:
+                continue
+            seen.add((w, oi))
+            pb = po(mk.p0(t, before=True), oi)
+            pb = px if pb is None else pb
+            p5 = po(mk.p0(t + 300), oi)
+            fin = mk.f0 if oi == 0 else 1 - mk.f0
+            r = {"mid": mid, "ev": x.get("ev") or mid, "t": t, "w": w, "oi": oi, "px": px, "usd": px * sh, "v24": v24,
+                 "cp": cp, "fin": fin, "fee": x.get("fee") or 0.0, "p5": p5, "end": x["end"], "q": x["q"]}
+            for h in H:
+                ph = po(mk.p0(t + h), oi)
+                r[f"m{h}"] = None if ph is None else ph - pb            # move from just before the trade
+                r[f"c{h}"] = None if ph is None or p5 is None else ph - p5  # move after our 5-minute delay
+            out.append(r)
+    out.sort(key=lambda r: r["t"])
+    return out
+
+
+def copy_pnl(r, slip=SLIP):
+    """Profit per $1 staked copying this buy: real next BUY 5-65 min later + slip + taker fee, held to the result."""
+    if r["cp"] is None or r["cp"] < 0:
+        return None
+    e = r["cp"] + slip
+    if not 0.02 <= e <= 0.97:
+        return None
+    fee = r["fee"] * e * (1 - e)
+    return (r["fin"] - e - fee) / e
+
+
+def summarize(rows, slip=SLIP, boot=400, seed=1):
+    vals = [(r["ev"], copy_pnl(r, slip)) for r in rows]
+    vals = [(e, v) for e, v in vals if v is not None]
+    if not vals:
+        return {"n": 0}
+    by = collections.defaultdict(list)
+    for e, v in vals:
+        by[e].append(v)
+    keys = list(by)
+    rng = random.Random(seed)
+    sims = []
+    for _ in range(boot):
+        s = n = 0
+        for _k in range(len(keys)):
+            g = by[keys[rng.randrange(len(keys))]]
+            s += sum(g)
+            n += len(g)
+        sims.append(100 * s / n if n else 0)
+    sims.sort()
+    return {"n": len(vals), "ev": len(keys), "per100": 100 * sum(v for _, v in vals) / len(vals),
+            "lo": sims[int(0.05 * boot)], "hi": sims[int(0.95 * boot)], "won": sum(1 for _, v in vals if v > 0)}
+
+
+def fmt(s):
+    if not s.get("n"):
+        return "no copyable trades"
+    return (f"{s['n']} copies in {s['ev']} events, won {s['won']}: ${s['per100']:+.2f} per $100 "
+            f"(90% band ${s['lo']:+.2f} to ${s['hi']:+.2f})")
+
+
+def wallet_scores(rows, t_lo, t_hi, h=86400):
+    """Per wallet: mean move in its direction h after our 5-min delay, averaged per market first, with a t-value."""
+    per = collections.defaultdict(lambda: collections.defaultdict(list))
+    for r in rows:
+        if t_lo <= r["t"] and r["t"] + h < t_hi and r[f"c{h}"] is not None and 0.02 <= r["px"] <= 0.95:
+            per[r["w"]][r["mid"]].append(r[f"c{h}"])
+    out = {}
+    for w, mk in per.items():
+        vals = [statistics.mean(v) for v in mk.values()]
+        n = len(vals)
+        m = statistics.mean(vals)
+        sd = statistics.pstdev(vals) if n > 1 else 0.0
+        out[w] = {"n": n, "mean": m, "t": m / (sd / n ** 0.5) if sd > 0 and n > 1 else 0.0}
+    return out
+
+
+def spearman(a, b):
+    def rank(v):
+        o = sorted(range(len(v)), key=lambda i: v[i])
+        r = [0] * len(v)
+        for k, i in enumerate(o):
+            r[i] = k
+        return r
+    if len(a) < 3:
+        return None
+    ra, rb = rank(a), rank(b)
+    ma, mb = statistics.mean(ra), statistics.mean(rb)
+    num = sum((x - ma) * (y - mb) for x, y in zip(ra, rb))
+    den = (sum((x - ma) ** 2 for x in ra) * sum((y - mb) ** 2 for y in rb)) ** 0.5
+    return num / den if den else None
+
+
+RULES = {  # wallet picks, fixed before looking at the test half
+    "S1 5+ markets, avg +3c, t>=2": lambda s: s["n"] >= 5 and s["mean"] >= 0.03 and s["t"] >= 2,
+    "S2 10+ markets, t>=3": lambda s: s["n"] >= 10 and s["t"] >= 3,
+    "S3 3+ markets, avg +10c": lambda s: s["n"] >= 3 and s["mean"] >= 0.10,
+    "S4 5+ markets, avg +5c, t>=2.5": lambda s: s["n"] >= 5 and s["mean"] >= 0.05 and s["t"] >= 2.5,
+}
+
+
+def split_test(rows, L):
+    ts_ = sorted(r["t"] for r in rows)
+    mid_t = ts_[len(ts_) // 2]
+    lo_t, hi_t = ts_[0], ts_[-1] + 1
+    L += [f"Split at {bt.iso_t(mid_t)} (middle trade). Picks use only moves seen 24h after the trade and before the split.", ""]
+    halves = {"A": (lo_t, mid_t), "B": (mid_t, hi_t)}
+    sc = {k: wallet_scores(rows, *v) for k, v in halves.items()}
+    both = [w for w in sc["A"] if w in sc["B"] and sc["A"][w]["n"] >= 5 and sc["B"][w]["n"] >= 5]
+    rho = spearman([sc["A"][w]["mean"] for w in both], [sc["B"][w]["mean"] for w in both])
+    L += [f"**Does 'early' repeat?** {len(both)} wallets have 5+ markets in both halves. Rank correlation of their "
+          f"24h-after-delay move between halves: {rho if rho is None else round(rho, 3)} (0 = no memory, 1 = perfect).", ""]
+    # top decile in A -> B moves
+    if both:
+        srt = sorted(both, key=lambda w: -sc["A"][w]["mean"])
+        dec = max(1, len(srt) // 10)
+        top, bot_ = srt[:dec], srt[-dec:]
+        L += [f"- Top tenth in half A ({dec} wallets): half A avg {100 * statistics.mean(sc['A'][w]['mean'] for w in top):+.2f}c, "
+              f"half B avg {100 * statistics.mean(sc['B'][w]['mean'] for w in top):+.2f}c",
+              f"- Bottom tenth in half A: half A {100 * statistics.mean(sc['A'][w]['mean'] for w in bot_):+.2f}c, "
+              f"half B {100 * statistics.mean(sc['B'][w]['mean'] for w in bot_):+.2f}c",
+              f"- Everyone in both halves: half B {100 * statistics.mean(sc['B'][w]['mean'] for w in both):+.2f}c", ""]
+    L += ["| Pick rule | direction | wallets | copies in the other half | same-size random wallets (median, 20 draws) |", "|---|---|---|---|---|"]
+    res = {}
+    for name, fn in RULES.items():
+        for a, b in (("A", "B"), ("B", "A")):
+            pick = {w for w, s in sc[a].items() if fn(s)}
+            test = [r for r in rows if halves[b][0] <= r["t"] < halves[b][1]]
+            mine = [r for r in test if r["w"] in pick]
+            s = summarize(mine)
+            # random twins: wallets with a similar number of markets in the pick half
+            pool = collections.defaultdict(list)
+            for w, x in sc[a].items():
+                pool[min(x["n"], 30) // 3].append(w)
+            rng = random.Random(5)
+            tw = []
+            for _ in range(20):
+                twins = set()
+                for w in pick:
+                    cand = pool[min(sc[a][w]["n"], 30) // 3]
+                    twins.add(rng.choice(cand))
+                ss = summarize([r for r in test if r["w"] in twins], boot=50)
+                if ss.get("n"):
+                    tw.append(ss["per100"])
+            res[(name, a)] = (pick, s)
+            L.append(f"| {name} | pick {a}, test {b} | {len(pick)} | {fmt(s)} | "
+                     f"{'-' if not tw else f'${statistics.median(tw):+.2f} per $100'} |")
+    L.append("")
+    return res, halves, sc
+
+
+def fresh_check(rows, cap=1500):
+    """Real wallet history from the API: how many trades did the wallet make before this one? (<= 5 = fresh)."""
+    W = {}
+
+    def hist(w):
+        out, cur = [], None
+        for _ in range(6):
+            p = {"user": w, "limit": 500}
+            if cur:
+                p["cursor"] = cur
+            try:
+                r, cur, _ = trades_page(p)
+            except Exception:
+                return w, None
+            out += [bot.fnum(bot.pick(x, "timestamp", "time")) for x in r]
+            if not cur or not r:
+                break
+        return w, (out, bool(cur))
+    ws = sorted({r["waddr"] for r in rows})[:cap]
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for w, res in ex.map(hist, ws):
+            W[w] = res
+    for r in rows:
+        h = W.get(r["waddr"])
+        if not h:
+            r["prior"] = None
+            continue
+        tt, more = h
+        prior = sum(1 for x in tt if x and (x / 1000 if x > 1e11 else x) < r["t"])
+        r["prior"] = None if more and prior == 0 else prior  # unknown when we couldn't reach back that far
+        r["prior"] = 999 if more and prior > 0 else r["prior"]
+    return rows
+
+
+def band3(p):
+    return "3-30c" if p < 0.30 else "30-60c" if p < 0.60 else "60-90c"
+
+
+def run():
+    tapes = bt.rjson(TAPES, {}) or {}
+    if not tapes.get("m"):
+        print("no tapes; run btinf_fetch first")
+        return
+    Wl = tapes["W"]
+    rows = buys(tapes)
+    for r in rows:
+        r["waddr"] = Wl[r["w"]]
+    nm = len(tapes["m"])
+    L = ["# Who trades before the price moves? (informed-trader hunt)", "",
+         f"Data: full trade lists of {nm} finished Polymarket markets from {len({x.get('ev') for x in tapes['m'].values()})} whole events "
+         f"(sports and 5/15-minute crypto left out, every choice of an event kept so cheap losers aren't missing: "
+         f"{'yes' if tapes.get('evok') else 'NO, events cache missing'}), markets ending 2026-03-01 to 2026-11-09 (holdout untouched). "
+         f"{len(rows)} first buys of $100+ by {len({r['w'] for r in rows})} wallets. Prices are real trades (5-minute steps). "
+         f"A copy pays the next real buy price 5-65 minutes later (our bot is ~5 min behind) + 1c + taker fee, held to the result. "
+         f"No later buy within an hour = no copy (no made-up fills).", ""]
+    # baseline
+    L += ["## 1. Baseline: copying everyone", "",
+          f"- All $100+ first buys: {fmt(summarize(rows))}",
+          f"- Same at +3c: {fmt(summarize(rows, SLIP_STRESS))}"]
+    for lo, hi in ((100, 1000), (1000, 10000), (10000, 1e12)):
+        L.append(f"- Buys ${lo:,.0f}-{hi:,.0f}: {fmt(summarize([r for r in rows if lo <= r['usd'] < hi]))}")
+    L.append("")
+    L += ["Average move in the buyer's direction (cents), from just before the trade / after our 5-min delay:", ""]
+    for h in H:
+        a = [r[f"m{h}"] for r in rows if r[f"m{h}"] is not None]
+        b = [r[f"c{h}"] for r in rows if r[f"c{h}"] is not None]
+        L.append(f"- {h // 3600}h: {100 * statistics.mean(a):+.2f}c / {100 * statistics.mean(b):+.2f}c")
+    L.append("")
+    # 2. wallets
+    L += ["## 2. Wallets that are early again and again (split-half test)", ""]
+    res, halves, sc = split_test(rows, L)
+    # list best A wallets that also did well in B
+    best = sorted([w for w, s in sc["A"].items() if RULES["S1 5+ markets, avg +3c, t>=2"](s)], key=lambda w: -sc["A"][w]["t"])[:15]
+    if best:
+        L += ["Top wallets picked on half A (S1), and what they did in half B:", "", "| wallet | A markets | A avg | A t | B markets | B avg | B copies |", "|---|---|---|---|---|---|---|"]
+        for w in best:
+            b = sc["B"].get(w, {"n": 0, "mean": 0})
+            s = summarize([r for r in rows if r["w"] == w and r["t"] >= halves["B"][0]], boot=100)
+            L.append(f"| `{Wl[w]}` | {sc['A'][w]['n']} | {100 * sc['A'][w]['mean']:+.1f}c | {sc['A'][w]['t']:.1f} | {b['n']} | "
+                     f"{100 * b['mean']:+.1f}c | {fmt(s) if s.get('n') else '-'} |")
+        L.append("")
+    # 3. pattern: fresh wallet, big bet, quiet market
+    L += ["## 3. Pattern: new wallet, one big bet, quiet market", "",
+          "Known at the time of the trade, no wallet history needed from us. 'Quiet' = the bet is bigger than everything "
+          "traded in that market in the 24 hours before. 'New in our data' = first market we see this wallet in.", ""]
+    first_seen = {}
+    for r in rows:
+        first_seen.setdefault(r["w"], r["t"])
+    nmk = collections.Counter()
+    seen_mk = collections.defaultdict(set)
+    for r in rows:
+        r["nprior"] = len(seen_mk[r["w"]])
+        seen_mk[r["w"]].add(r["mid"])
+    base = [r for r in rows if 0.03 <= r["px"] <= 0.90]
+    variants = {
+        "big ($1k+)": lambda r: r["usd"] >= 1000,
+        "big + quiet": lambda r: r["usd"] >= 1000 and r["usd"] >= r["v24"],
+        "big + new in our data": lambda r: r["usd"] >= 1000 and r["nprior"] == 0,
+        "big + quiet + new": lambda r: r["usd"] >= 1000 and r["usd"] >= r["v24"] and r["nprior"] == 0,
+        "$5k+ + quiet + new": lambda r: r["usd"] >= 5000 and r["usd"] >= r["v24"] and r["nprior"] == 0,
+        "big + quiet + new, cheap side (3-30c)": lambda r: r["usd"] >= 1000 and r["usd"] >= r["v24"] and r["nprior"] == 0 and r["px"] < 0.30,
+    }
+    L += ["| Pattern | half A | half B | all |", "|---|---|---|---|"]
+    for name, fn in variants.items():
+        hit = [r for r in base if fn(r)]
+        L.append(f"| {name} | {fmt(summarize([r for r in hit if r['t'] < halves['B'][0]]))} | "
+                 f"{fmt(summarize([r for r in hit if r['t'] >= halves['B'][0]]))} | {fmt(summarize(hit))} |")
+    L.append("")
+    # same price band twins for the main pattern
+    hit = [r for r in base if variants["big + quiet + new"](r)]
+    L += ["Same price band, big buys that are NOT the pattern (are we just seeing the price band?):", ""]
+    for b3 in ("3-30c", "30-60c", "60-90c"):
+        h_ = [r for r in hit if band3(r["px"]) == b3]
+        o_ = [r for r in base if r["usd"] >= 1000 and band3(r["px"]) == b3 and not variants["big + quiet + new"](r)]
+        L.append(f"- {b3}: pattern {fmt(summarize(h_))}; others {fmt(summarize(o_))}")
+    L.append("")
+    # real freshness from the API for pattern hits
+    L += ["Real wallet age from the Polymarket API (trades the wallet made before this bet):", ""]
+    chk = fresh_check([dict(r) for r in base if r["usd"] >= 1000 and r["usd"] >= r["v24"]])
+    for name, fn in (("brand new (0 earlier trades)", lambda r: r["prior"] == 0), ("1-5 earlier", lambda r: r["prior"] is not None and 1 <= r["prior"] <= 5),
+                     ("6-3000 earlier", lambda r: r["prior"] is not None and 6 <= r["prior"] < 999), ("3000+ earlier", lambda r: r["prior"] == 999),
+                     ("unknown", lambda r: r["prior"] is None)):
+        g = [r for r in chk if fn(r)]
+        L.append(f"- big + quiet, {name}: {fmt(summarize(g))}; half A {fmt(summarize([r for r in g if r['t'] < halves['B'][0]]))}; "
+                 f"half B {fmt(summarize([r for r in g if r['t'] >= halves['B'][0]]))}")
+    L.append("")
+    fresh = [r for r in chk if r["prior"] is not None and r["prior"] <= 5]
+    if fresh:
+        tp = collections.defaultdict(list)
+        for r in fresh:
+            tp[__import__("calib").topic(r["q"])].append(r)
+        L += ["Fresh + big + quiet by topic: " + "; ".join(f"{k}: {fmt(summarize(v, boot=100))}" for k, v in sorted(tp.items(), key=lambda kv: -len(kv[1]))), ""]
+        L += ["Examples (fresh wallet, big bet, quiet market):", ""]
+        for r in sorted(fresh, key=lambda r: -r["usd"])[:20]:
+            c = copy_pnl(r)
+            L.append(f"- {bt.iso_t(r['t'])[:16]} ${r['usd']:,.0f} at {100 * r['px']:.0f}c (24h before: ${r['v24']:,.0f} traded) -> "
+                     f"{'won' if r['fin'] > 0.5 else 'lost'}, copy {'-' if c is None else f'{100 * c:+.0f} per $100'} | {r['q'][:80]}")
+        L.append("")
+    txt = "\n".join(L) + "\n"
+    os.makedirs(OUT, exist_ok=True)
+    with open(os.path.join(OUT, "informed.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     {"peek": peek, "fetch": fetch, "run": lambda: globals()["run"](), "all": lambda: (fetch(), globals()["run"]())}[cmd]()
