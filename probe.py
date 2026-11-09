@@ -606,3 +606,51 @@ def marks(what):
 
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1].startswith("marks"):
     marks(sys.argv[1])
+
+
+def egcheck():
+    """egcheck: were endgame 'estimate' fills real? (1) live: raw CLOB book for today's resolved/proposed candidates.
+    (2) history: real trades on the tape near the time of each past endgame_strict paper buy."""
+    import bot, datetime as dt
+    r = bot.rules_for("endgame_strict")
+    cands = bot.endgame_candidates(r)
+    print(f"== live: {len(cands)} strict candidates")
+    for c in cands[:25]:
+        m = c["market"]
+        try:
+            raw = bot.http_json(f"{bot.CLOB}/book", {"token_id": c["token"]})
+            asks = sorted((float(a["price"]), float(a["size"])) for a in raw.get("asks", []))
+            bk = f"asks {len(asks)} best {asks[:3]}"
+        except Exception as e:
+            bk = f"BOOK ERROR {e}"[:140]
+        print(f"{c['tier']:8} listed {c['price']:.3f} accepting {m.get('acceptingOrders')} ob {m.get('enableOrderBook')} "
+              f"closed {m.get('closed')} sports {bot.is_sports(m)} | {bk} | {c['title'][:60]} [{c['outcome']}]")
+    tr = bot.load_tracks()["endgame_strict"]
+    rows = tr["closed"][:: max(1, len(tr["closed"]) // 30)][:30]
+    print(f"== history: {len(rows)} of {len(tr['closed'])} closed strict trades")
+    hits = 0
+    for p in rows:
+        m = bot.market_by_slug(p["slug"]) or {}
+        cid = m.get("conditionId")
+        t0 = bot.parse_iso(p["opened"])
+        try:
+            tr_ = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"condition_id": cid, "limit": 500}), "data", "trades")
+        except Exception as e:
+            print("trades failed", e)
+            tr_ = []
+        near = []
+        for x in tr_:
+            ts = x.get("timestamp")
+            ts = dt.datetime.fromtimestamp(int(ts), dt.timezone.utc) if ts else None
+            if ts and abs((ts - t0).total_seconds()) <= 1800 and str(x.get("asset")) == p["token"]:
+                near.append((round(float(x.get("price", 0)), 3), x.get("side"), round(float(x.get("size", 0)), 1), ts.strftime("%H:%M")))
+        cheap = [n for n in near if n[0] <= p["entry"] + 1e-9]
+        hits += bool(cheap)
+        last = [(round(float(x.get('price', 0)), 3), x.get('side'), x.get('timestamp')) for x in tr_[:2]]
+        print(f"entry {p['entry']:.3f} opened {p['opened'][11:16]} trades_total {len(tr_)} near(+-30m) {len(near)} "
+              f"at_or_below_entry {len(cheap)} sample {near[:4]} newest {last} | {p['title'][:55]} [{p['outcome']}]")
+    print(f"== {hits} of {len(rows)} had a real trade at or below our paper price within 30 min")
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "egcheck":
+    egcheck()
