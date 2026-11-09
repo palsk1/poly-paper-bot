@@ -522,11 +522,21 @@ def prob(mu, sd, step, m):
 class Models:
     """forecast(kind, event, t) -> (mu, sd) as known at time t, and actual(kind, event)."""
 
-    def __init__(self):
-        self.cle = load("cleveland") or {}
-        self.gdp = load("gdpnow") or {"now": [], "actual": {}}
-        self.fred = load("fred") or {}
-        self.vint = load("vintages") or {}
+    def __init__(self, live=False, kinds=None):
+        """live=True: fresh downloads for the paper track (no cache, no GDP), only for the kinds asked for."""
+        self.live = live
+        if not live:
+            self.cle = load("cleveland") or {}
+            self.gdp = load("gdpnow") or {"now": [], "actual": {}}
+            self.fred = load("fred") or {}
+            self.vint = load("vintages") or {}
+            return
+        kinds = set(kinds or ())
+        self.cle = fetch_cleveland() if kinds & {"cpi", "core", "cpi_yoy"} else {}
+        self.gdp = {"now": [], "actual": {}}
+        self.fred = {sid: fred_csv(FRED + sid) for kind, sid in (("claims", "ICSA"), ("u3", "UNRATE"), ("payrolls", "PAYEMS"))
+                     if kind in kinds}
+        self.vint = {}
 
     # --- inflation (Cleveland Fed nowcast)
     def _cle_at(self, kind, ym, before):
@@ -583,21 +593,33 @@ class Models:
                 return None
             return pts[-1], math.sqrt(sum(e * e for e in errs) / len(errs))
         cd = dt.date.fromisoformat(dstr(m["close"]))
-        vb = self._vint({"claims": "ICSA", "u3": "UNRATE", "payrolls": "PAYEMS"}[kind], (cd - dt.timedelta(days=1)).isoformat())
+        sid = {"claims": "ICSA", "u3": "UNRATE", "payrolls": "PAYEMS"}.get(kind)
+        if not sid:
+            return None
+        if self.live:   # FRED's current numbers = what is known now (the backtest used the vintage of the day before)
+            vb = [r for r in self.fred.get(sid, []) if r[0] < today][-30:]
+        else:
+            vb = self._vint(sid, (cd - dt.timedelta(days=1)).isoformat())
         if not vb:
             return None
         if kind == "claims":
             sd = self._hist_sd("ICSA", today, 104, lambda r, i: r[i][1] - r[i - 1][1])
+            if self.live and (cd - dt.date.fromisoformat(vb[-1][0])).days > 14:   # last week's number is missing
+                return None
             return (vb[-1][1], sd) if sd else None
         if kind == "u3":
             ym = ev_month(m["e"])
             last = [v for d, v in vb if d[:7] == prev_month(ym)]
+            if self.live and vb[-1][0][:7] != prev_month(ym):
+                return None
             sd = self._hist_sd("UNRATE", today, 120, lambda r, i: r[i][1] - r[i - 1][1])
             return (last[0], sd) if last and sd else None
         if kind == "payrolls":
             ch = [(vb[i][0], (vb[i][1] - vb[i - 1][1]) * 1000) for i in range(1, len(vb))]
             ym = ev_month(m["e"])
             prior = [c for d, c in ch if d[:7] < ym][-3:]
+            if self.live and vb[-1][0][:7] != prev_month(ym):
+                return None
             sd = self._hist_sd("PAYEMS", today, 120,
                                lambda r, i: ((r[i][1] - r[i - 1][1]) - sum(r[j][1] - r[j - 1][1] for j in (i - 1, i - 2, i - 3)) / 3) * 1000)
             return (sum(prior) / 3, sd) if len(prior) == 3 and sd else None
@@ -958,6 +980,56 @@ def fetch_run():
     run()
 
 
+# ================================================================ live paper track (bot.py source "econ")
+
+LIVE_SERIES = ("KXCPI", "KXCPICORE", "KXCPIYOY", "KXECONSTATCPI", "KXJOBLESSCLAIMS", "KXU3", "KXPAYROLLS")
+
+
+def live_chances(markets, now_ts):
+    """{ticker: (chance of YES, forecast, spread)} for open Kalshi markets (raw API rows, with "_series"), same model
+    as the backtest. GDP is left out (its forecast file needs openpyxl; the next advance estimate is in late January)."""
+    kinds = {SERIES[m["_series"]][0] for m in markets if m.get("_series") in SERIES}
+    if not kinds:
+        return {}
+    models = Models(live=True, kinds=kinds)
+    out = {}
+    for m in markets:
+        s = m.get("_series")
+        if s not in LIVE_SERIES:
+            continue
+        kind, step = SERIES[s]
+        sm = kslim(m, s)
+        if not sm["close"]:
+            continue
+        f = models.forecast(kind, sm, now_ts)
+        if not f:
+            continue
+        if sat(rnd(f[0], step), sm) is None:   # a strike we can't read
+            continue
+        out[sm["t"]] = (prob(f[0], f[1], step, sm), f[0], f[1])
+    return out
+
+
+def selftest():
+    m = {"st": "greater", "lo": 0.3, "hi": None}
+    assert abs(prob(0.25, 0.1, 0.1, m) - (1 - ncdf(1.0))) < 1e-6
+    assert sat(0.3, {"st": "custom", "sub": "Exactly 0.3%", "lo": None, "hi": None})
+    assert sat(220000, {"st": "greater_or_equal", "lo": 220000, "hi": None})
+    assert not sat(0.3, m) and sat(0.4, m)
+    assert kpx("0.36", False) == 0.36 and kpx(36, False) == 0.36 and kpx("0.3600", True) == 0.36
+    assert ev_month("KXCPI-26SEP") == "2026-09" and prev_month("2026-01") == "2025-12"
+    # live claims model on made-up FRED data
+    mdl = Models.__new__(Models)
+    mdl.live, mdl.cle, mdl.gdp, mdl.vint = True, {}, {"now": [], "actual": {}}, {}
+    d0 = dt.date(2024, 1, 6)
+    mdl.fred = {"ICSA": [[(d0 + dt.timedelta(weeks=i)).isoformat(), 220000 + (5000 if i % 2 else -5000)] for i in range(150)]}
+    close = int(dt.datetime.combine(d0 + dt.timedelta(weeks=150, days=5), dt.time(13, 30), UTC).timestamp())
+    mk = {"st": "greater_or_equal", "lo": 240000, "hi": None, "close": close, "e": "KXJOBLESSCLAIMS-X"}
+    f = mdl.forecast("claims", mk, close - 86400)
+    assert f and abs(f[1] - 10000) < 1, f
+    print("econ selftest ok")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill, "drill2": drill2, "drill3": drill3}[cmd]()
+    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill, "drill2": drill2, "drill3": drill3, "selftest": selftest}[cmd]()

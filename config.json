@@ -120,6 +120,13 @@
       "source": "endgame",
       "rules": "fade_sure"
     },
+    "econ_fav": {
+      "label": "Forecast backs the favorite (added 2026-11-09): Kalshi CPI, jobless-claims, unemployment and jobs-report markets. 20-76 hours before the release, buys the side that costs 80-99c when a free forecast (Cleveland Fed for inflation, last release for the jobs numbers) says it is worth 3c+ more. Holds to the result. Real order-book fills. $50 paper",
+      "start_cash": 50,
+      "refill": true,
+      "source": "econ",
+      "rules": "econ_fav"
+    },
     "sharp_pinnacle": {
       "label": "Sharp bookie price: buys a Polymarket game outcome (soccer, NBA/NHL/NFL, baseball, esports, MMA) when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and paying the fee. Pre-game only, holds to the end. Real order-book fills. $100 paper",
       "start_cash": 100,
@@ -1751,6 +1758,17 @@
       "max_open": 40,
       "picks_per_scan": 3,
       "shadow_sell_at": []
+    },
+    "econ_fav": {
+      "why": "2026-11-09 econ.py backtest (backtest/econ.md): on 340 Kalshi data releases 2021-2026, buying the 80-99c side when the forecast said it was worth 3c+ more made +$6.73 per $100 24h before (141 bets, 7 lost) and +$7.75 72h before, both halves ahead, still ahead 2c worse; the same band without the forecast lost about $5 per $100. Found after looking at price bands, so the live track is the real test. Claude's track, rule changes reported.",
+      "series": ["KXCPI", "KXCPICORE", "KXCPIYOY", "KXECONSTATCPI", "KXJOBLESSCLAIMS", "KXU3", "KXPAYROLLS"],
+      "min_hours": 20,
+      "max_hours": 76,
+      "min_cost": 0.8,
+      "max_cost": 0.99,
+      "min_edge": 0.03,
+      "usd_per_bet": 5,
+      "scan_minutes": 55
     },
     "sharp_pinnacle": {
       "why": "Jan's idea (2026-11-09): Pinnacle is the bookie the pros bet with, so its odds minus its margin are a strong fair price. Polymarket market makers mostly copy Pinnacle, so gaps should be rare and short; this measures how often a 15-minute bot catches one. Fair = the lower of two de-vig methods (sharp.py). One bet per game. Claude's track, rule changes reported.",
