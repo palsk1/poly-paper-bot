@@ -441,7 +441,13 @@ def watch(minutes):
 
 if __name__ == "__main__":
     what = (sys.argv[1] if len(sys.argv) > 1 else "all").replace("lh_", "")
-    if what.startswith("watch"):
+    if what.startswith("kevent_"):
+        ev = bot.kalshi_get(f"/events/{what[7:]}", {"with_nested_markets": "true"})
+        for m in (ev.get("event") or {}).get("markets") or ev.get("markets") or []:
+            print(json.dumps({k: m.get(k) for k in ("ticker", "status", "strike_type", "floor_strike", "cap_strike", "yes_sub_title",
+                  "yes_bid_dollars", "yes_ask_dollars", "no_ask_dollars", "last_price_dollars", "volume", "rules_primary")}))
+            print("  book:", kbook(m["ticker"]))
+    elif what.startswith("watch"):
         watch(int(what.split("_")[1]) if "_" in what else 60)
     else:
         run_all({"nested", "groups", "cross", "kalshi"} if what == "all" else {what})
