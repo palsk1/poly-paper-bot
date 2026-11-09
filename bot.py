@@ -162,6 +162,23 @@ def log_event(ev):
     print("EVENT", json.dumps(ev, sort_keys=True))
 
 
+def drop_phantom_fills(tr):
+    """One-time cleanup (Jan's OK, 2026-11-09): endgame paper buys made on an empty order book ('estimate' fills at
+    the stale listed price) could never have happened, so they are taken out of the score and their money put back.
+    The old numbers stay in git history."""
+    closed = [c for c in tr["closed"] if c.get("price_source") == "estimate"]
+    opened = {t: p for t, p in tr["positions"].items() if p.get("price_source") == "estimate"}
+    pnl = sum(c.get("pnl", 0.0) for c in closed)
+    back = sum(p["shares"] * p["entry"] + p.get("entry_fee", 0.0) for p in opened.values())
+    tr["closed"] = [c for c in tr["closed"] if c.get("price_source") != "estimate"]
+    for t in opened:
+        del tr["positions"][t]
+    tr["cash"] = round(tr["cash"] - pnl + back, 6)
+    tr["realized"] = round(tr["realized"] - pnl, 6)
+    tr["phantom_removed"] = {"on": iso(), "closed": len(closed), "open": len(opened), "pnl_removed": round(pnl, 4)}
+    print(f"phantom cleanup: removed {len(closed)} closed + {len(opened)} open estimate fills, pnl {pnl:+.2f}")
+
+
 def load_tracks():
     tracks = load("tracks.json", {})
     for name, tc in CFG["tracks"].items():
@@ -181,6 +198,8 @@ def load_tracks():
                 "skipped_no_cash": 0,
                 "created": iso(),
             }
+        if tc["source"] == "endgame" and "phantom_removed" not in tracks[name]:
+            drop_phantom_fills(tracks[name])
         if tc["source"] == "arb":
             for k, v in (("arbs", {}), ("opportunities", 0), ("mismatches", 0), ("last_check", {})):
                 tracks[name].setdefault(k, v)
