@@ -456,9 +456,11 @@ if __name__ == "__main__":
                     kinds[k] = kinds.get(k, 0) + 1
             print(fp, f"{os.path.getsize(fp) / 1e3:.0f} kB", kinds)
             with gzip.open(fp, "rt") as f:
-                for i, line in enumerate(f):
+                for line in f:
                     if '"k":"gas"' in line[:20]:
                         print("GAS", line[:3000])
+            with gzip.open(fp, "rt") as f:
+                for i, line in enumerate(f):
                     if i < 3 or '"k":"kbook"' in line[:20] and i < 400:
                         print(line[:400])
                         if i > 3:
