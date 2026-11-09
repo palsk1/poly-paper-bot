@@ -1053,4 +1053,6 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
     {"fetch": fetch, "run": run, "all": lambda: (fetch(), run()), "selftest": selftest,
      "btfetch": fetch, "btrun": lambda: (fetch(), run()), "btselftest": selftest, "btdiag": diag,
-     "btfade": lambda: (fetch(), fade()), "fade": fade}[cmd]()
+     "btfade": lambda: (fetch(), fade()), "fade": fade,
+     "btcalib": lambda: __import__("calib").run(),
+     "btcalibsmall": lambda: (__import__("calib").fetch_small(), __import__("calib").run())}[cmd]()
