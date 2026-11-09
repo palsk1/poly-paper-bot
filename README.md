@@ -20,6 +20,7 @@
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 | `mention_no` | "Will X say Y" markets (earnings calls, speeches, podcasts) that end within 7 days: buys **NO** at 25-90c, one word per event, real order-book fills, skips thin books where the ask is 5c+ above the listed price. Added 2026-11-09 (see "Calibration hunt" below) | $50 |
+| `fineprint_limbo` | Markets whose end date passed 1-3 days ago but aren't paid out yet, and whose rules have 2+ dispute-prone clauses (official only, "consensus of credible reporting", lists of things that don't count, a date the title doesn't name...). Buys the **underdog** at 10-30c, holds to the result, real order-book fills, skips books whose ask is 5c+ over the listed price. Added 2026-11-09 (see "Fine-print hunt" below) | $50 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 | `kc_maker`, `kc_maker_safe`, `kc_maker_early` | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
@@ -150,6 +151,18 @@ What it found (profit per $100 staked at +2c slippage):
 - Weather long shots at 10-25c, 1-7 days out, also came out ahead (+$28): the same effect `fade_sure` already trades at 2-10c.
 - 272 slices were tested, so about 13 could pass by luck. A pass is a lead, not proof. Final market volume was NOT used as a rule: it knows the outcome (surprises draw volume).
 
+## Fine-print hunt (added 2026-11-09, `rules.py`, `fineprint.py`)
+
+Does the crowd trade the title and miss the rules? `rules.py` pulls the rule text and UMA history (proposed, disputed, resolved) for the 124,260 finished markets in the backtest cache (395 were disputed) and flags text a trader could read before the end: "official" only, "announced", "plans don't count", "consensus of credible reporting", room for judgment, 2+ things that don't count, a date the title doesn't name, very long rules. `fineprint.py` holds the flags, so the bot and the backtest use the same code. Results in `backtest/rules.md`; rerun with probe input `btrulesrun` (`btrulesfetch` refreshes the rule text, `btrulespeek` shows raw fields).
+
+What it found (profit per $100 staked at +2c):
+- **The flags predict disputes very well.** No flags: 0.4 disputes per 1,000 markets. 4+ flags: 51 per 1,000. Useful as a warning light.
+- **But the prices are mostly right anyway.** Buying YES or NO in flagged markets loses about the spread, like everything else. The guess "strict rules make YES too dear" is wrong: if anything YES does slightly better in "official only" markets than in look-alikes.
+- **Disputed markets are where long shots win** (in hindsight: +$108 per $100 on 2-25c tickets). You can't know a dispute in advance, but the flags point at the same markets.
+- **The one usable lead:** 1-3 days after the end date, unpaid, 2+ flags, the underdog at 10-30c: +$20 per $100 (band -$4 to +$43, 184 events, both halves ahead). The leader in these markets loses about $9 per $100, which fits the old endgame "past deadline" losses. `fineprint_limbo` paper-tests it on real books.
+- 204 rows were tested, so about 10 could pass by luck. One did ("rules name a date the title doesn't", buy YES 1-3 days out), but its markets are a grab bag (earthquake counts, Trump-says-this-week, Hormuz shipping), so it is treated as luck.
+- Limits: Gamma shows today's rule text. Polymarket's later clarifications don't appear in it (none were found), so the flags read close to what traders saw, but small edits can't be ruled out. History prices in limbo can be stale, which is why the live track only buys on a real ask within 5c of the listed price.
+
 ## Sharp bookie price (added 2026-11-09, `sharp.py`)
 
 Jan's idea: big bookmakers spend a fortune on models and on taking bets from pros, so their odds are a good "fair price". If Polymarket sells the same outcome for less, buy it.
@@ -264,6 +277,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `backtest/report.md`: last backtest on past markets (`backtest.py`)
 - `backtest/checks.md`, `backtest/PROTOCOL.md`: backtest sanity checks and the test-before-results rules (`btcheck.py`)
 - `backtest/calib.md`: calibration hunt by market kind, horizon, size and weekday (`calib.py`)
+- `backtest/rules.md`: fine-print hunt, rule-text flags vs disputes and prices (`rules.py`, `fineprint.py`)
 - `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
