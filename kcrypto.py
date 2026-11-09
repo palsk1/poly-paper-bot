@@ -281,22 +281,26 @@ def fetch_candles(ms, store):
 
 def fetch_spot(symbol, t0, t1, have):
     """Binance 1-minute closes {minute_end_ts: close}. Kalshi settles on CF Benchmarks' index, not Binance: this
-    is only used to measure how far the coin was from the strike."""
+    is only used to measure how far the coin was from the strike. Fills whatever is missing before and after the
+    cached stretch."""
     out = dict(have or {})
-    start = max([int(k) for k in out] + [t0 - 3600]) * 1000
-    while start < t1 * 1000:
-        try:
-            rows = bot.http_json(BINANCE, {"symbol": symbol, "interval": "1m", "startTime": start, "limit": 1000})
-        except Exception as e:
-            print(f"  binance {symbol} failed: {e}")
-            break
-        if not rows:
-            break
-        for r in rows:
-            out[str(int(r[6]) // 1000 + 1)] = float(r[4])   # close time is end-1ms
-        start = int(rows[-1][0]) + 60000
-        if len(rows) < 1000:
-            break
+    keys = sorted(int(k) for k in out)
+    gaps = [(t0 - 3600, t1)] if not keys else [(t0 - 3600, keys[0]), (keys[-1], t1)]
+    for g0, g1 in gaps:
+        start = g0 * 1000
+        while start < g1 * 1000:
+            try:
+                rows = bot.http_json(BINANCE, {"symbol": symbol, "interval": "1m", "startTime": start, "limit": 1000})
+            except Exception as e:
+                print(f"  binance {symbol} failed: {e}")
+                break
+            if not rows:
+                break
+            for r in rows:
+                out[str(int(r[6]) // 1000 + 1)] = float(r[4])   # close time is end-1ms
+            start = int(rows[-1][0]) + 60000
+            if len(rows) < 1000:
+                break
     return out
 
 
