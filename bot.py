@@ -4687,7 +4687,8 @@ def push_scoreboard(stats):
     for i, name in enumerate(top, 1):
         s, t = stats[name], stats[name]["trust"]
         lines.append(f"{i}. {name}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}), {t['finished']} finished. "
-                     f"{plain_verdict(t, name.startswith('control_'))[1].split(' (')[0]}")
+                     f"{plain_verdict(t, name.startswith('control_'))[1].split(' (')[0]}"
+                     + (f", worst case {usd(t['worst_per_100'])[:-3]} per $100" if t["finished"] >= 10 else ""))
     if rs_rank_size():
         lines.append(f"(ranked on what a real ${rs_rank_size()} bet would have made)")
     best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)

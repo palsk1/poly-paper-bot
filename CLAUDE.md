@@ -8,7 +8,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 - Use plain dollars and cents and simple words. **No percentages.** Math is hard for him, so show "cost $4.85, pays $5.00" instead of a rate. Light snark and humor are welcome.
 - Ask clarifying questions before starting a bigger task instead of guessing.
 - He reads on his phone, so keep reports short.
-- **Plain words (2026-11-09, Jan's ask):** he found the dashboard and reports too jargon-heavy ("like a tech bro AI hybrid"). Write for a smart friend who doesn't trade: short sentences, everyday words, no P&L / edge / worst case / trust score / fill / book. Say what each number means for him (good, bad, too early). Costs are red, never green. Strategy verdicts use `bot.plain_verdict()`: "Looks real", "Promising, needs more bets", "Ahead, but could be luck", "Losing", "Too early to tell". The dashboard, the daily ntfy push and the morning review prompt all use them.
+- **Plain words (2026-11-09, Jan's ask):** he found the dashboard and reports too jargon-heavy ("like a tech bro AI hybrid"). Write for a smart friend who doesn't trade: short sentences, everyday words, no edge / trust score / fill / book / "careful guess". Jan likes "P&L" and "worst case per $100": keep those. Say what each number means for him (good, bad, too early). Costs are red, never green. Strategy verdicts use `bot.plain_verdict()`: "Looks real", "Promising, needs more bets", "Ahead, but could be luck", "Losing", "Too early to tell". The dashboard, the daily ntfy push and the morning review prompt all use them.
 
 ## Hard rules (never break)
 1. **Paper money only.** Never place real trades.
