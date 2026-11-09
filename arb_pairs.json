@@ -168,6 +168,30 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Both need Beshear himself to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count on either), both end Dec 31 2026 ET. Risk: a vague 'I'm running' remark could be judged differently.",
    "approved": "2026-11-08"
+  },
+  {
+   "id": "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027",
+   "kalshi": "KXDESANTISRUN-28-27JAN01",
+   "poly_slug": "will-ron-desantis-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Ron DeSantis himself/herself or the official campaign to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count), both end Dec 31 2026 ET; same template as approved Beshear pair. Risk: a vague 'I'm running' remark could be judged differently.",
+   "approved": "2026-11-09"
+  },
+  {
+   "id": "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027",
+   "kalshi": "KXEMANUELRUN-28-27JAN01",
+   "poly_slug": "will-rahm-emanuel-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Rahm Emanuel himself/herself or the official campaign to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count), both end Dec 31 2026 ET; same template as approved Beshear pair. Risk: a vague 'I'm running' remark could be judged differently.",
+   "approved": "2026-11-09"
+  },
+  {
+   "id": "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027",
+   "kalshi": "KXKAMALARUN-28-27JAN01",
+   "poly_slug": "will-kamala-harris-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Kamala Harris himself/herself or the official campaign to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count), both end Dec 31 2026 ET; same template as approved Beshear pair. Risk: a vague 'I'm running' remark could be judged differently.",
+   "approved": "2026-11-09"
   }
  ],
  "rejected": [
@@ -690,6 +714,116 @@
    "id": "KXFARAGEOUTREFORM-26JUL-JAN01|nigel-farage-out-as-reform-uk-leader-in-2026-20260622233131512",
    "reason": "Kalshi death clause settles at last fair price; Polymarket would resolve Yes if he ceases to be leader.",
    "date": "2026-11-08"
+  },
+  {
+   "id": "KXRECOGPALESTINE-27-ITA|will-italy-recognize-palestine-before-2027",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission) as recognition; Polymarket needs formal recognition only.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXLOL-WORLDS26-BLG|will-bilibili-gaming-win-worlds-2026",
+   "reason": "Polymarket goes 'Other' if postponed past Nov 28 or no winner declared, and has an alphabetical tie rule; Kalshi has neither.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXGAMEAWARDS-BNAR-GRA|will-grand-theft-auto-vi-win-best-narrative-at-the-2026-game-awards-1785857783138",
+   "reason": "Polymarket has tie (alphabetical) and no-winner-by-Dec-31 ('Other') clauses; Kalshi has neither.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXGAMEAWARDS-BMUL-GEA|will-gears-of-war-e-day-win-best-multiplayer-at-the-2026-game-awards-1785857785563",
+   "reason": "Polymarket has tie (alphabetical) and no-winner-by-Dec-31 ('Other') clauses; Kalshi has neither.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXDWTSRANK-326DEC31-AGLE|will-amber-glenn-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 3rd, Polymarket is winning.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXPREMIERLEAGUE-27-BRI|will-brighton-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Different outcome: Kalshi is winning the league, Polymarket is a top-6 finish.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXPCECORE-26OCT-T0.2|will-core-pce-mom-be-0pt2pct-in-october-2026",
+   "reason": "Different outcome: Kalshi is core PCE above 0.2%, Polymarket is exactly 0.2%.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KX1ALBUM-26DEC-CHAP|will-chappell-roan-be-the-1-searched-person-on-google-in-the-us-this-year-20260730192940414",
+   "reason": "Different question: Kalshi is a #1 Billboard album, Polymarket is #1 Google searched person.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KX1ALBUM-26DEC-BIL|will-billie-eilish-be-the-1-searched-person-on-google-this-year-20260717214426272",
+   "reason": "Different question: Kalshi is a #1 Billboard album, Polymarket is #1 Google searched person.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXSERIEA-27-ROM|will-roma-finish-in-the-top-4-of-the-2026-27-serie-a-season",
+   "reason": "Different outcome: Kalshi is winning Serie A, Polymarket is a top-4 finish.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXDWTSRANK-326DEC31-HSHU|will-harry-shum-jr-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 3rd, Polymarket is winning.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXTRUMPMEETING-27JAN01-NVPUT|will-trump-meet-with-vladimir-putin-in-2026",
+   "reason": "Kalshi meeting rule is a template ('physically or virtually as specified', Source Agency, window from Issuance) vs Polymarket's in-person interaction in calendar 2026.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXTOPARTIST-26B-TAY|will-taylor-swift-be-the-top-artist-in-the-us-for-2026-20260714171850368",
+   "reason": "Different scope: Kalshi is the top Spotify artist overall, Polymarket is the top artist in the US.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXMEETINGS-27JAN01-TAKXI|will-xi-meet-with-takaichi-by-december-31-2026",
+   "reason": "Windows start differently (Kalshi after Issuance, Polymarket at market creation) and brief-encounter wording differs (handshake counts on Poly; Kalshi needs documented direct interaction).",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXMEASLES-26-10000|will-there-be-at-least-10000-measles-cases-in-the-us-in-2026-418-668-617-245-787-217",
+   "reason": "Kalshi is 'above 10000' with no source named; Polymarket is 'at least 10000' on the CDC counter.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXVENEZUELALEADER-26DEC31-DROD|delcy-rodrguez-out-as-leader-of-venezuela-by-december-31-2026-148-853",
+   "reason": "Not mirror images: Kalshi YES needs her to hold the post on Dec 31 and excludes acting/interim capacity (she is Acting President); Polymarket counts any lapse or an announced resignation.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXLOL-WORLDS26-GEN|will-genptg-win-worlds-2026",
+   "reason": "Polymarket goes 'Other' if postponed past Nov 28 or no winner declared, and has an alphabetical tie rule; Kalshi has neither.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXIPOFANNIE-27JAN01|fannie-mae-ipo-before-2027",
+   "reason": "Kalshi pays on IPO 'confirmed' (S-1 effective, priced or ticker); Polymarket needs shares actually sold by Dec 31.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXIPO-26-KRAKEN|kraken-ipo-by-december-31-2026-513",
+   "reason": "Kalshi pays on IPO 'confirmed' (S-1 effective, priced or ticker); Polymarket needs shares actually sold by Dec 31.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXPOPESWIFT-27|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "reason": "Different question: Kalshi is Taylor Swift meeting the Pope, Polymarket is Trump meeting the Pope.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXTOKENLAUNCH-27JAN01-TEMPO|will-tempo-launch-a-token-by-december-31-2026",
+   "reason": "Kalshi counts any qualifying token (utility, airdrop, needs a liquidity pool); Polymarket needs a governance token that is tradable.",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "KXUCL-27-MCI|will-manchester-city-win-the-2026-27-uefa-champions-league-championship-20260701202025553",
+   "reason": "Polymarket goes 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
+   "date": "2026-11-09"
   }
  ]
 }
