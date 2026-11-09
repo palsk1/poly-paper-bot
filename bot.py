@@ -694,7 +694,7 @@ def manage_exits(tracks, lab=True):
                 continue
             rec = paper_close(tr, name, tok, fill, taker_fee(pos["shares"], fill, fee_rate(m)), f"{reason}, {how}")
             if rec and CFG["push"].get("on_claude_trades"):
-                push(f"[{name}] SELL {pos.get('outcome')} @ {cents(fill)} ({rec['pnl']:+.2f})",
+                push(f"[{name}] sold {pos.get('outcome')} at {cents(fill)} ({usd(rec['pnl'])})",
                      f"{pos.get('title')}\nReason: {reason}",
                      click=market_link(pos.get("slug", ""), pos.get("event_slug", "")), tags="moneybag", track=name)
 
@@ -942,7 +942,7 @@ def follow_leader(tracks):
                    "our_price": None if px is None else round(px, 4), "price_source": how, "copied_by": took})
         if CFG["push"]["on_leader_trades"]:
             push(f"{lead['name']} BUY {p['outcome']} @ {cents(p['avg'])}",
-                 f"{p['title']}\nHe holds {p['size']:.0f} sh (${p['size'] * p['avg']:,.0f}). "
+                 f"{p['title']}\nHe holds {p['size']:.0f} shares (${p['size'] * p['avg']:,.0f}). "
                  f"Your price now: {cents(px)}.\nPaper copied by: {', '.join(took) or 'none'}",
                  click=market_link(p["slug"], p["event_slug"]), tags="chart_with_upwards_trend", track=leader_tracks())
 
@@ -985,7 +985,7 @@ def follow_leader(tracks):
                 how = (f"Sold at ~{cents(xr['exit_price'])} (his avg {cents(q.get('avg'))}, "
                        f"{xr['profit_per_share'] * 100:+.0f}c/sh, ~${xr['profit_usd']:,.0f}), "
                        f"{xr.get('days_left', '?')} days before the end date.\n")
-            push(f"{lead['name']} EXIT {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} sh)",
+            push(f"{lead['name']} sold {q.get('outcome')} ({q.get('size', 0):.0f} -> {after:.0f} shares)",
                  f"{q.get('title')}\n{how}Paper closed in: {', '.join(closed_by) or 'none'}",
                  click=market_link(q.get("slug", ""), q.get("event_slug", "")), tags="chart_with_downwards_trend",
                  track=leader_tracks())
@@ -1507,7 +1507,7 @@ def buy_candidates(tracks, name, cands, limit):
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
-        push(f"[{name}] paper-bought {len(bought)}", "\n".join(bought), tags="mag", track=name)
+        push(f"[{name}] bought {len(bought)} (practice money)", "\n".join(bought), tags="mag", track=name)
     return bought
 
 
@@ -1964,7 +1964,7 @@ def arb_check_pair(name, tr, pair, r):
     log_event({"type": "arb_open", "track": name, "title": pm.get("question"), "pair": pid,
                "price": round(best["pk"] + best["pp"], 4), "edge": round(best["edge"], 4)})
     if CFG["push"].get("on_arb") and not prev.get("opportunity"):  # one ping per gap, not per lot
-        push(f"[arb] locked {best['edge'] * 100:.1f}c/share",
+        push(f"[arb] locked in {best['edge'] * 100:.1f}c a share",
              f"{pm.get('question')}\nKalshi {best['k_side'].upper()} {cents(best['pk'])} + Polymarket "
              f"{best['p_out']} {cents(best['pp'])}, fees ${best['kf'] + best['pf']:.2f}\n"
              f"{shares:.0f} shares: pays ${shares:.2f} at the end for ${best['cost']:.2f} (paper)",
@@ -2003,7 +2003,7 @@ def arb_settle(tracks):
         if mismatch:
             tr["mismatches"] += 1
             push("[arb] MISMATCH: sites resolved differently",
-                 f"{a['title']}\nKalshi paid {pk:.2f}, Polymarket paid {pp:.2f} per share. P&L ${pnl:+.2f} (paper). "
+                 f"{a['title']}\nKalshi paid ${pk:.2f}, Polymarket paid ${pp:.2f} a share. Result {usd(pnl)} (practice money). "
                  "This is the risk the experiment is measuring.", tags="rotating_light")
 
 
@@ -2041,14 +2041,14 @@ def proof(n, k, e, realized, what="trades", bad="bad outcomes"):
             m += 1
         need = max(m - n, 20 - n, 0)
     if n == 0:
-        verdict = (f"Not proven yet: no finished {what}. At ~{e * 100:.1f}c edge we need about {need} "
-                   f"finished {what} with 0 {bad} to be 90% sure.")
+        verdict = (f"Not proven yet: no finished {what}. Each one earns about {e * 100:.1f}c a share, so it needs about "
+                   f"{need} finished {what} with no {bad} before we can be 90% sure it's not luck.")
     elif proven:
-        verdict = (f"PROVEN at 90%: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. The {bad} rate is "
-                   f"below {ub * 100:.1f}% with 90% confidence, under the {e * 100:.1f}c edge.")
+        verdict = (f"PROVEN: {n} finished {what}, {k} {bad}, profit ${realized:.2f}. That's enough to be 90% sure "
+                   f"the {bad} are too rare to eat the {e * 100:.1f}c a share it earns.")
     else:
-        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit ${realized:+.2f}. Need about "
-                   f"{need} more clean ones to be 90% sure (if no new {bad}).")
+        verdict = (f"Not proven yet: {n} finished {what}, {k} {bad}, profit {usd(realized)}. It needs about "
+                   f"{need} more with no {bad} to be 90% sure it's not luck.")
     return {"finished": n, "mismatches": k, "avg_edge": round(e, 4), "bad_rate_upper90": round(ub, 4),
             "proven": proven, "more_needed": need, "verdict": verdict}
 
@@ -2334,7 +2334,7 @@ def sets_settle(tracks, name, tag, why):
         if bad:
             tr["incomplete"] += 1
             push(f"[{tag}] SHORT: paid less than guaranteed",
-                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. P&L ${pnl:+.2f} (paper).",
+                 f"{s['title']}: paid ${proceeds:.2f}, expected ${s['guaranteed']:.2f}. Result {usd(pnl)} (practice money).",
                  tags="rotating_light")
 
 
@@ -4105,6 +4105,22 @@ def trust(tr, n_tracks=None, size="rank"):
             "worst_per_100": round(worst * 100, 2), "proven": proven}
 
 
+def plain_verdict(t, control=False, few=10):
+    """One plain-words verdict per strategy, from its trust numbers (wording only, no new math).
+    Returns (key, text): key is good / maybe / bad / early / luck, used for colors on the dashboard."""
+    if control:
+        return "luck", "Random buyer (shows what luck looks like)"
+    if t["finished"] < few:
+        return "early", f"Too early to tell ({t['finished']} finished, need {few}+)"
+    if t["proven"]:
+        return "good", "Looks real"
+    if t["worst_per_100"] > 0:
+        return "good", "Promising, needs more bets"
+    if t["avg_per_100"] < 0:
+        return "bad", "Losing"
+    return "maybe", "Ahead, but could be luck"
+
+
 def usd(x):
     return f"{'+' if x >= 0 else '-'}${abs(x):.2f}"
 
@@ -4667,18 +4683,18 @@ def push_scoreboard(stats):
     Also saves the top 10 to state/top.json: only those strategies send trade pushes until the next scoreboard."""
     n = CFG["push"].get("top_n", 10)
     top = save_top(stats)
-    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead on 3+ finished trades so far."]
+    lines = [] if len(top) >= n else [f"Only {len(top)} strategies are ahead after 3+ finished bets so far."]
     for i, name in enumerate(top, 1):
         s, t = stats[name], stats[name]["trust"]
-        lines.append(f"{i}. {name}{' PROVEN' if t['proven'] else ''}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}) | "
-                     f"{t['finished']} done | worst case {usd(t['worst_per_100'])[:-3]} per $100")
+        lines.append(f"{i}. {name}: {usd(s['pnl'])} (today {usd(s.get('today', 0))}), {t['finished']} finished. "
+                     f"{plain_verdict(t, name.startswith('control_'))[1].split(' (')[0]}")
     if rs_rank_size():
-        lines.append(f"(ranked on what ${rs_rank_size()} a trade would really have done)")
+        lines.append(f"(ranked on what a real ${rs_rank_size()} bet would have made)")
     best = max(stats, key=lambda x: stats[x].get("today", 0), default=None)
     if best and best not in top and stats[best].get("today", 0) > 0:
         lines.append(f"Best day (probably luck): {best} +${stats[best]['today']:.2f}")
     proven = sum(1 for x in stats.values() if x["trust"]["proven"])
-    lines.append(f"{len(stats)} strategies tracked, {proven} proven. Full ranking in summary.md")
+    lines.append(f"{len(stats)} strategies tracked, {proven} clearly work so far. Dashboard has the rest.")
     push("Paper top 10", "\n".join(lines), tags="bar_chart")
 
 
