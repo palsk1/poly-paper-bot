@@ -1746,6 +1746,8 @@ def arb_propose():
     r = arb_rules()
     pairs = load_pairs()
     decided = {p.get("id") for p in pairs["approved"] + pairs["rejected"]}
+    # Whole Kalshi events whose rule text differs from Polymarket's for every choice (one review covers them all).
+    blocked_events = {str(e.get("event") or "") for e in pairs.get("rejected_events", []) if isinstance(e, dict)}
     lo, hi = now() + dt.timedelta(days=r["min_days"]), now() + dt.timedelta(days=r["max_days"])
     poly = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi), "liquidity_num_min": r["min_liquidity"]})
     P = []
@@ -1784,6 +1786,9 @@ def arb_propose():
     tol = r["date_tolerance_days"] * 86400
     max_diff = r.get("max_price_diff", 0.12)
     for k in K:
+        if str(k["m"].get("event_ticker") or "") in blocked_events:
+            dropped["event rejected as a whole"] += 1
+            continue
         pool = Counter()
         for t in k["toks"]:
             for i in index.get(t, ()):
@@ -1850,10 +1855,15 @@ def arb_propose():
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
         })
-    # Most twin-like first; among equals, the ones closest to a real (fee-beating) gap.
-    cands.sort(key=lambda c: (-round(c["match_score"], 1), -c["est_gap_before_fees"]))
+    # Review the ones that would pay right now first (gap of 1c+ before fees, biggest first), then the rest by
+    # how twin-like they look. Review time is the bottleneck, so it goes where a gap already exists.
+    min_gap = r.get("review_first_gap", 0.01)
+    cands.sort(key=lambda c: (c["est_gap_before_fees"] < min_gap,
+                              -c["est_gap_before_fees"] if c["est_gap_before_fees"] >= min_gap else 0,
+                              -round(c["match_score"], 1), -c["est_gap_before_fees"]))
     save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
                                  "kalshi_kept": len(K), "matched_unreviewed": len(cands),
+                                 "with_gap_1c_plus": sum(c["est_gap_before_fees"] >= min_gap for c in cands),
                                  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
                                                   "twins into arb_pairs.json (see 'about' there).",
                                  "candidates": cands[: r["max_candidates"]]})

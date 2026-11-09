@@ -1261,7 +1261,8 @@
       "date_tolerance_days": 4,
       "min_match_score": 0.5,
       "max_df": 400,
-      "max_candidates": 25,
+      "max_candidates": 50,
+      "review_first_gap": 0.01,
       "kalshi_min_volume": 500,
       "kalshi_max_pages": 150,
       "kalshi_skip_prefixes": [
