@@ -763,6 +763,8 @@ def run(out_name="ideas.md"):
 # ================================================================ drill-down of one survivor
 
 DRILLS = {  # name: (question regex, side, band, horizons)
+    "quiet_no": (r".", 1, (0.50, 0.75), (1, 2, 3), "swing size last 7 days = <2c"),
+    "quiet_no_wide": (r".", 1, (0.40, 0.90), (1, 2, 3, 7), "swing size last 7 days = <2c"),
     "wx": (r"temperature", 0, (0.25, 0.50), (1, 2, 3)),
     "wx_all": (r"temperature", 0, (0.02, 0.98), (1, 2, 3)),
     "superl_nowx": (r"^(?!.*temperature).*(\bmost\b|\bhighest\b|\blowest\b|\bfirst\b|\btop\b|\bbest\b|\blargest\b|\bbiggest\b|#1)", 0, (0.25, 0.50), (1, 2, 3)),
@@ -771,20 +773,21 @@ DRILLS = {  # name: (question regex, side, band, horizons)
 
 def drill(name):
     """Split one idea every way we can think of: by month, days before the end, price, and its twins."""
-    rx_s, side, band, hzs = DRILLS[name]
+    rx_s, side, band, hzs, *lab = DRILLS[name]
     rx = re.compile(rx_s, re.I)
-    markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
-    hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
-    markets = {k: m for k, m in in_sample(markets_all).items() if not m.get("sports")}
-    FEATURES[:] = []          # no features needed: just rows
+    markets, hist, note = load_screen_set()
+    print(f"drill data: {note}")
+    keep = [f for f in FEATURES if lab and f[0] == lab[0].split(" = ")[0]]
+    FEATURES[:] = keep          # only the feature the drill filters on
     rows = build_rows(markets, hist, horizons=hzs)
     half_of, cut = split_events(rows)
     base = twins(rows, half_of)
+    lid = LAB.get(lab[0]) if lab else None
     sel = []
     for r in rows:
         q = r["pe"] if side == 0 else 1 - r["pe"]
         pay = r["y"] if side == 0 else 1 - r["y"]
-        if rx.search(r["q"]) and band[0] <= q < band[1]:
+        if rx.search(r["q"]) and band[0] <= q < band[1] and (lid is None or lid in r["labels"]):
             sel.append((r, q, pay))
     print(f"drill {name}: {len(sel)} bets")
 
@@ -806,8 +809,13 @@ def drill(name):
     tab("by half", lambda r, q: half_of[r["ev"]])
     tab("by days before the end", lambda r, q: r["h"])
     tab("by price", lambda r, q: f"{int(q * 20) * 5:02d}-{int(q * 20) * 5 + 5}c")
+    tab("by topic", lambda r, q: calib.topic(r["q"]))
     tab("by city / first words", lambda r, q: " ".join(re.sub(r"[^a-z ]", " ", r["q"].lower()).split()[:7])[-28:])
     tab("all", lambda r, q: "all")
+    rng = __import__("random").Random(4)
+    print("\nsample questions:")
+    for r, q, pay in rng.sample(sel, min(25, len(sel))):
+        print(f"- {r['q'][:100]} | {q * 100:.0f}c | {'won' if pay >= 0.5 else 'lost'} | {bt.iso_t(r['end'])[:10]}")
 
 
 def volbias():
