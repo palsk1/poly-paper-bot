@@ -874,3 +874,44 @@ def watchtest():
 
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "watchtest":
     watchtest()
+
+
+def rewardcheck():
+    """rewardcheck: is the maker track's reward model right? For each market it quotes: raw reward-market records from
+    Polymarket's public endpoints (incl. 'competitiveness'), the YES and the NO book separately (are they really one
+    mirrored book?), and the competition score the bot computes."""
+    import bot
+    tr = bot.load_tracks().get("maker", {})
+    r = bot.rules_for("maker")
+    for b in tr.get("books", {}).values():
+        print(f"== {b['title'][:70]}  pool ${b['rate']}/day  v {b['v']}c  min {b['min_size']}  our size {b['size']}")
+        for url, params in ((f"{bot.CLOB}/rewards/markets/{b['cid']}", None),
+                            (f"{bot.CLOB}/rewards/markets/multi", {"q": b["title"][:40], "page_size": 5}),
+                            (f"{bot.CLOB}/rewards/markets/current", {"condition_id": b["cid"]})):
+            try:
+                res = bot.http_json(url, params, retries=1)
+                rows = bot.envelope_rows(res, "data", "markets") or ([res] if isinstance(res, dict) else [])
+                rows = [x for x in rows if isinstance(x, dict) and (x.get("condition_id") in (None, b["cid"]))][:2]
+                print("  ", url.split(".com")[1], json.dumps(rows)[:1500])
+            except Exception as e:
+                print("  ", url.split(".com")[1], "failed:", str(e)[:150])
+        for side in ("yes_tok", "no_tok"):
+            raw = bot.http_json(f"{bot.CLOB}/book", {"token_id": b[side]})
+            bids = sorted(((float(x["price"]), float(x["size"])) for x in raw.get("bids", [])), reverse=True)[:6]
+            asks = sorted((float(x["price"]), float(x["size"])) for x in raw.get("asks", []))[:6]
+            print(f"   {side} book: bids {bids} | asks {asks}")
+        bk = bot.book(b["yes_tok"])
+        sc = bot.book_scores(bk, b["v"], b["min_size"]) if bk else None
+        if sc:
+            mid, qb, qa, bb, ba = sc
+            sh = bot.our_share(mid, qb, qa, b["v"], bb, ba, b["size"])
+            print(f"   bot's view: mid {mid:.3f} competitors buy-side {qb:.1f} sell-side {qa:.1f}; our share at the touch "
+                  f"{sh:.3f} -> ${b['rate'] * sh:.2f}/day")
+            nb = bot.book(b["no_tok"])
+            sc2 = bot.book_scores(nb, b["v"], b["min_size"]) if nb else None
+            if sc2:
+                print(f"   NO book alone: competitors {sc2[1]:.1f} / {sc2[2]:.1f} (if the books are separate, both count)")
+
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "rewardcheck":
+    rewardcheck()
