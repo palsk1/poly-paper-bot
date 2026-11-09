@@ -1,0 +1,53 @@
+# Test before results: how a backtest lead becomes "worth real money"
+
+Written 2026-11-09, before any holdout data was looked at. Change it only with Jan's OK, and never after seeing
+the result it would change.
+
+## 1. Every engine change passes the sanity checks first
+
+`python3 btcheck.py selftest` (offline, ~15 s) and the `btcheck` probe on real data (`backtest/checks.md`):
+
+- **Fair-coin world.** On fake markets where every price is exactly right, every strategy must lose its costs and
+  no more. A planted bug (stop-loss booked at the stop price after a gap) must be caught.
+- **Second simulator.** A separate, small simulator re-walks every trade from the raw price history. Entry, exit and
+  profit must match the engine to a tenth of a cent.
+- **Random entries** on the same real data, held to the end, should lose about the costs.
+
+If one fails, no backtest number counts until it's fixed.
+
+## 2. The decision number is the pessimistic one
+
+- Fill = history price **+2c** (one tick worse than the old +1c main case) plus the taker fee.
+- Entry **1 hour after** the signal. The "next recorded price" column is shown as a stress test.
+- A take-profit seen above its target is booked **at the target** (history is 12-hourly; the live bot would have
+  sold near the target, not at the higher price seen later).
+- Thin markets (tiny volume, mention markets) are also shown at +5c.
+
+## 3. A lead has to beat random entries with the same exits
+
+Same hour, same days-to-end window, same price band, same take-profit and stop rules, same costs. If the
+strategy doesn't beat those twins, the "edge" is in the band or the exits, not the signal.
+
+## 4. Order of tests (never skip, never go back)
+
+1. **Sweep** the parameters on the whole in-sample period (ends before 2026-11-10). Allowed: looking.
+2. **Walk-forward on two halves** (split at the middle trade): pick the best setting on one half, score it on the other, and
+   the other way round. Something that wins one half and loses the other is a regime bet, not an edge.
+3. **Holdout, once.** Markets ending **2026-11-10 or later** are kept out of every check (btcheck drops them). From
+   **2026-12-21** the `btholdout` probe scores the pre-registered tests below, once (it refreshes the
+   cache first). Its log is committed as `backtest/holdout.md`; once that file exists, `btholdout` refuses to run again. No rule changes between now and then for these tests, and don't rerun `calib.py` or `backtest.py` slices about
+   mention markets or panic fades on data past 2026-11-10 before then (those tools don't hold the holdout back).
+
+## 5. Pre-registered holdout tests (fixed now)
+
+| Test | Rule | Pass bar |
+|---|---|---|
+| `mention_no` | NO at 25-90c, first time a "will X say Y" market is within 7 days of its end, one bet per event, +2c + fee, held | ahead, and band low end above -$5 per $100 |
+| `panic_fade_10c` | engine, 2c + 1 hour later, take-profit at the target | ahead, and band low end above -$5 per $100 |
+
+A pass is not proof. It means the lead survived one fresh look and the live paper track is worth watching to
+2027-01-01. The money decision still uses the live trust score (90% bar, many strategies tested).
+
+## 6. Keep it simple
+
+Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.
