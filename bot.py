@@ -3146,7 +3146,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3230,7 +3230,7 @@ def run_fast(tracks, force=False):
         return {}
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
-                     ("mentions", mention_candidates)):
+                     ("mentions", mention_candidates), ("quiet", quiet_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3283,6 +3283,60 @@ def mention_candidates(names):
             if r["min_price"] <= prices[i] <= r["max_price"]:
                 cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
         cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+        out[n] = cands
+    return out
+
+
+def week_range(token):
+    """(high - low over the last 7 days, number of points) from the CLOB price history of a token, or None."""
+    try:
+        res = http_json(f"{CLOB}/prices-history", {"market": token, "interval": "1w", "fidelity": 60})
+    except Exception as e:
+        print(f"week history failed for {token[:12]}...: {e}")
+        return None
+    px = []
+    for p in envelope_rows(res, "history", "data"):
+        if isinstance(p, dict):
+            v = fnum(pick(p, "p", "price"), None)
+            if v is not None:
+                px.append(v)
+    if len(px) < 2:
+        return None
+    return max(px) - min(px), len(px)
+
+
+def quiet_candidates(names):
+    """Quiet week, buy NO (idea machine, ideas.py, 2026-11-09): markets ending in 1-3 days whose price moved less than
+    max_week_range over the last 7 days, second answer (No) at min_price-max_price. The only one of 33,823 screened
+    ideas that passed on whole events (backtest/ideas.md). The 7-day range is checked on the first answer's history."""
+    rs = {n: rules_for(n) for n in names}
+    lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs.values()))
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
+    markets = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi),
+                            "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
+    out = {}
+    for n, r in rs.items():
+        short = []
+        for m in markets:
+            prices = binary(m)
+            b = base_filter(m, r) if prices else None
+            if not b or len(prices) != 2:
+                continue
+            q = str(m.get("question") or "").lower()
+            if any(w in q for w in r.get("skip_words", [])):
+                continue
+            i = 1  # second answer, as screened
+            if r["min_price"] <= prices[i] <= r["max_price"]:
+                short.append((m, i, b))
+        short.sort(key=lambda x: -x[2][1])  # most liquid first: the history check costs a call each
+        cands = []
+        for m, i, b in short[: r.get("max_history_checks", 40)]:
+            wr = week_range(market_tokens(m)[0])
+            if not wr or wr[0] >= r["max_week_range"]:
+                continue
+            cands.append(candidate(m, i, b[0], b[1], {"signal": f"moved {wr[0] * 100:.1f}c this week"}))
+        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))
+        print(f"quiet {n}: {len(short)} in the price band, {len(cands)} quiet")
         out[n] = cands
     return out
 
