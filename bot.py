@@ -1855,15 +1855,15 @@ def arb_propose():
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
         })
-    # Review the ones that would pay right now first (gap of 1c+ before fees, biggest first), then the rest by
-    # how twin-like they look. Review time is the bottleneck, so it goes where a gap already exists.
-    min_gap = r.get("review_first_gap", 0.01)
-    cands.sort(key=lambda c: (c["est_gap_before_fees"] < min_gap,
-                              -c["est_gap_before_fees"] if c["est_gap_before_fees"] >= min_gap else 0,
-                              -round(c["match_score"], 1), -c["est_gap_before_fees"]))
+    # Review first the ones that look like twins AND would pay now (text match 0.6+, gap 2c+ before fees), then
+    # the rest by how twin-like they look. Gap alone is a bad guide: the biggest "gaps" are almost all two
+    # different questions (live test 2026-11-09), so the match score still has to vouch for them.
+    min_gap, min_s = r.get("review_first_gap", 0.02), r.get("review_first_score", 0.6)
+    hot = lambda c: c["match_score"] >= min_s and c["est_gap_before_fees"] >= min_gap
+    cands.sort(key=lambda c: (not hot(c), -round(c["match_score"], 1), -c["est_gap_before_fees"]))
     save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
                                  "kalshi_kept": len(K), "matched_unreviewed": len(cands),
-                                 "with_gap_1c_plus": sum(c["est_gap_before_fees"] >= min_gap for c in cands),
+                                 "review_first": sum(hot(c) for c in cands),
                                  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
                                                   "twins into arb_pairs.json (see 'about' there).",
                                  "candidates": cands[: r["max_candidates"]]})
