@@ -193,8 +193,9 @@ def snapshots(markets, hist, horizons=HORIZONS):
             t = mk["end"] - hz * DAY
             if t < first + DAY or (mk.get("start") and t < mk["start"]):
                 continue
-            if mk.get("closed_t") and t > mk["closed_t"] - 6 * 3600:
-                continue  # already settled (or about to): that is endgame, tested elsewhere
+            if mk.get("closed_t") and t >= mk["closed_t"]:
+                continue  # already closed. (Dropping "closes within hours" would peek ahead: it drops the
+                #           markets where the thing happened right after the snapshot, which biases toward NO.)
             i = bisect.bisect_right(T, t) - 1
             if i < 0 or t - T[i] > 3 * DAY:
                 continue  # no recent price point: no trading, can't trust the number
@@ -216,7 +217,7 @@ def weekpoints(markets, hist, max_days=60):
         h = hist.get(mk["id"])
         if y is None or not h or not h[0] or not mk.get("end"):
             continue
-        last_t = min(mk["end"], mk.get("closed_t") or mk["end"]) - DAY
+        last_t = min(mk["end"] - DAY, mk.get("closed_t") or mk["end"])
         lo = mk["end"] - max_days * DAY
         T, P = h
         k = 0
