@@ -292,7 +292,9 @@ def hunt_kalshi():
         end = max(parse_iso(m.get("close_time")) or now() for m in ms)
         # strike ladders
         for typ, up in (("greater", True), ("greater_or_equal", True), ("less", False), ("less_or_equal", False)):
-            lad = [m for m in ms if m.get("strike_type") == typ and m.get("floor_strike" if up else "cap_strike") is not None]
+            # Kalshi labels some "exactly N" buckets as 'less' with floor == cap: only one-sided markets are ladders
+            lad = [m for m in ms if m.get("strike_type") == typ and m.get("floor_strike" if up else "cap_strike") is not None
+                   and m.get("cap_strike" if up else "floor_strike") is None]
             if len(lad) < 2:
                 continue
             st["ladders"] += 1
