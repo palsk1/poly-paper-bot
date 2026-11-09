@@ -142,10 +142,6 @@ def mapping():
         print(f"{str(k)[:38]:38s} {a['n']:6d} {a['soon']:6d} {a['vol24']:10.0f} {a['oi']:10.0f}  {fr} | {' | '.join(sorted(a['ex']))}")
 
 
-if __name__ == "__main__":
-    mode = (sys.argv[1] if len(sys.argv) > 1 else "map")
-    {"map": mapping, "kdaily": kdaily, "precur": precurring}[mode]()
-
 
 def kdaily():
     """Kalshi series that repeat often (hourly/daily/weekly), by settle source, with lifetime volume."""
@@ -190,3 +186,9 @@ def precurring():
     for (sl, rc), a in sorted(agg.items(), key=lambda kv: -kv[1]["vol24"])[:120]:
         src = a["src"].most_common(1)[0][0] if a["src"] else "-"
         print(f"{sl[:40]:40s} {rc[:8]:8s} {a['n']:6d} {a['vol24']:10.0f}  {src} | {a['ex']}")
+
+
+MODES = {"map": mapping, "kdaily": kdaily, "precur": precurring}
+
+if __name__ == "__main__":
+    MODES[sys.argv[1] if len(sys.argv) > 1 else "map"]()
