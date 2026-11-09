@@ -25,6 +25,7 @@ and you read the result in the run log. All of it is paper only.
 | `ideas.py` | **Idea machine / cheap screener**: a catalog of features (wording, age, siblings, price path, ...) each tied to a bias, crossed with topics, side, price band and horizon; screened vs random twins on two halves with a many-ideas correction and placebo features. Other threads can plug in a feature with `@ideas.feature(...)`. Report `backtest/ideas.md`, method `backtest/IDEAS.md` | probe `btideas`, `btideasself`, `btideasdrill_<preset>` (split one idea by month/price/question), `btideasvolbias` (checks the cache for missing losing choices) (PR #38) |
 | `kcrypto.py` | Backtest of Kalshi 15-min crypto maker bids; report `backtest/kcrypto.md` | probe `kc_run`, `btkc` (PR #31) |
 | `sharp.py` | Pinnacle fair price vs Polymarket sports (live scan and backtest); report `backtest/sharp.md` | probe `sharp_*` (PR #24) |
+| `sources.py` | Who reads the settle source first: map of every open market by the website its rules settle on, Kalshi family explorer (rules, settle values, candles), which early sources GitHub can read, and lag tests for gas (AAA), earthquakes (USGS), executive orders. Report `backtest/sources.md` | probe `src_map`, `src_kdaily`, `src_precur`, `src_ks_<SERIES,...>`, `src_reach`, `src_gas[_SERIES]`, `src_quake`, `src_eo` |
 | `livelag.py` | Live esports score feed vs Polymarket price, who moves first; report `backtest/livelag.md` | probe `lag_scan`, `lag_<minutes>` (PR #25) |
 
 ## Live research probes (read-only)
