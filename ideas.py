@@ -352,7 +352,7 @@ def build_rows(markets, hist, horizons=HORIZONS):
                     if TOPIC_CROSS and cross:
                         labels.append(LAB.setdefault(f"topic {tp} & {name} = {lab}", len(LAB)))
                 rows.append({"ev": ev, "end": mk["end"], "h": hz, "pe": pe, "y": y, "fee": mk.get("fee", 0),
-                             "labels": tuple(labels)})
+                             "labels": tuple(labels), "q": mk["q"]})
         if n_ev % 20000 == 0 and n_ev:
             print(f"  rows: {n_ev}/{len(by_ev)} events, {len(rows)} rows ({time.time() - t0:.0f}s)")
     return rows
@@ -517,6 +517,19 @@ def m100(x):
     return f"{'+' if x >= 0 else '-'}${abs(x) * 100:.2f}"
 
 
+def examples(rows, key, k=6):
+    lab, side, b, hg = key
+    lid = LAB.get(lab)
+    seen, out = set(), []
+    for r in rows:
+        q = r["pe"] if side == 0 else 1 - r["pe"]
+        if lid in r["labels"] and HGROUP[r["h"]] == hg and band_of(q) == b and r["ev"] not in seen:
+            seen.add(r["ev"])
+            out.append(f"{r['q']} ({q * 100:.0f}c, {'won' if (r['y'] if side == 0 else 1 - r['y']) else 'lost'})")
+    step = max(1, len(out) // k)
+    return out[::step][:k]
+
+
 def report(acc, cut, rows, survivors, info, n_markets):
     stories = {n: s for n, s, _, _ in FEATURES}
     L = ["# Idea machine: hundreds of edge ideas, screened hard", "",
@@ -565,6 +578,10 @@ def report(acc, cut, rows, survivors, info, n_markets):
         L.append(rowtxt(key, real[key]))
     if not real:
         L.append("| none | | | | | | | | |")
+    if real:
+        L += ["", "Sample questions behind each survivor (check the feature caught what its name says):", ""]
+        for key in sorted(real, key=strength, reverse=True):
+            L += [f"- **{describe(key)}**"] + [f"  - {q[:110]}" for q in examples(rows, key)]
     if plac:
         L += ["", "### Placebos that passed (should be none)", ""] + hdr + [rowtxt(k, v) for k, v in plac.items()]
 
