@@ -242,11 +242,170 @@ def kseries(arg):
             print("  candles failed:", e)
 
 
+# ---------------------------------------------------------------- gas: AAA daily national average (Kalshi)
+def _norm_cdf(z):
+    import math
+    return 0.5 * (1 + math.erf(z / 2 ** 0.5))
+
+
+def ladder(series, pages=5):
+    """{event_date: {"v": settle value, "close": ts, "open": ts, "mk": [(ticker, strike)]}} from settled markets."""
+    import kcrypto
+    ev = {}
+    for m in kmarkets(series, pages=pages):
+        try:
+            v = float(str(m.get("expiration_value")).strip("%M "))
+        except ValueError:
+            continue
+        k = m.get("floor_strike")
+        if k is None or m.get("strike_type") not in ("greater", "greater_or_equal"):
+            continue
+        e = ev.setdefault(m["event_ticker"], {"v": v, "close": bot.parse_iso(m["close_time"]).timestamp(),
+                                              "open": bot.parse_iso(m["open_time"]).timestamp(), "mk": [],
+                                              "ge": m.get("strike_type") == "greater_or_equal"})
+        e["mk"].append((m["ticker"], float(k), m.get("result"), f(m.get("volume_fp"))))
+    return ev
+
+
+def hourly(series, e, period=60):
+    import kcrypto
+    tks = [t for t, *_ in e["mk"]]
+    out = {}
+    for i in range(0, len(tks), 50):
+        try:
+            res = kcrypto.get("/markets/candlesticks", {"market_tickers": ",".join(tks[i:i + 50]),
+                              "start_ts": int(e["open"]), "end_ts": int(e["close"]), "period_interval": period})
+        except Exception as ex:
+            print("  candles failed", ex)
+            continue
+        rows = next((res[k] for k in ("markets", "market_candlesticks", "candlesticks", "data")
+                     if isinstance(res, dict) and isinstance(res.get(k), list)), [])
+        for r in rows:
+            out[r.get("market_ticker") or r.get("ticker")] = [kcrypto.candle_row(c) for c in r.get("candlesticks") or []]
+    return out
+
+
+def gas(arg="KXAAAGASD"):
+    """Is the AAA gas average more predictable than the Kalshi ladder prices it?
+    Models only use settle values of EARLIER events (known before this market opened)."""
+    import math
+    from concurrent.futures import ThreadPoolExecutor
+    series = arg or "KXAAAGASD"
+    ev = ladder(series)
+    keys = sorted(ev, key=lambda k: ev[k]["close"])
+    print(f"{series}: {len(keys)} settled events with a ladder")
+    with ThreadPoolExecutor(8) as ex:
+        cand = dict(zip(keys, ex.map(lambda k: hourly(series, ev[k]), keys)))
+    vals = [(ev[k]["close"], ev[k]["v"]) for k in keys]
+    # days between settles (weekly series compare to the latest DAILY value if available)
+    daily = {}
+    if series != "KXAAAGASD":
+        d = ladder("KXAAAGASD")
+        daily = sorted((x["close"], x["v"]) for x in d.values())
+    else:
+        daily = vals
+
+    def past(ts):          # daily settle values whose market closed >= 9h before ts (AAA posts in the morning)
+        return [v for c, v in daily if c <= ts - 9 * 3600]
+
+    models = {
+        "same as last": lambda p: p[-1],
+        "last + last change": lambda p: p[-1] + (p[-1] - p[-2]),
+        "last + avg change 3d": lambda p: p[-1] + (p[-1] - p[-4]) / 3,
+        "last + 0.7 x last change": lambda p: p[-1] + 0.7 * (p[-1] - p[-2]),
+    }
+    hrs = (14, 16, 18, 20, 22, 2)          # UTC decision hours (day before; 2 = 2am UTC, 9pm ET)
+    acc = collections.defaultdict(list)    # (who, hour) -> abs errors
+    trades = collections.defaultdict(list) # (model, hour, edge) -> [(t, pnl, cost)]
+    resid = collections.defaultdict(list)  # model -> past residuals (for sigma)
+    for k in keys:
+        e = ev[k]
+        days_ahead = max(1, round((e["close"] - (e["open"])) / 86400))
+        for hr in hrs:
+            # time of decision: the first time of day hr after the market opened
+            t = e["open"] + ((hr * 3600 - e["open"] % 86400) % 86400)
+            if t >= e["close"] - 600:
+                continue
+            p = past(t)
+            if len(p) < 6:
+                continue
+            # steps from the last known daily value to the settle date
+            steps = max(1, round((e["close"] - [c for c, v in daily if c <= t - 9 * 3600][-1]) / 86400))
+            # market ladder at t: (strike, bid, ask)
+            lad = []
+            for tk, K, res, vol in e["mk"]:
+                cs = [c for c in cand.get(tk, []) if c[0] <= t]
+                if not cs:
+                    continue
+                c = cs[-1]
+                if c[1] is None or c[2] is None or t - c[0] > 4 * 3600:
+                    continue
+                lad.append((K, c[1], c[2], res))
+            if len(lad) < 4:
+                continue
+            lad.sort()
+            # market median: strike where mid crosses 0.5 (linear interpolation)
+            mids = [(K, (b + a) / 2) for K, b, a, _ in lad]
+            med = None
+            for (k1, m1), (k2, m2) in zip(mids, mids[1:]):
+                if m1 >= 0.5 >= m2 and m1 != m2:
+                    med = k1 + (m1 - 0.5) / (m1 - m2) * (k2 - k1)
+                    break
+            if med is not None:
+                acc[("market", hr)].append(abs(med - e["v"]))
+            for name, fn in models.items():
+                fc = p[-1] + (fn(p) - p[-1]) * steps
+                acc[(name, hr)].append(abs(fc - e["v"]))
+                rs = resid[(name, steps)][-25:]
+                if len(rs) < 8:
+                    continue
+                sig = max(0.004, (sum(r * r for r in rs) / len(rs)) ** 0.5) * 1.25
+                for K, b, a, res in lad:
+                    pu = 1 - _norm_cdf((K - fc) / sig)
+                    for edge in (0.05, 0.10, 0.15):
+                        for side, prob, ask in (("yes", pu, a + 0.01), ("no", 1 - pu, (1 - b) + 0.01)):
+                            if not 0.03 <= ask <= 0.97:
+                                continue
+                            fee = 0.07 * ask * (1 - ask)
+                            if prob - ask - fee >= edge:
+                                won = (res == side)
+                                trades[(name, hr, edge)].append((e["close"], (1 if won else 0) - ask - fee, ask + fee, won))
+            if hr == hrs[0]:
+                pass
+        # after all hours of this event: add residuals (settle now known) for each model, per steps
+        p = past(e["close"] + 9 * 3600)[:-1] if False else past(e["open"] + 3600 * 14)
+        if len(p) >= 6:
+            steps = max(1, round((e["close"] - [c for c, v in daily if c <= e["open"] + 3600 * 14 - 9 * 3600][-1]) / 86400))
+            for name, fn in models.items():
+                resid[(name, steps)].append(p[-1] + (fn(p) - p[-1]) * steps - e["v"])
+    print("\n== Who guesses the settle value better? (average miss in cents, smaller is better)")
+    print(f"{'guesser':28s} " + " ".join(f"{h:>5d}h" for h in hrs) + "   (UTC hour of the guess, the day before)")
+    for who in ["market"] + list(models):
+        row = []
+        for h in hrs:
+            xs = acc.get((who, h), [])
+            row.append(f"{100 * sum(xs) / len(xs):6.2f}" if xs else "     -")
+        print(f"{who:28s} " + " ".join(row) + f"   n={len(acc.get((who, hrs[0]), []))}")
+    print("\n== Paper bets: buy where the model's chance beats ask + 1c + fee by the edge; hold to the end")
+    print(f"{'model':28s} {'hour':>4s} {'edge':>4s} {'bets':>5s} {'won':>5s} {'cost$':>8s} {'pnl$':>8s} {'per$100':>8s} {'1st half':>8s} {'2nd half':>8s}")
+    for (name, hr, edge), tr in sorted(trades.items(), key=lambda kv: (kv[0][0], kv[0][2], kv[0][1])):
+        tr.sort()
+        cost = sum(x[2] for x in tr)
+        pnl = sum(x[1] for x in tr)
+        h = len(tr) // 2
+        def per(xs):
+            c = sum(x[2] for x in xs)
+            return 100 * sum(x[1] for x in xs) / c if c else 0
+        print(f"{name:28s} {hr:4d} {edge:4.2f} {len(tr):5d} {sum(x[3] for x in tr):5d} {cost:8.2f} {pnl:8.2f} {per(tr):8.2f} {per(tr[:h]):8.2f} {per(tr[h:]):8.2f}")
+
+
 MODES = {"map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
-    if a.startswith("ks_"):
+    if a.startswith("gas"):
+        gas(a[4:])
+    elif a.startswith("ks_"):
         kseries(a[3:])
     else:
         MODES[a]()
