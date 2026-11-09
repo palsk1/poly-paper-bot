@@ -579,6 +579,9 @@ if __name__ == "__main__":
         fast()
     if what == "lab":
         lab()
+    if what.startswith("wallet_"):
+        import walletcheck
+        walletcheck.main(what[len("wallet_"):])
 
 
 def marks(what):
