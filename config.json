@@ -29,25 +29,25 @@
   "fallback_slippage": 0.01,
   "tracks": {
     "kc_maker": {
-      "label": "Kalshi late favorite (Reddit bot): in the last ~5 minutes of Kalshi's 15-minute BTC/ETH/SOL/XRP/DOGE/HYPE/BNB up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+), held to the result. Maker, no fee. Fills from the real trade tape, back of the queue. $10 an order, $100 paper",
+      "label": "Kalshi late favorite (Reddit bot): in the last ~5 minutes of Kalshi's 15-minute BTC/ETH/SOL/XRP/DOGE/HYPE/BNB up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+), held to the result. Maker, no fee. Fills from the real trade tape after the close, behind anyone already waiting at that price. $10 an order, $100 paper",
       "start_cash": 100,
       "refill": true,
       "source": "kmaker",
       "rules": "kc_maker"
     },
-    "kc_maker_97": {
-      "label": "Kalshi late favorite, fixed 97c: same, but the order sits at 97c while the winning side trades at 97c or more (fills only if it dips). $100 paper",
+    "kc_maker_safe": {
+      "label": "Kalshi late favorite + spot check: same as kc_maker, but only when Binance spot sits at least 2 'typical moves until the close' past the strike on the winning side (the backtest's best family: +$0.56 per $100, band +$0.41 to +$0.73). $100 paper",
       "start_cash": 100,
       "refill": true,
       "source": "kmaker",
-      "rules": "kc_maker_97"
+      "rules": "kc_maker_safe"
     },
-    "kc_maker_join": {
-      "label": "Kalshi late favorite, join the line: same, but the order joins the best bid (97c+) at the back of the queue. $100 paper",
+    "kc_maker_early": {
+      "label": "Kalshi favorite, earlier: one tick in front of the best bid on the winning side (90c+) with 6.5-11.5 minutes left instead of the last 5 (backtest: 7-10 minutes left did better than the last 1-3). $100 paper",
       "start_cash": 100,
       "refill": true,
       "source": "kmaker",
-      "rules": "kc_maker_join"
+      "rules": "kc_maker_early"
     },
     "mirror": {
       "label": "Mirror: copies every position he opens and closes ($20 paper)",
@@ -1137,15 +1137,15 @@
       "kind": "improve",
       "level": 0.95
     },
-    "kc_maker_97": {
+    "kc_maker_safe": {
       "inherit": "kc_maker",
-      "kind": "level",
-      "level": 0.97
+      "min_spot_z": 2.0
     },
-    "kc_maker_join": {
+    "kc_maker_early": {
       "inherit": "kc_maker",
-      "kind": "join",
-      "level": 0.97
+      "level": 0.9,
+      "min_minutes_left": 6.5,
+      "max_minutes_left": 11.5
     },
     "maker": {
       "why": "Polymarket pays about $190k a day to market makers. A slow bot can only keep it if the rewards beat the losses from getting picked off; this measures both.",

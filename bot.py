@@ -2779,6 +2779,34 @@ def kalshi_book_sides(ticker):
     return out
 
 
+KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "KXXRP15M": "XRPUSDT",
+               "KXDOGE15M": "DOGEUSDT", "KXHYPE15M": "HYPEUSDT", "KXBNB15M": "BNBUSDT"}
+_kmaker_spot = {}
+
+
+def kmaker_z(series, strike, minutes_left, side):
+    """How many 'typical moves until the close' Binance spot sits on our side of the strike (same formula as the
+    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data."""
+    sym = KMAKER_SPOT.get(series)
+    if not sym or not strike:
+        return None
+    if sym not in _kmaker_spot:
+        try:
+            ks = http_json(f"{BINANCE}/klines", {"symbol": sym, "interval": "1m", "limit": 62})
+            closes = [fnum(k[4]) for k in ks]
+            rets = [math.log(b / a) for a, b in zip(closes[:-1], closes[1:]) if a > 0 and b > 0][-60:]
+            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets))) if len(rets) >= 30 else None
+        except Exception as e:
+            print(f"binance 1m klines failed for {sym}: {e}")
+            _kmaker_spot[sym] = None
+    got = _kmaker_spot[sym]
+    if not got or got[1] <= 0:
+        return None
+    px, sd1 = got
+    z = (px - strike) / (sd1 * px * math.sqrt(max(minutes_left, 0.5)))
+    return z if side == "yes" else -z
+
+
 def kmaker_tick(p):
     return 0.001 if p >= 0.9 - 1e-9 or p < 0.1 else 0.01
 
@@ -2840,6 +2868,14 @@ def kmaker_place(tracks, names):
                                                                "bid": bid, "ask": ask, "placed": False}
                     continue
                 price, front = got
+                z = None
+                if r.get("min_spot_z") is not None:
+                    z = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side)
+                    if z is None or z < r["min_spot_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z": None if z is None else round(z, 2)}
+                        continue
                 queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
                 shares = max(1, int(r.get("usd_per_order", 10) / price))
                 cost = round(shares * price, 6)
@@ -2852,7 +2888,8 @@ def kmaker_place(tracks, names):
                                     "outcome": side, "side": side, "price": price, "front": front, "queue": round(queue, 2),
                                     "shares": shares, "cost": cost, "placed": iso(), "close": iso(close),
                                     "minutes_left": round(left, 2), "bid": bid, "ask": ask,
-                                    "strike": fnum(m.get("floor_strike"), None)}
+                                    "strike": fnum(m.get("floor_strike"), None),
+                                    "spot_z": None if z is None else round(z, 2)}
                 tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
                 tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
                                                            "bid": bid, "ask": ask, "placed": True}
