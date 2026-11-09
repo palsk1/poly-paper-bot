@@ -569,7 +569,18 @@ def eo(arg=""):
                   + f"   vol {f(m.get('volume_fp')):.0f}")
 
 
-MODES = {"eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
+def gaspages():
+    for url in ("https://www.gasbuddy.com/usa", "https://gasprices.aaa.com/"):
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (research; paper bot)"})
+        body = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "replace")
+        print("####", url)
+        for m in re.finditer(r"(.{0,160})\$?\b([34]\.\d{2,3})\b(.{0,120})", body):
+            print("  ", re.sub(r"\s+", " ", (m.group(1) + " [[" + m.group(2) + "]] " + m.group(3)))[:300])
+        for m in re.finditer(r"(?i)(updated|as of|last update)[^<]{0,80}", body):
+            print("  time:", m.group(0)[:120])
+
+
+MODES = {"gaspages": gaspages, "eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
