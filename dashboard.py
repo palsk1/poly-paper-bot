@@ -148,7 +148,7 @@ def build(offline=False):
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
-            "late": late_copy(tr), "rs": real_size(tr),
+            "late": late_copy(tr), "rs": real_size(tr), "status": tr.get("status"),
             "mk": {"rewards": r2(s["maker_rewards"]), "locked": r2(s["maker_locked"]), "open": r2(s["maker_open"]),
                    "exits": s.get("exits", 0)} if "maker_rewards" in s else None,
         })
