@@ -1,5 +1,5 @@
 {
- "about": "Kalshi x Polymarket twin markets. Only 'approved' pairs are traded. Each approved pair's rules were read side by side (event, outcome definition, deadline and time zone, resolution source, early-close/death/cancellation clauses). poly_outcome_for_kalshi_yes = the Polymarket outcome that wins exactly when Kalshi YES wins. Rejected pairs are never proposed again.",
+ "about": "Kalshi x Polymarket twin markets. Only 'approved' pairs are traded. Each approved pair's rules were read side by side (event, outcome definition, deadline and time zone, resolution source, early-close/death/cancellation clauses). poly_outcome_for_kalshi_yes = the Polymarket outcome that wins exactly when Kalshi YES wins. Rejected pairs are never proposed again. rejected_events = whole Kalshi events whose rules differ from Polymarket's for every choice; the finder skips them.",
  "approved": [
   {
    "id": "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026",
@@ -823,6 +823,78 @@
   {
    "id": "KXUCL-27-MCI|will-manchester-city-win-the-2026-27-uefa-champions-league-championship-20260701202025553",
    "reason": "Polymarket goes 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
+   "date": "2026-11-09"
+  }
+ ],
+ "rejected_events": [
+  {
+   "event": "KXARREST-27JAN",
+   "reason": "Kalshi's full 'arrested' definition isn't in its rules text; Polymarket also counts house arrest.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXLOLAWARD-WORLDS26FMVP",
+   "reason": "Kalshi pays 1/N on a shared Finals MVP; Polymarket gives a tie to the alphabetically first name.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXLEADERSOUT-27JAN01",
+   "reason": "Polymarket is 'first of a list to leave'; Kalshi is 'this person leaves or announces it'.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXRECOGPALESTINE-27",
+   "reason": "Kalshi counts softer acts (state visit, diplomatic mission); Polymarket needs formal recognition.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXTRUMPADMINLEAVE-26DEC31",
+   "reason": "Polymarket resolves Yes on an announcement; Kalshi needs actual departure.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXUECL-27",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed or no winner; Kalshi has no such clause.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXUCL-27",
+   "reason": "Polymarket goes to 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXIPO-26",
+   "reason": "Kalshi pays on IPO 'confirmed' (S-1 effective, priced or ticker); Polymarket needs shares actually sold.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXLEAVEMERZ-29JAN01",
+   "reason": "Kalshi ignores announcements of leaving more than a year out; Polymarket counts any announcement.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXTRUMPCOUNTRIES-27JAN01",
+   "reason": "Kalshi needs him to exit the plane/vessel and excludes embassies; Polymarket counts any entry.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXLOL-WORLDS26",
+   "reason": "Polymarket goes 'Other' if postponed past Nov 28 or no winner, plus an alphabetical tie rule; Kalshi has neither.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXTRUMPMEETING-27JAN01",
+   "reason": "Kalshi meeting rule is an unfilled template ('physically or virtually', 'purposeful engagement').",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXFEDERALCHARGE-27JAN01",
+   "reason": "Kalshi counts federal charges only; Polymarket also counts state/local charges.",
+   "date": "2026-11-09"
+  },
+  {
+   "event": "KXRANKLISTGOOGLESEARCHTOP5-26DEC",
+   "reason": "Polymarket waits until Mar 31 2027 then resolves No if no list; Kalshi has no such rule.",
    "date": "2026-11-09"
   }
  ]

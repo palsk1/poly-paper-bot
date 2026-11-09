@@ -326,6 +326,11 @@ function detail(n) {
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
     <div id="curve"></div></div>`;
+  if (t.status) {
+    const sk = Object.entries(t.status.skips || {});
+    h += `<div class="card"><b>Last check</b> <span class="sub">${esc(stockholm(t.status.at))}</span><p class="sub">${esc(t.status.msg || "")}</p>` +
+      (sk.length ? `<p class="sub">Skipped this check: ${sk.map(([k, v]) => `${esc(k)} ×${v}`).join(", ")}</p>` : "") + `</div>`;
+  }
   if (t.mk) h += `<div class="card"><b>Bonus vs price swings</b><p class="sub">Polymarket pays a small bonus for keeping buy and sell offers up. Our estimate: ${M(t.mk.rewards)} (capped at what real traders actually get, about 40c a day per $100). The real test is the price swings: ${M(t.mk.locked)} already settled, ${M(t.mk.open)} on what it still holds. ${t.mk.exits ? `Sold early ${t.mk.exits} time${t.mk.exits === 1 ? "" : "s"}. ` : ""}It only pays off if the bonus is bigger than the swing losses.</p></div>`;
   if (t.late && t.late.n) h += `<div class="card"><b>Cost of copying late</b><p class="sub">${t.late.usd >= 0
       ? `We buy after the wallet does, so we usually pay a bit more. On ${t.late.n} copied buys we paid <span class="num neg">$${t.late.usd.toFixed(2)}</span> more than the wallet did (about ${cents(t.late.c_per_share)} more per share). That's already taken out of the profit above.`
@@ -334,6 +339,10 @@ function detail(n) {
     `<div class="bet"><div class="t"><a href="${esc(b.u)}" target="_blank" rel="noopener">${esc(b.t)}</a></div>
      <div class="m">${esc(b.o)}${b.e != null ? ` · bought ${cents(b.e)}` : ""}${b.n != null ? ` · now ${cents(b.n)}` : ""} · cost ${money(b.c, false)} · ${b.locked ? "expected P&L" : "P&L"} ${M(b.pnl)}${b.end ? ` · ends ${esc(b.end)}` : ""}</div></div>`).join("") +
     (t.n_bets > t.bets.length ? `<p class="note">Showing the ${t.bets.length} that moved most.</p>` : "") : "No open bets.") + `</div>`;
+  if (t.waiting && t.waiting.length) h += `<h2 style="font-size:16px">Waiting offers, nothing bought yet (${t.waiting.length})</h2>
+    <p class="note">Here we only have offers up. Nobody has traded with us yet, so nothing is spent and nothing can be lost. The bonus is what Polymarket pays (our estimate) just for keeping the offers there.</p><div class="card">` +
+    t.waiting.map(w => `<div class="bet"><div class="t"><a href="${esc(w.u)}" target="_blank" rel="noopener">${esc(w.t)}</a></div>
+     <div class="m">price now ${cents(w.n)} · bonus so far ${money(w.bonus, false)}${w.end ? ` · ends ${esc(w.end)}` : ""}</div></div>`).join("") + `</div>`;
   if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished bets</summary><div class="card">` + t.recent.map(c =>
     `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)} · bought ${cents(c.e)}, ended ${cents(c.x)} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
   $("detail").innerHTML = h;

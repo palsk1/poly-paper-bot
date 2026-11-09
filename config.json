@@ -108,11 +108,24 @@
       "source": "mentions",
       "rules": "mention_no"
     },
+    "quiet_no": {
+      "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
+      "start_cash": 50,
+      "source": "quiet",
+      "rules": "quiet_no"
+    },
     "fade_sure": {
       "label": "Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
       "start_cash": 25,
       "source": "endgame",
       "rules": "fade_sure"
+    },
+    "econ_fav": {
+      "label": "Forecast backs the favorite (added 2026-11-09): Kalshi CPI, jobless-claims, unemployment and jobs-report markets. 20-76 hours before the release, buys the side that costs 80-99c when a free forecast (Cleveland Fed for inflation, last release for the jobs numbers) says it is worth 3c+ more. Holds to the result. Real order-book fills. $50 paper",
+      "start_cash": 50,
+      "refill": true,
+      "source": "econ",
+      "rules": "econ_fav"
     },
     "sharp_pinnacle": {
       "label": "Sharp bookie price: buys a Polymarket game outcome (soccer, NBA/NHL/NFL, baseball, esports, MMA) when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and paying the fee. Pre-game only, holds to the end. Real order-book fills. $100 paper",
@@ -1261,7 +1274,9 @@
       "date_tolerance_days": 4,
       "min_match_score": 0.5,
       "max_df": 400,
-      "max_candidates": 25,
+      "max_candidates": 50,
+      "review_first_gap": 0.02,
+      "review_first_score": 0.6,
       "kalshi_min_volume": 500,
       "kalshi_max_pages": 150,
       "kalshi_skip_prefixes": [
@@ -1687,6 +1702,27 @@
       "max_open": 40,
       "picks_per_scan": 3
     },
+    "quiet_no": {
+      "why": "2026-11-09 idea machine (ideas.py, backtest/ideas.md): on whole events, markets whose price moved under 2c in the last 7 days, NO at 50-75c bought 1-3 days before the end, made +$25 / +$35 per $100 at +2c in the two halves (+$23 at +5c, 153 events), passing a 33,823-idea screen with a many-ideas correction; no placebo passed. Replayed as a bot would enter (first qualifying hour, btcheck.quiet_bets): +$0.32 per $100 at +2c over 215 events, second half negative, so it was dropped as a research lead; Jan chose (2026-11-09) to run it live on $50 paper anyway. Not in PROTOCOL.md's holdout table. Claude's track, rule changes reported.",
+      "side": "no",
+      "min_price": 0.5,
+      "max_price": 0.75,
+      "max_week_range": 0.02,
+      "max_over_listed": 0.05,
+      "max_over_listed_note": "Skip when the real ask is 5c+ above the listed price (thin book).",
+      "skip_words": ["up or down", "temperature"],
+      "min_days": 1,
+      "max_days": 3,
+      "min_liquidity": 200,
+      "min_volume": 0,
+      "scan_every_minutes": 60,
+      "picks_per_scan": 5,
+      "max_history_checks": 40,
+      "max_open": 20,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
+    },
     "mention_no": {
       "why": "2026-11-09 calibration hunt (calib.py, backtest/calib.md): in 89 finished 'will X say Y' events, buying YES at 10-90c lost about $30 per $100 and buying NO won about $15 per $100 at +2c slippage, in both halves of the period. Fans overrate the chance of a given word. Claude's track, rule changes reported.",
       "side": "no",
@@ -1722,6 +1758,17 @@
       "max_open": 40,
       "picks_per_scan": 3,
       "shadow_sell_at": []
+    },
+    "econ_fav": {
+      "why": "2026-11-09 econ.py backtest (backtest/econ.md): on 340 Kalshi data releases 2021-2026, buying the 80-99c side when the forecast said it was worth 3c+ more made +$6.73 per $100 24h before (141 bets, 7 lost) and +$7.75 72h before, both halves ahead, still ahead 2c worse; the same band without the forecast lost about $5 per $100. Found after looking at price bands, so the live track is the real test. Claude's track, rule changes reported.",
+      "series": ["KXCPI", "KXCPICORE", "KXCPIYOY", "KXECONSTATCPI", "KXJOBLESSCLAIMS", "KXU3", "KXPAYROLLS"],
+      "min_hours": 20,
+      "max_hours": 76,
+      "min_cost": 0.8,
+      "max_cost": 0.99,
+      "min_edge": 0.03,
+      "usd_per_bet": 5,
+      "scan_minutes": 55
     },
     "sharp_pinnacle": {
       "why": "Jan's idea (2026-11-09): Pinnacle is the bookie the pros bet with, so its odds minus its margin are a strong fair price. Polymarket market makers mostly copy Pinnacle, so gaps should be rare and short; this measures how often a 15-minute bot catches one. Fair = the lower of two de-vig methods (sharp.py). One bet per game. Claude's track, rule changes reported.",

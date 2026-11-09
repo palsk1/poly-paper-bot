@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy2.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,6 +45,15 @@ jobs:
         if: steps.pages.outputs.on == 'true'
         with:
           path: site
+      # GitHub sometimes can't see the just-uploaded artifact for a few seconds ("No artifacts named
+      # github-pages were found", 2026-11-09). Try once more after a short wait instead of failing.
       - id: deploy
         if: steps.pages.outputs.on == 'true'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Wait before retrying the deploy
+        if: steps.pages.outputs.on == 'true' && steps.deploy.outcome == 'failure'
+        run: sleep 30
+      - id: deploy2
+        if: steps.pages.outputs.on == 'true' && steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
