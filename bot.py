@@ -3256,6 +3256,23 @@ def reward_markets(max_pages=40):
     return out
 
 
+def reward_config(cid):
+    """Today's live reward pool for one market: {"rate", "v", "min_size"}, rate 0 when no pool runs today.
+    None when the lookup fails. /sampling-markets can lag; this per-market answer is the one Polymarket pays on."""
+    try:
+        rows = envelope_rows(http_json(f"{CLOB}/rewards/markets/{cid}"), "data")
+    except Exception as e:
+        print(f"maker: reward config {str(cid)[:10]} failed: {e}")
+        return None
+    rows = [x for x in rows if isinstance(x, dict) and x.get("condition_id") == cid]
+    if not rows:
+        return {"rate": 0.0, "v": 0.0, "min_size": 0.0}
+    m, today = rows[0], now().strftime("%Y-%m-%d")
+    rate = sum(fnum(c.get("rate_per_day")) for c in (m.get("rewards_config") or []) if isinstance(c, dict)
+               and str(c.get("start_date") or "")[:10] <= today <= str(c.get("end_date") or "9999")[:10])
+    return {"rate": rate, "v": fnum(m.get("rewards_max_spread")), "min_size": fnum(m.get("rewards_min_size"))}
+
+
 def book_scores(bk, v, min_size):
     """(middle, everyone else's score on the buy side, on the sell side, best bid, best ask). YES and NO are one
     mirrored book on Polymarket, so the YES book alone holds all of it."""
@@ -3294,6 +3311,11 @@ def maker_pick(tr, r):
     pre.sort(key=lambda x: -x["rate"])
 
     def est(rm):
+        cfg = reward_config(rm["cid"])  # the pool list can be stale; trust the per-market answer
+        if cfg is not None:
+            if cfg["rate"] <= 0 or cfg["v"] <= 0 or cfg["min_size"] > r["max_shares"]:
+                return None
+            rm = {**rm, **cfg}
         bk = book(rm["yes"])
         sc = book_scores(bk, rm["v"], rm["min_size"]) if bk else None
         if not sc:
@@ -3399,6 +3421,18 @@ def maker_cycle(tracks, pick_new=True):
         if payout is not None:
             maker_close(tr, name, key, "resolved", payout)
             continue
+        # the pool can shrink or end at any time: re-read it at most once an hour (bug fix 2026-11-09:
+        # rate/spread/min size used to be frozen at the day the book opened)
+        if t_now - b.get("cfg_ts", 0) > 3600:
+            cfg = reward_config(b["cid"])
+            if cfg is not None:
+                if abs(cfg["rate"] - b["rate"]) > 1e-9 or cfg["min_size"] != b["min_size"]:
+                    print(f"maker: {b['title'][:40]} pool ${b['rate']:.0f}->${cfg['rate']:.0f}/day, "
+                          f"min {b['min_size']:.0f}->{cfg['min_size']:.0f}")
+                b["rate"], b["min_size"] = cfg["rate"], cfg["min_size"]
+                if cfg["v"] > 0:
+                    b["v"] = cfg["v"]
+                b["cfg_ts"] = t_now
         bk = book(b["yes_tok"])
         sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
         q = b.get("q") or {}
@@ -3456,6 +3490,8 @@ def maker_cycle(tracks, pick_new=True):
         if sc and elapsed > 0:
             mid, qb, qa, bb, ba = sc
             sh = our_share(mid, qb, qa, b["v"], (q.get("bid") or {}).get("px"), (q.get("ask") or {}).get("px"), b["size"])
+            if b["size"] < b["min_size"]:
+                sh = 0.0  # orders below the minimum size earn nothing
             mins = min(elapsed / 60, r["max_credit_minutes"])
             earned = b["rate"] * sh * mins / 1440
             b["rewards"] += earned
