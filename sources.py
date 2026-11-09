@@ -322,6 +322,7 @@ def gas(arg="KXAAAGASD"):
     acc = collections.defaultdict(list)    # (who, hour) -> abs errors
     trades = collections.defaultdict(list) # (model, hour, edge) -> [(t, pnl, cost)]
     resid = collections.defaultdict(list)  # model -> past residuals (for sigma)
+    skip = collections.Counter()
     for k in keys:
         e = ev[k]
         days_ahead = max(1, round((e["close"] - (e["open"])) / 86400))
@@ -329,16 +330,18 @@ def gas(arg="KXAAAGASD"):
             # time of decision: the first time of day hr after the market opened
             t = e["open"] + ((hr * 3600 - e["open"] % 86400) % 86400)
             if t >= e["close"] - 600:
+                skip["late"] += 1
                 continue
             p = past(t)
             if len(p) < 6:
+                skip["history"] += 1
                 continue
             # steps from the last known daily value to the settle date
             steps = max(1, round((e["close"] - [c for c, v in daily if c <= t - 9 * 3600][-1]) / 86400))
             # market ladder at t: (strike, bid, ask)
             lad = []
             for tk, K, res, vol in e["mk"]:
-                cs = [c for c in cand.get(tk, []) if c[0] <= t]
+                cs = [c for c in cand[k].get(tk, []) if c[0] <= t]
                 if not cs:
                     continue
                 c = cs[-1]
@@ -346,6 +349,7 @@ def gas(arg="KXAAAGASD"):
                     continue
                 lad.append((K, c[1], c[2], res))
             if len(lad) < 4:
+                skip["ladder"] += 1
                 continue
             lad.sort()
             # market median: strike where mid crosses 0.5 (linear interpolation)
@@ -382,6 +386,7 @@ def gas(arg="KXAAAGASD"):
             steps = max(1, round((e["close"] - [c for c, v in daily if c <= e["open"] + 3600 * 14 - 9 * 3600][-1]) / 86400))
             for name, fn in models.items():
                 resid[(name, steps)].append(p[-1] + (fn(p) - p[-1]) * steps - e["v"])
+    print("skipped:", dict(skip))
     print("\n== Who guesses the settle value better? (average miss in cents, smaller is better)")
     print(f"{'guesser':28s} " + " ".join(f"{h:>5d}h" for h in hrs) + "   (UTC hour of the guess, the day before)")
     for who in ["market"] + list(models):
