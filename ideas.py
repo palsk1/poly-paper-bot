@@ -58,7 +58,7 @@ SLIP = 0.02           # decision cost (PROTOCOL.md): history price + 2c + fee
 SLIP_HARD = 0.05      # thin-market stress column
 ENTRY_LAG = 3600      # buy 1 hour after the snapshot
 MIN_EV_DISC = 30      # events needed in the discovery half
-MIN_EV_CONF = 20      # events needed in the confirm half
+MIN_EV_CONF = 30      # events needed in the confirm half
 DISC_T = 2.0          # discovery bar: beats its twins by 2 standard errors
 ALPHA = 0.10          # 90% confidence, split over the ideas that reached the confirm half
 TOPIC_CROSS = True
@@ -446,11 +446,17 @@ def screen(rows):
     return acc, cut
 
 
-def stat(a):
-    """events, mean excess, its t, return +2c, return +5c, bets."""
+PHANTOM = True       # add one made-up event that lost its whole stake (like the live trust score's phantom loss)
+
+
+def stat(a, phantom=None):
+    """events, mean excess, its t, return +2c, return +5c, bets. With the phantom loss, an idea with 30 wins at 95c and
+    no loss yet can't look sure: the normal-curve t is far too kind to bets that win small and lose big, rarely."""
     if not a or a[0] < 2:
         return None
     n, sx, sx2, s2, s5, bets = a
+    if PHANTOM if phantom is None else phantom:
+        n, sx, sx2, s2, s5 = n + 1, sx - 1, sx2 + 1, s2 - 1, s5 - 1
     m = sx / n
     var = max(0.0, (sx2 - n * m * m) / (n - 1))
     se = math.sqrt(var / n) if var > 0 else 1e-9
@@ -527,9 +533,14 @@ def report(acc, cut, rows, survivors, info, n_markets):
          f"- Confirm bar on the other half: 90% after correcting for that many ideas, AND making money at +2c in both halves", ""]
     real = {k: v for k, v in survivors.items() if not is_placebo(k)}
     plac = {k: v for k, v in survivors.items() if is_placebo(k)}
-    L += [f"**Survivors: {len(real)} real ideas, {len(plac)} placebos.** "
+    n_pl = sum(1 for k in {k[1:] for k in acc} if is_placebo(k))
+    n_re = info["ideas"] - n_pl
+    luck = len(plac) * n_re / max(1, n_pl)
+    L += [f"**Survivors: {len(real)} real ideas, {len(plac)} placebos.** Placebos are {n_pl:,} of the {info['ideas']:,} "
+          f"ideas, so pure luck would let through about {luck:.1f} real-looking ideas (placebo survivors scaled up). "
           + ("No placebo passed, so the filter is strict enough." if not plac else
              "Placebos passed too, so treat survivors with extra doubt.")]
+    L += ["", "Every number below includes one made-up total loss per idea (so a short lucky run can't pass)."]
     L += ["", "## Survivors", ""]
     hdr = ["| Idea | Why it might work | Events A / B | Bets | vs twins A / B | +2c A / B | +5c (all) | Passed | Note |",
            "|---|---|---|---|---|---|---|---|---|"]
