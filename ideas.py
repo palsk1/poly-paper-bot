@@ -62,6 +62,10 @@ MIN_EV_CONF = 30      # events needed in the confirm half
 DISC_T = 2.0          # discovery bar: beats its twins by 2 standard errors
 ALPHA = 0.10          # 90% confidence, split over the ideas that reached the confirm half
 TOPIC_CROSS = True
+# Data flaw found by this machine (volbias, 2026-11-09): the cache keeps only markets whose FINAL volume passed $20k.
+# In weather events the winning bucket draws volume late, so losing buckets are missing: weather choices we have won
+# 1.3-1.5 times as often as their prices said (other topics about 1.0). Weather is left out until the data is fixed.
+EXCLUDE_TOPICS = {"weather"}
 
 FEATURES = []         # (name, story, fn, cross)
 LAB = {}              # label text -> small int (rows keep ints, so 500k rows x 60 labels fit in memory)
@@ -534,7 +538,7 @@ def report(acc, cut, rows, survivors, info, n_markets):
     stories = {n: s for n, s, _, _ in FEATURES}
     L = ["# Idea machine: hundreds of edge ideas, screened hard", "",
          f"Generated {bot.iso(bot.now())} by `ideas.py` (probe `btideas`). Paper only. {n_markets:,} finished markets "
-         f"that ended before {HOLDOUT_FROM} (the holdout is never read), {len(rows):,} price snapshots, "
+         f"that ended before {HOLDOUT_FROM} (the holdout is never read; weather left out, see volbias), {len(rows):,} price snapshots, "
          f"{len(FEATURES)} features ({sum(1 for f in FEATURES if 'PLACEBO' in f[0])} of them placebo coin flips). "
          f"Halves split at {bt.iso_t(cut)[:10]}.", "",
          "How to read: each idea buys one side 1 hour after a snapshot at the history price + 2c + fee and holds to the "
@@ -606,8 +610,10 @@ def report(acc, cut, rows, survivors, info, n_markets):
 def run(out_name="ideas.md"):
     markets_all = bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {})
     hist = bt.rjson(os.path.join(bt.CACHE, "hist.json.gz"), {})
-    markets = {k: m for k, m in in_sample(markets_all).items() if not m.get("sports")}
-    print(f"markets {len(markets_all)} cached, {len(markets)} in-sample non-sports (end before {HOLDOUT_FROM})")
+    markets = {k: m for k, m in in_sample(markets_all).items()
+               if not m.get("sports") and calib.topic(m["q"]) not in EXCLUDE_TOPICS}
+    print(f"markets {len(markets_all)} cached, {len(markets)} in-sample non-sports, without {sorted(EXCLUDE_TOPICS)} "
+          f"(end before {HOLDOUT_FROM})")
     t0 = time.time()
     rows = build_rows(markets, hist)
     print(f"rows {len(rows)} ({time.time() - t0:.0f}s)")
