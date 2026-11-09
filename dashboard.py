@@ -65,18 +65,18 @@ def open_bets(name, tr):
                      "pnl": r2(a.get("expected_profit")), "c": r2(a.get("cost")), "end": str(a.get("poly_end", ""))[:10],
                      "u": bot.market_link(a.get("poly_slug", "")), "locked": True})
     for s in tr.get("sets", {}).values():
-        rows.append({"t": str(s.get("title", ""))[:90], "o": "full set", "e": None, "n": None,
+        rows.append({"t": str(s.get("title", ""))[:90], "o": "every outcome", "e": None, "n": None,
                      "pnl": r2(s.get("expected_profit")), "c": r2(s.get("cost")), "end": str(s.get("end", ""))[:10],
                      "u": bot.market_link(s.get("slug", ""), s.get("event_slug", "")), "locked": True})
     for b in tr.get("books", {}).values():
         held = b.get("yes_cost", 0) + b.get("no_cost", 0)
-        hold = f"{b.get('yes', 0):.0f} YES, {b.get('no', 0):.0f} NO" if held > bot.EPS else "nothing held"
-        rows.append({"t": b.get("title", "")[:90], "o": f"quoting, {hold}, rewards ${b.get('rewards', 0):.2f} (model)",
+        hold = f"holding {b.get('yes', 0):.0f} YES, {b.get('no', 0):.0f} NO" if held > bot.EPS else "holding nothing"
+        rows.append({"t": b.get("title", "")[:90], "o": f"offering to buy and sell, {hold}, bonus ${b.get('rewards', 0):.2f} (estimate)",
                      "e": None, "n": r2(b.get("mid", 0) * 100),  # P&L = price move only, rewards shown apart
                      "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
                      "end": str(b.get("end", ""))[:10], "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
     for o in tr.get("orders", {}).values():  # kmaker: resting Kalshi bids, settled from the trade tape after the close
-        rows.append({"t": str(o.get("title", ""))[:90], "o": f"bid {str(o.get('side', '')).upper()} (resting, Kalshi)",
+        rows.append({"t": str(o.get("title", ""))[:90], "o": f"waiting order to buy {str(o.get('side', '')).upper()} on Kalshi",
                      "e": r2(o.get("price", 0) * 100), "n": None, "pnl": 0.0, "c": r2(o.get("cost")),
                      "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",
                      "locked": True})
@@ -141,7 +141,7 @@ def build(offline=False):
             "pnl": r2(s["pnl"]), "today": r2(s.get("today", 0)), "realized": r2(s.get("realized")),
             "open": s["open"], "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
-            "trust": s["trust"], "paper": s.get("trust_paper"), "verdict": (s.get("proof") or {}).get("verdict"),
+            "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
             "late": late_copy(tr), "rs": real_size(tr),
             "mk": {"rewards": r2(s["maker_rewards"]), "locked": r2(s["maker_locked"]), "open": r2(s["maker_open"]),
