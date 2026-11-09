@@ -913,6 +913,46 @@ def drill2():
                   f"forecast doesn't {money(per100(dis))} ({len(dis)}); GDP only any side {money(per100(gd))} ({len(gd)})")
 
 
+def fav_bets(pts, h, lo=0.80, hi=0.99, thr=0.03, slip=0.0):
+    """'Forecast confirms the favorite': buy the side that costs lo-hi (with fee) when the forecast says it's worth
+    at least thr more. Found in drill2 (2026-11-09) on the 80-100c band, so its in-sample numbers are optimistic."""
+    out = []
+    for r in pts:
+        if r["h"] != h:
+            continue
+        for side in (1, 0):
+            if side == 0 and r["bid"] <= 0:
+                continue
+            px = (r["ask"] if side else 1 - r["bid"]) + slip
+            cost = px + kfee(px - slip)
+            val = r["p"] if side else 1 - r["p"]
+            if lo <= cost <= hi and val - cost >= thr:
+                won = r["y"] == side
+                out.append(dict(r, side=side, cost=cost, pnl=(1.0 if won else 0.0) - cost, won=won, twin_pnl=0, twin_cost=1))
+    return out
+
+
+def drill3():
+    models = Models()
+    pts, _ = build_points(models)
+    placebo, _ = build_points(models, placebo=True)
+    for h in HOURS:
+        bs = fav_bets(pts, h)
+        print(f"\n== {h}h favorite confirmed: {line(bs)}")
+        print(f"   {halves(bs)}; 1c worse {money(per100(fav_bets(pts, h, slip=0.01)))}; 2c worse {money(per100(fav_bets(pts, h, slip=0.02)))}")
+        print(f"   wrong month: {line(fav_bets(placebo, h))}")
+        for thr in (0.0, 0.05, 0.10):
+            print(f"   threshold {int(thr*100)}c: {line(fav_bets(pts, h, thr=thr))}")
+        for s in SERIES:
+            x = [b for b in bs if b["s"] == s]
+            if x:
+                print(f"   {s}: {len(x)} bets, lost {sum(1 for b in x if not b['won'])}, {money(per100(x))} per $100")
+        if h == 24:
+            for b in sorted(bs, key=lambda b: b["close"]):
+                if not b["won"]:
+                    print(f"   LOST {b['t']} side {'YES' if b['side'] else 'NO'} cost {b['cost']:.2f} forecast {b['mu']:.3f} chance {b['p']:.2f}")
+
+
 def fetch_run():
     fetch()
     run()
@@ -920,4 +960,4 @@ def fetch_run():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill, "drill2": drill2}[cmd]()
+    {"scan": scan, "scan2": scan2, "fetch": fetch, "run": run, "all": fetch_run, "drill": drill, "drill2": drill2, "drill3": drill3}[cmd]()
