@@ -12,7 +12,7 @@ and you read the result in the run log. All of it is paper only.
 | **bt_cache** (main backtest data) | **Warning: only markets whose FINAL volume passed $20k, so multi-choice events (weather buckets most of all) miss many losing choices and look too good (`backtest/ideas.md`, volbias).** ~126k finished Polymarket markets since 2026-03-01 with volume > $20k: question, answers, start/end/close times, final prices, fee, event id; plus outcome-0 price history (12-hourly, hourly in the last 2 days) and the copied wallets' trades | `backtest.py fetch` (probe `btfetch`). Lives in the Actions cache `bt-cache-*`. **Start bt* probes with ref=main**, caches saved on other branches can't be shared (PR #7) |
 | small-market sample | ~12k tiny markets ($1k-20k volume), 12-hourly history | `calib.py fetch_small` (probe `btcalibsmall`, PR #30) |
 | Kalshi 15-min crypto | Kalshi 15-minute crypto windows, trades and history | `kcrypto.py fetch [days]` (probe `kc_fetch`, `btkcfetch`, PR #31) |
-| Live recordings | Order books, trades, spot prices every minute for fast markets, hourly files on GitHub releases `data-YYYYMMDD` | `recorder.yml` / `recorder.py` (PR #12). Use it to replace guessed slippage once enough is recorded |
+| Live recordings | Order books, trades, spot prices every minute for fast markets; every 5 min also AAA + GasBuddy live gas prices and the Kalshi AAA gas ladders (`gas` lines, PR #40), hourly files on GitHub releases `data-YYYYMMDD` | `recorder.yml` / `recorder.py` (PR #12). Use it to replace guessed slippage once enough is recorded |
 | Holdout | Markets ending **2026-11-10 or later**. Never look at them before 2026-12-21 | `btcheck.py holdout` (probe `btholdout`), see `backtest/PROTOCOL.md` |
 
 ## Testing ideas on history

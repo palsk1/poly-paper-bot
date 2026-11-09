@@ -29,7 +29,11 @@ Pyth hermes.
 
 The market gets sharper all day, so traders are already reading live station data (GasBuddy / OPIS) during the
 day. Every trend rule lost $34-80 per $100 at +1c + fee. Weekly ladder (KXAAAGASW, 10 weeks): same picture.
-**Dead unless a live GasBuddy reading beats the market at 14-18h UTC; that needs a forward recording to test.**
+**Dead unless a live GasBuddy reading beats the market at 14-18h UTC.** Jan wanted that tested (2026-11-09), so the
+recorder now saves AAA's national average, GasBuddy's 51 live state averages (price + change today) and every open
+Kalshi gas ladder book every 5 minutes (`gas` lines + `kbook` in the `data-YYYYMMDD` releases). Score it after about
+2 weeks (~2026-11-23): fit AAA's next value on GasBuddy at 14-18h UTC using the first week, then compare its miss
+with the market's on the second week. Only if it clearly beats the market's 0.3-0.5c is a paper track worth adding.
 
 ## 3. Earthquakes, Kalshi KXBIGGESTQUAKE (probe `src_quake`)
 
