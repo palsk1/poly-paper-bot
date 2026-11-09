@@ -4872,8 +4872,43 @@ def discover():
         print("W", json.dumps(row, sort_keys=True))
 
 
+def kmakertest():
+    """Dry run of the Kalshi late-favorite maker (no state saved): place on the live windows with any minutes left,
+    then replay the fill check on the last closed BTC/ETH window as if we had bid 3 minutes before its close."""
+    names = kmaker_names()
+    tracks = {n: {"unlimited": False, "cash": 100.0, "start_cash": 100, "deposited": 100.0, "refills": 0, "min_cash": 0,
+                  "peak_open_cost": 0, "positions": {}, "closed": [], "realized": 0.0, "skipped_no_cash": 0,
+                  "orders": {}, "unfilled": 0, "unfilled_log": [], "last_check": {}} for n in names}
+    for n in names:
+        CFG["rules"][CFG["tracks"][n]["rules"]]["max_minutes_left"] = 15
+    kmaker_place(tracks, names)
+    for n in names:
+        print(n, "last look:", json.dumps(tracks[n]["last_check"]))
+    for series in ("KXBTC15M", "KXETH15M"):
+        rows = kalshi_get("/markets", {"series_ticker": series, "status": "settled", "limit": 1}).get("markets") or []
+        if not rows:
+            continue
+        m = rows[0]
+        close = parse_iso(m["close_time"])
+        trades, complete = kalshi_trades(m["ticker"], (close - dt.timedelta(minutes=3)).timestamp(), close.timestamp())
+        print(f"{m['ticker']} result {m.get('result')}: {len(trades)} trades in the last 3 min (complete {complete})")
+        if not trades:
+            continue
+        early = sorted(trades, key=lambda t: t["created_time"])[0]
+        yp = fnum(early.get("yes_price_dollars"), 0.5)
+        side = "yes" if yp >= 0.5 else "no"
+        px = yp if side == "yes" else round(1 - yp, 4)
+        for off in (0.0, -0.01, -0.03):
+            o = {"side": side, "price": round(px + off, 4), "queue": 0.0, "shares": 10,
+                 "placed": iso(close - dt.timedelta(minutes=3))}
+            got, through = kmaker_fill(o, trades)
+            print(f"  bid {side.upper()} {o['price'] * 100:.1f}c 3 min before close: filled {got:.0f}/10 "
+                  f"({'through' if through else 'at price'}), {'won' if m.get('result') == side else 'lost'}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
-     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest}[cmd]()
+     "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
+     "kmakertest": kmakertest}[cmd]()
