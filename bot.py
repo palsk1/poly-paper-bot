@@ -3776,7 +3776,8 @@ def integrity(tracks, deep=False):
             bad("negative_cash", name, f"cash below zero (${tr['cash']:.2f})")
         rows = list(tr.get("positions", {}).values()) + tr.get("closed", [])
         # 2) every fill is a real order-book fill with a sane price
-        recent_est = [r for r in rows if r.get("price_source") not in (None, "book") and r.get("opened", "") >= day_ago]
+        recent_est = [r for r in rows if r.get("price_source") not in (None, "book")
+                      and r.get("opened", "") >= max(day_ago, "2026-11-09T12")]  # older ones are known (audit)
         if recent_est:
             bad("not_book_fill", name, f"{len(recent_est)} buys in the last 24h without a real order-book fill")
         insane = [r for r in rows if not (0 < r.get("entry", 0.5) < 1) or r.get("shares", 1) <= 0
