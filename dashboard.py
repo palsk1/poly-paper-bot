@@ -70,9 +70,10 @@ def open_bets(name, tr):
                      "u": bot.market_link(s.get("slug", ""), s.get("event_slug", "")), "locked": True})
     for b in tr.get("books", {}).values():
         held = b.get("yes_cost", 0) + b.get("no_cost", 0)
-        rows.append({"t": b.get("title", "")[:90], "o": f"quoting, rewards ${b.get('rewards', 0):.2f}",
-                     "e": None, "n": r2(b.get("mid", 0) * 100),
-                     "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held + b.get("rewards", 0)), "c": r2(held),
+        hold = f"{b.get('yes', 0):.0f} YES, {b.get('no', 0):.0f} NO" if held > bot.EPS else "nothing held"
+        rows.append({"t": b.get("title", "")[:90], "o": f"quoting, {hold}, rewards ${b.get('rewards', 0):.2f} (model)",
+                     "e": None, "n": r2(b.get("mid", 0) * 100),  # P&L = price move only, rewards shown apart
+                     "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
                      "end": str(b.get("end", ""))[:10], "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
     rows.sort(key=lambda r: -abs(r["pnl"] or 0))
     return rows[:MAX_OPEN], len(rows)
@@ -138,6 +139,8 @@ def build(offline=False):
             "trust": s["trust"], "paper": s.get("trust_paper"), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
             "late": late_copy(tr), "rs": real_size(tr),
+            "mk": {"rewards": r2(s["maker_rewards"]), "locked": r2(s["maker_locked"]), "open": r2(s["maker_open"]),
+                   "exits": s.get("exits", 0)} if "maker_rewards" in s else None,
         })
     data = {"generated": bot.iso(), "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
             "order": bot.ranked(stats), "tracks": rows, "trial_end": "2027-01-01",
