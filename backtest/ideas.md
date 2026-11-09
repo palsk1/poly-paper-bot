@@ -117,3 +117,20 @@ the data). Use `ideas.load_full()` / `ideas.load_screen_set()` for any multi-cho
 event): old cache +$1.50 per $100 on 51 events, whole events **+$8.33 per $100 on 66 events** (YES in mention markets
 won 0.81 of what its price said). The hole did not flatter mention_no; with all the words in, it looks a bit better.
 This is in-sample (markets ending before 2026-11-10) and doesn't replace the pre-registered holdout test.
+
+## Follow-up on the one survivor: "quiet week, buy NO" (2026-11-09, probes `btideasdrill_quiet_no`, `btcheckquiet`)
+
+Split by month on whole events, the screen's version looked steady (ahead in 7 of 9 months, both halves). But the
+screen buys at three fixed moments (exactly 1, 2 and 3 days before the end) and averages them. A real bot would buy
+the **first** hour the rule fits. Replayed that way (`btcheck.quiet_bets`, hourly from 3 days to 1 day out, 1 hour
+late, +2c + fee, one bet per event, whole events, markets ending before 2026-11-10):
+
+| Cost | Events | Per $100 | 90% band | 1st half / 2nd half |
+|---|---|---|---|---|
+| +2c | 215 | +$0.32 | -$7.53 to +$8.16 | +$7.04 / -$6.54 |
+| +5c | 215 | -$3.96 | -$11.47 to +$3.55 | +$2.53 / -$10.58 |
+
+So the profit came from the exact moment of buying (mostly 2 days out, 50-55c), not from a rule a bot can follow.
+**Verdict: dropped, no paper track.** The machine's filter passed something that shows up only at one timing. Next
+version of the screen should test each idea the way a bot would enter it (first qualifying hour), not at fixed
+snapshots.
