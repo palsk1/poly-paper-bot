@@ -3985,3 +3985,7 @@
 {"minutes_left": 2.68, "price": 0.979, "queue": 3723.74, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:20Z", "type": "kmaker_order"}
 {"minutes_left": 2.68, "price": 0.961, "queue": 508.21, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:21Z", "type": "kmaker_order"}
 {"minutes_left": 2.68, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:22Z", "type": "kmaker_order"}
+{"fee": 0.0101, "outcome": "Yes", "price": 0.042, "shares": 5, "title": "Will the lowest temperature in Hong Kong be 20\u00b0C on November 11?", "token": "54325133352894296917224821506969744101432529835869546318907185747886488993587", "track": "fade_sure", "ts": "2026-11-10T12:16:25Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:16:44Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "no", "through": true, "ticker": "KXETH15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:16:44Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:16:44Z", "type": "kmaker_fill"}
