@@ -1,15 +1,7 @@
 {
- "alerted": {
-  "negative_cash:maker_tp": "2026-11-10T08:56:28Z"
- },
- "checked": "2026-11-10T10:36:47Z",
+ "alerted": {},
+ "checked": "2026-11-10T20:12:08Z",
  "deep_checked": "2026-11-10T05:15:02Z",
  "deep_problems": [],
- "problems": [
-  {
-   "key": "negative_cash",
-   "track": "maker_tp",
-   "what": "cash below zero ($-5.99)"
-  }
- ]
+ "problems": []
 }
