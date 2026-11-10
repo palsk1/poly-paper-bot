@@ -115,7 +115,7 @@
       "rules": "quiet_no"
     },
     "fade_sure": {
-      "label": "Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
+      "label": "STOPPED 2026-11-10 (no new bets; the re-test on complete data loses about $19 per $100). Fade the sure thing: in weather markets that end within a day, buys the CHEAP side (2-10c) when the other side looks 'sure' at 90-98c. Most bets lose; the few that win pay 10-50x. Real order-book fills. $25 paper",
       "start_cash": 25,
       "source": "endgame",
       "rules": "fade_sure"
@@ -1749,7 +1749,7 @@
     "fade_sure": {
       "inherit": "endgame",
       "why": "2026-11-08: 'sure' 93-98c favorites in weather/crypto-price/post-count markets a day before the end flipped far more often than their price said (backtest/report.md). This buys the other side. Checked with backtest.py btfade (backtest/fade.md). From the Reddit/forum idea hunt; Claude's track, rule changes reported.",
-      "fade": true,
+      "no_new_bets": true, "no_new_bets_why": "2026-11-10, Jan's ask: re-test on whole events (btcheck.py fade, backtest/fade_full.md) loses $18.67 per $100 at +2c and 1 hour late, both halves; the old +$121 came from the cache missing losing weather buckets. Open bets settle as usual, history kept.", "fade": true,
       "tiers": ["ending_soon"],
       "fav_min_price": 0.90,
       "fav_max_price": 0.98,
