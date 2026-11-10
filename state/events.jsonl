@@ -4350,3 +4350,18 @@
 {"filled": 11.0, "pnl": -9.966, "price": 0.906, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV101145-45", "track": "kc_maker_early", "ts": "2026-11-10T16:47:45Z", "type": "kmaker_fill"}
 {"minutes_left": 8.29, "price": 0.932, "queue": 34.99, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV101200-00", "track": "kc_maker_early", "ts": "2026-11-10T16:51:43Z", "type": "kmaker_order"}
 {"minutes_left": 8.29, "price": 0.915, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101200-00", "track": "kc_maker_early", "ts": "2026-11-10T16:51:43Z", "type": "kmaker_order"}
+{"fee": 0.0225, "outcome": "Yes", "price": 0.1, "shares": 5, "title": "Will the highest temperature in Dallas be between 82-83\u00b0F on November 11?", "token": "76517276047810592003494219684800184548929102077334315240110008745733520817880", "track": "fade_sure", "ts": "2026-11-10T16:56:51Z", "type": "paper_buy"}
+{"pnl": 1.995, "price": 0.85, "reason": "take profit: sold 50 YES at 85.0c", "title": "Will Pete Hegseth be the first of these people impeached by December 31, 2027?", "track": "maker_tp", "ts": "2026-11-10T16:57:02Z", "type": "maker_exit"}
+{"pnl": -2.7408, "price": 0.14, "reason": "stop loss: sold 50 NO at 14.0c", "title": "Will Pete Hegseth be the first of these people impeached by December 31, 2027?", "track": "maker_tpsl", "ts": "2026-11-10T16:57:02Z", "type": "maker_exit"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV101200-00", "track": "kc_maker_safe", "ts": "2026-11-10T16:57:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 8770.23, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 8770.23, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV101200-00", "track": "kc_maker_safe", "ts": "2026-11-10T16:57:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 260.0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 260.0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV101200-00", "track": "kc_maker_safe", "ts": "2026-11-10T16:57:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.996, "queue": 81.52, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.996, "queue": 81.52, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV101200-00", "track": "kc_maker_safe", "ts": "2026-11-10T16:57:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:08Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101200-00", "track": "kc_maker", "ts": "2026-11-10T16:57:08Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101200-00", "track": "kc_maker_safe", "ts": "2026-11-10T16:57:09Z", "type": "kmaker_order"}
