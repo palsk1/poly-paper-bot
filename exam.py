@@ -280,7 +280,7 @@ def card_text(c):
     if not c.get("bets"):
         return "\n".join(L + ["No bets to grade."])
     sep = f"{c['groups']} separate bets"
-    how = (f"{c['bets']} bets on {c['events']} events over {c['days']} days" if c.get("days")
+    how = (f"{c['bets']} bets on {c['events']} events over {c['days']} day{'s' if c['days'] != 1 else ''}" if c.get("days")
            else f"{c['bets']} bets on {c['events']} events")
     L.append(f"Bets: {how}. Counted as {sep}"
              + (" (losses came in bunches on the same days, so one day counts once)." if c.get("bunched")
