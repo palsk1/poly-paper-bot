@@ -13,6 +13,7 @@ in the last minutes.
                                    # + Binance 1-minute spot into bt_cache/kc/ (re-runs only fetch what's new)
     python3 kcrypto.py run         # write backtest/kcrypto.md (+ kcrypto.json)
     python3 kcrypto.py selftest    # offline check on made-up candles
+    python3 kcrypto.py depth       # kc_maker_safe like a trading firm: price after the bid, loss bunches, live pass bar, $300 pot
   From GitHub: probe workflow with what = btkc (fetch + run), btkcfetch, btkcrun; cache and report are kept.
   (probe `kc_scan` prints the API shapes.)
 
@@ -614,6 +615,191 @@ def run():
     print(txt)
 
 
+# ================================================================ depth (be-ambitious check, 2026-11-10)
+
+DEPTH_N = (300, 600, 1000, 1500, 2500, 4000)
+
+
+def _per100(rows):
+    c = sum(r["price"] + r["fee"] for r in rows)
+    return sum(r["pnl"] for r in rows) / c * 100 if c else 0.0
+
+
+def _mid_after(w, t, side, k):
+    """Leading side's mid-price k minutes after t (None if no book)."""
+    row = w["c"].get(t + 60 * k)
+    if not row:
+        return None
+    b, a, _, _ = side_view(row, side)
+    return None if b is None or a is None else (b + a) / 2
+
+
+def live_fills(track):
+    """Closed live paper bets of a kmaker track from state/tracks.json."""
+    try:
+        with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+            tr = json.load(fh).get(track) or {}
+    except Exception:
+        return []
+    out = []
+    for c in tr.get("closed") or []:
+        if c.get("reason") != "resolved" or not c.get("cost"):
+            continue
+        out.append({"close": c["close"], "price": c["entry"], "fee": c.get("entry_fee") or 0.0, "won": c["exit"] >= 0.5,
+                    "pnl": (c["exit"] - c["entry"] - (c.get("entry_fee") or 0.0)), "s": c.get("series")})
+    return out
+
+
+def depth(track="kc_maker_safe", kind="improve", level=0.95, minutes=3, zmin=2.0, sims=4000):
+    """Pro-style checks of one kmaker variant on the cached 60 days (writes backtest/kcdepth.md):
+    A. price right after our bid (is a filled bid a warning sign?), B. losses by 15-minute window and day (how
+    many independent chances do we really have?), C. a pass bar for the live track written BEFORE its results
+    (how many live bets, and what P&L, prove it at 90%?), D. a $300 pot with $10 bets played out on whole days."""
+    rng = random.Random(11)
+    windows = load_windows()
+    if not windows:
+        print("no cached windows: run `kcrypto.py fetch` first")
+        return
+    sigs = signals(windows, minutes)
+    rows = variant_trades(sigs, kind, level, zmin)
+    byt = {s["w"]["t"]: s for s in sigs}
+    f = []
+    for r in rows:
+        r["pnl"] = (1.0 if r["won"] else 0.0) - r["price"] - r["fee"]
+        r["close"] = r["t"] + 60 * minutes
+        if r["fills"][1]:
+            f.append(r)
+    n = len(f)
+    if not n:
+        print("no fills")
+        return
+    lost = [r for r in f if not r["won"]]
+    edge = sum(r["pnl"] for r in f) / n
+    t0, t1 = min(r["t"] for r in f), max(r["t"] for r in f)
+    ndays = len({r["day"] for r in f})
+    L = [f"# {track}: checked the way a trading firm would (kcdepth, {bot.iso()[:10]})", "",
+         f"Research only, paper only. Data: {len(windows)} Kalshi 15-minute crypto windows, "
+         f"{bot.iso(dt.datetime.fromtimestamp(t0, UTC))[:10]} to {bot.iso(dt.datetime.fromtimestamp(t1, UTC))[:10]}. "
+         f"Rule: {kind}, leader bid {level * 100:.0f}c+, {minutes} min left, Binance spot z >= {zmin}, 'fair' fills "
+         f"(same as backtest/kcrypto.md). Code: `kcrypto.py depth`.", "",
+         f"Backtest: {n} filled bets over {ndays} days, {len(lost)} lost, average price {sum(r['price'] for r in f) / n * 100:.1f}c, "
+         f"{money(_per100(f))} per $100.", ""]
+
+    # A. price after our bid
+    L += ["## A. Does a filled bid mean trouble? (price 1 and 2 minutes after we bid)", "",
+          "If the bets that get filled are the ones about to go wrong, the price drops after they fill and filled bets "
+          "win less often than all signals. That is how market makers lose money.", "",
+          "| Group | Bets | Won out of 100 | Price after 1 min vs our bid | After 2 min |", "|---|---|---|---|---|"]
+    for label, grp in (("All signals", rows), ("Filled", f), ("Not filled", [r for r in rows if not r["fills"][1]])):
+        m1 = [(_mid_after(byt[r["tk"]]["w"], r["t"], byt[r["tk"]]["side"], 1), r["price"]) for r in grp]
+        m2 = [(_mid_after(byt[r["tk"]]["w"], r["t"], byt[r["tk"]]["side"], 2), r["price"]) for r in grp]
+        m1 = [a - b for a, b in m1 if a is not None]
+        m2 = [a - b for a, b in m2 if a is not None]
+        wr = sum(1 for r in grp if r["won"]) / len(grp) * 100 if grp else 0
+        L.append(f"| {label} | {len(grp)} | {wr:.1f} | {sum(m1) / len(m1) * 100:+.2f}c | {sum(m2) / len(m2) * 100:+.2f}c |"
+                 if m1 and m2 else f"| {label} | {len(grp)} | {wr:.1f} | - | - |")
+
+    # B. clustering
+    by_close = defaultdict(list)
+    for r in f:
+        by_close[r["close"]].append(r)
+    bad = {c: g for c, g in by_close.items() if any(not r["won"] for r in g)}
+    sizes = defaultdict(int)
+    for g in bad.values():
+        sizes[sum(1 for r in g if not r["won"])] += 1
+    by_day = defaultdict(list)
+    for r in f:
+        by_day[r["day"]].append(r)
+    day_pnl = sorted((sum(x["pnl"] / (x["price"] + x["fee"]) * 10 for x in g), d) for d, g in by_day.items())
+    L += ["", "## B. Do losses come in bunches?", "",
+          f"- {n} bets sit in {len(by_close)} different 15-minute windows (up to 7 coins share a window).",
+          f"- The {len(lost)} losses happened in {len(bad)} windows: "
+          + ", ".join(f"{v} window{'s' if v > 1 else ''} with {k} loss{'es' if k > 1 else ''}" for k, v in sorted(sizes.items())) + ".",
+          f"- Losing days with $10 bets: {sum(1 for p, _ in day_pnl if p < 0)} of {len(day_pnl)}. "
+          f"Worst day {money(day_pnl[0][0])}, best day {money(day_pnl[-1][0])}, typical day "
+          f"{money(day_pnl[len(day_pnl) // 2][0])}.",
+          "- So the real number of independent chances is closer to the number of losing *windows* than the number of "
+          "bets. Every test below resamples whole windows or whole days, never single bets.", ""]
+
+    # C. pass bar: resample whole windows; 'no edge' world = same bets with the average profit taken out
+    groups = list(by_close.values())
+    per_bet = n / len(groups)
+
+    def draw(N, shift):
+        got, pn, cost = 0, 0.0, 0.0
+        while got < N:
+            g = groups[rng.randrange(len(groups))]
+            for r in g:
+                pn += r["pnl"] - shift
+                cost += r["price"] + r["fee"]
+            got += len(g)
+        return pn / cost * 100
+
+    L += ["## C. The pass bar for the live track (written before the live results)", "",
+          "Two made-up worlds, both built from the real 60 days by drawing whole 15-minute windows: 'no edge' (the same "
+          "bets with the average profit removed, so it breaks even) and 'backtest is right'. The bar is the live P&L per "
+          "$100 that the no-edge world beats only 1 time in 10. That is our 90% test.", "",
+          "| Live bets | Pass if live P&L per $100 is above | Chance a truly break-even track passes | Chance the backtest's track passes |",
+          "|---|---|---|---|"]
+    bars = {}
+    for N in DEPTH_N:
+        null = sorted(draw(N, edge) for _ in range(sims // 4))
+        bar = null[int(len(null) * 0.9)]
+        alt = [draw(N, 0.0) for _ in range(sims // 4)]
+        power = sum(1 for x in alt if x > bar) / len(alt)
+        bars[N] = bar
+        L.append(f"| {N} | {money(bar)} | 10 in 100 | {power * 100:.0f} in 100 |")
+    live = live_fills(track)
+    if live:
+        lc = sorted({x["close"] for x in live})
+        span = (bot.parse_iso(lc[-1]) - bot.parse_iso(lc[0])).total_seconds() / 86400 if len(lc) > 1 else 0
+        per_day = len(live) / span if span > 0.2 else None
+        lp = _per100(live)
+        nl = sum(1 for x in live if not x["won"])
+        L += ["", f"Live so far: {len(live)} bets, {nl} lost, average price {sum(x['price'] for x in live) / len(live) * 100:.1f}c, "
+              f"{money(lp)} per $100" + (f", about {per_day:.0f} bets a day" if per_day else "") + ".",
+              f"Average live price vs backtest: {sum(x['price'] for x in live) / len(live) * 100:.1f}c vs "
+              f"{sum(r['price'] for r in f) / n * 100:.1f}c (a higher price means a smaller win per bet)."]
+        ap = sum(x["price"] for x in live) / len(live)
+        L.append(f"- At the live average price one loss eats about {ap / (1 - ap):.0f} wins, so break-even is about 1 loss "
+                 f"in {1 / (1 - ap):.0f} bets. The backtest had 1 loss in {n / max(1, len(lost)):.0f}.")
+        if per_day:
+            for N in (1000, 1500, 2500):
+                L.append(f"- {N} live bets reached around day {N / per_day:.0f} after the start (9 Nov 19:00 UTC).")
+    L += ["", "Use one bar, not all of them: looking at every row and stopping at the first pass would make a lucky pass "
+          "more likely than 1 in 10."]
+    # D. a $300 pot
+    days = [g for _, g in sorted(by_day.items())]
+    L += ["", "## D. A $300 pot with $10 bets, played out on real days", "",
+          f"Each run strings together whole days drawn from the 60 (so bad days and bad windows stay intact). "
+          f"{sims} runs each.", "",
+          "| Days | Typical end | Worst 1 in 20 | Ends below $300 | Drops below $250 at some point | Drops below $200 |",
+          "|---|---|---|---|---|---|"]
+    for D in (30, 60):
+        ends, b250, b200, below = [], 0, 0, 0
+        for _ in range(sims):
+            pot = low = 300.0
+            for _ in range(D):
+                g = sorted(days[rng.randrange(len(days))], key=lambda x: x["t"])
+                for r in g:
+                    pot += r["pnl"] / (r["price"] + r["fee"]) * 10
+                    low = min(low, pot)
+            ends.append(pot)
+            b250 += low < 250
+            b200 += low < 200
+            below += pot < 300
+        ends.sort()
+        L.append(f"| {D} | ${ends[len(ends) // 2]:.0f} | ${ends[len(ends) // 20]:.0f} | {below * 100 // sims} in 100 | "
+                 f"{b250 * 100 // sims} in 100 | {b200 * 100 // sims} in 100 |")
+    L += ["", "Limits: 60 days only; Binance stands in for the index Kalshi settles on; size that fills at $25-$100 is "
+          "unknown; the live bot bids anywhere from 0.75 to 5.5 minutes left, the backtest at exactly 3.", ""]
+    os.makedirs(OUT, exist_ok=True)
+    txt = "\n".join(L) + "\n"
+    with open(os.path.join(OUT, "kcdepth.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
+
 # ================================================================ selftest
 
 def selftest():
@@ -647,5 +833,5 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if cmd.startswith("fetch_"):
         cmd, arg = "fetch", cmd.split("_", 1)[1]
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest,
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth,
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
