@@ -14,8 +14,8 @@ make, so we can make the same kind ourselves:
   B. Honest check: pick the winners on the FIRST half of the calendar only, then look at their bets in the second
      half: at their own prices, and at the price a slow follower really got 5-65 minutes later (+1c + fee).
   C. What winners do differently from everyone else: topic, side, price paid, time left, bet size.
-  D. Idea cells: kinds of bets (topic x side x price x time left) where winners gather AND everybody else who made
-     that kind of bet came out ahead too. Those need no skill and no speed, so they are strategy ideas to test next.
+  D. Forget who made the bet: which KINDS of bet (side, price, time left, topic) paid at the price a slow follower
+     really got 5-65 minutes later, same money on every bet. Those need no skill and no speed: ideas to test next.
 
     python3 winners.py run        # probe `win_run` (ref = any branch; reads main's bt_cache, saves nothing)
     python3 winners.py selftest   # offline: a planted winner is found, lucky wallets are not
@@ -70,6 +70,7 @@ def rows_from(tapes, topic_fn=None):
                 c = min(0.99, cp + 0.01)
                 r["ccost"] = c * sh + rate * sh * c * (1 - c)
                 r["gap"] = cp - px
+                r["c"], r["rate"] = c, rate
             out.append(r)
     out.sort(key=lambda r: r["t"])
     return out
@@ -135,33 +136,63 @@ def profile(win_rows, all_rows, P):
         P("")
 
 
-def cells(rows, winners, P, min_w=5, min_ev=30, top=15):
-    P("\n## D. Idea cells: where winners gather and everyone else wins too\n")
-    cw, co = collections.defaultdict(set), collections.defaultdict(list)
-    for r in rows:
-        k = (r["topic"], "Yes / first answer" if r["o"] == 0 else "No / second answer", bucket(r["price"], BANDS), bucket(r["left"], LEFT))
-        if r["w"] in winners:
-            cw[k].add(r["w"])
-        else:
-            co[k].append(r)
-    cand = [k for k in co if len(cw[k]) >= min_w and len({r["ev"] for r in co[k]}) >= min_ev]
-    P(f"{len(cand)} kinds of bet have {min_w}+ winners in them and {min_ev}+ events of other people's bets. Each is graded on the "
-      f"OTHER people's bets only (real prices they paid, fee included), with the luck bar raised for {len(cand)} tries.\n")
+def flat(rs, follow, stake=25.0):
+    """The same bets with the same money on each ($25), so a few whales can't carry a result. follow=True prices each
+    at what a slow follower got: the next real buy of that answer 5-65 minutes later, +1c, plus the taker fee."""
     out = []
-    for k in cand:
-        c = exam.score(co[k], " / ".join(k), tries=max(1, len(cand)), prereg=True, log=False, quiet=True)
-        c["cell"], c["nw"] = k, len(cw[k])
+    for r in rs:
+        if not r.get("c"):
+            continue
+        p = r["c"] if follow else r["price"]
+        sh = stake / p
+        out.append({"ev": r["ev"], "t": r["t"], "sh": sh, "cost": stake + r["rate"] * sh * p * (1 - p), "pay": sh * r["pay"] / r["sh"]})
+    return out
+
+
+def kinds(rows, P, min_ev=30, top=15):
+    """D. Forget who made the bet: which KINDS of bet paid, at prices a slow bot could really get?"""
+    P("\n## D. Which kinds of bet paid, for anyone, at prices a slow bot could get\n")
+    buys = [r for r in rows if r.get("c")]
+    P(f"{len(buys):,} buys had a real follow-up buy of the same answer 5-65 minutes later. Each is counted as a $25 bet at "
+      "that later price +1c + fee (so no speed needed, and whales count the same as everyone).\n")
+    one = []
+    for f in ("side", "price paid", "time left", "topic"):
+        g = collections.defaultdict(list)
+        for r in buys:
+            g[(f, feats(r)[f].replace("buys the ", ""))].append(r)
+        one += [(k, v) for k, v in g.items() if len({r["ev"] for r in v}) >= min_ev]
+    cell = collections.defaultdict(list)
+    for r in buys:
+        cell[(r["topic"], "Yes / first answer" if r["o"] == 0 else "No / second answer", bucket(r["price"], BANDS), bucket(r["left"], LEFT))].append(r)
+    cand = [(k, v) for k, v in cell.items() if len({r["ev"] for r in v}) >= min_ev]
+    tries = len(one) + len(cand)
+    P(f"Looked at {len(one)} simple splits and {len(cand)} detailed kinds (topic x side x price x time left, {min_ev}+ events each). "
+      f"The luck bar is raised for all {tries}.\n")
+    P("| Split | Value | Separate bets | Follower per $100 | Luck range | Halves | Worst case per $100 | Verdict |")
+    P("|---|---|---|---|---|---|---|---|")
+    for k, v in one:
+        c = exam.score(flat(v, True), "x", tries=tries, prereg=True, log=False, quiet=True)
+        P(f"| {k[0]} | {k[1]} | {c['groups']} | {exam.usd(c['per100'])} | {exam.usd(c['lo100'])} to {exam.usd(c['hi100'])} | "
+          f"{exam.usd(c['half1'], 0)} / {exam.usd(c['half2'], 0)} | {exam.usd(c['floor100'])} | {c['verdict']} |")
+    out = []
+    for k, v in cand:
+        c = exam.score(flat(v, True), " / ".join(k), tries=tries, prereg=True, log=False, quiet=True)
+        own = exam.score(flat(v, False), "own", tries=tries, prereg=True, log=False, quiet=True)
+        c["cell"], c["own100"], c["nbets"] = k, own["per100"], len(v)
         out.append(c)
     out.sort(key=lambda c: -(c.get("floor100") or -999))
-    P("| Topic | Bet on | Price paid | Time left | Winners there | Others: separate bets | Others per $100 | Luck range | Worst case per $100 | Verdict |")
-    P("|---|---|---|---|---|---|---|---|---|---|")
+    P("\nThe detailed kinds with the best worst case:\n")
+    P("| Topic | Bet on | Price paid | Time left | Bets | Separate bets | At the price they paid | Follower per $100 | Luck range | Halves | Worst case per $100 | Verdict |")
+    P("|---|---|---|---|---|---|---|---|---|---|---|---|")
     for c in out[:top]:
         k = c["cell"]
-        P(f"| {k[0]} | {k[1]} | {k[2]} | {k[3]} | {c['nw']} | {c['groups']} | {exam.usd(c['per100'])} | "
-          f"{exam.usd(c['lo100'])} to {exam.usd(c['hi100'])} | {exam.usd(c['floor100'])} | {c['verdict']} |")
+        P(f"| {k[0]} | {k[1]} | {k[2]} | {k[3]} | {c['nbets']} | {c['groups']} | {exam.usd(c['own100'])} | {exam.usd(c['per100'])} | "
+          f"{exam.usd(c['lo100'])} to {exam.usd(c['hi100'])} | {exam.usd(c['half1'], 0)} / {exam.usd(c['half2'], 0)} | "
+          f"{exam.usd(c['floor100'])} | {c['verdict']} |")
     ahead = sum(1 for c in out if c["per100"] > 0)
-    P(f"\n{ahead} of {len(out)} cells are ahead at all; by luck alone about half would be if betting were free. "
-      f"Called real: {sum(1 for c in out if c['key'] == 'good')}. Promising: {sum(1 for c in out if c['key'] == 'promising')}.")
+    P(f"\n{ahead} of {len(out)} detailed kinds are ahead at all for a follower. Called real: "
+      f"{sum(1 for c in out if c['key'] == 'good')}. Promising: {sum(1 for c in out if c['key'] == 'promising')}. "
+      "Everything here was found by looking, so even a \"real\" one still needs fresh bets before it counts.")
     return out
 
 
@@ -183,8 +214,12 @@ def analyse(rows, names=None, P=print):
     good = {w for w, c in cards.items() if c["key"] == "good"}
     prom = {w for w, c in cards.items() if c["key"] == "promising"}
     n_luck = sum(1 for c in luck.values() if c["key"] == "good")
-    P(f"So {len(good)} wallets pass the full bar where luck alone gives about {n_luck}. "
-      + ("Real winners exist." if len(good) > 3 * max(1, n_luck) else "That is not clearly more than luck.") + "\n")
+    def share(cs, keys):
+        return 1000 * sum(1 for c in cs.values() if c["key"] in keys) / max(1, len(cs))
+    rw, rl = share(cards, ("good", "promising")), share(luck, ("good", "promising"))
+    P(f"Passed or promising: {rw:.0f} of every 1,000 real wallets, against {rl:.0f} of every 1,000 shuffled ones. "
+      + ("Clearly more than luck: real winners exist." if rw > 2 * rl and len(good) >= 5 else
+         "That is about what luck alone gives: in this data, steady winners are not showing.") + "\n")
     bw = by_wallet(rows)
     P("| Wallet | Separate bets | Money bet | Per $100 | Worst case per $100 | Mostly bets on | Both sides of a market | Price 5+ min after their buys |")
     P("|---|---|---|---|---|---|---|---|")
@@ -214,20 +249,18 @@ def analyse(rows, names=None, P=print):
         own = exam.score(later, "own", prereg=True, log=False, quiet=True)
         cp = exam.score(copies(later), "copy", prereg=True, log=False, quiet=True)
         res[label] = (len(pick), own, cp)
-        P(f"- **{len(pick)} wallets that {label}** in the first half, their second-half bets:")
+        P(f"- **{len(pick)} wallet(s) that {label}** in the first half, their second-half bets:")
         P(f"  - at their own prices: {line(own)}")
         P(f"  - following 5-65 min later at the real price +1c: {line(cp)}")
     rest = exam.score(h2, "all", prereg=True, log=False, quiet=True)
     P(f"- Everyone in the second half, for comparison: {line(rest)}")
 
-    winners = good or prom
-    P(f"\n(Sections C and D use the {len(winners)} wallets that {'passed the full bar' if good else 'are promising (none passed)'} on all the data.)")
-    wr = [r for r in rows if r["w"] in winners]
-    if wr:
-        profile(wr, rows, P)
-        out = cells(rows, winners, P)
+    if len(good) >= 5:
+        profile([r for r in rows if r["w"] in good], rows, P)
     else:
-        out = []
+        P(f"\n## C. What the winners do differently\n\nSkipped: only {len(good)} wallet(s) passed the full bar, and the habits "
+          "of one or two wallets are a story, not a pattern.")
+    out = kinds(rows, P)
     return {"cards": cards, "good": good, "prom": prom, "luck_good": n_luck, "half": res, "cells": out}
 
 
@@ -281,7 +314,7 @@ def selftest():
     assert len(res["good"]) <= 2 and res["luck_good"] <= 1, (res["good"], res["luck_good"])
     n, own, cp = res["half"]["passed the full bar"]
     assert n >= 1 and own["per100"] > 5 and cp["per100"] < own["per100"], (n, own["per100"], cp["per100"])
-    assert not any(c["key"] == "good" for c in res["cells"])      # other people's bets were fair: no idea cell may pass
+    assert not any(c["key"] == "good" for c in res["cells"])      # ordinary bets were fair: no kind of bet may pass
     print("\nselftest ok: planted winner found, lucky wallets not, follower gets less, no fake idea cell")
 
 
