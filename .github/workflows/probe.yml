@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what:
-        description: "all | kalshi | poly | endgame | events | fast | fast2 | fast3 (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' / 'fasttest' / 'makertest' for bot dry runs; edges_* for edges.py research; lh_* for logichunt.py (markets that contradict each other); sharp_* for sharp.py (bookmaker fair price); src_* for sources.py (who reads the settle source first); fast* and fasttest = weather + crypto; 'hunt' / 'hunt_ladders' / 'hunt_dupes' / 'hunt_rejected' / 'hunt_sports2' for arbhunt.py; 'rec_once' = one recorder pass; lag_scan / lag_<minutes> = live esports lag test, livelag.py)"
+        description: "all | kalshi | poly | endgame | events | fast | fast2 | fast3 (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' / 'fasttest' / 'makertest' for bot dry runs; edges_* for edges.py research; lh_* for logichunt.py (markets that contradict each other); sharp_* for sharp.py (bookmaker fair price); src_* for sources.py (who reads the settle source first); fast* and fasttest = weather + crypto; 'hunt' / 'hunt_ladders' / 'hunt_dupes' / 'hunt_rejected' / 'hunt_sports2' for arbhunt.py; 'rec_once' = one recorder pass; lag_scan / lag_<minutes> = live esports lag test, livelag.py; launch_live_<min>_<follow> = watch brand-new listings, launch.py)"
         default: all
 
 jobs:
@@ -28,6 +28,7 @@ jobs:
       - name: Probe APIs
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
+          case "${{ inputs.what }}" in launch_*) PYTHONUNBUFFERED=1 python3 launch.py $(echo '${{ inputs.what }}' | sed 's/^launch_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in bt*) PYTHONUNBUFFERED=1 python3 backtest.py "${{ inputs.what }}"; exit $?;; esac
           case "${{ inputs.what }}" in rec_once) python3 recorder.py once; exit $?;; rec_6) PYTHONUNBUFFERED=1 python3 recorder.py once 6; exit $?;; esac
           case "${{ inputs.what }}" in econ_*) pip install -q openpyxl; PYTHONUNBUFFERED=1 python3 econ.py "$(echo '${{ inputs.what }}' | sed 's/^econ_//')"; exit $?;; esac
