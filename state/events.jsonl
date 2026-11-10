@@ -3191,3 +3191,10 @@
 {"filled": 10.0, "pnl": 0.29, "price": 0.971, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:18:17Z", "type": "kmaker_fill"}
 {"fee": 0.0134, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Bitcoin reach $76,000 on November 9?", "token": "75820113077243078235411164692407753687346571859062120298410804277069837141073", "track": "endgame_sell98", "ts": "2026-11-10T02:19:59Z", "type": "paper_buy"}
 {"minutes_left": 8.13, "price": 0.962, "queue": 310.13, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV092130-30", "track": "kc_maker_early", "ts": "2026-11-10T02:21:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:30Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.981, "queue": 947.26, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:31Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.993, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:31Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.952, "queue": 0.26, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:32Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.978, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:33Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.995, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV092130-30", "track": "kc_maker", "ts": "2026-11-10T02:26:34Z", "type": "kmaker_order"}
+{"minutes_left": 3.5, "price": 0.995, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV092130-30", "track": "kc_maker_safe", "ts": "2026-11-10T02:26:34Z", "type": "kmaker_order"}
