@@ -265,15 +265,16 @@ def analyse(rows, names=None, P=print):
 
 
 PRESETS = (("crypto price", 1, 0.70, 0.90, 3 * DAY, 7 * DAY), ("crypto price", 1, 0.90, 0.97, 3 * DAY, 7 * DAY),
-           ("other", 1, 0.90, 0.97, 30 * DAY, 9e9), ("other", 1, 0.97, 0.995, 3 * DAY, 7 * DAY),
+           ("other", 1, 0.90, 0.97, 30 * DAY, 9e9),
            ("crypto price", 0, 0.70, 0.90, 3 * DAY, 7 * DAY))          # last one: the mirror (Yes), as a control
 N_KINDS = 282      # kinds of bet section D looked at before these were picked: sets the luck bar
 
 
-def rule_bets(tapes, topic_fn, topic, o, lo, hi, left_lo, left_hi, late=300, wait=6 * 3600, over=0.02):
+def rule_bets(tapes, topic_fn, topic, o, lo, hi, left_lo, left_hi, late=300, wait=6 * 3600, over=0.02, under=0.02):
     """The lead as a rule a bot could run by itself, one bet per market: the FIRST time the answer's last traded price
     is inside [lo, hi) with the right time left, wait 5 minutes, then take the next real $100+ buy of that answer
-    within 6 hours, +1c + fee. No bet if that price is more than 2c above the band (a bot would have a limit)."""
+    within 6 hours, +1c + fee. No bet if that price is more than 2c outside the band (a bot would have limits; a buy
+    far below the band is a different bet: buying after a scare)."""
     bets, skipped, info = [], 0, []
     for mid, x in tapes["m"].items():
         if x.get("cut") or topic_fn(x.get("q") or "") != topic or not x.get("end"):
@@ -292,8 +293,8 @@ def rule_bets(tapes, topic_fn, topic, o, lo, hi, left_lo, left_hi, late=300, wai
             continue
         fill = next(((t, px) for t, w, oi, sd, px, sh, cp, v24 in x["tr"]
                      if sd == "B" and oi == o and sig + late <= t <= sig + late + wait and t < x["end"]), None)
-        if not fill or fill[1] + 0.01 > hi + over:
-            skipped += 1
+        if not fill or fill[1] + 0.01 > hi + over or fill[1] + 0.01 >= 0.995 or fill[1] < lo - under:
+            skipped += 1          # no buy, too dear, nothing left to win at 99.5c+, or the price had already fallen out of the band
             continue
         c = fill[1] + 0.01
         sh = 25.0 / c
@@ -320,7 +321,9 @@ def drill(tapes=None, topic_fn=None, P=print, presets=PRESETS):
                 f"{'over 30 days' if l1 > 1e9 else f'{l0 / DAY:.0f}-{l1 / DAY:.0f} days'} before the end")
         bets, skipped, info = rule_bets(tapes, topic_fn, topic, o, lo, hi, l0, l1)
         P(f"\n## {name}\n")
-        P(f"{len(bets)} bets, {skipped} signals with no real buy near the band.")
+        P(f"{len(bets)} bets, {skipped} signals with no real buy near the band."
+          + (f" Typical price paid {100 * statistics.median(b['px'] for b in bets) + 1:.0f}c; won {sum(1 for b in bets if b['pay'] > b['cost'])}, "
+             f"lost {sum(1 for b in bets if b['pay'] <= b['cost'])}." if bets else ""))
         if not bets:
             continue
         lines = []
