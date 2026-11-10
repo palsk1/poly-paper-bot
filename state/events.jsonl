@@ -3980,3 +3980,8 @@
 {"pnl": -2.3886, "price": 0.8571, "reason": "flatten: sold 50 YES at 85.7c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T12:02:36Z", "type": "maker_exit"}
 {"filled": 10.0, "pnl": 0.4, "price": 0.96, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV100700-00", "track": "kc_maker", "ts": "2026-11-10T12:02:38Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.38, "price": 0.962, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV100700-00", "track": "kc_maker", "ts": "2026-11-10T12:02:39Z", "type": "kmaker_fill"}
+{"fee": 0.0176, "outcome": "No", "price": 0.053, "shares": 5, "title": "Predict.fun FDV above $400M one day after launch?", "token": "61151177946739421291102488850369206756210599921409217545938858262005374248465", "track": "w_jjo", "ts": "2026-11-10T12:10:42Z", "type": "paper_buy"}
+{"fee": 0.0176, "outcome": "No", "price": 0.053, "shares": 5, "title": "Predict.fun FDV above $400M one day after launch?", "token": "61151177946739421291102488850369206756210599921409217545938858262005374248465", "track": "wb_jjo", "ts": "2026-11-10T12:10:42Z", "type": "paper_buy"}
+{"minutes_left": 2.68, "price": 0.979, "queue": 3723.74, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:20Z", "type": "kmaker_order"}
+{"minutes_left": 2.68, "price": 0.961, "queue": 508.21, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:21Z", "type": "kmaker_order"}
+{"minutes_left": 2.68, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV100715-15", "track": "kc_maker", "ts": "2026-11-10T12:12:22Z", "type": "kmaker_order"}
