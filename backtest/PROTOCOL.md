@@ -45,6 +45,7 @@ strategy doesn't beat those twins, the "edge" is in the band or the exits, not t
 | `mention_no` | NO at 25-90c, first time a "will X say Y" market is within 7 days of its end, one bet per event, +2c + fee, held | ahead, and band low end above -$5 per $100 |
 | `panic_fade_10c` | engine, 2c + 1 hour later, take-profit at the target | ahead, and band low end above -$5 per $100 |
 | `soccer_draw` (added 2026-11-10, `census.py`) | YES on a soccer full-time draw priced 15-50c 24h before kickoff, filled at the first real buy of it before kickoff +1c + fee, held. Not in `btholdout` yet: score with the census sports fetch on games from 2026-11-10 on | ahead, and band low end above -$5 per $100 |
+| `soccer_draw_mid` (secondary, added 2026-11-10, `digs.py draws`) | Same as `soccer_draw` but only draws priced 22-32c and only outside the big leagues (slugs epl, lal, sea, bun, fl1, ucl, uel). Found by slicing in-sample data, so it only counts if `soccer_draw` also passes | ahead at +1c |
 
 A pass is not proof. It means the lead survived one fresh look and the live paper track is worth watching to
 2027-01-01. The money decision still uses the live trust score (90% bar, many strategies tested).

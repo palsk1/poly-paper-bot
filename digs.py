@@ -358,13 +358,15 @@ def krows(mk, hist):
             if b is None or a is None or not (0 < b < a < 1):
                 continue
             spread = a - b
+            vol = C[k][3] if len(C[k]) > 3 else None
             for side in (0, 1):
                 q = a if side == 0 else 1 - b
                 if not 0.02 <= q <= 0.98:
                     continue
                 rows.append({"s": m["s"], "cat": cat, "ev": m["ev"], "h": hn, "side": side, "q": q,
                              "pay": pay0 if side == 0 else 1 - pay0, "t": t, "spread": spread, "close": m["close"],
-                             "done": bool(DONE_RX.search(m["s"])), "title": m["q"]})
+                             "done": bool(DONE_RX.search(m["s"])), "title": m["q"],
+                             "vol": vol, "age": t - Ct[k], "tk": tk})
     return rows
 
 
@@ -417,6 +419,55 @@ def placebo_rows(rows, salt):
         rr["s"] = f"FAKE{h % 40}"
         out.append(rr)
     return out
+
+
+def ksane():
+    """Is the Kalshi census data clean? Score at the MIDDLE of bid and ask (no fee): a fair, clean market should be
+    near $0 there. Split by bid-ask gap, by whether anyone traded in that hour, and by how old the quote is."""
+    mk = (_rj(K_MK, {}) or {}).get("markets", {})
+    hist = _rj(K_H, {}) or {}
+    rows = krows(mk, hist)
+
+    def mid_score(rs):
+        items = []
+        for r in rs:
+            m = (r["q"] + (r["q"] - r["spread"])) / 2  # mid seen from that side
+            items.append((r["ev"], r["pay"] - m, m))
+        return cluster_score(items)
+
+    L = ["# Kalshi census sanity check (digs.py ksane)", "",
+         "A clean, fair market loses about $0 per $100 at the middle of bid and ask. Big losses at the middle mean the "
+         "quotes were stale or one-sided, not real prices.", "",
+         "| group | events | bets | per $100 at the ask (+fee) | per $100 at the middle (no fee) |", "|---|---|---|---|---|"]
+
+    def line(name, rs):
+        a, m_ = kscore(rs), mid_score(rs)
+        if a and m_:
+            L.append(f"| {name} | {a['events']} | {len(rs)} | {m100(a['per100'])} | {m100(m_['per100'])} |")
+    line("all", rows)
+    for lo, hi in ((0, 0.021), (0.021, 0.051), (0.051, 0.15), (0.15, 1)):
+        line(f"gap {lo * 100:.0f}-{hi * 100:.0f}c", [r for r in rows if lo <= r["spread"] < hi])
+    line("someone traded that hour", [r for r in rows if (r.get("vol") or 0) > 0])
+    line("nobody traded that hour", [r for r in rows if not (r.get("vol") or 0) > 0])
+    line("traded that hour AND gap 0-2c", [r for r in rows if (r.get("vol") or 0) > 0 and r["spread"] < 0.021])
+    for hn, _ in K_HZ:
+        line(f"traded + gap 0-2c, {hn}", [r for r in rows if r["h"] == hn and (r.get("vol") or 0) > 0 and r["spread"] < 0.021])
+    for bi, (a, b) in enumerate(K_BANDS):
+        for side in (0, 1):
+            line(f"traded + gap 0-2c, {a * 100:.0f}-{b * 100:.0f}c {'YES' if side == 0 else 'NO'}",
+                 [r for r in rows if a <= r["q"] < b and r["side"] == side and (r.get("vol") or 0) > 0 and r["spread"] < 0.021])
+    # examples: favorites 90-98c that lost
+    bad = [r for r in rows if 0.90 <= r["q"] < 0.98 and r["pay"] == 0][:12]
+    L += ["", "Examples: 90-98c buys that lost (quote age, gap, traded that hour, prices after)", ""]
+    for r in bad:
+        C = hist[r["tk"]]
+        after = [f"{c[1]}/{c[2]}" for c in C if c[0] > r["t"]][:4]
+        L.append(f"- {r['tk']} {r['h']} {'YES' if r['side'] == 0 else 'NO'} paid {r['q'] * 100:.0f}c, gap {r['spread'] * 100:.0f}c, "
+                 f"age {r['age'] / 60:.0f} min, vol {r.get('vol')}, next bid/ask {after} | {r['title'][:70]}")
+    txt = "\n".join(L) + "\n"
+    os.makedirs("backtest", exist_ok=True)
+    open("backtest/kfamily_sanity.md", "w").write(txt)
+    print(txt)
 
 
 def kfam():
@@ -595,5 +646,5 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
-    {"draws": draws, "kfetch": kfetch, "kfam": kfam, "kall": lambda: (kfetch(), kfam()), "ideas": run_ideas,
+    {"draws": draws, "kfetch": kfetch, "kfam": kfam, "ksane": ksane, "kall": lambda: (kfetch(), kfam()), "ideas": run_ideas,
      "selftest": selftest}[cmd]()
