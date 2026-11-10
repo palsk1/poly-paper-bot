@@ -388,6 +388,103 @@ def history():
             print(f"     {'WON ' if pay >= 0.5 else 'lost'} {100 * q:.0f}c  {r['q'][:90]}")
 
 
+# ================================================================ drill: daily stock/commodity up/down (flagged 2026-11-10)
+
+def updown_hist():
+    """Every finished daily (not 5m/15m/hourly) stock/commodity Up-or-Down market: price 1 day before the end
+    (the previous close, before the window opens) and later, the result, how many price points, the fee."""
+    import calib
+    import ideas
+    markets, hist, _ = ideas.load_full()
+    ms = ideas.in_sample(markets)
+    rows = []
+    for mk in ms.values():
+        fa, fo = classify(mk["q"], mk.get("slug"), "", mk.get("outs"), mk.get("sports"), None, 1)
+        if fa != "up/down: stocks/other" or re.search(r"\d{1,2}(:\d\d)?\s*(am|pm)", mk["q"].lower()):
+            continue
+        y = calib.outcome0(mk)
+        h = hist.get(mk["id"])
+        if y is None or not h or not h[0] or not mk.get("end"):
+            continue
+        T, P = h
+
+        def px(hours):
+            t = mk["end"] - hours * 3600
+            i = bisect.bisect_right(T, t) - 1
+            return (P[i], t - T[i]) if i >= 0 else (None, None)
+        p24, age24 = px(24 - 1)
+        p12, _ = px(12)
+        p6, _ = px(6)
+        n_before = sum(1 for t in T if t < mk["end"] - 23 * 3600)
+        rows.append((mk, y, p24, age24, p12, p6, n_before))
+    print(f"daily stock/commodity up/down markets with history: {len(rows)}")
+    by_asset = collections.defaultdict(list)
+    for r in rows:
+        a = re.sub(r" (opens )?up or down.*", "", r[0]["q"].lower())
+        by_asset[a].append(r)
+    print("asset | markets | median price 23h before end | share priced under 45c or over 55c then | fee")
+    for a, rs in sorted(by_asset.items(), key=lambda kv: -len(kv[1])):
+        ps = [r[2] for r in rs if r[2] is not None]
+        off = sum(1 for x in ps if x < 0.45 or x > 0.55)
+        print(f"{a} | {len(rs)} | {100 * statistics.median(ps):.0f}c | {off}/{len(ps)} | {rs[0][0].get('fee')}")
+    print("\nbuy the side under 45c, 23h before the end (fill = that price + 1c/2c/5c + fee), held to the result")
+    for slip in (0.01, 0.02, 0.05):
+        pnl = cost = 0.0
+        n = w = 0
+        for mk, y, p24, age, *_ in rows:
+            if p24 is None:
+                continue
+            for q, pay in ((p24, y), (1 - p24, 1 - y)):
+                if 0.15 <= q < 0.45:
+                    c = min(0.99, q + slip)
+                    fe = bot.taker_fee(1, c, mk.get("fee", 0))
+                    pnl += pay - c - fe
+                    cost += c + fe
+                    n += 1
+                    w += pay >= 0.5
+        if cost:
+            print(f"  +{100 * slip:.0f}c: {n} bets, won {w}, {'+' if pnl >= 0 else '-'}${abs(100 * pnl / cost):.0f} per $100")
+    print("\nsample: question | price 23h / 12h / 6h before end (outcome 0) | age of that price | points before | result")
+    import random
+    for mk, y, p24, age, p12, p6, nb in random.Random(5).sample(rows, min(40, len(rows))):
+        fmt = lambda x: "-" if x is None else f"{100 * x:.0f}c"
+        print(f"  {mk['q'][:60]} | {fmt(p24)} / {fmt(p12)} / {fmt(p6)} | {(age or 0) / 3600:.0f}h | {nb} | "
+              f"{mk['outs'][0] if y == 1 else mk['outs'][1]}")
+
+
+def updown_live():
+    """Open daily stock/commodity up/down markets right now: real best bid/ask, depth on the ask, hours left."""
+    import sources
+    evs = sources.poly_events(400)
+    now = bot.now()
+    out = []
+    for e in evs:
+        tags = {str(t.get("label") or "").lower() for t in (e.get("tags") or []) if isinstance(t, dict)}
+        for m in e.get("markets") or []:
+            if not isinstance(m, dict) or m.get("closed"):
+                continue
+            fa, _ = classify(m.get("question"), m.get("slug"), e.get("title"), bot.jlist(m.get("outcomes")),
+                             bot.is_sports(m), m.get("sportsMarketType"), 1, tags)
+            q = str(m.get("question") or "")
+            if fa != "up/down: stocks/other" or re.search(r"\d{1,2}(:\d\d)?\s*(am|pm)", q.lower()):
+                continue
+            end = bot.parse_iso(m.get("endDate"))
+            out.append(((end - now).total_seconds() / 3600 if end else None, q, m))
+    print(f"open daily stock/commodity up/down markets: {len(out)}")
+    for hrs, q, m in sorted(out, key=lambda x: x[0] or 1e9)[:60]:
+        toks = bot.market_tokens(m)
+        book = ""
+        try:
+            b = bot.http_json(f"{bot.CLOB}/book", {"token_id": toks[0]}) if toks else {}
+            asks = sorted(((f(a.get("price")), f(a.get("size"))) for a in b.get("asks") or []))[:3]
+            bids = sorted(((f(a.get("price")), f(a.get("size"))) for a in b.get("bids") or []), reverse=True)[:3]
+            book = f"bids {bids} asks {asks}"
+        except Exception as ex:
+            book = f"book failed {ex}"
+        print(f"  {hrs:5.1f}h | {q[:55]} | bid {m.get('bestBid')} ask {m.get('bestAsk')} last {m.get('lastTradePrice')} "
+              f"| 24h ${f(m.get('volume24hr')):.0f} | fee {bot.fee_rate(m)} | {book}")
+
+
 # ================================================================ selftest
 
 def selftest():
@@ -423,4 +520,4 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "live"
-    {"live": live, "history": history, "selftest": selftest}[cmd]()
+    {"live": live, "history": history, "selftest": selftest, "updown": updown_live, "updownhist": updown_hist}[cmd]()
