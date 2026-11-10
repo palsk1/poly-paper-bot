@@ -1,0 +1,31 @@
+name: kfastlive
+# Live PAPER test of the "last 45 seconds" idea on Kalshi 15-minute crypto (kfastlive.py, README "Fast Kalshi
+# paper bot"). Never trades. Each run watches ~5h40m and pushes state/kfast_live/ every hour. The cron fires
+# every 20 min; with the concurrency group one run always waits in line, so the next one starts when one ends.
+on:
+  schedule:
+    - cron: "11-59/20 * * * *"
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "how long to watch (max ~345)"
+        default: "340"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kfastlive
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Watch and paper-trade
+        run: |
+          git config user.name "poly-paper-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          PYTHONUNBUFFERED=1 python3 kfastlive.py loop "${{ inputs.minutes || '340' }}"

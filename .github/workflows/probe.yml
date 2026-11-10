@@ -33,6 +33,7 @@ jobs:
           case "${{ inputs.what }}" in rec_once) python3 recorder.py once; exit $?;; rec_6) PYTHONUNBUFFERED=1 python3 recorder.py once 6; exit $?;; esac
           case "${{ inputs.what }}" in econ_*) pip install -q openpyxl; PYTHONUNBUFFERED=1 python3 econ.py "$(echo '${{ inputs.what }}' | sed 's/^econ_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
           case "${{ inputs.what }}" in src_*) PYTHONUNBUFFERED=1 python3 sources.py "$(echo '${{ inputs.what }}' | sed 's/^src_//')"; exit $?;; esac
           case "${{ inputs.what }}" in sharp_*) PYTHONUNBUFFERED=1 python3 sharp.py "$(echo '${{ inputs.what }}' | sed 's/^sharp_//')"; exit $?;; esac
