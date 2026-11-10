@@ -19,6 +19,18 @@ jobs:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
           restore-keys: bt-cache-
+      - uses: actions/cache/restore@v4   # digs.py: reads the shared bt_cache but never saves it (keeps main's cache the newest)
+        if: startsWith(inputs.what, 'dig_')
+        with:
+          path: bt_cache
+          key: bt-cache-${{ github.run_id }}
+          restore-keys: bt-cache-
+      - uses: actions/cache/restore@v4
+        if: startsWith(inputs.what, 'dig_')
+        with:
+          path: dig_cache
+          key: dig-cache-${{ github.run_id }}
+          restore-keys: dig-cache-
       - uses: actions/cache/restore@v4
         if: startsWith(inputs.what, 'econ')
         with:
@@ -29,6 +41,7 @@ jobs:
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
           case "${{ inputs.what }}" in launch_*) PYTHONUNBUFFERED=1 python3 launch.py $(echo '${{ inputs.what }}' | sed 's/^launch_//; s/_/ /g'); exit $?;; esac
+          case "${{ inputs.what }}" in dig_*) PYTHONUNBUFFERED=1 python3 digs.py "$(echo '${{ inputs.what }}' | sed 's/^dig_//')"; exit $?;; esac
           case "${{ inputs.what }}" in bt*) PYTHONUNBUFFERED=1 python3 backtest.py "${{ inputs.what }}"; exit $?;; esac
           case "${{ inputs.what }}" in rec_once) python3 recorder.py once; exit $?;; rec_6) PYTHONUNBUFFERED=1 python3 recorder.py once 6; exit $?;; esac
           case "${{ inputs.what }}" in econ_*) pip install -q openpyxl; PYTHONUNBUFFERED=1 python3 econ.py "$(echo '${{ inputs.what }}' | sed 's/^econ_//')"; exit $?;; esac
@@ -46,6 +59,17 @@ jobs:
         with:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
+      - uses: actions/cache/save@v4
+        if: always() && startsWith(inputs.what, 'dig_k')
+        with:
+          path: dig_cache
+          key: dig-cache-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always() && startsWith(inputs.what, 'dig_')
+        with:
+          name: digs
+          path: backtest/
+          if-no-files-found: ignore
       - uses: actions/cache/save@v4
         if: always() && startsWith(inputs.what, 'econ')
         with:
