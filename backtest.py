@@ -1061,6 +1061,9 @@ if __name__ == "__main__":
         import runpy
         runpy.run_path(os.path.join(ROOT, "launch.py"), run_name="__main__")
         sys.exit(0)
+    if cmd == "btcensus":   # every kind of Polymarket bet, priced vs result (census.py)
+        __import__("census").history()
+        sys.exit(0)
     if cmd == "btideasvolbias":
         __import__("ideas").volbias()
         sys.exit(0)
