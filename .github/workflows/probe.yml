@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4   # the branch it was started on (main by default), so a PR branch can be tried live
       - uses: actions/cache/restore@v4
-        if: startsWith(inputs.what, 'bt')
+        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_')   # win_* only reads the cache, never saves it
         with:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
@@ -35,6 +35,7 @@ jobs:
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in win_*) PYTHONUNBUFFERED=1 python3 winners.py "$(echo '${{ inputs.what }}' | sed 's/^win_//')"; exit $?;; esac
           case "${{ inputs.what }}" in exam_*) PYTHONUNBUFFERED=1 python3 exam.py $(echo '${{ inputs.what }}' | sed 's/^exam_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in census_*) PYTHONUNBUFFERED=1 python3 census.py "$(echo '${{ inputs.what }}' | sed 's/^census_//')"; exit $?;; esac
           case "${{ inputs.what }}" in src_*) PYTHONUNBUFFERED=1 python3 sources.py "$(echo '${{ inputs.what }}' | sed 's/^src_//')"; exit $?;; esac
