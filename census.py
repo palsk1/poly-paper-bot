@@ -849,6 +849,82 @@ def tape_check(sig, window, cap=500):
               f"90% band {100 * (rate - 1.645 * se):+.1f} to {100 * (rate + 1.645 * se):+.1f}")
 
 
+def draw_depth():
+    """Live: every open soccer full-time draw market kicking off in the next 48h. How much could you buy near the
+    price? (Jan, 2026-11-10, after the draw lead in census.md.) Read only."""
+    import sources
+    evs = sources.poly_events(400)
+    now = time.time()
+    rows = []
+    for e in evs:
+        for m in e.get("markets") or []:
+            if not isinstance(m, dict) or m.get("closed") or not bot.is_sports(m):
+                continue
+            smt = str(m.get("sportsMarketType") or "").lower()
+            q = str(m.get("question") or "")
+            if not (("moneyline" in smt or smt == "h2h") and "draw" in q.lower()) or "half" in q.lower():
+                continue
+            g = _gst(m)
+            if not g or not 0 < g - now < 48 * 3600:
+                continue
+            toks = bot.market_tokens(m)
+            if not toks:
+                continue
+            rows.append((g, q, m, toks[0], e.get("slug") or ""))
+    print(f"open soccer draw markets kicking off within 48h: {len(rows)}")
+    out = []
+
+    def one(r):
+        g, q, m, tok, slug = r
+        bk = bot.book(tok)
+        return r, bk
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(8) as ex:
+        res = list(ex.map(one, rows))
+    for (g, q, m, tok, slug), bk in res:
+        listed = f(bot.jlist(m.get("outcomePrices"))[0] if bot.jlist(m.get("outcomePrices")) else None)
+        if not bk or not bk["asks"]:
+            out.append({"q": q, "slug": slug, "h": (g - now) / 3600, "listed": listed, "ask": None})
+            continue
+        a0 = bk["asks"][0][0]
+        bid = bk["bids"][0][0] if bk["bids"] else 0.0
+        d = {"q": q, "slug": slug, "h": (g - now) / 3600, "listed": listed, "ask": a0, "bid": bid,
+             "v24": f(m.get("volume24hr")), "fee": bot.fee_rate(m)}
+        for extra in (0.0, 0.01, 0.02):
+            sh, cost = bot.fill_usd(bk["asks"], 1e9, a0 + extra)
+            d[f"usd{int(extra * 100)}"] = cost
+        for usd in (10, 25, 50, 100):
+            sh, cost = bot.fill_usd(bk["asks"], usd)
+            d[f"avg{usd}"] = cost / sh if sh and cost >= usd - 0.01 else None
+        out.append(d)
+    band = [d for d in out if d.get("ask") and 0.15 <= d["ask"] < 0.50]
+    print(f"with a real ask: {sum(1 for d in out if d.get('ask'))}; ask 15-50c (the test band): {len(band)}")
+    if band:
+        md = statistics.median
+        print(f"median gap best ask minus listed price: {100 * md([d['ask'] - d['listed'] for d in band]):+.1f}c; "
+              f"median spread {100 * md([d['ask'] - d['bid'] for d in band]):.1f}c")
+        for k, lab in (("usd0", "at the best ask"), ("usd1", "within +1c"), ("usd2", "within +2c")):
+            v = sorted(d[k] for d in band)
+            print(f"money on sale {lab}: median ${md(v):,.0f}, quarter of games under ${v[len(v) // 4]:,.0f}")
+        for usd in (10, 25, 50, 100):
+            ok = [d for d in band if d[f"avg{usd}"] is not None]
+            if ok:
+                print(f"${usd}: fits in {len(ok)} of {len(band)}; avg price over best ask, median "
+                      f"{100 * md([d[f'avg{usd}'] - d['ask'] for d in ok]):+.2f}c")
+            else:
+                print(f"${usd}: fits in 0 of {len(band)}")
+        sh25 = [d for d in band if d["usd1"] >= 25]
+        print(f"games where $25 fits within +1c of the best ask: {len(sh25)} of {len(band)}")
+    print("\nhours | listed | bid | ask | $ at ask | $ within +1c | $ within +2c | 24h traded | question")
+    for d in sorted(out, key=lambda d: d["h"])[:80]:
+        if not d.get("ask"):
+            print(f"{d['h']:5.1f} | {100 * (d['listed'] or 0):.1f}c | no asks | {d['q'][:60]}")
+            continue
+        print(f"{d['h']:5.1f} | {100 * d['listed']:.1f}c | {100 * d['bid']:.1f}c | {100 * d['ask']:.1f}c | ${d['usd0']:,.0f} | "
+              f"${d['usd1']:,.0f} | ${d['usd2']:,.0f} | ${d['v24']:,.0f} | {d['q'][:60]}")
+
+
+
 # ================================================================ selftest
 
 def selftest():
@@ -884,4 +960,4 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "live"
-    {"live": live, "history": history, "selftest": selftest, "updown": updown_live, "updownhist": updown_hist, "updowntape": updown_tape}[cmd]()
+    {"live": live, "history": history, "selftest": selftest, "updown": updown_live, "updownhist": updown_hist, "updowntape": updown_tape, "drawdepth": draw_depth}[cmd]()
