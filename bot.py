@@ -98,6 +98,51 @@ def jlist(x):
     return []
 
 
+# Run stats (2026-11-10, Jan asked "can this overload GitHub?"): count every web request per site and time each
+# watch step, so the log and state/run_stats.json show real numbers. Records only; changes no trading.
+import threading
+REQS = Counter()
+_REQS_LOCK = threading.Lock()
+_real_urlopen = urllib.request.urlopen
+
+
+def _counting_urlopen(req, *a, **k):
+    url = getattr(req, "full_url", None) or str(req)
+    with _REQS_LOCK:
+        REQS[urllib.parse.urlsplit(url).hostname or "?"] += 1
+    return _real_urlopen(req, *a, **k)
+
+
+urllib.request.urlopen = _counting_urlopen  # also counts sharp.py / econ.py, which call urlopen themselves
+STEP_SECS = {}
+RUN_T0 = time.time()
+
+
+class timed:
+    """with timed("name"): ... adds the seconds spent to STEP_SECS[name]."""
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        self.t = time.time()
+
+    def __exit__(self, *exc):
+        STEP_SECS[self.name] = STEP_SECS.get(self.name, 0.0) + time.time() - self.t
+        return False
+
+
+def save_run_stats(kind):
+    """One line in the log plus the last 300 runs in state/run_stats.json."""
+    secs = round(time.time() - RUN_T0, 1)
+    steps = {k: round(v, 1) for k, v in sorted(STEP_SECS.items(), key=lambda kv: -kv[1])}
+    row = {"at": iso(), "kind": kind, "seconds": secs, "requests": sum(REQS.values()),
+           "by_site": dict(REQS.most_common()), "steps": steps}
+    print(f"run stats: {secs}s, {row['requests']} web requests {row['by_site']}, slowest steps {dict(list(steps.items())[:6])}")
+    hist = load("run_stats.json", {"runs": []})
+    hist["runs"] = (hist.get("runs", []) + [row])[-300:]
+    save("run_stats.json", hist)
+
+
 def http_json(url, params=None, retries=3):
     if params:
         url += ("&" if "?" in url else "?") + urllib.parse.urlencode(params, doseq=True)
@@ -4803,49 +4848,61 @@ def run_copy_tracks(tracks):
 
 
 def watch():
-    tracks = load_tracks()
+    with timed("load"):
+        tracks = load_tracks()
     try:
-        follow_leader(tracks)
+        with timed("follow_leader"):
+            follow_leader(tracks)
     except Exception as e:
         print(f"leader check failed: {e}")
-    run_copy_tracks(tracks)
+    with timed("wallet_copies"):
+        run_copy_tracks(tracks)
     lab_due = lab_exits_due()
-    manage_exits(tracks, lab=lab_due)  # also pays out resolved endgame positions
+    with timed("exits" + ("_lab" if lab_due else "")):
+        manage_exits(tracks, lab=lab_due)  # also pays out resolved endgame positions
     if lab_due:
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
     for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle):
         try:
-            step(tracks)
+            with timed(step.__name__):
+                step(tracks)
         except Exception as e:
             print(f"{step.__name__} failed: {e}")
     if panic_scan_due():
-        markets = scan_markets()
-        if markets:
-            run_strategies(tracks, markets, panic_only=True)
+        with timed("panic_scan"):
+            markets = scan_markets()
+            if markets:
+                run_strategies(tracks, markets, panic_only=True)
         try:
-            fullset_check(tracks)
+            with timed("fullset_check"):
+                fullset_check(tracks)
         except Exception as e:
             print(f"fullset_check failed: {e}")
         st = load("scan_state.json", {})
         st["last_panic_scan"] = iso()
         save("scan_state.json", st)
     try:
-        late_fill_check(tracks)
+        with timed("late_fill_check"):
+            late_fill_check(tracks)
     except Exception as e:
         print(f"late fill check failed: {e}")
-    integrity_run(tracks)
-    stamp_status(tracks)
-    save("tracks.json", tracks)
+    with timed("integrity_and_save"):
+        integrity_run(tracks)
+        stamp_status(tracks)
+        save("tracks.json", tracks)
     try:
-        refresh_top(tracks)
+        with timed("refresh_top"):
+            refresh_top(tracks)
     except Exception as e:
         print(f"top list refresh failed: {e}")
     # GitHub's scheduler sometimes skips the daily run entirely; catch up from here.
     if now().hour >= 5 and load("scan_state.json", {}).get("last_daily") != today_utc():
         print("daily job hasn't run today (GitHub skipped it?); catching up now")
-        daily(force=False)
+        with timed("daily_catch_up"):
+            daily(force=False)
+    save_run_stats("watch")
 
 
 def settle_resolved(tracks):
@@ -4900,6 +4957,8 @@ def daily(force=None):
     st["last_daily"] = today_utc()
     save("scan_state.json", st)
     push_scoreboard(write_summary(tracks))
+    if sys.argv[1:2] == ["daily"]:
+        save_run_stats("daily")
 
 
 def mark(pos, tok):
