@@ -3332,3 +3332,7 @@
 {"filled": 10.0, "pnl": 0.53, "price": 0.947, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV092300-00", "track": "kc_maker_early", "ts": "2026-11-10T04:02:34Z", "type": "kmaker_fill"}
 {"minutes_left": 7.79, "price": 0.948, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV092315-15", "track": "kc_maker_early", "ts": "2026-11-10T04:07:13Z", "type": "kmaker_order"}
 {"minutes_left": 7.79, "price": 0.952, "queue": 10.53, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV092315-15", "track": "kc_maker_early", "ts": "2026-11-10T04:07:15Z", "type": "kmaker_order"}
+{"outcome": "Rockets", "pnl": 1.7917, "price": 1.0, "reason": "resolved", "title": "Nuggets vs. Rockets", "token": "110064005408310059453252375085215074361164748331910370751580048394847117555392", "track": "sharp_pinnacle", "ts": "2026-11-10T04:10:32Z", "type": "paper_close"}
+{"pnl": -5.2017, "price": 0.7407, "reason": "stop loss: sold 100 YES at 74.1c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_tpsl", "ts": "2026-11-10T04:11:16Z", "type": "maker_exit"}
+{"pnl": -2.8169, "price": 0.7413, "reason": "flatten: sold 50 YES at 74.1c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T04:11:16Z", "type": "maker_exit"}
+{"minutes_left": 3.72, "price": 0.977, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV092315-15", "track": "kc_maker", "ts": "2026-11-10T04:11:17Z", "type": "kmaker_order"}
