@@ -346,6 +346,379 @@ def fetch():
     print(f"kalshi done ({time.time() - t0:.0f}s)")
 
 
+# ================================================================ test
+
+import math     # noqa: E402
+import random   # noqa: E402
+
+HOURS = (3, 12, 24, 48, 96)
+THRESH = (0.03, 0.05, 0.10)
+GRID = [round(20 + i * 0.1, 1) for i in range(500)]   # 20.0 .. 69.9
+
+
+def settle_value(ms, step=0.1):
+    """The reported number that reproduces every strike result of one event (None if none or ambiguous range > 1)."""
+    ok = [v for v in GRID if all(econ.sat(v, m) in (None, m["res"] == "yes") for m in ms)
+          and any(econ.sat(v, m) is not None for m in ms)]
+    if not ok or ok[-1] - ok[0] > 1.0001:
+        return None
+    return round((ok[0] + ok[-1]) / 2, 2), round(ok[-1] - ok[0], 2)
+
+
+POLY_RX = (("between", re.compile(r"between (\d+(?:\.\d+)?) and (\d+(?:\.\d+)?)", re.I)),
+           ("less", re.compile(r"(?:less than|below) (\d+(?:\.\d+)?)", re.I)),
+           ("greater_or_equal", re.compile(r"(?:at least|or (?:more|higher)) (\d+(?:\.\d+)?)", re.I)),
+           ("greater_or_equal", re.compile(r"(\d+(?:\.\d+)?)%? or (?:more|higher|above)", re.I)))
+
+
+def poly_strike(q):
+    for st, rx in POLY_RX:
+        mt = rx.search(q)
+        if mt:
+            if st == "between":
+                return {"st": "between", "lo": float(mt.group(1)), "hi": float(mt.group(2))}
+            if st == "less":
+                return {"st": "less", "lo": None, "hi": float(mt.group(1))}
+            return {"st": st, "lo": float(mt.group(1)), "hi": None}
+    return None
+
+
+def poly_source(rules):
+    r = (rules or "").lower()
+    if "silver bulletin" in r:
+        return "silver"
+    if "realclear" in r:
+        return "rcp"
+    if "votehub" in r:
+        return "votehub"
+    return "?"
+
+
+def sb_series(src):
+    """Silver Bulletin daily approve average from the Datawrapper datasets: {date: value}."""
+    best = {}
+    for k, txt in src.items():
+        if not k.startswith("dw_"):
+            continue
+        lines = [ln for ln in txt.splitlines() if ln.strip()]
+        if not lines:
+            continue
+        sep = "\t" if "\t" in lines[0] else ","
+        head = [h.strip().lower() for h in lines[0].split(sep)]
+        if "modeldate" not in head or "approve" not in head:
+            continue
+        di, ai = head.index("modeldate"), head.index("approve")
+        gi = head.index("group") if "group" in head else None
+        ser = {}
+        for ln in lines[1:]:
+            c = ln.split(sep)
+            if gi is not None and c[gi].strip().lower() not in ("all", "all polls"):
+                continue
+            try:
+                mo, da, yr = [int(x) for x in c[di].strip().split("/")]
+                yr += 2000 if yr < 100 else 0
+                ser[dt.date(yr, mo, da).isoformat()] = float(c[ai])
+            except Exception:
+                continue
+        if len(ser) > len(best):
+            best = ser
+            print(f"  Silver Bulletin daily series from {k}: {len(ser)} days, {min(ser)} to {max(ser)}")
+    return best
+
+
+class Families:
+    """Every event we can test: settle source, close time, strike markets with results and hourly quotes."""
+
+    def __init__(self):
+        self.events = []      # {"fam", "src", "e", "close", "value", "markets": [m...]}
+        self.known = defaultdict(dict)   # src -> {known_from_ts: value}
+        src = pload("sources") or {}
+        kmk, kcd = pload("kmarkets") or {}, pload("kcandles") or {}
+        self.checks = []
+        for s, ms in kmk.items():
+            source = KSERIES.get(s, ("?", 0.1))[0]
+            by = defaultdict(list)
+            for m in ms:
+                by[m["e"]].append(m)
+            ok = bad = 0
+            for e, group in by.items():
+                sv = settle_value(group)
+                if sv is None:
+                    bad += 1
+                    continue
+                ok += 1
+                close = max(m["close"] for m in group)
+                for m in group:
+                    m["quotes"] = kcd.get(m["t"]) or []
+                    m["venue"] = "kalshi"
+                self.events.append({"fam": s, "src": source, "e": e, "close": close, "value": sv[0], "width": sv[1],
+                                    "markets": group})
+                if sv[1] <= 0.2001:
+                    self.known[source][close] = sv[0]
+            self.checks.append(f"{s} ({source}): {ok} events with one settle value, {bad} without (dropped)")
+        sb = sb_series(src)
+        for d, v in sb.items():   # a day's value counts as known at 12:00 UTC the next day (cautious)
+            t = int(dt.datetime.fromisoformat(d).replace(tzinfo=UTC).timestamp()) + DAY + 12 * 3600
+            self.known["silver"][t] = v
+        pev, ph = pload("pevents") or {}, pload("phist") or {}
+        pok = pbad = 0
+        for slug, ev in pev.items():
+            if not ev or not ev["markets"]:
+                continue
+            group = []
+            for m in ev["markets"]:
+                sk = poly_strike(m["q"])
+                if not sk or not m.get("final") or m["final"][0] is None or not m.get("closed") or (m.get("end") or 0) >= HOLDOUT_TS:
+                    continue
+                if m["final"][0] not in (0.0, 1.0) and not (m["final"][0] > 0.98 or m["final"][0] < 0.02):
+                    continue
+                q = dict(m, **sk, res="yes" if m["final"][0] > 0.5 else "no", sub="", venue="poly",
+                         hist=ph.get(m["id"]) or [], close=m["end"])
+                group.append(q)
+            if not group:
+                continue
+            source = poly_source(group[0].get("rules"))
+            sv = settle_value(group)
+            if sv is None:
+                pbad += 1
+                continue
+            pok += 1
+            self.events.append({"fam": "poly_" + source, "src": source, "e": slug, "close": max(m["close"] for m in group),
+                                "value": sv[0], "width": sv[1], "markets": group})
+        self.checks.append(f"Polymarket: {pok} events with one settle value, {pbad} without")
+        # Silver Bulletin cross-check: does the chart's value for the day match the Polymarket result?
+        agree = dis = 0
+        for ev in self.events:
+            if ev["src"] != "silver" or ev["fam"] == "KXSILVERAPPROVE":
+                continue
+            mt = re.search(r"on-([a-z]+)-(\d+)", ev["e"])
+            if not mt or mt.group(1) not in MONTHS:
+                continue
+            d = dt.datetime.fromtimestamp(ev["close"] - 12 * 3600, UTC).date()
+            v = sb.get(d.isoformat())
+            if v is None:
+                continue
+            if abs(round(v, 1) - ev["value"]) <= ev["width"] / 2 + 0.051:
+                agree += 1
+            else:
+                dis += 1
+        self.checks.append(f"Silver Bulletin chart vs Polymarket results: {agree} agree, {dis} disagree")
+        for k in self.known:
+            self.known[k] = dict(sorted(self.known[k].items()))
+        self.ktimes = {k: list(v) for k, v in self.known.items()}
+
+    def last_known(self, src, t, lag=0):
+        ts_ = self.ktimes.get(src) or []
+        import bisect
+        i = bisect.bisect_right(ts_, t - lag) - 1
+        if i < 0:
+            return None
+        return ts_[i], self.known[src][ts_[i]]
+
+    def changes(self, src, t, gap_days):
+        """Past changes of the settle number over about gap_days, using only pairs finished before t."""
+        ts_ = [x for x in self.ktimes.get(src) or [] if x < t]
+        vals = self.known[src]
+        out = []
+        j = 0
+        for i, a in enumerate(ts_):
+            target = a + gap_days * DAY
+            while j < len(ts_) and ts_[j] < target - 0.5 * DAY:
+                j += 1
+            if j < len(ts_) and abs(ts_[j] - target) <= 0.5 * DAY:
+                out.append(round(vals[ts_[j]] - vals[a], 2))
+        return out
+
+
+def model_p(fams, ev, m, t, placebo_shift=0):
+    """Chance the market settles YES, from the last known value + past changes over the same gap."""
+    lk = fams.last_known(ev["src"], t - placebo_shift)
+    if not lk:
+        return None
+    t0, v0 = lk
+    gap = (ev["close"] - (t0 + placebo_shift)) / DAY
+    if gap < 0.3 or gap > 12:
+        return None
+    ch = fams.changes(ev["src"], t, max(1, round(gap)))
+    if len(ch) < 20:
+        return None
+    sd = max(0.15, (sum(c * c for c in ch) / len(ch)) ** 0.5)
+    pe = sum(1 for c in ch if econ.sat(round(v0 + c, 1), m)) / len(ch)
+    pn = econ.prob(v0, sd, 0.1, m)
+    return 0.8 * pe + 0.2 * pn, v0, gap
+
+
+def quote_at(m, t):
+    if m["venue"] == "kalshi":
+        return econ.quote(m["quotes"], t)
+    h = [x for x in m["hist"] if x[0] is not None and x[1] is not None and t - 6 * 3600 <= x[0] <= t]
+    if not h:
+        return None
+    p = h[-1][1]
+    if not 0.01 <= p <= 0.99:
+        return None
+    return p - 0.02, p + 0.02   # Polymarket history is a price, not a book: buy 2c worse (PROTOCOL.md)
+
+
+def fee(m, price):
+    if m["venue"] == "kalshi":
+        return econ.kfee(price)
+    return (m.get("fee") or 0) * price * (1 - price)
+
+
+def build(fams, placebo_shift=0):
+    pts = []
+    for ev in fams.events:
+        if ev["close"] >= HOLDOUT_TS:
+            continue
+        for m in ev["markets"]:
+            if m.get("res") not in ("yes", "no"):
+                continue
+            for h in HOURS:
+                t = ev["close"] - h * 3600
+                q = quote_at(m, t)
+                if not q:
+                    continue
+                r = model_p(fams, ev, m, t, placebo_shift)
+                if not r:
+                    continue
+                pts.append({"fam": ev["fam"], "src": ev["src"], "e": ev["e"], "close": ev["close"], "h": h, "p": r[0],
+                            "v0": r[1], "gap": r[2], "value": ev["value"], "bid": q[0], "ask": q[1], "venue": m["venue"],
+                            "fee": m.get("fee") or 0, "y": 1 if m["res"] == "yes" else 0, "t": m.get("t") or m.get("id")})
+    return pts
+
+
+def pick(pts, thr, slip=0.0, one_per_event=True):
+    """Bet the side the model likes when it's worth thr more than the price + fee. One bet per event and horizon
+    (the biggest gap), so 15 strikes of one day count once."""
+    cand = []
+    for r in pts:
+        m = {"venue": r["venue"], "fee": r["fee"]}
+        cy, cn = r["ask"] + slip, 1 - r["bid"] + slip
+        if not (0 < cy < 1 and 0 < cn < 1):
+            continue
+        ey = r["p"] - cy - fee(m, cy)
+        en = (1 - r["p"]) - cn - fee(m, cn)
+        side, cost, edge = (1, cy + fee(m, cy), ey) if ey >= en else (0, cn + fee(m, cn), en)
+        if edge < thr:
+            continue
+        twin = 0.5 * ((r["y"] - cy - fee(m, cy)) + ((1 - r["y"]) - cn - fee(m, cn)))
+        cand.append(dict(r, side=side, cost=cost, edge=edge, won=r["y"] == side, pnl=(1.0 if r["y"] == side else 0.0) - cost,
+                         twin_pnl=twin, twin_cost=0.5 * (cy + fee(m, cy) + cn + fee(m, cn))))
+    if not one_per_event:
+        return cand
+    best = {}
+    for b in cand:
+        k = (b["e"], b["h"])
+        if k not in best or b["edge"] > best[k]["edge"]:
+            best[k] = b
+    return list(best.values())
+
+
+def run():
+    fams = Families()
+    pts = build(fams)
+    placebo = build(fams, placebo_shift=21 * DAY)
+    L = ["# Poll averages vs approval and generic-ballot markets (polls.py)", "",
+         f"Written by `python3 polls.py run` on {dt.date.today().isoformat()}. Markets that closed before 2026-11-10 only "
+         "(PROTOCOL.md holdout).", "",
+         "Model: the poll average the market settles on (RealClearPolitics, Silver Bulletin or VoteHub) can only move "
+         "so far in a few days. We take its last value a bot could have known (the previous settled market's number, "
+         "or Silver Bulletin's chart for the day before, counted as known at 12:00 UTC the next day) and spread it by "
+         "how much it moved over the same number of days in the past (only past data). That gives a chance for every strike.", "",
+         "Bets: Kalshi at the real hourly ask (YES) or 1 minus the bid (NO) plus the taker fee; Polymarket at the "
+         "history price + 2c + fee. One bet per event and time (the strike with the biggest gap), held to the result. "
+         "'Coin-flip side' = same markets, random side: what costs alone do. 'Wrong dates' = the model is given the "
+         "average from 3 weeks earlier: a real edge must vanish there.", "", "## Data checks", ""]
+    L += [f"- {c}" for c in fams.checks]
+    L += [f"- known values: " + ", ".join(f"{k} {len(v)}" for k, v in fams.known.items())]
+    L += [f"- strike x time rows: {len(pts)} (wrong-dates: {len(placebo)})", ""]
+    L += ["## Who guesses better? (lower is better; every strike row)", "",
+          "| Family | Hours before | Rows | Model score | Market score |", "|---|---|---|---|---|"]
+    fam_names = sorted({r["fam"] for r in pts})
+    for f in fam_names:
+        for h in HOURS:
+            sub = [r for r in pts if r["fam"] == f and r["h"] == h]
+            if len(sub) < 20:
+                continue
+            bm = sum((r["p"] - r["y"]) ** 2 for r in sub) / len(sub)
+            bk = sum(((r["bid"] + r["ask"]) / 2 - r["y"]) ** 2 for r in sub) / len(sub)
+            L.append(f"| {f} | {h} | {len(sub)} | {bm:.4f} | {bk:.4f} |")
+    L += ["", "## Betting the model (all families together)", ""]
+    for h in HOURS:
+        L.append(f"### {h} hours before the close")
+        for thr in THRESH:
+            bs = pick([r for r in pts if r["h"] == h], thr)
+            L.append(f"- model beats price by {int(thr * 100)}c+: {econ.line(bs)}")
+            if bs:
+                L.append(f"  - {econ.halves(bs)}; 1c worse prices {econ.money(econ.per100(pick([r for r in pts if r['h'] == h], thr, 0.01)))} per $100")
+                L.append(f"  - wrong dates: {econ.line(pick([r for r in placebo if r['h'] == h], thr))}")
+        L.append("")
+    L += ["## By family (5c+ gap)", ""]
+    for f in fam_names:
+        for h in HOURS:
+            bs = pick([r for r in pts if r["fam"] == f and r["h"] == h], 0.05)
+            if bs:
+                L.append(f"- {f}, {h}h: {econ.line(bs)}; {econ.halves(bs)}")
+    L += ["", "## By price paid (all hours, 5c+ gap)", ""]
+    allb = pick(pts, 0.05)
+    for lo, hi in ((0, 0.2), (0.2, 0.5), (0.5, 0.8), (0.8, 1.01)):
+        bs = [b for b in allb if lo <= b["cost"] < hi]
+        L.append(f"- paid {int(lo * 100)}-{min(100, int(hi * 100))}c: {econ.line(bs)}")
+    txt = "\n".join(L) + "\n"
+    os.makedirs(bt.OUT, exist_ok=True)
+    with open(os.path.join(bt.OUT, "polls.md"), "w") as f:
+        f.write(txt)
+    print(txt)
+    rng = random.Random(1)
+    print("\n== sample rows")
+    for r in rng.sample(pts, min(20, len(pts))):
+        print({k: (round(v, 3) if isinstance(v, float) else v) for k, v in r.items()})
+
+
+def selftest():
+    """Offline: in a fake world where the market price is the true chance, betting the model must lose about the
+    costs (no fake edge). In a world where the market ignores the average entirely, the model must win."""
+    import tempfile
+    global PCACHE
+    old = PCACHE
+    steps = [-0.3, -0.2, -0.1, 0.1, 0.2, 0.3]
+    for world in ("fair", "blind"):
+        PCACHE = tempfile.mkdtemp()
+        rng = random.Random(5)
+        v, t0 = 42.0, 1767225600
+        km, kc = [], {}
+        for d in range(300):
+            close = t0 + d * DAY + 18 * 3600
+            prev = v
+            if rng.random() < 0.4:
+                v = round(v + rng.choice(steps), 1)
+            e = f"FAKE-{d}"
+            for k in range(-4, 5):
+                x = round(prev + k * 0.1 + 0.05, 2)
+                m = {"t": f"{e}-{k}", "e": e, "s": "KXTRUMPAPPROVE", "close": close, "st": "greater", "lo": x, "hi": None,
+                     "sub": "", "res": "yes" if v > x else "no", "vol": 1, "rules": ""}
+                km.append(m)
+                true = 0.6 * (prev > x) + 0.4 * sum(1 for c in steps if prev + c > x) / len(steps)
+                p = true if world == "fair" else 0.5
+                p = min(0.97, max(0.03, p))
+                kc[m["t"]] = [[close - h * 3600, round(p - 0.01, 3), round(p + 0.01, 3), 1] for h in range(0, 100, 3)]
+        psave("kmarkets", {"KXTRUMPAPPROVE": km})
+        psave("kcandles", kc)
+        for n in ("sources", "pevents", "phist"):
+            psave(n, {})
+        pts = build(Families())
+        bs = pick([r for r in pts if r["h"] == 12], 0.03)
+        r = econ.per100(bs) if bs else 0.0
+        print(f"  {world} world: {len(bs)} bets, {econ.money(r)} per $100; costs alone {econ.money(econ.per100(bs, 'twin_pnl', 'twin_cost')) if bs else 0}")
+        if world == "fair":
+            assert len(bs) < 30 or r < 3, "fake edge in a fair world"
+        else:
+            assert bs and r > 10, "model can't beat a blind market"
+    PCACHE = old
+    print("selftest OK")
+
+
 def reach():
     reach_markets()
     reach_kalshi()
@@ -354,4 +727,4 @@ def reach():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "reach"
-    {"reach": reach, "fetch": fetch}[cmd]()
+    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "all": lambda: (fetch(), run())}[cmd]()
