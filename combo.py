@@ -63,17 +63,19 @@ def need_sklearn():
 
 
 # ================================================================ rows
-def build(markets, hist):
-    """One row per market per noon it was open with a fresh price. Returns dict of numpy arrays + lists."""
+def build(markets, hist, cut=CUT, grid=None):
+    """One row per market per noon it was open with a fresh price. Returns dict of numpy arrays + lists.
+    cut = only markets ending before it (the holdout day by default); grid = the noons (default: the in-sample ones)."""
     import numpy as np
     import calib
-    G = np.array(GRID, dtype=np.int64)
+    grid = GRID if grid is None else grid
+    G = np.array(grid, dtype=np.int64)
     kinds = {}
     per = []                      # (mid, mk, yi, pay_yes, kind id, idx array, p_now, pv_all)
     ev_sum, ev_cnt, ev_max = {}, {}, {}
     skipped = collections.Counter()
     for mid, mk in markets.items():
-        if not mk.get("end") or mk["end"] >= CUT:
+        if not mk.get("end") or mk["end"] >= cut:
             skipped["ends in holdout"] += 1
             continue
         yi = yesno.poly_side_index(mk)
@@ -108,7 +110,7 @@ def build(markets, hist):
         per.append((mid, mk, yi, float(y0 if yi == 0 else 1 - y0), kid, live, pv, ev))
     print(f"combo: {len(per):,} markets usable, skipped {dict(skipped)} ({time.time() - T0:.0f}s)")
     X, y, t, mi, cost_meta = [], [], [], [], []
-    wd = np.array([dt.datetime.fromtimestamp(g, dt.timezone.utc).weekday() for g in GRID], dtype=np.float64)
+    wd = np.array([dt.datetime.fromtimestamp(g, dt.timezone.utc).weekday() for g in grid], dtype=np.float64)
     for j, (mid, mk, yi, pay, kid, live, pv, ev) in enumerate(per):
         idx = np.nonzero(live)[0]
         n = len(pv)
@@ -362,12 +364,60 @@ def run():
     print("\n".join(L))
 
 
+# ================================================================ the frozen test (registered 2026-11-10, Jan's OK)
+HOLD_GAP = 0.12            # the gap the tuning weeks picked. Frozen.
+HOLD_NAME = "combo_moving"
+
+
+def holdout_rows(data):
+    """(learn rows, judge rows, columns) for the frozen test. Learn: markets that ended before the holdout day.
+    Judge: noons from the holdout day on, markets ending on or after it, events never learned from. Both only
+    where the price moved since yesterday (0.2c or more)."""
+    import numpy as np
+    X, t, m, per = data["X"], data["t"], data["m"], data["per"]
+    end = np.array([p[1]["end"] for p in per])[m]
+    ev = np.array([p[7] for p in per], dtype=object)[m]
+    moving = ~np.isnan(X[:, 1]) & (np.abs(X[:, 0] - X[:, 1]) >= 0.002)
+    learn = np.nonzero((end < CUT) & moving)[0]
+    seen = set(ev[learn].tolist())
+    judge = np.nonzero((end >= CUT) & (t >= CUT) & moving & np.array([e not in seen for e in ev.tolist()]))[0]
+    return learn, judge, [i for i in range(len(FEATS)) if i != CLOCK], ev
+
+
+def holdout(fills=None, now=None):
+    """Score the frozen model ONCE, on or after 2026-12-21 (backtest/PROTOCOL.md 5). Needs the cache to hold markets
+    that ended 2026-11-10 or later (a fresh `btfetch` + `btideasfetch`). Prints the exam's card; commit the log."""
+    need_sklearn()
+    import ideas
+    import exam
+    now = now or time.time()
+    grid = list(range(T_START, int(now), DAY))
+    markets, hist, _ = ideas.load_full()
+    data = build(markets, hist, cut=float("inf"), grid=grid)
+    learn, judge, cols, ev = holdout_rows(data)
+    print(f"combo holdout: learn {len(learn):,} rows, judge {len(judge):,} rows")
+    if len(judge) < 100:
+        print("combo holdout: not enough judged rows yet (fetch markets ending 2026-11-10 or later first)")
+        return None
+    mf = fit(data["X"][learn], data["y"][learn], ev[learn], cols)
+    q = mf.predict_proba(data["X"][judge][:, cols])[:, 1]
+    bets = make_bets(data, judge, q, HOLD_GAP)
+    info = {}
+    real = (fills or exam.fills)([b["sig"] for b in bets], info=info)
+    print(f"combo holdout: {len(bets):,} bets wanted, {len(real):,} had a real buy within 3 hours")
+    card = exam.score(real, "Everything-together model, moving prices only (frozen 10 Nov)", tries=1, prereg=True,
+                      src="combo.py holdout, backtest/PROTOCOL.md 5", log=False)
+    ok = card.get("per100") is not None and card["per100"] > 0 and (card.get("lo100") or -99) > -5
+    print(f"combo holdout: {'PASS' if ok else 'FAIL'} (bar: ahead, and luck-range low end above -$5 per $100)")
+    return card
+
+
 # ================================================================ selftest
-def fake_world(planted, n=5000, seed=1):
+def fake_world(planted, n=5000, seed=1, last=None):
     rng = random.Random(seed)
     markets, hist = {}, {}
     for k in range(n):
-        end = rng.randrange(T_START + 20 * DAY, CUT - DAY)
+        end = rng.randrange(T_START + 20 * DAY, (last or CUT) - DAY)
         start = end - rng.randrange(8, 40) * DAY
         p = rng.uniform(0.08, 0.92)
         sports = planted and k % 4 == 0
@@ -404,4 +454,4 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
-    {"selftest": selftest, "run": run}[cmd]()
+    {"selftest": selftest, "run": run, "holdout": holdout}[cmd]()

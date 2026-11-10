@@ -1121,4 +1121,5 @@ if __name__ == "__main__":
      "btyesno": lambda: (__import__("yesno").fetch_kalshi(), __import__("yesno").run()),
      "btyesnorun": lambda: __import__("yesno").run(),
      "btyesnogrid": lambda: __import__("yesno").grid(),
-     "btcombo": lambda: __import__("combo").run()}[cmd]()
+     "btcombo": lambda: __import__("combo").run(),
+     "btcomboholdout": lambda: __import__("combo").holdout()}[cmd]()
