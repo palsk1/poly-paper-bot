@@ -539,6 +539,54 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "xvenue.py"
+  },
+  {
+   "id": "winner_wallets",
+   "date": "2026-11-10",
+   "what": "Learn from wallets that really win (2,742 wallets through the exam)",
+   "tries": 2742,
+   "bets": 523408,
+   "groups": 2559,
+   "per100": "32 in 1,000 look good, luck gives 28; first-half picks lost $5 later",
+   "verdict": "Losing",
+   "status": "dropped (steady winners don't show)",
+   "src": "winners.py, backtest/winners.md, PR #66"
+  },
+  {
+   "id": "kinds_of_bet_follower",
+   "date": "2026-11-10",
+   "what": "Which kinds of bet paid for anyone at a slow follower's real price (282 kinds)",
+   "tries": 282,
+   "bets": 300494,
+   "groups": 2559,
+   "per100": "Yes buyers -$8.10, No buyers +$0.28",
+   "verdict": "Ahead, but could be luck",
+   "status": "two leads below",
+   "src": "winners.py, backtest/winners.md, PR #66"
+  },
+  {
+   "id": "boring_no_long",
+   "date": "2026-11-10",
+   "what": "Buy No at 90-97c more than 30 days before the end (topic 'other'), as a rule",
+   "tries": 1,
+   "bets": 101,
+   "groups": 64,
+   "per100": 5.45,
+   "verdict": "Promising, needs more bets",
+   "status": "lead: needs a fresh-data test (not registered yet)",
+   "src": "winners.py drill, backtest/winners.md, PR #66"
+  },
+  {
+   "id": "crypto_no_70_90",
+   "date": "2026-11-10",
+   "what": "Crypto price markets: buy No at 70-90c, 3-7 days before the end, as a rule",
+   "tries": 1,
+   "bets": 116,
+   "groups": null,
+   "per100": 6.95,
+   "verdict": "Ahead, but could be luck",
+   "status": "lead: needs a fresh-data test (not registered yet)",
+   "src": "winners.py drill, backtest/winners.md, PR #66"
   }
  ]
 }

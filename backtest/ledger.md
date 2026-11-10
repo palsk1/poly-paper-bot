@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**45 ideas examined, in about 45,869 versions.** 28 dropped, 17 still being tested or waiting. **Looks real: 0.**
+**49 ideas examined, in about 48,895 versions.** 29 dropped, 20 still being tested or waiting. **Looks real: 0.**
 
-Why count: if you test 45 ideas that are all worthless, the luckiest one still looks good. With 45 tries, a result has to beat about 2.8 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 49 ideas that are all worthless, the luckiest one still looks good. With 49 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -45,13 +45,17 @@ Why count: if you test 45 ideas that are all worthless, the luckiest one still l
 | 2026-11-09 | Buy NO in 'will X say Y' markets | 8 | 52 | +$4.35 | Ahead, but could be luck | paper track running, holdout test 21 Dec | backtest/checks.md, PR #32 |
 | 2026-11-09 | Quiet week, buy NO at 50-75c (the idea machine's survivor) | 1 | 215 | +$0.32 | Ahead, but could be luck | paper track running (Jan's choice) | btcheck quiet, PR #48/#50 |
 | 2026-11-09 | Buy below the sharp bookmaker's fair price (Pinnacle, Betfair) | 3 | 1230 | -$0.04 | Losing | dropped (track left running) | backtest/sharp.md, PR #24 |
+| 2026-11-10 | Buy No at 90-97c more than 30 days before the end (topic 'other'), as a rule | 1 | 64 | +$5.45 | Promising, needs more bets | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
 | 2026-11-10 | Calendar effects and 'choices add up to' (6 pattern families) | 10,000 |  | 0 survivors | Losing | dropped | digs.py dig_ideas |
+| 2026-11-10 | Crypto price markets: buy No at 70-90c, 3-7 days before the end, as a rule | 1 |  | +$6.95 | Ahead, but could be luck | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
+| 2026-11-10 | Which kinds of bet paid for anyone at a slow follower's real price (282 kinds) | 282 | 2559 | Yes buyers -$8.10, No buyers +$0.28 | Ahead, but could be luck | two leads below | winners.py, backtest/winners.md, PR #66 |
 | 2026-11-10 | Brand-new markets, first hours | 150 |  | -$0.25 to +$4 at real prices | Losing | dropped | backtest/launch.md, PR #55 |
 | 2026-11-10 | Order book shapes (thick side, pulled orders, gaps) | 812 |  | about 1c, less than costs | Losing | dropped (one fixed recheck about 1 Dec) | obook.py, PR #61 |
 | 2026-11-10 | Poll averages vs approval markets | 10 |  | -$6 to -$46 on Kalshi | Losing | dropped | polls.py, PR #62 |
 | 2026-11-10 | Soccer full-time draws at 15-50c | 30 | 4538 | +$5.60 | Ahead, but could be luck | holdout test 21 Dec | backtest/census.md, digs_draws.md, PR #63/#65 |
 | 2026-11-10 | Sports totals and spreads long shots | 100 |  | gone at real prices | Losing | dropped | backtest/census.md, PR #63 |
 | 2026-11-10 | Daily stock and commodity 'Up or Down', cheap side | 20 |  | -$3.50 | Losing | dropped | backtest/census.md, PR #63 |
+| 2026-11-10 | Learn from wallets that really win (2,742 wallets through the exam) | 2,742 | 2559 | 32 in 1,000 look good, luck gives 28; first-half picks lost $5 later | Losing | dropped (steady winners don't show) | winners.py, backtest/winners.md, PR #66 |
 | 2026-11-10 | Kalshi vs Polymarket 15-minute crypto pairs | 5 |  | a pair costs about $1.05 | Losing | dropped | xvenue.py |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

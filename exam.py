@@ -302,7 +302,9 @@ def card_text(c):
                  f"would show about {usd(c['luck_show'])} per $100 on this many bets.")
         L.append(f"Worst case per $100 (one more disaster added, bar raised for all tries): {usd(c['floor100'])}. "
                  + ("Above $0: good." if c["floor100"] > 0 else "Below $0: not proven."))
-    if c["key"] in ("promising", "maybe", "early") and c.get("more") is not None:
+    if c["key"] in ("promising", "maybe", "early") and (c.get("more") or 0) > 100000:
+        L.append("To prove it: it would take more bets than anyone will ever make. The lead is too thin to prove.")
+    elif c["key"] in ("promising", "maybe", "early") and c.get("more") is not None:
         when = ""
         if c.get("eta"):
             when = (f" At its pace ({c['pace']:.1f} separate bets a day) that is around {c['eta']}"
