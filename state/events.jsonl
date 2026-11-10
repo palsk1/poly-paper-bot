@@ -4702,3 +4702,11 @@
 {"minutes_left": 7.55, "price": 0.929, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T20:52:28Z", "type": "kmaker_order"}
 {"minutes_left": 7.55, "price": 0.969, "queue": 354.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T20:52:28Z", "type": "kmaker_order"}
 {"minutes_left": 7.55, "price": 0.919, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T20:52:28Z", "type": "kmaker_order"}
+{"fee": 0.0025, "outcome": "Mena Warriors", "price": 0.99, "shares": 5, "title": "Dota 2: Rottweilas Latam vs Mena Warriors (BO3) - Esports Pro Circuit  Decider", "token": "34695751933676152392982400487893468694456412095664884805122679148428218756792", "track": "endgame", "ts": "2026-11-10T20:56:34Z", "type": "paper_buy"}
+{"pnl": -2.595, "price": 0.05, "reason": "stop loss: sold 50 NO at 5.0c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_tpsl", "ts": "2026-11-10T20:56:54Z", "type": "maker_exit"}
+{"minutes_left": 3.06, "price": 0.952, "queue": 2630.38, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV101600-00", "track": "kc_maker", "ts": "2026-11-10T20:56:56Z", "type": "kmaker_order"}
+{"minutes_left": 3.06, "price": 0.952, "queue": 2630.38, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV101600-00", "track": "kc_maker_safe", "ts": "2026-11-10T20:56:57Z", "type": "kmaker_order"}
+{"minutes_left": 3.06, "price": 0.957, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101600-00", "track": "kc_maker", "ts": "2026-11-10T20:56:57Z", "type": "kmaker_order"}
+{"minutes_left": 3.06, "price": 0.957, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101600-00", "track": "kc_maker_safe", "ts": "2026-11-10T20:56:58Z", "type": "kmaker_order"}
+{"minutes_left": 3.06, "price": 0.992, "queue": 37.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV101600-00", "track": "kc_maker", "ts": "2026-11-10T20:56:58Z", "type": "kmaker_order"}
+{"minutes_left": 3.06, "price": 0.992, "queue": 37.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV101600-00", "track": "kc_maker_safe", "ts": "2026-11-10T20:56:59Z", "type": "kmaker_order"}
