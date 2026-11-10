@@ -421,6 +421,46 @@ def placebo_rows(rows, salt):
     return out
 
 
+def btts():
+    """Cross-check of the Kalshi Argentina 'both teams to score' flag on Polymarket's own BTTS markets: YES and NO,
+    by league and hours before kickoff, chart +2c + fee, held."""
+    import census
+    ms, hist, rows, kinds = census.sports_rows()
+    rs = [r for r in rows if r["kind"] == "both teams score"]
+    print(f"both-teams-score rows {len(rs):,}")
+    L = ["# Both teams to score, Polymarket cross-check (digs.py btts)", "",
+         "Kalshi's Argentina 'both teams to score' YES at 25-50c, 1h before close, won 28 of 42 (+$53 per $100). Does the "
+         "same bet win on Polymarket? Chart price +2c + fee, held, in-sample games only.", "",
+         "| group | side | games | won | avg price | per $100 at +2c | 90% band |", "|---|---|---|---|---|---|---|"]
+    g = collections.defaultdict(list)
+    for r in rs:
+        for side in (0, 1):
+            p_ = r["p"] if side == 0 else 1 - r["p"]
+            y_ = r["y"] if side == 0 else 1 - r["y"]
+            if not 0.25 <= p_ < 0.75:
+                continue
+            for key in ("all", r["sport"]):
+                g[(key, r["h"], side)].append((r["ev"], p_, y_, r["fee"]))
+    for k in sorted(g, key=lambda k: (k[0] != "all", k[0] != "arg", k)):
+        it = g[k]
+        if len(it) < 30:
+            continue
+        items = []
+        for ev, p_, y_, fee in it:
+            c = min(0.99, p_ + 0.02)
+            f = bot.taker_fee(1, c, fee)
+            items.append((ev, y_ - c - f, c + f))
+        sc = cluster_score(items)
+        won = sum(1 for x in it if x[2] >= 0.5)
+        avg = sum(x[1] for x in it) / len(it)
+        L.append(f"| {k[0]} {k[1]} | {'YES' if k[2] == 0 else 'NO'} | {sc['events']} | {won} | {avg * 100:.0f}c | "
+                 f"{m100(sc['per100'])} | {m100(sc['lo'])} to {m100(sc['hi'])} |")
+    txt = "\n".join(L) + "\n"
+    os.makedirs("backtest", exist_ok=True)
+    open("backtest/digs_btts.md", "w").write(txt)
+    print(txt)
+
+
 def ksane():
     """Is the Kalshi census data clean? Score at the MIDDLE of bid and ask (no fee): a fair, clean market should be
     near $0 there. Split by bid-ask gap, by whether anyone traded in that hour, and by how old the quote is."""
@@ -646,5 +686,5 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
-    {"draws": draws, "kfetch": kfetch, "kfam": kfam, "ksane": ksane, "kall": lambda: (kfetch(), kfam()), "ideas": run_ideas,
+    {"draws": draws, "kfetch": kfetch, "kfam": kfam, "ksane": ksane, "btts": btts, "kall": lambda: (kfetch(), kfam()), "ideas": run_ideas,
      "selftest": selftest}[cmd]()
