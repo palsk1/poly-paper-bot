@@ -228,7 +228,7 @@ def score(bets, name, tries=1, prereg=False, src="", note="", status=None, log=T
         more = max(0, need - k, MIN_REAL - k)
         if pace:
             base = now or (dt.datetime.now(dt.timezone.utc).timestamp() if prereg else t1)
-            eta = base + more / pace * DAY
+            eta = base + min(more / pace, 36500) * DAY      # capped at 100 years: a date that far out just means "never"
     if k < MIN_GROUPS:
         key = "early"
     elif rate < 0:
@@ -602,6 +602,10 @@ def selftest():
     weak = power(world(60, 0.54, 0.5), 60, bar=bar_real, sims=40)
     print("8. pass chance (real / worthless): 3,000 bets", strong, "| 60 bets", weak)
     assert strong[0] >= 80 and strong[1] <= 10 and weak[0] <= 40, (strong, weak)
+    # 8b. a hopeless pace must not crash the date (found on real wallets: year 36759)
+    c = score([{"ev": i, "t": 1.76e9 + i, "cost": 10.0, "pay": 10.0001 if i else 9.0} for i in range(40)], "slow", tries=5000,
+              prereg=True, log=False, quiet=True)
+    assert c["eta"] is None or c["eta"] < "2200", c["eta"]
     # 9. the printed card runs for every verdict
     for bl in (world(5, 0.5, 0.5), world(200, 0.4, 0.5), world(200, 0.56, 0.5), world(3000, 0.54, 0.5), []):
         assert "Verdict:" in card_text(score(bl, "print check", prereg=True, log=False, quiet=True))
