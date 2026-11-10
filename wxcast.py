@@ -1085,7 +1085,50 @@ def run_all():
         run()
 
 
-MODES = {"scan": scan, "fetch": fetch, "run": run, "all": run_all}
+def drill():
+    """The one lead from `run` (Polymarket daily LOWS, +$11 per $100 but only in the newer half): is it one month,
+    one city, one side, and does it survive +5c? Found after looking at the table, so at best a lead for the holdout."""
+    tg = targets()
+    fcs = Forecasts()
+    rows, _ = build(tg, fcs)
+    rng = random.Random(7)
+    L = ["", "## Drill: Polymarket daily lows (found after looking, so a lead, not proof)", "", HDR]
+    for slip, nm in ((0.02, "+2c"), (0.05, "+5c")):
+        P = [r for r in points(tg, rows, slip_poly=slip) if r["pf"] == "poly" and r["kind"] == "low"]
+        bs = twins(choose(P, 0.05), P, rng)
+        L.append(row(f"lows, 5c+, listed price {nm}", bs))
+        if slip == 0.05:
+            continue
+        for side, sn in ((1, "YES (this bucket)"), (0, "NO (not this bucket)")):
+            L.append(row(f"lows, {sn} bets only", [b for b in bs if b["side"] == side]))
+        for lo, hi, cn in ((0.0, 0.25, "cost under 25c"), (0.25, 0.75, "cost 25-75c"), (0.75, 1.0, "cost over 75c")):
+            L.append(row(f"lows, {cn}", [b for b in bs if lo <= b["cost"] <= hi]))
+        for slot in SLOTS:
+            L.append(row(f"lows, {slot}", [b for b in bs if b["slot"] == slot]))
+        by = defaultdict(list)
+        for b in bs:
+            by[b["day"][:7]].append(b)
+        L += ["", "| Month | Bets | P&L per $100 |", "|---|---|---|"]
+        for m, x in sorted(by.items()):
+            L.append(f"| {m} | {len(x)} | {money(per100(x))} |")
+        by = defaultdict(list)
+        for b in bs:
+            by[b["st"]].append(b)
+        L += ["", "| Station | Bets | P&L per $100 |", "|---|---|---|"]
+        for sid, x in sorted(by.items(), key=lambda kv: -len(kv[1])):
+            L.append(f"| {sid} | {len(x)} | {money(per100(x))} |")
+        L += ["", HDR]
+    # the same cut on highs over the same months, as a check that it isn't just 'recent months were easy'
+    P = [r for r in points(tg, rows) if r["pf"] == "poly" and r["kind"] == "high"]
+    first_low = min((t["day"] for t in tg if t["pf"] == "poly" and t["kind"] == "low"), default=HOLDOUT_DAY)
+    P = [r for r in P if r["day"] >= first_low]
+    L.append(row(f"check: highs since the first lows market ({first_low}), 5c+", twins(choose(P, 0.05), P, rng)))
+    with open(os.path.join(OUT, "wxcast.md"), "a") as f:
+        f.write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
+MODES = {"scan": scan, "fetch": fetch, "run": run, "all": run_all, "drill": drill}
 
 if __name__ == "__main__":
     MODES[sys.argv[1] if len(sys.argv) > 1 else "scan"]()
