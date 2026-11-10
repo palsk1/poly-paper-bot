@@ -4678,3 +4678,8 @@
 {"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV101530-30", "track": "kc_maker_safe", "ts": "2026-11-10T20:31:47Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV101530-30", "track": "kc_maker_safe", "ts": "2026-11-10T20:31:47Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV101530-30", "track": "kc_maker_safe", "ts": "2026-11-10T20:31:47Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.482, "price": 1.0, "reason": "resolved", "title": "Will \"DMT\" be said during the first Joe Rogan Experience of the week of November 9?", "token": "111376767882584709634510572926867869457728595531858105660349665367551682334463", "track": "mention_no", "ts": "2026-11-10T20:35:30Z", "type": "paper_close"}
+{"minutes_left": 8.66, "price": 0.936, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV101545-45", "track": "kc_maker_early", "ts": "2026-11-10T20:36:20Z", "type": "kmaker_order"}
+{"minutes_left": 8.66, "price": 0.91, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV101545-45", "track": "kc_maker_early", "ts": "2026-11-10T20:36:21Z", "type": "kmaker_order"}
+{"minutes_left": 8.66, "price": 0.944, "queue": 100.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV101545-45", "track": "kc_maker_early", "ts": "2026-11-10T20:36:21Z", "type": "kmaker_order"}
+{"minutes_left": 8.66, "price": 0.955, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101545-45", "track": "kc_maker_early", "ts": "2026-11-10T20:36:21Z", "type": "kmaker_order"}
