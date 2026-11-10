@@ -336,6 +336,88 @@ def fetch_sources():
     psave("sources", out)
 
 
+def fetch_poly2():
+    """More Polymarket approval events (2025 and 2026 dates share slugs, so follow each event's series), condition ids,
+    and the full trade tape of every market (for the real-fill check)."""
+    evs = pload("pevents") or {}
+    found = [k for k, v in evs.items() if v]
+    series = {}
+    for slug in found[:80]:
+        e = gamma_event(slug) or {}
+        for sr in e.get("series") or []:
+            if isinstance(sr, dict) and sr.get("id"):
+                series[str(sr["id"])] = sr.get("slug") or sr.get("title")
+        cids = {str(m.get("id")): m.get("conditionId") for m in e.get("markets") or []}
+        for m in evs[slug]["markets"]:
+            m["cid"] = cids.get(m["id"]) or m.get("cid")
+    print(f"  series: {series}")
+    added = 0
+    for sid in series:
+        off = 0
+        while off < 3000:
+            try:
+                r = bot.http_json(G + "/events", {"series_id": sid, "limit": 100, "offset": off, "closed": "true"})
+            except Exception as ex:
+                print("   series page failed", ex)
+                break
+            rows = r if isinstance(r, list) else bot.envelope_rows(r, "events", "data")
+            if not rows:
+                break
+            for e in rows:
+                slug = e.get("slug")
+                if not slug or evs.get(slug):
+                    continue
+                ms = [bt.slim_market(m) for m in e.get("markets") or []]
+                for m, rm in zip(ms, e.get("markets") or []):
+                    m["rules"] = str(rm.get("description") or "")[:600]
+                    m["cid"] = rm.get("conditionId")
+                evs[slug] = {"slug": slug, "title": e.get("title"), "end": ms[0]["end"] if ms else None, "markets": ms}
+                added += 1
+            off += 100
+    print(f"  events added from series: {added}; total {sum(1 for v in evs.values() if v)}")
+    psave("pevents", evs)
+    ph = pload("phist") or {}
+    mlist = [m for v in evs.values() if v for m in v["markets"] if m["id"] not in ph and m.get("toks") and m.get("end")]
+
+    def one(m):
+        s_, e_ = m["end"] - 9 * DAY, min(m["closed_t"] or m["end"] + DAY, m["end"] + 2 * DAY)
+        try:
+            return m["id"], bt.hist_points(bot.http_json(f"{bt.C}/prices-history",
+                                                         {"market": m["toks"][0], "startTs": s_, "endTs": e_, "fidelity": 60}))
+        except Exception:
+            return m["id"], []
+    with ThreadPoolExecutor(8) as ex:
+        for mid, pts in ex.map(one, mlist):
+            ph[mid] = pts
+    psave("phist", ph)
+    tp = pload("ptapes") or {}
+    todo = [m for v in evs.values() if v for m in v["markets"] if m.get("cid") and m["id"] not in tp]
+    print(f"  trade tapes to fetch: {len(todo)}")
+    import informed
+
+    def tape_one(m):
+        try:
+            rows, more = informed.tape(m["cid"], 40)
+        except Exception:
+            return m["id"], None
+        out = []
+        for r in rows:
+            t = bot.fnum(bot.pick(r, "timestamp", "time"))
+            t = t / 1000 if t > 1e11 else t
+            oi = r.get("outcome_index")
+            if oi not in (0, 1):
+                tok = str(bot.pick(r, "token_id", "asset", default=""))
+                oi = 0 if tok == m["toks"][0] else 1 if tok == m["toks"][1] else None
+            if t and oi is not None:
+                out.append([int(t), oi, str(r.get("side") or "").upper()[:1], bot.fnum(r.get("price")), bot.fnum(r.get("size"))])
+        return m["id"], sorted(out)
+    with ThreadPoolExecutor(8) as ex:
+        for mid, rows in ex.map(tape_one, todo):
+            tp[mid] = rows
+    psave("ptapes", tp)
+    print(f"  tapes: {sum(1 for v in tp.values() if v)} markets with trades, {sum(len(v or []) for v in tp.values())} trades")
+
+
 def sb_parse(txt):
     lines = [ln for ln in (txt or "").splitlines() if ln.strip()]
     if not lines:
@@ -530,7 +612,7 @@ class Families:
         for d, v in use.items():   # a day's value counts as known at 12:00 UTC the next day (cautious)
             t = int(dt.datetime.fromisoformat(d).replace(tzinfo=UTC).timestamp()) + DAY + 12 * 3600
             self.known["silver"][t] = v
-        pev, ph = pload("pevents") or {}, pload("phist") or {}
+        pev, ph, tapes = pload("pevents") or {}, pload("phist") or {}, pload("ptapes") or {}
         pok = pbad = 0
         for slug, ev in pev.items():
             if not ev or not ev["markets"]:
@@ -543,7 +625,7 @@ class Families:
                 if m["final"][0] not in (0.0, 1.0) and not (m["final"][0] > 0.98 or m["final"][0] < 0.02):
                     continue
                 q = dict(m, **sk, res="yes" if m["final"][0] > 0.5 else "no", sub="", venue="poly",
-                         hist=ph.get(m["id"]) or [], close=m["end"])
+                         hist=ph.get(m["id"]) or [], close=m["end"], tape=tapes.get(m["id"]))
                 group.append(q)
             if not group:
                 continue
@@ -652,7 +734,7 @@ def build(fams, placebo_shift=0):
                 r = model_p(fams, ev, m, t, placebo_shift)
                 if not r:
                     continue
-                pts.append({"fam": ev["fam"], "src": ev["src"], "e": ev["e"], "close": ev["close"], "h": h, "p": r[0],
+                pts.append({"tape": m.get("tape"), "tt": t, "fam": ev["fam"], "src": ev["src"], "e": ev["e"], "close": ev["close"], "h": h, "p": r[0],
                             "v0": r[1], "gap": r[2], "value": ev["value"], "bid": q[0], "ask": q[1], "venue": m["venue"],
                             "fee": m.get("fee") or 0, "y": 1 if m["res"] == "yes" else 0, "t": m.get("t") or m.get("id")})
     return pts
@@ -683,6 +765,22 @@ def pick(pts, thr, slip=0.0, one_per_event=True):
         if k not in best or b["edge"] > best[k]["edge"]:
             best[k] = b
     return list(best.values())
+
+
+def real_fill(b, wait=2 * 3600):
+    """Polymarket only: the first real taker BUY of our side within 2 hours after the decision, at most 3c above the
+    price we assumed. Returns the bet re-priced at that trade, or None (no fill)."""
+    tape = b.get("tape")
+    if b["venue"] != "poly" or tape is None:
+        return None
+    oi = 0 if b["side"] == 1 else 1   # outcome 0 = Yes
+    m = {"venue": "poly", "fee": b["fee"]}
+    assumed = b["cost"] - fee(m, b["cost"])
+    for t, o, sd, px, sz in tape:
+        if b["tt"] < t <= b["tt"] + wait and o == oi and sd == "B" and px <= assumed + 0.03:
+            cost = px + fee(m, px)
+            return dict(b, cost=cost, pnl=(1.0 if b["won"] else 0.0) - cost, fill_px=px)
+    return None
 
 
 def run():
@@ -730,6 +828,13 @@ def run():
             bs = pick([r for r in pts if r["fam"] == f and r["h"] == h], 0.05)
             if bs:
                 L.append(f"- {f}, {h}h: {econ.line(bs)}; {econ.halves(bs)}")
+    L += ["", "## Polymarket real-fill check (5c+ gap): only bets where a real buyer paid near our price within 2 hours", ""]
+    for f in [x for x in fam_names if x.startswith("poly_")]:
+        for h in HOURS:
+            bs = pick([r for r in pts if r["fam"] == f and r["h"] == h], 0.05)
+            rf = [x for x in (real_fill(b) for b in bs) if x]
+            if bs:
+                L.append(f"- {f}, {h}h: {len(rf)} of {len(bs)} bets fill; filled: {econ.line(rf) if rf else 'none'}")
     L += ["", "## By price paid (all hours, 5c+ gap)", ""]
     allb = pick(pts, 0.05)
     for lo, hi in ((0, 0.2), (0.2, 0.5), (0.5, 0.8), (0.8, 1.01)):
@@ -831,4 +936,5 @@ def reach():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "reach"
-    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "drill": drill, "sbpit": lambda: (fetch_sbpit(), drill(), run()), "all": lambda: (fetch(), run())}[cmd]()
+    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "drill": drill, "sbpit": lambda: (fetch_sbpit(), drill(), run()),
+     "more": lambda: (fetch_poly2(), drill(), run()), "all": lambda: (fetch(), run())}[cmd]()
