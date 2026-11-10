@@ -445,15 +445,17 @@ def live(minutes=120, every=3):
     import recorder
     minutes, every = float(minutes), float(every)
     pool = ThreadPoolExecutor(4)
-    cur, cur_win = {}, None
+    cur, cur_win, last_try = {}, None, 0
 
     def refresh(start):
         out = {}
         for coin, (series, prefix) in PAIRS.items():
             try:
-                ks = [m for m in (kcrypto.get("/markets", {"series_ticker": series, "status": "open", "limit": 20}).get("markets") or [])
+                ks = [m for m in (kcrypto.get("/markets", {"series_ticker": series, "status": "open", "limit": 100}).get("markets") or [])
                       if kcrypto.tsec(m.get("close_time")) == start + 900]
                 pm = bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {"slug": f"{prefix}-updown-15m-{start}"}), "markets", "data")
+                if not ks or not pm:
+                    print(f"  {coin}: Kalshi {len(ks)} / Polymarket {len(pm)} markets for this window")
                 if ks and pm:
                     toks = bot.market_tokens(pm[0])
                     names = [str(n).lower() for n in json.loads(pm[0].get("outcomes") or "[]")]
@@ -495,8 +497,12 @@ def live(minutes=120, every=3):
         now = time.time()
         start = int(now // 900) * 900
         left = start + 900 - now
-        if start != cur_win:
-            cur, cur_win = refresh(start), start
+        if start != cur_win or (len(cur) < len(PAIRS) and now - last_try > 20):
+            if start != cur_win:
+                cur = {}
+            cur.update(refresh(start))
+            cur_win, last_try = start, now
+            print(f"window {dt.datetime.fromtimestamp(start, dt.timezone.utc):%H:%M}: {len(cur)} coins on both sites ({' '.join(sorted(cur))})")
         if not cur or left < 20 or left > 885:
             time.sleep(2)
             continue
