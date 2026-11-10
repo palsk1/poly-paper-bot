@@ -1,5 +1,23 @@
 # Kalshi family census (digs.py kfam)
 
+## Plain summary (2026-11-10)
+
+- **What:** every kind of Kalshi market that closed 11 Sep to 9 Nov (51,949 markets, 2,820 series, 221,931 bets),
+  bought at the real ask 72h, 24h, 6h and 1h before the close, fee included, held to the result.
+- **Everything loses at the ask.** Overall about -$12 per $100. That looked like a data bug, so I checked
+  (`backtest/kfamily_sanity.md`): at the middle of bid and ask, everything is about $0 (-$0.34 per $100). So Kalshi
+  is fairly priced, and the loss is just the cost of buying. Most of it comes from empty books where a robot shows
+  3c to buy and 96c to sell. Where people really trade (gap 2c or less), buying costs about $3.80 per $100.
+- **Long shots (2-10c) are overpriced even at the middle**, -$13 to -$28 per $100. That means the 90-98c side is
+  a touch cheap, but only by about the fee. Buying 90-98c favorites at the ask is about even (+$0.16 / -$0.85).
+- **Calendar:** weekends and month ends look the same as other days. Dead, like on Polymarket.
+- **Flags:** 5 of 247 series slices passed the bar (luck check: 1-2 of ~1,580 fake ones). All are tiny (40-47
+  events). Checked by eye: NFL "no safety" at 95c won 40 of 40, but about 1 NFL game in 12-15 has a safety, so
+  95c is about fair and the streak is luck. Tennis set and Challenger slices flip between halves. Argentina "both
+  teams to score" YES won 28 of 42 at about 42c; cross-checked on Polymarket (`backtest/digs_btts.md`): the same bet lost about $15 per $100 there (132 games), so luck.
+- **Verdict:** no new Kalshi family worth a track. Settlement-timing (bets 1h before close at 90-98c) is fair too.
+
+
 Generated 2026-11-10T19:16:52Z. Settled Kalshi markets closing 2026-09-11 to 2026-11-09 (volume 50+ contracts; up to 2 events per series per day, one market each). 51,949 markets, 2,820 series, 221,931 priced bets. Every bet is bought at the REAL top-of-book ask at that hour (YES ask, or 1 - YES bid for NO), plus Kalshi's taker fee (10 contracts), held to the result. 'Per $100' = profit per $100 staked, grouped by event. Size at the ask is unknown, so '+1c' is the stress column. Families marked 'done' were already tested by other threads (crypto 15-min, econ data, weather highs, gas, approval polls).
 
 ## By kind of market (all bands, both sides)
