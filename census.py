@@ -426,6 +426,8 @@ def updown_hist():
     for a, rs in sorted(by_asset.items(), key=lambda kv: -len(kv[1])):
         ps = [r[2] for r in rs if r[2] is not None]
         off = sum(1 for x in ps if x < 0.45 or x > 0.55)
+        if not ps:
+            continue
         print(f"{a} | {len(rs)} | {100 * statistics.median(ps):.0f}c | {off}/{len(ps)} | {rs[0][0].get('fee')}")
     print("\nbuy the side under 45c, 23h before the end (fill = that price + 1c/2c/5c + fee), held to the result")
     for slip in (0.01, 0.02, 0.05):
