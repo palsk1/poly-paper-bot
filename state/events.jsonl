@@ -3884,3 +3884,4 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV100530-30", "track": "kc_maker", "ts": "2026-11-10T10:32:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV100530-30", "track": "kc_maker", "ts": "2026-11-10T10:32:25Z", "type": "kmaker_fill"}
 {"minutes_left": 8.25, "price": 0.973, "queue": 129.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV100545-45", "track": "kc_maker_early", "ts": "2026-11-10T10:36:47Z", "type": "kmaker_order"}
+{"pnl": -0.8542, "price": 0.23, "reason": "flatten: sold 50 NO at 23.0c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T10:44:41Z", "type": "maker_exit"}
