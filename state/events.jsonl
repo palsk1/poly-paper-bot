@@ -4723,3 +4723,9 @@
 {"filled": 10.0, "pnl": 0.71, "price": 0.929, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T21:02:51Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T21:02:51Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.81, "price": 0.919, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV101600-00", "track": "kc_maker_early", "ts": "2026-11-10T21:02:51Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.3, "price": 0.93, "reason": "wallet exit (book)", "title": "Will the U.S. invade Iran before 2027?", "token": "1910830010387565971650098373488592514702818137344973088263643820608151819241", "track": "w_jjo", "ts": "2026-11-10T21:05:50Z", "type": "paper_close"}
+{"outcome": "No", "pnl": 0.3, "price": 0.93, "reason": "wallet exit (book)", "title": "Will the U.S. invade Iran before 2027?", "token": "1910830010387565971650098373488592514702818137344973088263643820608151819241", "track": "wb_jjo", "ts": "2026-11-10T21:05:50Z", "type": "paper_close"}
+{"minutes_left": 7.95, "price": 0.929, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV101615-15", "track": "kc_maker_early", "ts": "2026-11-10T21:07:02Z", "type": "kmaker_order"}
+{"minutes_left": 7.95, "price": 0.959, "queue": 3977.94, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV101615-15", "track": "kc_maker_early", "ts": "2026-11-10T21:07:03Z", "type": "kmaker_order"}
+{"minutes_left": 7.95, "price": 0.971, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101615-15", "track": "kc_maker_early", "ts": "2026-11-10T21:07:03Z", "type": "kmaker_order"}
+{"minutes_left": 7.95, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV101615-15", "track": "kc_maker_early", "ts": "2026-11-10T21:07:03Z", "type": "kmaker_order"}
