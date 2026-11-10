@@ -766,6 +766,8 @@ def depth(track="kc_maker_safe", kind="improve", level=0.95, minutes=3, zmin=2.0
         if per_day:
             for N in (1000, 1500, 2500):
                 L.append(f"- {N} live bets reached around day {N / per_day:.0f} after the start (9 Nov 19:00 UTC).")
+    L += ["", "Use one bar, not all of them: looking at every row and stopping at the first pass would make a lucky pass "
+          "more likely than 1 in 10."]
     # D. a $300 pot
     days = [g for _, g in sorted(by_day.items())]
     L += ["", "## D. A $300 pot with $10 bets, played out on real days", "",
