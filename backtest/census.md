@@ -83,3 +83,13 @@ $412M draws). Snapshots 24h, 6h and 1h before the game, buy 1h later but never a
   soccer full-time draw at 15-50c, decided 24h before kickoff, filled at the first real buy before kickoff, must be
   ahead at +1c. Check the book depth at $25 then too.
 
+
+### Draw depth, live (2026-11-10 14:30 UTC, probe `census_drawdepth`)
+
+43 open soccer draw markets kicking off within 48 hours, 23 with an ask at 15-50c.
+- Books that are alive (mostly matchday): spread 1-2c, ask about 1c over the listed price. $25 fits within +1c of
+  the best ask in 15 of 23; the median game has about $107 on sale within +1c and $138 within +2c.
+  Big games (PSG-Bayern, Inter-Man City women) have $1,000-3,000 within +1c.
+- Books a day or more out are often placeholders (5c bid / 95c ask, or $2 on the ask), so a "24h before" buy
+  mostly happens on matchday anyway. The holdout rule already fills at the first real buy before kickoff.
+- Verdict: $10-25 bets fit in most games, $100 only in the bigger ones. Depth is not the problem; the ~2c edge is.
