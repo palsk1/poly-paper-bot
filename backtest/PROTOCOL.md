@@ -48,6 +48,20 @@ strategy doesn't beat those twins, the "edge" is in the band or the exits, not t
 A pass is not proof. It means the lead survived one fresh look and the live paper track is worth watching to
 2027-01-01. The money decision still uses the live trust score (90% bar, many strategies tested).
 
+## 5b. Pre-registered live test: kc_maker_safe (fixed 2026-11-10, Jan's OK)
+
+Written before the result, from `backtest/kcdepth.md` (probe `btkcdepth`, run 42823059046). Don't move it.
+
+- **What counts:** the live paper track `kc_maker_safe` (state/tracks.json), closed bets only, from its start on
+  2026-11-09 19:00 UTC, with its rules as they are today. A rule change restarts the count.
+- **When:** once, at the first daily look after the **2,500th** closed live bet (about 1 Dec at ~115 bets a day).
+  No earlier verdict: peeking at 300 / 600 / 1,000 / 1,500 bets is fine for interest, but none of them counts.
+- **Pass:** live P&L above **+$0.22 per $100** staked (all closed bets, $10 paper orders).
+  A break-even rule passes this about 10 times in 100; if the 60-day backtest (+$0.57) is right, about 96 in 100.
+- **Fail:** at or below +$0.22. Then kc_maker_safe is not the money pick.
+- A pass still leaves two open checks before real money: whether $25-100 orders fill the same, and whether Kalshi
+  takes a Swedish account (Jan's job).
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.
