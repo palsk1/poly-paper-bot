@@ -591,8 +591,8 @@ def fetch():
     poly_fix_times(evs, stations)
     forecasts_fetch(stations, need)
     cli_fetch(set(kst.values()))
+    poly_fetch()     # Polymarket first: Kalshi's candles are slow (about 2 a second) and were fetched in earlier runs
     kalshi_fetch()
-    poly_fetch()
     print(f"fetch done in {time.time() - T0:.0f}s")
 
 
