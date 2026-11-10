@@ -29,6 +29,7 @@ jobs:
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
           case "${{ inputs.what }}" in launch_*) PYTHONUNBUFFERED=1 python3 launch.py $(echo '${{ inputs.what }}' | sed 's/^launch_//; s/_/ /g'); exit $?;; esac
+          case "${{ inputs.what }}" in watchstats) PYTHONUNBUFFERED=1 python3 bot.py watch; tail -c 3000 state/run_stats.json; exit $?;; esac  # one watch run on a throwaway copy: nothing is saved or pushed
           case "${{ inputs.what }}" in bt*) PYTHONUNBUFFERED=1 python3 backtest.py "${{ inputs.what }}"; exit $?;; esac
           case "${{ inputs.what }}" in rec_once) python3 recorder.py once; exit $?;; rec_6) PYTHONUNBUFFERED=1 python3 recorder.py once 6; exit $?;; esac
           case "${{ inputs.what }}" in econ_*) pip install -q openpyxl; PYTHONUNBUFFERED=1 python3 econ.py "$(echo '${{ inputs.what }}' | sed 's/^econ_//')"; exit $?;; esac

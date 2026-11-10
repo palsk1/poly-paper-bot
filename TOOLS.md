@@ -55,6 +55,7 @@ and you read the result in the run log. All of it is paper only.
 |---|---|
 | `bot.py watch / daily / summary / selftest` | The paper trader. `watch.yml` every 5 min (timer: cron-job.org), `daily.yml` once a day. Writes `state/` |
 | `config.json`, `arb_pairs.json` | Every track's rules; reviewed arb pairs |
+| `state/run_stats.json` | Last 300 runs: seconds, web requests per site, seconds per step ("run stats" line in each watch/daily log). One-off test on a branch: probe `watchstats` (runs one watch, saves nothing) |
 | `bot.integrity()` | Data check after every run, `state/integrity.json`, "Data check" in summary (PR #22) |
 | `bot.plain_verdict()` | Plain-word verdicts used by dashboard, pushes and the morning review (PR #34) |
 | `dashboard.py` | Phone page https://palsk1.github.io/poly-paper-bot/ (PR #11, #34, #35) |
