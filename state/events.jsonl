@@ -4009,3 +4009,11 @@
 {"minutes_left": 3.78, "price": 0.998, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T12:56:16Z", "type": "kmaker_order"}
 {"minutes_left": 3.78, "price": 0.98, "queue": 2.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV100800-00", "track": "kc_maker", "ts": "2026-11-10T12:56:16Z", "type": "kmaker_order"}
 {"minutes_left": 3.78, "price": 0.98, "queue": 2.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T12:56:17Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV100800-00", "track": "kc_maker", "ts": "2026-11-10T13:02:45Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV100800-00", "track": "kc_maker", "ts": "2026-11-10T13:02:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV100800-00", "track": "kc_maker", "ts": "2026-11-10T13:02:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV100800-00", "track": "kc_maker", "ts": "2026-11-10T13:02:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T13:02:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T13:02:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T13:02:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV100800-00", "track": "kc_maker_safe", "ts": "2026-11-10T13:02:47Z", "type": "kmaker_fill"}
