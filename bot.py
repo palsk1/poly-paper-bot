@@ -5045,6 +5045,10 @@ def write_summary(tracks):
                         bits.append(f"({ev['reason']})")
                     lines.append("- " + " ".join(b for b in bits if b))
     md += lines or ["Nothing happened (fittingly)."]
+    kfl = os.path.join(STATE, "kfast_live", "report.md")   # live fast-bot test (kfastlive.py, its own workflow)
+    if os.path.exists(kfl):
+        with open(kfl) as fh:
+            md += [""] + [("#" + x if x.startswith("#") else x) for x in fh.read().splitlines()]
 
     with open(os.path.join(STATE, "summary.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")

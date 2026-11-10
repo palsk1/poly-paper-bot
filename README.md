@@ -202,6 +202,25 @@ The idea, inferred from a Reddit post: a few minutes before the close, rest a bu
   - Kalshi pays no maker rewards on these series (`kf_incentives`: 0 programs; its incentive programs are US-only anyway), and two Designated Liquidity Providers (paid pro market makers) quote them.
   - Probe routes: `btkf` (fetch + run, `KF_DAYS` default 14, cached in `bt_cache/kf/`), `btkffetch`, `btkfrun`, `btkf2` (2-day smoke test), `kf_<cmd>`. Trade sizes aren't kept, so "fills" don't say how many contracts.
 
+## Fast Kalshi paper bot: the last 45 seconds (added 2026-11-10, `kfastlive.py`)
+
+The fast-bot backtest above left one small lead and two unknowns (how many contracts really fill, and how fast a bot sees the book). Jan: "build it so we'll know for sure". So this is a live paper bot, still on GitHub, no server:
+
+- The `kfastlive` workflow runs nonstop like the recorder (~5h40m a run, the next one queued; cron every 20 min as a backstop). It never trades.
+- 60, 45 and 30 seconds before every 15-minute close it reads, for all 7 coins at once, Binance's 1-second prices (the last 5.5 minutes, plus the minute before the window opened) and the Kalshi order book. Then it works out how sure Binance is (z, same formula as `kfast.model_window`).
+- When a test's rule says buy, it reads the order book **a second time** and buys on paper at that book's real asks, for 10 and for 100 contracts, with Kalshi's taker fee. The second read stands in for the delay a real order has.
+- Maker tests rest a bid at 99.5c or 99.8c. They count the contracts already waiting at that price and fill only from real trades after them. A bid that would cross the ask fills there as a taker, and pays the fee.
+- After the close it reads Kalshi's result and the trade tape. It writes one line per coin and window to `state/kfast_live/days/YYYY-MM-DD.jsonl`, and a scoreboard to `state/kfast_live/report.md` (pushed every hour). It also records how often Binance's own guess of the result was wrong, and how long each read took.
+- **Pre-registered tests (fixed 2026-11-10, before any live data):**
+  - buy now with 45 s left at z 4+;
+  - buy now with 45 s left at z 6+;
+  - wait at 99.5c with 45 s left at z 4+;
+  - wait at 99.8c with 45 s left at z 2+.
+
+  For comparison only: 60 s and 30 s versions, and a control that buys the favourite at 45 s without Binance.
+- **The bar** is the repo's proof rule (`bot.proof`): the 90% upper bound on the loss rate must sit below what a bet earns per contract. At about half a cent a contract that means roughly 450-950 bets without a loss. At ~20-50 chances a day, that's a few weeks.
+- Probe routes: `kfl_once` (one look at every coin now) and `kfl_loop_<minutes>` (a short run that doesn't push).
+
 ## Maker: get paid to quote (added 2026-11-08)
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
@@ -298,6 +317,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `backtest/rules.md`: fine-print hunt, rule-text flags vs disputes and prices (`rules.py`, `fineprint.py`)
 - `backtest/kcrypto.md`: Kalshi 15-minute crypto late-favorite maker backtest (`kcrypto.py`)
 - `backtest/kfast.md`: what a fast (every-second) bot could add on Kalshi 15-minute crypto (`kfast.py`)
+- `state/kfast_live/report.md`: live paper scoreboard of the last-45-seconds tests (`kfastlive.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
 
 ## Setup
