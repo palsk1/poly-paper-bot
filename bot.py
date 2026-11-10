@@ -1520,9 +1520,26 @@ def momentum_candidates(markets, r):
     return out
 
 
+STORY_SKIP = {"will", "before", "after", "end", "out", "the", "this", "next", "new", "by", "in", "of", "be",
+              "january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
+              "november", "december", "trump", "donald", "us", "u.s.", "united", "states", "president", "prime",
+              "minister", "leader", "party", "election", "world", "worlds", "gaming", "team"}
+
+
+def story_names(title):
+    """Names in a title (capitalised words), e.g. {'benjamin', 'netanyahu'}. Two markets sharing one are the same
+    news story ('Netanyahu next leader out' and 'Netanyahu out by end of 2026'). Trump etc. are too common to count."""
+    words = re.findall(r"[A-Z][\w'.-]{3,}", title or "")
+    return {w.lower().strip(".'") for w in words} - STORY_SKIP
+
+
 def buy_candidates(tracks, name, cands, limit):
     tc, tr, r = CFG["tracks"][name], tracks[name], rules_for(name)
     held_events = {p.get("event_key") for p in tr["positions"].values()}
+    held_names = set()
+    if r.get("one_per_story"):
+        for p in tr["positions"].values():
+            held_names |= story_names(p.get("title"))
     themes = {}
     for p in tr["positions"].values():
         if p.get("theme"):
@@ -1533,6 +1550,9 @@ def buy_candidates(tracks, name, cands, limit):
             break
         if c["token"] in tr["positions"] or c["event_key"] in held_events:
             why(name, "already holds this market")
+            continue
+        if r.get("one_per_story") and story_names(c["title"]) & held_names:
+            why(name, "already has a bet on this news story")
             continue
         if c["theme"] and themes.get(c["theme"], 0) >= r.get("max_per_theme", 999):
             why(name, "too many bets on this theme")
@@ -1568,6 +1588,8 @@ def buy_candidates(tracks, name, cands, limit):
             why(name, "out of cash")
             break
         held_events.add(c["event_key"])
+        if r.get("one_per_story"):
+            held_names |= story_names(c["title"])
         if c["theme"]:
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
