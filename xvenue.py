@@ -18,8 +18,9 @@ Polymarket the market's own fee rate.
 Usage:  python3 xvenue.py results [days]   real results of both sites -> xv_cache/results.json.gz, mismatch table
         python3 xvenue.py run              replay on the recordings, writes backtest/xvenue.md
         python3 xvenue.py all [days]       both
+        python3 xvenue.py live [min] [s]   live: read both books in the same second every few seconds, re-read gaps 2 s later
         python3 xvenue.py selftest         fake data: a fair world must lose its costs, a planted gap must be found
-Probe: xv_results_<days>, xv_run, xv_all_<days>, xv_selftest.  XV_REC_DIR=<folder> uses already downloaded files.
+Probe: xv_results_<days>, xv_run, xv_all_<days>, xv_live_<minutes>, xv_selftest.  XV_REC_DIR=<folder> uses already downloaded files.
 """
 import bisect
 import collections
@@ -435,6 +436,103 @@ def run():
     print("\n".join(L))
 
 
+# ================================================================ live check: both books in the same second
+
+def live(minutes=120, every=3):
+    """Read both sites' books within the same second, every few seconds. A pair under $1.00 is read again 2 s
+    later: only gaps still there at the second read count as buyable (at the second read's prices).
+    Prints one line per gap and a summary. Reads only, buys nothing, saves nothing."""
+    import recorder
+    minutes, every = float(minutes), float(every)
+    pool = ThreadPoolExecutor(4)
+    cur, cur_win = {}, None
+
+    def refresh(start):
+        out = {}
+        for coin, (series, prefix) in PAIRS.items():
+            try:
+                ks = [m for m in (kcrypto.get("/markets", {"series_ticker": series, "status": "open", "limit": 20}).get("markets") or [])
+                      if kcrypto.tsec(m.get("close_time")) == start + 900]
+                pm = bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {"slug": f"{prefix}-updown-15m-{start}"}), "markets", "data")
+                if ks and pm:
+                    toks = bot.market_tokens(pm[0])
+                    names = [str(n).lower() for n in json.loads(pm[0].get("outcomes") or "[]")]
+                    if len(toks) == 2 and names[:1] == ["up"]:
+                        out[coin] = (ks[0]["ticker"], toks[0], bot.fee_rate(pm[0]))
+            except Exception as e:
+                print(f"  refresh {coin}: {e}")
+        return out
+
+    def read(coins):
+        t0 = time.time()
+        kf = {c: pool.submit(recorder.kalshi_book, cur[c][0]) for c in coins}
+        pf = pool.submit(recorder.poly_books, [cur[c][1] for c in coins])
+        pb = pf.result()
+        out = {}
+        for c in coins:
+            try:
+                kb = kf[c].result()
+            except Exception:
+                continue
+            b = pb.get(cur[c][1])
+            if not b or not kb["yb"] or not kb["nb"]:
+                continue
+            rate = cur[c][2]
+            for combo in "AB":
+                if combo == "A":
+                    ka, pa = walk([(round(1 - p, 4), s) for p, s in kb["nb"]], SHARES), walk([(round(1 - p, 4), s) for p, s in b["b"]], SHARES)
+                else:
+                    ka, pa = walk([(round(1 - p, 4), s) for p, s in kb["yb"]], SHARES), walk(b["a"], SHARES)
+                if ka is None or pa is None or not (0.005 < ka < 0.995 and 0.005 < pa < 0.995):
+                    continue
+                out[(c, combo)] = (ka, pa, ka + pa + (kfee(SHARES, ka) + bot.taker_fee(SHARES, pa, rate)) / SHARES)
+        return out, time.time() - t0
+
+    t_end = time.time() + minutes * 60
+    n_reads = n_first = n_conf = 0
+    costs, spans, conf, wins = [], [], [], set()
+    while time.time() < t_end:
+        now = time.time()
+        start = int(now // 900) * 900
+        left = start + 900 - now
+        if start != cur_win:
+            cur, cur_win = refresh(start), start
+        if not cur or left < 20 or left > 885:
+            time.sleep(2)
+            continue
+        got, span = read(list(cur))
+        spans.append(span)
+        n_reads += len(got)
+        costs += [v[2] for v in got.values()]
+        wins.update((c, start) for c, _ in got)
+        hits = {k: v for k, v in got.items() if v[2] < 1.0}
+        if hits:
+            n_first += len(hits)
+            time.sleep(2)
+            again, _ = read(sorted({c for c, _ in hits}))
+            for k, v in hits.items():
+                v2 = again.get(k)
+                ok = bool(v2 and v2[2] < 1.0)
+                n_conf += ok
+                if ok:
+                    conf.append((k[0], start, k[1], v2[2]))
+                print(f"GAP {k[0]} {k[1]} {left:.0f}s left: first read K {v[0]:.3f} + P {v[1]:.3f} = ${v[2]:.3f} with fees; "
+                      f"2 s later {'$%.3f' % v2[2] if v2 else 'no book'} {'STILL THERE' if ok else 'gone'}")
+        time.sleep(max(0.2, every - (time.time() - now)))
+    if not costs:
+        print("no reads")
+        return
+    print(f"\nLIVE SUMMARY: {minutes:.0f} min, {len(wins)} coin-windows, {n_reads:,} pair reads, both sites read within "
+          f"{st.median(spans):.1f} s (worst {max(spans):.1f} s). Typical pair cost with fees ${st.median(costs):.3f}, "
+          f"cheapest ${min(costs):.3f}. Under $1.00 at the first read: {n_first}. Still under $1.00 2 s later: {n_conf}.")
+    seen, total = set(), 0.0
+    for c, w, combo, cost in conf:
+        if (c, w, combo) not in seen:
+            seen.add((c, w, combo))
+            total += (1 - cost) * SHARES
+    print(f"Buying each confirmed gap once per window and side ({len(seen)} bets of {SHARES} pairs): {money(total)} if the two sites agree on the result.")
+
+
 # ================================================================ selftest
 
 def selftest():
@@ -475,6 +573,8 @@ if __name__ == "__main__":
     elif cmd == "all":
         results(*args[:1])
         run()
+    elif cmd == "live":
+        live(*args[:2])
     elif cmd == "selftest":
         sys.exit(selftest())
     else:
