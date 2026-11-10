@@ -192,6 +192,38 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Both need Kamala Harris himself/herself or the official campaign to publicly announce a 2028 presidential run (nomination counts on Kalshi; paperwork/exploratory don't count), both end Dec 31 2026 ET; same template as approved Beshear pair. Risk: a vague 'I'm running' remark could be judged differently.",
    "approved": "2026-11-09"
+  },
+  {
+   "id": "KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027",
+   "kalshi": "KXBUTTIGIEGRUN-28-27JAN01",
+   "poly_slug": "will-pete-buttigieg-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same Buttigieg 2028 run announcement by him/his campaign, deadline end of 2026 ET on both; paperwork alone not enough on either; same pattern as approved Beshear/Harris pairs.",
+   "approved": "2026-11-10"
+  },
+  {
+   "id": "KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027",
+   "kalshi": "KXOSSOFFRUN-28-27APR01",
+   "poly_slug": "will-jon-ossoff-announce-a-presidential-run-by-march-31-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same Ossoff 2028 run announcement by him/his campaign, before Apr 1 2027 = by Mar 31 11:59 PM ET; both exclude exploratory/non-genuine statements.",
+   "approved": "2026-11-10"
+  },
+  {
+   "id": "KXRUBIORUN-28-27APR01|will-marco-rubio-announce-a-presidential-run-by-march-31-2027",
+   "kalshi": "KXRUBIORUN-28-27APR01",
+   "poly_slug": "will-marco-rubio-announce-a-presidential-run-by-march-31-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same Rubio 2028 run announcement by him/his campaign, before Apr 1 2027 = by Mar 31 11:59 PM ET; both exclude exploratory/non-genuine statements.",
+   "approved": "2026-11-10"
+  },
+  {
+   "id": "KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088",
+   "kalshi": "KXCRYPTOSTRUCTURE-26JAN-27",
+   "poly_slug": "crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Word-for-word the same three-part 'crypto market structure' definition and exclusions (not stablecoin-only), federal law enacted by end of 2026 ET on both.",
+   "approved": "2026-11-10"
   }
  ],
  "rejected": [
@@ -824,6 +856,236 @@
    "id": "KXUCL-27-MCI|will-manchester-city-win-the-2026-27-uefa-champions-league-championship-20260701202025553",
    "reason": "Polymarket goes 'Other' if cancelled/postponed past Jun 19 2027; Kalshi has no such clause.",
    "date": "2026-11-09"
+  },
+  {
+   "id": "KXPREMIERLEAGUE-27-LFC|will-liverpool-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Different outcome: Kalshi is winning the league, Polymarket is a top-6 finish.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXDWTSRANK-326DEC31-JDEW|will-jenna-dewan-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 3rd, Polymarket is winning.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-AVL|will-aston-villa-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXTRUMPMEETM-26DEC01-MBS|will-trump-meet-with-mohammed-bin-salman-by-november-30-2026",
+   "reason": "Kalshi counts phone calls; Polymarket needs an in-person meeting.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXCBDECISIONJAPAN-26DEC17-H25|will-the-central-bank-of-colombia-increase-the-monetary-policy-interest-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different events: Bank of Japan vs Central Bank of Colombia.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXMEDIAGUESTKIMMEL-27-DWA|will-dwayne-the-rock-johnson-announce-a-presidential-run-before-2027",
+   "reason": "Different events: appearing on Jimmy Kimmel vs announcing a presidential run.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXANTHROPICMILLENNIUM-27-JAN01|will-openai-announce-another-millennium-prize-solution-by-december-31-2026",
+   "reason": "Different events: Anthropic vs OpenAI announcing a Millennium Prize solution.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXGTEMP-27-P0|will-november-2026-be-the-1st-hottest-on-record",
+   "reason": "Different events: 2026 hottest year vs November 2026 hottest month.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXGAMEAWARDSBGD-2026-CON|will-control-resonant-win-game-of-the-year-at-the-2026-game-awards-20260804145651085",
+   "reason": "Different awards: Best Game Direction vs Game of the Year.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-MCI|will-manchester-city-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXUAPFILES-26OCT27-26DEC01|trump-declassifies-new-ufo-files-by-november-30-2026-20261026",
+   "reason": "Kalshi counts any federal release of UAP files; Polymarket needs declassification by the Trump administration and includes ET-life files.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHIMPEACH-27JUL01-27APR01|pete-hegseth-impeached-by-march-31-2027",
+   "reason": "Polymarket resolves No at once if Hegseth leaves office before impeachment; Kalshi has no such clause.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXFEDDECISION-27APR-C26|will-the-fed-decrease-interest-rates-by-25-bps-after-the-april-2027-meeting",
+   "reason": "Different outcome: Kalshi cut of more than 25bps vs Polymarket exactly 25bps.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXPOPEVISIT-27JAN01-USA|will-pope-leo-xiv-be-the-1-searched-person-on-google-in-the-us-this-year-20260730192940427",
+   "reason": "Different events: Pope visiting the US vs top Google search.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHIMPEACH-27JUL01-27JUL01|pete-hegseth-impeached-by-june-30-2027",
+   "reason": "Polymarket resolves No at once if Hegseth leaves office before impeachment; Kalshi has no such clause.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-TOT|will-tottenham-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-BRI|will-brighton-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP4-NEW|will-newcastle-united-finish-in-the-top-4-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOP2-MCI|will-manchester-city-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXFEDDECISION-27APR-H25|will-the-fed-increase-interest-rates-by-25-bps-after-the-april-2027-meeting",
+   "reason": "Polymarket rounds odd-size moves up to 25bps and has its own no-statement rule; Kalshi's rounding/cancel rules differ.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXLASTEXAM-26DEC31-T60|will-the-highest-score-achieved-on-humanitys-last-exam-in-2026-be-60-or-higher-20260723190142923",
+   "reason": "Kalshi is 'before Dec 31' (Dec 31 excluded) vs Polymarket 'by Dec 31 11:59 PM ET'; Kalshi names no leaderboard source.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXLAIVISITUSA-26OCT01-JUL01|lai-ching-te-visits-us-by-june-30",
+   "reason": "Polymarket counts entering US maritime territory; Kalshi needs exiting the vessel/aircraft and excludes embassy-only presence.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXFEATURE-26GTA6-MARI|will-grand-theft-auto-vi-win-game-of-the-year-at-the-2026-game-awards-20260804145651075",
+   "reason": "Different events: band featured on GTA VI album vs GTA VI winning Game of the Year.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KX1ALBUM-26DEC-KAN|will-kanye-west-be-the-1-searched-person-on-google-this-year-20260717214426255",
+   "reason": "Different events: #1 album vs #1 Google search.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHANNOUNCEOUT-26AUG-27JAN01|pete-hegseth-out-as-secretary-of-defense-by-december-31",
+   "reason": "Polymarket counts an announced removal by anyone; Kalshi is Hegseth leaving or announcing it; death/title-change rules not shown.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXTRUMPMEETM-26DEC01-MCAR|will-trump-meet-with-mark-carney-by-november-30-2026",
+   "reason": "Kalshi counts phone calls; Polymarket needs an in-person meeting.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHOUT-26APR-27JUL01|will-the-house-impeach-pete-hegseth-by-june-30-2027",
+   "reason": "Different events: Hegseth out of office vs House impeachment.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOPHALF-AVL|will-aston-villa-finish-in-the-top-5-of-the-2026-27-english-premier-league-season",
+   "reason": "Different outcome: top half (top 10) vs top 5.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXFISALENGTH-26MAY-FISA5Y|will-fisa-section-702-reauthorization-become-law-this-year",
+   "reason": "Different terms: Kalshi needs a 5+ year extension, Polymarket counts a 2-year reauthorization.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXRUBIOANNOUNCEOUT-26OCT-27JAN01|marco-rubio-out-as-secretary-of-state-by-december-31-2026",
+   "reason": "Polymarket counts an announced removal by anyone; Kalshi is Rubio leaving or announcing it; death rules not shown.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXCBDSA-26NOV19-H25|will-the-south-african-reserve-bank-decrease-the-repo-rate-by-25-bps-at-the-november-meeting",
+   "reason": "Opposite moves: Kalshi is a hike, Polymarket is a cut.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXCBDECISIONINDIA-26DEC04-H25P|will-the-reserve-bank-of-india-decrease-the-policy-repo-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different outcome: Kalshi hike >25bps vs Polymarket 25bps cut.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXSENGOPLEADRUN-26-27JAN01-JTHU|will-john-thune-announce-a-presidential-run-before-2027",
+   "reason": "Different events: Senate GOP leader run vs presidential run.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXRANKLISTGOOGLESEARCH-26-LIN|will-lindsay-clancy-be-the-1-searched-person-on-google-this-year-20260717214426299",
+   "reason": "Polymarket waits until Mar 31 2027 then resolves Other if no list; Kalshi closes Dec 31 2026 with no no-publish rule shown.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXIPOANTHROPIC-DATE-26NOV16|will-anthropic-ipo-by-november-16-2026",
+   "reason": "'Confirms/announces an IPO' (Kalshi) vs shares actually listed and trading (Polymarket).",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXSPACEXCOUNT-26B-160|will-spacex-have-between-160-179-launches-in-2026",
+   "reason": "Different ranges: Kalshi above 160 vs Polymarket 160-179.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLTOP-27TOPHALF-HUL|will-hull-city-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Different outcome: top half vs top 2.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXDJTATTACKWARSH-27-JAN|trump-publicly-insults-warsh-by-december-31",
+   "reason": "'Criticizes' (Kalshi) vs 'insults' (Polymarket) are different bars.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHANNOUNCEOUT-26AUG-26DEC01|pete-hegseth-out-as-secretary-of-defense-by-october-31-20261001003401433",
+   "reason": "Polymarket counts an announced removal by anyone; Kalshi is Hegseth leaving or announcing it; death/title-change rules not shown.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "TESLACEOCHANGE-26|musk-out-as-tesla-ceo-before-2027",
+   "reason": "Polymarket resolves Yes on an announced resignation/firing; Kalshi needs Musk to actually stop being CEO.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXALBUMRELEASEDATEFRANK-JAN01-27|will-frank-ocean-release-an-album-in-2026",
+   "reason": "Kalshi gives no album definition or time zone; Polymarket uses LA time and a 50%-new-tracks rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXHEGSETHOUT-26APR-26NOV16|pete-hegseth-out-as-secretary-of-defense-by-november-14",
+   "reason": "Different deadlines (before Nov 16 vs Nov 14) and Polymarket resolves Yes on an announcement.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXTRUMPOUT27-27-DJT|will-trump-resign-before-2027",
+   "reason": "Different events: Trump leaving office any way vs announcing a resignation.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXDWTSRANK-226DEC31-CWOO|will-connor-wood-win-dancing-with-the-stars-season-35",
+   "reason": "Different outcome: Kalshi is finishing 2nd, Polymarket is winning.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXEPLLAST-27-MCI|will-manchester-city-finish-in-last-place-in-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket goes 'Other' if the season is cancelled/postponed and breaks ties alphabetically; Kalshi has neither rule.",
+   "date": "2026-11-10"
+  },
+  {
+   "id": "KXTOKENLAUNCH-27JAN01-UNIT|will-unit-launch-a-token-by-december-31-2026",
+   "reason": "Kalshi needs a liquidity pool and real value; Polymarket needs a governance token. Definitions differ.",
+   "date": "2026-11-10"
   }
  ],
  "rejected_events": [

@@ -4272,6 +4272,13 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
         too_old = (now() - parse_iso(b["opened"])).total_seconds() > r["max_days"] * 86400
         if too_old or (end and end < now() + dt.timedelta(days=r["min_days_left"] - 2)) or not sc \
                 or not m or m.get("closed") or m.get("acceptingOrders") is False:
+            if not too_old and m and (m.get("closed") or m.get("acceptingOrders") is False) \
+                    and (b["yes"] > EPS or b["no"] > EPS):
+                # bug fix 2026-11-10: a market that stopped trading but isn't paid out yet has no buyers, so the
+                # old close sold what we held at $0 (maker_short, Lambda). Hold it and let the payout close it.
+                b["q"] = {"bid": None, "ask": None}
+                why(name, "market stopped trading; holding what we own until it pays out")
+                continue
             maker_close(tr, name, key, "episode over" if too_old else "market left the list")
             continue
         mid, qb, qa, bb, ba = sc
