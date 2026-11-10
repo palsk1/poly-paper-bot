@@ -904,7 +904,95 @@ def selftest():
           f"({', '.join(bbad)}) in {time.time() - t0:.0f}s")
 
 
+
+FADE_WORDS = ("temperature", "rain", "snow")   # bot rules.fade_sure only_words
+
+
+def fade_bets(markets, hist, slip=0.02, delay=3600, fav_lo=0.90, fav_hi=0.98, lo=0.02, hi=0.10, hours=24, t_to=None,
+              complete=None, words=FADE_WORDS):
+    """fade_sure as the live track trades it: weather markets ending within `hours`; scanning hourly, the first hour
+    one side is priced fav_lo..fav_hi and the other lo..hi, buy the cheap side `delay` seconds later at the history
+    price + slip + fee, hold to the result. One bet per market. -> rows (profit, stake, t, event, implied, won)."""
+    out = []
+    for mk in markets.values():
+        q = mk["q"].lower()
+        if not any(w in q for w in words) or len(mk.get("toks") or []) != 2:
+            continue
+        if t_to is not None and mk["end"] >= t_to:
+            continue
+        ev = mk.get("ev") or mk["id"]
+        if complete is not None and ev not in complete:
+            continue
+        h = hist.get(mk["id"])
+        if not h or not h[0]:
+            continue
+        ct = mk.get("closed_t") or mk["end"]
+        t = mk["end"] - hours * 3600
+        t -= t % 3600
+        hit = None
+        while t < min(mk["end"], ct) - 3600:
+            p0, tp = price_at(h, t, 0)
+            if p0 is not None and t - tp <= 6 * 3600:
+                for side in (0, 1):
+                    fav = p0 if side == 1 else 1 - p0   # side = the cheap side we'd buy
+                    if fav_lo <= fav <= fav_hi and lo <= 1 - fav <= hi:
+                        hit = (t, side)
+                        break
+            if hit:
+                break
+            t += 3600
+        if not hit:
+            continue
+        t0, side = hit
+        pay = settle_value(mk, side)
+        if pay is None:
+            continue
+        p, _ = price_at(h, t0 + delay, side)
+        if p is None:
+            continue
+        e = min(0.99, p + slip)
+        f = fee_of(1, e, mk["fee"])
+        out.append((pay - e - f, e + f, t0, ev, p, pay >= 0.5))
+    return out
+
+
+def fade_check():
+    """Re-test of fade_sure (backtest/fade.md, +$121 per $100) on whole events vs the old $20k-volume cache, in-sample
+    only (markets ending before HOLDOUT_FROM). Per-event bands (bets in one event are not independent)."""
+    import ideas
+    old_markets = dict(bt.rjson(os.path.join(bt.CACHE, "markets.json.gz"), {}).get("markets", {}))
+    markets, hist, complete = ideas.load_full()
+    cut = T(HOLDOUT_FROM)
+    print(f"whole events: {'yes, ' + str(len(complete)) + ' complete events' if complete is not None else 'NO (run btideasfetch)'}")
+    L = ["| Data | Entry | Slip | Bets | Events | Cheap side won (price said) | Per $100 | 90% band (by event) | 1st / 2nd half |",
+         "|---|---|---|---|---|---|---|---|---|"]
+    sets = [("old cache ($20k final volume)", {k: m for k, m in markets.items() if k in old_markets}, None)]
+    if complete is not None:
+        sets.append(("whole events (complete only)", markets, complete))
+    for label, ms, comp in sets:
+        for dl, dname in ((0, "same hour"), (3600, "1h later")):
+            for slip in (0.01, 0.02, 0.03):
+                rows = fade_bets(ms, hist, slip=slip, delay=dl, t_to=cut, complete=comp)
+                byev = defaultdict(lambda: [0.0, 0.0, 0])
+                for pnl, st, t, ev, _, _ in rows:
+                    byev[ev][0] += pnl
+                    byev[ev][1] += st
+                    byev[ev][2] = t
+                s = ratio_stats([(a, b) for a, b, _ in byev.values()])
+                a, b = halves_of([(x[0], x[1], x[2]) for x in byev.values()])
+                won = sum(1 for r in rows if r[5])
+                exp = sum(r[4] for r in rows)
+                L.append(f"| {label} | {dname} | +{slip * 100:.0f}c | {len(rows)} | {len(byev)} | {won} ({exp:.0f}) | "
+                         f"{m100(s and s['per100'])} | {band(s)} | {m100(a and a['per100'])} / {m100(b and b['per100'])} |")
+    txt = ("# fade_sure re-test on whole events (btcheck.py fade)\n\nLive rule: weather (temperature/rain/snow) markets "
+           "ending within 24h, first hour one side is 90-98c and the other 2-10c, buy the cheap side, hold. In-sample only "
+           f"(ending before {HOLDOUT_FROM}). History price + slip + fee.\n\n" + "\n".join(L) + "\n")
+    os.makedirs(os.path.join(bt.ROOT, "backtest"), exist_ok=True)
+    with open(os.path.join(bt.ROOT, "backtest", "fade_full.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+
 if __name__ == "__main__":
     cmd = (sys.argv[1] if len(sys.argv) > 1 else "run").replace("btcheck", "").replace("bt", "") or "run"
-    {"quiet": quiet_check, "run": run, "self": selftest, "selftest": selftest, "holdout": holdout,
+    {"quiet": quiet_check, "fade": fade_check, "run": run, "self": selftest, "selftest": selftest, "holdout": holdout,
      "holdout_force": lambda: holdout(True)}[cmd]()
