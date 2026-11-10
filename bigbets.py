@@ -159,6 +159,9 @@ def hist(tapes=None, topic_fn=None):
 LIVE_TRACKS = (("soccer_draw", "draws"), ("boring_no", "kind"), ("crypto_no", "kind"), ("mention_no", "mentions"))
 
 
+_SHOWN = False
+
+
 def flow_24h(m, outcome_index):
     """$ of this answer bought on Polymarket in the last 24 hours (data-api trades, up to 500 newest)."""
     cid = m.get("conditionId")
@@ -172,6 +175,10 @@ def flow_24h(m, outcome_index):
         return None
     t0 = time.time() - DAY
     tok = bot.market_tokens(m)[outcome_index]
+    global _SHOWN
+    if rows and not _SHOWN:
+        _SHOWN = True
+        print("trade row shape: " + json.dumps(rows[0])[:400])
     tot = 0.0
     for r in rows:
         ts = bot.fnum(r.get("timestamp"), 0)
@@ -179,7 +186,8 @@ def flow_24h(m, outcome_index):
             ts /= 1000
         if ts < t0:
             continue
-        if str(r.get("asset")) == str(tok) and str(r.get("side")).upper() == "BUY":
+        asset = str(bot.pick(r, "asset", "asset_id", "token_id", "tokenId", default=""))
+        if asset == str(tok) and str(r.get("side")).upper() == "BUY":
             tot += bot.fnum(r.get("price"), 0) * bot.fnum(r.get("size"), 0)
     return tot
 
@@ -312,7 +320,7 @@ def kalshi(names=("kc_maker_safe", "kc_maker", "kc_maker_early")):
             except Exception as e:
                 print(f"tape failed for {o['ticker']}: {e}")
                 return o["ticker"], None
-        with ThreadPoolExecutor(4) as ex:
+        with ThreadPoolExecutor(2) as ex:   # Kalshi answers 429 when asked faster
             for tk, got in ex.map(get, need):
                 tapes[tk] = got
         rows = []

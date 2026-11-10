@@ -48,6 +48,8 @@ def repo():
 
 def gh(args, **kw):
     """Run gh; returns CompletedProcess. Replaced in the selftest."""
+    if "stdout" in kw:   # bug fix 2026-11-10: capture_output can't be combined with stdout= (pull crashed on every download)
+        return subprocess.run(["gh"] + args, stderr=subprocess.PIPE, **kw)
     return subprocess.run(["gh"] + args, capture_output=True, **kw)
 
 
