@@ -336,6 +336,62 @@ def fetch_sources():
     psave("sources", out)
 
 
+def sb_parse(txt):
+    lines = [ln for ln in (txt or "").splitlines() if ln.strip()]
+    if not lines:
+        return {}
+    sep = "\t" if "\t" in lines[0] else ","
+    head = [h.strip().lower() for h in lines[0].split(sep)]
+    if "modeldate" not in head or "approve" not in head:
+        return {}
+    di, ai = head.index("modeldate"), head.index("approve")
+    gi = head.index("group") if "group" in head else None
+    ser = {}
+    for ln in lines[1:]:
+        c = ln.split(sep)
+        if gi is not None and c[gi].strip().lower() not in ("all", "all polls"):
+            continue
+        try:
+            mo, da, yr = [int(x) for x in c[di].strip().split("/")]
+            yr += 2000 if yr < 100 else 0
+            ser[dt.date(yr, mo, da).isoformat()] = float(c[ai])
+        except Exception:
+            continue
+    return ser
+
+
+def fetch_sbpit(step=3):
+    """Point in time: every 'step'-th published version of the Silver Bulletin approval chart. For each version keep
+    its newest day and the last 10 days' values, so we know what the chart said BEFORE later polls revised it."""
+    pit = pload("sbpit") or {}
+    st, b, _ = raw("https://datawrapper.dwcdn.net/kSCt4/")
+    txt = b.decode("utf-8", "replace") if b else ""
+    vs = [int(x) for x in re.findall(r"kSCt4/(\d+)/", txt)]
+    top = max(vs) if vs else 8700
+    todo = [v for v in range(1, top + 1, step) if str(v) not in pit]
+    print(f"  Silver Bulletin chart versions: newest {top}, {len(todo)} to fetch")
+
+    def one(v):
+        st2, b2, _ = raw(f"https://datawrapper.dwcdn.net/kSCt4/{v}/dataset.csv", timeout=30)
+        if st2 != 200:
+            return v, None
+        ser = sb_parse(b2.decode("utf-8", "replace"))
+        if not ser:
+            return v, None
+        days = sorted(ser)[-10:]
+        return v, {"last": days[-1], "vals": {d: ser[d] for d in days}}
+    t0 = time.time()
+    with ThreadPoolExecutor(8) as ex:
+        for i, (v, r) in enumerate(ex.map(one, todo)):
+            pit[str(v)] = r
+            if i % 500 == 499:
+                print(f"    {i + 1}/{len(todo)} ({time.time() - t0:.0f}s)")
+    psave("sbpit", pit)
+    good = [r for r in pit.values() if r]
+    print(f"  versions with data: {len(good)} of {len(pit)}; days covered: "
+          f"{min(r['last'] for r in good) if good else '-'} to {max(r['last'] for r in good) if good else '-'}")
+
+
 def fetch():
     t0 = time.time()
     fetch_sources()
@@ -352,6 +408,7 @@ import math     # noqa: E402
 import random   # noqa: E402
 
 HOURS = (3, 12, 24, 48, 96)
+PIT = os.environ.get("POLLS_PIT", "1") != "0"
 THRESH = (0.03, 0.05, 0.10)
 GRID = [round(20 + i * 0.1, 1) for i in range(500)]   # 20.0 .. 69.9
 
@@ -457,7 +514,20 @@ class Families:
                     self.known[source][close] = sv[0]
             self.checks.append(f"{s} ({source}): {ok} events with one settle value, {bad} without (dropped)")
         sb = sb_series(src)
-        for d, v in sb.items():   # a day's value counts as known at 12:00 UTC the next day (cautious)
+        pit = pload("sbpit") or {}
+        first = {}   # date -> value as FIRST published (later polls can revise the chart backward)
+        for v in sorted((int(k) for k, r in pit.items() if r)):
+            r = pit[str(v)]
+            if r["last"] not in first:
+                first[r["last"]] = r["vals"][r["last"]]
+        self.sb_mode = "first-published (chart versions)" if len(first) > 100 and PIT else "today's chart (may peek)"
+        use = first if len(first) > 100 and PIT else sb
+        rev = [abs(first[d] - sb[d]) for d in first if d in sb]
+        if rev:
+            self.checks.append(f"Silver Bulletin revisions: first-published vs today's chart differ by {sum(rev) / len(rev):.2f} "
+                               f"points on average, {sum(1 for x in rev if x >= 0.25)} of {len(rev)} days by 0.25+")
+        self.checks.append(f"Silver Bulletin values used: {self.sb_mode}, {len(use)} days")
+        for d, v in use.items():   # a day's value counts as known at 12:00 UTC the next day (cautious)
             t = int(dt.datetime.fromisoformat(d).replace(tzinfo=UTC).timestamp()) + DAY + 12 * 3600
             self.known["silver"][t] = v
         pev, ph = pload("pevents") or {}, pload("phist") or {}
@@ -761,4 +831,4 @@ def reach():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "reach"
-    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "drill": drill, "all": lambda: (fetch(), run())}[cmd]()
+    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "drill": drill, "sbpit": lambda: (fetch_sbpit(), drill(), run()), "all": lambda: (fetch(), run())}[cmd]()
