@@ -64,7 +64,7 @@ outside the band. Luck bar: 282 tries.
 | Rule | Bets | Won / lost | Typical cost | Per $100 | Luck range | Halves | Months ahead | Worst case per $100 | Verdict |
 |---|---|---|---|---|---|---|---|---|---|
 | **"other" topics: No at 90-97c, over 30 days left** | 101 (64 events) | 100 / 1 | 93c, pays $1 | **+$5.45** | +$3.63 to +$7.28 | +$4.48 / +$6.49 | 11 of 11 | -$0.75 | Promising, needs more bets |
-| **Crypto price: No at 70-90c, 3-7 days left** | 116 | 102 / 14 | about 80c, pays $1 | **+$6.95** | +$0.42 to +$13.48 | +$8.97 / +$4.89 | 9 of 9 | -$9.67 | Ahead, but could be luck |
+| **Crypto price: No at 70-90c, 3-7 days left** | 115 | 102 / 13 | about 80c, pays $1 | **+$6.95** | +$0.42 to +$13.48 | +$8.97 / +$4.89 | 9 of 9 | -$9.67 | Ahead, but could be luck |
 | Crypto price: No at 90-97c, 3-7 days left | 195 (94 events) | 186 / 9 | 95c | +$0.53 | -$2.26 to +$3.31 | -$1.99 / +$2.60 | 6 of 10 | -$6.03 | Ahead, but could be luck |
 | Control, the mirror: crypto price Yes at 70-90c | 74 (53 events) | 57 / 17 | 81c | -$5.38 | -$18.05 to +$7.29 | -$14.77 / +$5.04 | 7 of 10 | -$39.25 | Losing |
 
