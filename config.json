@@ -1410,7 +1410,7 @@
       "max_chase": 0.05,
       "max_new_per_day": 10,
       "max_open": 80,
-      "max_pages": 4,
+      "max_pages": 8,
       "max_backfill": 30,
       "backfill_per_run": 10
     },
