@@ -1064,6 +1064,11 @@ if __name__ == "__main__":
     if cmd == "btideasvolbias":
         __import__("ideas").volbias()
         sys.exit(0)
+    if cmd.startswith("btpolls_"):  # polls vs politics markets (polls.py)
+        sys.argv = [sys.argv[0], cmd[len("btpolls_"):]] + sys.argv[2:]
+        import runpy
+        runpy.run_path(os.path.join(ROOT, "polls.py"), run_name="__main__")
+        sys.exit(0)
     if cmd.startswith("btinf_"):  # informed-trader hunt (informed.py)
         sys.argv = [sys.argv[0], cmd[len("btinf_"):]] + sys.argv[2:]
         import runpy
