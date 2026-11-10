@@ -512,6 +512,18 @@ def price_at(T, P, t, stale=2 * 3600):
     return P[k]
 
 
+def real_fill(tr, side, t, within=3600):
+    """What a taker really paid for `side` in the hour after t: the first trade that bought it
+    (a BUY of that outcome, or a SELL of the other outcome = the mirrored book). None = nobody bought it."""
+    for ts_, oi, sd, px, sz in tr:
+        if t < ts_ <= t + within:
+            if oi == side and sd == 1:
+                return px
+            if oi != side and sd == -1:
+                return round(1 - px, 4)
+    return None
+
+
 def poly_rows():
     """Launch rows and seasoned rows. Row: (venue, cat, label, side, q_entry_mid, pay, fee_rate, t, ev, dte, kind)."""
     mk = bt.rjson(P_MK, {}).get("markets", {})
@@ -552,10 +564,12 @@ def poly_rows():
                 continue
             p_prev = price_at(T, P, t0 + 300) if a > 600 else None
             at50 = abs(p - 0.5) <= 0.015 and (p_prev is None or abs(p_prev - 0.5) <= 0.015)
+            known = bool(h.get("trc")) or (tr and tr[0][0] <= t)   # we hold every trade of the window after t
             for side in (0, 1):
                 q = p if side == 0 else 1 - p
                 pay = pay0 if side == 0 else 1 - pay0
-                L.append(("poly", cat, lab, side, q, pay, m["fee"], t, m.get("ev") or mid, dte_bucket(m["end"] - t), at50))
+                L.append(("poly", cat, lab, side, q, pay, m["fee"], t, m.get("ev") or mid, dte_bucket(m["end"] - t), at50,
+                          real_fill(tr, side, t) if known else "?"))
         W = h.get("w") or [[], []]
         pts = [k for k, t in enumerate(W[0]) if t >= t0 + SEASON_AGE and t < stop]
         for k in rng.sample(pts, min(3, len(pts))):
@@ -635,7 +649,7 @@ def kalshi_rows():
 
 def ret(row, slip):
     """(profit, stake) for one share. Poly: mid + slip + fee. Kalshi: the real ask + (slip - 2c) + fee."""
-    v, cat, lab, side, q, pay, fee, t, ev, dte, at50 = row
+    v, cat, lab, side, q, pay, fee, t, ev, dte, at50 = row[:11]
     e = min(0.99, q + (slip if v == "poly" else max(0.0, slip - SLIP)))
     f = 0.07 * e * (1 - e) if fee == "k" else fee * e * (1 - e)
     return pay - e - f, e + f
@@ -722,6 +736,46 @@ def select(acc):
             if s and s["n"] >= MIN_EV and norm_sf(s["t"]) < ALPHA / K and s["r2"] > 0 and sd["r2"] > 0:
                 out.setdefault(k, []).append(disc)
     return out, info
+
+
+def real_fill_table(L, survivors):
+    """Survivors re-priced at the price someone REALLY paid for that side in the next hour (from the trade tape)."""
+    W = ["Real-fill check for the survivors: the same bets, but priced at the first trade where someone really "
+         "bought that side in the hour after the signal (+ fee). 'No buyer' = nobody bought that side at any price "
+         "in that hour, so we could not have either without setting the price ourselves.", "",
+         "| Bet | Signals | Real buy found | No buyer | Tape unknown | Avg real price vs listed | Per $100 at real price |",
+         "|---|---|---|---|---|---|---|"]
+    for k in sorted(survivors, key=describe):
+        v, cat, lab, side, b = k
+        n = got = none = unk = 0
+        gap = prof = stake = 0.0
+        evs = defaultdict(lambda: [0.0, 0.0])
+        for r in L:
+            if r[0] != v or r[3] != side or (cat != "ALL" and r[1] != cat):
+                continue
+            if b == -1:
+                if r[2] + " still at 50c" != lab or not r[10]:
+                    continue
+            elif r[2] != lab or band_of(r[4]) != b:
+                continue
+            n += 1
+            rf = r[11] if len(r) > 11 else "?"
+            if rf == "?":
+                unk += 1
+                continue
+            if rf is None:
+                none += 1
+                continue
+            got += 1
+            gap += rf - r[4]
+            e = min(0.999, rf)
+            f = r[6] * e * (1 - e)
+            evs[r[8]][0] += r[5] - e - f
+            evs[r[8]][1] += e + f
+        P, S_ = sum(x[0] for x in evs.values()), sum(x[1] for x in evs.values())
+        W.append(f"| {describe(k)} | {n} | {got} | {none} | {unk} | {'+' if gap >= 0 else ''}{100 * gap / max(1, got):.1f}c | "
+                 f"{m100(P / S_) if S_ else '-'} ({len(evs)} events) |")
+    return W + [""]
 
 
 def m100(x):
@@ -818,6 +872,8 @@ def run(out_name="launch.md"):
             if s and s["n"] >= MIN_EV and lab == "1 hour":
                 W.append(f"| {cat} | {lab} | {'Yes' if side == 0 else 'No'} | {s['n']} | {m100(s['r2'])} | {m100(s['x'])} |")
         W.append("")
+        if v == "poly":
+            W += real_fill_table(L, out)
         # still at 50c
         W += ["Still sitting at the 50c opening price (nobody has moved it yet):", "",
               "| Kind | Age | Side | Events | Per $100 at +2c | +5c |", "|---|---|---|---|---|---|"]
