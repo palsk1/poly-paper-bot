@@ -82,6 +82,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 With this few trades, results are mostly luck, so say so when reporting.
 
 ## Working on the code
+- **Every new research lead sits the shared exam (2026-11-10, `exam.py`, TOOLS.md):** `exam.score(bets, name, tries=...)` gives the same plain scorecard for every idea (separate bets, luck range, worst case per $100 with a bar raised for everything tried so far, how many more bets it needs) and adds a line to `backtest/ledger.md`, the list of all ideas tried (45 at the start, 0 "Looks real"). Use `exam.fills()` to price chart signals at what people really paid. Report the exam's verdict to Jan, not a dig's own grading.
 - `bot.py` is one file with commands `watch | daily | summary | selftest | arbtest | dryrun | discover`. `config.json` holds every rule. `arb_pairs.json` is edited by the review, not by the bot.
 - Before pushing: `python3 -c "import ast;ast.parse(open('bot.py').read())"`. Test risky changes with an offline mock (monkeypatch `bot.http_json`) or a `dryrun` probe.
 - **Real-size check (2026-11-08):** every fill is also priced at $10/$25/$50/$100 on the same book (`real_size` in config, `rs` on positions, `rs_pnl` on closed trades). Records only; the trust ranking uses the $25 numbers. See README "Real money check".

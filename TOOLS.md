@@ -21,6 +21,7 @@ and you read the result in the run log. All of it is paper only.
 
 | Tool | What it does | Run |
 |---|---|---|
+| **`exam.py` (EVERY new lead sits this before it's reported)** | **The shared exam + the list of everything tried.** Give it a bet list (event, time, $ paid, $ back) and it prints one scorecard in plain words, the same for every idea: profit per $100, luck range, how many bets are really separate (same event, or same day when losses bunch, count once), first vs second half, worst case per $100 after one more made-up disaster and a bar raised for every idea we ever tried, how many more bets it needs and by when, and one of the dashboard's five verdicts. `exam.fills(signals)` first re-prices chart signals at the first real buy on the trade tape (+1c + fee, $25 a bet, counts signals nobody could buy). `exam.score(bets, name, tries=N)` adds a line to `backtest/ledger.json` (page `backtest/ledger.md`; a probe prints `LEDGER ROW {...}` to paste in). `exam.power(bets, n)` says if a planned test can even tell real from worthless. `census.tape_check(..., name=)` prints the card too | `import exam` in a dig; `python3 exam.py selftest`, `ledger`, `file bets.json "name" [tries]`, `tracks` (same exam for every live track: can it be proven by 1 Jan? -> `backtest/exam_tracks.md`); probe `exam_tapetest` (live check of the real-price step), `exam_selftest` |
 | `backtest.py` | Replays the bot's own strategy code hour by hour on bt_cache, incl. wallet copies. Report `backtest/report.md` | probe `btrun`, `btdiag`, `btfade` (PR #7, #10) |
 | `btcheck.py` + `backtest/PROTOCOL.md` | Sanity checks of the backtester (fair-coin world, second simulator, random twins, pessimistic costs, walk-forward) and the **test-before-results rules every new lead must follow**. Report `backtest/checks.md` | probe `btcheck`, `btcheckself` (PR #32) |
 | `calib.py` | Calibration by market kind: price x time-before-end x topic, YES vs NO, event-clustered bands. Has the **topic tagger** (`calib.topic`) and snapshot code. Report `backtest/calib.md` | probe `btcalib` (PR #30) |
@@ -63,5 +64,7 @@ and you read the result in the run log. All of it is paper only.
 | `state/summary.md` | Live scoreboard |
 
 ## Already tested and dropped
+
+**`backtest/ledger.md` is the list of every idea tried, with its verdict** (kept by `exam.py`). Check it first, and add your idea to it when you test one.
 
 See CLAUDE.md "Decisions and findings" and the TESTED & DROPPED list in project memory before re-testing anything.
