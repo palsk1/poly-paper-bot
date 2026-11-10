@@ -3996,3 +3996,8 @@
 {"minutes_left": 2.83, "price": 0.95, "queue": 0.01, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:42:12Z", "type": "kmaker_order"}
 {"minutes_left": 2.83, "price": 0.989, "queue": 10.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:42:13Z", "type": "kmaker_order"}
 {"minutes_left": 2.83, "price": 0.956, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:42:13Z", "type": "kmaker_order"}
+{"fee": 0.0415, "outcome": "Paris FC: No", "price": 0.79, "shares": 5, "title": "Will Paris FC win on 2026-11-10?", "token": "112767532345795897494980786804889126424612149895041050426550445686197842226928", "track": "sharp_pinnacle", "ts": "2026-11-10T12:46:47Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:46:52Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.5, "price": 0.95, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "no", "through": true, "ticker": "KXETH15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.44, "price": 0.956, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV100745-45", "track": "kc_maker", "ts": "2026-11-10T12:46:53Z", "type": "kmaker_fill"}
