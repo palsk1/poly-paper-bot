@@ -3292,3 +3292,6 @@
 {"minutes_left": 3.14, "price": 0.994, "queue": 22039.84, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV092245-45", "track": "kc_maker", "ts": "2026-11-10T03:41:52Z", "type": "kmaker_order"}
 {"minutes_left": 3.14, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV092245-45", "track": "kc_maker", "ts": "2026-11-10T03:41:52Z", "type": "kmaker_order"}
 {"minutes_left": 3.14, "price": 0.985, "queue": 25.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV092245-45", "track": "kc_maker", "ts": "2026-11-10T03:41:53Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.4548, "price": 0.65, "reason": "wallet exit (book)", "title": "Pete Hegseth out as Secretary of Defense by December 31?", "token": "39839649379979262874224474703228993451530996696316314037781119946088999891171", "track": "wb_blondbeast", "ts": "2026-11-10T03:45:35Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV092245-45", "track": "kc_maker", "ts": "2026-11-10T03:46:38Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV092245-45", "track": "kc_maker", "ts": "2026-11-10T03:46:38Z", "type": "kmaker_fill"}
