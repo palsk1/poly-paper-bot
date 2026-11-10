@@ -3473,3 +3473,6 @@
 {"fee": 0.0605, "outcome": "No", "price": 0.41, "shares": 5, "title": "Will the highest temperature in Miami be between 84-85\u00b0F on November 11?", "token": "47512080037126807921085556029814657264097483523460960661899600203117827559757", "track": "wx_forecast", "ts": "2026-11-10T05:32:07Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV100030-30", "track": "kc_maker", "ts": "2026-11-10T05:32:46Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV100030-30", "track": "kc_maker", "ts": "2026-11-10T05:32:47Z", "type": "kmaker_fill"}
+{"minutes_left": 8.6, "price": 0.965, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV100045-45", "track": "kc_maker_early", "ts": "2026-11-10T05:36:24Z", "type": "kmaker_order"}
+{"minutes_left": 8.6, "price": 0.927, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV100045-45", "track": "kc_maker_early", "ts": "2026-11-10T05:36:25Z", "type": "kmaker_order"}
+{"minutes_left": 8.6, "price": 0.96, "queue": 526.84, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV100045-45", "track": "kc_maker_early", "ts": "2026-11-10T05:36:25Z", "type": "kmaker_order"}
