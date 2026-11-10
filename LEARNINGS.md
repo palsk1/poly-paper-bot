@@ -34,8 +34,8 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 | 3 | `mention_no` | Buy NO in "Will X say Y" markets that end within 7 days, at 25-90c | Backtest +$4.35 per $100 on 52 events, but anything from -$15 to +$23 is possible. About $0 at worse prices | Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
 | 4 | Soccer draws | Bet on a draw in a soccer match at 15-50c, a day before kickoff | +$5.60 per $100 on 4,538 bets at prices people really paid | Same as #3 (locked, PROTOCOL 5) | **21 Dec** |
 | 5 | `panic_fade_10c` | Buy the boring side after a one-day 10c scare | Strict backtest -$3.11 per $100 (live is ahead, most likely luck) | Same as #3 (locked, PROTOCOL 5) | **21 Dec** |
-| 6 | Boring No, far out | Buy No at 90-97c more than 30 days before the end (things like "Will Trump meet Putin in August?") | +$5.45 per $100, **100 of 101 won**. Three more losses would wipe it out. Money is stuck for a month+ | **Not registered.** Needs Jan's OK to add to the 21 Dec look | 21 Dec, if Jan says yes |
-| 7 | Crypto "won't get there" | Buy No at 70-90c on "Will Bitcoin reach / dip to $X this week", 3-7 days before the end | +$6.95 per $100 on 115 bets, ahead in all 9 months. Luck range touches $0 | **Not registered.** Needs Jan's OK | 21 Dec, if Jan says yes |
+| 6 | Boring No, far out | Buy No at 90-97c more than 30 days before the end (things like "Will Trump meet Putin in August?") | +$5.45 per $100, **100 of 101 won**. Three more losses would wipe it out. Money is stuck for a month+. Live paper track `boring_no` ($500) since 10 Nov | Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
+| 7 | Crypto "won't get there" | Buy No at 70-90c on "Will Bitcoin reach / dip to $X this week", 3-7 days before the end | +$6.95 per $100 on 115 bets, ahead in all 9 months. Luck range touches $0. Live paper track `crypto_no` ($50) since 10 Nov | Same as #6 (locked, PROTOCOL 5) | **21 Dec** |
 | 8 | `arb` | Buy both sides of the same question on Kalshi and Polymarket for less than the $1 payout | $77.62 in, $80.00 back on 1 Jan = +$3.07 per $100. The risk is one pair where the two sites settle differently, not luck | All 4 pairs pay what they should | **1 Jan** |
 | 9 | `econ_fav` | Kalshi jobs/inflation markets: buy the 80-99c side when the free forecast agrees | Backtest +$6.73 per $100 on 141 bets (7 lost). Only 1-2 bets per data release, so maybe 10-15 by 1 Jan | **Not registered.** Can't be proven by 1 Jan | none yet |
 
@@ -88,7 +88,7 @@ A strategy gets real money only if **every** answer is yes:
 | 23 Nov | Gas-price recorder scored (who reads AAA first). Expected dead |
 | late Nov | Fast Kalshi bot first look |
 | about 1 Dec | **kc_maker_safe locked test** (2,500 bets). Order book shapes recheck |
-| 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c (+ the two new leads if Jan OKs them) |
+| 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c, boring No far out, crypto No |
 | 1 Jan 2027 | arb pays out. **Money decision** |
 | late Jan | Next GDP release (GDPNow vs Kalshi, only 19 past releases, too few to judge) |
 
@@ -147,9 +147,7 @@ Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast
 
 ## Open questions for Jan
 
-1. **Add the two new leads** (#6 boring No far out, #7 crypto No) to the 21 Dec look? Costs nothing, and the rule
-   can't be bent afterwards.
-2. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
-3. **Merge the open research PRs** (#64 locks the kc_maker_safe bar in the repo, #66 adds the exam and the ledger).
-4. **every_horse and ladder** have sat idle with $200 of paper since 8 Nov. Keep, or stop?
-5. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.
+1. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
+2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).
+3. **every_horse and ladder** have sat idle with $200 of paper since 8 Nov. Keep, or stop?
+4. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.

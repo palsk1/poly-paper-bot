@@ -785,13 +785,14 @@ def sports_run():
         # decide at the snapshot, then take the first real buy of that side after it and BEFORE the game starts
         sig = [(r["mk"], 0 if (q, pay) == (r["p"], r["y"]) else 1, q, r["t"] - ENTRY_LAG, pay, r["mk"]["gst"])
                for r, q, pay in tr]
-        tape_check(sig, 24 * 3600, int(os.environ.get("SP_TAPE_CAP", "500")))
+        tape_check(sig, 24 * 3600, int(os.environ.get("SP_TAPE_CAP", "500")), name=f"census sports: {name}")
 
 
-def tape_check(sig, window, cap=500):
+def tape_check(sig, window, cap=500, name=None):
     """sig = [(mk, outcome index, chart price, time, payout)]. Fill each at the first real BUY of that outcome on the
     trade tape within `window` seconds after the time. Grouped by event. A 6th item, if given, is a hard end time
-    (sports: the game start, so no in-game buys sneak in; in-game buyers know the score)."""
+    (sports: the game start, so no in-game buys sneak in; in-game buyers know the score).
+    With `name`, the filled bets also sit the shared exam (exam.py: separate bets, luck bar, verdict; not logged)."""
     import informed
     import random
     from concurrent.futures import ThreadPoolExecutor
@@ -847,6 +848,14 @@ def tape_check(sig, window, cap=500):
         se = math.sqrt(sum((v[0] - rate * v[1]) ** 2 for v in by.values()) / (S_ * S_) * (k / max(1, k - 1)))
         print(f"   real first buy +{100 * extra:.0f}c + fee: {len(filled)} bets, {k} games, won {w}, {100 * rate:+.1f} per $100, "
               f"90% band {100 * (rate - 1.645 * se):+.1f} to {100 * (rate + 1.645 * se):+.1f}")
+    if name:
+        try:
+            import exam
+            exam.score([{"ev": mk.get("ev") or mk["id"], "t": buys[0][0], "sh": 1, "pay": pay, "q": q, "px": buys[0][1],
+                         "cost": min(0.99, buys[0][1] + 0.01) + bot.taker_fee(1, min(0.99, buys[0][1] + 0.01), mk.get("fee", 0))}
+                        for mk, oi, q, t, pay, buys in filled], name, log=False)
+        except Exception as e:
+            print("   exam card failed:", str(e)[:200])
 
 
 def draw_depth():

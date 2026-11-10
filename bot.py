@@ -3344,7 +3344,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3428,7 +3428,7 @@ def run_fast(tracks, force=False):
         return {}
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
-                     ("mentions", mention_candidates), ("quiet", quiet_candidates)):
+                     ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3456,18 +3456,22 @@ def run_fast(tracks, force=False):
 
 def mention_candidates(names):
     """'Will X say Y' markets: the side named in rule `side` (No by default) priced in [min_price, max_price].
-    calib.py (backtest/calib.md, 2026-11-09) found YES in these markets wins less often than its price says."""
+    calib.py (backtest/calib.md, 2026-11-09) found YES in these markets wins less often than its price says.
+    Also serves the "kind" tracks (2026-11-10, winners.py): the same side-and-price rule for one topic (rule `topic`,
+    by calib.topic) instead of a wording regex, busiest markets first (rule `sort`: "busy")."""
     rs = {n: rules_for(n) for n in names}
+    lo = now() + dt.timedelta(days=max(0, min(r["min_days"] for r in rs.values()) - 1))
     hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
-    markets = scan_markets({"end_date_min": iso(now()), "end_date_max": iso(hi),
+    topic = __import__("calib").topic if any(r.get("topic") for r in rs.values()) else None
+    markets = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi),
                             "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
     out = {}
     for n, r in rs.items():
-        rx = re.compile(r["only_regex"], re.I)
+        rx = re.compile(r["only_regex"], re.I) if r.get("only_regex") else None
         cands = []
         for m in markets:
             q = str(m.get("question") or "")
-            if not rx.search(q):
+            if (rx and not rx.search(q)) or (r.get("topic") and topic(q) != r["topic"]):
                 continue
             prices = binary(m)
             b = base_filter(m, r) if prices else None
@@ -3479,8 +3483,12 @@ def mention_candidates(names):
                 continue
             i = outs.index(side)
             if r["min_price"] <= prices[i] <= r["max_price"]:
-                cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
-        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+                cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}",
+                                                          "busy": fnum(pick(m, "volume24hr", "volume24hrClob"))}))
+        if r.get("sort") == "busy":
+            cands.sort(key=lambda c: -c["busy"])  # most traded today first: the study only saw markets people were buying
+        else:
+            cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
         out[n] = cands
     return out
 

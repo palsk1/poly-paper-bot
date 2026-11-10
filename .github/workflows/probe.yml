@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what:
-        description: "all | kalshi | poly | endgame | events | fast | fast2 | fast3 (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' / 'fasttest' / 'makertest' for bot dry runs; edges_* for edges.py research; lh_* for logichunt.py (markets that contradict each other); sharp_* for sharp.py (bookmaker fair price); src_* for sources.py (who reads the settle source first); fast* and fasttest = weather + crypto; 'hunt' / 'hunt_ladders' / 'hunt_dupes' / 'hunt_rejected' / 'hunt_sports2' for arbhunt.py; 'rec_once' = one recorder pass; lag_scan / lag_<minutes> = live esports lag test, livelag.py; launch_live_<min>_<follow> = watch brand-new listings, launch.py)"
+        description: "all | kalshi | poly | endgame | events | fast | fast2 | fast3 (or 'arbtest' / 'dryrun' / 'discover' / 'copytest' / 'depthtest' / 'fasttest' / 'makertest' for bot dry runs; edges_* for edges.py research; lh_* for logichunt.py (markets that contradict each other); sharp_* for sharp.py (bookmaker fair price); src_* for sources.py (who reads the settle source first); fast* and fasttest = weather + crypto; 'hunt' / 'hunt_ladders' / 'hunt_dupes' / 'hunt_rejected' / 'hunt_sports2' for arbhunt.py; 'rec_once' = one recorder pass; lag_scan / lag_<minutes> = live esports lag test, livelag.py; launch_live_<min>_<follow> = watch brand-new listings, launch.py; exam_tapetest / exam_selftest = the shared exam, exam.py)"
         default: all
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4   # the branch it was started on (main by default), so a PR branch can be tried live
       - uses: actions/cache/restore@v4
-        if: startsWith(inputs.what, 'bt')
+        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_')   # win_* only reads the cache, never saves it
         with:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
@@ -35,6 +35,8 @@ jobs:
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in win_*) PYTHONUNBUFFERED=1 python3 winners.py "$(echo '${{ inputs.what }}' | sed 's/^win_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in exam_*) PYTHONUNBUFFERED=1 python3 exam.py $(echo '${{ inputs.what }}' | sed 's/^exam_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in census_*) PYTHONUNBUFFERED=1 python3 census.py "$(echo '${{ inputs.what }}' | sed 's/^census_//')"; exit $?;; esac
           case "${{ inputs.what }}" in src_*) PYTHONUNBUFFERED=1 python3 sources.py "$(echo '${{ inputs.what }}' | sed 's/^src_//')"; exit $?;; esac
           case "${{ inputs.what }}" in sharp_*) PYTHONUNBUFFERED=1 python3 sharp.py "$(echo '${{ inputs.what }}' | sed 's/^sharp_//')"; exit $?;; esac

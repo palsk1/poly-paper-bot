@@ -31,6 +31,8 @@ CANDIDATES = [
      "after 2,500 bets: pass if above +$0.22 per $100"),
     ("mention_no", "NO on 'will X say Y'", dt.date(2026, 12, 21), "holdout, scored once"),
     ("panic_fade_10c", "Boring side after a 10c scare", dt.date(2026, 12, 21), "holdout, scored once"),
+    ("boring_no", "NO at 90-97c, 30+ days out", dt.date(2026, 12, 21), "holdout, scored once"),
+    ("crypto_no", "NO on crypto price, 70-90c, 3-7 days out", dt.date(2026, 12, 21), "holdout, scored once"),
     ("econ_fav", "Economy favorites the forecast backs", None, "not registered yet"),
     ("arb", "Same question on Kalshi and Polymarket", DECISION_DAY, "pays out on 1 Jan"),
 ]

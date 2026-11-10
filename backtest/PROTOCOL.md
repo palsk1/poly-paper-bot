@@ -45,6 +45,8 @@ strategy doesn't beat those twins, the "edge" is in the band or the exits, not t
 | `mention_no` | NO at 25-90c, first time a "will X say Y" market is within 7 days of its end, one bet per event, +2c + fee, held | ahead, and band low end above -$5 per $100 |
 | `panic_fade_10c` | engine, 2c + 1 hour later, take-profit at the target | ahead, and band low end above -$5 per $100 |
 | `soccer_draw` (added 2026-11-10, `census.py`) | YES on a soccer full-time draw priced 15-50c 24h before kickoff, filled at the first real buy of it before kickoff +1c + fee, held. Not in `btholdout` yet: score with the census sports fetch on games from 2026-11-10 on | ahead, and band low end above -$5 per $100 |
+| `boring_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "other" (`calib.topic`), the first time No's last traded price is at 90-97c with more than 30 days to the end date: wait 5 minutes, take the next real $100+ buy of No within 6 hours, +1c + fee, $25 a bet, one bet per market, no bet if that buy is more than 2c outside the band. Exactly `winners.rule_bets` with `PRESETS[2]`. Not in `btholdout` yet: fetch trade lists (`informed.py`) for markets ending 2026-11-10 or later, then `winners.py drill` | ahead, and band low end above -$5 per $100 |
+| `crypto_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "crypto price", the first time No is at 70-90c with 3-7 days to the end date, same fill rule. Exactly `winners.rule_bets` with `PRESETS[0]`. Scored the same way | ahead, and band low end above -$5 per $100 |
 
 A pass is not proof. It means the lead survived one fresh look and the live paper track is worth watching to
 2027-01-01. The money decision still uses the live trust score (90% bar, many strategies tested).
