@@ -120,6 +120,12 @@
       "source": "kind",
       "rules": "crypto_no"
     },
+    "soccer_draw": {
+      "label": "Soccer draws: buys YES on 'will this game end in a draw' about 24h before kickoff when the draw costs 15-50c. In 4,538 past games draws won a bit more often than their price said (about 2c a bet, backtest/digs_draws.md). One bet per game, real order-book fills. $50 paper",
+      "start_cash": 50,
+      "source": "draws",
+      "rules": "soccer_draw"
+    },
     "quiet_no": {
       "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1758,6 +1764,24 @@
       "scan_every_minutes": 60,
       "picks_per_scan": 3,
       "max_open": 12
+    },
+    "soccer_draw": {
+      "why": "2026-11-10 census + digs (census.py, digs.py, backtest/census.md, digs_draws.md): soccer full-time draws at 15-50c bought 24h before kickoff made +$5.60 per $100 at +2c over 4,538 games (worst case +$1.70), gone at +4c. Pre-registered for the 21 Dec holdout as soccer_draw (PROTOCOL 5). Jan said Go for a $50 live paper track (2026-11-10). Claude's track, rule changes reported.",
+      "min_price": 0.15,
+      "max_price": 0.5,
+      "min_hours_to_start": 20,
+      "max_hours_to_start": 28,
+      "max_over_listed": 0.03,
+      "max_over_listed_note": "The lead is only about 2c, so skip when the real ask is 3c+ above the listed price.",
+      "min_days": 0,
+      "max_days": 2,
+      "min_liquidity": 0,
+      "scan_every_minutes": 60,
+      "picks_per_scan": 10,
+      "max_open": 40,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
     },
     "quiet_no": {
       "why": "2026-11-09 idea machine (ideas.py, backtest/ideas.md): on whole events, markets whose price moved under 2c in the last 7 days, NO at 50-75c bought 1-3 days before the end, made +$25 / +$35 per $100 at +2c in the two halves (+$23 at +5c, 153 events), passing a 33,823-idea screen with a many-ideas correction; no placebo passed. Replayed as a bot would enter (first qualifying hour, btcheck.quiet_bets): +$0.32 per $100 at +2c over 215 events, second half negative, so it was dropped as a research lead; Jan chose (2026-11-09) to run it live on $50 paper anyway. Not in PROTOCOL.md's holdout table. Claude's track, rule changes reported.",
