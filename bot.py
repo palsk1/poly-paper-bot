@@ -1102,6 +1102,13 @@ def copy_open(tracks, name, p, r, extra=None):
         tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
         why(name, "full (max open bets)")
         return False
+    if p.get("slug") and any(q.get("slug") == p["slug"] for q in tr["positions"].values()):
+        # bug fix 2026-11-10: a copy track must never hold both sides of one market (they pay exactly $1 together).
+        # consensus_3 bought NO while it still held YES (different wallets on different sides), and w_/wb_bigggggggg
+        # bought YES before its NO exit showed up (the wallet switched sides).
+        tr["skipped_other_side"] = tr.get("skipped_other_side", 0) + 1
+        why(name, "already holds the other side of this market")
+        return False
     m = market_by_slug(p["slug"])
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
         why(name, "market closed")
@@ -1202,8 +1209,25 @@ def follow_wallets(tracks):
             day.update({"date": today, "n": 0})
         if CFG["tracks"][name].get("backfill") and not tr.get("backfilled"):
             backfill(tracks, name, cur, r)
-        # new positions
         both = split_tokens(cur)
+        # exits: the wallet sold (or redeemed) most of what it had when we copied
+        # (exits run before new buys, so a wallet that switched sides is sold out of the old side first)
+        cur_slugs = {p["slug"] for t, p in cur.items() if p.get("slug") and t not in both and not p["redeemable"]}
+        for tok in list(tr["positions"]):
+            q = cur.get(tok)
+            pos = tr["positions"][tok]
+            if q and q["redeemable"]:
+                copy_close(tracks, name, tok, "resolved")
+                continue
+            if q is None and not complete:
+                if pos.get("slug") in cur_slugs:
+                    # bug fix 2026-11-10: it now holds the OTHER side of this market, so it sold ours (we just
+                    # can't see the old side because a big wallet has more positions than we read)
+                    copy_close(tracks, name, tok, "wallet switched sides")
+                continue  # beyond the pages we read; can't tell
+            if q is None or q["size"] <= 0.2 * pos.get("their_size", q["size"]):
+                copy_close(tracks, name, tok, "wallet exit")
+        # new positions
         fresh = 0
         for tok, p in cur.items():
             if tok in both:
@@ -1223,17 +1247,6 @@ def follow_wallets(tracks):
                 day["n"] += 1
         saw(name, f"Watching {len(cur)} open positions of this wallet; {fresh} new since the last check. "
                   f"Watching since {str(snaps[addr].get('since') or '?')[:10]}.")
-        # exits: the wallet sold (or redeemed) most of what it had when we copied
-        for tok in list(tr["positions"]):
-            q = cur.get(tok)
-            pos = tr["positions"][tok]
-            if q and q["redeemable"]:
-                copy_close(tracks, name, tok, "resolved")
-                continue
-            if q is None and not complete:
-                continue  # beyond the pages we read; can't tell
-            if q is None or q["size"] <= 0.2 * pos.get("their_size", q["size"]):
-                copy_close(tracks, name, tok, "wallet exit")
         held = {tkey(t) for t in cur}
         if not complete:
             held |= prev
@@ -4061,15 +4074,23 @@ def maker_trades(cid, since):
     return out
 
 
+def maker_order_cost(b, side, px):
+    """Cash one resting order needs if it fills: a YES bid costs bid x size, a NO bid (1-ask) x size. Whatever
+    merges with shares we already hold on the other side comes straight back ($1 a pair), so it doesn't count."""
+    if side == "bid":
+        return max(0.0, px * b["size"] - min(b["size"], b["no"]))
+    return max(0.0, (1 - px) * b["size"] - min(b["size"], b["yes"]))
+
+
 def maker_locked(tr):
-    """Cash our resting orders tie up (a YES bid locks bid x size, a NO bid locks (1-ask) x size)."""
+    """Cash our resting orders tie up (see maker_order_cost)."""
     tot = 0.0
     for b in tr["books"].values():
         q = b.get("q") or {}
         if q.get("bid"):
-            tot += q["bid"]["px"] * b["size"]
+            tot += maker_order_cost(b, "bid", q["bid"]["px"])
         if q.get("ask"):
-            tot += (1 - q["ask"]["px"]) * b["size"]
+            tot += maker_order_cost(b, "ask", q["ask"]["px"])
     return tot
 
 
@@ -4306,14 +4327,27 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
         mid, qb, qa, bb, ba = sc
         net = b["yes"] - b["no"]
         b["q"] = {"bid": None, "ask": None}
+        # bug fix 2026-11-10: only post an order the cash can pay for if it fills. Fills used to be charged with no
+        # check, so a track holding unsold shares kept bidding past its budget (maker_tp went to -$6).
+        free = tr["cash"] - maker_locked(tr)
         if (mid - bb) * 100 < b["v"] and net < r["max_inventory_lots"] * b["size"] and r["min_mid"] - 0.05 <= mid <= r["max_mid"] + 0.05:
-            old = q.get("bid")
-            lvl = next((s for p, s in bk["bids"] if abs(p - bb) < 1e-9), 0.0)
-            b["q"]["bid"] = old if old and abs(old["px"] - bb) < 1e-9 else {"px": bb, "queue": lvl}
+            if maker_order_cost(b, "bid", bb) <= max(free, 0.0) + EPS:
+                old = q.get("bid")
+                lvl = next((s for p, s in bk["bids"] if abs(p - bb) < 1e-9), 0.0)
+                b["q"]["bid"] = old if old and abs(old["px"] - bb) < 1e-9 else {"px": bb, "queue": lvl}
+                free -= maker_order_cost(b, "bid", bb)
+            else:
+                tr["skipped_no_cash"] = tr.get("skipped_no_cash", 0) + 1
+                why(name, "not enough cash for another buy order")
         if (ba - mid) * 100 < b["v"] and -net < r["max_inventory_lots"] * b["size"] and r["min_mid"] - 0.05 <= mid <= r["max_mid"] + 0.05:
-            old = q.get("ask")
-            lvl = next((s for p, s in bk["asks"] if abs(p - ba) < 1e-9), 0.0)
-            b["q"]["ask"] = old if old and abs(old["px"] - ba) < 1e-9 else {"px": ba, "queue": lvl}
+            if maker_order_cost(b, "ask", ba) <= max(free, 0.0) + EPS:
+                old = q.get("ask")
+                lvl = next((s for p, s in bk["asks"] if abs(p - ba) < 1e-9), 0.0)
+                b["q"]["ask"] = old if old and abs(old["px"] - ba) < 1e-9 else {"px": ba, "queue": lvl}
+                free -= maker_order_cost(b, "ask", ba)
+            else:
+                tr["skipped_no_cash"] = tr.get("skipped_no_cash", 0) + 1
+                why(name, "not enough cash for another buy order")
         b["mid"] = mid
     # 5) fill free slots
     last = parse_iso(tr["last_pick"]) if tr["last_pick"] else None
@@ -4725,12 +4759,47 @@ def lab_exits_due():
     return last is None or (now() - last).total_seconds() >= mins * 60 - 120
 
 
+def void_double_legs(tracks):
+    """Cleanup for the both-sides bug (fixed 2026-11-10): if a copy track still holds both sides of a market, the
+    side bought second should never have been bought. Undo that buy (money back, trade removed, noted in 'voided').
+    Pairs from before the 2026-11-09 audit are known and left alone."""
+    for name, tr in tracks.items():
+        if CFG["tracks"].get(name, {}).get("source") not in COPY_SOURCES:
+            continue
+        by_slug = defaultdict(list)
+        for tok, p in tr["positions"].items():
+            if p.get("slug"):
+                by_slug[p["slug"]].append(tok)
+        for slug, toks in by_slug.items():
+            if len(toks) < 2:
+                continue
+            toks.sort(key=lambda t: tr["positions"][t].get("opened", ""))
+            for tok in toks[1:]:
+                p = tr["positions"][tok]
+                if p.get("opened", "") < "2026-11-09T12":
+                    continue
+                cost = p["shares"] * p["entry"] + p.get("entry_fee", 0.0)
+                tr["positions"].pop(tok)
+                tr["cash"] = round(tr["cash"] + cost, 6)
+                tr.setdefault("voided", []).append({**{k: p.get(k) for k in ("title", "outcome", "entry", "shares",
+                                                    "opened", "slug")}, "token": tok, "voided_at": iso(),
+                                                    "why": "bought the other side of a market it already held"})
+                log_event({"type": "paper_void", "track": name, "token": tok, "title": p.get("title"),
+                           "outcome": p.get("outcome"), "refund": round(cost, 4),
+                           "reason": "both-sides bug: second side removed"})
+                print(f"{name}: voided {p.get('outcome')} on {slug[:50]} (both sides held)")
+
+
 def run_copy_tracks(tracks):
     try:
         live = follow_wallets(tracks)
         follow_consensus(tracks, live)
     except Exception as e:
         print(f"wallet copy failed: {e}")
+    try:
+        void_double_legs(tracks)
+    except Exception as e:
+        print(f"both-sides cleanup failed: {e}")
 
 
 def watch():
