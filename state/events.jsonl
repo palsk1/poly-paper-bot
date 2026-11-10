@@ -3069,3 +3069,13 @@
 {"minutes_left": 8.28, "price": 0.973, "queue": 243.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV091930-30", "track": "kc_maker_early", "ts": "2026-11-10T00:21:43Z", "type": "kmaker_order"}
 {"minutes_left": 8.28, "price": 0.95, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV091930-30", "track": "kc_maker_early", "ts": "2026-11-10T00:21:44Z", "type": "kmaker_order"}
 {"minutes_left": 8.28, "price": 0.953, "queue": 103.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV091930-30", "track": "kc_maker_early", "ts": "2026-11-10T00:21:44Z", "type": "kmaker_order"}
+{"fee": 0.0385, "outcome": "No", "price": 0.74, "shares": 5, "title": "Anthropic IPO closing market cap above $1.75T?", "token": "67636463387360492586169333399787851370933790600644262411385630786979120447907", "track": "w_cigarettes", "ts": "2026-11-10T00:25:26Z", "type": "paper_buy"}
+{"fee": 0.0385, "outcome": "No", "price": 0.74, "shares": 5, "title": "Anthropic IPO closing market cap above $1.75T?", "token": "67636463387360492586169333399787851370933790600644262411385630786979120447907", "track": "wb_cigarettes", "ts": "2026-11-10T00:25:26Z", "type": "paper_buy"}
+{"minutes_left": 3.12, "price": 0.998, "queue": 151.34, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.998, "queue": 151.34, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV091930-30", "track": "kc_maker_safe", "ts": "2026-11-10T00:26:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.998, "queue": 153720.63, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.995, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.997, "queue": 3152.71, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.997, "queue": 3152.71, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV091930-30", "track": "kc_maker_safe", "ts": "2026-11-10T00:26:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.994, "queue": 15.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:56Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.995, "queue": 721.07, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV091930-30", "track": "kc_maker", "ts": "2026-11-10T00:26:56Z", "type": "kmaker_order"}
