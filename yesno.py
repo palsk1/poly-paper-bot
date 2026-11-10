@@ -502,6 +502,216 @@ def run():
     print("\n".join(L))
 
 
+# ================================================================ the criss-cross (2026-11-10, Jan's second ask)
+# Same bets, cut every way: side x price x kind of market x time left x weekday, both sites. A pattern only counts
+# if it is ahead in BOTH halves of the window, has enough separate events, and beats a luck bar raised for every
+# cut we looked at. Polymarket survivors are then re-priced at what people really paid (exam.fills).
+WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+TL = [(1, "under 1 day"), (3, "1-3 days"), (7, "3-7 days"), (30, "7-30 days"), (1e9, "over 30 days")]
+POLY_EXTRA = {"under 10c": 0.001, "10-30c": 0.005, "30-50c": 0.005, "50-70c": 0.005, "70-90c": 0.015,
+              "90-97c": 0.007, "97c+": 0.001}      # what real buyers paid above the chart, measured in run()
+MIN_EV_HALF = int(os.environ.get("YESNO_MIN_EV", "25"))
+
+
+def tl_name(secs):
+    d = secs / DAY
+    for lim, name in TL:
+        if d < lim:
+            return name
+    return TL[-1][1]
+
+
+def grid_rows():
+    """Every $1 bet as (venue, side, band, kind, time left, weekday, half, ev, profit, stake, signal-or-None)."""
+    import calib
+    rows = []
+    try:
+        markets, sigs = poly_signals()
+    except Exception as e:
+        print("poly failed", e)
+        markets, sigs = {}, []
+    topic = {}
+    for mid, noon, p_yes, pay_yes, fee, ev, yi, age in sigs:
+        mk = markets[mid]
+        if mid not in topic:
+            topic[mid] = "sports" if mk.get("sports") else calib.topic(mk["q"])
+        wd, half, tl = WD[dt.datetime.fromtimestamp(noon, dt.timezone.utc).weekday()], 0 if noon < HALF else 1, tl_name(mk["end"] - noon)
+        for side, oi, p, pay in (("Yes", yi, p_yes, pay_yes), ("No", 1 - yi, 1 - p_yes, 1 - pay_yes)):
+            b = band(p)
+            c = min(0.999, p + POLY_EXTRA[b])
+            pr, st = bet(c, pay, lambda x: fee * x * (1 - x))
+            rows.append(("Polymarket", side, b, topic[mid], tl, wd, half, ev, pr, st,
+                         {"id": mid, "oi": oi, "t": noon, "pay": pay, "ev": ev, "fee": fee, "toks": mk.get("toks"), "q": p}))
+    n_poly = len(rows)
+    import launch
+    have = bt.rjson(K_MK, {}) or {}
+    hist = bt.rjson(K_H, {}) or {}
+    kfee = lambda x: 0.07 * x * (1 - x)
+    for tk, m in (have.get("markets") or {}).items():
+        q = hist.get(tk)
+        if not q:
+            continue
+        pay_yes = 1.0 if m["res"] == "yes" else 0.0
+        cat = launch.kcategory(m["s"], m["q"])
+        for n in NOONS:
+            ba = q.get(str(n))
+            if not ba or not m["open"] <= n < m["close"]:
+                continue
+            bid, ask = ba
+            wd, half, tl = WD[dt.datetime.fromtimestamp(n, dt.timezone.utc).weekday()], 0 if n < K_HALF else 1, tl_name(m["close"] - n)
+            for side, p, pay in (("Yes", ask, pay_yes), ("No", None if bid is None else 1 - bid, 1 - pay_yes)):
+                if p is None or not 0 < p < 1:
+                    continue
+                pr, st = bet(p, pay, kfee)
+                rows.append(("Kalshi", side, band(p), cat, tl, wd, half, m.get("ev") or tk, pr, st, None))
+    print(f"grid: {n_poly:,} Polymarket bets, {len(rows) - n_poly:,} Kalshi bets")
+    return rows
+
+
+K_HALF = (tsec("2026-09-11") + tsec(LAST_NOON)) // 2 + 12 * 3600     # Kalshi data starts 11 Sep
+
+
+def cell_keys(v, side, b, kind, tl, wd):
+    return [("price", v, side, b), ("kind", v, side, kind), ("time left", v, side, tl), ("weekday", v, side, wd),
+            ("price+kind", v, side, b, kind), ("price+time left", v, side, b, tl), ("kind+time left", v, side, kind, tl),
+            ("price+kind+time left", v, side, b, kind, tl), ("price+weekday", v, side, b, wd), ("kind+weekday", v, side, kind, wd)]
+
+
+def grid_cells(rows):
+    """{cell: {ev: [profit h0, stake h0, profit h1, stake h1]}}"""
+    cells = collections.defaultdict(dict)
+    for v, side, b, kind, tl, wd, half, ev, pr, st, sg in rows:
+        for k in cell_keys(v, side, b, kind, tl, wd):
+            e = cells[k].get(ev)
+            if e is None:
+                e = cells[k][ev] = [0.0, 0.0, 0.0, 0.0]
+            e[2 * half] += pr
+            e[2 * half + 1] += st
+    return cells
+
+
+def grade(cells, min_ev=MIN_EV_HALF):
+    """One line per cell with enough separate events in both halves."""
+    import exam
+    out = []
+    for k, evs in cells.items():
+        h = [[], []]
+        for e in evs.values():
+            for i in (0, 1):
+                if e[2 * i + 1] > 0:
+                    h[i].append((e[2 * i], e[2 * i + 1]))
+        if len(h[0]) < min_ev or len(h[1]) < min_ev:
+            continue
+        r0, r1 = (sum(p for p, _ in x) / sum(s for _, s in x) for x in h)
+        allr = [(e[0] + e[2], e[1] + e[3]) for e in evs.values()]
+        rate, se = exam._rate_se(allr)
+        out.append({"k": k, "ev": len(allr), "bets": sum(s for _, s in allr), "h0": r0, "h1": r1, "rate": rate, "se": se})
+    z = exam.luck_z(len(out))
+    for c in out:
+        c["lo"] = c["rate"] - z * c["se"]            # low end of the luck range, bar raised for every cell tried
+        c["lo90"] = c["rate"] - exam.Z90 * c["se"]
+    return out, z
+
+
+def cell_name(k):
+    return f"{k[1]}: {k[2]}, " + ", ".join(str(x) for x in k[3:])
+
+
+def grid():
+    import exam
+    rows = grid_rows()
+    cells = grid_cells(rows)
+    graded, z = grade(cells)
+    n = len(graded)
+    both_up = [c for c in graded if c["h0"] > 0 and c["h1"] > 0]
+    both_dn = [c for c in graded if c["h0"] < 0 and c["h1"] < 0]
+    solid = sorted([c for c in both_up if c["lo90"] > 0], key=lambda c: -c["lo"])
+    passed = [c for c in solid if c["lo"] > 0]
+    L = ["# Criss-cross: which Yes/No patterns would have worked? (2026-11-10, `yesno.py grid`)", "",
+         "Research only. Jan's ask: cut the all-Yes / all-No bets every way and look for patterns that paid. Same bets as "
+         "`backtest/yesno.md` ($1 on every open market every day at 12:00 UTC; Polymarket 10 Aug - 9 Nov, Kalshi 11 Sep - 9 Nov), "
+         "cut by Yes/No x price x kind of market x time left x weekday, alone and crossed.", "",
+         "Prices: Kalshi = the real ask + fee. Polymarket = chart price + what real buyers paid on top (0.1c to 1.5c by "
+         "price band) + fee; the best Polymarket patterns are then priced again at real buys from the trade tape.", "",
+         "A pattern counts only if (1) it has 25+ separate events in each half of the window, (2) it was ahead in BOTH "
+         "halves, (3) its luck range stays above $0 even with the bar raised for every cut we looked at.", "",
+         f"- Cuts with enough events: **{n:,}**",
+         f"- Ahead in both halves: **{len(both_up):,}**. Behind in both halves: **{len(both_dn):,}**. "
+         f"(A coin would give about {n // 4:,} each.)",
+         f"- Ahead in both halves and above $0 on the normal luck range: **{len(solid):,}**",
+         f"- Still above $0 with the bar raised for {n:,} tries: **{len(passed):,}**", ""]
+
+    def tab(cs, title):
+        T = [f"## {title}", "", "| Site | Bet | Pattern | Events | $1 bets | Per $100 | First half | Second half | Low end (normal) | Low end (raised bar) |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
+        for c in cs:
+            k = c["k"]
+            T.append(f"| {k[1]} | {k[2]} | {k[0]}: {', '.join(str(x) for x in k[3:])} | {c['ev']:,} | {c['bets']:,.0f} | "
+                     f"{usd(100 * c['rate'])} | {usd(100 * c['h0'])} | {usd(100 * c['h1'])} | {usd(100 * c['lo90'])} | {usd(100 * c['lo'])} |")
+        return T + [""]
+    L += tab(solid[:40], "The best patterns (ahead in both halves, sorted by the raised-bar low end)")
+    worst = sorted(both_dn, key=lambda c: c["rate"] + z * c["se"])[:15]
+    L += tab(worst, "The surest losers (for laughs, and to avoid)")
+    by_site = collections.Counter((c["k"][1], c["k"][2]) for c in solid)
+    L += ["Where the solid ones sit: " + ", ".join(f"{a} {b}: {v}" for (a, b), v in sorted(by_site.items())), ""]
+    # ---- real-price check of the best Polymarket patterns
+    top_poly = [c for c in solid if c["k"][1] == "Polymarket"][:int(os.environ.get("YESNO_TAPE_CELLS", "8"))]
+    if top_poly:
+        L += ["## The best Polymarket patterns at real buys", "",
+              "Up to 400 random bets from each pattern, priced at the first real buy within 3 hours after noon, +1c, + fee, "
+              "$25 a bet (the exam's rule). 'No real buy' = nobody bought there in 3 hours, so a bot may not have either.", "",
+              "| Pattern | Sampled | Had a real buy | Per $100 at real buys | Luck range | Exam verdict |", "|---|---|---|---|---|---|"]
+        rng = random.Random(5)
+        for c in top_poly:
+            k = c["k"]
+            mine = [r[10] for r in rows if r[10] is not None and k in cell_keys(*r[:6])]
+            pick = rng.sample(mine, min(400, len(mine)))
+            info = {}
+            try:
+                bets = exam.fills(pick, info=info)
+                card = exam.score(bets, "yesno grid " + cell_name(k), tries=n, log=False, quiet=True)
+                L.append(f"| {k[2]}, {k[0]}: {', '.join(str(x) for x in k[3:])} | {len(pick)} | {info.get('filled')} | "
+                         f"{'-' if card.get('per100') is None else usd(card['per100'])} | "
+                         f"{'-' if card.get('lo100') is None else usd(card['lo100']) + ' to ' + usd(card['hi100'])} | {card['verdict']} |")
+            except Exception as e:
+                L.append(f"| {cell_name(k)} | {len(pick)} | failed: {str(e)[:80]} | | | |")
+        L.append("")
+    # ---- the exam on the best Kalshi patterns (already real asks)
+    top_k = [c for c in solid if c["k"][1] == "Kalshi"][:8]
+    if top_k:
+        L += ["## The best Kalshi patterns through the exam (real asks already)", "",
+              "| Pattern | Bets | Separate events | Per $100 | Luck range | Worst case per $100 | Exam verdict |", "|---|---|---|---|---|---|---|"]
+        for c in top_k:
+            k = c["k"]
+            bets = [{"ev": r[7], "cost": r[9], "pay": r[9] + r[8]} for r in rows if r[0] == "Kalshi" and k in cell_keys(*r[:6])]
+            card = exam.score(bets, "yesno grid " + cell_name(k), tries=n, log=False, quiet=True)
+            L.append(f"| {k[2]}, {k[0]}: {', '.join(str(x) for x in k[3:])} | {card['bets']:,} | {card['groups']:,} | {usd(card['per100'])} | "
+                     f"{usd(card['lo100'])} to {usd(card['hi100'])} | {usd(card['floor100'])} | {card['verdict']} |")
+        L.append("")
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backtest", "yesno_grid.md")
+    with open(path, "w") as fh:
+        fh.write("\n".join(L))
+    print("\n".join(L))
+
+
+def grid_selftest():
+    """A world with no pattern gives no survivor; a planted one is found."""
+    rng = random.Random(3)
+    rows = []
+    for i in range(60000):
+        p = rng.choice([0.05, 0.2, 0.4, 0.6, 0.8, 0.95])
+        kind, tl, wd, half = rng.choice(["a", "b", "c", "d"]), rng.choice([x[1] for x in TL]), rng.choice(WD), rng.randrange(2)
+        win = p + (0.08 if (kind == "c" and p == 0.6) else 0.0)           # the planted pattern: kind c at 50-70c
+        y = 1.0 if rng.random() < win else 0.0
+        pr, st = bet(p + 0.005, y, lambda x: 0.0)
+        rows.append(("Polymarket", "Yes", band(p), kind, tl, wd, half, f"e{i}", pr, st, None))
+    graded, z = grade(grid_cells(rows))
+    passed = [c["k"] for c in graded if c["h0"] > 0 and c["h1"] > 0 and c["lo"] > 0]
+    assert ("price+kind", "Polymarket", "Yes", "50-70c", "c") in passed, passed
+    assert all("c" in k and "50-70c" in k or k[0] == "kind" and k[3] == "c" for k in passed), passed
+    print(f"grid selftest OK ({len(graded)} cuts, {len(passed)} passed, all on the planted pattern)")
+
+
 # ================================================================ selftest
 def selftest():
     # a fair coin at 50c, both sides: dream loses only the fee
@@ -530,4 +740,5 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
-    {"selftest": selftest, "run": run, "fetch": fetch_kalshi, "all": lambda: (fetch_kalshi(), run())}[cmd]()
+    {"selftest": lambda: (selftest(), grid_selftest()), "run": run, "fetch": fetch_kalshi, "grid": grid,
+     "all": lambda: (fetch_kalshi(), run())}[cmd]()
