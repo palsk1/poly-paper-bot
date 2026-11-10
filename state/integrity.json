@@ -2,7 +2,7 @@
  "alerted": {
   "both_sides:consensus_3": "2026-11-09T12:21:46Z"
  },
- "checked": "2026-11-10T05:56:38Z",
+ "checked": "2026-11-10T06:02:31Z",
  "deep_checked": "2026-11-10T05:15:02Z",
  "deep_problems": [],
  "problems": [
@@ -14,7 +14,7 @@
   {
    "key": "too_good",
    "track": "kc_maker_safe",
-   "what": "50 finished trades and not one loss: check the fills before trusting it"
+   "what": "54 finished trades and not one loss: check the fills before trusting it"
   }
  ]
 }
