@@ -61,7 +61,8 @@ and you read the result in the run log. All of it is paper only.
 | `bot.plain_verdict()` | Plain-word verdicts used by dashboard, pushes and the morning review (PR #34) |
 | `dashboard.py` | Phone page https://palsk1.github.io/poly-paper-bot/ (PR #11, #34, #35) |
 | `state/summary.md` | Live scoreboard |
+| `LEARNINGS.md` + `learnings.py` | **The main "what we've learned" page**: goal, candidates with pass rules and check dates, 1 Jan checklist, dropped ideas, open questions. Every finished dig updates it by hand; `python3 learnings.py` (run by daily.yml) rewrites its live-numbers block and the week-by-week table (`state/learnings_weeks.json`). `python3 learnings.py selftest` checks it offline |
 
 ## Already tested and dropped
 
-See CLAUDE.md "Decisions and findings" and the TESTED & DROPPED list in project memory before re-testing anything.
+See `LEARNINGS.md` "Tried and dropped", CLAUDE.md "Decisions and findings" and the TESTED & DROPPED list in project memory before re-testing anything.
