@@ -583,6 +583,261 @@ def updown_live():
               f"| 24h ${f(m.get('volume24hr')):.0f} | fee {bot.fee_rate(m)} | {book}")
 
 
+# ================================================================ sports side bets (Jan said yes, 2026-11-10)
+# bt_cache skips every sports market. This downloads finished sports markets (any kind: winner, spreads, totals,
+# draws, props) with their price history into bt_cache/sports/, then prices them before the game vs the result,
+# and checks any slice that looks cheap against the first real buy on the trade tape.
+
+SP_DIR = "sports"
+SP_VOL = float(__import__("os").environ.get("SP_VOL_MIN", "3000"))
+
+
+def _gst(m):
+    raw = str(m.get("gameStartTime") or m.get("eventStartTime") or "").strip()
+    if not raw:
+        return None
+    raw = raw.replace(" ", "T")
+    raw = re.sub(r"\+00(:00)?$", "Z", raw)
+    if not raw.endswith("Z") and "+" not in raw[10:]:
+        raw += "Z"
+    d = bot.parse_iso(raw)
+    return int(d.timestamp()) if d else None
+
+
+def sports_fetch():
+    import os
+    import backtest as bt
+    from concurrent.futures import ThreadPoolExecutor
+    import ideas
+    d0 = os.path.join(bt.CACHE, SP_DIR)
+    os.makedirs(d0, exist_ok=True)
+    mpath, hpath = os.path.join(d0, "markets.json.gz"), os.path.join(d0, "hist.json.gz")
+    have = bt.rjson(mpath, {"days": {}, "markets": {}}) or {"days": {}, "markets": {}}
+    start = dt.datetime.fromisoformat(bt.START).replace(tzinfo=dt.timezone.utc)
+    cut = dt.datetime.fromisoformat(ideas.HOLDOUT_FROM).replace(tzinfo=dt.timezone.utc)
+    days, d = [], start
+    while d < cut:
+        if d.strftime("%Y-%m-%d") not in have["days"]:
+            days.append(d)
+        d += dt.timedelta(days=1)
+    print(f"sports: {len(have['days'])} days cached, {len(days)} to read (volume >= ${SP_VOL:,.0f})")
+
+    def one(d):
+        out, cur = [], None
+        for _ in range(200):
+            p = {"closed": "true", "limit": 500, "end_date_min": bot.iso(d), "end_date_max": bot.iso(d + dt.timedelta(days=1)),
+                 "volume_num_min": SP_VOL}
+            if cur:
+                p["after_cursor"] = cur
+            try:
+                res = bot.http_json(f"{bt.G}/markets/keyset", p)
+            except Exception as e:
+                print(f"  {d:%Y-%m-%d} failed: {e}")
+                return d, None
+            rows = [m for m in bot.envelope_rows(res, "markets", "data") if isinstance(m, dict)]
+            out += rows
+            cur = res.get("next_cursor") if isinstance(res, dict) else None
+            if not cur or not rows:
+                break
+        return d, out
+    t0 = time.time()
+    with ThreadPoolExecutor(bt.WORKERS) as ex:
+        for d, rows in ex.map(one, days):
+            if rows is None:
+                continue
+            k = 0
+            for m in rows:
+                if not bot.is_sports(m):
+                    continue
+                sm = bt.slim_market(m)
+                if len(sm["toks"]) != 2 or len(sm["final"]) != 2 or not sm["end"]:
+                    continue
+                sm.update({"smt": str(m.get("sportsMarketType") or ""), "gst": _gst(m), "cid": m.get("conditionId"),
+                           "line": m.get("line"), "git": str(m.get("groupItemTitle") or "")})
+                have["markets"][sm["id"]] = sm
+                k += 1
+            have["days"][d.strftime("%Y-%m-%d")] = k
+            if len(have["days"]) % 20 == 0:
+                print(f"  {d:%Y-%m-%d}: {k} sports markets ({time.time() - t0:.0f}s)")
+    bt.wjson(mpath, have)
+    ms = have["markets"]
+    smt = collections.Counter(m["smt"] for m in ms.values())
+    print(f"sports markets cached: {len(ms):,}; by type: {smt.most_common(25)}")
+    print(f"with a game start time: {sum(1 for m in ms.values() if m.get('gst')):,}")
+    hist = bt.rjson(hpath, {}) or {}
+    todo = [m for m in ms.values() if m["id"] not in hist and m.get("closed")]
+    print(f"history: {len(hist):,} cached, {len(todo):,} to fetch")
+    with ThreadPoolExecutor(max(bt.WORKERS, 16)) as ex:
+        for c in range(0, len(todo), 3000):
+            if time.time() - bt.FETCH_T0 > bt.FETCH_MIN * 60:
+                print(f"  time budget used up, {len(todo) - c} left (run btsportsfetch again)")
+                break
+            for mid, h in ex.map(bt.fetch_history, todo[c:c + 3000]):
+                hist[mid] = h
+            bt.wjson(hpath, hist)
+            print(f"  {min(c + 3000, len(todo))}/{len(todo)} ({time.time() - t0:.0f}s)")
+    bt.wjson(hpath, hist)
+
+
+def sport_of(mk):
+    m = re.match(r"^([a-z0-9]+)-", (mk.get("slug") or "").lower())
+    return m.group(1) if m else "?"
+
+
+def sports_kind(mk):
+    smt = (mk.get("smt") or "").lower()
+    fa, fo = classify(mk["q"], mk.get("slug"), "", mk.get("outs"), True, smt, 1)
+    if smt:
+        if "spread" in smt:
+            return "spreads"
+        if "total" in smt:
+            return "totals (over/under)"
+        if "moneyline" in smt or smt in ("h2h",):
+            return "game winner" if "draw" not in mk["q"].lower() else "draw"
+        if "both_teams" in smt or "btts" in smt:
+            return "both teams score"
+        return smt
+    return fa.replace("sports: ", "").replace("esports: ", "esports ")
+
+
+SP_HZ = (("24h before start", 24 * 3600), ("6h before start", 6 * 3600), ("1h before start", 3600))
+
+
+def sports_rows():
+    import os
+    import backtest as bt
+    import calib
+    import ideas
+    d0 = os.path.join(bt.CACHE, SP_DIR)
+    ms = (bt.rjson(os.path.join(d0, "markets.json.gz"), {}) or {}).get("markets", {})
+    hist = bt.rjson(os.path.join(d0, "hist.json.gz"), {}) or {}
+    ms = ideas.in_sample(ms)
+    rows, kinds = [], collections.Counter()
+    for mk in ms.values():
+        y = calib.outcome0(mk)
+        h = hist.get(mk["id"])
+        if y is None or not h or not h[0]:
+            continue
+        g = mk.get("gst")
+        if not g:
+            continue
+        kind = sports_kind(mk)
+        kinds[kind] += 1
+        T, P = h
+        for hn, secs in SP_HZ:
+            t = g - secs
+            if mk.get("closed_t") and t + ENTRY_LAG >= mk["closed_t"]:
+                continue
+            if mk.get("start") and t < mk["start"]:
+                continue
+            i = bisect.bisect_right(T, t) - 1
+            if i < 0 or t - T[i] > 12 * 3600:
+                continue
+            k = bisect.bisect_right(T, min(t + ENTRY_LAG, g)) - 1
+            pe = P[k]
+            if not 0.02 <= pe <= 0.98:
+                continue
+            rows.append({"mk": mk, "kind": kind, "sport": sport_of(mk), "ev": mk.get("ev") or mk["id"], "h": hn,
+                         "p": pe, "y": y, "fee": mk.get("fee", 0), "t": t + ENTRY_LAG, "q": mk["q"]})
+    return ms, hist, rows, kinds
+
+
+def sports_run():
+    import calib
+    ms, hist, rows, kinds = sports_rows()
+    print(f"in-sample sports markets: {len(ms):,}; with history + start time + clean result: {sum(kinds.values()):,}")
+    print("kinds:", kinds.most_common(30))
+    vol = collections.defaultdict(float)
+    for mk in ms.values():
+        vol[sports_kind(mk)] += mk.get("vol") or 0
+    print("money traded by kind:", ", ".join(f"{k} {money(v)}" for k, v in sorted(vol.items(), key=lambda kv: -kv[1])[:20]))
+    print(f"price snapshots: {len(rows):,}")
+    flags = []
+    for group, label in (("kind", "bet type"), ("sport", "league (slug prefix)")):
+        keys = [k for k, n in collections.Counter(r[group] for r in rows).most_common() if n >= 60][:30]
+        print(f"\n== by {label}: buy 1h after the snapshot (never after the start), +2c + taker fee, held to the result")
+        print("slice | when | band | games | bets (won) | avg price | win rate | +1c | +2c | 90% band +2c | +5c | halves +2c")
+        for key in keys:
+            for hn, _ in SP_HZ:
+                rh = [r for r in rows if r[group] == key and r["h"] == hn]
+                for bn, lo, hi in BANDS:
+                    tr = [(r, q, pay) for r in rh for q, pay in ((r["p"], r["y"]), (1 - r["p"], 1 - r["y"])) if lo <= q < hi]
+                    s1, s2, s5 = (calib.score(tr, x) for x in (0.01, 0.02, 0.05))
+                    if not s2 or s2["events"] < 30:
+                        continue
+                    a, b = calib.halves(tr, 0.02)
+                    flag = s2["lo"] > 0 and s2["events"] >= 50 and (a or 0) > 0 and (b or 0) > 0
+                    print(f"{key} | {hn} | {bn} | {s2['events']} | {s2['bets']} ({s2['wins']}) | {100 * s2['avgq']:.0f}c | "
+                          f"{100 * s2['wins'] / s2['bets']:.0f}c | {calib.m(s1['per100'])} | {calib.m(s2['per100'])} | "
+                          f"{calib.m(s2['lo'])} to {calib.m(s2['hi'])} | {calib.m(s5['per100'])} | "
+                          f"{calib.m(a)} / {calib.m(b)}{' <-' if flag else ''}")
+                    if flag:
+                        flags.append((f"{label}={key} | {hn} | {bn}", tr))
+    print(f"\n== FLAGGED on chart prices: {len(flags)} (many slices tested, expect some luck). Real-buy check follows.")
+    for name, tr in flags[:12]:
+        print(f"\n-- {name}")
+        tape_check([(r["mk"], 0 if q == r["p"] and pay == r["y"] else 1, q, r["t"], pay) for r, q, pay in tr], 3600)
+
+
+def tape_check(sig, window, cap=500):
+    """sig = [(mk, outcome index, chart price, time, payout)]. Fill each at the first real BUY of that outcome on the
+    trade tape within `window` seconds after the time. Grouped by event."""
+    import informed
+    import random
+    from concurrent.futures import ThreadPoolExecutor
+    if len(sig) > cap:
+        sig = random.Random(11).sample(sig, cap)
+    need = [s[0]["id"] for s in sig if not s[0].get("cid")]
+    cids = informed.cids_for(need) if need else {}
+
+    def one(sg):
+        mk, oi, q, t, pay = sg
+        cid = mk.get("cid") or cids.get(mk["id"])
+        if not cid:
+            return None
+        try:
+            tr, _ = informed.tape(cid, 40)
+        except Exception:
+            return None
+        buys = []
+        for r in tr:
+            ts = bot.fnum(bot.pick(r, "timestamp", "time"))
+            ts = ts / 1000 if ts > 1e11 else ts
+            o = r.get("outcome_index", r.get("outcomeIndex"))
+            if o not in (0, 1):
+                tok = str(bot.pick(r, "token_id", "asset", default=""))
+                o = 0 if tok == mk["toks"][0] else 1 if tok == mk["toks"][1] else None
+            if o == oi and str(r.get("side") or "").upper().startswith("B") and t <= ts <= t + window:
+                buys.append((ts, bot.fnum(r.get("price")), bot.fnum(r.get("size"))))
+        buys.sort()
+        return (mk, oi, q, t, pay, buys)
+    with ThreadPoolExecutor(8) as ex:
+        res = [x for x in ex.map(one, sig) if x]
+    filled = [x for x in res if x[5]]
+    print(f"   tapes read {len(res)}, with a real buy of that side in the window: {len(filled)}")
+    if not filled:
+        return
+    gap = [x[5][0][1] - x[2] for x in filled]
+    print(f"   real first buy minus chart price: median {100 * statistics.median(gap):+.1f}c")
+    for extra in (0.0, 0.02):
+        by = collections.defaultdict(lambda: [0.0, 0.0])
+        w = 0
+        for mk, oi, q, t, pay, buys in filled:
+            c = min(0.99, buys[0][1] + extra)
+            fe = bot.taker_fee(1, c, mk.get("fee", 0))
+            e = by[mk.get("ev") or mk["id"]]
+            e[0] += pay - c - fe
+            e[1] += c + fe
+            w += pay >= 0.5
+        P_ = sum(v[0] for v in by.values())
+        S_ = sum(v[1] for v in by.values())
+        rate = P_ / S_
+        k = len(by)
+        se = math.sqrt(sum((v[0] - rate * v[1]) ** 2 for v in by.values()) / (S_ * S_) * (k / max(1, k - 1)))
+        print(f"   real first buy +{100 * extra:.0f}c + fee: {len(filled)} bets, {k} games, won {w}, {100 * rate:+.1f} per $100, "
+              f"90% band {100 * (rate - 1.645 * se):+.1f} to {100 * (rate + 1.645 * se):+.1f}")
+
+
 # ================================================================ selftest
 
 def selftest():

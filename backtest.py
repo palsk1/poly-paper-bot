@@ -1061,6 +1061,13 @@ if __name__ == "__main__":
         import runpy
         runpy.run_path(os.path.join(ROOT, "launch.py"), run_name="__main__")
         sys.exit(0)
+    if cmd in ("btsports", "btsportsfetch", "btsportsrun"):   # sports side bets priced vs result (census.py)
+        c = __import__("census")
+        if cmd != "btsportsrun":
+            c.sports_fetch()
+        if cmd != "btsportsfetch":
+            c.sports_run()
+        sys.exit(0)
     if cmd in ("btcensus", "btcensusupdown", "btcensustape"):   # every kind of Polymarket bet (census.py)
         getattr(__import__("census"), {"btcensus": "history", "btcensusupdown": "updown_hist",
                                        "btcensustape": "updown_tape"}[cmd])()
