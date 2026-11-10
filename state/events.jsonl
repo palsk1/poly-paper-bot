@@ -3467,3 +3467,6 @@
 {"pnl": -3.3432, "price": 0.78, "reason": "stop loss: sold 50 YES at 78.0c", "title": "Will Pete Hegseth be the first of these people impeached by December 31, 2027?", "track": "maker_tpsl", "ts": "2026-11-10T05:16:40Z", "type": "maker_exit"}
 {"pnl": -0.9032, "price": 0.72, "reason": "flatten: sold 50 YES at 72.0c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T05:16:40Z", "type": "maker_exit"}
 {"pnl": -3.3432, "price": 0.78, "reason": "flatten: sold 50 YES at 78.0c", "title": "Will Pete Hegseth be the first of these people impeached by December 31, 2027?", "track": "maker_flat", "ts": "2026-11-10T05:16:40Z", "type": "maker_exit"}
+{"pnl": -2.0988, "price": 0.225, "reason": "flatten: sold 50 NO at 22.5c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T05:24:18Z", "type": "maker_exit"}
+{"minutes_left": 5.3, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV100030-30", "track": "kc_maker", "ts": "2026-11-10T05:24:43Z", "type": "kmaker_order"}
+{"minutes_left": 5.3, "price": 0.977, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV100030-30", "track": "kc_maker", "ts": "2026-11-10T05:24:44Z", "type": "kmaker_order"}
