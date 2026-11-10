@@ -205,7 +205,12 @@ def snapshot(w, L):
     """At L seconds left, for one coin: Binance z, book, decisions, second book, paper orders."""
     close, s = w["close"], w["series"]
     t_dec = int(time.time())
-    px, bin_ms = timed(spot_seconds, SERIES[s])
+    px, bin_ms = timed(spot_seconds, SERIES[s], 330)   # 5.5 minutes: volatility + the last minute
+    if px is not None:
+        if "pre" not in w:   # the minute before the open, read once per window
+            got, _ = timed(spot_seconds, SERIES[s], 62, close - 961)
+            w["pre"] = {str(k): v for k, v in (got or {}).items()}
+        px.update({int(k): v for k, v in w["pre"].items()})
     bk1, b1_ms = timed(book, w["tk"])
     z, info = live_z(px or {}, close - 900, close, w["strike"], t_dec) if px else (None, "no spot")
     snap = {"t": iso(time.time()), "bin_ms": bin_ms, "book_ms": b1_ms,
@@ -325,6 +330,7 @@ def settle_pending(pending):
             print(f"  settle failed for {w['tk']}: {e}")
             done = False
         if done:
+            w.pop("pre", None)
             save_day(w)
             bets = ", ".join(f"{k} {b['side']} {'won' if b.get('won') else 'LOST'}" for k, b in w["bets"].items() if "won" in b)
             print(f"settled {w['tk']}: {w['result']}" + (f" ({bets})" if bets else ""))
@@ -357,6 +363,12 @@ def loop(minutes=340):
             mk = dict(zip(SERIES, ex.map(lambda s: window_market(s, close), SERIES)))
         ws = [{"series": s, "close": close, "tk": m["tk"], "strike": m["strike"], "snaps": {}, "bets": {}}
               for s, m in mk.items() if m and m["tk"]]
+        def pre(w):
+            got, _ = timed(spot_seconds, SERIES[w["series"]], 62, close - 961)
+            if got:
+                w["pre"] = {str(k): v for k, v in got.items()}
+        with ThreadPoolExecutor(len(ws) or 1) as ex:
+            list(ex.map(pre, ws))
         print(f"{iso(close)}: {len(ws)} coins")
         for L in SNAP_L:
             sleep_until(close - L)
