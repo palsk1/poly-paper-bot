@@ -1087,6 +1087,7 @@ if __name__ == "__main__":
      "btkcfetch": lambda: __import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)),
      "btkcrun": lambda: __import__("kcrypto").run(),
      "btkc2": lambda: (__import__("kcrypto").fetch(2), __import__("kcrypto").run()),
+     "btkreplay": lambda: __import__("kreplay").run(os.environ.get("KR_DAYS", 3)),
      "btkf": lambda: (__import__("kfast").fetch(os.environ.get("KF_DAYS", 14)), __import__("kfast").run()),
      "btkffetch": lambda: __import__("kfast").fetch(os.environ.get("KF_DAYS", 14)),
      "btkfrun": lambda: __import__("kfast").run(),
