@@ -56,6 +56,10 @@ def need_sklearn():
         import sklearn  # noqa
     except ImportError:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "scikit-learn"], check=True)
+        import importlib
+        import site
+        site.addsitedir(site.getusersitepackages())      # pip may have just created the user folder
+        importlib.invalidate_caches()
 
 
 # ================================================================ rows
