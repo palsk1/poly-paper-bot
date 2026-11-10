@@ -13,7 +13,8 @@ If the two cost less than $1.00 together, one of them pays $1.00. Reddit and Git
 - The recordings do show pairs under $1.00, but they are mostly a timing trick: our recorder reads Kalshi first and
   Polymarket about **20 seconds later**, and these prices move more than 1c every 5 seconds. Line the two up to the
   same second and "gaps" drop from 241 in every 1,000 reads to 7.
-- Live check with both sites read in the same second: see section 5.
+- Live check, both sites read in the same second for 2 hours: 46 real chances, worth **+$1.89 in total** on $10 bets
+  (about 4c each). Real, but crumbs, and half vanish within 2 seconds (section 5).
 - The two sites do not always agree who won: **17 windows in 1,000** end with different results (different price
   feeds). Then a pair pays $0 or $2. One $0 on a $10 bet eats about 60 small wins.
 
@@ -105,7 +106,23 @@ on each site, and both legs lose.
 
 ## 5. Live check: both books read in the same second
 
-LIVE_SECTION
+`xv_live_120`, 10 Nov 18:12 to 20:12 UTC. Every 3 seconds it read both sites' books for all 8 coins within the
+same 0.3 seconds. A pair under $1.00 was read again 2 seconds later, and only counted if it was still there.
+
+| What | Number |
+|---|---|
+| Pair reads | 31,700 (72 coin-windows) |
+| Typical pair cost with fees | $1.041 |
+| Under $1.00 at the first read | 503 (16 in 1,000) |
+| Still under $1.00 2 seconds later | 229 |
+| Different bets (one per window and side) | 46 |
+| P&L on those 46 bets of 10 pairs, if the sites agree every time | **+$1.89 in total** (about 4c a bet, on about $10 a bet) |
+
+So real same-second gaps exist, but they are crumbs: typically 0.2c to 0.8c a pair, mostly in the last two minutes
+when one side costs 1c and the other 98c. Half of them are gone within 2 seconds. And the 4c a bet is before the
+"sites disagree" risk from section 4: at 17 disagreements per 1,000 windows, 46 bets expect about one, and when it
+lands on the wrong side it costs the whole $10, which is 5 hours of these wins. Too thin to prove and too thin to
+live on. **Dropped.**
 
 ## Sanity checks
 
