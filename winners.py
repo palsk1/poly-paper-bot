@@ -264,6 +264,95 @@ def analyse(rows, names=None, P=print):
     return {"cards": cards, "good": good, "prom": prom, "luck_good": n_luck, "half": res, "cells": out}
 
 
+PRESETS = (("crypto price", 1, 0.70, 0.90, 3 * DAY, 7 * DAY), ("crypto price", 1, 0.90, 0.97, 3 * DAY, 7 * DAY),
+           ("other", 1, 0.90, 0.97, 30 * DAY, 9e9), ("other", 1, 0.97, 0.995, 3 * DAY, 7 * DAY),
+           ("crypto price", 0, 0.70, 0.90, 3 * DAY, 7 * DAY))          # last one: the mirror (Yes), as a control
+N_KINDS = 282      # kinds of bet section D looked at before these were picked: sets the luck bar
+
+
+def rule_bets(tapes, topic_fn, topic, o, lo, hi, left_lo, left_hi, late=300, wait=6 * 3600, over=0.02):
+    """The lead as a rule a bot could run by itself, one bet per market: the FIRST time the answer's last traded price
+    is inside [lo, hi) with the right time left, wait 5 minutes, then take the next real $100+ buy of that answer
+    within 6 hours, +1c + fee. No bet if that price is more than 2c above the band (a bot would have a limit)."""
+    bets, skipped, info = [], 0, []
+    for mid, x in tapes["m"].items():
+        if x.get("cut") or topic_fn(x.get("q") or "") != topic or not x.get("end"):
+            continue
+        try:
+            f0 = float(x["final"][0])
+        except (TypeError, ValueError, IndexError):
+            continue
+        sig = None
+        for t, p0 in x["path"]:
+            p = p0 if o == 0 else 1 - p0
+            if lo <= p < hi and left_lo <= x["end"] - t < left_hi:
+                sig = t + 300          # the 5-minute bucket is only known once it has ended
+                break
+        if sig is None:
+            continue
+        fill = next(((t, px) for t, w, oi, sd, px, sh, cp, v24 in x["tr"]
+                     if sd == "B" and oi == o and sig + late <= t <= sig + late + wait and t < x["end"]), None)
+        if not fill or fill[1] + 0.01 > hi + over:
+            skipped += 1
+            continue
+        c = fill[1] + 0.01
+        sh = 25.0 / c
+        fin = f0 if o == 0 else 1 - f0
+        bets.append({"ev": x.get("ev") or mid, "t": fill[0], "sh": sh, "px": fill[1], "pay": sh * fin,
+                     "cost": 25.0 + (x.get("fee") or 0.0) * sh * c * (1 - c)})
+        info.append((fill[0], x.get("q") or "", c, fin))
+    return bets, skipped, info
+
+
+def drill(tapes=None, topic_fn=None, P=print, presets=PRESETS):
+    import datetime as dt
+    if tapes is None:
+        import backtest as bt
+        import calib
+        import informed
+        tapes, topic_fn = bt.rjson(informed.TAPES, {}) or {}, calib.topic
+    P("# The leads from winners.py, replayed as rules a bot could follow\n")
+    P("One bet per market, the first time the price is in the band. Fill = the next real $100+ buy of that answer, at "
+      "least 5 minutes later, +1c + fee, $25 a bet. In-sample (markets ending before 2026-11-10).\n")
+    cards = []
+    for topic, o, lo, hi, l0, l1 in presets:
+        name = (f"{topic}: buy {'No' if o else 'Yes'} at {lo * 100:.0f}-{hi * 100:.0f}c, "
+                f"{'over 30 days' if l1 > 1e9 else f'{l0 / DAY:.0f}-{l1 / DAY:.0f} days'} before the end")
+        bets, skipped, info = rule_bets(tapes, topic_fn, topic, o, lo, hi, l0, l1)
+        P(f"\n## {name}\n")
+        P(f"{len(bets)} bets, {skipped} signals with no real buy near the band.")
+        if not bets:
+            continue
+        lines = []
+        c = exam.score(bets, name, tries=N_KINDS, prereg=True, log=False, quiet=True)
+        P("```" + exam.card_text(c) + "\n```")
+        wk = exam.score([dict(b, ev=dt.datetime.fromtimestamp(b["t"], dt.timezone.utc).strftime("%G-w%V")) for b in bets],
+                        name, tries=N_KINDS, prereg=True, log=False, quiet=True)
+        P(f"Counting a whole calendar week as ONE bet (in case the bets all ride the same market move): "
+          f"{wk['groups']} weeks, {line(wk)}; worst case {exam.usd(wk['floor100'])}.")
+        by = collections.defaultdict(list)
+        for b in bets:
+            by[exam.day(b["t"])[:7]].append(b)
+        P("\n| Month | Bets | Won | Per $100 |\n|---|---|---|---|")
+        for mth in sorted(by):
+            bs = by[mth]
+            P(f"| {mth} | {len(bs)} | {sum(1 for b in bs if b['pay'] > b['cost'])} | "
+              f"{exam.usd(100 * sum(b['pay'] - b['cost'] for b in bs) / sum(b['cost'] for b in bs))} |")
+        words = collections.Counter()
+        for _, q, _, fin in info:
+            k = next((w for w in ("up or down", "dip", "reach", "hit", "above", "below", "between", "less than", "greater than")
+                      if w in q.lower()), "other wording")
+            words[(k, fin > 0.5)] += 1
+        P("\nBy question wording (won / lost): " + ", ".join(
+            f"{k} {words[(k, True)]}/{words[(k, False)]}" for k in sorted({k for k, _ in words})))
+        rnd = random.Random(1)
+        P("Examples: " + " | ".join(f"{q[:70]} ({c2 * 100:.0f}c, {'won' if fin > 0.5 else 'LOST'})"
+                                   for _, q, c2, fin in rnd.sample(info, min(8, len(info)))))
+        c["weeks"] = wk
+        cards.append(c)
+    return cards
+
+
 def run():
     import backtest as bt
     import calib
@@ -315,9 +404,19 @@ def selftest():
     n, own, cp = res["half"]["passed the full bar"]
     assert n >= 1 and own["per100"] > 5 and cp["per100"] < own["per100"], (n, own["per100"], cp["per100"])
     assert not any(c["key"] == "good" for c in res["cells"])      # ordinary bets were fair: no kind of bet may pass
+    # the rule replay: one bet per market, first time in the band, real later buy
+    tp = {"m": {"a": {"q": "crypto price a", "end": 1.7e9 + 10 * DAY, "final": [0.0, 1.0], "fee": 0.0, "ev": "E",
+                      "path": [[1.7e9, 0.5], [1.7e9 + 5 * DAY, 0.2], [1.7e9 + 6 * DAY, 0.15]],
+                      "tr": [[1.7e9 + 5 * DAY + 100, 1, 1, "B", 0.79, 200, -1, 0],        # too soon after the signal
+                             [1.7e9 + 5 * DAY + 700, 1, 0, "B", 0.20, 200, -1, 0],        # other answer
+                             [1.7e9 + 5 * DAY + 900, 1, 1, "B", 0.81, 200, -1, 0],        # the fill
+                             [1.7e9 + 6 * DAY, 1, 1, "B", 0.85, 200, -1, 0]]}}}
+    bets, skipped, info = rule_bets(tp, lambda q: "crypto price", "crypto price", 1, 0.70, 0.90, 3 * DAY, 7 * DAY)
+    assert len(bets) == 1 and abs(bets[0]["px"] - 0.81) < 1e-9 and abs(bets[0]["pay"] - 25 / 0.82) < 1e-9 and skipped == 0, bets
+    assert drill(tp, lambda q: "crypto price", lambda s_: None, presets=PRESETS[:1])[0]["bets"] == 1
     print("\nselftest ok: planted winner found, lucky wallets not, follower gets less, no fake idea cell")
 
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
-    {"run": run, "selftest": selftest}[cmd]()
+    {"run": run, "selftest": selftest, "drill": drill}[cmd]()
