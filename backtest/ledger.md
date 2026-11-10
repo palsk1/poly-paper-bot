@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**49 ideas examined, in about 48,895 versions.** 29 dropped, 20 still being tested or waiting. **Looks real: 0.**
+**50 ideas examined, in about 49,950 versions.** 29 dropped, 21 still being tested or waiting. **Looks real: 0.**
 
-Why count: if you test 49 ideas that are all worthless, the luckiest one still looks good. With 49 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 50 ideas that are all worthless, the luckiest one still looks good. With 50 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -57,5 +57,6 @@ Why count: if you test 49 ideas that are all worthless, the luckiest one still l
 | 2026-11-10 | Daily stock and commodity 'Up or Down', cheap side | 20 |  | -$3.50 | Losing | dropped | backtest/census.md, PR #63 |
 | 2026-11-10 | Learn from wallets that really win (2,742 wallets through the exam) | 2,742 | 2559 | 32 in 1,000 look good, luck gives 28; first-half picks lost $5 later | Losing | dropped (steady winners don't show) | winners.py, backtest/winners.md, PR #66 |
 | 2026-11-10 | Kalshi vs Polymarket 15-minute crypto pairs | 5 |  | a pair costs about $1.05 | Losing | dropped | xvenue.py |
+| 2026-11-10 | Criss-cross of all-Yes / all-No bets (side x price x kind x time left x weekday, Polymarket + Kalshi) | 1,055 |  | best new cut +$5.62 at real buys (-$8 to +$19); Kalshi none | Ahead, but could be luck | no new candidate (re-finds boring_no and crypto_no) | yesno.py grid, backtest/yesno_grid.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
