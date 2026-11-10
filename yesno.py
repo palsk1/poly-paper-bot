@@ -153,14 +153,16 @@ def poly_signals():
             if not 0 < p0 < 1:
                 continue
             p_yes = p0 if yi == 0 else 1 - p0
-            out.append((mid, noon, p_yes, pay_yes, mk.get("fee") or 0.0, mk.get("ev") or mid, yi))
+            out.append((mid, noon, p_yes, pay_yes, mk.get("fee") or 0.0, mk.get("ev") or mid, yi, noon - T[k]))
     print(f"poly: {len(out):,} market-days (one Yes bet and one No bet each). Skipped markets: {dict(skipped)}")
     return markets, out
 
 
-def poly_tally(sigs, extra):
+def poly_tally(sigs, extra, max_age=1e9):
     t = Tally()
-    for mid, noon, p_yes, pay_yes, fee, ev, yi in sigs:
+    for mid, noon, p_yes, pay_yes, fee, ev, yi, age in sigs:
+        if age > max_age:
+            continue
         h = "first half" if noon < HALF else "second half"
         for side, p, pay in (("Yes", p_yes, pay_yes), ("No", 1 - p_yes, 1 - pay_yes)):
             c = min(0.999, p + extra)
@@ -188,8 +190,8 @@ def poly_tape_sample(markets, sigs, n=TAPE_N, window=3 * 3600):
         for mid, rows in ex.map(one, [m for m in ids if m in cids]):
             tapes[mid] = rows
     print(f"poly tape: {sum(1 for v in tapes.values() if v)} tapes read ({time.time() - T0:.0f}s)")
-    t, gap, miss = Tally(), collections.defaultdict(list), collections.Counter()
-    for mid, noon, p_yes, pay_yes, fee, ev, yi in picks:
+    t, same, gap, miss = Tally(), Tally(), collections.defaultdict(list), collections.Counter()
+    for mid, noon, p_yes, pay_yes, fee, ev, yi, age in picks:
         rows = tapes.get(mid)
         if not rows:
             miss["no tape"] += 2
@@ -216,9 +218,11 @@ def poly_tape_sample(markets, sigs, n=TAPE_N, window=3 * 3600):
             px = first[1]
             pr, st = bet(px, pay, lambda x: fee * x * (1 - x))
             t.add([(side,), (side, band(p_chart))], pr, st)
+            same.add([(side,), (side, band(p_chart))], *bet(p_chart, pay, lambda x: fee * x * (1 - x)))
             gap[side].append(px - p_chart)
+            gap[band(p_chart)].append(px - p_chart)
     print(f"poly tape: misses {dict(miss)}")
-    return t, gap, miss
+    return t, same, gap, miss
 
 
 # ================================================================ Kalshi
@@ -427,20 +431,22 @@ def run():
         markets, sigs = {}, []
     if sigs:
         dream, plus1 = poly_tally(sigs, 0.0), poly_tally(sigs, 0.01)
-        tape, gap, miss = poly_tape_sample(markets, sigs)
+        plus03, fresh = poly_tally(sigs, 0.003), poly_tally(sigs, 0.003, max_age=3600)
+        tape, same, gap, miss = poly_tape_sample(markets, sigs)
         n_m = len({s[0] for s in sigs})
         L += [f"## Polymarket ({n_m:,} markets, {len(sigs):,} market-days)", ""]
-        cols = [("Chart price (the dream)", dream), ("Chart +1c + fee", plus1),
-                (f"Real buys (sample of {min(TAPE_N, len(sigs)):,} days)", tape)]
+        cols = [("Chart price (the dream)", dream), ("Chart +0.3c + fee", plus03), ("Same, only prices under 1h old", fresh),
+                ("Chart +1c + fee", plus1), (f"Real buys (sample of {min(TAPE_N, len(sigs)):,} days)", tape),
+                ("Same sample at chart price", same)]
         L += table("Profit per $100", cols, "Real buys = the first time a real person bought that side within 3 hours after noon, "
                    "on the trade tape. That's what a slow bot would really pay.")
-        for side in ("Yes", "No"):
+        for side in ["Yes", "No"] + [b for _, _, b in BANDS]:
             g = sorted(gap.get(side) or [])
             if g:
                 L.append(f"- {side}: real buyers paid a median {100 * g[len(g) // 2]:+.1f}c vs the chart "
                          f"({len(g)} buys).")
         L += [f"- Tape misses: {dict(miss)}", ""]
-        L += ["Halves (chart +1c): " + ", ".join(f"{s} {h} {usd(plus1.per100((s, h)) or 0)}"
+        L += ["Halves (chart +0.3c): " + ", ".join(f"{s} {h} {usd(plus03.per100((s, h)) or 0)}"
                                                   for s in ("Yes", "No") for h in ("first half", "second half")), ""]
         for side in ("Yes", "No"):
             pr, st, n = plus1.row((side,))
