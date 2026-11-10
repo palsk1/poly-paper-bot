@@ -1258,7 +1258,8 @@
       ],
       "take_profit": null,
       "stop_loss": 0.45,
-      "scan_every_hours": 2
+      "scan_every_hours": 2,
+      "one_per_story": true
     },
     "arb": {
       "why": "Buy YES on one site and NO on the other when both together cost less than $1 after both sites' fees. Only on pairs whose rules were read side by side and approved (arb_pairs.json). Hold both legs to resolution.",
@@ -1681,11 +1682,13 @@
     },
     "panic_fade_4c": {
       "inherit": "panic_fade",
+      "one_per_story": false,
       "min_drop": 0.04,
       "max_open": 20
     },
     "panic_fade_10c": {
       "inherit": "panic_fade",
+      "one_per_story": false,
       "min_drop": 0.1,
       "min_pre_price": 0.75,
       "min_price": 0.45,
