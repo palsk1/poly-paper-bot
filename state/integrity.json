@@ -2,7 +2,7 @@
  "alerted": {
   "both_sides:consensus_3": "2026-11-09T12:21:46Z"
  },
- "checked": "2026-11-10T07:56:48Z",
+ "checked": "2026-11-10T08:02:41Z",
  "deep_checked": "2026-11-10T05:15:02Z",
  "deep_problems": [],
  "problems": [
@@ -10,11 +10,6 @@
    "key": "both_sides",
    "track": "consensus_3",
    "what": "holds both sides of 1 market(s), e.g. us-announces-end-of-iranian-blockade-by-november-1"
-  },
-  {
-   "key": "too_good",
-   "track": "kc_maker_safe",
-   "what": "62 finished trades and not one loss: check the fills before trusting it"
   }
  ]
 }
