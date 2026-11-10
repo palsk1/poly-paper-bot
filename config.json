@@ -108,6 +108,18 @@
       "source": "mentions",
       "rules": "mention_no"
     },
+    "boring_no": {
+      "label": "Boring No, far out: in everyday 'will this happen' markets (no crypto, weather, elections and so on) with more than 30 days left, buys NO at 90-97c. In the history 100 of 101 such bets won (backtest/winners.md), found by looking, so this is a live test. One bet per event, real order-book fills. $500 paper, because each bet is stuck for a month or more",
+      "start_cash": 500,
+      "source": "kind",
+      "rules": "boring_no"
+    },
+    "crypto_no": {
+      "label": "Crypto won't get there: in 'will Bitcoin reach / dip to / be above $X' markets with 3-7 days left, buys NO at 70-90c. In the history it was ahead in all 9 months (backtest/winners.md), but that could be luck, so this is a live test. One bet per event, real order-book fills. $50 paper",
+      "start_cash": 50,
+      "source": "kind",
+      "rules": "crypto_no"
+    },
     "quiet_no": {
       "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1704,6 +1716,48 @@
       "min_edge": 0.004,
       "max_open": 40,
       "picks_per_scan": 3
+    },
+    "boring_no": {
+      "why": "2026-11-10 winners.py (backtest/winners.md, Jan: 'build both'): replayed as a rule on finished markets (first time No is at 90-97c with 30+ days left, next real $100+ buy +1c + fee), topic 'other' made +$5.45 per $100 on 101 bets (100 won), ahead in all 11 months; exam verdict 'Promising, needs more bets', worst case -$0.75. Found by looking at 282 kinds of bet. Also registered for the 2026-12-21 holdout (PROTOCOL.md). Claude's track, rule changes reported.",
+      "topic": "other",
+      "side": "no",
+      "max_over_listed": 0.02,
+      "max_over_listed_note": "Skip when the real ask is 2c+ above the listed price: the replay allowed fills at most 2c outside the band.",
+      "min_volume": 0,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "sort": "busy",
+      "skip_words": ["up or down"],
+      "min_price": 0.9,
+      "max_price": 0.97,
+      "min_days": 30,
+      "max_days": 400,
+      "min_liquidity": 1000,
+      "scan_every_minutes": 180,
+      "picks_per_scan": 3,
+      "max_open": 100
+    },
+    "crypto_no": {
+      "why": "2026-11-10 winners.py (backtest/winners.md, Jan: 'build both'): replayed as a rule on finished markets (first time No is at 70-90c with 3-7 days left, next real $100+ buy +1c + fee), crypto price markets made +$6.95 per $100 on 115 bets (102 won), ahead in all 9 months; the same bet on Yes lost. Exam verdict 'Ahead, but could be luck'. Found by looking at 282 kinds of bet. Also registered for the 2026-12-21 holdout (PROTOCOL.md). Claude's track, rule changes reported.",
+      "topic": "crypto price",
+      "side": "no",
+      "max_over_listed": 0.02,
+      "max_over_listed_note": "Skip when the real ask is 2c+ above the listed price: the replay allowed fills at most 2c outside the band.",
+      "min_volume": 0,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null,
+      "sort": "busy",
+      "skip_words": ["up or down"],
+      "min_price": 0.7,
+      "max_price": 0.9,
+      "min_days": 3,
+      "max_days": 7,
+      "min_liquidity": 200,
+      "scan_every_minutes": 60,
+      "picks_per_scan": 3,
+      "max_open": 12
     },
     "quiet_no": {
       "why": "2026-11-09 idea machine (ideas.py, backtest/ideas.md): on whole events, markets whose price moved under 2c in the last 7 days, NO at 50-75c bought 1-3 days before the end, made +$25 / +$35 per $100 at +2c in the two halves (+$23 at +5c, 153 events), passing a 33,823-idea screen with a many-ideas correction; no placebo passed. Replayed as a bot would enter (first qualifying hour, btcheck.quiet_bets): +$0.32 per $100 at +2c over 215 events, second half negative, so it was dropped as a research lead; Jan chose (2026-11-09) to run it live on $50 paper anyway. Not in PROTOCOL.md's holdout table. Claude's track, rule changes reported.",
