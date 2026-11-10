@@ -2,7 +2,7 @@
 
 Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** experiment on Polymarket and Kalshi. It started 2026-11-03. Its goal is to find out which strategies would really make money before any real money goes in. Jan's line: "If we can show with 90% confidence that it works, I'm willing to invest" (e.g. $300 for arb).
 
-`state/summary.md` is the live scoreboard, and `README.md` explains every track. This file covers the context, the rules of engagement and the decisions that aren't in the code.
+`LEARNINGS.md` is the main "what we've learned" page (goal, candidates and check dates, what's dropped, open questions): **every finished dig updates it in the same PR**. `state/summary.md` is the live scoreboard, and `README.md` explains every track. This file covers the context, the rules of engagement and the decisions that aren't in the code.
 
 ## How to talk to Jan
 - Use plain dollars and cents and simple words. **No percentages.** Math is hard for him, so show "cost $4.85, pays $5.00" instead of a rate. Light snark and humor are welcome.

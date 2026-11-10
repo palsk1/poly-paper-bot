@@ -26,11 +26,13 @@ jobs:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           FORCE: ${{ github.event_name == 'workflow_dispatch' }}
         run: python3 bot.py daily
+      - name: Refresh the live part of LEARNINGS.md
+        run: python3 learnings.py > /dev/null || echo "LEARNINGS.md not refreshed (research page only, the bot is fine)"
       - name: Save state
         run: |
           git config user.name "poly-paper-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state
+          git add state LEARNINGS.md
           if ! git diff --cached --quiet; then
             git commit -m "daily: $(date -u +%Y-%m-%d)"
             # GitHub sometimes rejects a push with a one-off server error; retry so the run's paper trades aren't lost
