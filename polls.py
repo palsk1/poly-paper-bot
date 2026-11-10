@@ -676,6 +676,40 @@ def run():
         print({k: (round(v, 3) if isinstance(v, float) else v) for k, v in r.items()})
 
 
+def drill():
+    """Look inside the Polymarket Silver Bulletin lead: timing, every bet, wrong-dates by family."""
+    fams = Families()
+    pts = build(fams)
+    placebo = build(fams, placebo_shift=21 * DAY)
+    print("\n== event timing (Polymarket Silver Bulletin)")
+    for ev in sorted([e for e in fams.events if e["fam"] == "poly_silver"], key=lambda e: e["close"])[:8]:
+        print(f"  {ev['e']}: close {dt.datetime.fromtimestamp(ev['close'], UTC)} value {ev['value']} (+-{ev['width']})")
+    for f in sorted({r["fam"] for r in pts}):
+        for h in HOURS:
+            a = pick([r for r in pts if r["fam"] == f and r["h"] == h], 0.05)
+            b = pick([r for r in placebo if r["fam"] == f and r["h"] == h], 0.05)
+            if a:
+                print(f"  {f} {h}h: real {econ.money(econ.per100(a))} ({len(a)}), wrong dates "
+                      f"{econ.money(econ.per100(b)) if b else '-'} ({len(b)})")
+    print("\n== every Polymarket Silver Bulletin bet, 5c+ gap")
+    for h in HOURS:
+        for b in sorted(pick([r for r in pts if r["fam"] == "poly_silver" and r["h"] == h], 0.05), key=lambda x: x["close"]):
+            print(f"  {h:3d}h {b['e'][22:]:22s} known {b['v0']} gap {b['gap']:.2f}d final {b['value']} | {b['t']} "
+                  f"model {b['p']:.2f} price {(b['bid'] + b['ask']) / 2:.2f} side {'YES' if b['side'] else 'NO'} "
+                  f"cost {b['cost']:.2f} {'WON' if b['won'] else 'lost'}")
+    # how fresh is the SB value? compare chart day D with day D-1 at the market close
+    print("\n== question text of a few bet markets")
+    ids = {b["t"] for b in pick([r for r in pts if r["fam"] == "poly_silver"], 0.05)}
+    for ev in fams.events:
+        for m in ev["markets"]:
+            if m.get("id") in ids and len(ids) > 0:
+                print("  ", m["id"], m["q"][:90], "| end", dt.datetime.fromtimestamp(m["end"], UTC), "| closed",
+                      dt.datetime.fromtimestamp(m["closed_t"] or 0, UTC))
+                ids.discard(m["id"])
+                if len(ids) < max(0, len(ids) - 6):
+                    break
+
+
 def selftest():
     """Offline: in a fake world where the market price is the true chance, betting the model must lose about the
     costs (no fake edge). In a world where the market ignores the average entirely, the model must win."""
@@ -727,4 +761,4 @@ def reach():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "reach"
-    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "all": lambda: (fetch(), run())}[cmd]()
+    {"reach": reach, "fetch": fetch, "run": run, "selftest": selftest, "drill": drill, "all": lambda: (fetch(), run())}[cmd]()
