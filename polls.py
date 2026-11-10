@@ -398,7 +398,7 @@ def sb_series(src):
     """Silver Bulletin daily approve average from the Datawrapper datasets: {date: value}."""
     best = {}
     for k, txt in src.items():
-        if not k.startswith("dw_"):
+        if k != "dw_kSCt4":   # the approval chart on the SB approval page (rfiFi is the generic ballot)
             continue
         lines = [ln for ln in txt.splitlines() if ln.strip()]
         if not lines:
