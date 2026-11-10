@@ -454,6 +454,102 @@ def updown_hist():
               f"{mk['outs'][0] if y == 1 else mk['outs'][1]}")
 
 
+def updown_tape():
+    """Real-fill check for the daily stock/commodity up/down lead: the same signal (side under 45c on the price
+    history 23h before the end), but filled at the first real BUY of that side on the trade tape in the next 3 hours.
+    Results grouped by trading day, since SPX/SPY/'opens' markets on one day are really one bet."""
+    import calib
+    import ideas
+    import informed
+    markets, hist, _ = ideas.load_full()
+    ms = ideas.in_sample(markets)
+    sig = []
+    for mk in ms.values():
+        fa, _ = classify(mk["q"], mk.get("slug"), "", mk.get("outs"), mk.get("sports"), None, 1)
+        if fa != "up/down: stocks/other" or re.search(r"\d{1,2}(:\d\d)?\s*(am|pm)", mk["q"].lower()):
+            continue
+        y = calib.outcome0(mk)
+        h = hist.get(mk["id"])
+        if y is None or not h or not h[0] or not mk.get("end"):
+            continue
+        T, P = h
+        t = mk["end"] - 23 * 3600
+        i = bisect.bisect_right(T, t) - 1
+        if i < 0 or t - T[i] > 6 * 3600:
+            continue
+        for oi, q in ((0, P[i]), (1, 1 - P[i])):
+            if 0.15 <= q < 0.45:
+                sig.append((mk, oi, q, t, y if oi == 0 else 1 - y))
+    print(f"signals: {len(sig)}")
+    cids = informed.cids_for([s[0]["id"] for s in sig])
+    print(f"condition ids found: {len(cids)}")
+    rows = []
+    from concurrent.futures import ThreadPoolExecutor
+
+    def one(sg):
+        mk, oi, q, t, pay = sg
+        cid = cids.get(mk["id"])
+        if not cid:
+            return None
+        tr, _ = informed.tape(cid, 40)
+        buys = []
+        for r in tr:
+            ts = bot.fnum(bot.pick(r, "timestamp", "time"))
+            ts = ts / 1000 if ts > 1e11 else ts
+            o = r.get("outcome_index", r.get("outcomeIndex"))
+            if o not in (0, 1):
+                tok = str(bot.pick(r, "token_id", "asset", default=""))
+                o = 0 if tok == mk["toks"][0] else 1 if tok == mk["toks"][1] else None
+            if o == oi and str(r.get("side") or "").upper().startswith("B") and t <= ts <= t + 3 * 3600:
+                buys.append((ts, bot.fnum(r.get("price")), bot.fnum(r.get("size"))))
+        buys.sort()
+        return (mk, oi, q, t, pay, buys, len(tr))
+    with ThreadPoolExecutor(8) as ex:
+        for x in ex.map(one, sig):
+            if x:
+                rows.append(x)
+    filled = [r for r in rows if r[5]]
+    print(f"tapes read: {len(rows)}, with a real buy of that side within 3h: {len(filled)}")
+    gap = [r[5][0][1] - r[2] for r in filled]
+    if gap:
+        print(f"real first buy minus history price: median {100 * statistics.median(gap):+.1f}c, "
+              f"mean {100 * statistics.mean(gap):+.1f}c")
+    for extra in (0.0, 0.01, 0.02):
+        by_day = collections.defaultdict(lambda: [0.0, 0.0])
+        n = w = 0
+        for mk, oi, q, t, pay, buys, _ in filled:
+            c = min(0.99, buys[0][1] + extra)
+            fe = bot.taker_fee(1, c, mk.get("fee", 0))
+            d = bot.iso(dt.datetime.fromtimestamp(mk["end"], dt.timezone.utc))[:10]
+            by_day[d][0] += pay - c - fe
+            by_day[d][1] += c + fe
+            n += 1
+            w += pay >= 0.5
+        P_ = sum(v[0] for v in by_day.values())
+        S_ = sum(v[1] for v in by_day.values())
+        if S_ <= 0:
+            continue
+        rate = P_ / S_
+        k = len(by_day)
+        var = sum((v[0] - rate * v[1]) ** 2 for v in by_day.values()) / (S_ * S_) * (k / max(1, k - 1))
+        se = math.sqrt(var)
+        days = sorted(by_day)
+        mid = days[len(days) // 2]
+        h1 = [v for d, v in by_day.items() if d < mid]
+        h2 = [v for d, v in by_day.items() if d >= mid]
+        r1 = 100 * sum(v[0] for v in h1) / max(1e-9, sum(v[1] for v in h1))
+        r2 = 100 * sum(v[0] for v in h2) / max(1e-9, sum(v[1] for v in h2))
+        print(f"  real first buy +{100 * extra:.0f}c + fee: {n} bets on {k} trading days, won {w}, "
+              f"{100 * rate:+.1f} per $100, 90% band {100 * (rate - 1.645 * se):+.1f} to {100 * (rate + 1.645 * se):+.1f}, "
+              f"halves {r1:+.1f} / {r2:+.1f}")
+    print("\nsample: question | side | history price | first real buy (time after signal, shares) | result")
+    import random
+    for mk, oi, q, t, pay, buys, ntr in random.Random(3).sample(filled, min(30, len(filled))):
+        b = buys[0]
+        print(f"  {mk['q'][:55]} | {mk['outs'][oi]} | {100 * q:.0f}c | {100 * b[1]:.0f}c ({(b[0] - t) / 60:.0f} min, "
+              f"{b[2]:.0f} sh) | {'WON' if pay >= 0.5 else 'lost'}")
+
+
 def updown_live():
     """Open daily stock/commodity up/down markets right now: real best bid/ask, depth on the ask, hours left."""
     import sources
@@ -522,4 +618,4 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "live"
-    {"live": live, "history": history, "selftest": selftest, "updown": updown_live, "updownhist": updown_hist}[cmd]()
+    {"live": live, "history": history, "selftest": selftest, "updown": updown_live, "updownhist": updown_hist, "updowntape": updown_tape}[cmd]()
