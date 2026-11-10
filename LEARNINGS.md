@@ -122,6 +122,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Cheap side of "sure" weather buckets:** -$18.67 per $100 on full data (the +$121 was a data hole).
 - **Crypto price model 3-30 hours out:** the markets are priced like the model.
 - **Weather buckets already decided:** sit at 99.95c, nothing left.
+- **Betting free weather forecasts against temperature markets (10 Nov, PR #71):** Kalshi lost $11-15 per $100 on about 17,600 bets; Polymarket lost $2-4 (and $9 at +5c). The prices know the temperature better than GFS/ECMWF/NOAA do. One shaky lead: Polymarket daily lows, +$6 to +$11, but only Sep-Nov when new cities opened. Look again on the late-December test days.
 - **Same question listed twice on Polymarket:** no gaps.
 - **Kalshi vs Polymarket game winners:** a pair costs about $1.04 to win $1.
 - **Kalshi vs Polymarket 15-min crypto:** a pair costs about $1.05.
