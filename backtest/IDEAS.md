@@ -60,6 +60,11 @@ misses, worth re-screening once the cache holds whole events: crypto price marke
 NO at 25-50c, 1-3 days out (beat its twins by about $21-26 per $100 in both halves, ~250 events); threshold questions
 ("above", "at least") -> NO at 25-50c, 30 days out (small, 75 events).
 
+**Second run, on whole events (same day, after `btideasfetch`):** 33,823 ideas, **1 survivor, 0 placebos**:
+markets whose price moved less than 2c in the last week, buy NO at 50-75c, 1-3 days before the end (+$25 / +$35 per
+$100 at +2c in the two halves, +$23 at +5c, 97 + 56 events). Story: a quiet YES at 25-50c this close to the end
+hasn't priced in that time is running out. **Dropped after the drill-down:** replayed the way a bot would enter (first hour the rule fits), it's about break-even (+$0.32 per $100 at +2c, 2nd half negative). See ideas.md.
+
 ## 4. Ideas I'd like to add when data allows
 
 Not testable on today's cache (it has no rule text, holder lists or order books):

@@ -162,6 +162,37 @@ def log_event(ev):
     print("EVENT", json.dumps(ev, sort_keys=True))
 
 
+# ---- "alive but waiting": what each strategy saw on its last check and why it didn't buy (records only)
+_STATUS = {}
+
+
+def saw(name, msg):
+    """One plain line about this run's check for a track, e.g. '0 of 11,236 markets match its rules'."""
+    _STATUS.setdefault(name, {"skips": Counter()})["msg"] = msg
+
+
+def why(name, reason):
+    """Count one skip reason for a track this run."""
+    _STATUS.setdefault(name, {"skips": Counter()})["skips"][reason] += 1
+
+
+def stamp_status(tracks):
+    """Copy this run's notes into tracks[name]['status'] (shown on the dashboard). Tracks not checked this run keep
+    their last note; the paced rule tracks get a 'next pick' note so a quiet day doesn't look dead."""
+    picked = load("scan_state.json", {}).get("picked_on", {})
+    for name, tc in CFG["tracks"].items():
+        tr = tracks.get(name)
+        if tr is None:
+            continue
+        st = _STATUS.get(name)
+        if st:
+            tr["status"] = {"at": iso(), "msg": st.get("msg", ""), "skips": dict(st["skips"].most_common(5))}
+        elif tc["source"] in ("screener", "random", "momentum") and picked.get(name) != today_utc():
+            tr["status"] = {"at": iso(), "msg": "Picks once a day at the morning run (about 06:00 Stockholm); "
+                                                "no pick yet today.", "skips": {}}
+    _STATUS.clear()
+
+
 def drop_phantom_fills(tr):
     """One-time cleanup (Jan's OK, 2026-11-09): endgame paper buys made on an empty order book ('estimate' fills at
     the stale listed price) could never have happened, so they are taken out of the score and their money put back.
@@ -208,6 +239,9 @@ def load_tracks():
                 tracks[name].setdefault(k, v)
         if tc["source"] == "kmaker":
             for k, v in (("orders", {}), ("unfilled", 0), ("unfilled_log", []), ("last_check", {})):
+                tracks[name].setdefault(k, v)
+        if tc["source"] == "econ":
+            for k, v in (("orders", {}), ("done", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
     return tracks
 
@@ -652,7 +686,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -908,6 +942,9 @@ def follow_leader(tracks):
         print("Empty positions response while we expected some; skipping leader check this run.")
         return
     n = CFG["shares_per_trade"]
+    newest = max((v.get("first_seen") or "" for v in prev.values()), default="")
+    for name in leader_tracks():
+        saw(name, f"Watching his {len(cur)} open positions. Last new one seen: {newest[:10] or 'none since the start'}.")
 
     # ---- new positions he opened
     both = split_tokens(cur)
@@ -929,8 +966,10 @@ def follow_leader(tracks):
         for name in leader_tracks():
             tc, tr = CFG["tracks"][name], tracks[name]
             if px is None or tok in tr["positions"] or not (tc["min_price"] <= px <= tc["max_price"]):
+                why(name, "his new bet's price is outside its range")
                 continue
             if p["size"] * max(p["avg"], 0.01) < tc.get("min_open_usd", lead["min_open_usd"]):
+                why(name, "his new bet was too small")
                 continue  # e.g. sab_big: only his $1,000+ bets
             if paper_buy(tr, name, tok, shares, px, taker_fee(shares, px, rate),
                          {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"],
@@ -1061,23 +1100,31 @@ def copy_open(tracks, name, p, r, extra=None):
         return False
     if len(tr["positions"]) >= r.get("max_open", 999):
         tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+        why(name, "full (max open bets)")
         return False
     m = market_by_slug(p["slug"])
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
+        why(name, "market closed")
         return False
     end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
     if end and end < now():
+        why(name, "market already past its end date")
         return False
     px, shares, how = quote(p["token"], "buy", CFG["shares_per_trade"], m)
     if px is None or not (r.get("min_price", 0.02) <= px <= r.get("max_price", 0.97)):
+        why(name, "no order book" if px is None else "price under 3c or over 97c")
         return False
     if r.get("max_chase") is not None and p["avg"] and px > p["avg"] + r["max_chase"]:
         tr["skipped_chase"] = tr.get("skipped_chase", 0) + 1  # we'd be paying well above what they paid: too late
+        why(name, "too late (price 5c+ above what they paid)")
         return False
     meta = {"title": p["title"], "outcome": p["outcome"], "slug": p["slug"], "event_slug": p["event_slug"],
             "end": p["end"], "source": name, "their_avg": p["avg"], "their_size": p["size"], "price_source": how}
     meta.update(extra or {})
-    return paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta)
+    if not paper_buy(tr, name, p["token"], shares, px, taker_fee(shares, px, fee_rate(m)), meta):
+        why(name, "out of cash")
+        return False
+    return True
 
 
 def copy_close(tracks, name, tok, why):
@@ -1134,10 +1181,12 @@ def follow_wallets(tracks):
         addr = CFG["tracks"][name]["address"].lower()
         rows, complete = got.get(addr, (None, False))
         if rows is None:
+            saw(name, "Wallet lookup failed this run (API error); tries again in 5 minutes.")
             continue
         cur = {p["token"]: p for p in rows if p["token"] and p["size"] >= 1}
         prev = old.get(addr, set())
         if addr not in old:
+            saw(name, f"First look: {len(cur)} positions recorded as the starting point.")
             snaps[addr] = {"held": sorted(tkey(t) for t in cur), "since": iso()}
             log_event({"type": "wallet_baseline", "track": name, "positions": len(cur)})
             live[addr] = cur
@@ -1155,17 +1204,25 @@ def follow_wallets(tracks):
             backfill(tracks, name, cur, r)
         # new positions
         both = split_tokens(cur)
+        fresh = 0
         for tok, p in cur.items():
             if tok in both:
                 tr["skipped_split"] = tr.get("skipped_split", 0) + (tkey(tok) not in prev)
                 continue
-            if tkey(tok) in prev or p["redeemable"] or p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+            if tkey(tok) in prev or p["redeemable"]:
+                continue
+            fresh += 1
+            if p["size"] < 5 or p["size"] * max(p["avg"], 0.01) < r["min_open_usd"]:
+                why(name, f"too small (under ${r['min_open_usd']})")
                 continue
             if day["n"] >= r.get("max_new_per_day", 999):
                 tr["skipped_cap"] = tr.get("skipped_cap", 0) + 1
+                why(name, "daily copy limit reached")
                 continue
             if copy_open(tracks, name, p, r):
                 day["n"] += 1
+        saw(name, f"Watching {len(cur)} open positions of this wallet; {fresh} new since the last check. "
+                  f"Watching since {str(snaps[addr].get('since') or '?')[:10]}.")
         # exits: the wallet sold (or redeemed) most of what it had when we copied
         for tok in list(tr["positions"]):
             q = cur.get(tok)
@@ -1212,6 +1269,8 @@ def follow_consensus(tracks, live):
             elif holders.get(tok, 0) == 0:
                 copy_close(tracks, name, tok, "all wallets left")
         done = set(tr.setdefault("seen", []))
+        hot = sum(1 for _, k in count.items() if k >= r["min_wallets"])
+        saw(name, f"{hot} markets held by {r['min_wallets']}+ of the copied wallets right now ({len(live)} wallets read).")
         tried = 0
         for tok, k in count.most_common():
             if k < r["min_wallets"] or tried >= r.get("picks_per_run", 5) or len(tr["positions"]) >= r.get("max_open", 999):
@@ -1473,8 +1532,10 @@ def buy_candidates(tracks, name, cands, limit):
         if len(bought) >= limit or len(tr["positions"]) >= r.get("max_open", 999):
             break
         if c["token"] in tr["positions"] or c["event_key"] in held_events:
+            why(name, "already holds this market")
             continue
         if c["theme"] and themes.get(c["theme"], 0) >= r.get("max_per_theme", 999):
+            why(name, "too many bets on this theme")
             continue
         px, shares, how = quote(c["token"], "buy", n, c["market"])
         if how != "book" and tc["source"] == "endgame":
@@ -1482,13 +1543,16 @@ def buy_candidates(tracks, name, cands, limit):
         lo = r.get("min_price", 0.0)
         hi = r.get("max_price", 1.0) + 0.01
         if px is None or not (lo <= px <= hi):
+            why(name, "no order book" if px is None else "real price outside its range")
             continue
         if r.get("max_over_listed") is not None and px > c["price"] + r["max_over_listed"]:
             continue  # thin book: the real ask is far above the listed price, so the backtest edge isn't there
         fee = taker_fee(shares, px, c["fee_rate"])
         if r.get("min_edge") is not None and (1 - px - fee / shares) < r["min_edge"]:
+            why(name, "too little profit after the fee")
             continue  # too little left after paying the price and the fee
         if c.get("model_p") is not None and c["model_p"] - px - fee / shares < r.get("min_model_edge", 0):
+            why(name, "real price ate the model's edge")
             continue  # weather/crypto: the real fill price ate the model's edge
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
@@ -1501,11 +1565,15 @@ def buy_candidates(tracks, name, cands, limit):
         if r.get("sl_rel"):
             meta["stop"] = round(max(0.01, px - r["sl_rel"]), 4)    # cut at entry - sl_rel
         if not paper_buy(tr, name, c["token"], shares, px, fee, meta):
+            why(name, "out of cash")
             break
         held_events.add(c["event_key"])
         if c["theme"]:
             themes[c["theme"]] = themes.get(c["theme"], 0) + 1
         bought.append(f"{c['outcome']} @ {cents(px)} - {c['title'][:80]}")
+    if len(tr["positions"]) >= r.get("max_open", 999):
+        why(name, "full (max open bets)")
+    saw(name, f"{len(cands)} market{'' if len(cands) == 1 else 's'} matched its rules, bought {len(bought)}")
     if bought and (CFG["push"].get("on_screener_buys") if tc["source"] != "endgame" else CFG["push"].get("on_endgame")):
         push(f"[{name}] bought {len(bought)} (practice money)", "\n".join(bought), tags="mag", track=name)
     return bought
@@ -1746,6 +1814,8 @@ def arb_propose():
     r = arb_rules()
     pairs = load_pairs()
     decided = {p.get("id") for p in pairs["approved"] + pairs["rejected"]}
+    # Whole Kalshi events whose rule text differs from Polymarket's for every choice (one review covers them all).
+    blocked_events = {str(e.get("event") or "") for e in pairs.get("rejected_events", []) if isinstance(e, dict)}
     lo, hi = now() + dt.timedelta(days=r["min_days"]), now() + dt.timedelta(days=r["max_days"])
     poly = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi), "liquidity_num_min": r["min_liquidity"]})
     P = []
@@ -1784,6 +1854,9 @@ def arb_propose():
     tol = r["date_tolerance_days"] * 86400
     max_diff = r.get("max_price_diff", 0.12)
     for k in K:
+        if str(k["m"].get("event_ticker") or "") in blocked_events:
+            dropped["event rejected as a whole"] += 1
+            continue
         pool = Counter()
         for t in k["toks"]:
             for i in index.get(t, ()):
@@ -1850,10 +1923,15 @@ def arb_propose():
                            "fee_rate": fee_rate(pm), "description": str(pm.get("description") or "")[:1800],
                            "url": market_link(str(pm.get("slug") or ""), str(ev.get("slug") or ""))},
         })
-    # Most twin-like first; among equals, the ones closest to a real (fee-beating) gap.
-    cands.sort(key=lambda c: (-round(c["match_score"], 1), -c["est_gap_before_fees"]))
+    # Review first the ones that look like twins AND would pay now (text match 0.6+, gap 2c+ before fees), then
+    # the rest by how twin-like they look. Gap alone is a bad guide: the biggest "gaps" are almost all two
+    # different questions (live test 2026-11-09), so the match score still has to vouch for them.
+    min_gap, min_s = r.get("review_first_gap", 0.02), r.get("review_first_score", 0.6)
+    hot = lambda c: c["match_score"] >= min_s and c["est_gap_before_fees"] >= min_gap
+    cands.sort(key=lambda c: (not hot(c), -round(c["match_score"], 1), -c["est_gap_before_fees"]))
     save("arb_candidates.json", {"generated": iso(), "poly_markets": len(P), "kalshi_scanned": k_seen,
                                  "kalshi_kept": len(K), "matched_unreviewed": len(cands),
+                                 "review_first": sum(hot(c) for c in cands),
                                  "how_to_review": "Compare kalshi.rules_* with polymarket.description. Approve only true "
                                                   "twins into arb_pairs.json (see 'about' there).",
                                  "candidates": cands[: r["max_candidates"]]})
@@ -2235,6 +2313,10 @@ def fullset_check(tracks):
                 shortlist.append(("no", e, live, gap / (n - 1)))
     shortlist.sort(key=lambda x: -x[3])
     print(f"every_horse: {len(shortlist)} sets look cheap on listed prices")
+    near = sorted((v["edge"] for v in tr["seen"].values() if str(v.get("ts", ""))[:10] >= iso(now() - dt.timedelta(days=2))[:10]),
+                  reverse=True)
+    saw(name, f"{len(shortlist)} sets looked cheap on listed prices; none is cheap on the real order book yet"
+              + (f" (closest {near[0] * 100:+.1f}c a share)" if near else "") + ".")
     bought = []
     for kind, e, live, _ in shortlist[:15]:
         if len(bought) >= r["picks_per_scan"] or len(tr["sets"]) >= r["max_open"]:
@@ -2638,7 +2720,13 @@ def ladder_check(tracks, force=False):
     save("scan_state.json", st)
     tr = tracks[name]
     lp = load("ladder_pairs.json", {}).get("list", [])
+    if not lp and not load("ladder_pairs.json", {}).get("generated"):
+        # bug fix: the pair list was only built by the daily job, so a track added after it sat idle until tomorrow
+        print("ladder: no pair list yet; building it now")
+        ladder_discover()
+        lp = load("ladder_pairs.json", {}).get("list", [])
     if not lp:
+        saw(name, "No ladder pairs found in today's markets.")
         return
     fresh = gamma_markets_by_id([p["a"]["mid"] for p in lp] + [p["b"]["mid"] for p in lp])
     print(f"ladder: {len(lp)} pairs, fresh prices for {len(fresh)} markets")
@@ -2658,6 +2746,7 @@ def ladder_check(tracks, force=False):
             short.append((est, p, a, b))
     short.sort(key=lambda x: -x[0])
     print(f"ladder: {len(short)} pairs look cheap on listed prices")
+    saw(name, f"Checked {len(lp)} ladder pairs; {len(short)} looked cheap on listed prices.")
     bought = []
     for est, p, a, b in short[: r["books_per_check"]]:
         if len(bought) >= r["picks_per_check"] or len(tr["sets"]) >= r["max_open"]:
@@ -3039,6 +3128,166 @@ def kmaker_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ econ_fav: forecast backs the favorite (added 2026-11-09)
+#
+# Kalshi data-release markets (CPI, core CPI, CPI year-on-year, jobless claims, unemployment, payrolls). 20-76 hours
+# before the release, buy the side that costs 80-99c (with the fee) when a free forecast says it is worth at least 3c
+# more: Cleveland Fed inflation nowcast for CPI, 'same as last time' from FRED for the jobs numbers (econ.py).
+# Backtest (backtest/econ.md, 2021-2026): +$6.73 per $100 at 24h and +$7.75 at 72h, both halves ahead, still ahead at
+# 2c worse prices; the same price band WITHOUT the forecast lost about $5 per $100. Held to the result. Real book fills.
+
+def econ_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "econ"]
+
+
+def econ_settle(tracks, names):
+    for n in names:
+        tr = tracks[n]
+        for tk in list(tr["orders"]):
+            o = tr["orders"][tk]
+            close = parse_iso(o["close"])
+            if now() < close + dt.timedelta(seconds=60):
+                continue
+            m = kalshi_market(tk)
+            res = str((m or {}).get("result") or "").lower()
+            if res not in ("yes", "no"):
+                if now() - close > dt.timedelta(hours=12):
+                    print(f"{n}: {tk} still has no result 12h after the close")
+                continue
+            pay = 1.0 if res == o["side"] else 0.0
+            pnl = o["shares"] * pay - o["cost"]
+            tr["cash"] = round(tr["cash"] + o["shares"] * pay, 6)
+            tr["realized"] = round(tr["realized"] + pnl, 6)
+            del tr["orders"][tk]
+            tr["done"] = (tr.get("done", []) + [tk])[-500:]
+            rs = {k: [v[0], round(v[1] * pay - v[0], 4), v[2]] for k, v in (o.get("rs") or {}).items()}
+            tr["closed"].append({**o, "exit": pay, "exit_fee": 0.0, "pnl": round(pnl, 6), "reason": "resolved",
+                                 "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs})
+            log_event({"type": "econ_settle", "track": n, "ticker": tk, "side": o["side"], "pnl": round(pnl, 4)})
+            print(f"{n}: {tk} {o['side'].upper()} result {res}, P&L {pnl:+.2f}")
+            if pnl < 0 and push_allowed(n):
+                push(f"[{n}] FLIP: a forecast-backed favorite lost (${pnl:+.2f})",
+                     f"{o['title']}\nBought {o['side'].upper()} at {cents(o['entry'])}, forecast said {o['chance'] * 100:.0f} in 100.",
+                     tags="rotating_light", track=n)
+
+
+def econ_place(tracks, names, force=False):
+    t_now = now()
+    due = [n for n in names if force or not tracks[n].get("last_scan")
+           or t_now - parse_iso(tracks[n]["last_scan"]) >= dt.timedelta(minutes=rules_for(n).get("scan_minutes", 55))]
+    if not due:
+        return
+    import econ
+    cands = []
+    for series in sorted({s for n in due for s in rules_for(n).get("series", [])}):
+        try:
+            rows = kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 200}).get("markets") or []
+        except Exception as e:
+            print(f"econ: {series} list failed: {e}")
+            continue
+        for m in rows:
+            close = parse_iso(m.get("close_time"))
+            if close:
+                hrs = (close - t_now).total_seconds() / 3600
+                if min(rules_for(n).get("min_hours", 20) for n in due) <= hrs <= max(rules_for(n).get("max_hours", 76) for n in due):
+                    cands.append(dict(m, _series=series, _hours=hrs))
+    for n in due:
+        tracks[n]["last_scan"] = iso()
+        tracks[n]["last_check"] = {"ts": iso(), "markets_in_window": len(cands)}
+    if not cands:
+        return
+    try:
+        ch = econ.live_chances(cands, int(t_now.timestamp()))
+    except Exception as e:
+        print(f"econ: forecasts failed: {e}")
+        return
+    for n in due:
+        tracks[n]["last_check"]["with_forecast"] = len(ch)
+    for m in cands:
+        tk = m.get("ticker")
+        if tk not in ch:
+            continue
+        p, mu, sd = ch[tk]
+        bk = kalshi_asks(tk)
+        if not bk:
+            continue
+        for n in due:
+            r, tr = rules_for(n), tracks[n]
+            if m["_series"] not in r.get("series", []) or not (r.get("min_hours", 20) <= m["_hours"] <= r.get("max_hours", 76)):
+                continue
+            if tk in tr["orders"] or tk in tr.get("done", []):
+                continue
+            for side, asks, val in (("yes", bk[0], p), ("no", bk[1], 1 - p)):
+                if not asks:
+                    continue
+                shares = max(1, int(r.get("usd_per_bet", 5) / max(asks[0][0], 0.01)))
+                px = walk(asks, shares)
+                if px is None:
+                    continue
+                fee = kalshi_fee(shares, px)
+                cost = shares * px + fee
+                per = cost / shares
+                if not (r.get("min_cost", 0.80) <= per <= r.get("max_cost", 0.99)) or val - per < r.get("min_edge", 0.03):
+                    continue
+                maybe_refill(tr, n, cost)
+                if cost > tr["cash"] + EPS:
+                    tr["skipped_no_cash"] += 1
+                    continue
+                rs = {}
+                for usd_ in rs_sizes():
+                    want = max(1, int(usd_ / max(asks[0][0], 0.01)))
+                    p2 = walk(asks, want)
+                    if p2 is None:   # not all fits: take what the book has
+                        got = sum(sz for _, sz in asks)
+                        p2 = walk(asks, got) if got >= 1 else None
+                        want = got
+                    if p2 is not None:
+                        c2 = want * p2 + kalshi_fee(want, p2)
+                        rs[str(usd_)] = [round(c2, 4), round(want, 4), round(min(1.0, want * p2 / usd_), 4)]
+                tr["cash"] = round(tr["cash"] - cost, 6)
+                tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+                tr["orders"][tk] = {"ticker": tk, "series": m["_series"], "title": f"{m.get('title')} ({m.get('yes_sub_title', '')})",
+                                    "outcome": side, "side": side, "shares": shares, "entry": round(px, 6), "price": round(px, 6),
+                                    "entry_fee": round(fee, 6), "cost": round(cost, 6), "placed": iso(), "close": m.get("close_time"),
+                                    "hours_left": round(m["_hours"], 1), "chance": round(val, 4), "forecast": round(mu, 4),
+                                    "spread": round(sd, 4), "price_source": "book", "rs": rs}
+                tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+                log_event({"type": "econ_buy", "track": n, "ticker": tk, "side": side, "price": round(px, 4),
+                           "shares": shares, "chance": round(val, 4)})
+                print(f"{n}: bought {side.upper()} {shares} x {px * 100:.1f}c (+fee {fee:.2f}) on {tk}, forecast "
+                      f"{mu:g} says {val * 100:.0f} in 100, {m['_hours']:.0f}h before the release")
+                if push_allowed(n):
+                    push(f"[{n}] BUY {side.upper()} at {cents(per)}", f"{m.get('title')} ({m.get('yes_sub_title', '')})\n"
+                         f"Forecast says it wins {val * 100:.0f} times in 100. Result in {m['_hours']:.0f} hours.", track=n)
+                break
+
+
+def econ_cycle(tracks):
+    names = econ_names()
+    if not names:
+        return
+    econ_settle(tracks, names)
+    econ_place(tracks, names)
+
+
+def econ_summary(name, tr):
+    closed = tr["closed"]
+    wins = sum(1 for c in closed if c["pnl"] > 0)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr.get("orders", {})), "closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": tr["refills"],
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"]}
+    lc = tr.get("last_check", {})
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(tr.get('orders', {}))} | {len(closed)} ({wins}/{len(closed) - wins}) "
+           f"| ${tr['cash']:.2f} | last look {str(lc.get('ts', '-'))[:16]}: {lc.get('markets_in_window', 0)} markets near a release |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
+    for o in tr.get("orders", {}).values():
+        lines.append(f"- waiting: {o['title']} {o['side'].upper()} {o['shares']} at {cents(o['entry'])}, forecast says "
+                     f"{o['chance'] * 100:.0f} in 100, release {str(o['close'])[:16]}")
+    return row, stats, lines
+
+
 # ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
 #
 # These pay out within hours or a day, so they collect finished trades much faster than deadline markets.
@@ -3060,7 +3309,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3144,7 +3393,7 @@ def run_fast(tracks, force=False):
         return {}
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
-                     ("mentions", mention_candidates)):
+                     ("mentions", mention_candidates), ("quiet", quiet_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3197,6 +3446,60 @@ def mention_candidates(names):
             if r["min_price"] <= prices[i] <= r["max_price"]:
                 cands.append(candidate(m, i, b[0], b[1], {"signal": f"listed {cents(prices[i])}"}))
         cands.sort(key=lambda c: (c["days"], -c["liquidity"]))  # soonest first: the backtest edge is 1-7 days out
+        out[n] = cands
+    return out
+
+
+def week_range(token):
+    """(high - low over the last 7 days, number of points) from the CLOB price history of a token, or None."""
+    try:
+        res = http_json(f"{CLOB}/prices-history", {"market": token, "interval": "1w", "fidelity": 60})
+    except Exception as e:
+        print(f"week history failed for {token[:12]}...: {e}")
+        return None
+    px = []
+    for p in envelope_rows(res, "history", "data"):
+        if isinstance(p, dict):
+            v = fnum(pick(p, "p", "price"), None)
+            if v is not None:
+                px.append(v)
+    if len(px) < 2:
+        return None
+    return max(px) - min(px), len(px)
+
+
+def quiet_candidates(names):
+    """Quiet week, buy NO (idea machine, ideas.py, 2026-11-09): markets ending in 1-3 days whose price moved less than
+    max_week_range over the last 7 days, second answer (No) at min_price-max_price. The only one of 33,823 screened
+    ideas that passed on whole events (backtest/ideas.md). The 7-day range is checked on the first answer's history."""
+    rs = {n: rules_for(n) for n in names}
+    lo = now() + dt.timedelta(days=min(r["min_days"] for r in rs.values()))
+    hi = now() + dt.timedelta(days=max(r["max_days"] for r in rs.values()))
+    markets = scan_markets({"end_date_min": iso(lo), "end_date_max": iso(hi),
+                            "liquidity_num_min": min(r["min_liquidity"] for r in rs.values())})
+    out = {}
+    for n, r in rs.items():
+        short = []
+        for m in markets:
+            prices = binary(m)
+            b = base_filter(m, r) if prices else None
+            if not b or len(prices) != 2:
+                continue
+            q = str(m.get("question") or "").lower()
+            if any(w in q for w in r.get("skip_words", [])):
+                continue
+            i = 1  # second answer, as screened
+            if r["min_price"] <= prices[i] <= r["max_price"]:
+                short.append((m, i, b))
+        short.sort(key=lambda x: -x[2][1])  # most liquid first: the history check costs a call each
+        cands = []
+        for m, i, b in short[: r.get("max_history_checks", 40)]:
+            wr = week_range(market_tokens(m)[0])
+            if not wr or wr[0] >= r["max_week_range"]:
+                continue
+            cands.append(candidate(m, i, b[0], b[1], {"signal": f"moved {wr[0] * 100:.1f}c this week"}))
+        cands.sort(key=lambda c: (c["days"], -c["liquidity"]))
+        print(f"quiet {n}: {len(short)} in the price band, {len(cands)} quiet")
         out[n] = cands
     return out
 
@@ -3887,6 +4190,13 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
                     b["v"] = cfg["v"]
                 b["cfg_ts"] = t_now
         bk = maker_book(b["yes_tok"])
+        if (m is None or bk is None) and b.get("misses", 0) < 6:
+            # bug fix: one failed market/book lookup (an API blip) used to close the book as "market left the list".
+            # Skip it this run instead; last_ts stays, so the next run catches up on fills. 6 misses in a row = gone.
+            b["misses"] = b.get("misses", 0) + 1
+            why(name, "market or order book lookup failed; retrying next run")
+            continue
+        b["misses"] = 0
         sc = book_scores(bk, b["v"], b["min_size"]) if bk else None
         q = b.get("q") or {}
         elapsed = max(0.0, t_now - b["last_ts"])
@@ -4004,6 +4314,7 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
                        "reason": f"pool ${c['rate']:.0f}/day, est. ${c['per_day']:.2f}/day for us"})
     tr["peak_open_cost"] = round(max(tr["peak_open_cost"], maker_locked(tr) + sum(
         b["yes_cost"] + b["no_cost"] for b in tr["books"].values())), 6)
+    saw(name, f"Quoting in {len(tr['books'])} markets; {tr['fills']} fills and ${tr['rewards']:.2f} rewards so far.")
 
 
 def maker_summary(name, tr):
@@ -4264,7 +4575,7 @@ def _track_open_cost(tr, src):
         return sum(a["cost"] for a in tr.get("arbs", {}).values())
     if src in ("fullset", "ladder"):
         return sum(x["cost"] for x in tr.get("sets", {}).values())
-    if src == "kmaker":
+    if src in ("kmaker", "econ"):
         return sum(o["cost"] for o in tr.get("orders", {}).values())
     return open_cost(tr)
 
@@ -4406,7 +4717,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -4427,6 +4738,7 @@ def watch():
     except Exception as e:
         print(f"late fill check failed: {e}")
     integrity_run(tracks)
+    stamp_status(tracks)
     save("tracks.json", tracks)
     try:
         refresh_top(tracks)
@@ -4484,6 +4796,7 @@ def daily(force=None):
     except Exception as e:
         print(f"late fill check failed: {e}")
     integrity_run(tracks, deep=True)
+    stamp_status(tracks)
     save("tracks.json", tracks)
     st = load("scan_state.json", {})
     st["last_daily"] = today_utc()
@@ -4520,9 +4833,9 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker", "kmaker"):
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ"):
             row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
-                                       "maker": maker_summary, "kmaker": kmaker_summary}[src](name, tr)
+                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -4926,6 +5239,31 @@ def discover():
         print("W", json.dumps(row, sort_keys=True))
 
 
+def econtest():
+    """Dry run of econ_fav on live data: what it would buy now (nothing is saved)."""
+    tracks = load_tracks()
+    names = econ_names()
+    for n in names:   # look further ahead than the real rule so the dry run has something to price
+        CFG["rules"][CFG["tracks"][n]["rules"]].update({"min_hours": 0, "max_hours": 24 * 20})
+    econ_place(tracks, names, force=True)
+    for n in names:
+        print(n, tracks[n].get("last_check"), list(tracks[n]["orders"]))
+    import econ
+    rows = []
+    for s_ in econ.LIVE_SERIES:
+        for m in kalshi_get("/markets", {"series_ticker": s_, "status": "open", "limit": 200}).get("markets") or []:
+            rows.append(dict(m, _series=s_))
+    ch = econ.live_chances(rows, int(now().timestamp()))
+    for m in rows:
+        if m["ticker"] in ch:
+            p, mu, sd = ch[m["ticker"]]
+            bk = kalshi_asks(m["ticker"]) or ([], [])
+            ya = bk[0][0][0] if bk[0] else None
+            na = bk[1][0][0] if bk[1] else None
+            print(f"  {m['ticker']:34} closes {str(m.get('close_time'))[:16]} forecast {mu:g} (+-{sd:.3g}) "
+                  f"YES chance {p:.3f}  YES ask {ya}  NO ask {na}")
+
+
 def kmakertest():
     """Dry run of the Kalshi late-favorite maker (no state saved): place on the live windows with any minutes left,
     then replay the fill check on the last closed BTC/ETH window as if we had bid 3 minutes before its close."""
@@ -4965,4 +5303,4 @@ if __name__ == "__main__":
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
      "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
-     "kmakertest": kmakertest}[cmd]()
+     "kmakertest": kmakertest, "econtest": econtest}[cmd]()

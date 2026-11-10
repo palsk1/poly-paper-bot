@@ -609,5 +609,25 @@
   "title": "Will at least 10 ships transit the Strait of Hormuz on any day by October 31, 2026?",
   "token": "52802506667868504339931612703803735835409307518376598441687039242828749241841",
   "ts": "2026-11-08T02:35:18Z"
+ },
+ {
+  "days_left": -6.0,
+  "early": false,
+  "end": "2026-11-04",
+  "event_slug": "fl-26-house-election-winner",
+  "exit_price": 1.0,
+  "first_seen": null,
+  "his_avg": 0.8616,
+  "kind": "redeemed",
+  "left_on_table_per_share": 0.0,
+  "outcome": "Yes",
+  "price_source": "settled price",
+  "profit_per_share": 0.1384,
+  "profit_usd": 830.42,
+  "shares": 6000.11,
+  "slug": "will-the-republican-party-win-the-fl-26-house-seat",
+  "title": "Will the Republican Party win the FL-26 House seat?",
+  "token": "40617506054166922538352737983211722002439765026316001500193847105832422306759",
+  "ts": "2026-11-10T00:45:31Z"
  }
 ]

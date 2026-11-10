@@ -1064,6 +1064,11 @@ if __name__ == "__main__":
     if cmd == "btideasvolbias":
         __import__("ideas").volbias()
         sys.exit(0)
+    if cmd.startswith("btinf_"):  # informed-trader hunt (informed.py)
+        sys.argv = [sys.argv[0], cmd[len("btinf_"):]] + sys.argv[2:]
+        import runpy
+        runpy.run_path(os.path.join(ROOT, "informed.py"), run_name="__main__")
+        sys.exit(0)
     if cmd.startswith("btideasdrill_"):  # idea machine drill-down (ideas.py)
         __import__("ideas").drill(cmd[len("btideasdrill_"):])
         sys.exit(0)
@@ -1082,6 +1087,10 @@ if __name__ == "__main__":
      "btkcfetch": lambda: __import__("kcrypto").fetch(os.environ.get("KC_DAYS", 60)),
      "btkcrun": lambda: __import__("kcrypto").run(),
      "btkc2": lambda: (__import__("kcrypto").fetch(2), __import__("kcrypto").run()),
+     "btkf": lambda: (__import__("kfast").fetch(os.environ.get("KF_DAYS", 14)), __import__("kfast").run()),
+     "btkffetch": lambda: __import__("kfast").fetch(os.environ.get("KF_DAYS", 14)),
+     "btkfrun": lambda: __import__("kfast").run(),
+     "btkf2": lambda: (__import__("kfast").fetch(2), __import__("kfast").run()),
      "btrulespeek": lambda: __import__("rules").peek(),
      "btrulesfetch": lambda: __import__("rules").fetch(),
      "btrulessmall": lambda: (__import__("rules").fetch_small(), __import__("rules").run()),
