@@ -23,6 +23,8 @@ Line kinds ("k"): meta, kbook, pbook, ktrade, ptrade, spot, gas, err.
   gas:   {"aaa": 4.0093, "aaa_asof": "11/9/26", "gb": {"NC": [3.223, -0.012], ...}}  (GasBuddy price, change)  Prices in dollars (0-1).
   kbook: {"tk": ticker, "yb": [[p, size], ...] YES bids, "nb": NO bids, "cl": close_time}
   pbook: {"tok": yes token, "cid": condition id, "b": bids, "a": asks, "end": end date}
+         kbook/pbook also carry "rt": seconds after "t" when that book was really read (since 2026-11-10; the
+         Polymarket books come ~20 s after the Kalshi ones, which matters for anything comparing the two sites)
   meta:  the markets in each set (titles, slugs, tickers), written when a set is refreshed
 
 Usage: python3 recorder.py loop [minutes]   (the recorder workflow)
@@ -272,14 +274,15 @@ class Writer:
         self.path = f"{OUT_DIR}/rec-{h}.jsonl.gz"
         self.f = gzip.open(self.path, "at", compresslevel=9)
 
-    def put(self, kind, t, obj, key=None):
-        """Write a line; with `key`, only when the content changed since the last write this hour."""
+    def put(self, kind, t, obj, key=None, extra=None):
+        """Write a line; with `key`, only when the content changed since the last write this hour.
+        `extra` is written with the line but doesn't count as a change (e.g. the read time)."""
         if key is not None:
             h = hashlib.md5(json.dumps(obj, sort_keys=True).encode()).hexdigest()
             if self.last.get(key) == h:
                 return False
             self.last[key] = h
-        self.f.write(json.dumps({"k": kind, "t": t, **obj}, separators=(",", ":")) + "\n")
+        self.f.write(json.dumps({"k": kind, "t": t, **obj, **(extra or {})}, separators=(",", ":")) + "\n")
         return True
 
     def close(self):
@@ -361,7 +364,7 @@ def run(minutes, upload_files=True):
         for fu in cf.as_completed(futs):
             tk = futs[fu]
             try:
-                if w.put("kbook", t, {"tk": tk, **fu.result()}, key=("k", tk)):
+                if w.put("kbook", t, {"tk": tk, **fu.result()}, key=("k", tk), extra={"rt": ts() - t}):
                     stats["kbook"] += 1
             except Exception as e:
                 err(f"kbook {tk}", e)
@@ -370,7 +373,7 @@ def run(minutes, upload_files=True):
         toks = [m["tok"] for m in pf] + ([m["tok"] for m in pw] if wide else [])
         try:
             for tok, b in poly_books(list(dict.fromkeys(toks))).items():
-                if w.put("pbook", t, {"tok": tok, **b}, key=("p", tok)):
+                if w.put("pbook", t, {"tok": tok, **b}, key=("p", tok), extra={"rt": ts() - t}):
                     stats["pbook"] += 1
         except Exception as e:
             err("pbooks", e)
