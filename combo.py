@@ -225,10 +225,23 @@ def experiment(data, log=True):
     L, cards = [], {}
     L += [f"- Learned on **{len(learn_all):,}** market-days ({len(set(m[learn_all].tolist())):,} markets that ended before 10 Aug).",
           f"- Judged on **{len(judge):,}** market-days ({len(set(m[judge].tolist())):,} markets, 10 Aug - 9 Nov) it never saw.", ""]
-    versions = [("with the clock", list(range(len(FEATS)))), ("no clock", [i for i in range(len(FEATS)) if i != CLOCK])]
+    allc = list(range(len(FEATS)))
+    noclock = [i for i in allc if i != CLOCK]
+    everyone = np.ones(len(X), dtype=bool)
+    # "moving" = the price is not the same as a day ago: somebody is really quoting or trading there. Keeps out the
+    # ghost prices (dead markets whose chart sits near 50c with nobody selling), which fooled the first two versions.
+    moving = ~np.isnan(X[:, 1]) & (np.abs(X[:, 0] - X[:, 1]) >= 0.002)
+    versions = [("with the clock", allc, everyone), ("no clock", noclock, everyone),
+                ("moving prices only, no clock", noclock, moving)]
     tries = len(THRESHOLDS) * len(versions)
     rows_tab, guess_tab = [], []
-    for name, cols in versions:
+    base = (learn_all, learn_a, tune, judge)
+    for name, cols, mask in versions:
+        learn_all, learn_a, tune, judge = (r[mask[r]] for r in base)
+        print(f"  {name}: learn {len(learn_all):,}, tune {len(tune):,}, judge {len(judge):,} rows")
+        if len(learn_a) < 1000 or len(judge) < 100:
+            print(f"  {name}: too few rows, skipped")
+            continue
         # 1. pick the rule on the tuning weeks
         ma = fit(X[learn_a], y[learn_a], ev[learn_a], cols)
         qt = ma.predict_proba(X[tune][:, cols])[:, 1]
@@ -302,6 +315,8 @@ def run():
     X, y, t, m = data["X"], data["y"], data["t"], data["m"]
     kinds = {v: k for k, v in data["kinds"].items()}
     for name, (card, bets, thr, mf, cols, best) in cards.items():
+        if os.environ.get("COMBO_ONLY") and os.environ["COMBO_ONLY"] not in name:
+            continue
         if not bets:
             continue
         L += [f"## '{name}': a closer look", ""]
