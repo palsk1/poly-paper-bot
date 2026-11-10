@@ -52,8 +52,34 @@ On history prices, buying the side under 45c 23 hours before the end (the evenin
 +$0.80 per $100 at the real price, -$3.50 at +2c, 90% band -$18 to +$11. **Dropped.** Same lesson as launch.md:
 on thin markets the price chart is not a price you can get.
 
-## Most promising untested type
+## Sports side bets, tested (2026-11-10, Jan's "yes")
 
-Sports side bets (spreads, totals, soccer draws), only because they have never been priced vs results here.
-Most of their books are empty, so expect little. Test = fetch finished sports lines plus their trade tapes and run the
-same table at real buy prices.
+`btsports` fetched every finished sports market with $3,000+ traded, Mar 2026 to the holdout (190,380 in-sample,
+183,695 with a price chart, start time and clean result; $14.9B game winners, $2.3B totals, $1.2B spreads,
+$412M draws). Snapshots 24h, 6h and 1h before the game, buy 1h later but never after kickoff, held to the result.
+
+- **Chart prices:** game winners lose $2-7 per $100 at +2c in every band (priced right, minus costs). Long shots
+  (2-15c) on totals and spreads looked like +$30-50 per $100, NFL/NBA/college long shots even +$90-200. 46 slices
+  flagged.
+- **Real-buy check, first try was wrong:** a 1-hour window after kickoff let in in-game buys (buyers who already
+  know the score). Fixed: only the first real buy of that side **before kickoff** counts.
+- **Real buys before kickoff (sample of 500 per slice):** the long-shot leads shrink to noise (totals 24h +$0.80,
+  spreads 1h -$14.50, NBA/college bands cross zero). Real buyers paid about the chart (+0.5c), so the chart wasn't
+  the trap this time; the long-shot results just don't repeat across times and samples.
+- **Soccer draws survive, barely** (`btsportsdraw`, every bet, not a sample):
+
+| bet | when | bets | won | at the first real buy | 90% band | at +2c |
+|---|---|---|---|---|---|---|
+| full-time draw, 15-50c | 24h before | 3,783 | 1,146 | +$11.90 | +$7.30 to +$16.40 | +$4.00 |
+| full-time draw, 15-50c | 6h before | 4,102 | 1,203 | +$8.80 | +$4.50 to +$13.10 | +$1.20 |
+| full-time draw, 15-50c | 1h before | 4,094 | 1,186 | +$8.10 | +$3.70 to +$12.40 | +$0.40 |
+| half-time result underdog | 6h before | 1,416 | 600 | +$13.30 | +$8.00 to +$18.50 | +$7.50 |
+
+  So draws are about 2c cheap per bet (a 26c draw wins about 29 times in 100). That matches the old "people don't
+  like betting on draws" pattern from bookmakers. But the whole edge is about 2c, so paying 2c more than the first
+  real buyer wipes most of it, and we don't know how many shares sit at that price. Many slices were tested, so
+  some luck is expected.
+- **Verdict:** "Promising, needs more bets". No track (research mode). Pre-registered for the 21 Dec holdout:
+  soccer full-time draw at 15-50c, decided 24h before kickoff, filled at the first real buy before kickoff, must be
+  ahead at +1c. Check the book depth at $25 then too.
+
