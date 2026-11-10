@@ -4925,3 +4925,11 @@
 {"minutes_left": 2.66, "price": 0.978, "queue": 49.91, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV101815-15", "track": "kc_maker_safe", "ts": "2026-11-10T23:12:23Z", "type": "kmaker_order"}
 {"minutes_left": 2.66, "price": 0.998, "queue": 5811.65, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101815-15", "track": "kc_maker", "ts": "2026-11-10T23:12:24Z", "type": "kmaker_order"}
 {"minutes_left": 2.66, "price": 0.998, "queue": 5811.65, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV101815-15", "track": "kc_maker_safe", "ts": "2026-11-10T23:12:24Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.0624, "price": 1.0, "reason": "resolved", "title": "Will the Democratic Party win the FL-07 House seat?", "token": "16661917299889844562247566603559122251937209362630950418259738730496536105112", "track": "endgame", "ts": "2026-11-10T23:15:38Z", "type": "paper_close"}
+{"fee": 0.0096, "outcome": "Yes", "price": 0.96, "shares": 5, "title": "Will Kai Cenat finish his GTA marathon by November 11, 2:59 PM ET?", "token": "87884939770400248611370121746808424393828965378802333592238094313353768276247", "track": "endgame_sell98", "ts": "2026-11-10T23:16:27Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV101815-15", "track": "kc_maker", "ts": "2026-11-10T23:16:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV101815-15", "track": "kc_maker", "ts": "2026-11-10T23:16:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV101815-15", "track": "kc_maker", "ts": "2026-11-10T23:16:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV101815-15", "track": "kc_maker_safe", "ts": "2026-11-10T23:16:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.79, "price": 0.921, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV101815-15", "track": "kc_maker_early", "ts": "2026-11-10T23:16:37Z", "type": "kmaker_fill"}
+{"filled": 11.0, "pnl": -9.933, "price": 0.903, "side": "no", "through": true, "ticker": "KXETH15M-26NOV101815-15", "track": "kc_maker_early", "ts": "2026-11-10T23:16:38Z", "type": "kmaker_fill"}
