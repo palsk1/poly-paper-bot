@@ -104,6 +104,10 @@ A strategy gets real money only if **every** answer is yes:
 - **Check the data for holes.** Our first data dropped losing choices in weather events, which made one idea look
   like +$121 per $100. On full data it lost $18.67.
 - **We are slow (a run every 5 minutes).** Anything that needs speed belongs to the pros. Our edges must last hours.
+- **Downloads are slow because of the number of requests, not the size (10 Nov).** All our old prices together are
+  only about 200 MB packed. The weather dig asked Kalshi for 31,446 price charts, about 2 a second, so 4 hours for
+  just 5 MB. Until now each thread's download stayed on its own branch and was lost after 7 unused days, so sports
+  prices were fetched twice. Now every data run saves to one shared store (`store.py`), so nothing is fetched twice.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
