@@ -3344,7 +3344,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3428,7 +3428,8 @@ def run_fast(tracks, force=False):
         return {}
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
-                     ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates)):
+                     ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
+                     ("draws", draw_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3544,6 +3545,42 @@ def quiet_candidates(names):
         cands.sort(key=lambda c: (c["days"], -c["liquidity"]))
         print(f"quiet {n}: {len(short)} in the price band, {len(cands)} quiet")
         out[n] = cands
+    return out
+
+
+def draw_candidates(names):
+    """Soccer draws (digs.py / census.py, backtest/digs_draws.md, 2026-11-10): the 'end in a draw' leg of a soccer
+    game, YES at min_price-max_price, when kickoff is min_hours-max_hours away (the backtest decided 24h before).
+    Polymarket buyers underrate draws by about 2c. Pre-registered as `soccer_draw` in backtest/PROTOCOL.md."""
+    import sharp
+    rs = {n: rules_for(n) for n in names}
+    games = sharp.poly_games(max(r["max_hours_to_start"] for r in rs.values()))
+    out = {n: [] for n in names}
+    seen = 0
+    for g in games:
+        hrs = (g["start"] - now()).total_seconds() / 3600
+        for m, i, label, yn in sharp.side_names(g):
+            if label != "draw" or not yn:
+                continue
+            outs = [str(o).lower() for o in jlist(m.get("outcomes"))]
+            if outs[:1] != ["yes"]:
+                continue
+            seen += 1
+            price = fnum(jlist(m.get("outcomePrices"))[0], None)
+            for n, r in rs.items():
+                if price is None or not (r["min_hours_to_start"] <= hrs <= r["max_hours_to_start"]) \
+                        or not (r["min_price"] <= price <= r["max_price"]):
+                    continue
+                mm = {**m, "events": [{"id": g["event"].get("id"), "slug": g["event"].get("slug")}]}
+                c = candidate(mm, 0, max(hrs / 24, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                              {"signal": f"draw listed {cents(price)}, kickoff in {hrs:.0f}h",
+                               "league": str(g["event"].get("slug") or "").split("-")[0]})
+                c["outcome"] = "Draw"
+                c["theme"] = "soccer"
+                out[n].append(c)
+    for n in out:
+        out[n].sort(key=lambda c: -c["liquidity"])
+    print(f"draws: {len(games)} games, {seen} draw markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
 
 
