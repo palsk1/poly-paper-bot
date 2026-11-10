@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4   # the branch it was started on (main by default), so a PR branch can be tried live
       - uses: actions/cache/restore@v4
-        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_')   # win_* only reads the cache, never saves it
+        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_') || startsWith(inputs.what, 'big_')   # win_* and big_* only read the cache, never save it
         with:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
@@ -41,7 +41,7 @@ jobs:
           key: econ-cache-${{ github.run_id }}
           restore-keys: econ-cache-
       - name: Shared price store, fetch   # tops up the Actions cache with what any thread/branch saved (store.py)
-        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_')
+        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_') || startsWith(inputs.what, 'big_') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_')
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 store.py pull || true
@@ -57,6 +57,7 @@ jobs:
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in big_*) PYTHONUNBUFFERED=1 python3 bigbets.py "$(echo '${{ inputs.what }}' | sed 's/^big_//')"; exit $?;; esac
           case "${{ inputs.what }}" in win_*) PYTHONUNBUFFERED=1 python3 winners.py "$(echo '${{ inputs.what }}' | sed 's/^win_//')"; exit $?;; esac
           case "${{ inputs.what }}" in exam_*) PYTHONUNBUFFERED=1 python3 exam.py $(echo '${{ inputs.what }}' | sed 's/^exam_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in census_*) PYTHONUNBUFFERED=1 python3 census.py "$(echo '${{ inputs.what }}' | sed 's/^census_//')"; exit $?;; esac
