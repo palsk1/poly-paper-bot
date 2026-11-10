@@ -3173,3 +3173,9 @@
 {"filled": 10.0, "pnl": -9.2, "price": 0.92, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV092100-00", "track": "kc_maker_early", "ts": "2026-11-10T02:03:05Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.57, "price": 0.943, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV092100-00", "track": "kc_maker_early", "ts": "2026-11-10T02:03:05Z", "type": "kmaker_fill"}
 {"outcome": "No", "pnl": 0.101, "price": 0.984, "reason": "take profit (now 99c), book", "title": "Will Bitcoin dip to $73,000 on November 9?", "token": "64460095010288164843457594072370758531859737877870476139451985436440103278537", "track": "endgame_sell98", "ts": "2026-11-10T02:05:41Z", "type": "paper_close"}
+{"minutes_left": 3.12, "price": 0.97, "queue": 517.87, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.994, "queue": 560.6, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.968, "queue": 743.28, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.989, "queue": 903.2, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:56Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.995, "queue": 277.53, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:57Z", "type": "kmaker_order"}
+{"minutes_left": 3.12, "price": 0.971, "queue": 244.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV092115-15", "track": "kc_maker", "ts": "2026-11-10T02:11:57Z", "type": "kmaker_order"}
