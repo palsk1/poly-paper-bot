@@ -96,7 +96,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <p class="note" style="margin-top:8px"><a href="#all-h">Jump to all strategies ↓</a></p>
 
   <h2>Top 10 today</h2>
-  <p class="note">The 10 strategies we trust most right now. We rank by how sure we are, not by who made the most, because a big win can be pure luck. To get on the list, a strategy needs at least 3 finished bets and must be ahead. Only these 10 send pushes to your phone. Tap one for details.</p>
+  <p class="note">The 10 strategies we trust most right now. Strategies that are ahead come first, ranked by how sure we are (not by who made the most, because a big win can be pure luck). Strategies that are losing always come last. To get on the list, a strategy needs at least 3 finished bets and must be ahead. Only these 10 send pushes to your phone. Tap one for details.</p>
   <div id="top"></div>
 
   <h2>Skill or luck?</h2>
@@ -321,7 +321,7 @@ function detail(n) {
       ${tr.finished >= FEW ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>` : `<div class="tile"><div class="v">${tr.finished}</div><div class="k">bets finished</div></div>`}
     </div>
     <p class="sub" style="margin-top:8px">${tr.finished >= FEW
-      ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100. The worst case decides the ranking.`
+      ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100. Among strategies that are ahead, the worst case decides the ranking; losing ones go last.`
       : `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. That's too few to tell skill from luck, so just look at the dollar amount at the top for now.`}</p>
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}

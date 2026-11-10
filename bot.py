@@ -2234,6 +2234,8 @@ def run_endgame(tracks):
         if tc["source"] == "endgame":
             try:
                 r = rules_for(name)
+                if r.get("no_new_bets"):   # stopped: open bets still settle, history stays (fade_sure, 2026-11-10)
+                    continue
                 buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
             except Exception as e:
                 print(f"endgame {name} failed: {e}")
@@ -4499,16 +4501,39 @@ def usd(x):
     return f"{'+' if x >= 0 else '-'}${abs(x):.2f}"
 
 
+def rank_group(t):
+    """0 = worst case above $0 (profit that holds up), 1 = ahead on finished bets, 2 = nothing finished or even,
+    3 = losing. 2026-11-10 (Jan): sorting only by the worst case put losing tracks with many bets on top, because
+    many bets shrink the luck allowance even when the average is below zero."""
+    if t["finished"] and t["worst_per_100"] > 0:
+        return 0
+    if t["finished"] and t["avg_per_100"] > 0:
+        return 1
+    if not t["finished"] or abs(t["avg_per_100"]) < 1e-9:
+        return 2
+    return 3
+
+
 def ranked(stats):
-    return sorted(stats, key=lambda n: (-stats[n]["trust"]["worst_per_100"], -stats[n]["pnl"]))
+    def key(n):
+        s, t = stats[n], stats[n]["trust"]
+        g = rank_group(t)
+        if g in (0, 1):   # more trust first; ties by profit
+            return (g, -t["worst_per_100"], -s["pnl"])
+        if g == 2:
+            return (g, -s["pnl"], 0)
+        return (g, -t["avg_per_100"], -s["pnl"])   # losing: least bad first, clear losers at the bottom
+    return sorted(stats, key=key)
 
 
 def leaderboard_md(stats):
     sz = rs_rank_size()
     at = f" at ${sz} a trade" if sz else ""
     out = ["\n## All strategies, ranked by trust\n",
-           "Ranked by the worst profit per $100 bet that is still plausible (one imaginary total loss added, bar raised "
-           "for testing many strategies at once). Only finished trades count. **PROVEN** = that worst case is above $0 "
+           "Ranked in four groups (2026-11-10): first strategies whose worst plausible profit per $100 is above $0, then "
+           "those ahead on finished bets, then those with nothing finished yet, and losing ones last. Inside the first two "
+           "groups the order is the worst profit per $100 bet that is still plausible (one imaginary total loss added, bar "
+           "raised for testing many strategies at once); losing ones are ordered least bad first. Only finished trades count. **PROVEN** = that worst case is above $0 "
            f"after {CFG.get('ranking', {}).get('min_trades_proven', 30)}+ finished trades. Controls show what luck looks like.\n",
            (f"Since 2026-11-08 the ranking uses **real-size** numbers: what each trade would have done with ${sz} instead "
             "of 5 shares (deeper into the order book, bigger fee, only what actually fits; see \"Real money check\"). "
