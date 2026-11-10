@@ -587,6 +587,18 @@
    "verdict": "Ahead, but could be luck",
    "status": "lead: needs a fresh-data test (not registered yet)",
    "src": "winners.py drill, backtest/winners.md, PR #66"
+  },
+  {
+   "id": "yesno_grid",
+   "date": "2026-11-10",
+   "what": "Criss-cross of all-Yes / all-No bets (side x price x kind x time left x weekday, Polymarket + Kalshi)",
+   "tries": 1055,
+   "bets": 501385,
+   "groups": null,
+   "per100": "best new cut +$5.62 at real buys (-$8 to +$19); Kalshi none",
+   "verdict": "Ahead, but could be luck",
+   "status": "no new candidate (re-finds boring_no and crypto_no)",
+   "src": "yesno.py grid, backtest/yesno_grid.md"
   }
  ]
 }

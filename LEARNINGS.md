@@ -147,6 +147,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Sports totals and spreads long shots:** gone at real prices.
 - **Daily stock and commodity "Up or Down", cheap side:** -$3.50.
 - **$1 on Yes (or No) in every open market every day (10 Nov, `yesno.py`, just for fun):** Polymarket all Yes -$11 to -$18 per $100, all No -$6 to -$8; Kalshi at the real ask all Yes -$25, all No -$20. At the dream price both are near fair, so the loss is the cost of buying, worst on long shots. No new candidate.
+- **Criss-cross of those bets (10 Nov, `yesno.py grid`):** 1,055 cuts by Yes/No, price, kind of market, time left and weekday. 124 ahead in both halves, 667 behind in both. The survivors are the two leads we already track (nearly sure things 30+ days out = `boring_no`; crypto No 3-7 days out = `crypto_no`), and they shrink at real buys. No weekday pattern. Kalshi: nothing. No new candidate.
 
 Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
