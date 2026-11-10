@@ -3974,3 +3974,5 @@
 {"pnl": -1.8404, "price": 0.076, "reason": "flatten: sold 50 NO at 7.6c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T11:48:21Z", "type": "maker_exit"}
 {"price": 0.27, "reason": "pool $50/day, est. $50.00/day for us", "title": "Over $20M committed to the Mori Finance public sale?", "track": "maker_short", "ts": "2026-11-10T11:48:35Z", "type": "maker_open"}
 {"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXETH15M-26NOV100645-45", "track": "kc_maker", "ts": "2026-11-10T11:48:35Z", "type": "kmaker_fill"}
+{"minutes_left": 3.47, "price": 0.96, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV100700-00", "track": "kc_maker", "ts": "2026-11-10T11:56:32Z", "type": "kmaker_order"}
+{"minutes_left": 3.47, "price": 0.962, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV100700-00", "track": "kc_maker", "ts": "2026-11-10T11:56:33Z", "type": "kmaker_order"}
