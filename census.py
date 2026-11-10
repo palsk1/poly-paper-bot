@@ -46,7 +46,7 @@ PROP = re.compile(r"\b(points|rebounds|assists|yards|touchdowns?|receptions|stri
                   r"goals? scored|anytime|first goal|to score|shots|aces|kills|sacks|3-pointers|threes)\b")
 
 
-def classify(q, slug="", ev_title="", outs=None, sports=False, smt=None, n_sib=1):
+def classify(q, slug="", ev_title="", outs=None, sports=False, smt=None, n_sib=1, tags=()):
     """(family, format) for one market. family = what it's about; format = the shape of the bet."""
     t = (q or "").lower()
     et = (ev_title or "").lower()
@@ -54,6 +54,7 @@ def classify(q, slug="", ev_title="", outs=None, sports=False, smt=None, n_sib=1
     outs = [str(o).lower() for o in (outs or [])]
     smt = (smt or "").lower()
     both = t + " | " + et
+    tg = {str(x).lower() for x in (tags or ())}
     # ---- format first (shape of the bet)
     if "up or down" in both or outs == ["up", "down"]:
         fmt = "up/down window"
@@ -78,8 +79,13 @@ def classify(q, slug="", ev_title="", outs=None, sports=False, smt=None, n_sib=1
     else:
         fmt = "single yes/no"
     # ---- family (what it's about)
-    is_sport = sports or bool(smt) or bool(SPORT_SLUG.match(s)) or bool(ESPORT_WORDS.search(both))
-    if ESPORT_SLUG.match(s) or ESPORT_WORDS.search(both):
+    is_sport = (sports or bool(smt) or bool(SPORT_SLUG.match(s)) or bool(ESPORT_WORDS.search(both))
+                or bool(tg & {"sports", "esports"}))
+    if "mentions" in tg and not is_sport:
+        return "mentions (will X say Y)", fmt
+    if tg & {"daily temperature", "weather"} and not is_sport and re.search(r"temperature|°|ºc", both):
+        return "weather: temperature", fmt
+    if ESPORT_SLUG.match(s) or ESPORT_WORDS.search(both) or "esports" in tg:
         if re.search(r"(game|map) \d", t):
             fam = "esports: single map/game"
         elif fmt in ("over/under line", "handicap line"):
@@ -204,7 +210,7 @@ def live(pages=400):
             n_mk += 1
             outs = bot.jlist(m.get("outcomes"))
             fa, fo = classify(m.get("question"), m.get("slug") or e.get("slug"), e.get("title"), outs,
-                              bot.is_sports(m), m.get("sportsMarketType"), n_sib)
+                              bot.is_sports(m), m.get("sportsMarketType"), n_sib, tags)
             a = fam[fa]
             a["ev"].add(e.get("id"))
             a["mk"] += 1
@@ -245,8 +251,11 @@ def live(pages=400):
                     a["ex"].append(str(m.get("question") or e.get("title"))[:70])
         if (e.get("negRisk") or e.get("enableNegRisk")) and n_sib >= 3 and all(x is not None and x > 0 for x in asks):
             fa0 = classify(ms[0].get("question"), ms[0].get("slug"), e.get("title"), bot.jlist(ms[0].get("outcomes")),
-                           bot.is_sports(ms[0]), ms[0].get("sportsMarketType"), n_sib)[0]
-            fam[fa0]["over"].append(sum(asks) - 1.0)
+                           bot.is_sports(ms[0]), ms[0].get("sportsMarketType"), n_sib, tags)[0]
+            # only events where every choice has a real two-sided book (empty books ask 99c and mean nothing)
+            sprs = [f(m.get("bestAsk")) - f(m.get("bestBid")) for m in ms]
+            if max(sprs) <= 0.05:
+                fam[fa0]["over"].append(sum(asks) - 1.0)
     tot24 = sum(a["v24"] for a in fam.values()) or 1
     totliq = sum(a["liq"] for a in fam.values()) or 1
     print(f"\nopen markets: {n_mk}, money traded in the last 24h: {money(tot24)}, money resting in books: {money(totliq)}")
