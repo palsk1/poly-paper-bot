@@ -122,7 +122,7 @@ A strategy gets real money only if **every** answer is yes:
   mention markets, where half the books hold only $12-50.
 - **Paper maker bids can look too good (10 Nov).** The bot counts a Kalshi bid as fully filled once one contract
   trades below it. On the real tape the losers fill fully and the winners only partly: `kc_maker_early` is really
-  -$12 per $100, not the -$4.50 it shows.
+  -$12 per $100, not the -$4.50 it showed. Fixed 10 Nov: the bot now counts only what was really sold.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
@@ -174,6 +174,5 @@ Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast
 2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).
 3. **every_horse and ladder** have sat idle with $200 of paper since 8 Nov. Keep, or stop?
 4. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.
-5. **Kalshi paper fills are a bit too kind** (`bigbets.md`). Fix the bot's fill rule for the kc_maker tracks? It would
-   move kc_maker_safe from about +$0.21 to +$0.18 per $100, but its pass test is locked, so it's your call. Until
-   then, read its live number with that in mind.
+5. ~~Kalshi paper fills are a bit too kind~~ **Fixed 10 Nov (Jan said "Fix it").** The bot now counts only contracts
+   really sold to the bids. kc_maker_safe's locked test re-scores all its bets the fixed way on 1 Dec (PROTOCOL 5b).

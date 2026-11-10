@@ -66,6 +66,11 @@ Written before the result, from `backtest/kcdepth.md` (probe `btkcdepth`, run 42
 - **Fail:** at or below +$0.22. Then kc_maker_safe is not the money pick.
 - A pass still leaves two open checks before real money: whether $25-100 orders fill the same, and whether Kalshi
   takes a Swedish account (Jan's job).
+- **Fill rule fix (2026-11-10, Jan: "Fix it", `backtest/bigbets.md`):** this is a bug fix in how a paper bid is
+  counted as filled, not a rule change, so the count does not restart. From then on the bot counts only contracts
+  really sold at our price (after the queue) or below. Bets closed before the fix were counted the old, kinder way,
+  so at scoring time **every** closed bet is re-scored on its real trade tape with the fixed rule (probe
+  `big_kalshi`, the "$10" row), and that number is the one compared with +$0.22. Pass bar unchanged.
 
 ## 6. Keep it simple
 

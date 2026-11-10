@@ -3039,27 +3039,32 @@ def kalshi_trades(ticker, t0, t1, max_pages=40):
 
 
 def kmaker_fill(o, trades, shares=None):
-    """Contracts filled for a resting bid, from the real tape. -> (filled, through)."""
+    """Contracts filled for a resting bid, from the real tape. -> (filled, through).
+    Our paper bid isn't really in Kalshi's book, so it only gets what sellers really sold to the bids: contracts sold
+    AT our price after the queue that was there first, plus every contract sold BELOW our price (those sellers would
+    have hit our higher bid first). Bug fix 2026-11-10 (Jan: "Fix it", backtest/bigbets.md): before, one contract
+    traded below our price counted the whole bid as filled, which filled losing bets fully and winners only partly
+    on paper too kindly (kc_maker_early showed -$4.53 per $100, the real tape says about -$12)."""
     shares = o["shares"] if shares is None else shares
     t0 = parse_iso(o["placed"])
-    sold_at, through = 0.0, False
+    at, below, through = 0.0, 0.0, False
     for t in trades:
         ts = parse_iso(t.get("created_time"))
         if ts is None or ts <= t0:
             continue
+        if str(t.get("taker_side")) == o["side"]:
+            continue  # a taker buying our side doesn't sell to a bid on our side
         yp = fnum(t.get("yes_price_dollars"), None)
         if yp is None:
             yp = fnum(t.get("yes_price"), 0) / 100
         px = yp if o["side"] == "yes" else round(1 - yp, 6)
-        if px < o["price"] - 1e-6:
+        n = fnum(t.get("count_fp") or t.get("count"), 0)
+        if abs(px - o["price"]) < 1e-6:
+            at += n
+        elif px < o["price"]:
+            below += n
             through = True
-            break
-        # a taker selling our side = buying the other side
-        if abs(px - o["price"]) < 1e-6 and str(t.get("taker_side")) != o["side"]:
-            sold_at += fnum(t.get("count_fp") or t.get("count"), 0)
-    if through:
-        return float(shares), True
-    return max(0.0, min(float(shares), sold_at - o["queue"])), False
+    return max(0.0, min(float(shares), max(0.0, at - o.get("queue", 0)) + below)), through
 
 
 def kmaker_settle(tracks, names):
@@ -3104,7 +3109,7 @@ def kmaker_settle(tracks, names):
             rs = {}
             for usd_ in rs_sizes():
                 want = usd_ / o["price"]
-                f2 = want if through else max(0.0, min(want, kmaker_fill(o, trades, want)[0]))
+                f2 = max(0.0, min(want, kmaker_fill(o, trades, want)[0]))
                 rs[str(usd_)] = [round(f2 * o["price"], 4), round(f2 * pay - f2 * o["price"], 4), round(f2 / want, 4)]
             rec = {**o, "shares": round(filled, 4), "entry": o["price"], "entry_fee": 0.0, "exit": pay, "exit_fee": 0.0,
                    "pnl": round(pnl, 6), "cost": round(cost, 6), "through": through, "tape_complete": complete,
