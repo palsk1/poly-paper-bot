@@ -3963,3 +3963,6 @@
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV100630-30", "track": "kc_maker_early", "ts": "2026-11-10T11:32:38Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV100630-30", "track": "kc_maker_early", "ts": "2026-11-10T11:32:38Z", "type": "kmaker_fill"}
 {"pnl": -3.7688, "price": 0.16, "reason": "flatten: sold 50 NO at 16.0c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T11:37:00Z", "type": "maker_exit"}
+{"outcome": "Yes", "pnl": -0.085, "price": 0.13, "reason": "wallet exit (book)", "title": "Will Arsenal win the 2026-27 UEFA Champions League Championship?", "token": "43901405785924750229793277147927116360564476290216401880491136719593445150601", "track": "wb_lpgb", "ts": "2026-11-10T11:40:38Z", "type": "paper_close"}
+{"pnl": -2.9147, "price": 0.1055, "reason": "flatten: sold 50 NO at 10.5c", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_flat", "ts": "2026-11-10T11:42:00Z", "type": "maker_exit"}
+{"minutes_left": 2.97, "price": 0.987, "queue": 445.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV100645-45", "track": "kc_maker", "ts": "2026-11-10T11:42:03Z", "type": "kmaker_order"}
