@@ -157,13 +157,65 @@ def out_of_time(margin=0):
 
 # ---- Polymarket
 
+PEV = "poly_events_v2"   # v1 kept only METAR-settled events (from about Oct 2026); v2 adds the Wunderground ones
+MONTHS = {m: i for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
+                                      "september", "october", "november", "december"), 1)}
+
+
+def wunder_info(e):
+    """(kind, ICAO, local day) for an event that settles on a wunderground.com/history/daily/.../KXXX page, or None."""
+    t = str(e.get("title") or "").lower()
+    kind = "high" if t.startswith("highest temperature") else "low" if t.startswith("lowest temperature") else None
+    src = " ".join([str(e.get("resolutionSource") or ""), str(e.get("description") or "")] +
+                   [str(m.get("resolutionSource") or "") + " " + str(m.get("description") or "") for m in (e.get("markets") or [])[:1]])
+    ms = re.search(r"wunderground\.com/history/daily/[^\s\"')]*?/([A-Z]{4})\b", src)
+    md = re.search(r" on ([a-z]+) (\d{1,2})\b", t)
+    end = tsec(e.get("endDate"))
+    if not kind or not ms or not md or md.group(1) not in MONTHS or not end:
+        return None
+    ref = dt.datetime.fromtimestamp(end, UTC).date()
+    best = None
+    for y in (ref.year - 1, ref.year, ref.year + 1):
+        try:
+            d = dt.date(y, MONTHS[md.group(1)], int(md.group(2)))
+        except ValueError:
+            continue
+        if best is None or abs((d - ref).days) < abs((best - ref).days):
+            best = d
+    if best is None or abs((best - ref).days) > 5:
+        return None
+    return kind, ms.group(1), best.isoformat()
+
+
+def poly_fix_times(evs, stations):
+    """Fill the local calendar day's UTC start/end for Wunderground events (the page shows the local day)."""
+    from zoneinfo import ZoneInfo
+    n = bad = 0
+    for e in evs.values():
+        if e.get("s") is not None:
+            continue
+        tz = (stations.get(e["st"]) or {}).get("tz")
+        if not tz:
+            bad += 1
+            continue
+        d = dt.date.fromisoformat(e["day"])
+        z = ZoneInfo(tz)
+        e["s"] = int(dt.datetime(d.year, d.month, d.day, tzinfo=z).timestamp())
+        d2 = d + dt.timedelta(days=1)
+        e["e"] = int(dt.datetime(d2.year, d2.month, d2.day, tzinfo=z).timestamp())
+        n += 1
+    if n:
+        save(PEV, evs)
+    print(f"poly local days filled: {n}, no time zone: {bad}")
+
+
 def poly_events():
     """Every closed daily temperature event, slimmed: kind, station, local day (UTC start/end), buckets."""
-    have = load("poly_events", {})
+    have = load(PEV, {})
     if have and not os.environ.get("WX_REFRESH"):
         print(f"poly events cached: {len(have)}")
         return have
-    out, cur, n = {}, None, 0
+    out, cur, n, drop = {}, None, 0, Counter()
     for _ in range(2000):
         p = {"tag_slug": "daily-temperature", "closed": "true", "limit": 100}
         if cur:
@@ -177,11 +229,21 @@ def poly_events():
         for e in evs:
             n += 1
             info = bot.wx_event_info(e)
-            if not info:
-                continue
-            kind, icao, start, end = info
-            day = (start + dt.timedelta(hours=12)).date().isoformat()
+            if info:
+                kind, icao, start, end = info
+                day = (start + dt.timedelta(hours=12)).date().isoformat()
+                s0, e0 = int(start.timestamp()), int(end.timestamp())
+            else:
+                # older events settle on Wunderground's daily history page: station from its link,
+                # day from the title; the local day's start/end is filled in once the station's time zone is known
+                old = wunder_info(e)
+                if not old:
+                    drop["no station/day"] += 1
+                    continue
+                kind, icao, day = old
+                s0 = e0 = None
             if not (FIRST_DAY <= day < HOLDOUT_DAY):
+                drop["outside dates"] += 1
                 continue
             ms = []
             for m in e.get("markets") or []:
@@ -195,15 +257,18 @@ def poly_events():
                            "hi": None if b[1] == math.inf else round(b[1], 3), "u": b[2], "tok": toks[0],
                            "y": 1 if (fin[0] or 0) > 0.5 else 0, "fee": bot.fee_rate(m),
                            "vol": bot.fnum(m.get("volumeNum") or m.get("volume"), 0), "open": tsec(m.get("startDate"))})
-            if len(ms) >= 3 and sum(x["y"] for x in ms) == 1:
-                out[str(e.get("id"))] = {"kind": kind, "st": icao, "day": day, "s": int(start.timestamp()),
-                                        "e": int(end.timestamp()), "title": e.get("title"), "ms": ms,
+            if len(ms) < 3 or sum(x["y"] for x in ms) != 1:
+                drop["buckets/winner"] += 1
+            else:
+                out[str(e.get("id"))] = {"kind": kind, "st": icao, "day": day, "s": s0, "src": "metar" if info else "wunderground",
+                                        "e": e0, "title": e.get("title"), "ms": ms,
                                         "open": tsec(e.get("startDate"))}
         cur = res.get("next_cursor") if isinstance(res, dict) else None
         if not cur or not evs:
             break
-    print(f"poly events read: {n}, kept {len(out)} (one winning bucket, in {FIRST_DAY}..{HOLDOUT_DAY})")
-    save("poly_events", out)
+    print(f"poly events read: {n}, kept {len(out)} (one winning bucket, in {FIRST_DAY}..{HOLDOUT_DAY}); "
+          f"dropped {dict(drop)}; settle source {Counter(x['src'] for x in out.values())}")
+    save(PEV, out)
     return out
 
 
@@ -236,6 +301,7 @@ def poly_hist_one(job):
 def poly_fetch():
     evs = poly_events()
     hist = load("poly_hist", {})
+    evs = {k: e for k, e in evs.items() if e.get("s") is not None}
     jobs = [(m["id"], m["tok"], e["s"]) for e in sorted(evs.values(), key=lambda e: -e["s"]) for m in e["ms"]
             if m["id"] not in hist]
     print(f"poly price history: {len(hist)} cached, {len(jobs)} to fetch")
@@ -522,6 +588,7 @@ def fetch():
             a, b, _ = need.get(kst[s], (min(days), max(days), True))
             need[kst[s]] = (min(a, min(days)), max(b, max(days)), True)
     stations = station_info(need)
+    poly_fix_times(evs, stations)
     forecasts_fetch(stations, need)
     cli_fetch(set(kst.values()))
     kalshi_fetch()
@@ -602,7 +669,9 @@ def targets():
     out = []
     st = load("stations", {})
     # Polymarket: buckets in °C (Fahrenheit buckets were converted), actual = middle of the winning bucket
-    for eid, e in load("poly_events", {}).items():
+    for eid, e in load(PEV, {}).items():
+        if e.get("s") is None:
+            continue
         win = [m for m in e["ms"] if m["y"]][0]
         if win["lo"] is None and win["hi"] is None:
             continue
@@ -627,7 +696,7 @@ def targets():
         if not tz or not day:
             nodata["no tz"] += 1
             continue
-        xv = Counter(bot.fnum(m.get("xv"), None) for m in ms if m.get("xv") not in (None, ""))
+        xv = Counter(v for v in (bot.fnum(m.get("xv"), None) for m in ms if m.get("xv") not in (None, "")) if v is not None)
         if not xv:
             nodata["no settle value"] += 1
             continue
