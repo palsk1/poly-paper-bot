@@ -230,7 +230,14 @@ _CUT = [None]
 
 
 def kget(path, p=None):
-    return bot.http_json(f"{K}{path}", p)
+    """Kalshi GET with a few slow retries on 429 (too many requests), which cut short the first listing."""
+    for i in range(5):
+        try:
+            return bot.http_json(f"{K}{path}", p)
+        except Exception as e:
+            if "429" not in str(e) or i == 4:
+                raise
+            time.sleep(2 * 2 ** i)
 
 
 def k_cutoff():
@@ -362,6 +369,7 @@ def kalshi_tally():
     hist = bt.rjson(K_H, {}) or {}
     days = have.get("days") or {}
     t, cats, info = Tally(), Tally(), collections.Counter()
+    tu, tight, mid = Tally(), Tally(), Tally()
     for tk, m in (have.get("markets") or {}).items():
         d0 = str(m["close"] - m["close"] % DAY)
         dd = days.get(d0) or {}
@@ -380,6 +388,12 @@ def kalshi_tally():
                 info["noon without a quote"] += 1
                 continue
             bid, ask = ba
+            sp = None if bid is None or ask is None else ask - bid
+            info["spread 5c or less" if sp is not None and sp <= 0.05 else "spread over 5c (or one side empty)"] += 1
+            if sp is not None and 0 < bid and ask < 1 and sp > 0:
+                mp = (bid + ask) / 2
+                for side, p, pay in (("Yes", mp, pay_yes), ("No", 1 - mp, 1 - pay_yes)):
+                    mid.add([(side,), (side, band(p))], *bet(p, pay, lambda x: 0.0, w))
             h = "first half" if n < HALF else "second half"
             kfee = lambda x: 0.07 * x * (1 - x)
             for side, p, pay in (("Yes", ask, pay_yes), ("No", None if bid is None else 1 - bid, 1 - pay_yes)):
@@ -389,10 +403,13 @@ def kalshi_tally():
                 pr, st = bet(p, pay, kfee, w)
                 t.add([(side,), (side, band(p)), (side, h)], pr, st)
                 cats.add([(side, cat)], pr, st)
+                tu.add([(side,), (side, band(p))], *bet(p, pay, kfee))
+                if sp is not None and sp <= 0.05:
+                    tight.add([(side,), (side, band(p))], pr, st)
             info["market-days"] += 1
     info["markets sampled"] = len(have.get("markets") or {})
     info["markets that closed in the window (all)"] = sum((d.get("eligible") or 0) for d in days.values())
-    return t, cats, info
+    return t, cats, info, tu, tight, mid
 
 
 # ================================================================ report
@@ -453,12 +470,14 @@ def run():
             print(f"POLY {side}: {n:,} bets, ${st:,.0f} bet, profit {usd(pr)} = {usd(100 * pr / st)} per $100 (chart +1c)")
             print(f"POLY {side}: dream {usd(dream.per100((side,)))}, real-buy sample {usd(tape.per100((side,)) or 0)}")
     # ---- Kalshi
-    kt, kc, info = kalshi_tally()
+    kt, kc, info, ku, ktight, kmid = kalshi_tally()
     if kt.d:
         L += [f"## Kalshi (sample of {info['markets sampled']:,} of {info['markets that closed in the window (all)']:,} "
               f"markets, weighted back to all of them)", ""]
-        L += table("Profit per $100, at the real ask + fee", [("Real ask", kt)],
-                   "Kalshi's history has the real best bid and ask each hour, so this is what you'd really pay.")
+        L += table("Profit per $100, at the real ask + fee", [("Middle of bid and ask, no fee (the dream)", kmid),
+                   ("Real ask + fee", kt), ("Same, not scaled up", ku), ("Real ask, only tight prices (bid and ask 5c apart or less)", ktight)],
+                   "Kalshi's history has the real best bid and ask each hour, so 'real ask' is what you'd really pay. "
+                   "Many quiet Kalshi markets show silly prices like 'buy at 99c, sell at 1c'; the last column skips those.")
         L += ["Halves: " + ", ".join(f"{s} {h} {usd(kt.per100((s, h)) or 0)}" for s in ("Yes", "No")
                                      for h in ("first half", "second half")), ""]
         cl = sorted({k[1] for k in kc.d})
