@@ -1111,4 +1111,6 @@ if __name__ == "__main__":
      "btrulessmall": lambda: (__import__("rules").fetch_small(), __import__("rules").run()),
      "btrulesrun": lambda: __import__("rules").run(),
      "btrules": lambda: (__import__("rules").fetch(), __import__("rules").run()),
-     "btcalibsmall": lambda: (__import__("calib").fetch_small(), __import__("calib").run())}[cmd]()
+     "btcalibsmall": lambda: (__import__("calib").fetch_small(), __import__("calib").run()),
+     "btyesno": lambda: (__import__("yesno").fetch_kalshi(), __import__("yesno").run()),
+     "btyesnorun": lambda: __import__("yesno").run()}[cmd]()
