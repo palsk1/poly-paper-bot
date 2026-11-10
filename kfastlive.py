@@ -332,7 +332,11 @@ def settle_pending(pending):
         if done:
             w.pop("pre", None)
             save_day(w)
-            bets = ", ".join(f"{k} {b['side']} {'won' if b.get('won') else 'LOST'}" for k, b in w["bets"].items() if "won" in b)
+            def fx(b):
+                return "/".join(f"{b[str(n)].get('filled', 0):g}@{b[str(n)]['avg'] * 100:.1f}c" if b[str(n)].get("filled")
+                                else "0" for n in SIZES)
+            bets = ", ".join(f"{k} {b['side']} {'won' if b.get('won') else 'LOST'} {fx(b)}"
+                             for k, b in w["bets"].items() if "won" in b)
             print(f"settled {w['tk']}: {w['result']}" + (f" ({bets})" if bets else ""))
         else:
             left.append(w)
