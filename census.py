@@ -777,12 +777,15 @@ def sports_run():
                         flags.append((f"{label}={key} | {hn} | {bn}", tr))
     print(f"\n== FLAGGED on chart prices: {len(flags)} (many slices tested, expect some luck). Real-buy check follows.")
     cap = int(os.environ.get("SP_TAPE_SLICES", "24"))
+    only = os.environ.get("SP_TAPE_ONLY")          # regex: re-check just these slices, with a bigger sample
+    if only:
+        flags = [f for f in flags if re.search(only, f[0])]
     for name, tr in sorted(flags, key=lambda f: -len(f[1]))[:cap]:
         print(f"\n-- {name}")
         # decide at the snapshot, then take the first real buy of that side after it and BEFORE the game starts
         sig = [(r["mk"], 0 if (q, pay) == (r["p"], r["y"]) else 1, q, r["t"] - ENTRY_LAG, pay, r["mk"]["gst"])
                for r, q, pay in tr]
-        tape_check(sig, 24 * 3600)
+        tape_check(sig, 24 * 3600, int(os.environ.get("SP_TAPE_CAP", "500")))
 
 
 def tape_check(sig, window, cap=500):

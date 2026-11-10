@@ -1061,6 +1061,10 @@ if __name__ == "__main__":
         import runpy
         runpy.run_path(os.path.join(ROOT, "launch.py"), run_name="__main__")
         sys.exit(0)
+    if cmd == "btsportsdraw":   # bigger real-buy check of the draw leads only
+        os.environ.setdefault("SP_TAPE_ONLY", "draw|halftime")
+        os.environ.setdefault("SP_TAPE_CAP", "5000")
+        cmd = "btsportsrun"
     if cmd in ("btsports", "btsportsfetch", "btsportsrun"):   # sports side bets priced vs result (census.py)
         c = __import__("census")
         if cmd != "btsportsrun":
