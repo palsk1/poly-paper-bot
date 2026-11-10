@@ -4430,3 +4430,7 @@
 {"minutes_left": 3.64, "price": 0.996, "queue": 201.96, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV101245-45", "track": "kc_maker", "ts": "2026-11-10T17:41:25Z", "type": "kmaker_order"}
 {"minutes_left": 3.64, "price": 0.996, "queue": 201.96, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV101245-45", "track": "kc_maker_safe", "ts": "2026-11-10T17:41:25Z", "type": "kmaker_order"}
 {"minutes_left": 3.64, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV101245-45", "track": "kc_maker", "ts": "2026-11-10T17:41:26Z", "type": "kmaker_order"}
+{"fee": 0.0706, "outcome": "No", "price": 0.28, "shares": 5, "title": "Predict.fun FDV above $800M one day after launch?", "token": "106743852420032062896126022912491525920553506512937594131305353231116232234117", "track": "w_jjo", "ts": "2026-11-10T17:42:32Z", "type": "paper_buy"}
+{"fee": 0.0706, "outcome": "No", "price": 0.28, "shares": 5, "title": "Predict.fun FDV above $800M one day after launch?", "token": "106743852420032062896126022912491525920553506512937594131305353231116232234117", "track": "wb_jjo", "ts": "2026-11-10T17:42:32Z", "type": "paper_buy"}
+{"minutes_left": 1.15, "price": 0.996, "queue": 83.5, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV101245-45", "track": "kc_maker", "ts": "2026-11-10T17:43:52Z", "type": "kmaker_order"}
+{"minutes_left": 1.15, "price": 0.996, "queue": 83.5, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV101245-45", "track": "kc_maker_safe", "ts": "2026-11-10T17:43:53Z", "type": "kmaker_order"}
