@@ -487,7 +487,8 @@ def updown_tape():
     from concurrent.futures import ThreadPoolExecutor
 
     def one(sg):
-        mk, oi, q, t, pay = sg
+        mk, oi, q, t, pay = sg[:5]
+        end = min(t + window, sg[5]) if len(sg) > 5 and sg[5] else t + window
         cid = cids.get(mk["id"])
         if not cid:
             return None
@@ -744,6 +745,7 @@ def sports_rows():
 
 def sports_run():
     import calib
+    import os
     ms, hist, rows, kinds = sports_rows()
     print(f"in-sample sports markets: {len(ms):,}; with history + start time + clean result: {sum(kinds.values()):,}")
     print("kinds:", kinds.most_common(30))
@@ -774,14 +776,19 @@ def sports_run():
                     if flag:
                         flags.append((f"{label}={key} | {hn} | {bn}", tr))
     print(f"\n== FLAGGED on chart prices: {len(flags)} (many slices tested, expect some luck). Real-buy check follows.")
-    for name, tr in flags[:12]:
+    cap = int(os.environ.get("SP_TAPE_SLICES", "24"))
+    for name, tr in sorted(flags, key=lambda f: -len(f[1]))[:cap]:
         print(f"\n-- {name}")
-        tape_check([(r["mk"], 0 if q == r["p"] and pay == r["y"] else 1, q, r["t"], pay) for r, q, pay in tr], 3600)
+        # decide at the snapshot, then take the first real buy of that side after it and BEFORE the game starts
+        sig = [(r["mk"], 0 if (q, pay) == (r["p"], r["y"]) else 1, q, r["t"] - ENTRY_LAG, pay, r["mk"]["gst"])
+               for r, q, pay in tr]
+        tape_check(sig, 24 * 3600)
 
 
 def tape_check(sig, window, cap=500):
     """sig = [(mk, outcome index, chart price, time, payout)]. Fill each at the first real BUY of that outcome on the
-    trade tape within `window` seconds after the time. Grouped by event."""
+    trade tape within `window` seconds after the time. Grouped by event. A 6th item, if given, is a hard end time
+    (sports: the game start, so no in-game buys sneak in; in-game buyers know the score)."""
     import informed
     import random
     from concurrent.futures import ThreadPoolExecutor
@@ -791,7 +798,8 @@ def tape_check(sig, window, cap=500):
     cids = informed.cids_for(need) if need else {}
 
     def one(sg):
-        mk, oi, q, t, pay = sg
+        mk, oi, q, t, pay = sg[:5]
+        end = min(t + window, sg[5]) if len(sg) > 5 and sg[5] else t + window
         cid = mk.get("cid") or cids.get(mk["id"])
         if not cid:
             return None
@@ -807,7 +815,7 @@ def tape_check(sig, window, cap=500):
             if o not in (0, 1):
                 tok = str(bot.pick(r, "token_id", "asset", default=""))
                 o = 0 if tok == mk["toks"][0] else 1 if tok == mk["toks"][1] else None
-            if o == oi and str(r.get("side") or "").upper().startswith("B") and t <= ts <= t + window:
+            if o == oi and str(r.get("side") or "").upper().startswith("B") and t <= ts < end:
                 buys.append((ts, bot.fnum(r.get("price")), bot.fnum(r.get("size"))))
         buys.sort()
         return (mk, oi, q, t, pay, buys)
