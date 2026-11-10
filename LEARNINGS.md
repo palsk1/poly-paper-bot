@@ -23,19 +23,24 @@ Only one candidate can be **proven with live bets** by 1 Jan: `kc_maker_safe`, b
 day. The rest get **one fresh look** on 21 Dec (the "holdout": markets we have kept our eyes off). Passing that look
 isn't proof. It just means the idea survived a test it couldn't be tuned for.
 
+**Real-money sizes (10 Nov, `backtest/bigbets.md`):** at $100 a bet, `boring_no` and `crypto_no` cost only pennies
+more (deep books, $300-500 fits easily). Soccer draws are too thin for $100 bets (half the games take $12-25).
+`kc_maker_safe` can use the money (it turns over every 15 minutes) but earns only about 14-18c per $100 on the real
+trade tape.
+
 ## The candidates and their check dates
 
 Each one has a pass rule written down before the result. "Locked" means Jan OK'd it and it can't be moved.
 
 | # | Candidate | In plain words | What we have so far | Pass rule | Check date |
 |---|---|---|---|---|---|
-| 1 | `kc_maker_safe` | Kalshi 15-minute crypto: bid 1c above the best bid on the side that's winning, only when Binance says the coin is far past the line. Hold to the result. One bet costs about $9.89 and pays $10.00 | Backtest: **+$0.56 per $100** on 8,663 bets. Live: see below. Warning: its two siblings lose about twice as often live as in the backtest | After 2,500 live bets, **above +$0.22 per $100**. A strategy worth nothing passes this about 10 times in 100 (locked, PROTOCOL 5b, PR #64) | **about 1 Dec** |
+| 1 | `kc_maker_safe` | Kalshi 15-minute crypto: bid 1c above the best bid on the side that's winning, only when Binance says the coin is far past the line. Hold to the result. One bet costs about $9.89 and pays $10.00 | Backtest: **+$0.56 per $100** on 8,663 bets. Live: see below. Warning: its two siblings lose about twice as often live as in the backtest. **On the real trade tape live is +$0.18 per $100 ($10 bids), +$0.14 at $100 bids** (`bigbets.md`) | After 2,500 live bets, **above +$0.22 per $100**. A strategy worth nothing passes this about 10 times in 100 (locked, PROTOCOL 5b, PR #64) | **about 1 Dec** |
 | 2 | Fast Kalshi bot (`kfastlive`) | Same markets, but buy the sure side 45 seconds before the close, or wait at 99.5c / 99.8c | Backtest +$0.40 per $100. Live since 10 Nov | 4 fixed tests, don't change them. Each needs hundreds of bets with no loss (the "proof" column) | first look late Nov, answer by mid Dec |
 | 3 | `mention_no` | Buy NO in "Will X say Y" markets that end within 7 days, at 25-90c | Backtest +$4.35 per $100 on 52 events, but anything from -$15 to +$23 is possible. About $0 at worse prices | Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
-| 4 | Soccer draws | Bet on a draw in a soccer match at 15-50c, a day before kickoff | +$5.60 per $100 on 4,538 bets at prices people really paid | Same as #3 (locked, PROTOCOL 5) | **21 Dec** |
+| 4 | Soccer draws | Bet on a draw in a soccer match at 15-50c, a day before kickoff | +$5.60 per $100 on 4,538 bets at prices people really paid. **Thin at real sizes:** only half the games take $25, so about +$3.50 per $100 left where it fits (`bigbets.md`) | Same as #3 (locked, PROTOCOL 5) | **21 Dec** |
 | 5 | `panic_fade_10c` | Buy the boring side after a one-day 10c scare | Strict backtest -$3.11 per $100 (live is ahead, most likely luck) | Same as #3 (locked, PROTOCOL 5) | **21 Dec** |
-| 6 | Boring No, far out | Buy No at 90-97c more than 30 days before the end (things like "Will Trump meet Putin in August?") | +$5.45 per $100, **100 of 101 won**. Three more losses would wipe it out. Money is stuck for a month+. Live paper track `boring_no` ($500) since 10 Nov | Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
-| 7 | Crypto "won't get there" | Buy No at 70-90c on "Will Bitcoin reach / dip to $X this week", 3-7 days before the end | +$6.95 per $100 on 115 bets, ahead in all 9 months. Luck range touches $0. Live paper track `crypto_no` ($50) since 10 Nov | Same as #6 (locked, PROTOCOL 5) | **21 Dec** |
+| 6 | Boring No, far out | Buy No at 90-97c more than 30 days before the end (things like "Will Trump meet Putin in August?") | +$5.45 per $100, **100 of 101 won**. Three more losses would wipe it out. Money is stuck for a month+. Live paper track `boring_no` ($500) since 10 Nov. **$100 bets fit** (54 of 56 markets, about 8c extra a bet) | Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
+| 7 | Crypto "won't get there" | Buy No at 70-90c on "Will Bitcoin reach / dip to $X this week", 3-7 days before the end | +$6.95 per $100 on 115 bets, ahead in all 9 months. Luck range touches $0. Live paper track `crypto_no` ($50) since 10 Nov. **$100 bets fit** (21 of 24 markets, about 30c extra a bet) | Same as #6 (locked, PROTOCOL 5) | **21 Dec** |
 | 8 | `arb` | Buy both sides of the same question on Kalshi and Polymarket for less than the $1 payout | $77.62 in, $80.00 back on 1 Jan = +$3.07 per $100. The risk is one pair where the two sites settle differently, not luck | All 4 pairs pay what they should | **1 Jan** |
 | 9 | `econ_fav` | Kalshi jobs/inflation markets: buy the 80-99c side when the free forecast agrees | Backtest +$6.73 per $100 on 141 bets (7 lost). Only 1-2 bets per data release, so maybe 10-15 by 1 Jan | **Not registered.** Can't be proven by 1 Jan | none yet |
 
@@ -73,6 +78,8 @@ A strategy gets real money only if **every** answer is yes:
 1. **It passed its locked test** (the rule written before the result, above).
 2. **Live paper bets agree** with the backtest. Not losing live, not losing much more often than the backtest said.
 3. **Bigger bets still fit.** Real orders of $25-100 would fill at about the same price (the "real size" numbers).
+   Checked 10 Nov (`bigbets.py`): yes for boring_no, crypto_no and kc_maker_safe; no for soccer draws and mention_no
+   at $100 (fine at about $25). Re-run `big_all` once more before 1 Jan.
 4. **The exam's worst case is above $0**, counting every idea we ever tried (luck gets a bigger head start the more we try).
 5. **Jan may legally use that site from Sweden** (Kalshi especially). Jan checks this himself.
 6. **A stop rule is set before the first dollar**, for example "if $300 turns into $250, stop and look".
@@ -108,6 +115,12 @@ A strategy gets real money only if **every** answer is yes:
   only about 200 MB packed. The weather dig asked Kalshi for 31,446 price charts, about 2 a second, so 4 hours for
   just 5 MB. Until now each thread's download stayed on its own branch and was lost after 7 unused days, so sports
   prices were fetched twice. Now every data run saves to one shared store (`store.py`), so nothing is fetched twice.
+- **Bet size is not the problem for most leads (10 Nov).** Polymarket's No books at 70-97c are deep: a $100 bet costs
+  8-30c more than a $5 one. The problem is whether the lead is real, not whether it fits. Exception: soccer draws and
+  mention markets, where half the books hold only $12-50.
+- **Paper maker bids can look too good (10 Nov).** The bot counts a Kalshi bid as fully filled once one contract
+  trades below it. On the real tape the losers fill fully and the winners only partly: `kc_maker_early` is really
+  -$12 per $100, not the -$4.50 it shows.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
@@ -155,3 +168,6 @@ Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast
 2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).
 3. **every_horse and ladder** have sat idle with $200 of paper since 8 Nov. Keep, or stop?
 4. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.
+5. **Kalshi paper fills are a bit too kind** (`bigbets.md`). Fix the bot's fill rule for the kc_maker tracks? It would
+   move kc_maker_safe from about +$0.21 to +$0.18 per $100, but its pass test is locked, so it's your call. Until
+   then, read its live number with that in mind.
