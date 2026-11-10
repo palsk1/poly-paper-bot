@@ -28,10 +28,19 @@ jobs:
           path: bt_cache
           key: bt-cache-${{ github.run_id }}
           restore-keys: bt-cache-
+      - name: Shared price store, fetch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 store.py pull bt_cache || true
       - name: Backtest
         env:
           BT_START: ${{ inputs.start }}
         run: PYTHONUNBUFFERED=1 python3 backtest.py all
+      - name: Shared price store, save
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 store.py push bt_cache || true
       - uses: actions/cache/save@v4   # also after a failure or timeout, so a long download isn't lost
         if: always()
         with:

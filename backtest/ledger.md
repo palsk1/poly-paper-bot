@@ -1,0 +1,61 @@
+# Everything we've tried so far (the ledger)
+
+Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
+
+**49 ideas examined, in about 48,895 versions.** 29 dropped, 20 still being tested or waiting. **Looks real: 0.**
+
+Why count: if you test 49 ideas that are all worthless, the luckiest one still looks good. With 49 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+
+| Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
+|---|---|---|---|---|---|---|---|
+| 2026-11-08 | Kalshi vs Polymarket, same question (reviewed pairs) | 1 | 4 | +$3.07 | Too early to tell | paper track running (pays 1 Jan) | state/summary.md |
+| 2026-11-08 | Buy what 2-3 smart wallets all hold | 2 |  | ahead on open bets only | Too early to tell | paper track running (lab) | state/summary.md |
+| 2026-11-08 | Copy sabsabinxz (mirror, favorites, unlimited, his style by rule) | 6 |  | about $0 | Too early to tell | paper track running | state/summary.md |
+| 2026-11-08 | Crypto price model 3-30 hours ahead | 1 |  | priced like the model | Losing | dropped | CLAUDE.md Fast markets |
+| 2026-11-08 | Hourly crypto candles, late entry | 1 | 9 | -$7.09 | Too early to tell | paper track running (lab) | state/summary.md |
+| 2026-11-08 | Weather buckets that are already decided | 1 |  | sit at 99.95c | Losing | dropped | CLAUDE.md Fast markets |
+| 2026-11-08 | Same question listed twice on Polymarket | 1 |  | no gaps | Losing | dropped | arbhunt.py hunt_dupes |
+| 2026-11-08 | Endgame: buy 95c+ a day before the end | 1 |  | -$5.50 | Losing | dropped | backtest/report.md, PR #8 |
+| 2026-11-08 | Endgame: buy 95c+ after the deadline, before a result | 1 |  | -$167 on 709 bets | Losing | dropped | backtest/report.md, PR #9 |
+| 2026-11-08 | Endgame: buy 95-99c once a result is in or proposed | 1 | 6 | +$3.08 | Too early to tell | paper track running | state/summary.md (6 finished) |
+| 2026-11-08 | Buy every answer of an event for under $1 | 1 |  | 0 real sets found | Losing | dropped in practice (track idle, Jan to decide) | CLAUDE.md |
+| 2026-11-08 | Buy the cheap side of 'sure' weather buckets | 6 | 3100 | -$18.67 | Losing | dropped (was +$121 on the old data with missing losers) | backtest/fade.md, PR #10, re-test PR #60 |
+| 2026-11-08 | Buy favorites by rule (screener, favorite bands, NO only, momentum, fade the rally) | 12 |  | lost, even with free trading | Losing | dropped (lab tracks kept as proof) | backtest/report.md, PR #7 |
+| 2026-11-08 | Collect Polymarket holding rewards | 1 |  | +$3.25 a year | Ahead, but could be luck | dropped (too small) | edges.py, PR #5 |
+| 2026-11-08 | Kalshi vs Polymarket game winners | 1 |  | all 160 pairs cost about $1.04 | Losing | dropped | arbhunt.py hunt_sports2 |
+| 2026-11-08 | Two markets in one event that can't both lose (ladders) | 1 |  | best gap 1.3c, under the bar | Too early to tell | paper track running (idle) | arbhunt.py, PR #4 |
+| 2026-11-08 | Quote both sides for liquidity rewards (5 versions) | 5 |  | rewards 1-38c a day, price moves cost far more | Losing | paper track running | probe rewardpay, PR #27/#28 |
+| 2026-11-08 | Sell a full set now for more than $1 | 1 | 5681 | -0.05c a share at best | Losing | dropped | edges.py, PR #5 |
+| 2026-11-08 | Buy the boring side after a one-day scare (3 versions) | 3 |  | -$3.11 | Ahead, but could be luck | paper track running, holdout test 21 Dec | backtest/checks.md, PR #32 |
+| 2026-11-08 | Rejected arb pairs, traded one way only | 1 |  | gaps only on the unsafe side | Losing | dropped | arbhunt.py hunt_rejected |
+| 2026-11-08 | Copy 40 winning wallets (new trades, and filled-up twins) | 80 |  | mixed | Too early to tell | paper track running (lab) | README The lab, PR #6 |
+| 2026-11-08 | Weather forecast vs temperature buckets | 1 | 50 | -$14.67 | Losing | paper track running (lab) | state/summary.md |
+| 2026-11-09 | Mispriced kinds of markets (weekend, quiet, tiny, long-dated, long shots) | 200 |  | all lose about the costs | Losing | dropped | backtest/calib.md, PR #30 |
+| 2026-11-09 | Read the settle source first (gas prices, earthquakes, executive orders) | 10 |  | -$34 to -$80 on gas | Losing | dropped (gas recheck 23 Nov) | backtest/sources.md, PR #40 |
+| 2026-11-09 | Economy favorites the forecast agrees with (found in a 4-band table) | 4 |  | +$6.73 | Ahead, but could be luck | paper track running | backtest/econ.md, PR #53 |
+| 2026-11-09 | Bet free Fed forecasts against Kalshi economy markets | 20 |  | -$4 to +$3 | Losing | dropped | backtest/econ.md, PR #53 |
+| 2026-11-09 | Fine print and disputes (ugly rule wording) | 204 |  | -$18.00 | Losing | dropped | backtest/rules.md, PR #41 |
+| 2026-11-09 | GDPNow vs Kalshi GDP markets | 1 |  | +$22 to +$30 on only 19 releases | Too early to tell | waiting (next release late Jan) | backtest/econ.md |
+| 2026-11-09 | Idea machine: about 34,000 pattern ideas screened | 34,000 |  | 1 survivor, see next line | Losing | dropped (tool kept) | backtest/ideas.md, PR #38/#39 |
+| 2026-11-09 | Copy wallets that buy before the price moves | 10 |  | -$4.40 | Losing | dropped | backtest/informed.md, PR #49/#52 |
+| 2026-11-09 | Kalshi 15-minute crypto: bid in front, hold to the result (about 105 versions) | 105 |  | +$0.56 | Promising, needs more bets | paper track running, pass bar 1 Dec | backtest/kcrypto.md, PR #31/#64 |
+| 2026-11-09 | Kalshi 15-minute crypto: fast cancels and last 45 seconds | 40 |  | +$0.40 | Ahead, but could be luck | paper test running (kfastlive, 4 fixed tests) | backtest/kfast.md, PR #51/#59 |
+| 2026-11-09 | Watch live esports, buy before the price moves | 1 |  | price moves first | Losing | dropped | backtest/livelag.md, PR #25 |
+| 2026-11-09 | Markets that contradict each other (lists, groups, ladders) | 6 |  | no set under $1 | Losing | dropped | backtest/logic.md, PR #54 |
+| 2026-11-09 | Buy NO in 'will X say Y' markets | 8 | 52 | +$4.35 | Ahead, but could be luck | paper track running, holdout test 21 Dec | backtest/checks.md, PR #32 |
+| 2026-11-09 | Quiet week, buy NO at 50-75c (the idea machine's survivor) | 1 | 215 | +$0.32 | Ahead, but could be luck | paper track running (Jan's choice) | btcheck quiet, PR #48/#50 |
+| 2026-11-09 | Buy below the sharp bookmaker's fair price (Pinnacle, Betfair) | 3 | 1230 | -$0.04 | Losing | dropped (track left running) | backtest/sharp.md, PR #24 |
+| 2026-11-10 | Buy No at 90-97c more than 30 days before the end (topic 'other'), as a rule | 1 | 64 | +$5.45 | Promising, needs more bets | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
+| 2026-11-10 | Calendar effects and 'choices add up to' (6 pattern families) | 10,000 |  | 0 survivors | Losing | dropped | digs.py dig_ideas |
+| 2026-11-10 | Crypto price markets: buy No at 70-90c, 3-7 days before the end, as a rule | 1 |  | +$6.95 | Ahead, but could be luck | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
+| 2026-11-10 | Which kinds of bet paid for anyone at a slow follower's real price (282 kinds) | 282 | 2559 | Yes buyers -$8.10, No buyers +$0.28 | Ahead, but could be luck | two leads below | winners.py, backtest/winners.md, PR #66 |
+| 2026-11-10 | Brand-new markets, first hours | 150 |  | -$0.25 to +$4 at real prices | Losing | dropped | backtest/launch.md, PR #55 |
+| 2026-11-10 | Order book shapes (thick side, pulled orders, gaps) | 812 |  | about 1c, less than costs | Losing | dropped (one fixed recheck about 1 Dec) | obook.py, PR #61 |
+| 2026-11-10 | Poll averages vs approval markets | 10 |  | -$6 to -$46 on Kalshi | Losing | dropped | polls.py, PR #62 |
+| 2026-11-10 | Soccer full-time draws at 15-50c | 30 | 4538 | +$5.60 | Ahead, but could be luck | holdout test 21 Dec | backtest/census.md, digs_draws.md, PR #63/#65 |
+| 2026-11-10 | Sports totals and spreads long shots | 100 |  | gone at real prices | Losing | dropped | backtest/census.md, PR #63 |
+| 2026-11-10 | Daily stock and commodity 'Up or Down', cheap side | 20 |  | -$3.50 | Losing | dropped | backtest/census.md, PR #63 |
+| 2026-11-10 | Learn from wallets that really win (2,742 wallets through the exam) | 2,742 | 2559 | 32 in 1,000 look good, luck gives 28; first-half picks lost $5 later | Losing | dropped (steady winners don't show) | winners.py, backtest/winners.md, PR #66 |
+| 2026-11-10 | Kalshi vs Polymarket 15-minute crypto pairs | 5 |  | a pair costs about $1.05 | Losing | dropped | xvenue.py |
+
+"Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
