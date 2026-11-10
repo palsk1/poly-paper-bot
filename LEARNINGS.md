@@ -94,6 +94,7 @@ A strategy gets real money only if **every** answer is yes:
 
 ## Big lessons so far
 
+- **A chart price isn't always a price you can buy at.** Dead Polymarket markets sit near 50c with nobody selling. A smart model finds those first and looks like a genius (+$21 per $100) until you check real trades (10 Nov).
 - **Old-data wins mostly vanish at real prices.** One extra cent plus the fee kills most "edges". Brand-new
   Polymarket markets even open with fake 1c/99c books, so the listed price lies.
 - **Yes buyers pay for the thrill.** On Polymarket, buying Yes lost about $8 per $100; buying No got about your money
@@ -148,6 +149,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Daily stock and commodity "Up or Down", cheap side:** -$3.50.
 - **$1 on Yes (or No) in every open market every day (10 Nov, `yesno.py`, just for fun):** Polymarket all Yes -$11 to -$18 per $100, all No -$6 to -$8; Kalshi at the real ask all Yes -$25, all No -$20. At the dream price both are near fair, so the loss is the cost of buying, worst on long shots. No new candidate.
 - **Criss-cross of those bets (10 Nov, `yesno.py grid`):** 1,055 cuts by Yes/No, price, kind of market, time left and weekday. 124 ahead in both halves, 667 behind in both. The survivors are the two leads we already track (nearly sure things 30+ days out = `boring_no`; crypto No 3-7 days out = `crypto_no`), and they shrink at real buys. No weekday pattern. Kalshi: nothing. No new candidate.
+- **One math model that looks at everything together (10 Nov, `combo.py`):** learned on markets ending before 10 Aug, judged on 10 Aug - 9 Nov. Chart says +$15 to +$22 per $100; at real buys +$0 to +$8, could be luck. It mostly found ghost prices (dead markets near 50c that nobody sells at). The plain price guessed better than the model overall. Fair version (moving prices only): +$7.66 on 259 real buys, luck range -$4 to +$20. Not a candidate unless it passes a frozen test.
 
 Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.

@@ -599,6 +599,18 @@
    "verdict": "Ahead, but could be luck",
    "status": "no new candidate (re-finds boring_no and crypto_no)",
    "src": "yesno.py grid, backtest/yesno_grid.md"
+  },
+  {
+   "id": "combo_model",
+   "date": "2026-11-10",
+   "what": "One model that looks at everything together (gradient-boosted trees, walk-forward, Polymarket)",
+   "tries": 15,
+   "bets": 259,
+   "groups": null,
+   "per100": "+$7.66 at real buys (-$4.23 to +$19.54); chart said +$15 to +$22",
+   "verdict": "Ahead, but could be luck",
+   "status": "lead, not registered (chart profit was ghost prices)",
+   "src": "combo.py, backtest/combo.md"
   }
  ]
 }

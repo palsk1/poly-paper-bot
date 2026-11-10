@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**50 ideas examined, in about 49,950 versions.** 29 dropped, 21 still being tested or waiting. **Looks real: 0.**
+**51 ideas examined, in about 49,965 versions.** 29 dropped, 22 still being tested or waiting. **Looks real: 0.**
 
-Why count: if you test 50 ideas that are all worthless, the luckiest one still looks good. With 50 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 51 ideas that are all worthless, the luckiest one still looks good. With 51 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -47,6 +47,7 @@ Why count: if you test 50 ideas that are all worthless, the luckiest one still l
 | 2026-11-09 | Buy below the sharp bookmaker's fair price (Pinnacle, Betfair) | 3 | 1230 | -$0.04 | Losing | dropped (track left running) | backtest/sharp.md, PR #24 |
 | 2026-11-10 | Buy No at 90-97c more than 30 days before the end (topic 'other'), as a rule | 1 | 64 | +$5.45 | Promising, needs more bets | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
 | 2026-11-10 | Calendar effects and 'choices add up to' (6 pattern families) | 10,000 |  | 0 survivors | Losing | dropped | digs.py dig_ideas |
+| 2026-11-10 | One model that looks at everything together (gradient-boosted trees, walk-forward, Polymarket) | 15 |  | +$7.66 at real buys (-$4.23 to +$19.54); chart said +$15 to +$22 | Ahead, but could be luck | lead, not registered (chart profit was ghost prices) | combo.py, backtest/combo.md |
 | 2026-11-10 | Crypto price markets: buy No at 70-90c, 3-7 days before the end, as a rule | 1 |  | +$6.95 | Ahead, but could be luck | lead: needs a fresh-data test (not registered yet) | winners.py drill, backtest/winners.md, PR #66 |
 | 2026-11-10 | Which kinds of bet paid for anyone at a slow follower's real price (282 kinds) | 282 | 2559 | Yes buyers -$8.10, No buyers +$0.28 | Ahead, but could be luck | two leads below | winners.py, backtest/winners.md, PR #66 |
 | 2026-11-10 | Brand-new markets, first hours | 150 |  | -$0.25 to +$4 at real prices | Losing | dropped | backtest/launch.md, PR #55 |
