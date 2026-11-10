@@ -4625,3 +4625,10 @@
 {"minutes_left": 8.28, "price": 0.931, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV101500-00", "track": "kc_maker_early", "ts": "2026-11-10T19:51:43Z", "type": "kmaker_order"}
 {"minutes_left": 8.28, "price": 0.954, "queue": 103.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV101500-00", "track": "kc_maker_early", "ts": "2026-11-10T19:51:43Z", "type": "kmaker_order"}
 {"minutes_left": 8.28, "price": 0.903, "queue": 0, "shares": 11, "side": "yes", "ticker": "KXXRP15M-26NOV101500-00", "track": "kc_maker_early", "ts": "2026-11-10T19:51:43Z", "type": "kmaker_order"}
+{"annual": 0.185, "edge": 0.027, "pair": "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027", "title": "Will Rahm Emanuel announce a Presidential run before 2027?", "track": "arb", "ts": "2026-11-10T19:55:57Z", "type": "arb_opportunity"}
+{"minutes_left": 2.87, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV101500-00", "track": "kc_maker", "ts": "2026-11-10T19:57:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.87, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV101500-00", "track": "kc_maker_safe", "ts": "2026-11-10T19:57:08Z", "type": "kmaker_order"}
+{"minutes_left": 2.87, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101500-00", "track": "kc_maker", "ts": "2026-11-10T19:57:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.87, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV101500-00", "track": "kc_maker_safe", "ts": "2026-11-10T19:57:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.87, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV101500-00", "track": "kc_maker", "ts": "2026-11-10T19:57:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.87, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV101500-00", "track": "kc_maker_safe", "ts": "2026-11-10T19:57:11Z", "type": "kmaker_order"}
