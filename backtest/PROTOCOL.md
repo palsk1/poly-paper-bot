@@ -48,6 +48,7 @@ strategy doesn't beat those twins, the "edge" is in the band or the exits, not t
 | `boring_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "other" (`calib.topic`), the first time No's last traded price is at 90-97c with more than 30 days to the end date: wait 5 minutes, take the next real $100+ buy of No within 6 hours, +1c + fee, $25 a bet, one bet per market, no bet if that buy is more than 2c outside the band. Exactly `winners.rule_bets` with `PRESETS[2]`. Not in `btholdout` yet: fetch trade lists (`informed.py`) for markets ending 2026-11-10 or later, then `winners.py drill` | ahead, and band low end above -$5 per $100 |
 | `crypto_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "crypto price", the first time No is at 70-90c with 3-7 days to the end date, same fill rule. Exactly `winners.rule_bets` with `PRESETS[0]`. Scored the same way | ahead, and band low end above -$5 per $100 |
 | `soccer_draw_mid` (secondary, added 2026-11-10, `digs.py draws`) | Same as `soccer_draw` but only draws priced 22-32c and only outside the big leagues (slugs epl, lal, sea, bun, fl1, ucl, uel). Found by slicing in-sample data, so it only counts if `soccer_draw` also passes | ahead at +1c |
+| `combo_moving` (added 2026-11-10, Jan's OK, `combo.py`) | The everything-together model, "moving prices only, no clock" version, frozen: same 14 inputs and settings as `combo.fit` (random_state 1), learned on every usable market that ended before 2026-11-10, only on market-days where the price moved 0.2c or more since the day before. Judged on noons from 2026-11-10 on, markets ending 2026-11-10 or later, events it never learned from, moving prices only. Bets when its chance is 12c or more above the cost (chart + `yesno.POLY_EXTRA` + fee, cost 5-95c), one bet per market at the first such noon, $25. Counted at the first real buy within 3 hours +1c + fee (`exam.fills`); bets nobody could buy don't count. Exactly `combo.holdout()` (probe `btcomboholdout`, after a fresh fetch of markets ending 2026-11-10 or later) | ahead, and band low end above -$5 per $100 |
 
 A pass is not proof. It means the lead survived one fresh look and the live paper track is worth watching to
 2027-01-01. The money decision still uses the live trust score (90% bar, many strategies tested).
@@ -65,6 +66,11 @@ Written before the result, from `backtest/kcdepth.md` (probe `btkcdepth`, run 42
 - **Fail:** at or below +$0.22. Then kc_maker_safe is not the money pick.
 - A pass still leaves two open checks before real money: whether $25-100 orders fill the same, and whether Kalshi
   takes a Swedish account (Jan's job).
+- **Fill rule fix (2026-11-10, Jan: "Fix it", `backtest/bigbets.md`):** this is a bug fix in how a paper bid is
+  counted as filled, not a rule change, so the count does not restart. From then on the bot counts only contracts
+  really sold at our price (after the queue) or below. Bets closed before the fix were counted the old, kinder way,
+  so at scoring time **every** closed bet is re-scored on its real trade tape with the fixed rule (probe
+  `big_kalshi`, the "$10" row), and that number is the one compared with +$0.22. Pass bar unchanged.
 
 ## 6. Keep it simple
 
