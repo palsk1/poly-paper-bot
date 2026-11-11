@@ -240,7 +240,12 @@ def build(offline=False):
             "mk": {"rewards": r2(s["maker_rewards"]), "locked": r2(s["maker_locked"]), "open": r2(s["maker_open"]),
                    "exits": s.get("exits", 0)} if "maker_rewards" in s else None,
         })
-    data = {"generated": bot.iso(), "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
+    try:
+        with open(os.path.join(bot.ROOT, "state", "quoter.json")) as fh:
+            quoter = {k: v for k, v in json.load(fh).items() if k != "leg_results"}
+    except (OSError, ValueError):
+        quoter = None
+    data = {"generated": bot.iso(), "quoter": quoter, "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
             "order": bot.ranked(stats), "tracks": rows, "trial_end": "2027-01-01",
             "min_proven": bot.CFG.get("ranking", {}).get("min_trades_proven", 30),
             "repo": "https://github.com/palsk1/poly-paper-bot"}

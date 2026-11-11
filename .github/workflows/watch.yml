@@ -25,6 +25,10 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python3 bot.py watch
+      - name: Combo quoter scoreboard (reads the logs Jan's server posts, at most every 25 min)
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python3 combos.py qstate
       - name: Save state
         run: |
           git config user.name "poly-paper-bot"
