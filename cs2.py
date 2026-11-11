@@ -184,6 +184,8 @@ def peek(team="mouz"):
 
 def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
     """Probe `cs2_jsapi`: read bo3.gg's page scripts to find which API paths its prediction widget calls."""
+    st, pb = get("https://bo3.gg/predictions")
+    print("predictions page", st, len(pb), re.sub(r"\s+", " ", pb.decode("utf-8", "replace"))[:1500])
     st, body = get(f"https://bo3.gg/matches/{slug}")
     html = body.decode("utf-8", "replace")
     js = sorted(set(re.findall(r'(/_nuxt/[A-Za-z0-9_.-]+\.js)', html)))
@@ -203,11 +205,19 @@ def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
             for pth in re.findall(r'["\'`](/?(?:api/)?v\d/[^"\'`]{3,80}|/[a-z_]+/[a-z_/{}$.:-]{3,60})["\'`]', seg):
                 paths[pth] += 1
     print("scripts read", len(seen))
+    for u in sorted(seen):
+        t = get("https://bo3.gg" + u)[1].decode("utf-8", "replace")
+        for k in re.finditer(r"prediction", t):
+            seg = t[max(0, k.start() - 200):k.start() + 200]
+            if re.search(r"/v\d|api|\$fetch|useFetch|get\(|url", seg) and "predictions\"" not in seg[:5]:
+                print("  JS", u, "::", re.sub(r"\s+", " ", seg))
     for pth, n in paths.most_common(80):
         print(f"  {n:3}  {pth}")
     for u in ["matches/%s/predictions" % slug, "predictions/matches/%s" % slug, "matches/%s/ai_predictions" % slug,
               "ai/predictions?filter[match_slug][eq]=%s" % slug, "matches/%s/forecast" % slug, "games/predictions",
-              "match_predictions?filter[match_predictions.match_slug][eq]=%s" % slug, "predictions?page[limit]=2"]:
+              "match_predictions?filter[match_predictions.match_slug][eq]=%s" % slug, "predictions?page[limit]=2",
+              "articles?filter[articles.type][eq]=prediction&page[limit]=2", "predictions/matches?page[limit]=2",
+              "matches/%s/bet_updates" % slug, "bet_updates?filter[bet_updates.match_id][eq]=133431"]:
         for base in ("https://api.bo3.gg/api/v1/", "https://api.bo3.gg/api/v2/"):
             st, b = get(base + u)
             print(st, len(b), base + u, b[:300].decode("utf-8", "replace") if st == 200 else "")
@@ -443,6 +453,12 @@ def exam_run():
                 "pay": 1.0 if r["w"] == s else 0.0, "ev": r["ev"], "q": q, "fee": r["fee"]} for r, s, q, hrs in sel]
         info = {}
         bets = exam.fills(sig, window=3 * H, tape_fn=tape_fn, workers=10, info=info)
+        # selection check: did the bets we COULD price (someone else bought in the window) do better on the chart
+        # than the ones nobody bought? If so, "a real buy happened" is itself a tip-off and the real-price result flatters.
+        got = {str(b["ev"]) for b in bets}
+        for lab, part in (("priced", [x for x in sel if str(x[0]["ev"]) in got]),
+                          ("nobody bought", [x for x in sel if str(x[0]["ev"]) not in got])):
+            print("  chart result, " + chart_line(lab, part))
         gap = [b["px"] - b["q"] for b in bets if b.get("q") is not None]
         if gap:
             print(f"  {rule[1]}: real first buy minus chart price, median {100 * statistics.median(gap):+.1f}c")
