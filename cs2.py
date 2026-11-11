@@ -426,7 +426,7 @@ RULES = [
     ("fav1", "CS2: favorite at 70-97c an hour before the match", "p1", 1, lambda r, s, q: 0.70 <= q < 0.97),
     # Jan, 11 Nov: "if we just used bo3.gg's prediction model, would we have gained money?"
     ("ai1", "CS2: back bo3.gg's AI pick, 1h before", "p1", 1, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
-    ("ai_sweep", "CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before", "p1", 1,
+    ("aisweep", "CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before", "p1", 1,
      lambda r, s, q: r.get("ai") and r["ai"]["side"] == s and r["ai"]["sweep"]),
     ("ai24", "CS2: back bo3.gg's AI pick, a day before", "p24", 24, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
 ]
