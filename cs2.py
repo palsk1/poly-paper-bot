@@ -207,11 +207,16 @@ def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
     print("scripts read", len(seen))
     for u in sorted(seen):
         t = get("https://bo3.gg" + u)[1].decode("utf-8", "replace")
+        for ep in re.findall(r"apiService\.(?:get|post)\(\s*([`'\"][^`'\"]{2,140}[`'\"])", t):
+            paths["API " + ep] += 1
+        if "match-prediction" in t or "ai_predict" in t or "aiPredict" in t:
+            for k in re.finditer(r"ai_predict|aiPredict|prediction_|predictions?\b[^\"]{0,3}[:=]", t):
+                print("  WIDGET", u, "::", re.sub(r"\s+", " ", t[max(0, k.start() - 250):k.start() + 250]))
         for k in re.finditer(r"prediction", t):
             seg = t[max(0, k.start() - 200):k.start() + 200]
             if re.search(r"/v\d|api|\$fetch|useFetch|get\(|url", seg) and "predictions\"" not in seg[:5]:
                 print("  JS", u, "::", re.sub(r"\s+", " ", seg))
-    for pth, n in paths.most_common(80):
+    for pth, n in sorted(paths.items()):
         print(f"  {n:3}  {pth}")
     for u in ["matches/%s/predictions" % slug, "predictions/matches/%s" % slug, "matches/%s/ai_predictions" % slug,
               "ai/predictions?filter[match_slug][eq]=%s" % slug, "matches/%s/forecast" % slug, "games/predictions",
