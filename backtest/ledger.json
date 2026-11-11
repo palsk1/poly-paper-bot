@@ -611,6 +611,30 @@
    "verdict": "Ahead, but could be luck",
    "status": "lead, not registered (chart profit was ghost prices)",
    "src": "combo.py, backtest/combo.md"
+  },
+  {
+   "id": "kspeed_timeline_speed",
+   "date": "2026-11-11",
+   "what": "Kalshi 15-minute crypto: every minute of the window, Binance vs Kalshi's price, buying Binance jumps 0-30 s late, 45-second buy by delay",
+   "tries": 84,
+   "bets": 17518,
+   "groups": null,
+   "per100": "Binance rule -$4.75; jump buys -$5 at any delay; 45 s buy +$0.69 at 1 s, same up to 5 s",
+   "verdict": "Losing",
+   "status": "dropped (speed buys nothing we can measure; no server)",
+   "src": "kspeed.py, backtest/kspeed.md"
+  },
+  {
+   "id": "kspeed_early_sure",
+   "date": "2026-11-11",
+   "what": "Kalshi 15-minute crypto: side already at 95c+ with 8+ minutes left, bought at the ask one minute late",
+   "tries": 84,
+   "bets": 4406,
+   "groups": null,
+   "per100": 0.72,
+   "verdict": "Ahead, but could be luck",
+   "status": "lead, no track (research mode; same family as kc_maker_safe)",
+   "src": "kspeed.py, backtest/kspeed.md"
   }
  ]
 }
