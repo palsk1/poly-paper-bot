@@ -96,8 +96,8 @@ def open_bets(name, tr):
 def recent_closed(tr):
     out = []
     for c in sorted(tr.get("closed", []), key=lambda c: c.get("closed_at") or "", reverse=True)[:MAX_CLOSED]:
-        out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2((c.get("entry") or 0) * 100),
-                    "x": r2((c.get("exit") or 0) * 100), "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
+        out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2(c["entry"] * 100) if c.get("entry") is not None else None,
+                    "x": r2(c["exit"] * 100) if c.get("exit") is not None else None, "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
                     "why": c.get("reason", "")})
     return out
 

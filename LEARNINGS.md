@@ -133,6 +133,11 @@ A strategy gets real money only if **every** answer is yes:
 - **Paper maker bids can look too good (10 Nov).** The bot counts a Kalshi bid as fully filled once one contract
   trades below it. On the real tape the losers fill fully and the winners only partly: `kc_maker_early` is really
   -$12 per $100, not the -$4.50 it showed. Fixed 10 Nov: the bot now counts only what was really sold.
+- **Polymarket maker tracks hid their losses (11 Nov, Jan spotted it).** Money from early sales and from pairs turned
+  back into $1 was counted, but never shown as finished bets, so the dashboard said "0 won / 0 lost, too early" while
+  `maker_tpsl` had lost $104 of $200 and `maker_flat` $100. The cash was right; the scoreboard wasn't. Fixed: every
+  sale and pair is now a finished bet. Lesson: the stop loss sells right after a fill, into a book that was just
+  emptied, often 10-28c below what it paid. The maker idea stays dead.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 

@@ -4148,6 +4148,55 @@ def maker_inv_value(b, mid):
     return b["yes"] * mid + b["no"] * (1 - mid)
 
 
+def maker_row(tr, b, kind, pnl, cost, why, **extra):
+    """Bug fix 2026-11-11: early sales and merged pairs moved money (cash, realized) but never showed up as finished
+    bets, so maker tracks read "0 won / 0 lost" and "too early" while losing half their money. Each sale and merge
+    is now its own finished row; the book remembers what it already booked so the final close doesn't count it twice."""
+    rec = {"title": b["title"], "slug": b["slug"], "event_slug": b.get("event_slug", ""), "cid": b["cid"],
+           "opened": b["opened"], "closed_at": iso(), "reason": why, "kind": kind,
+           "cost": round(cost, 4), "pnl": round(pnl, 4), **extra}
+    tr["closed"].append(rec)
+    b["booked"] = b.get("booked", 0.0) + rec["pnl"]
+    return rec
+
+
+def maker_backfill_rows(tr, name):
+    """One-time (2026-11-11): add rows for sales and merges made before maker_row existed, so the record matches the
+    money. Sales come from the event log (one row each); merges only have a total per market (one row)."""
+    if tr.get("rows_backfilled"):
+        return
+    try:
+        evs = [json.loads(l) for l in open(os.path.join(STATE, "events.jsonl"))]
+    except Exception:
+        evs = []
+    for b in tr["books"].values():
+        if "booked" in b:
+            continue
+        b["booked"] = 0.0
+        got = 0.0
+        for e in evs:
+            if e.get("track") != name or e.get("type") != "maker_exit" or e.get("title") != b["title"] \
+                    or e.get("ts", "") < b["opened"]:
+                continue
+            m = re.search(r"^(.*?): sold (\d+(?:\.\d+)?) (YES|NO) at", e.get("reason", ""))
+            if not m:
+                continue
+            sh, px, pnl = float(m.group(2)), float(e["price"]), float(e["pnl"])
+            cost = sh * px - taker_fee(sh, px, b.get("fee_rate", 0.0)) - pnl
+            rec = maker_row(tr, b, "sale", pnl, cost, e["reason"], outcome=m.group(3), shares=sh,
+                            entry=round(cost / sh, 4), exit=round(px, 4))
+            rec["closed_at"] = e["ts"]
+            got += pnl
+        rest = b.get("exit_pnl", 0.0) - got
+        if abs(rest) > 0.01:
+            maker_row(tr, b, "sale", rest, b["size"], "earlier sales (before 11 Nov, no detail kept)")
+        if abs(b.get("merged_pnl", 0.0)) > 1e-9:
+            maker_row(tr, b, "merge", b["merged_pnl"], b["size"],
+                      "pairs bought on both sides and turned back into $1 (all before 11 Nov)", outcome="YES+NO")
+    tr["closed"].sort(key=lambda c: c.get("closed_at") or "")
+    tr["rows_backfilled"] = iso()
+
+
 def maker_close(tr, name, key, why, payout=None):
     """End one market episode: merge pairs, then pay out (resolved) or sell what is left at the bid."""
     b = tr["books"].pop(key)
@@ -4168,9 +4217,10 @@ def maker_close(tr, name, key, why, payout=None):
     proceeds -= fee
     exit_pnl = b.get("exit_pnl", 0.0)
     pnl = b["rewards"] + b["merged_pnl"] + exit_pnl + proceeds - b["yes_cost"] - b["no_cost"]
+    pnl -= b.get("booked", 0.0)  # sales and merges already have their own finished rows (maker_row)
     tr["cash"] = round(tr["cash"] + proceeds, 6)
     # rewards, merges and early sales were booked when they happened
-    tr["realized"] = round(tr["realized"] + pnl - b["rewards"] - b["merged_pnl"] - exit_pnl, 6)
+    tr["realized"] = round(tr["realized"] + pnl + b.get("booked", 0.0) - b["rewards"] - b["merged_pnl"] - exit_pnl, 6)
     rec = {"title": b["title"], "slug": b["slug"], "cid": b["cid"], "opened": b["opened"], "closed_at": iso(),
            "reason": why, "cost": round(b["size"], 4), "pnl": round(pnl, 4), "rewards": round(b["rewards"], 4),
            "merged_pnl": round(b["merged_pnl"], 4), "leftover_pnl": round(proceeds - b["yes_cost"] - b["no_cost"], 4),
@@ -4210,6 +4260,8 @@ def maker_exits(tr, name, b, r):
         b["exits"] = b.get("exits", 0) + 1
         tr["exits"] = tr.get("exits", 0) + 1
         b[side], b[side + "_cost"] = 0.0, 0.0
+        maker_row(tr, b, "sale", gain, cost, f"{why}: sold {sh:.0f} {side.upper()} at {px * 100:.1f}c",
+                  outcome=side.upper(), shares=sh, entry=round(cost / sh, 4), exit=round(px, 4))
         log_event({"type": "maker_exit", "track": name, "title": b["title"], "price": round(px, 4),
                    "pnl": round(gain, 4), "reason": f"{why}: sold {sh:.0f} {side.upper()} at {px * 100:.1f}c"})
 
@@ -4262,6 +4314,7 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
     for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
         tr.setdefault(k, v)
     maker_recap_rewards(tr, r)
+    maker_backfill_rows(tr, name)
     t_now = time.time()
     for key in list(tr["books"]):
         b = tr["books"][key]
@@ -4336,6 +4389,9 @@ def maker_cycle_one(tracks, name, r, pick_new=True):
             gain = pairs * (1 - ay - an)
             b["merged_pnl"] += gain
             tr["realized"] = round(tr["realized"] + gain, 6)
+            maker_row(tr, b, "merge", gain, pairs * (ay + an),
+                      f"bought both sides ({ay * 100:.1f}c YES + {an * 100:.1f}c NO), turned {pairs:.0f} pairs back into $1",
+                      outcome="YES+NO", shares=pairs)
             tr["cash"] = round(tr["cash"] + pairs, 6)
             b["yes_cost"] -= pairs * ay
             b["no_cost"] -= pairs * an
@@ -4709,10 +4765,12 @@ def integrity(tracks, deep=False):
         want = (0.0 if tr["unlimited"] else tr["deposited"]) - _track_open_cost(tr, src) + tr["realized"]
         if abs(tr["cash"] - want) > 0.02:
             bad("cash", name, f"cash ${tr['cash']:.2f} but deposits - open bets + profit = ${want:.2f}")
-        if src != "maker":
-            s = sum(c.get("pnl", 0.0) for c in tr["closed"])
-            if abs(s - tr["realized"]) > 0.02:
-                bad("realized", name, f"realized ${tr['realized']:.2f} but finished trades add up to ${s:.2f}")
+        s = sum(c.get("pnl", 0.0) for c in tr["closed"])
+        if src == "maker":  # bonus on markets still quoted is booked at their close (bug fix 2026-11-11)
+            s += sum(b.get("rewards", 0.0) + b.get("merged_pnl", 0.0) + b.get("exit_pnl", 0.0) - b.get("booked", 0.0)
+                     for b in tr.get("books", {}).values())
+        if abs(s - tr["realized"]) > 0.02:
+            bad("realized", name, f"realized ${tr['realized']:.2f} but finished trades add up to ${s:.2f}")
         if not tr["unlimited"] and tr["cash"] < -0.02:
             bad("negative_cash", name, f"cash below zero (${tr['cash']:.2f})")
         rows = list(tr.get("positions", {}).values()) + tr.get("closed", [])

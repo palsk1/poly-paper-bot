@@ -351,7 +351,7 @@ function detail(n) {
     t.waiting.map(w => `<div class="bet"><div class="t"><a href="${esc(w.u)}" target="_blank" rel="noopener">${esc(w.t)}</a></div>
      <div class="m">price now ${cents(w.n)} · bonus so far ${money(w.bonus, false)}${w.end ? ` · ends ${esc(w.end)}` : ""}</div></div>`).join("") + `</div>`;
   if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished bets</summary><div class="card">` + t.recent.map(c =>
-    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)} · bought ${cents(c.e)}, ended ${cents(c.x)} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
+    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.e != null ? ` · bought ${cents(c.e)}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
   $("detail").innerHTML = h;
   curveChart($("curve"), t);
 }
