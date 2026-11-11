@@ -6164,3 +6164,5 @@
 {"minutes_left": 1.86, "price": 0.953, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV111000-00", "track": "kc_maker", "ts": "2026-11-11T14:58:09Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.47, "price": 0.953, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV111000-00", "track": "kc_maker", "ts": "2026-11-11T15:02:47Z", "type": "kmaker_fill"}
 {"fee": 0.0058, "outcome": "Yes", "price": 0.97, "shares": 5, "title": "Will Google (GOOGL) close above $285 on November 11?", "token": "8257021079740294780398321474476855769157489138554890578595278696052700742569", "track": "endgame_sell98", "ts": "2026-11-11T15:06:20Z", "type": "paper_buy"}
+{"minutes_left": 3.16, "price": 0.98, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV111015-15", "track": "kc_maker", "ts": "2026-11-11T15:11:51Z", "type": "kmaker_order"}
+{"minutes_left": 3.16, "price": 0.98, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV111015-15", "track": "kc_maker_safe", "ts": "2026-11-11T15:11:52Z", "type": "kmaker_order"}
