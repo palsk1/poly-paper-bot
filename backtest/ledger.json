@@ -647,6 +647,19 @@
    "verdict": "Losing",
    "status": "dropped for buyers; maker side needs Jan's API key on his own server + a 0.4 s bot (open idea)",
    "src": "combos.py, backtest/combos.md"
+  },
+  {
+   "id": "paper_house_combos",
+   "date": "2026-11-11",
+   "what": "Paper house for Polymarket combos: sell 2-4 leg combos (no same-game legs) at legs x 1.05 when that beats the pros' real price",
+   "tries": 15,
+   "bets": 1581,
+   "groups": 1044,
+   "per100": 3.99,
+   "floor100": -2.22,
+   "verdict": "Promising, needs more bets",
+   "status": "lead (needs Jan's API key on his own server for a live paper test; Jan to decide)",
+   "src": "combos.py replay, backtest/combos.md"
   }
  ]
 }

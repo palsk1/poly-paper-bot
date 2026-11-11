@@ -43,7 +43,40 @@ About half of those 15,655 combos were held on the **No side**: many of the big 
   needs a real-money market-making bot with API keys answering in 0.4 s, against pro firms who see the same requests,
   with risk of sharp parlay buyers picking them off. We can't paper-test it either: the requests only go to logged-in
   makers, so even a paper test needs Jan's own Polymarket API key on a server he controls (hard rule 2: the key never goes in this repo or to Claude). Not on today's free GitHub setup, and it's a speed game.
-- Dropped. If ever revisited: a "paper house" replay (pretend we sold every public combo buy at its price, judged on
-  results from an unbiased sample of combos) would show whether makers really keep that $10 after sharp buyers.
+- Buying combos: dropped.
+
+## Paper house replay (same day, Jan: "grade it from our circumstances")
+Fairer sample: 2,062 ordinary buyers found on the big wallets' combos, 500 of them at random, then **all** their finished
+Yes combos (30,341; not picked by who won). 4,945 buys on 2,924 combos kept (same chart checks as above).
+
+**What the pros really kept:** buyers paid $348,919, the combos paid out $240,496. The house kept **$31 per $100** of
+buyers' money, more than the legs said ($15). The legs these buyers pick do worse than their prices say (and some of it
+is luck: results bunch by day). Long shots under 20c: house kept $45. Legs 60c+: the house *lost* $22.
+
+**Us as the house:** quote legs x (1 + markup) and only count buys where our quote is below what the buyer really
+paid (we'd be the cheapest pro). $25 of our money at risk per buy (selling a 20c combo puts up 80c a share).
+
+| Which combos | Markup | Buys we'd win | Per $100 at risk | Luck range | Verdict |
+|---|---|---|---|---|---|
+| All | +0% | 4,316 | -$0.31 | -$2.56 to +$1.93 | Losing |
+| All | +3% | 3,347 | +$1.51 | -$0.64 to +$3.67 | Ahead, but could be luck |
+| 2-4 legs, no same-game legs | +3% | 2,111 | +$3.43 | +$0.42 to +$6.45 | Promising, needs more bets |
+| 2-4 legs, no same-game legs | **+5%** | **1,581** | **+$3.99** | **+$0.68 to +$7.29** | **Promising, needs more bets** |
+| 2-4 legs, no same-game legs | +10% | 959 | +$4.11 | +$0.32 to +$7.91 | Ahead, but could be luck |
+| Long shots under 20c | +0% to +10% | 1,509-2,403 | -$0.61 to -$0.10 | all touch below $0 | Losing |
+
+Exam (best of 15 versions, bar raised for 69 ideas tried): **Promising, needs more bets**. Both halves ahead (+$3.34,
++$4.83). Worst case per $100 -$2.22, so not proven. The exam's "too slow for 1 Jan" pace counts only our 500-buyer
+sample; a live quoter would see every request on Polymarket, many times more.
+
+**Why it can still be wrong:**
+- We price legs on the chart minute; a live quoter needs the real book in 0.4 s.
+- We assume a buyer takes our quote whenever it's cheaper than the pro's. Requests that got no trade at all are invisible here.
+- Pros may decline quotes they think are sharp (Last Look); we'd be the one left with those.
+- Long shots, the fattest part for the pros, lost for us: the pros must be pricing them with something better than "legs multiplied".
+- Maker fees on the RFQ side are assumed zero.
+
+**Next step if Jan says go:** a live paper quoter on Jan's own server with his own key (hard rule 2), logging every
+request, our quote, and the winning trade price, scored on results. No money moves.
 
 Run: probe `cmb_peek` / `cmb_peek2` / `cmb_peek3` (API shapes, sanity checks), `cmb_run` (this table, about 10 min).
