@@ -9,6 +9,7 @@ charge over "the legs multiplied", and whether combo buyers lose more than singl
 """
 import collections
 import json
+import os
 import sys
 import time
 
@@ -16,6 +17,7 @@ import bot
 
 DATA = "https://data-api.polymarket.com"
 RFQ = "https://combos-rfq-api.polymarket.com"
+GAMMA = "https://gamma-api.polymarket.com"
 
 
 def show(name, obj, n=1500):
@@ -427,6 +429,136 @@ def replay(n_seed=700, n_buyers=500, cap_combos=3000):
                    src="combos.py replay, backtest/combos.md", log=True)
 
 
+# ---------------------------------------------------------------- live paper quoter results (quoter/quoter.py on Jan's server)
+def q_logs(local=None):
+    """Every line the paper quoter wrote: from a local folder, or the public release `quoter-data`."""
+    import gzip
+    import io
+    import urllib.request
+    out = []
+    if local:
+        for fn in sorted(os.listdir(local)):
+            if fn.endswith(".jsonl"):
+                out += [json.loads(x) for x in open(os.path.join(local, fn)) if x.strip()]
+        return out
+    rel = get("https://api.github.com/repos/palsk1/poly-paper-bot/releases/tags/quoter-data")
+    if not isinstance(rel, dict) or rel.get("error"):
+        print("no quoter data yet:", rel)
+        return out
+    for a in rel.get("assets") or []:
+        if a["name"].endswith(".jsonl.gz"):
+            raw = urllib.request.urlopen(urllib.request.Request(a["browser_download_url"], headers={"User-Agent": "poly-paper-bot"}), timeout=60).read()
+            out += [json.loads(x) for x in gzip.open(io.BytesIO(raw)).read().decode().splitlines() if x.strip()]
+    return out
+
+
+_leg_cache = {}
+
+
+def leg_result(tok):
+    """1 = this leg's outcome won, 0 = lost, None = not settled yet (Gamma, by CLOB token)."""
+    if tok in _leg_cache:
+        return _leg_cache[tok]
+    r = None
+    try:
+        ms = get(GAMMA + "/markets", {"clob_token_ids": tok, "closed": "true"})
+        for m in (ms if isinstance(ms, list) else []):
+            toks = json.loads(m["clobTokenIds"]) if isinstance(m.get("clobTokenIds"), str) else m.get("clobTokenIds") or []
+            px = json.loads(m["outcomePrices"]) if isinstance(m.get("outcomePrices"), str) else m.get("outcomePrices") or []
+            if tok in toks and px:
+                p = float(px[toks.index(tok)])
+                r = 1 if p >= 0.99 else 0 if p <= 0.01 else None
+    except Exception as e:  # noqa: BLE001
+        print("leg lookup failed", tok[:12], e)
+    _leg_cache[tok] = r
+    return r
+
+
+def q_match(lines, rule, result=leg_result, stake=25.0):
+    """Pair each request we priced with the trade that really happened. We 'win' a request when our would-be quote
+    is below the price the winning pro got (the buyer takes the cheapest quote). The house's bet: $stake of our
+    money backs the parlay failing; we keep it plus the buyer's money if any leg loses, we lose it if all legs win."""
+    trades = {}
+    for x in lines:
+        if x.get("k") == "trade" and x.get("rfq"):
+            trades[x["rfq"]] = x
+    reqs = [x for x in lines if x.get("k") == "req"]
+    won, pending, bets = [], 0, []
+    for r in reqs:
+        q = (r.get("quotes") or {}).get(rule)
+        tr = trades.get(r.get("rfq"))
+        if q is None or not tr or not r.get("in_time"):
+            continue
+        price = float(tr["price"]) / 1e6 if tr.get("price") is not None else None
+        if price is None or not q < price:
+            continue
+        won.append(r)
+        res = [result(lg["token"]) for lg in r.get("leg_info") or []]
+        if 0 in res:
+            pay = stake + q * stake / (1 - q)     # parlay failed: we keep our stake and the buyer's money
+        elif res and all(x == 1 for x in res):
+            pay = 0.0                              # parlay hit: our stake goes to the buyer
+        else:
+            pending += 1
+            continue
+        bets.append({"ev": r.get("cid") or r["rfq"], "t": (r.get("seen") or 0) / 1000, "cost": stake, "pay": pay,
+                     "price": price, "q": q})
+    return reqs, trades, won, pending, bets
+
+
+def qscore(local=None):
+    """Score the live paper quoter (pre-registered in backtest/PROTOCOL.md 5c)."""
+    import exam
+    lines = q_logs(local or os.environ.get("QUOTER_DIR"))
+    notes = [x for x in lines if x.get("k") == "note"]
+    reqs = [x for x in lines if x.get("k") == "req"]
+    print(f"lines {len(lines)}: requests {len(reqs)}, trades {sum(1 for x in lines if x.get('k') == 'trade')}, notes {len(notes)}")
+    auth = [x for x in notes if x.get("what") == "auth"]
+    if auth:
+        print("last login:", auth[-1])
+    if not reqs:
+        print("No requests seen yet. If logins succeed but nothing arrives, Polymarket doesn't send requests to a quoter that only listens.")
+        return
+    print("skipped:", collections.Counter((x.get("skip") or "priced").split(" ")[0] for x in reqs).most_common())
+    lat = sorted((x["priced"] - x["seen"]) for x in reqs if x.get("priced"))
+    if lat:
+        print(f"time to price a request: middle {lat[len(lat) // 2]} ms, slowest 1 in 10 {lat[int(len(lat) * 0.9)]} ms; "
+              f"in time {sum(1 for x in reqs if x.get('in_time'))} of {len(reqs)}")
+    print("legs:", collections.Counter(len(x.get("legs") or []) for x in reqs).most_common(8))
+    for rule in ("main", "m3", "all5"):
+        reqs, trades, won, pending, bets = q_match(lines, rule)
+        quoted = sum(1 for r in reqs if (r.get("quotes") or {}).get(rule) is not None)
+        traded = sum(1 for r in reqs if (r.get("quotes") or {}).get(rule) is not None and r.get("rfq") in trades)
+        print(f"\n[{rule}] would quote {quoted}, of those really traded {traded}, we'd have been cheapest on {len(won)}, "
+              f"settled {len(bets)}, waiting {pending}")
+        if bets:
+            c = exam.score(bets, f"Paper combo quoter, live ({rule})", tries=1, prereg=True, src="quoter/quoter.py, combos.py qscore",
+                           log=(rule == "main"), quiet=False)
+            gap = sum(b["price"] - b["q"] for b in bets) / len(bets)
+            print(f"average: we'd quote {100 * gap:.1f}c a share below the pro who won")
+
+
+def qtest():
+    """Offline check of the quoter scoring with made-up lines."""
+    L = [{"k": "req", "rfq": "a", "cid": "c1", "dir": "BUY", "seen": 1000, "priced": 1050, "in_time": True,
+          "quotes": {"main": 0.30, "m3": 0.29, "all5": 0.30}, "leg_info": [{"token": "t1"}, {"token": "t2"}]},
+         {"k": "req", "rfq": "b", "cid": "c2", "dir": "BUY", "seen": 2000, "priced": 2050, "in_time": True,
+          "quotes": {"main": 0.50, "m3": 0.49, "all5": 0.50}, "leg_info": [{"token": "t3"}, {"token": "t4"}]},
+         {"k": "req", "rfq": "c", "cid": "c3", "dir": "BUY", "seen": 3000, "priced": 3050, "in_time": True,
+          "quotes": {"main": 0.40, "m3": 0.39, "all5": 0.40}, "leg_info": [{"token": "t1"}, {"token": "t5"}]},
+         {"k": "req", "rfq": "d", "cid": "c4", "dir": "BUY", "seen": 4000, "priced": 4050, "in_time": True,
+          "quotes": {"main": 0.20, "m3": 0.19, "all5": 0.20}, "leg_info": [{"token": "t1"}]},
+         {"k": "trade", "rfq": "a", "price": 330000}, {"k": "trade", "rfq": "b", "price": 480000},
+         {"k": "trade", "rfq": "c", "price": 450000}, {"k": "trade", "rfq": "d", "price": 250000}]
+    res = {"t1": 1, "t2": 0, "t3": 1, "t4": 1, "t5": None}.get
+    reqs, trades, won, pending, bets = q_match(L, "main", result=res)
+    # a: cheaper (30 < 33), a leg lost -> we keep $25 + buyer's money; b: pro cheaper, not ours; c: ours, still open;
+    # d: ours, its one leg won -> we pay
+    assert [r["rfq"] for r in won] == ["a", "c", "d"] and pending == 1, (won, pending)
+    assert abs(bets[0]["pay"] - (25 + 0.30 * 25 / 0.70)) < 1e-9 and bets[1]["pay"] == 0.0, bets
+    print("quoter scoring test ok")
+
+
 def usd(x):
     return "n/a" if x is None else (f"+${x:.2f}" if x >= 0 else f"-${-x:.2f}")
 
@@ -434,5 +566,5 @@ def usd(x):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay}[cmd]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")

@@ -224,6 +224,15 @@ The fast-bot backtest above left one small lead and two unknowns (how many contr
 - **The bar** is the repo's proof rule (`bot.proof`): the 90% upper bound on the loss rate must sit below what a bet earns per contract. At about half a cent a contract that means roughly 450-950 bets without a loss. At ~20-50 chances a day, that's a few weeks.
 - Probe routes: `kfl_once` (one look at every coin now) and `kfl_loop_<minutes>` (a short run that doesn't push).
 
+## Paper combo quoter (added 2026-11-11, `quoter/`)
+
+Polymarket Combos are parlays. Pro quoters answer each request within 0.4 s and buyers pay about $13 per $100 over
+the legs (`backtest/combos.md`). Replaying 4,945 real buys, selling 2-4 leg combos at the legs +5% when that beat the
+pros' price would have made +$3.99 per $100 at risk ("Promising, needs more bets"). Combo requests only reach
+logged-in quoters, so the live paper test runs on Jan's own server in Ireland with a fresh empty wallet: it listens,
+writes down what it would have quoted, and sees the winning price. It never quotes and holds no private key.
+Setup and rules: `quoter/README.md`, PROTOCOL.md 5c. Score: probe `cmb_qscore`.
+
 ## Maker: get paid to quote (added 2026-11-08)
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:

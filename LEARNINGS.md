@@ -177,7 +177,7 @@ Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast
 
 ## Open questions for Jan
 
-- **Be the house on Polymarket combos? (11 Nov, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. The real test needs Jan's own Polymarket API key on his own server (a paper quoter, no money moves). Jan to decide.
+- **Be the house on Polymarket combos? (11 Nov, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. Jan said go (11 Nov): a listen-only paper quoter (`quoter/`) runs on Jan's own server in Ireland with a fresh empty wallet. First question: does Polymarket send requests to someone who only listens? Pass rule proposed in PROTOCOL.md 5c (above +$1.00 per $100 at risk at 1 Jan or 1,000 settled bets), waiting for Jan's OK.
 
 1. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
 2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).
