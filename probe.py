@@ -582,6 +582,16 @@ if __name__ == "__main__":
     if what.startswith("wallet_"):
         import walletcheck
         walletcheck.main(what[len("wallet_"):])
+    if what == "wallets_all":  # profile every copied lab wallet (w_* tracks), one after another; feeds wallet_notes.json
+        import walletcheck
+        cfg = json.load(open("config.json"))["tracks"]
+        for name, tc in cfg.items():
+            if tc.get("source") == "wallet" and tc.get("address") and not tc.get("backfill"):
+                print(f"\n\n######## {name} {tc['address']}", flush=True)
+                try:
+                    walletcheck.main(tc["address"])
+                except Exception as e:
+                    print("walletcheck failed:", e)
 
 
 def marks(what):
