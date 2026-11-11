@@ -52,6 +52,7 @@ BATCH_S = 0.3        # price waiting requests every 0.3 s, in one go
 BOOK_TTL = 3.0       # reuse a leg's book for 3 s (popular legs repeat across many requests)
 MAX_BOOK_CALLS = 4   # at most 4 /books calls (400 tokens) per batch
 MAX_PRICE_LEGS = 6   # requests with more legs are only counted
+SILENCE_S = 120      # no message for 2 minutes = the connection is dead, reconnect
 PAGE_PAUSE = 0.5     # seconds between catalog pages (Polymarket said 429 'too many requests' at full speed)
 
 
@@ -394,6 +395,7 @@ async def run():
     auth = creds()
     tried = set()
     backoff = 2
+    down_since = None
     while True:
         try:
             async with websockets.connect(WS, ping_interval=None, max_size=2 ** 22) as ws:
@@ -455,14 +457,20 @@ async def run():
                     await asyncio.sleep(300)
                     continue
                 backoff = 2
+                down_since = None
                 last_note = time.time()
+                last_msg = time.time()
                 while True:
                     try:
                         raw = await asyncio.wait_for(ws.recv(), 60)
                     except asyncio.TimeoutError:
                         raw = None
                     if raw:
+                        last_msg = time.time()
                         await dispatch(json.loads(raw))
+                    elif time.time() - last_msg > SILENCE_S:
+                        # Polymarket sends many messages a second: silence means a dead line (seen 11 Nov), so reconnect
+                        raise ConnectionError(f"no message for {SILENCE_S} s")
                     if time.time() - last_note > 600:
                         last_note = time.time()
                         log.put({"k": "note", "what": "counts", "counts": dict(counts), "pricer": dict(pricer.counts)})
@@ -482,6 +490,9 @@ async def run():
         except Exception as e:  # noqa: BLE001
             log.put({"k": "note", "what": "disconnected", "err": f"{type(e).__name__}: {e}"})
             print("disconnected:", e, flush=True)
+            down_since = down_since or time.time()
+            if time.time() - down_since > 600:
+                sys.exit("no working connection for 10 minutes, exiting so the service restarts fresh")
             await asyncio.sleep(backoff)
             backoff = min(backoff * 2, 120)
 
