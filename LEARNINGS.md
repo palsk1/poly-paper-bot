@@ -113,6 +113,11 @@ A strategy gets real money only if **every** answer is yes:
 - **Check the data for holes.** Our first data dropped losing choices in weather events, which made one idea look
   like +$121 per $100. On full data it lost $18.67.
 - **We are slow (a run every 5 minutes).** Anything that needs speed belongs to the pros. Our edges must last hours.
+- **A server would buy us nothing we can measure (11 Nov, `kspeed.py`).** The free GitHub machine reaches Kalshi in
+  about 70 thousandths of a second, about what a cheap server gets. When Binance jumps, Kalshi's price moves in the
+  same 1-3 seconds, so buying the jump lost about $5 per $100 whether we were under 1 second late or 30. The
+  45-seconds-left buy made the same at 1, 2, 3 and 5 seconds late (+$0.64 to +$0.88 per $100) and only faded at 10.
+  To be first you'd have to beat the paid pros by fractions of a second. Not our game. No server.
 - **Downloads are slow because of the number of requests, not the size (10 Nov).** All our old prices together are
   only about 200 MB packed. The weather dig asked Kalshi for 31,446 price charts, about 2 a second, so 4 hours for
   just 5 MB. Until now each thread's download stayed on its own branch and was lost after 7 unused days, so sports
@@ -164,6 +169,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **$1 on Yes (or No) in every open market every day (10 Nov, `yesno.py`, just for fun):** Polymarket all Yes -$11 to -$18 per $100, all No -$6 to -$8; Kalshi at the real ask all Yes -$25, all No -$20. At the dream price both are near fair, so the loss is the cost of buying, worst on long shots. No new candidate.
 - **Criss-cross of those bets (10 Nov, `yesno.py grid`):** 1,055 cuts by Yes/No, price, kind of market, time left and weekday. 124 ahead in both halves, 667 behind in both. The survivors are the two leads we already track (nearly sure things 30+ days out = `boring_no`; crypto No 3-7 days out = `crypto_no`), and they shrink at real buys. No weekday pattern. Kalshi: nothing. No new candidate.
 - **One math model that looks at everything together (10 Nov, `combo.py`):** learned on markets ending before 10 Aug, judged on 10 Aug - 9 Nov. Chart says +$15 to +$22 per $100; at real buys +$0 to +$8, could be luck. It mostly found ghost prices (dead markets near 50c that nobody sells at). The plain price guessed better than the model overall. Fair version (moving prices only): +$7.66 on 259 real buys, luck range -$4 to +$20. Frozen and registered for the 21 Dec look (`combo_moving`, Jan's OK).
+- **Kalshi 15-minute crypto, every minute of the window and every speed (11 Nov, `kspeed.py`):** 39,006 rounds. Buying either side at the asking price loses $4 to $6 per $100 in every stretch (fee plus the buy/sell gap); at the middle price it's even, so the price is fair. A rule that buys when Binance says "too cheap" lost $4.75. After big Binance moves Kalshi even gives back about 1c the next minute, too little to trade. One small lean: a side already at 95c+ with 8+ minutes left made +$0.72 per $100 on 4,406 bets, also when bought a minute late: "Ahead, but could be luck", same family as `kc_maker_safe`, no track. `backtest/kspeed.md`.
 
 Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
