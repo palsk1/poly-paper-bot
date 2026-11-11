@@ -7,8 +7,8 @@ Jan asked: is https://polymarket.com/combos worth exploring?
 - Your request goes to pro market makers. They have 0.4 seconds to answer with a price, you get 5-10 seconds to take it.
   There is no order book. If no maker answers, you can't buy.
 - A user can **only buy (or sell back) the Yes side**, the parlay. The No side ("not all legs win") is the maker's side.
-  So you can't bet against parlay gamblers as a user. Only a maker can, and that needs API keys, real money and a bot
-  that answers in 0.4 seconds.
+  So you can't bet against parlay gamblers as a user. Only a maker can, and that needs an API key (on Jan's own
+  server), money and a bot that answers in 0.4 seconds.
 - Fee: the sports rate, 0.05 x price x (1 - price) per share (checked on a real buy: $515.74 on 44,044 shares at 37.4c).
 
 ## What we measured
@@ -42,7 +42,7 @@ About half of those 15,655 combos were held on the **No side**: many of the big 
 - **As the house (the maker): this is where the gamblers' money goes** (about $10 per $100 of combo buys), but it
   needs a real-money market-making bot with API keys answering in 0.4 s, against pro firms who see the same requests,
   with risk of sharp parlay buyers picking them off. We can't paper-test it either: the requests only go to logged-in
-  makers. Not for us (hard rule 2: no keys; and it's a speed game).
+  makers, so even a paper test needs Jan's own Polymarket API key on a server he controls (hard rule 2: the key never goes in this repo or to Claude). Not on today's free GitHub setup, and it's a speed game.
 - Dropped. If ever revisited: a "paper house" replay (pretend we sold every public combo buy at its price, judged on
   results from an unbiased sample of combos) would show whether makers really keep that $10 after sharp buyers.
 
