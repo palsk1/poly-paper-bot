@@ -74,13 +74,13 @@ Written before the result, from `backtest/kcdepth.md` (probe `btkcdepth`, run 42
   so at scoring time **every** closed bet is re-scored on its real trade tape with the fixed rule (probe
   `big_kalshi`, the "$10" row), and that number is the one compared with +$0.22. Pass bar unchanged.
 
-## 5c. Pre-registered live test: paper combo quoter (proposed 2026-11-11, waits for Jan's OK)
+## 5c. Pre-registered live test: paper combo quoter (fixed 2026-11-11, Jan's OK)
 
 Written before the first live request (`quoter/`, `backtest/combos.md`). Rules are in `quoter/quoter.py` RULES; a
 change restarts the count.
 
-- **What counts:** rule `main` (2-4 legs, no same-game legs, legs x 1.05), requests seen on Jan's server from the
-  day it starts. A bet counts only when our would-be quote was ready before the deadline and below the price the
+- **What counts:** rule `main` (2-4 legs, no same-game legs, legs x 1.05), requests seen on Jan's server (AWS Lightsail Stockholm) from
+  2026-11-11 12:17 UTC, the first clean run. A bet counts only when our would-be quote was ready before the deadline and below the price the
   winning pro really got, and once every leg has settled. $25 at risk per bet.
 - **When:** once, at 1 Jan 2027 or after **1,000** settled bets, whichever is first. Peeks before that don't count.
 - **Pass:** above **+$1.00 per $100 at risk** and both halves (by time) ahead.
