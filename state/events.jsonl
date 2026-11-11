@@ -6469,3 +6469,7 @@
 {"edge": 0.0678, "pair": "KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027", "price": 0.91, "title": "Will Alexandria Ocasio-Cortez announce a presidential run by March 31, 2027?", "track": "arb", "ts": "2026-11-11T18:26:05Z", "type": "arb_open"}
 {"minutes_left": 2.84, "price": 0.979, "queue": 44239.66, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV111330-30", "track": "kc_maker", "ts": "2026-11-11T18:27:10Z", "type": "kmaker_order"}
 {"minutes_left": 2.84, "price": 0.979, "queue": 44239.66, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV111330-30", "track": "kc_maker_safe", "ts": "2026-11-11T18:27:10Z", "type": "kmaker_order"}
+{"edge": 0.0678, "pair": "KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027", "price": 0.91, "title": "Will Alexandria Ocasio-Cortez announce a presidential run by March 31, 2027?", "track": "arb", "ts": "2026-11-11T18:31:31Z", "type": "arb_open"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV111330-30", "track": "kc_maker", "ts": "2026-11-11T18:32:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV111330-30", "track": "kc_maker_safe", "ts": "2026-11-11T18:32:51Z", "type": "kmaker_fill"}
+{"filled": 11.0, "pnl": -9.911, "price": 0.901, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV111330-30", "track": "kc_maker_early", "ts": "2026-11-11T18:32:53Z", "type": "kmaker_fill"}
