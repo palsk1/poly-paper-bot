@@ -5259,3 +5259,9 @@
 {"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV102200-00", "track": "kc_maker", "ts": "2026-11-11T03:02:24Z", "type": "kmaker_fill"}
 {"fee": 0.0, "outcome": "No", "price": 0.78, "shares": 5, "title": "US strike on Colombia by December 31?", "token": "105908573240663389268879331099901068872848375329297966573120454297394481597082", "track": "panic_fade", "ts": "2026-11-11T03:02:55Z", "type": "paper_buy"}
 {"fee": 0.0404, "outcome": "Yes", "price": 0.719, "shares": 5, "title": "Will Anthropic's valuation hit (HIGH) $1.5T by December 31?", "token": "35463080027643710943404451740372279284756519666289737675927914180433392453861", "track": "panic_fade_4c", "ts": "2026-11-11T03:02:56Z", "type": "paper_buy"}
+{"minutes_left": 7.9, "price": 0.921, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:06Z", "type": "kmaker_order"}
+{"minutes_left": 7.9, "price": 0.926, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:06Z", "type": "kmaker_order"}
+{"minutes_left": 7.9, "price": 0.939, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:07Z", "type": "kmaker_order"}
+{"minutes_left": 7.9, "price": 0.989, "queue": 13.96, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:07Z", "type": "kmaker_order"}
+{"minutes_left": 7.9, "price": 0.965, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:08Z", "type": "kmaker_order"}
+{"minutes_left": 7.9, "price": 0.976, "queue": 389.25, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV102215-15", "track": "kc_maker_early", "ts": "2026-11-11T03:07:08Z", "type": "kmaker_order"}
