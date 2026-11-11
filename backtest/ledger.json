@@ -842,6 +842,58 @@
    "verdict": "Losing",
    "status": "dropped (chart prices already lose; no real-price run needed)",
    "src": "cs2.py players"
+  },
+  {
+   "id": "claude_track_fix_sell_at_97c_never_sell_at_a_loss",
+   "date": "2026-11-11",
+   "what": "claude track fix: Sell at 97c, never sell at a loss",
+   "tries": 5,
+   "bets": 363,
+   "groups": 182,
+   "per100": -17.5,
+   "floor100": -27.5,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_sell_at_70c_otherwise_hold_to_the_end",
+   "date": "2026-11-11",
+   "what": "claude track fix: Sell at 70c, otherwise hold to the end",
+   "tries": 5,
+   "bets": 353,
+   "groups": 180,
+   "per100": -0.5,
+   "floor100": -6.12,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_every_bet_to_the_end",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold every bet to the end",
+   "tries": 5,
+   "bets": 340,
+   "groups": 176,
+   "per100": -6.85,
+   "floor100": -16.42,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_only_30_60_days_left",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, only 30-60 days left",
+   "tries": 5,
+   "bets": 273,
+   "groups": 154,
+   "per100": -4.93,
+   "floor100": -14.82,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
   }
  ]
 }
