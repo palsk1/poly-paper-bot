@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**69 ideas examined, in about 51,487 versions.** 43 dropped, 26 still being tested or waiting. **Looks real: 1.**
+**73 ideas examined, in about 51,507 versions.** 47 dropped, 26 still being tested or waiting. **Looks real: 1.**
 
-Why count: if you test 69 ideas that are all worthless, the luckiest one still looks good. With 69 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 73 ideas that are all worthless, the luckiest one still looks good. With 73 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -59,6 +59,10 @@ Why count: if you test 69 ideas that are all worthless, the luckiest one still l
 | 2026-11-10 | Learn from wallets that really win (2,742 wallets through the exam) | 2,742 | 2559 | 32 in 1,000 look good, luck gives 28; first-half picks lost $5 later | Losing | dropped (steady winners don't show) | winners.py, backtest/winners.md, PR #66 |
 | 2026-11-10 | Kalshi vs Polymarket 15-minute crypto pairs | 5 |  | a pair costs about $1.05 | Losing | dropped | xvenue.py |
 | 2026-11-10 | Criss-cross of all-Yes / all-No bets (side x price x kind x time left x weekday, Polymarket + Kalshi) | 1,055 |  | best new cut +$5.62 at real buys (-$8 to +$19); Kalshi none | Ahead, but could be luck | no new candidate (re-finds boring_no and crypto_no) | yesno.py grid, backtest/yesno_grid.md |
+| 2026-11-11 | claude track fix: Hold every bet to the end | 5 | 176 | -$6.85 | Losing | dropped | claudefix.py |
+| 2026-11-11 | claude track fix: Hold to the end, only 30-60 days left | 5 | 154 | -$4.93 | Losing | dropped | claudefix.py |
+| 2026-11-11 | claude track fix: Sell at 70c, otherwise hold to the end | 5 | 180 | -$0.50 | Losing | dropped | claudefix.py |
+| 2026-11-11 | claude track fix: Sell at 97c, never sell at a loss | 5 | 182 | -$17.50 | Losing | dropped | claudefix.py |
 | 2026-11-11 | CS2: back bo3.gg's AI pick, 1h before | 65 | 4533 | -$4.18 | Losing | dropped | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: back bo3.gg's AI pick, a day before | 65 | 555 | -$0.04 | Losing | dropped | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before | 65 | 2288 | -$1.29 | Losing | dropped | cs2.py, backtest/cs2.md |
