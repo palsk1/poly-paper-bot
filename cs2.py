@@ -228,6 +228,38 @@ def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
             print(st, len(b), base + u, b[:300].decode("utf-8", "replace") if st == 200 else "")
 
 
+def ai(since="2026-02-15"):
+    """Probe `cs2_ai`: bo3.gg's own AI prediction per finished match (field ai_predictions, asked with
+    with=ai_predictions) plus the bookmaker odds it shows (bet_updates) -> bt_cache/cs2/bo3_ai.json.gz (price store)."""
+    import subprocess
+    d = os.path.join(ROOT, "bt_cache", "cs2")
+    os.makedirs(d, exist_ok=True)
+    api = "https://api.bo3.gg/api/v1/matches?page[limit]=100&sort=-start_date&filter[matches.status][in]=finished&with=ai_predictions"
+    out, off, shown = [], 0, 0
+    while off < 40000:
+        r = jget(api + f"&page[offset]={off}")
+        res = (r or {}).get("results") or []
+        if not res:
+            print("stop at", off, json.dumps(r)[:300])
+            break
+        for x in res:
+            if x.get("ai_predictions") and shown < 4:
+                print("SAMPLE", x["slug"], x["start_date"], json.dumps(x["ai_predictions"])[:1500])
+                shown += 1
+            out.append({k: x.get(k) for k in ("id", "slug", "team1_id", "team2_id", "winner_team_id", "start_date",
+                                              "end_date", "bo_type", "tier", "ai_predictions", "bet_updates")})
+        off += 100
+        if off % 2000 == 0:
+            print("  ", off, res[-1]["start_date"], "with ai:", sum(1 for x in out if x.get("ai_predictions")))
+        if res[-1]["start_date"] < since:
+            break
+    json.dump(out, gzip.open(os.path.join(d, "bo3_ai.json.gz"), "wt"))
+    print("saved", len(out), "with ai:", sum(1 for x in out if x.get("ai_predictions")),
+          "with odds:", sum(1 for x in out if x.get("bet_updates")))
+    if os.environ.get("GITHUB_ACTIONS"):
+        subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
+
+
 # ======================================================================== the test
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REL = "https://github.com/palsk1/poly-paper-bot/releases/download/price-store/"
@@ -481,6 +513,8 @@ if __name__ == "__main__":
         peek(*sys.argv[2:3])
     elif cmd == "jsapi":
         jsapi(*sys.argv[2:3])
+    elif cmd == "ai":
+        ai(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
     elif cmd == "exam":
