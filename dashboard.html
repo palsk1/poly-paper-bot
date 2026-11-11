@@ -375,7 +375,11 @@ pick.onchange = () => detail(pick.value);
 function openDetail(n) { pick.value = n; detail(n); $("detail-h").scrollIntoView({behavior: "smooth"}); }
 function detail(n) {
   const t = byName[n]; if (!t) return;
-  const cash = t.cash == null ? `It has no spending limit and has used ${money(t.needed, false)} so far.` : `${money(t.cash, false)} of its ${money(t.deposited, false)} is not in a bet right now.`;
+  // Plain cash split (Jan, 11 Nov: "$107.82 of its $100.00" made no sense once profit pushed cash past the start money).
+  const aside = (t.orders || []).reduce((a, o) => a + (o.c || 0), 0), no = (t.orders || []).length;
+  const cash = t.cash == null ? `It has no spending limit and has used ${money(t.needed, false)} so far.`
+    : "Right now " + [`${money(t.cash, false)} is free cash`, no ? `${money(aside, false)} is set aside for ${no} waiting order${no === 1 ? "" : "s"}` : "",
+        t.open ? "the rest is in open bets" : ""].filter(Boolean).reduce((a, x, i, l) => a + (i ? (i === l.length - 1 ? " and " : ", ") : "") + x, "") + ".";
   const tr = t.trust;
   let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}</div>
     <div class="pot big">${pot(t)}</div>
