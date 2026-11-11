@@ -177,7 +177,7 @@ const stockholm = iso => new Date(iso.length <= 16 ? iso + ":00Z" : iso)
   const gen = new Date(D.generated);
   // Re-checked every minute: a phone tab left open keeps showing an old copy (Jan, 11 Nov, saw bets "stuck" that
   // the bot had already counted). The page is rebuilt every ~5 min, so past 15 min the copy on screen is stale.
-  const stamp = () => {
+  let stamp = () => {
     const mins = Math.round((Date.now() - gen) / 60000);
     const ago = mins < 2 ? "just now" : mins < 120 ? mins + " min ago" : Math.round(mins / 60) + " hours ago";
     $("updated").innerHTML = `Updated ${esc(stockholm(D.generated))} Stockholm time (${ago}).` +
@@ -185,9 +185,23 @@ const stockholm = iso => new Date(iso.length <= 16 ? iso + ":00Z" : iso)
         : mins > 15 ? ` <b class="neg">This copy is old. <a href="#" onclick="location.reload();return false">Reload</a> to see the latest.</b>` : "") +
       (D.offline ? " Test build: open bets valued at their buy price." : "");
   };
+  // Phones reopen a tab from memory without asking the server (Jan saw a 30-min-old copy twice on 11 Nov), so also ask
+  // the server for the newest page when the tab comes back and every 5 min, and offer a reload if it's newer.
+  let newer = null;
+  const fresh = () => fetch(location.href.split("#")[0], {cache: "no-store"}).then(r => r.ok ? r.text() : "").then(txt => {
+    const m = /"generated":"([^"]+)"/.exec(txt);
+    if (m && new Date(m[1]) > gen) { newer = m[1]; stamp(); }
+  }).catch(() => {});
+  const stamp0 = stamp;
+  stamp = () => {
+    stamp0();
+    if (newer) $("updated").innerHTML += ` <b class="neg">Newer numbers are out (${esc(stockholm(newer))}). <a href="#" onclick="location.reload();return false">Reload</a></b>`;
+  };
   stamp();
   setInterval(stamp, 60000);
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) stamp(); });
+  setInterval(() => { if (!document.hidden) fresh(); }, 300000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { stamp(); fresh(); } });
+  window.addEventListener("pageshow", () => { stamp(); fresh(); });
   $("summary-link").href = D.repo + "/blob/main/state/summary.md";
   const days = Math.max(0, Math.ceil((new Date(D.trial_end + "T00:00:00Z") - Date.now()) / 864e5));
   const proven = D.tracks.filter(t => t.trust.proven).length;
