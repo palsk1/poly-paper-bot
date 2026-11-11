@@ -155,6 +155,33 @@ def fetch(since="2025-09-01"):
         subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
 
 
+def peek(team="mouz"):
+    """Probe `cs2_peek_<team>`: what bo3.gg stores per match (prediction bot? bookmaker odds?), for a few finished games."""
+    api = "https://api.bo3.gg/api/v1/"
+    r = jget(api + "matches?page[offset]=0&page[limit]=100&sort=-start_date&filter[matches.status][in]=finished") or {}
+    t = jget(api + f"teams?filter[teams.slug][eq]={team}") or {}
+    print("team lookup", json.dumps(t)[:600])
+    ms = [x for x in r.get("results") or [] if team in (x.get("slug") or "")][:2] or (r.get("results") or [])[:2]
+    for x in ms:
+        sl, mid = x["slug"], x["id"]
+        print("\n#####", sl, mid, "bet_updates:", json.dumps(x.get("bet_updates"))[:1500])
+        for u in [api + f"matches/{sl}", api + f"matches/{mid}", api + f"matches/{sl}?with=teams,predictions,bets,odds",
+                  api + f"matches/{mid}/predictions", api + f"matches/{mid}/prediction", api + f"predictions?filter[predictions.match_id][eq]={mid}",
+                  api + f"matches/{mid}/bets", api + f"matches/{mid}/odds", api + f"bets?filter[bets.match_id][eq]={mid}",
+                  api + f"matches/{mid}/ai_prediction", api + f"ai_predictions?filter[match_id][eq]={mid}",
+                  f"https://bo3.gg/matches/{sl}"]:
+            st, body = get(u)
+            txt = body.decode("utf-8", "replace")
+            print(f"\n== {st} {len(body)}  {u}")
+            if u.startswith("https://bo3.gg/"):
+                for k in re.finditer(r"(predict|odds|coef|winProb|win_prob|probab|bookmaker)", txt, re.I):
+                    print("   ...", re.sub(r"\s+", " ", txt[max(0, k.start() - 150):k.start() + 250]))
+                    if k.start() > 0 and txt.count("predict") > 40:
+                        break
+            else:
+                print(re.sub(r"\s+", " ", txt)[:2500])
+
+
 # ======================================================================== the test
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REL = "https://github.com/palsk1/poly-paper-bot/releases/download/price-store/"
@@ -398,6 +425,8 @@ if __name__ == "__main__":
         sources()
     elif cmd == "fetch":
         fetch(*sys.argv[2:3])
+    elif cmd == "peek":
+        peek(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
     elif cmd == "exam":
