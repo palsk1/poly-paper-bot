@@ -5348,3 +5348,12 @@
 {"minutes_left": 6.79, "price": 0.969, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV102330-30", "track": "kc_maker_early", "ts": "2026-11-11T04:23:14Z", "type": "kmaker_order"}
 {"minutes_left": 6.79, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV102330-30", "track": "kc_maker_early", "ts": "2026-11-11T04:23:14Z", "type": "kmaker_order"}
 {"minutes_left": 6.79, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV102330-30", "track": "kc_maker_early", "ts": "2026-11-11T04:23:15Z", "type": "kmaker_order"}
+{"fee": 0.0847, "outcome": "No", "price": 0.59, "shares": 5, "title": "Will Bitcoin reach $76,000 November 9-15?", "token": "83617530881618271269229962571024810888396868037584291443874520316373961864301", "track": "w_tokor", "ts": "2026-11-11T04:25:26Z", "type": "paper_buy"}
+{"fee": 0.0847, "outcome": "No", "price": 0.59, "shares": 5, "title": "Will Bitcoin reach $76,000 November 9-15?", "token": "83617530881618271269229962571024810888396868037584291443874520316373961864301", "track": "wb_tokor", "ts": "2026-11-11T04:25:26Z", "type": "paper_buy"}
+{"minutes_left": 3.77, "price": 0.998, "queue": 62.97, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV102330-30", "track": "kc_maker", "ts": "2026-11-11T04:26:14Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.998, "queue": 62.97, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV102330-30", "track": "kc_maker_safe", "ts": "2026-11-11T04:26:15Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.978, "queue": 5.0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV102330-30", "track": "kc_maker", "ts": "2026-11-11T04:26:15Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.992, "queue": 5.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV102330-30", "track": "kc_maker", "ts": "2026-11-11T04:26:16Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.992, "queue": 5.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV102330-30", "track": "kc_maker_safe", "ts": "2026-11-11T04:26:17Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.989, "queue": 78.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV102330-30", "track": "kc_maker", "ts": "2026-11-11T04:26:17Z", "type": "kmaker_order"}
+{"minutes_left": 3.77, "price": 0.989, "queue": 78.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV102330-30", "track": "kc_maker_safe", "ts": "2026-11-11T04:26:17Z", "type": "kmaker_order"}
