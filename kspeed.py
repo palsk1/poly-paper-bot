@@ -19,11 +19,12 @@ kfast.py per-second trade tapes + Binance seconds):
   3. HOW FAST ARE WE REALLY. `ping` times Kalshi and Binance from the machine it runs on; the report also reads the
      timings the live paper bot (kfastlive.py) has logged.
 
-    python3 kspeed.py fetch [days]   # kcrypto fetch (60 d) + full 15-minute candles + kfast fetch (14 d)
+    python3 kspeed.py fetch [days]   # kcrypto fetch (60 d) + full 15-minute candles
+    python3 kspeed.py tapes [days]   # kfast fetch: per-second trade tapes + Binance seconds (default 5 d, slow)
     python3 kspeed.py run            # write backtest/kspeed.md
     python3 kspeed.py ping           # latency meter (Kalshi REST, Binance REST), prints a small table
     python3 kspeed.py selftest       # offline
-  From GitHub: probe `btks` (fetch + ping + run), `btksrun`, `btksping`.
+  From GitHub: probe `btks` (fetch + ping + run), `btkstape` (tapes + run), `btksrun`, `btksping`.
 
 Windows closing 2026-11-10 or later are left out (PROTOCOL.md holdout).
 """
@@ -73,77 +74,34 @@ def phase(L):
 
 # ================================================================ fetch: all 15 minute candles
 
-def full_batch(ms):
-    t0 = min(m["close"] for m in ms) - FULL_MIN * 60
-    t1 = max(m["close"] for m in ms)
-    res = kc.get("/markets/candlesticks", {"market_tickers": ",".join(m["t"] for m in ms), "start_ts": t0,
-                                           "end_ts": t1, "period_interval": 1})
-    rows = None
-    if isinstance(res, dict):
-        rows = next((res[k] for k in ("markets", "market_candlesticks", "candlesticks", "data")
-                     if isinstance(res.get(k), list)), None)
-    out = {}
-    close = {m["t"]: m["close"] for m in ms}
-    for r in rows or []:
-        tk = r.get("market_ticker") or r.get("ticker")
-        if tk in close:
-            out[tk] = [row for row in (kc.candle_row(c) for c in r.get("candlesticks") or [])
-                       if close[tk] - FULL_MIN * 60 < row[0] <= close[tk]]
-    return out
-
-
-def full_one(m):
-    p = {"start_ts": m["close"] - FULL_MIN * 60, "end_ts": m["close"], "period_interval": 1}
-    for path in (f"/series/{m['s']}/markets/{m['t']}/candlesticks", f"/historical/markets/{m['t']}/candlesticks"):
-        try:
-            cs = (kc.get(path, p) or {}).get("candlesticks")
-        except Exception:
-            continue
-        if cs:
-            return [kc.candle_row(c) for c in cs]
-    return []
-
-
 def fetch_full():
+    """All 15 minute candles of every window, with kcrypto's batch fetch (all coins of the same hours in one call;
+    Kalshi caps one call at 10,000 candles = tickers x minutes of the whole span)."""
     os.makedirs(CACHE, exist_ok=True)
+    ms, store = [], {}
     for s in kc.SERIES:
-        path = os.path.join(CACHE, f"full_{s}.json.gz")
-        store = kc.rjson(path, {})
-        ms = [m for m in kc.rjson(os.path.join(kc.CACHE, f"markets_{s}.json.gz"), []) if m["close"] < HOLD]
-        todo = [m for m in ms if m["t"] not in store]
-        t_s, bad = time.time(), 0
-        groups = []
-        for i in range(0, len(todo), 60):     # one coin: 60 windows = 15 hours = ~900 candles a call
-            groups.append(todo[i:i + 60])
-        for gi, g in enumerate(groups):
-            got = {}
-            for attempt in range(3):
-                try:
-                    got = full_batch(g)
-                    break
-                except Exception as e:
-                    if attempt == 2:
-                        print(f"  {s} batch failed: {str(e)[:120]}")
-                    time.sleep(3 + 4 * attempt)
-            miss = [m for m in g if not got.get(m["t"])]
-            if miss and bad < 400:
-                with ThreadPoolExecutor(6) as ex:
-                    for m, rows in zip(miss, ex.map(full_one, miss)):
-                        got[m["t"]] = rows
-                bad += len(miss)
-            for m in g:
-                store[m["t"]] = got.get(m["t"]) or []
-            if gi % 20 == 19:
-                kc.wjson(path, store)
-        kc.wjson(path, store)
-        full = sum(1 for v in store.values() if len(v) >= 12)
-        print(f"{s}: {len(ms)} windows, {len(todo)} fetched, {full} with 12+ minute candles ({time.time() - t_s:.0f}s)")
+        ms += [m for m in kc.rjson(os.path.join(kc.CACHE, f"markets_{s}.json.gz"), []) if m["close"] < HOLD]
+        store.update({k: v for k, v in kc.rjson(os.path.join(CACHE, f"full_{s}.json.gz"), {}).items() if v})
+    keep = kc.LOOKBACK_MIN
+    kc.LOOKBACK_MIN = FULL_MIN
+    try:
+        kc.fetch_candles(ms, store)
+    finally:
+        kc.LOOKBACK_MIN = keep
+    for s in kc.SERIES:
+        mine = {m["t"]: store[m["t"]] for m in ms if m["s"] == s and store.get(m["t"])}
+        kc.wjson(os.path.join(CACHE, f"full_{s}.json.gz"), mine)
+        print(f"{s}: {sum(1 for v in mine.values() if len(v) >= 12)} windows with 12+ minute candles")
 
 
 def fetch(days=60):
     kc.fetch(int(days))
     fetch_full()
-    kf.fetch(int(os.environ.get("KF_DAYS", 14)))
+
+
+def fetch_tapes(days=None):
+    """Per-second trade tapes + Binance seconds (kfast). Slow: BTC alone is ~4 s a window."""
+    kf.fetch(int(days or os.environ.get("KF_DAYS", 5)))
 
 
 # ================================================================ part 1: the whole 15 minutes (minute candles)
@@ -713,6 +671,8 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
     if cmd == "fetch":
         fetch(sys.argv[2] if len(sys.argv) > 2 else os.environ.get("KC_DAYS", 60))
+    elif cmd == "tapes":
+        fetch_tapes(sys.argv[2] if len(sys.argv) > 2 else None)
     elif cmd == "run":
         run()
     elif cmd == "ping":

@@ -1114,6 +1114,7 @@ if __name__ == "__main__":
      "btkf2": lambda: (__import__("kfast").fetch(2), __import__("kfast").run()),
      "btks": lambda: (__import__("kspeed").fetch(os.environ.get("KC_DAYS", 60)), __import__("kspeed").ping(),
               __import__("kspeed").run()),
+     "btkstape": lambda: (__import__("kspeed").fetch_tapes(), __import__("kspeed").run()),
      "btksrun": lambda: __import__("kspeed").run(),
      "btksping": lambda: __import__("kspeed").ping(),
      "btrulespeek": lambda: __import__("rules").peek(),
