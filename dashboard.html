@@ -61,7 +61,7 @@ table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--grid); vertical-align: top; }
 th { color: var(--ink2); font-weight: 600; }
 td.r, th.r { text-align: right; }
-#all td.allname { max-width: 8.5em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#all td.allname { max-width: 7.5em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #all td, #all th { padding: 7px 3px; }
 #all .tag { margin-left: 2px; padding: 0 3px; }
 #late td:first-child, #rs td:first-child { max-width: 11em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -143,6 +143,10 @@ const cls = x => x == null ? "" : x > 0.004 ? "pos" : x < -0.004 ? "neg" : "";
 const M = (x, sign = true) => `<span class="num ${sign ? cls(x) : ""}">${money(x, sign)}</span>`;
 const cents = x => x == null ? "–" : (Math.round(x * 10) / 10) + "c";
 const FEW = 10;  // below this many finished bets, per-$100 numbers are noise
+// worst case per $100, always shown once a bet has finished; under FEW finished bets it gets a grey "mostly luck" tag
+const endTxt = t => t.first_end ? `, first one ends ${esc(t.first_end)}` : "";
+const worstLine = t => t.trust.finished === 0 ? `worst case: no finished bets yet${endTxt(t)}`
+  : `worst case ${M(t.trust.worst_per_100)} per $100${t.trust.finished < FEW ? ` <span class="tag">only ${t.trust.finished} bet${t.trust.finished === 1 ? "" : "s"}, mostly luck</span>` : ""}`;
 const vd = t => `<span class="vd ${t.pv[0]}">${esc(t.pv[1])}</span>`;  // plain verdict, computed in bot.plain_verdict
 const why = r => String(r || "").replace(/,? \(?(book|estimate)\)?$/, "").replace(/^resolved$/, "market ended")
   .replace(/^take profit \(now (\d+c)\)$/, "sold early for a profit at $1").replace(/^wallet exit$/, "the wallet sold, so we sold")
@@ -264,7 +268,7 @@ function curveChart(el, t) {
       <div class="rank">${i + 1}</div>
       <div class="grow"><div class="name">${esc(n)}${t.lab ? '<span class="tag">lab</span>' : ""}</div>
         <div class="pot">${pot(t)}</div>
-        <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished${t.trust.finished >= FEW ? ` · worst case ${M(t.trust.worst_per_100)} per $100` : ""}</div><div style="margin-top:4px">${vd(t)}</div></div>
+        <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished · ${worstLine(t)}</div><div style="margin-top:4px">${vd(t)}</div></div>
       <div>${spark(t)}</div></div></div>`;
   }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies made the list so far.</p>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
@@ -314,15 +318,18 @@ function detail(n) {
     <div class="pot big">${pot(t)}</div>
     <div style="margin:4px 0">${vd(t)}</div>
     <p class="sub">${esc(t.label)}</p>
+    ${t.wnote ? `<p class="sub"><b>What this wallet does</b> (from its whole history): ${esc(t.wnote)}</p>` : ""}
+    ${t.wstyle ? `<p class="sub"><b>What we copied so far:</b> ${esc(t.wstyle)}</p>` : (/^wb?_/.test(t.name) ? `<p class="sub"><b>What we copied so far:</b> nothing yet. The wallet hasn't opened a new bet since we started watching.</p>` : "")}
     <div class="tiles" style="margin-top:6px">
       <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
       <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
       <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
-      ${tr.finished >= FEW ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100</div></div>` : `<div class="tile"><div class="v">${tr.finished}</div><div class="k">bets finished</div></div>`}
+      ${tr.finished ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100${tr.finished < FEW ? ` (only ${tr.finished} bet${tr.finished === 1 ? "" : "s"})` : ""}</div></div>` : `<div class="tile"><div class="v">–</div><div class="k">worst case per $100 (no finished bets yet)</div></div>`}
     </div>
     <p class="sub" style="margin-top:8px">${tr.finished >= FEW
       ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100. The worst case decides the ranking.`
-      : `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. That's too few to tell skill from luck, so just look at the dollar amount at the top for now.`}</p>
+      : tr.finished ? `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. For every $100 it bet it made ${M(tr.avg_per_100)}, and the worst case is ${M(tr.worst_per_100)} per $100. With this few bets the worst case is mostly luck (one loss can drag it to −$100), so don't read much into it until ${FEW}+ bets have finished.`
+      : `No bet has finished yet${endTxt(t)}, so there's no worst case to show. It appears after the first finished bet.`}</p>
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
     <div id="curve"></div></div>`;
@@ -367,7 +374,7 @@ addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("cur
     ["pnl", "P&amp;L", t => t.pnl, true],
     ["today", "Today", t => t.today, true],
     ["wl", "Won / lost", t => t.wins - t.losses, true],
-    ["open", "Open", t => t.open, true],
+    ["worst", "Worst", t => t.trust.finished ? t.trust.worst_per_100 : -1e9, true],
   ];
   let g = "all", sortBy = "pnl", desc = true;
   $("allfilter").innerHTML = groups.map(([k, l]) => `<button data-g="${k}">${l}</button>`).join("");
@@ -388,8 +395,9 @@ addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("cur
     ].map(([v, k]) => `<div class="tile"><div class="v" style="font-size:18px">${v}</div><div class="k">${k}</div></div>`).join("");
     $("all").innerHTML = `<table><thead><tr>${cols.map(([k, l]) => `<th class="${k === "name" ? "" : "r"}" data-k="${k}" style="cursor:pointer;white-space:nowrap">${l}${k === sortBy ? (desc ? " ▾" : " ▴") : ""}</th>`).join("")}</tr></thead><tbody>` +
       rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td class="allname">${esc(t.name)}${t.control ? '<span class="tag luck">random</span>' : ""}${t.trust.proven ? '<span class="tag proven">✓</span>' : ""}</td>` +
-        `<td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.wins} / ${t.losses}</td><td class="r num">${t.open}</td></tr>`).join("") +
-      `</tbody></table>`;
+        `<td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.wins} / ${t.losses}</td>` +
+        `<td class="r">${t.trust.finished ? `<span class="num ${cls(t.trust.worst_per_100)}" style="${t.trust.finished < FEW ? "opacity:.55" : ""}">${money(Math.round(t.trust.worst_per_100)).replace(".00", "")}</span>` : '<span class="num">–</span>'}</td></tr>`).join("") +
+      `</tbody></table><p class="note">Worst = worst case per $100. Faded = fewer than ${FEW} finished bets, mostly luck. – = nothing finished yet.</p>`;
     $("all").querySelectorAll("th[data-k]").forEach(th => th.onclick = () => {
       if (sortBy === th.dataset.k) desc = !desc; else { sortBy = th.dataset.k; desc = sortBy !== "name"; }
       draw();
