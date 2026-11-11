@@ -44,6 +44,7 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 | 8 | `arb` | Buy both sides of the same question on Kalshi and Polymarket for less than the $1 payout | $77.62 in, $80.00 back on 1 Jan = +$3.07 per $100. The risk is one pair where the two sites settle differently, not luck | All 4 pairs pay what they should | **1 Jan** |
 | 9 | `econ_fav` | Kalshi jobs/inflation markets: buy the 80-99c side when the free forecast agrees | Backtest +$6.73 per $100 on 141 bets (7 lost). Only 1-2 bets per data release, so maybe 10-15 by 1 Jan | **Not registered.** Can't be proven by 1 Jan | none yet |
 | 10 | Everything-together model (`combo_moving`) | A math model reads price, price moves, kind of market, rival choices and more together, and bets where it disagrees with the price by 12c+. Only on markets whose price is really moving | Chart +$15.39 per $100; at prices people really paid **+$7.66 on 259 bets**, anything from -$4 to +$20. For 7 in 10 of its bets nobody was selling. The plain price guessed better overall | Frozen 10 Nov. Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
+| 11 | CS2 favorite a day before (`cs2_fav_day`) | Buy the CS2 team priced 70-97c a day before the match, hold to the result | +$7.60 per $100 on 234 matches at real buys (smaller leagues +$15 on 91). Partly flattered: the matches that could be priced were the better ones. Very thin: about $7 traded near the price in 10 minutes | Ahead, and the low end of its luck range above -$5 per $100 (PROTOCOL 5, registered 11 Nov) | **21 Dec** |
 
 <!-- AUTO:START (learnings.py writes this part every morning, don't edit by hand) -->
 
@@ -96,7 +97,7 @@ A strategy gets real money only if **every** answer is yes:
 | 23 Nov | Gas-price recorder scored (who reads AAA first). Expected dead |
 | late Nov | Fast Kalshi bot first look |
 | about 1 Dec | **kc_maker_safe locked test** (2,500 bets). Order book shapes recheck |
-| 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c, boring No far out, crypto No, the everything-together model |
+| 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c, boring No far out, crypto No, the everything-together model, CS2 favorite a day before |
 | 1 Jan 2027 | arb pays out. **Money decision** |
 | late Jan | Next GDP release (GDPNow vs Kalshi, only 19 past releases, too few to judge) |
 
@@ -112,6 +113,7 @@ A strategy gets real money only if **every** answer is yes:
 - **"Sure" bets hide a big loss.** At 99c, one loss eats about 100 wins. You need hundreds of bets to know.
 - **Check the data for holes.** Our first data dropped losing choices in weather events, which made one idea look
   like +$121 per $100. On full data it lost $18.67.
+- **Check the clock too (10 Nov).** Our recorder read Kalshi first and Polymarket about 20 seconds later. Compared as-is, that looked like +$4 per $100 of free money. Lined up to the same second it was gone. Recorded books now save the real second (`rt`).
 - **We are slow (a run every 5 minutes).** Anything that needs speed belongs to the pros. Our edges must last hours.
 - **A server would buy us nothing we can measure (11 Nov, `kspeed.py`).** The free GitHub machine reaches Kalshi in
   about 70 thousandths of a second, about what a cheap server gets. When Binance jumps, Kalshi's price moves in the
@@ -145,7 +147,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Betting free weather forecasts against temperature markets (10 Nov, PR #71):** Kalshi lost $11-15 per $100 on about 17,600 bets; Polymarket lost $2-4 (and $9 at +5c). The prices know the temperature better than GFS/ECMWF/NOAA do. One shaky lead: Polymarket daily lows, +$6 to +$11, but only Sep-Nov when new cities opened. Look again on the late-December test days.
 - **Same question listed twice on Polymarket:** no gaps.
 - **Kalshi vs Polymarket game winners:** a pair costs about $1.04 to win $1.
-- **Kalshi vs Polymarket 15-min crypto:** a pair costs about $1.05.
+- **Kalshi vs Polymarket 15-min crypto (buy UP on one site, DOWN on the other):** a pair costs about $1.05 and pays $1.00. Live, both sites read in the same second for 2 hours: 46 real gaps, worth +$1.89 in total on $10 bets, half gone within 2 seconds. And the two sites disagree on the result 17 times in 1,000 (`backtest/xvenue.md`).
 - **Rejected arb pairs, one way only:** gaps only on the unsafe side.
 - **Sell a full set for more than $1:** -0.05c a share at best.
 - **Holding rewards:** real, but $3.25 a year per $100.
@@ -170,6 +172,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Criss-cross of those bets (10 Nov, `yesno.py grid`):** 1,055 cuts by Yes/No, price, kind of market, time left and weekday. 124 ahead in both halves, 667 behind in both. The survivors are the two leads we already track (nearly sure things 30+ days out = `boring_no`; crypto No 3-7 days out = `crypto_no`), and they shrink at real buys. No weekday pattern. Kalshi: nothing. No new candidate.
 - **One math model that looks at everything together (10 Nov, `combo.py`):** learned on markets ending before 10 Aug, judged on 10 Aug - 9 Nov. Chart says +$15 to +$22 per $100; at real buys +$0 to +$8, could be luck. It mostly found ghost prices (dead markets near 50c that nobody sells at). The plain price guessed better than the model overall. Fair version (moving prices only): +$7.66 on 259 real buys, luck range -$4 to +$20. Frozen and registered for the 21 Dec look (`combo_moving`, Jan's OK).
 - **Kalshi 15-minute crypto, every minute of the window and every speed (11 Nov, `kspeed.py`):** 39,006 rounds. Buying either side at the asking price loses $4 to $6 per $100 in every stretch (fee plus the buy/sell gap); at the middle price it's even, so the price is fair. A rule that buys when Binance says "too cheap" lost $4.75. After big Binance moves Kalshi even gives back about 1c the next minute, too little to trade. One small lean: a side already at 95c+ with 8+ minutes left made +$0.72 per $100 on 4,406 bets, also when bought a minute late: "Ahead, but could be luck", same family as `kc_maker_safe`, no track. `backtest/kspeed.md`.
+- **CS2 rankings and bo3.gg's AI vs Polymarket (11 Nov, `cs2.py`, Jan's ask):** 6,495 CS2 matches. Backing the team Valve's ranking or our own rating likes when the price disagrees lost $12-17 per $100 at real buys; the price predicts better than both rankings. bo3.gg's AI picks the winner 61 times in 100, the plain favorite 66: backing every AI pick lost $4.18 per $100 at real buys (4,533 matches), and betting more when it predicts a 2-0 or sizing by price doesn't help. bo3.gg's bookmaker odds are after-the-game odds, unusable. HLTV blocks robots. One thin lean (favorite a day before) goes to the 21 Dec look. `backtest/cs2.md`.
 
 Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
