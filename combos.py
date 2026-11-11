@@ -70,10 +70,26 @@ def peek():
 
     users = [r.get("proxy_wallet") for r in combo_rows if r.get("proxy_wallet")]
     if not users:
-        users = [r.get("proxy_wallet") for r in rows(get(DATA + "/v2/leaderboard", {"category": "combos"}))[:3]]
-    for u in users[:2]:
-        show(f"activity/combos {u}", rows(get(DATA + "/v2/activity/combos", {"user": u, "limit": 5}))[:3], 3500)
-        show(f"positions/combos {u}", rows(get(DATA + "/v2/positions/combos", {"user": u, "limit": 5}))[:2], 3500)
+        lb = rows(get(DATA + "/v2/leaderboard", {"category": "combos", "time_period": "month", "sort_direction": "asc"}))
+        show("leaderboard combos asc (losers?)", lb[:2], 800)
+        users = [r.get("user_id") for r in rows(get(DATA + "/v2/leaderboard", {"category": "combos", "time_period": "week"}))[5:7]]
+        users += [r.get("user_id") for r in lb[:1]]
+    for u in users[:3]:
+        act = rows(get(DATA + "/v2/activity/combos", {"user": u, "limit": 200}))
+        print(u, "activity rows", len(act), collections.Counter(a.get("type") for a in act))
+        show(f"activity/combos {u}", act[:2], 5000)
+        pos = rows(get(DATA + "/v2/positions/combos", {"user": u, "limit": 100}))
+        print(u, "positions", len(pos))
+        show(f"positions/combos {u}", pos[:1], 5000)
+        tr = rows(get(DATA + "/v2/trades", {"user": u, "limit": 200}))
+        ct = [t for t in tr if t.get("is_combo")]
+        print(u, "trades", len(tr), "combo trades", len(ct))
+        show("combo trade rows for user", ct[:2], 1500)
+        if act:
+            leg = (act[0].get("legs") or [{}])[0]
+            cid = leg.get("leg_condition_id")
+            show("gamma market for leg cid", get("https://gamma-api.polymarket.com/markets", {"condition_ids": cid}), 1200)
+            show("tokens for leg cid", get(DATA + "/v2/tokens", {"condition": cid}), 1500)
 
 
 if __name__ == "__main__":
