@@ -6,7 +6,9 @@ PAPER ONLY. Reads data, never trades, never writes state/.
     python3 cs2.py sources       # probe `cs2_sources`: which rating sites a robot can read at all
     python3 cs2.py fetch         # probe `cs2_fetch`: Valve standings + bo3.gg results -> bt_cache/cs2/ (price store)
     python3 cs2.py chart         # offline: ratings vs prices and the rule grid on chart prices (Polymarket sports cache)
-    python3 cs2.py exam          # probe `cs2_exam`: the picked rules at REAL buy prices (trade tape), shared exam
+    python3 cs2.py exam [ids]    # probe `cs2_exam` / `cs2_exam_fav24,ai1`: the rules at REAL buy prices, shared exam
+    CS2_HOLDOUT=1 python3 cs2.py exam fav24,fav24b   # 21 Dec ONLY: the registered fresh-data look (PROTOCOL 5),
+                                 # after fresh fetches (census sports fetch, cs2_fetch, cs2_ai). Don't run it earlier.
 
 Why: Jan (11 Nov) "can we find something between cs2 and hltv? people are dumb, would be nice to just go against
 gamblers not the elite quants". HLTV itself blocks robots (Cloudflare 403 from GitHub too), so the stand-ins are
@@ -306,7 +308,12 @@ def build():
         if not (m.get("slug") or "").startswith("cs2-") or m.get("smt") != "moneyline" or not m.get("gst"):
             continue
         f = m.get("final")
-        if not f or max(f) < 0.99 or m["gst"] > HOLD - 6 * H or (m.get("end") or 0) >= HOLD:
+        if not f or max(f) < 0.99:
+            continue
+        if os.environ.get("CS2_HOLDOUT"):     # the 21 Dec look: ONLY games from 10 Nov on (PROTOCOL 5)
+            if m["gst"] < HOLD:
+                continue
+        elif m["gst"] > HOLD - 6 * H or (m.get("end") or 0) >= HOLD:
             continue
         h = hist.get(str(m["id"]))
         if not h or not h[0]:
