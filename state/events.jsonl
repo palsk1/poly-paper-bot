@@ -5932,3 +5932,6 @@
 {"minutes_left": 3.52, "price": 0.995, "queue": 69.51, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV110630-30", "track": "kc_maker", "ts": "2026-11-11T11:26:28Z", "type": "kmaker_order"}
 {"minutes_left": 3.52, "price": 0.985, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV110630-30", "track": "kc_maker", "ts": "2026-11-11T11:26:30Z", "type": "kmaker_order"}
 {"minutes_left": 3.52, "price": 0.976, "queue": 96.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV110630-30", "track": "kc_maker", "ts": "2026-11-11T11:26:31Z", "type": "kmaker_order"}
+{"fee": 0.0515, "outcome": "Draw", "price": 0.29, "shares": 5, "title": "Will Uzbekistan vs. Russia end in a draw?", "token": "69580341503802134730742519310889640937522658593793159277240349798257160461145", "track": "soccer_draw", "ts": "2026-11-11T11:36:19Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV110630-30", "track": "kc_maker", "ts": "2026-11-11T11:36:30Z", "type": "kmaker_fill"}
+{"filled": 9.0, "pnl": 0.216, "price": 0.976, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV110630-30", "track": "kc_maker", "ts": "2026-11-11T11:36:31Z", "type": "kmaker_fill"}
