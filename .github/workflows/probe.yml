@@ -67,6 +67,7 @@ jobs:
           case "${{ inputs.what }}" in big_*) PYTHONUNBUFFERED=1 python3 bigbets.py "$(echo '${{ inputs.what }}' | sed 's/^big_//')"; exit $?;; esac
           case "${{ inputs.what }}" in win_*) PYTHONUNBUFFERED=1 python3 winners.py "$(echo '${{ inputs.what }}' | sed 's/^win_//')"; exit $?;; esac
           case "${{ inputs.what }}" in exam_*) PYTHONUNBUFFERED=1 python3 exam.py $(echo '${{ inputs.what }}' | sed 's/^exam_//; s/_/ /g'); exit $?;; esac
+          case "${{ inputs.what }}" in cmb_*) PYTHONUNBUFFERED=1 python3 combos.py "$(echo '${{ inputs.what }}' | sed 's/^cmb_//')"; exit $?;; esac
           case "${{ inputs.what }}" in census_*) PYTHONUNBUFFERED=1 python3 census.py "$(echo '${{ inputs.what }}' | sed 's/^census_//')"; exit $?;; esac
           case "${{ inputs.what }}" in src_*) PYTHONUNBUFFERED=1 python3 sources.py "$(echo '${{ inputs.what }}' | sed 's/^src_//')"; exit $?;; esac
           case "${{ inputs.what }}" in sharp_*) PYTHONUNBUFFERED=1 python3 sharp.py "$(echo '${{ inputs.what }}' | sed 's/^sharp_//')"; exit $?;; esac
