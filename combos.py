@@ -592,6 +592,27 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
         return r
 
     reqs, trades, won, pending, bets = q_match(lines, "main", result=res)
+    names = {}
+    for x in lines:
+        if x.get("k") == "legs":
+            for tok, info in (x.get("legs") or {}).items():
+                names[tok] = info
+    recent = []
+    for r in sorted(won, key=lambda r: r.get("seen") or 0, reverse=True):
+        toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
+        rs = [cache.get(t) for t in toks]
+        q = r["quotes"]["main"]
+        price = float(trades[r["rfq"]]["price"]) / 1e6
+        if 0 in rs:
+            end, gain = "kept", round(25 * q / (1 - q), 2)
+        elif rs and all(v == 1 for v in rs):
+            end, gain = "paid", -25.0
+        else:
+            end, gain = "waiting", None
+        recent.append({"t": (r.get("seen") or 0) / 1000, "q": round(q, 4), "price": round(price, 4), "end": end, "gain": gain,
+                       "legs": [{"title": (names.get(t) or {}).get("title") or "unknown market",
+                                 "out": (names.get(t) or {}).get("out") or "", "res": v} for t, v in zip(toks, rs)]})
+    recent = [x for x in recent if x["end"] != "waiting"][:30] + [x for x in recent if x["end"] == "waiting"][:30]
     heard = sum(int((x.get("pricer") or {}).get("heard", 0)) for x in lines if x.get("k") == "note" and x.get("what") == "counts")
     last = max((x.get("t") or 0) for x in lines)
     c = exam.score(bets, "Paper combo quoter, live (main)", tries=1, prereg=True, log=False, quiet=True) if bets else {}
@@ -605,10 +626,10 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
            "verdict": c.get("verdict") if bets else "Too early to tell",
            "rule": "2-4 legs, no two legs from the same game, our price = the legs multiplied, +5%, $25 at risk a bet",
            "pass_rule": "Pass (fixed 11 Nov): above +$1.00 per $100 and both halves ahead, at 1 Jan or 1,000 finished bets",
-           "leg_results": cache}
+           "bets": recent, "leg_results": cache}
     os.makedirs(os.path.dirname(path), exist_ok=True)
     json.dump(out, open(path, "w"), separators=(",", ":"))
-    print({k: v for k, v in out.items() if k != "leg_results"}, "lookups", lookups[0])
+    print({k: v for k, v in out.items() if k not in ("leg_results", "bets")}, "lookups", lookups[0], "listed", len(recent))
 
 
 def usd(x):

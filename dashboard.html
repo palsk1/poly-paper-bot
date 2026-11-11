@@ -303,8 +303,25 @@ function curveChart(el, t) {
   ];
   el.innerHTML = warn + `<div class="tiles">${tiles.map(([v, k]) => `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>` +
     `<p class="note"><b>Verdict:</b> ${esc(q.verdict || "Too early to tell")}${q.waiting ? ` · ${q.waiting} still waiting for games to end` : ""}</p>` +
-    `<p class="note">${esc(q.pass_rule)}. Last heard from the server: ${q.last_seen ? esc(stockholm(new Date(q.last_seen * 1000).toISOString().slice(0, 16))) : "never"} Stockholm time.</p>`;
+    `<p class="note">${esc(q.pass_rule)}. Last heard from the server: ${q.last_seen ? esc(stockholm(new Date(q.last_seen * 1000).toISOString().slice(0, 16))) : "never"} Stockholm time.</p>` + qbets(q);
 })();
+
+function qbets(q) {
+  const bs = q.bets || [];
+  if (!bs.length) return "";
+  const c = v => Math.round(v * 100) + "c";
+  const mark = r => r === 1 ? "✅" : r === 0 ? "❌" : "⏳";
+  const end = b => b.end === "kept" ? `<span class="pos">A leg lost, we keep +$${b.gain.toFixed(2)}</span>`
+    : b.end === "paid" ? `<span class="neg">Every leg won, we pay out $25.00</span>` : `<span>Games not over yet</span>`;
+  const row = b => `<div style="padding:8px 0;border-top:1px solid #8883">
+      <div class="meta">${esc(stockholm(new Date(b.t * 1000).toISOString().slice(0, 16)))} · buyer paid a pro ${c(b.price)} per $1, we'd have asked ${c(b.q)}</div>
+      ${b.legs.map(l => `<div>${mark(l.res)} ${esc(l.title)}${l.out ? ` <b>${esc(l.out)}</b>` : ""}</div>`).join("")}
+      <div style="margin-top:2px">${end(b)}</div></div>`;
+  const done = bs.filter(b => b.end !== "waiting"), wait = bs.filter(b => b.end === "waiting");
+  return `<details style="margin-top:8px"><summary><b>Our parlays (${done.length} finished, ${wait.length} waiting)</b></summary>
+    <p class="note">The buyer bets that every leg wins. We'd be the house: if any leg loses (❌), we keep their money. If every leg wins (✅), we pay out our $25.</p>
+    ${done.map(row).join("")}${wait.map(row).join("")}</details>`;
+}
 
 (function top() {
   if (!D.top.length) { $("top").innerHTML = `<div class="card">No strategy is ahead after 3+ finished bets yet. Patience.</div>`; return; }
