@@ -414,6 +414,65 @@ def model_p(r, s, kind):
     return e if s == 0 else 1 - e
 
 
+def _ts(s):
+    try:
+        return dt.datetime.fromisoformat(s).timestamp() if s else None
+    except ValueError:
+        return None
+
+
+def add_form(rows):
+    """Team form from bo3.gg results that ENDED before the match (no look-ahead): r['form'][side] =
+    won5 / lost3 / lost2 / new (under 15 past matches) / rest (hours since its last match) / roster (Valve list
+    changed by 1+ player since the month before, or None)."""
+    M = load("bt_cache/cs2/bo3_matches.json.gz")
+    hist = collections.defaultdict(list)
+    for x in M:
+        a_, b_, w_ = x.get("team1_id"), x.get("team2_id"), x.get("winner_team_id")
+        if not a_ or not b_ or w_ not in (a_, b_):
+            continue
+        t0 = _ts(x.get("start_date"))
+        te = _ts(x.get("end_date")) or (t0 + 3 * H if t0 else None)
+        if not te:
+            continue
+        for tid in (a_, b_):
+            hist[tid].append((te, w_ == tid))
+    for h in hist.values():
+        h.sort()
+    ends = {k: [y[0] for y in h] for k, h in hist.items()}
+    V = load("bt_cache/cs2/valve.json.gz")
+    vd = sorted(V)
+    ros = {d: {} for d in vd}
+    for d in vd:
+        for _, _, tm, pl in V[d]:
+            ros[d].setdefault(nm(tm), frozenset(p.strip().lower() for p in pl.split(",") if p.strip()))
+
+    def roster(name, t):
+        d = dt.datetime.fromtimestamp(t, dt.timezone.utc).strftime("%Y-%m-%d")
+        i = bisect.bisect_right(vd, d) - 1
+        if i < 1:
+            return None
+        a_, b_ = ros[vd[i]].get(name), ros[vd[i - 1]].get(name)
+        return None if a_ is None or b_ is None else len(a_ - b_) >= 1
+
+    for r in rows:
+        r["form"] = None
+        if not r.get("agree"):
+            continue
+        f = []
+        for tid, name in ((r["ia"], r["a"]), (r["ib"], r["b"])):
+            h = hist.get(tid, [])
+            pst = h[:bisect.bisect_left(ends.get(tid, []), r["gst"] - 60)]
+            if len(pst) < 5:
+                break
+            f.append({"won5": all(y[1] for y in pst[-5:]), "lost3": not any(y[1] for y in pst[-3:]),
+                      "lost2": not pst[-1][1] and not pst[-2][1], "new": len(pst) < 15,
+                      "rest": (r["gst"] - pst[-1][0]) / H, "roster": roster(nm(name), r["gst"])})
+        if len(f) == 2:
+            r["form"] = f
+    return rows
+
+
 def rated(rows, kind):
     if kind == "elo":
         return [r for r in rows if r.get("elo") is not None and r.get("agree") and min(r["na"], r["nb"]) >= 15]
@@ -436,9 +495,21 @@ RULES = [
     ("aisweep", "CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before", "p1", 1,
      lambda r, s, q: r.get("ai") and r["ai"]["side"] == s and r["ai"]["sweep"]),
     ("ai24", "CS2: back bo3.gg's AI pick, a day before", "p24", 24, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
+    # Jan, 11 Nov: "what do the losers have in common? Upsets? Roster changes? Start of a losing streak?"
+    # Picked from the `upsets` table (34 patterns x 2 sides), so the luck bar counts them all.
+    ("dogclose", "CS2: back the underdog in a close match (favorite 50-60c), 1h before", "p1", 1,
+     lambda r, s, q: 0.40 < q < 0.50),
+    ("dogstreak", "CS2: back the underdog when the favorite won its last 5, 1h before", "p1", 1,
+     lambda r, s, q: q < 0.50 and r.get("form") and r["form"][1 - s]["won5"]),
+    ("favdrop", "CS2: back the favorite after its price fell 5c+ since a day before, 1h before", "p1", 1,
+     lambda r, s, q: 0.50 <= q < 0.97 and r["p24"] is not None and q - side_p(r, s, "p24") <= -0.05),
+    ("bo1fav", "CS2: favorite at 60-97c in a best-of-1, 1h before", "p1", 1,
+     lambda r, s, q: r.get("bo") == 1 and 0.60 <= q < 0.97),
+    ("doglost3", "CS2: back the favorite when the underdog lost its last 3, 1h before", "p1", 1,
+     lambda r, s, q: q >= 0.50 and r.get("form") and r["form"][1 - s]["lost3"]),
 ]
-TRIES = 65     # versions looked at in this dig (rating gaps x4 x2, bands, tiers x4 x4, timing, drift, volume, months,
-#                and 14 ways to bet or size the bo3.gg AI pick)
+TRIES = 155    # first dig 65 (rating gaps, bands, tiers, timing, drift, volume, months, 14 AI bets) + upset hunt 90
+#                (34 patterns x 2 sides, price-drop at 3/5/8c from 24h and 6h, bands x patterns)
 
 
 def picks(rows, rule):
@@ -469,7 +540,7 @@ def logloss(rs, f):
 
 
 def chart():
-    rows = build()
+    rows = add_form(build())
     p1 = [r for r in rows if r["p1"] is not None and 0.03 < r["p1"] < 0.97]
     print(f"{len(rows)} finished CS2 match-winner markets, {len(p1)} with a price 1h before; matched to bo3.gg "
           f"{sum(1 for r in rows if r.get('elo') is not None)}, results agree {sum(1 for r in rows if r.get('agree'))}, "
@@ -483,6 +554,52 @@ def chart():
     for rule in RULES:
         print(chart_line(rule[1], picks(rows, rule)))
     return rows
+
+
+def upsets():
+    """Jan, 11 Nov: what do the losers have in common? Each pattern: how often the favorite lost (price said vs
+    really) and what backing the underdog / the favorite made per $100 at chart prices 1h before +1c (no fee),
+    with the luck range and first/second half. Positive "really" minus "price said" = upsets happen MORE often."""
+    rows = add_form(build())
+    R = []
+    for r in rows:
+        if r["p1"] is None or not 0.03 < r["p1"] < 0.97 or not r["form"]:
+            continue
+        fs = 0 if r["p1"] >= 0.5 else 1
+        q, F, U = side_p(r, fs, "p1"), r["form"][fs], r["form"][1 - fs]
+        mv = None if r["p24"] is None else q - side_p(r, fs, "p24")
+        R.append({"q": q, "up": r["w"] != fs, "t": r["gst"], "pat": {
+            "favorite won its last 5": F["won5"], "favorite lost its last 2": F["lost2"],
+            "underdog lost its last 3": U["lost3"], "underdog won its last 5": U["won5"],
+            "favorite is a new team (under 15 matches)": F["new"], "underdog is a new team": U["new"],
+            "favorite played in the last 12h": F["rest"] < 12, "underdog played in the last 12h": U["rest"] < 12,
+            "favorite rested 14+ days": F["rest"] > 336, "underdog rested 14+ days": U["rest"] > 336,
+            "favorite changed a player this month": F["roster"] is True,
+            "underdog changed a player this month": U["roster"] is True,
+            "best-of-1": r.get("bo") == 1, "best-of-3": r.get("bo") == 3,
+            "top events (tier S/A)": r.get("tier") in ("s", "a"), "small events (tier B/C)": r.get("tier") in ("b", "c"),
+            "favorite's price fell 5c+ since a day before": mv is not None and mv <= -0.05,
+            "favorite's price rose 5c+ since a day before": mv is not None and mv >= 0.05,
+            "close match (favorite 50-60c)": q < 0.60, "big favorite (75c+)": q >= 0.75}})
+    R.sort(key=lambda f: f["t"])
+
+    def pl(sel, dog):
+        return [100 / ((1 - f["q"] if dog else f["q"]) + 0.01) * (f["up"] == dog) - 100 for f in sel]
+
+    print(f"{len(R)} matches with both teams' form, {sum(f['up'] for f in R)} upsets\n")
+    print("| Pattern | Matches | Upsets per 100: price said / really | Back underdog per $100 (halves) "
+          "| Back favorite per $100 (halves) |\n|---|---|---|---|---|")
+    for k in ["(all matches)"] + list(R[0]["pat"]):
+        sel = R if k.startswith("(") else [f for f in R if f["pat"][k]]
+        if len(sel) < 60:
+            continue
+        h, cell = len(sel) // 2, []
+        for dog in (True, False):
+            a = pl(sel, dog)
+            se = 1.645 * statistics.pstdev(a) / math.sqrt(len(a))
+            cell.append(f"{statistics.mean(a):+.2f} ±{se:.2f} ({statistics.mean(a[:h]):+.1f} / {statistics.mean(a[h:]):+.1f})")
+        print(f"| {k} | {len(sel)} | {100 * sum(1 - f['q'] for f in sel) / len(sel):.1f} / "
+              f"{100 * sum(f['up'] for f in sel) / len(sel):.1f} | {cell[0]} | {cell[1]} |")
 
 
 def exam_run(only=None):
@@ -542,6 +659,8 @@ if __name__ == "__main__":
         ai(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
+    elif cmd == "upsets":
+        upsets()
     elif cmd == "exam":
         exam_run(*sys.argv[2:3])
     else:
