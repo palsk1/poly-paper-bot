@@ -55,7 +55,7 @@ Ideas tried so far: **63**. Dropped: 37. Still in play: 26. Looking real: **1**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 226 | 225 / 1 | +$0.62 | Ahead, but could be luck | 1 Dec (20 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 234 | 233 / 1 | +$0.65 | Ahead, but could be luck | 1 Dec (20 days): after 2,500 bets: pass if above +$0.22 per $100 |
 | NO on 'will X say Y' (`mention_no`) | 2 | 1 / 1 | -$44.67 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
 | Boring side after a 10c scare (`panic_fade_10c`) | 2 | 2 / 0 | +$23.52 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
 | NO at 90-97c, 30+ days out (`boring_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (40 days): holdout, scored once |
@@ -63,14 +63,14 @@ Ideas tried so far: **63**. Dropped: 37. Still in play: 26. Looking real: **1**.
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
 | Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.06 locked in | 16 sets cost $77.62 and pay $80.00 if both sites agree. Nothing to judge before then. | 1 Jan (51 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 226 of 2,500 bets, 1 lost, +$13.72 so far (+$0.61 per $100; the bar is +$0.22). About 132 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
-**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 112 bought, 3 lost, -$19.97 (-$1.81 per $100). Full table: `state/kfast_live/report.md`.
+**kc_maker_safe toward its locked test:** 237 of 2,500 bets, 1 lost, +$14.88 so far (+$0.63 per $100; the bar is +$0.22). About 132 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
+**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 125 bought, 3 lost, -$16.19 (-$1.31 per $100). Full table: `state/kfast_live/report.md`.
 
 ### Week by week (numbers as of the last day of each week, all bets so far)
 
 | Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` |
 |---|---|---|---|---|---|---|
-| 2026-W46 | 226 bets, +$0.62 | 2 bets, -$44.67 | 2 bets, +$23.52 | 0 bets | 0 bets | 0 bets |
+| 2026-W46 | 234 bets, +$0.65 | 2 bets, -$44.67 | 2 bets, +$23.52 | 0 bets | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
