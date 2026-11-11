@@ -5589,3 +5589,4 @@
 {"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV110115-15", "track": "kc_maker_early", "ts": "2026-11-11T06:17:09Z", "type": "kmaker_fill"}
 {"fee": 0.0035, "outcome": "No", "price": 0.982, "shares": 5, "title": "Will Microsoft (MSFT) close above $550 on November 11?", "token": "84510136413580735803592856766782966037812538263301566638522106656751240898861", "track": "endgame_97", "ts": "2026-11-11T06:22:05Z", "type": "paper_buy"}
 {"minutes_left": 3.67, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV110130-30", "track": "kc_maker", "ts": "2026-11-11T06:26:19Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV110130-30", "track": "kc_maker", "ts": "2026-11-11T06:31:40Z", "type": "kmaker_fill"}
