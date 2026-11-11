@@ -5730,3 +5730,7 @@
 {"filled": 10.0, "pnl": 0.49, "price": 0.951, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV110315-15", "track": "kc_maker", "ts": "2026-11-11T08:19:03Z", "type": "kmaker_fill"}
 {"minutes_left": 10.94, "price": 0.937, "queue": 4750.53, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV110330-30", "track": "kc_maker_early", "ts": "2026-11-11T08:19:03Z", "type": "kmaker_order"}
 {"minutes_left": 10.94, "price": 0.921, "queue": 195.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV110330-30", "track": "kc_maker_early", "ts": "2026-11-11T08:19:04Z", "type": "kmaker_order"}
+{"fee": 0.0134, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will XRP dip to $1.00 on November 11?", "token": "62522834172175981080835844051920459176659801756206384255820382099756057242075", "track": "endgame_ending_soon", "ts": "2026-11-11T08:21:27Z", "type": "paper_buy"}
+{"fee": 0.0024, "outcome": "No", "price": 0.993, "shares": 5, "title": "Will Solana reach $90 on November 11?", "token": "85896841870158001318124663832362568614159453513930992228744563440886715726211", "track": "endgame_97", "ts": "2026-11-11T08:21:28Z", "type": "paper_buy"}
+{"minutes_left": 8.32, "price": 0.932, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV110330-30", "track": "kc_maker_early", "ts": "2026-11-11T08:21:41Z", "type": "kmaker_order"}
+{"minutes_left": 8.32, "price": 0.965, "queue": 300.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV110330-30", "track": "kc_maker_early", "ts": "2026-11-11T08:21:41Z", "type": "kmaker_order"}
