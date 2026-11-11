@@ -19,6 +19,7 @@ Env:  POLY_API_KEY, POLY_API_SECRET, POLY_API_PASSPHRASE, POLY_SIGNER, POLY_MAKE
       GITHUB_TOKEN (optional, for uploads), DATA_DIR (default ~/quoter-data)
 """
 import asyncio
+import collections
 import datetime as dt
 import gzip
 import json
@@ -314,6 +315,16 @@ async def run():
                                  "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
                                  "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids"),
                                  "raw": msg})
+                    elif typ == "RFQ_UNMET_DEMAND_SUMMARY":
+                        # every 30 s: requests nobody quoted. Thousands each time, so keep a short summary, not the list
+                        rs = msg.get("rfqs") or []
+                        log.put({"k": "unmet", "window": msg.get("window_ms"), "total": msg.get("total_unfilled"),
+                                 "listed": len(rs),
+                                 "reasons": dict(collections.Counter(str(r.get("reason")) for r in rs)),
+                                 "dirs": dict(collections.Counter(f"{r.get('direction')}/{r.get('side')}" for r in rs)),
+                                 "legs": dict(collections.Counter(str(len(r.get("leg_position_ids") or [])) for r in rs)),
+                                 "keys": sorted({k for r in rs[:50] for k in r}),
+                                 "sample": [{k: v for k, v in r.items()} for r in rs[:5]]})
                     elif str(typ).lower() == "ping":
                         await ws.send(json.dumps({**msg, "type": "pong"}))   # if they ping in text, answer in text
                     else:
