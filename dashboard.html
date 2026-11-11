@@ -99,6 +99,10 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <p class="note">The 10 strategies we trust most right now. We rank by how sure we are, not by who made the most, because a big win can be pure luck. To get on the list, a strategy needs at least 3 finished bets and must be ahead. Only these 10 send pushes to your phone. Tap one for details.</p>
   <div id="top"></div>
 
+  <h2>Combo house (practice, on your server)</h2>
+  <p class="note">Your AWS server listens to people asking for parlay prices. For each one it writes down the price we would have offered (the legs multiplied, plus 5%). When the parlay really sells, we see what the pro got. If our price was lower, we count it as our sale. When the games end, we see if we'd have kept the money. No real money moves.</p>
+  <div class="card" id="quoter"></div>
+
   <h2>Skill or luck?</h2>
   <p class="note">A quick verdict for every strategy that has finished at least 3 bets.</p>
   <p class="note"><b class="pos">Looks real</b>: it keeps winning, even if we assume some bad luck. That's what we're looking for.<br>
@@ -268,6 +272,26 @@ function curveChart(el, t) {
 }
 
 // ---------- top 10
+(function quoter() {
+  const q = D.quoter, el = $("quoter");
+  if (!q) { el.innerHTML = "No notes from the server yet."; return; }
+  const ageH = q.last_seen ? (Date.now() / 1000 - q.last_seen) / 3600 : null;
+  const usd = v => v == null ? "–" : (v < 0 ? "-$" : "+$") + Math.abs(v).toFixed(2);
+  const cls = v => v == null ? "" : (v < 0 ? "neg" : "pos");
+  const warn = ageH == null || ageH > 2.5 ? `<p class="neg">The server has been quiet for ${ageH == null ? "a while" : Math.round(ageH) + " hours"}. It may need a restart.</p>` : "";
+  const tiles = [
+    [q.heard.toLocaleString(), "price requests heard"],
+    [q.trades.toLocaleString(), "parlays really sold"],
+    [q.would_win.toLocaleString(), "we'd have been cheapest"],
+    [`${q.settled} (${q.won_by_house} kept)`, "finished, house kept the money"],
+    [`<span class="${cls(q.pnl)}">${usd(q.pnl)}</span>`, "P&L at $25 a bet"],
+    [`<span class="${cls(q.per100)}">${usd(q.per100)}</span>`, "per $100 at risk"],
+  ];
+  el.innerHTML = warn + `<div class="tiles">${tiles.map(([v, k]) => `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>` +
+    `<p class="note"><b>Verdict:</b> ${esc(q.verdict || "Too early to tell")}${q.waiting ? ` · ${q.waiting} still waiting for games to end` : ""}</p>` +
+    `<p class="note">${esc(q.pass_rule)}. Last heard from the server: ${q.last_seen ? esc(stockholm(new Date(q.last_seen * 1000).toISOString().slice(0, 16))) : "never"} Stockholm time.</p>`;
+})();
+
 (function top() {
   if (!D.top.length) { $("top").innerHTML = `<div class="card">No strategy is ahead after 3+ finished bets yet. Patience.</div>`; return; }
   $("top").innerHTML = D.top.map((n, i) => {

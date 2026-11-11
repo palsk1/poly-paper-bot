@@ -563,6 +563,54 @@ def qtest():
     print("quoter scoring test ok")
 
 
+def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
+    """Small scoreboard of the paper combo quoter for the dashboard (run by watch, at most every 25 min)."""
+    import exam
+    old = {}
+    try:
+        old = json.load(open(path))
+    except (OSError, ValueError):
+        pass
+    if old.get("generated_ts") and time.time() - old["generated_ts"] < min_age:
+        print("quoter state is fresh, skipped")
+        return
+    lines = q_logs(os.environ.get("QUOTER_DIR"))
+    if not lines:
+        return
+    cache = {k: v for k, v in (old.get("leg_results") or {}).items()}
+    lookups = [0]
+
+    def res(tok):
+        if tok in cache:
+            return cache[tok]
+        if lookups[0] >= max_lookups:
+            return None
+        lookups[0] += 1
+        r = leg_result(tok)
+        if r is not None:
+            cache[tok] = r
+        return r
+
+    reqs, trades, won, pending, bets = q_match(lines, "main", result=res)
+    heard = sum(int((x.get("pricer") or {}).get("heard", 0)) for x in lines if x.get("k") == "note" and x.get("what") == "counts")
+    last = max((x.get("t") or 0) for x in lines)
+    c = exam.score(bets, "Paper combo quoter, live (main)", tries=1, prereg=True, log=False, quiet=True) if bets else {}
+    paid = sum(b["cost"] for b in bets)
+    back = sum(b["pay"] for b in bets)
+    out = {"generated_ts": time.time(), "last_seen": last / 1000 if last else None,
+           "days": sorted({time.strftime("%Y-%m-%d", time.gmtime((x.get("t") or 0) / 1000)) for x in lines if x.get("t")}),
+           "heard": heard, "priced": len(reqs), "trades": len(trades), "would_win": len(won), "settled": len(bets),
+           "waiting": pending, "won_by_house": sum(1 for b in bets if b["pay"] > 0),
+           "pnl": round(back - paid, 2), "per100": c.get("per100"), "lo100": c.get("lo100"), "hi100": c.get("hi100"),
+           "verdict": c.get("verdict") if bets else "Too early to tell",
+           "rule": "2-4 legs, no two legs from the same game, our price = the legs multiplied, +5%, $25 at risk a bet",
+           "pass_rule": "Pass (fixed 11 Nov): above +$1.00 per $100 and both halves ahead, at 1 Jan or 1,000 finished bets",
+           "leg_results": cache}
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump(out, open(path, "w"), separators=(",", ":"))
+    print({k: v for k, v in out.items() if k != "leg_results"}, "lookups", lookups[0])
+
+
 def usd(x):
     return "n/a" if x is None else (f"+${x:.2f}" if x >= 0 else f"-${-x:.2f}")
 
@@ -570,5 +618,5 @@ def usd(x):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest}[cmd]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest, "qstate": qstate}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
