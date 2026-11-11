@@ -6122,3 +6122,4 @@
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": false, "ticker": "KXXRP15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:54Z", "type": "kmaker_fill"}
+{"fee": 0.0058, "outcome": "Yes", "price": 0.97, "shares": 5, "title": "Will Apple (AAPL) close above $345 on November 11?", "token": "75212617030688162054645011355097497293430156443553392282668511424926823299810", "track": "endgame_sell98", "ts": "2026-11-11T14:37:07Z", "type": "paper_buy"}
