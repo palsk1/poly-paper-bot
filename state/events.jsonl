@@ -5098,3 +5098,11 @@
 {"minutes_left": 3.38, "price": 0.964, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T00:56:38Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T00:56:39Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.99, "queue": 147.49, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T00:56:40Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T01:02:45Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T01:02:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV102000-00", "track": "kc_maker", "ts": "2026-11-11T01:02:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.61, "price": 0.939, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV102000-00", "track": "kc_maker_early", "ts": "2026-11-11T01:02:48Z", "type": "kmaker_fill"}
+{"filled": 11.0, "pnl": 1.056, "price": 0.904, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV102000-00", "track": "kc_maker_early", "ts": "2026-11-11T01:02:48Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.65, "price": 0.935, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV102000-00", "track": "kc_maker_early", "ts": "2026-11-11T01:02:48Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.72, "price": 0.928, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV102000-00", "track": "kc_maker_early", "ts": "2026-11-11T01:02:48Z", "type": "kmaker_fill"}
+{"fee": 0.0, "outcome": "No", "price": 0.79, "shares": 5, "title": "US strike on Colombia by December 31?", "token": "105908573240663389268879331099901068872848375329297966573120454297394481597082", "track": "panic_fade_4c", "ts": "2026-11-11T01:03:33Z", "type": "paper_buy"}
