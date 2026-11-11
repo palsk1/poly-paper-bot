@@ -291,7 +291,7 @@ async def run():
                 await asyncio.sleep(120)
 
     asyncio.create_task(catalog_loop())
-    last_up = time.time()
+    last_up = time.time() - 3300   # first upload ~5 min after start, then hourly
     auth = creds()
     tried = set()
     backoff = 2
@@ -376,6 +376,7 @@ async def run():
                             print("upload:", r, flush=True)
                         except Exception as e:  # noqa: BLE001
                             log.put({"k": "note", "what": "upload failed", "err": str(e)})
+                            print("upload failed:", e, flush=True)
         except Exception as e:  # noqa: BLE001
             log.put({"k": "note", "what": "disconnected", "err": f"{type(e).__name__}: {e}"})
             print("disconnected:", e, flush=True)
@@ -433,6 +434,8 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "selftest"
     if cmd == "run":
         asyncio.run(run())
+    elif cmd == "upload":   # by hand: python3 quoter.py upload (with the settings file loaded)
+        print(upload_all(Log(os.environ.get("DATA_DIR", "~/quoter-data")), os.environ.get("GITHUB_TOKEN")))
     elif cmd == "catalog":
         print(Catalog().refresh())
     else:
