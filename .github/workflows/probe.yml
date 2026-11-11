@@ -65,6 +65,7 @@ jobs:
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
           case "${{ inputs.what }}" in xv_*) GH_TOKEN="${{ github.token }}" PYTHONUNBUFFERED=1 python3 xvenue.py $(echo '${{ inputs.what }}' | sed 's/^xv_//; s/_/ /g'); exit $?;; esac
+          case "${{ inputs.what }}" in cs2_*) GH_TOKEN="${{ github.token }}" PYTHONUNBUFFERED=1 python3 cs2.py $(echo '${{ inputs.what }}' | sed 's/^cs2_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in big_*) PYTHONUNBUFFERED=1 python3 bigbets.py "$(echo '${{ inputs.what }}' | sed 's/^big_//')"; exit $?;; esac
           case "${{ inputs.what }}" in win_*) PYTHONUNBUFFERED=1 python3 winners.py "$(echo '${{ inputs.what }}' | sed 's/^win_//')"; exit $?;; esac
           case "${{ inputs.what }}" in exam_*) PYTHONUNBUFFERED=1 python3 exam.py $(echo '${{ inputs.what }}' | sed 's/^exam_//; s/_/ /g'); exit $?;; esac
