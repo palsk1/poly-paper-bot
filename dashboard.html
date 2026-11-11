@@ -175,11 +175,19 @@ const stockholm = iso => new Date(iso.length <= 16 ? iso + ":00Z" : iso)
 // ---------- header + tiles
 (function header() {
   const gen = new Date(D.generated);
-  const mins = Math.round((Date.now() - gen) / 60000);
-  const ago = mins < 2 ? "just now" : mins < 120 ? mins + " min ago" : Math.round(mins / 60) + " hours ago";
-  $("updated").innerHTML = `Updated ${esc(stockholm(D.generated))} Stockholm time (${ago}).` +
-    (mins > 90 ? ` <b class="neg">That's old, the bot may be stuck.</b>` : "") +
-    (D.offline ? " Test build: open bets valued at their buy price." : "");
+  // Re-checked every minute: a phone tab left open keeps showing an old copy (Jan, 11 Nov, saw bets "stuck" that
+  // the bot had already counted). The page is rebuilt every ~5 min, so past 15 min the copy on screen is stale.
+  const stamp = () => {
+    const mins = Math.round((Date.now() - gen) / 60000);
+    const ago = mins < 2 ? "just now" : mins < 120 ? mins + " min ago" : Math.round(mins / 60) + " hours ago";
+    $("updated").innerHTML = `Updated ${esc(stockholm(D.generated))} Stockholm time (${ago}).` +
+      (mins > 90 ? ` <b class="neg">That's old, the bot may be stuck.</b>`
+        : mins > 15 ? ` <b class="neg">This copy is old. <a href="#" onclick="location.reload();return false">Reload</a> to see the latest.</b>` : "") +
+      (D.offline ? " Test build: open bets valued at their buy price." : "");
+  };
+  stamp();
+  setInterval(stamp, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) stamp(); });
   $("summary-link").href = D.repo + "/blob/main/state/summary.md";
   const days = Math.max(0, Math.ceil((new Date(D.trial_end + "T00:00:00Z") - Date.now()) / 864e5));
   const proven = D.tracks.filter(t => t.trust.proven).length;
@@ -350,8 +358,16 @@ function detail(n) {
     <p class="note">Here we only have offers up. Nobody has traded with us yet, so nothing is spent and nothing can be lost. The bonus is what Polymarket pays (our estimate) just for keeping the offers there.</p><div class="card">` +
     t.waiting.map(w => `<div class="bet"><div class="t"><a href="${esc(w.u)}" target="_blank" rel="noopener">${esc(w.t)}</a></div>
      <div class="m">price now ${cents(w.n)} · bonus so far ${money(w.bonus, false)}${w.end ? ` · ends ${esc(w.end)}` : ""}</div></div>`).join("") + `</div>`;
+  if (t.orders && t.orders.length) h += `<h2 style="font-size:16px">Waiting orders, not bought yet (${t.orders.length})</h2>
+    <p class="note">An offer to buy in the last few minutes of a 15-minute Kalshi window. We only find out after the window ends whether someone sold to us. Then it moves to finished bets (won or lost), or drops out if nobody sold. The money is set aside until then.</p><div class="card">` +
+    t.orders.map(o => {
+      const ended = new Date(o.close) <= Date.now();
+      return `<div class="bet"><div class="t"><a href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.t)}</a></div>
+     <div class="m">offer to buy ${esc(o.side)} at ${cents(o.e)} · up to ${money(o.c, false)} · ${ended
+        ? `ended ${esc(stockholm(o.close))}, gets counted at the next check (every 5-10 min)`
+        : `ends ${esc(stockholm(o.close))}`}</div></div>`; }).join("") + `</div>`;
   if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished bets</summary><div class="card">` + t.recent.map(c =>
-    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)} · bought ${cents(c.e)}, ended ${cents(c.x)} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
+    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.e != null ? ` · bought ${cents(c.e)}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
   $("detail").innerHTML = h;
   curveChart($("curve"), t);
 }

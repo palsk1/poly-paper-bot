@@ -48,26 +48,29 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 
 <!-- AUTO:START (learnings.py writes this part every morning, don't edit by hand) -->
 
-## Live numbers (updated 2026-11-10)
+## Live numbers (updated 2026-11-11)
 
-**52 days left** until the money decision on 1 Jan 2027.
+**51 days left** until the money decision on 1 Jan 2027.
+Ideas tried so far: **63**. Dropped: 37. Still in play: 26. Looking real: **1**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 104 | 103 / 1 | +$0.07 | Ahead, but could be luck | 1 Dec (21 days): after 2,500 bets: pass if above +$0.22 per $100 |
-| NO on 'will X say Y' (`mention_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (41 days): holdout, scored once |
-| Boring side after a 10c scare (`panic_fade_10c`) | 2 | 2 / 0 | +$23.52 | Too early to tell (2 finished) | 21 Dec (41 days): holdout, scored once |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 234 | 233 / 1 | +$0.65 | Ahead, but could be luck | 1 Dec (20 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| NO on 'will X say Y' (`mention_no`) | 2 | 1 / 1 | -$44.67 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
+| Boring side after a 10c scare (`panic_fade_10c`) | 2 | 2 / 0 | +$23.52 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
+| NO at 90-97c, 30+ days out (`boring_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (40 days): holdout, scored once |
+| NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (40 days): holdout, scored once |
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
-| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.06 locked in | 16 sets cost $77.62 and pay $80.00 if both sites agree. Nothing to judge before then. | 1 Jan (52 days): pays out on 1 Jan |
+| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.06 locked in | 16 sets cost $77.62 and pay $80.00 if both sites agree. Nothing to judge before then. | 1 Jan (51 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 110 of 2,500 bets, 1 lost, +$1.13 so far (+$0.10 per $100; the bar is +$0.22). About 115 bets a day, so the look is due about 1 Dec. This is only a peek: the number counts once, at 2,500.
-**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 24 bought, 0 lost, +$1.02 (+$0.43 per $100). Full table: `state/kfast_live/report.md`.
+**kc_maker_safe toward its locked test:** 237 of 2,500 bets, 1 lost, +$14.88 so far (+$0.63 per $100; the bar is +$0.22). About 132 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
+**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 125 bought, 3 lost, -$16.19 (-$1.31 per $100). Full table: `state/kfast_live/report.md`.
 
 ### Week by week (numbers as of the last day of each week, all bets so far)
 
-| Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `econ_fav` |
-|---|---|---|---|---|
-| 2026-W46 | 104 bets, +$0.07 | 0 bets | 2 bets, +$23.52 | 0 bets |
+| Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` |
+|---|---|---|---|---|---|---|
+| 2026-W46 | 234 bets, +$0.65 | 2 bets, -$44.67 | 2 bets, +$23.52 | 0 bets | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
@@ -130,6 +133,11 @@ A strategy gets real money only if **every** answer is yes:
 - **Paper maker bids can look too good (10 Nov).** The bot counts a Kalshi bid as fully filled once one contract
   trades below it. On the real tape the losers fill fully and the winners only partly: `kc_maker_early` is really
   -$12 per $100, not the -$4.50 it showed. Fixed 10 Nov: the bot now counts only what was really sold.
+- **Polymarket maker tracks hid their losses (11 Nov, Jan spotted it).** Money from early sales and from pairs turned
+  back into $1 was counted, but never shown as finished bets, so the dashboard said "0 won / 0 lost, too early" while
+  `maker_tpsl` had lost $104 of $200 and `maker_flat` $100. The cash was right; the scoreboard wasn't. Fixed: every
+  sale and pair is now a finished bet. Lesson: the stop loss sells right after a fill, into a book that was just
+  emptied, often 10-28c below what it paid. The maker idea stays dead.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
@@ -171,6 +179,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **$1 on Yes (or No) in every open market every day (10 Nov, `yesno.py`, just for fun):** Polymarket all Yes -$11 to -$18 per $100, all No -$6 to -$8; Kalshi at the real ask all Yes -$25, all No -$20. At the dream price both are near fair, so the loss is the cost of buying, worst on long shots. No new candidate.
 - **Criss-cross of those bets (10 Nov, `yesno.py grid`):** 1,055 cuts by Yes/No, price, kind of market, time left and weekday. 124 ahead in both halves, 667 behind in both. The survivors are the two leads we already track (nearly sure things 30+ days out = `boring_no`; crypto No 3-7 days out = `crypto_no`), and they shrink at real buys. No weekday pattern. Kalshi: nothing. No new candidate.
 - **One math model that looks at everything together (10 Nov, `combo.py`):** learned on markets ending before 10 Aug, judged on 10 Aug - 9 Nov. Chart says +$15 to +$22 per $100; at real buys +$0 to +$8, could be luck. It mostly found ghost prices (dead markets near 50c that nobody sells at). The plain price guessed better than the model overall. Fair version (moving prices only): +$7.66 on 259 real buys, luck range -$4 to +$20. Frozen and registered for the 21 Dec look (`combo_moving`, Jan's OK).
+- **Polymarket Combos / parlays, as a buyer (11 Nov, `combos.py`):** 3,897 real combo buys vs the same legs bought one by one. A buyer pays about $100 for legs worth $86.61 (maker $10.33, fee $3.05); 5+ legs or long shots lose about $21-22 per $100. Buying combos: dropped. The house side is a lead, see open questions. `backtest/combos.md`.
 - **Kalshi 15-minute crypto, every minute of the window and every speed (11 Nov, `kspeed.py`):** 39,006 rounds. Buying either side at the asking price loses $4 to $6 per $100 in every stretch (fee plus the buy/sell gap); at the middle price it's even, so the price is fair. A rule that buys when Binance says "too cheap" lost $4.75. After big Binance moves Kalshi even gives back about 1c the next minute, too little to trade. One small lean: a side already at 95c+ with 8+ minutes left made +$0.72 per $100 on 4,406 bets, also when bought a minute late: "Ahead, but could be luck", same family as `kc_maker_safe`, no track. `backtest/kspeed.md`.
 - **CS2 rankings and bo3.gg's AI vs Polymarket (11 Nov, `cs2.py`, Jan's ask):** 6,495 CS2 matches. Backing the team Valve's ranking or our own rating likes when the price disagrees lost $12-17 per $100 at real buys; the price predicts better than both rankings. bo3.gg's AI picks the winner 61 times in 100, the plain favorite 66: backing every AI pick lost $4.18 per $100 at real buys (4,533 matches), and betting more when it predicts a 2-0 or sizing by price doesn't help. bo3.gg's bookmaker odds are after-the-game odds, unusable. HLTV blocks robots. One thin lean (favorite a day before) goes to the 21 Dec look. `backtest/cs2.md`. **Upsets (same day, Jan: "find the red thread"):** what losing favorites share. Roster changes, slumps, win streaks, tiredness, rust and best-of-1 are all already in the price (expected vs real upsets within 1-3 per 100); the 5 best patterns fail at real buys (best: underdog vs a favorite on 5 wins, +$5.17 per $100 on 201, flips between halves). In-fighting has no data. Dropped. **Players' recent form (same day, Jan asked):** bo3.gg player ratings for 10,367 matches; backing the team whose players are hotter than usual over the last 2-7 days lost $4-8 per $100 even at chart prices. Priced in. Dropped.
 
@@ -178,6 +187,8 @@ Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
 
 ## Open questions for Jan
+
+- **Be the house on Polymarket combos? (11 Nov, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. Jan said go (11 Nov): a listen-only paper quoter (`quoter/`) runs on Jan's own server (AWS Lightsail Stockholm, the free plan allows only that region) with a fresh empty wallet, since 11 Nov 12:17 UTC. Listen-only quoters DO get the requests and trade prices, and every 30 s Polymarket reports ~2,500-2,900 requests nobody quoted. Pass rule fixed with Jan's OK (PROTOCOL.md 5c): above +$1.00 per $100 at risk and both halves ahead, at 1 Jan or 1,000 settled bets. Score: probe `cmb_qscore`.
 
 1. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
 2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).

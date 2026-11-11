@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**67 ideas examined, in about 51,458 versions.** 42 dropped, 25 still being tested or waiting. **Looks real: 1.**
+**69 ideas examined, in about 51,487 versions.** 43 dropped, 26 still being tested or waiting. **Looks real: 1.**
 
-Why count: if you test 67 ideas that are all worthless, the luckiest one still looks good. With 67 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 69 ideas that are all worthless, the luckiest one still looks good. With 69 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -75,5 +75,7 @@ Why count: if you test 67 ideas that are all worthless, the luckiest one still l
 | 2026-11-11 | CS2: players' recent form (bo3.gg player ratings, last 2/3/7 days vs their 60-day level), back the hotter team or hot underdog, 1h before | 30 | 945 | -$7.08 | Losing | dropped (chart prices already lose; no real-price run needed) | cs2.py players |
 | 2026-11-11 | Kalshi 15-minute crypto: side already at 95c+ with 8+ minutes left, bought at the ask one minute late | 84 |  | +$0.72 | Ahead, but could be luck | lead, no track (research mode; same family as kc_maker_safe) | kspeed.py, backtest/kspeed.md |
 | 2026-11-11 | Kalshi 15-minute crypto: every minute of the window, Binance vs Kalshi's price, buying Binance jumps 0-30 s late, 45-second buy by delay | 84 |  | Binance rule -$4.75; jump buys -$5 at any delay; 45 s buy +$0.69 at 1 s, same up to 5 s | Losing | dropped (speed buys nothing we can measure; no server) | kspeed.py, backtest/kspeed.md |
+| 2026-11-11 | Paper house for Polymarket combos: sell 2-4 leg combos (no same-game legs) at legs x 1.05 when that beats the pros' real price | 15 | 1044 | +$3.99 | Promising, needs more bets | lead (needs Jan's API key on his own server for a live paper test; Jan to decide) | combos.py replay, backtest/combos.md |
+| 2026-11-11 | Polymarket Combos (parlays): price paid vs the legs multiplied, 3,897 real combo buys | 14 |  | buyers start -$13.39 (maker -$10.33, fee -$3.05); 5+ legs -$21; long shots -$22 | Losing | dropped for buyers; maker side needs Jan's API key on his own server + a 0.4 s bot (open idea) | combos.py, backtest/combos.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

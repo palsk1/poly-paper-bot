@@ -54,8 +54,9 @@ def curve(tr, pnl_now):
 
 
 def open_bets(name, tr):
-    """Open bets (largest moves first), the count, and maker quotes that hold nothing yet (shown apart)."""
-    rows, waiting = [], []
+    """Open bets (largest moves first), the count, maker quotes that hold nothing yet, and Kalshi bids not yet
+    filled (both shown apart)."""
+    rows, waiting, orders = [], [], []
     for tok, p in tr.get("positions", {}).items():
         px = bot.mark(p, tok)
         cost = p["shares"] * p["entry"] + p.get("entry_fee", 0.0)
@@ -82,22 +83,29 @@ def open_bets(name, tr):
                      "e": None, "n": r2(b.get("mid", 0) * 100),  # P&L = price move only, rewards shown apart
                      "pnl": r2(bot.maker_inv_value(b, b.get("mid", 0.5)) - held), "c": r2(held),
                      "end": str(b.get("end", ""))[:10], "u": bot.market_link(b.get("slug", ""), b.get("event_slug", ""))})
-    for o in tr.get("orders", {}).values():  # kmaker: resting Kalshi bids, settled from the trade tape after the close
-        what = (f"bought {str(o.get('side', '')).upper()} on Kalshi, waiting for the release" if o.get("chance") is not None
-                else f"waiting order to buy {str(o.get('side', '')).upper()} on Kalshi")   # econ_fav holds real buys
+    for o in tr.get("orders", {}).values():
+        if o.get("chance") is None:
+            # kc_maker*: a resting Kalshi bid, not a bet yet. Shown apart (Jan, 11 Nov: "waiting order ... bought 96c ...
+            # expected P&L +$0.00" read like a stuck bet). Whether anyone sold to it is only known from the trade tape
+            # after the close; then it becomes a finished bet or "nobody sold".
+            orders.append({"t": str(o.get("title", ""))[:90], "side": str(o.get("side", "")).upper(),
+                           "e": r2(o.get("price", 0) * 100), "c": r2(o.get("cost")), "close": str(o.get("close", "")),
+                           "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}"})
+            continue
+        what = f"bought {str(o.get('side', '')).upper()} on Kalshi, waiting for the release"   # econ_fav holds real buys
         rows.append({"t": str(o.get("title", ""))[:90], "o": what,
                      "e": r2(o.get("price", 0) * 100), "n": None, "pnl": 0.0, "c": r2(o.get("cost")),
                      "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",
                      "locked": True})
     rows.sort(key=lambda r: -abs(r["pnl"] or 0))
-    return rows[:MAX_OPEN], len(rows), waiting
+    return rows[:MAX_OPEN], len(rows), waiting, orders
 
 
 def recent_closed(tr):
     out = []
     for c in sorted(tr.get("closed", []), key=lambda c: c.get("closed_at") or "", reverse=True)[:MAX_CLOSED]:
-        out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2((c.get("entry") or 0) * 100),
-                    "x": r2((c.get("exit") or 0) * 100), "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
+        out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2(c["entry"] * 100) if c.get("entry") is not None else None,
+                    "x": r2(c["exit"] * 100) if c.get("exit") is not None else None, "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
                     "why": c.get("reason", "")})
     return out
 
@@ -218,11 +226,11 @@ def build(offline=False):
     rows = []
     for n in names:
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
-        ob, n_open, waiting = open_bets(n, tr)
+        ob, n_open, waiting, orders = open_bets(n, tr)
         rows.append({
             "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "control": n.startswith("control_"),
             "pnl": r2(s["pnl"]), "today": r2(s.get("today", 0)), "realized": r2(s.get("realized")),
-            "open": s["open"] - len(waiting), "waiting": waiting, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
+            "open": s["open"] - len(waiting) - len(orders), "waiting": waiting, "orders": orders, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
