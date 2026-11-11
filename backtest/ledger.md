@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**66 ideas examined, in about 51,428 versions.** 41 dropped, 25 still being tested or waiting. **Looks real: 1.**
+**67 ideas examined, in about 51,458 versions.** 42 dropped, 25 still being tested or waiting. **Looks real: 1.**
 
-Why count: if you test 66 ideas that are all worthless, the luckiest one still looks good. With 66 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 67 ideas that are all worthless, the luckiest one still looks good. With 67 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -72,6 +72,7 @@ Why count: if you test 66 ideas that are all worthless, the luckiest one still l
 | 2026-11-11 | CS2: favorite at 70-97c a day before, minor leagues (bo3.gg tier B) | 65 | 91 | +$15.27 | Looks real | secondary holdout 21 Dec; flattered (priced bets were the better ones), $7 of room | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: favorite at 70-97c a day before the match | 65 | 234 | +$7.60 | Promising, needs more bets | holdout test 21 Dec (cs2_fav_day) | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: favorite at 70-97c an hour before the match | 65 | 1671 | +$0.96 | Ahead, but could be luck | dropped | cs2.py, backtest/cs2.md |
+| 2026-11-11 | CS2: players' recent form (bo3.gg player ratings, last 2/3/7 days vs their 60-day level), back the hotter team or hot underdog, 1h before | 30 | 945 | -$7.08 | Losing | dropped (chart prices already lose; no real-price run needed) | cs2.py players |
 | 2026-11-11 | Kalshi 15-minute crypto: side already at 95c+ with 8+ minutes left, bought at the ask one minute late | 84 |  | +$0.72 | Ahead, but could be luck | lead, no track (research mode; same family as kc_maker_safe) | kspeed.py, backtest/kspeed.md |
 | 2026-11-11 | Kalshi 15-minute crypto: every minute of the window, Binance vs Kalshi's price, buying Binance jumps 0-30 s late, 45-second buy by delay | 84 |  | Binance rule -$4.75; jump buys -$5 at any delay; 45 s buy +$0.69 at 1 s, same up to 5 s | Losing | dropped (speed buys nothing we can measure; no server) | kspeed.py, backtest/kspeed.md |
 

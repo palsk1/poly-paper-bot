@@ -16,6 +16,8 @@ would we have made money? Maybe with different bet sizes too."
   they "predict" the winner far too well. Any test with them would be cheating.
 - **Upsets have no common thread the price misses.** Roster changes, slumps, winning streaks, tiredness, rust,
   best-of-1: the price already accounts for each. The five best-looking patterns all fail at real prices (section 5).
+- **Players' recent form doesn't help.** Backing the team whose players rated higher than usual in the last few
+  days lost $4-8 per $100 even at chart prices: the price already knows (section 6).
 - **One lean: the favorite a day before.** Buying the team priced 70-97c a day before the match made **+$7.60 per
   $100** on 234 matches at real prices ("Promising, needs more bets"), and **+$15.27 on 91** in smaller leagues
   (bo3.gg tier B, the exam says "Looks real"). But: only 4 in 10 of these could be priced at all, the ones that could
@@ -145,6 +147,27 @@ None survives. The "won 5 in a row" and "price fell" rules flip between halves (
 the price-fell rule loses when measured from 6h instead of 24h before (-$4). Best-of-1 is ahead in both halves but by
 $1, gone at +1c worse prices. Ledger tries are now 155 for CS2 alone (34 patterns x 2 sides plus nearby versions).
 
+## 6. Players' form in the last few days (Jan: "what about players' rating the last couple of days?")
+
+bo3.gg keeps a rating for every player in every match (`matches/{slug}/players_stats`, average about 6.0). We read
+it for 10,367 matches since December (105,420 player rows). For each match: the five players who played it, each
+one's average rating in matches that ended in the last 2, 3 or 7 days before the start, minus their own level over
+the 60 days before that. "Hotter" = the team's players are playing above their usual level by more than the other
+team's. 2,100-2,900 Polymarket matches have this for both teams. Chart prices 1h before +1c, no fee.
+
+| Rule (last 3 days) | Bets | Per $100 | Luck range |
+|---|---|---|---|
+| Back the team whose players are 0.3+ hotter | 1,432 | -$4.16 | -$9.19 to +$0.86 |
+| Back the team whose players are 0.5+ hotter | 945 | -$7.08 | -$12.95 to -$1.22 |
+| Same, only when it's the underdog | 444 | -$7.76 | -$18.59 to +$3.08 |
+| Underdog whose players' recent rating is 0.5+ above the favorite's | 264 | -$6.70 | -$19.40 to +$5.99 |
+
+Last 2 days and last 7 days look the same (-$2.54 to -$12.78 per $100). Split into five groups from "much colder"
+to "much hotter", the team's real win rate sits within 1-3 per 100 of what the price said in every group, with no
+order to it. So the price already knows who is on a hot streak, and backing the hot team loses even before real
+prices and fees. Not sent to the real-price exam (it would only lose more). One honest gap: a player's rating in the
+match itself isn't known before it, so we used only matches that had ended at least a minute before the start.
+
 ## Sanity checks
 
 - Result check: bo3.gg's winner matches Polymarket's result in 5,886 of 5,902 matched games (16 left out).
@@ -159,5 +182,5 @@ $1, gone at +1c worse prices. Ledger tries are now 155 for CS2 alone (34 pattern
 
 `cs2_fetch` (Valve standings + bo3.gg results into the price store), `cs2_ai` (bo3.gg AI picks + odds),
 `python3 cs2.py chart` (offline, tables 1-2 on chart prices), probe `cs2_exam` (all rules at real prices) or
-`cs2_exam_<ids>` with rule ids like `ai1,aisweep` (no underscores). `python3 cs2.py upsets` (offline, section 5). `cs2_sources`, `cs2_peek_<team>`, `cs2_jsapi`
+`cs2_exam_<ids>` with rule ids like `ai1,aisweep` (no underscores). `python3 cs2.py upsets` (offline, section 5), probe `cs2_pstats` then `python3 cs2.py players` (section 6). `cs2_sources`, `cs2_peek_<team>`, `cs2_jsapi`
 were the source hunt.

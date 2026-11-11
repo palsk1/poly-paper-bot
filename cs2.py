@@ -555,6 +555,103 @@ def add_form(rows):
     return rows
 
 
+def add_players(rows, days=3):
+    """Players' recent form (Jan, 11 Nov). For each team in each match: the five players who played it (lineups are
+    announced before the match), each player's average bo3.gg rating in matches that ENDED in the last `days` days
+    before the start (`hot`), and over the 60 days before that (`base`). r['pf'][side] = {hot, base, delta, n}
+    where delta = hot - base averaged over players with both, n = players with recent matches."""
+    P = load("bt_cache/cs2/bo3_pstats.json.gz")
+    M = {x["id"]: x for x in load(FILES[2])}
+    hist = collections.defaultdict(list)      # player -> [(end, rating)]
+    lineup = {}
+    for mid, ps in P.items():
+        x = M.get(int(mid))
+        if not x:
+            continue
+        te = _ts(x.get("end_date")) or ((_ts(x.get("start_date")) or 0) + 3 * H)
+        lu = collections.defaultdict(list)
+        for sp, tid, rt, *_ in ps:
+            if sp is None or rt is None:
+                continue
+            hist[sp].append((te, rt))
+            lu[tid].append(sp)
+        lineup[int(mid)] = lu
+    for h in hist.values():
+        h.sort()
+    ends = {k: [y[0] for y in h] for k, h in hist.items()}
+
+    def form(sp, t):
+        h, e = hist.get(sp, []), ends.get(sp, [])
+        j = bisect.bisect_left(e, t - 60)
+        i = bisect.bisect_left(e, t - days * 86400)
+        k = bisect.bisect_left(e, t - 60 * 86400)
+        hot = [y[1] for y in h[i:j]]
+        base = [y[1] for y in h[k:i]]
+        return (statistics.mean(hot) if hot else None, statistics.mean(base) if len(base) >= 3 else None)
+    for r in rows:
+        r["pf"] = None
+        lu = lineup.get(r.get("bo3_id"))
+        if not lu or not r.get("agree"):
+            continue
+        out = []
+        for tid in (r["ia"], r["ib"]):
+            fs = [form(sp, r["gst"]) for sp in lu.get(tid, [])]
+            if len(fs) < 4:
+                break
+            hot = [a for a, b in fs if a is not None]
+            dl = [a - b for a, b in fs if a is not None and b is not None]
+            base = [b for a, b in fs if b is not None]
+            out.append({"hot": statistics.mean(hot) if hot else None, "base": statistics.mean(base) if base else None,
+                        "delta": statistics.mean(dl) if len(dl) >= 3 else None, "n": len(hot)})
+        if len(out) == 2:
+            r["pf"] = out
+    return rows
+
+
+def players():
+    """`python3 cs2.py players`: does the players' last few days say anything the price doesn't?"""
+    for days in (2, 3, 7):
+        rows = add_players(build(), days)
+        R = [r for r in rows if r["p1"] is not None and 0.03 < r["p1"] < 0.97 and r["pf"]
+             and r["pf"][0]["delta"] is not None and r["pf"][1]["delta"] is not None]
+        R.sort(key=lambda r: r["gst"])
+        print(f"\n=== last {days} days: {len(R)} matches with both teams' recent player form ===")
+        # 1) does recent form (hot - base, team vs team) predict on top of the price? split into 5 groups
+        def g(r):
+            return r["pf"][0]["delta"] - r["pf"][1]["delta"]
+        qs = sorted(g(r) for r in R)
+        cuts = [qs[int(len(qs) * f)] for f in (0.2, 0.4, 0.6, 0.8)]
+        print("| Team A's players hot minus team B's | Matches | A won per 100: price said / really | Back A per $100 | Back B per $100 |")
+        print("|---|---|---|---|---|")
+        for lo, hi, lab in ((-9, cuts[0], "B much hotter"), (cuts[0], cuts[1], "B a bit hotter"), (cuts[1], cuts[2], "even"),
+                            (cuts[2], cuts[3], "A a bit hotter"), (cuts[3], 9, "A much hotter")):
+            sel = [r for r in R if lo <= g(r) < hi]
+            a = [100 / (r["p1"] + 0.01) * (r["w"] == 0) - 100 for r in sel]
+            b = [100 / (1 - r["p1"] + 0.01) * (r["w"] == 1) - 100 for r in sel]
+            print(f"| {lab} ({lo:+.2f} to {hi:+.2f}) | {len(sel)} | {100 * statistics.mean(r['p1'] for r in sel):.1f} / "
+                  f"{100 * statistics.mean(r['w'] == 0 for r in sel):.1f} | {statistics.mean(a):+.2f} | {statistics.mean(b):+.2f} |")
+        # 2) rules: back the hotter team (gap 0.3+ / 0.5+), and only when it's the underdog
+        for gap in (0.3, 0.5):
+            for dog in (False, True):
+                sel = []
+                for r in R:
+                    for s_ in (0, 1):
+                        d = (g(r) if s_ == 0 else -g(r))
+                        q = side_p(r, s_, "p1")
+                        if d >= gap and (not dog or q < 0.5):
+                            sel.append((r, s_, q, 1))
+                print(chart_line(f"back the team whose players are {gap}+ hotter{' (underdog only)' if dog else ''}", sel))
+        # 3) also: hot level, not change (players' recent average vs opponent's)
+        sel = [(r, s_, side_p(r, s_, "p1"), 1) for r in R for s_ in (0, 1)
+               if r["pf"][s_]["hot"] is not None and r["pf"][1 - s_]["hot"] is not None
+               and r["pf"][s_]["hot"] - r["pf"][1 - s_]["hot"] >= 0.5 and side_p(r, s_, "p1") < 0.5]
+        print(chart_line("underdog whose players' recent rating is 0.5+ above the favorite's", sel))
+        h = len(R) // 2
+        for lab, part in (("first half", R[:h]), ("second half", R[h:])):
+            sel = [(r, s_, side_p(r, s_, "p1"), 1) for r in part for s_ in (0, 1) if (g(r) if s_ == 0 else -g(r)) >= 0.5]
+            print("   ", chart_line(lab + ", hotter by 0.5+", sel))
+
+
 def rated(rows, kind):
     if kind == "elo":
         return [r for r in rows if r.get("elo") is not None and r.get("agree") and min(r["na"], r["nb"]) >= 15]
@@ -745,6 +842,8 @@ if __name__ == "__main__":
         ai(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
+    elif cmd == "players":
+        players()
     elif cmd == "upsets":
         upsets()
     elif cmd == "exam":

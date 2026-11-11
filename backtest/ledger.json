@@ -804,6 +804,19 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_player_form",
+   "date": "2026-11-11",
+   "what": "CS2: players' recent form (bo3.gg player ratings, last 2/3/7 days vs their 60-day level), back the hotter team or hot underdog, 1h before",
+   "tries": 30,
+   "bets": 945,
+   "groups": 945,
+   "per100": -7.08,
+   "floor100": null,
+   "verdict": "Losing",
+   "status": "dropped (chart prices already lose; no real-price run needed)",
+   "src": "cs2.py players"
   }
  ]
 }
