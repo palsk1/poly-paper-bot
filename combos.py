@@ -169,8 +169,8 @@ def positions(u, pages=5):
     return out
 
 
-def leg_token(leg):
-    """CLOB token of the leg's outcome, from the Gamma market (combo legs carry v2 condition ids the chart doesn't know)."""
+def leg_info(leg):
+    """(CLOB token of the leg's outcome, game start unix or None), from the Gamma market (combo legs carry v2 ids the chart doesn't know)."""
     mid, oi = (leg.get("market") or {}).get("market_id"), leg.get("leg_outcome_index")
     if mid not in _tok:
         m = get(f"https://gamma-api.polymarket.com/markets/{mid}")
@@ -180,11 +180,21 @@ def leg_token(leg):
                 toks = json.loads(toks)
             except ValueError:
                 toks = None
-        _tok[mid] = toks or []
-        if len(_tok) <= 2:
-            print("debug gamma", mid, {k: m.get(k) for k in ("question", "outcomes", "clobTokenIds", "gameStartTime", "endDate")} if isinstance(m, dict) else m)
-    toks = _tok[mid]
-    return toks[oi] if isinstance(oi, int) and oi < len(toks) else None
+        gs = None
+        try:
+            g = (m.get("gameStartTime") or "").strip() if isinstance(m, dict) else ""
+            if g:
+                import datetime as dt
+                gs = int(dt.datetime.fromisoformat(g.replace(" ", "T").replace("+00", "+00:00").replace("Z", "+00:00")).timestamp())
+        except ValueError:
+            gs = None
+        _tok[mid] = (toks or [], gs)
+    toks, gs = _tok[mid]
+    return (toks[oi] if isinstance(oi, int) and oi < len(toks) else None), gs
+
+
+def leg_token(leg):
+    return leg_info(leg)[0]
 
 
 _dbg = [0]
@@ -206,35 +216,56 @@ def iso_t(s):
     return int(dt.datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp())
 
 
-def one(pos):
+def fee_of(p, shares):
+    return 0.05 * p * (1 - p) * shares   # sports fee rate (2026-07), checked on a real combo buy: 515.74 on 44,044 shares at 37.4c
+
+
+def yes_result(pos):
+    st = pos.get("status")
+    if st not in ("RESOLVED_WIN", "RESOLVED_LOSS"):
+        return None
+    win = st == "RESOLVED_WIN"
+    if pos.get("outcome_index") == 1:      # this wallet held the NO side (the maker's side): flip it
+        win = not win
+    return 1.0 if win else 0.0
+
+
+def one(pos, max_fills=4):
+    """Every YES buy of one combo (public trade list): price paid vs the legs multiplied on the chart at that minute."""
     legs = pos.get("legs") or []
-    t = iso_t(pos["first_entry_at"])
-    prod, ages, live = 1.0, [], 0
-    for lg in legs:
-        tok = leg_token(lg)
-        if not tok:
-            return None
-        p, age = price_at(tok, t)
-        if p is None:
-            return None
-        prod *= p
-        ages.append(age)
+    fills = [f for f in rows(get(DATA + "/v2/trades", {"condition": pos["combo_condition_id"], "limit": 100}))
+             if f.get("side") == "BUY" and bot.fnum(f.get("size"), 0) > 0 and 0 < bot.fnum(f.get("price"), 0) < 1]
+    fills = sorted(fills, key=lambda f: f["timestamp"])[:max_fills]
+    infos = [leg_info(lg) for lg in legs]
+    if not fills or any(not tok for tok, _ in infos):
+        return []
     evs = [((lg.get("market") or {}).get("event") or {}).get("event_id") for lg in legs]
     kinds = [(lg.get("market") or {}).get("sports_market_type") or "other" for lg in legs]
-    gross = bot.fnum(pos.get("gross_entry_cost_usdc"), 0)
-    fee = bot.fnum(pos.get("entry_fees_usdc"), 0)
-    price = bot.fnum(pos.get("entry_avg_price_usdc"), 0)
-    size = bot.fnum(pos.get("current_size"), 0) or ((gross - fee) / price if price else 0)
-    if bot.fnum(pos.get("current_size"), 0):
-        price = (gross - fee) / size
-    return {"price": price, "prod": prod, "legs": len(legs), "same_game": len(set(evs)) < len(evs),
-            "gross": gross, "fee": fee, "size": size, "status": pos.get("status"),
-            "payout": (bot.fnum(pos.get("realized_payout_usdc"), 0) or size) if pos.get("status") in ("RESOLVED_WIN", "REDEEMED", "REDEEMABLE")
-            else (0.0 if pos.get("status") == "RESOLVED_LOSS" else None),
-            "max_age": max(ages) if ages else 0, "kinds": kinds, "t": t, "wallet": pos.get("proxy_wallet")}
+    res = yes_result(pos)
+    out = []
+    for f in fills:
+        t = int(f["timestamp"])
+        prod, ages, decided = 1.0, [], False
+        for tok, _ in infos:
+            p, age = price_at(tok, t)
+            if p is None:
+                prod = None
+                break
+            decided |= p >= 0.985 or p <= 0.015
+            prod *= p
+            ages.append(age)
+        if prod is None:
+            continue
+        price, size = float(f["price"]), float(f["size"])
+        out.append({"price": price, "prod": prod, "legs": len(legs), "same_game": len(set(evs)) < len(evs),
+                    "gross": price * size + fee_of(price, size), "fee": fee_of(price, size), "size": size,
+                    "payout": None if res is None else res * size, "decided": decided,
+                    "in_play": any(gs and gs <= t for _, gs in infos), "max_age": max(ages) if ages else 0,
+                    "kinds": kinds, "t": t, "cid": pos["combo_condition_id"]})
+    return out
 
 
-def run(cap_w=160, cap_pos=1500):
+def run(cap_w=160, cap_pos=2500):
     from concurrent.futures import ThreadPoolExecutor
     ws = wallets(cap_w)
     pos = []
@@ -242,11 +273,24 @@ def run(cap_w=160, cap_pos=1500):
         for ps in ex.map(positions, ws):
             pos += [p for p in ps if p.get("first_entry_at") and p.get("legs") and bot.fnum(p.get("gross_entry_cost_usdc"), 0) > 0]
     print("combo positions:", len(pos), collections.Counter(p.get("status") for p in pos).most_common())
+    by = {}
+    for p in pos:                      # one row per combo; prefer a holder of the YES side
+        c = p["combo_condition_id"]
+        if c not in by or p.get("outcome_index") == 0:
+            by[c] = p
+    pos = list(by.values())
+    import random
+    random.seed(11)
+    random.shuffle(pos)
+    print("different combos:", len(pos), "held on the NO (maker) side by these wallets:", sum(1 for p in pos if p.get("outcome_index") == 1))
     pos = pos[:cap_pos]
+    res = []
     with ThreadPoolExecutor(8) as ex:
-        res = [r for r in ex.map(one, pos) if r]
-    res = [r for r in res if r["max_age"] <= 3600 and 0.001 < r["prod"] < 0.999 and 0 < r["price"] < 1]
-    print("priced (every leg had a chart price within 1 h of the buy):", len(res))
+        for r in ex.map(one, pos):
+            res += r
+    allr = res
+    res = [r for r in res if r["max_age"] <= 1800 and not r["decided"]]
+    print(f"YES buys priced: {len(allr)}; kept {len(res)} (every leg had a chart price within 30 min, no leg already 98.5c+/1.5c-)")
     json.dump(res, open("combos_rows.json", "w"))
 
     def block(name, rs):
@@ -264,9 +308,11 @@ def run(cap_w=160, cap_pos=1500):
         print(f"{name}: {len(rs)} combos, ${g:,.0f} spent | per $100 spent: legs-multiplied worth ${100 * fair / g:.2f}, "
               f"maker's extra ${100 * (paid - fair) / g:.2f}, fee ${100 * fee / g:.2f} | median price/legs {ratios[len(ratios) // 2]:.3f}, "
               f"middle half {ratios[len(ratios) // 4]:.3f}-{ratios[3 * len(ratios) // 4]:.3f}, cheaper than legs {cheap}/{len(rs)} | "
-              f"finished {len(done)}: got back ${100 * back / spent if spent else 0:.2f} per $100 (legs said ${100 * exp_back / spent if spent else 0:.2f}; winners-only sample)")
+              f"finished {len(done)}: got back ${100 * back / spent if spent else 0:.2f} per $100 (legs said ${100 * exp_back / spent if spent else 0:.2f}; combos picked from big combo wallets)")
 
     block("ALL", res)
+    block("before any game started", [r for r in res if not r["in_play"]])
+    block("a game already running", [r for r in res if r["in_play"]])
     for k in (2, 3, 4):
         block(f"{k} legs", [r for r in res if r["legs"] == k])
     block("5+ legs", [r for r in res if r["legs"] >= 5])
@@ -280,7 +326,7 @@ def run(cap_w=160, cap_pos=1500):
     block("legs 60c+", [r for r in res if r["prod"] >= 0.6])
     print("cheapest 8 vs legs:")
     for r in sorted(res, key=lambda r: r["price"] / r["prod"])[:8]:
-        print(f"  paid {r['price']:.3f} legs {r['prod']:.3f} legs={r['legs']} same_game={r['same_game']} ${r['gross']:,.0f} {r['status']} {r['kinds']}")
+        print(f"  paid {r['price']:.3f} legs {r['prod']:.3f} legs={r['legs']} same_game={r['same_game']} ${r['gross']:,.0f} {r['payout']} {r['kinds']}")
 
 
 if __name__ == "__main__":
