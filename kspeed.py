@@ -274,6 +274,27 @@ def model_bets(rows, table, thr, delay, lmin=1, lmax=14):
     return out
 
 
+def early_sure(rows, late=False, lmin=8, lo=0.95, hi=0.995):
+    """First minute with lmin+ minutes left where a side asks lo-hi: buy it at the ask (or one minute later)."""
+    out, done = [], set()
+    for r in rows:
+        if r["tk"] in done or r["L"] < lmin:
+            continue
+        for side_yes in (True, False):
+            ask = r["ya"] if side_yes else 1 - r["yb"]
+            if lo <= ask < hi:
+                if late:
+                    if r["nya"] is None:
+                        break
+                    ask = r["nya"] if side_yes else 1 - r["nyb"]
+                    if not (0.5 < ask < 0.999):
+                        break
+                done.add(r["tk"])
+                out.append({**bet(r["close"], r["close"] - 60 * r["L"], ask, r["yes"] == side_yes), "s": r["s"]})
+                break
+    return out
+
+
 def drift_table(rows):
     """c) after a big Binance minute: Kalshi's mid move in the same minute's quote vs the minute after."""
     by = {}
@@ -330,7 +351,7 @@ def seconds_replay(windows, tapes, spots):
     """Jump study + 45-second buy, per delay. Returns dicts of bet lists and the price path after jumps."""
     jump = {d: [] for d in DELAYS}
     late = {d: [] for d in DELAYS}
-    path = {k: [] for k in (0, 1, 2, 3, 5, 10, 20, 30)}
+    path = {k: [] for k in (-3, -2, -1, 0, 1, 2, 3, 5, 10, 20, 30)}
     n_jump = 0
     for w in windows:
         tape = tapes.get(w["t"])
@@ -353,7 +374,7 @@ def seconds_replay(windows, tapes, spots):
                 continue
             side = "yes" if dz > 0 else "no"
             t = close - L
-            pre = last_px(tape, idx, t - 4, side)
+            pre = last_px(tape, idx, t - 6, side)
             if pre is None or not (0.15 <= pre <= 0.85):
                 continue
             cool = L - 30
@@ -528,6 +549,16 @@ def run():
           "leave cents in the last column.", "",
           "| Binance move in one minute | Cases | Kalshi, same minute | Kalshi, minute after |", "|---|---|---|---|"]
     L += drift_table(rows)
+    es0, es1 = early_sure(rows), early_sure(rows, late=True)
+    TRIES[0] += 2
+    L += ["", "### d) The one cell that is ahead: a side already at 95c+ early in the window", "",
+          "In table a) the only cells above $0 are sides that cost 95c or more while 8+ minutes are still left. "
+          "As one rule: the first time that happens in a window, buy that side at the asking price.", "",
+          "| Version | Result | Lost bets | By coin |", "|---|---|---|---|"]
+    for lab, b in (("Buy the same minute", es0), ("Buy one minute late", es1)):
+        coins = ", ".join(f"{s_[2:-3]} {usd(tally([x for x in b if x['s'] == s_])[1])}" for s_ in kc.SERIES
+                          if any(x["s"] == s_ for x in b))
+        L.append(f"| {lab} | {cell(b)} | {sum(1 for x in b if not x['pay'])} | {coins} |")
     print("\n".join(L))
     print(f"part 1 done ({time.time() - t_s:.0f}s)")
     # ---- 2
@@ -552,7 +583,8 @@ def run():
                "### a) When Binance jumps, how fast does Kalshi follow?", "",
                f"A jump = Binance moved the odds a lot within 3 seconds while Kalshi was still at 15-85c "
                f"({n_jump} jumps). The line shows how many cents Kalshi's last traded price had moved our way, "
-               "counted from 4 seconds before the jump.", "",
+               "counted from 6 seconds before it. The jump itself runs from -3 to 0, so a number that is already big at "
+               "-2 or -1 means Kalshi moved while Binance was still moving.", "",
                "| Seconds after the jump | " + " | ".join(str(k) for k in sorted(path)) + " |",
                "|---|" + "---|" * len(path),
                "| Kalshi has moved | " + " | ".join(f"{statistics.mean(path[k]):+.1f}c" if path[k] else "-"
@@ -605,7 +637,8 @@ def run():
                f"{lt['bin50']:.0f} ms (slow: {lt['bin90']:.0f} ms)."]
     # ---- exam
     X = ["", "## The exam", ""]
-    cands = [("Binance vs Kalshi price, whole window, 6c gap, one minute late", best)]
+    cands = [("Binance vs Kalshi price, whole window, 6c gap, one minute late", best),
+             ("Side at 95c+ with 8+ minutes left, bought one minute late", es1)]
     if jump.get(1):
         cands.append(("Buy the Binance jump, 1 s late", jump[1]))
     if late.get(1):
