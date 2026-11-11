@@ -36,6 +36,22 @@ def rows(res):
     return res or []
 
 
+def peek2():
+    """Per-fill combo prices: trades/activity feeds by combo condition."""
+    u = "0xebfdb8164f0e0748818d6c7a9ac85a323267fd63"
+    ps = rows(get(DATA + "/v2/positions/combos", {"user": u, "limit": 5, "status": "RESOLVED_WIN,RESOLVED_LOSS"}))
+    for p in ps[:2]:
+        cid = p["combo_condition_id"]
+        print("position", cid, p.get("entry_avg_price_usdc"), p.get("gross_entry_cost_usdc"), p.get("first_entry_at"), p.get("current_size"))
+        show("trades by condition", rows(get(DATA + "/v2/trades", {"condition": cid, "limit": 20})), 2500)
+        show("trades by user+condition", rows(get(DATA + "/v2/trades", {"user": u, "condition": cid, "limit": 20})), 2000)
+        show("activity by user+condition", rows(get(DATA + "/v2/activity", {"user": u, "condition": cid, "limit": 20})), 2000)
+        show("combo activity by user+condition", [{k: v for k, v in a.items() if k != "legs"} for a in rows(get(DATA + "/v2/activity/combos", {"user": u, "condition": cid}))], 2000)
+    act = rows(get(DATA + "/v2/activity", {"user": u, "limit": 500}))
+    print("activity types", collections.Counter((a.get("type"), a.get("is_combo")) for a in act))
+    show("combo activity rows in /v2/activity", [a for a in act if a.get("is_combo")][:3], 2500)
+
+
 def peek():
     cat = get(RFQ + "/v1/rfq/combo-markets", {"limit": 100})
     ms = rows(cat)
@@ -242,5 +258,5 @@ def run(cap_w=160, cap_pos=1500):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "run": run}[cmd]()
+    {"peek": peek, "peek2": peek2, "run": run}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
