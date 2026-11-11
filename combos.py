@@ -329,8 +329,110 @@ def run(cap_w=160, cap_pos=2500):
         print(f"  paid {r['price']:.3f} legs {r['prod']:.3f} legs={r['legs']} same_game={r['same_game']} ${r['gross']:,.0f} {r['payout']} {r['kinds']}")
 
 
+def yes_positions(u):
+    """A wallet's finished YES combos (status filter needed: the default listing hides redeemed wins)."""
+    out, cur = [], None
+    for _ in range(3):
+        p = {"user": u, "limit": 100, "status": "RESOLVED_WIN,RESOLVED_LOSS"} if not cur else {"user": u, "cursor": cur}
+        res = get(DATA + "/v2/positions/combos", p)
+        out += [x for x in rows(res) if x.get("outcome_index") == 0]
+        cur = (res.get("pagination") or {}).get("next_cursor") if isinstance(res, dict) else None
+        if not cur:
+            break
+    return out
+
+
+def replay(n_seed=700, n_buyers=500, cap_combos=3000):
+    """Paper house: would selling combos a bit cheaper than the pros have kept money after the real results?
+    Sample: ordinary buyers found on the big wallets' combos (second hop), then ALL their finished YES combos, so the
+    combos are not picked by who won. Each buy is re-priced: we'd sell at legs x (1 + markup) and only get the buy
+    when that is below what the buyer really paid (we'd be the cheapest quote)."""
+    import random
+    from concurrent.futures import ThreadPoolExecutor
+    import exam
+    random.seed(5)
+    seeds = wallets(160)
+    pos = []
+    with ThreadPoolExecutor(8) as ex:
+        for ps in ex.map(lambda u: positions(u, 2), seeds):
+            pos += ps
+    cids = list({p["combo_condition_id"] for p in pos})
+    random.shuffle(cids)
+    buyers = collections.Counter()
+    with ThreadPoolExecutor(8) as ex:
+        for fs in ex.map(lambda c: rows(get(DATA + "/v2/trades", {"condition": c, "limit": 100})), cids[:n_seed]):
+            for f in fs:
+                if f.get("side") == "BUY" and f.get("proxy_wallet") not in seeds:
+                    buyers[f["proxy_wallet"]] += 1
+    bl = list(buyers)
+    random.shuffle(bl)
+    print(f"seed combos read {min(n_seed, len(cids))}, ordinary buyers found {len(bl)}, using {min(n_buyers, len(bl))}")
+    yp = {}
+    with ThreadPoolExecutor(8) as ex:
+        for ps in ex.map(yes_positions, bl[:n_buyers]):
+            for p in ps:
+                if p.get("legs") and p.get("first_entry_at"):
+                    yp.setdefault(p["combo_condition_id"], p)
+    combos = list(yp.values())
+    random.shuffle(combos)
+    print("finished YES combos of those buyers:", len(combos), collections.Counter(p["status"] for p in combos).most_common())
+    res = []
+    with ThreadPoolExecutor(8) as ex:
+        for r in ex.map(lambda p: one(p, 3), combos[:cap_combos]):
+            res += r
+    res = [r for r in res if r["max_age"] <= 1800 and not r["decided"] and r["payout"] is not None]
+    print(f"buys kept: {len(res)} on {len({r['cid'] for r in res})} combos")
+    json.dump(res, open("combos_replay.json", "w"))
+
+    def house(rs, name):
+        paid = sum(r["price"] * r["size"] for r in rs)
+        back = sum(r["payout"] for r in rs)
+        fair = sum(r["prod"] * r["size"] for r in rs)
+        n = len(rs)
+        print(f"{name}: {n} buys, buyers paid ${paid:,.0f}, legs said ${fair:,.0f}, combos paid out ${back:,.0f} "
+              f"-> the house kept ${100 * (paid - back) / paid if paid else 0:+.2f} per $100 of buyers' money "
+              f"(legs-only guess ${100 * (paid - fair) / paid if paid else 0:+.2f}); won {sum(1 for r in rs if r['payout'] > 0)} of {n}")
+
+    print("\n-- The pros as they are (sold at the real price) --")
+    house(res, "all buys")
+    for k, f in (("2 legs", lambda r: r["legs"] == 2), ("3-4 legs", lambda r: 3 <= r["legs"] <= 4), ("5+ legs", lambda r: r["legs"] >= 5),
+                 ("legs under 20c", lambda r: r["prod"] < 0.2), ("legs 20-60c", lambda r: 0.2 <= r["prod"] < 0.6),
+                 ("legs 60c+", lambda r: r["prod"] >= 0.6), ("before games", lambda r: not r["in_play"]), ("game running", lambda r: r["in_play"]),
+                 ("no same-game legs", lambda r: not r["same_game"])):
+        house([r for r in res if f(r)], k)
+
+    print("\n-- Us as the house: quote legs x (1 + markup), only where that beats the pros' price; $25 at risk a buy --")
+    tries = 0
+    best = None
+    for name, f in (("all", lambda r: True), ("2-4 legs, no same game", lambda r: r["legs"] <= 4 and not r["same_game"]),
+                    ("long shots under 20c", lambda r: r["prod"] < 0.2)):
+        for m in (0.0, 0.02, 0.03, 0.05, 0.10):
+            tries += 1
+            bets = []
+            for r in res:
+                if not f(r):
+                    continue
+                q = r["prod"] * (1 + m)
+                if not (q < r["price"] and q < 0.97):
+                    continue
+                sh = 25 / (1 - q)                     # shares we'd back with $25 of our money
+                bets.append({"ev": r["cid"], "t": r["t"], "cost": 25.0, "pay": 0.0 if r["payout"] > 0 else 25 + q * sh})
+            c = exam.score(bets, f"paper house {name} +{int(m * 100)}%", tries=tries, log=False, quiet=True)
+            print(f"{name:24s} markup +{int(m * 100):2d}%: {len(bets):5d} buys we'd win, {usd(c.get('per100'))} per $100 at risk, "
+                  f"luck range {usd(c.get('lo100'))} to {usd(c.get('hi100'))}, halves {usd(c.get('half1'))}/{usd(c.get('half2'))}, {c['verdict']}")
+            if c.get("per100") is not None and (best is None or (c.get("lo100") or -1e9) > (best[1].get("lo100") or -1e9)):
+                best = (bets, c, name, m)
+    if best:
+        exam.score(best[0], f"Paper house for Polymarket combos ({best[2]}, legs +{int(best[3] * 100)}%)", tries=tries,
+                   src="combos.py replay, backtest/combos.md", log=True)
+
+
+def usd(x):
+    return "n/a" if x is None else (f"+${x:.2f}" if x >= 0 else f"-${-x:.2f}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run}[cmd]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
