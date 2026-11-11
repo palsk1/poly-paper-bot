@@ -6491,3 +6491,13 @@
 {"minutes_left": 7.37, "price": 0.946, "queue": 14.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV111400-00", "track": "kc_maker_early", "ts": "2026-11-11T18:52:39Z", "type": "kmaker_order"}
 {"minutes_left": 7.37, "price": 0.96, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV111400-00", "track": "kc_maker_early", "ts": "2026-11-11T18:52:39Z", "type": "kmaker_order"}
 {"minutes_left": 7.37, "price": 0.959, "queue": 241.03, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV111400-00", "track": "kc_maker_early", "ts": "2026-11-11T18:52:39Z", "type": "kmaker_order"}
+{"fee": 0.0105, "outcome": "No", "price": 0.969, "shares": 5, "title": "Will the price of Solana be between $90 and $100 on November 12?", "token": "59411292897241287661772224427516737826635975031649615562908998869490960744470", "track": "endgame_sell98", "ts": "2026-11-11T18:56:35Z", "type": "paper_buy"}
+{"minutes_left": 3.26, "price": 0.951, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:44Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.968, "queue": 5041.08, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:45Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV111400-00", "track": "kc_maker_safe", "ts": "2026-11-11T18:56:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.992, "queue": 970.19, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:47Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:47Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.996, "queue": 4748.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:48Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.996, "queue": 4748.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV111400-00", "track": "kc_maker_safe", "ts": "2026-11-11T18:56:49Z", "type": "kmaker_order"}
+{"minutes_left": 3.26, "price": 0.976, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV111400-00", "track": "kc_maker", "ts": "2026-11-11T18:56:49Z", "type": "kmaker_order"}
