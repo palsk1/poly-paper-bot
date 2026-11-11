@@ -184,6 +184,49 @@ def peek(team="mouz"):
                 print(re.sub(r"\s+", " ", txt)[:2500])
 
 
+def pprobe(slug="spirit-vs-fut-cs2-11-11-2026", mid="132592"):
+    """Probe `cs2_pprobe`: find where bo3.gg keeps per-player ratings for a match (Jan, 11 Nov: "what about players'
+    rating the last couple of days?")."""
+    api = "https://api.bo3.gg/api/v1/"
+    st, body = get(f"https://bo3.gg/matches/{slug}")
+    html = body.decode("utf-8", "replace")
+    js = sorted(set(re.findall(r'(/_nuxt/[A-Za-z0-9_.-]+\.js)', html)))
+    seen, todo, paths = set(), list(js), collections.Counter()
+    while todo and len(seen) < 400:
+        u = todo.pop()
+        if u in seen:
+            continue
+        seen.add(u)
+        t = get("https://bo3.gg" + u)[1].decode("utf-8", "replace")
+        for x in re.findall(r'["\'`](?:\./)?([A-Za-z0-9_.-]+\.js)["\'`]', t):
+            todo.append("/_nuxt/" + x)
+        for ep in re.findall(r'["\'`](/?(?:api/v\d/)?[a-z_]*(?:player|stat|game|round|rating)[a-z_/${}.:-]{0,70})["\'`]', t):
+            paths[ep] += 1
+    print("page", st, "scripts read", len(seen))
+    for pth, n in sorted(paths.items()):
+        print(f"  {n:3}  {pth}")
+    for u in [f"matches/{slug}", f"matches/{mid}", f"matches/{slug}?with=games,players,players_stats",
+              f"games?filter[games.match_id][eq]={mid}", f"matches/{slug}/games", f"matches/{slug}/players_stats",
+              f"matches/{mid}/players_stats", f"matches/{slug}/player_stats", f"players_stats?filter[match_id][eq]={mid}",
+              f"player_stats?filter[player_stats.match_id][eq]={mid}", f"matches/{slug}/stats", f"matches/{slug}/lineups",
+              f"matches/{slug}/players", f"game_player_stats?filter[match_id][eq]={mid}"]:
+        st, b = get(api + u)
+        t = b.decode("utf-8", "replace")
+        print("TRY", st, len(t), u, "::", re.sub(r"\s+", " ", t)[:700])
+    # follow a game id if we found one
+    st, b = get(api + f"games?filter[games.match_id][eq]={mid}")
+    try:
+        g = json.loads(b)
+        gid = (g.get("results") or g.get("data") or [{}])[0].get("id")
+    except Exception:
+        gid = None
+    if gid:
+        for u in [f"games/{gid}", f"games/{gid}/players_stats", f"games/{gid}/player_stats", f"games/{gid}/stats",
+                  f"games/{gid}/rounds", f"players_stats?filter[game_id][eq]={gid}"]:
+            st, b = get(api + u)
+            print("GAME", st, u, "::", re.sub(r"\s+", " ", b.decode("utf-8", "replace"))[:900])
+
+
 def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
     """Probe `cs2_jsapi`: read bo3.gg's page scripts to find which API paths its prediction widget calls."""
     st, pb = get("https://bo3.gg/predictions")
@@ -653,6 +696,8 @@ if __name__ == "__main__":
         fetch(*sys.argv[2:3])
     elif cmd == "peek":
         peek(*sys.argv[2:3])
+    elif cmd == "pprobe":
+        pprobe(*sys.argv[2:4])
     elif cmd == "jsapi":
         jsapi(*sys.argv[2:3])
     elif cmd == "ai":
