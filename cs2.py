@@ -182,6 +182,37 @@ def peek(team="mouz"):
                 print(re.sub(r"\s+", " ", txt)[:2500])
 
 
+def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
+    """Probe `cs2_jsapi`: read bo3.gg's page scripts to find which API paths its prediction widget calls."""
+    st, body = get(f"https://bo3.gg/matches/{slug}")
+    html = body.decode("utf-8", "replace")
+    js = sorted(set(re.findall(r'(/_nuxt/[A-Za-z0-9_.-]+\.js)', html)))
+    print(st, len(html), "scripts", len(js))
+    seen, todo, paths = set(), list(js), collections.Counter()
+    while todo and len(seen) < 400:
+        u = todo.pop()
+        if u in seen:
+            continue
+        seen.add(u)
+        st, b = get("https://bo3.gg" + u)
+        t = b.decode("utf-8", "replace")
+        for x in re.findall(r'["\'`](?:\./)?([A-Za-z0-9_.-]+\.js)["\'`]', t):
+            todo.append("/_nuxt/" + x)
+        for k in re.finditer(r"predict|forecast|ai_|odds|probabilit|winrate|win_rate", t, re.I):
+            seg = t[max(0, k.start() - 120):k.start() + 160]
+            for pth in re.findall(r'["\'`](/?(?:api/)?v\d/[^"\'`]{3,80}|/[a-z_]+/[a-z_/{}$.:-]{3,60})["\'`]', seg):
+                paths[pth] += 1
+    print("scripts read", len(seen))
+    for pth, n in paths.most_common(80):
+        print(f"  {n:3}  {pth}")
+    for u in ["matches/%s/predictions" % slug, "predictions/matches/%s" % slug, "matches/%s/ai_predictions" % slug,
+              "ai/predictions?filter[match_slug][eq]=%s" % slug, "matches/%s/forecast" % slug, "games/predictions",
+              "match_predictions?filter[match_predictions.match_slug][eq]=%s" % slug, "predictions?page[limit]=2"]:
+        for base in ("https://api.bo3.gg/api/v1/", "https://api.bo3.gg/api/v2/"):
+            st, b = get(base + u)
+            print(st, len(b), base + u, b[:300].decode("utf-8", "replace") if st == 200 else "")
+
+
 # ======================================================================== the test
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REL = "https://github.com/palsk1/poly-paper-bot/releases/download/price-store/"
@@ -427,6 +458,8 @@ if __name__ == "__main__":
         fetch(*sys.argv[2:3])
     elif cmd == "peek":
         peek(*sys.argv[2:3])
+    elif cmd == "jsapi":
+        jsapi(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
     elif cmd == "exam":
