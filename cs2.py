@@ -305,6 +305,45 @@ def ai(since="2026-02-15"):
         subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
 
 
+def pstats(since="2025-12-01"):
+    """Probe `cs2_pstats`: bo3.gg per-player stats for every finished match since `since`
+    (api matches/{slug}/players_stats: one row per player per match, bo3.gg's own rating ~6 = average)
+    -> bt_cache/cs2/bo3_pstats.json.gz (price store). Jan, 11 Nov: "what about players' rating the last couple of days?"."""
+    import subprocess
+    from concurrent.futures import ThreadPoolExecutor
+    d = os.path.join(ROOT, "bt_cache", "cs2")
+    M = [x for x in load(FILES[2]) if (x.get("start_date") or "") >= since and x.get("slug")]
+    print("matches to read", len(M))
+    api = "https://api.bo3.gg/api/v1/matches/"
+
+    def one(x):
+        r = jget(api + x["slug"] + "/players_stats", tries=3)
+        if not isinstance(r, list):
+            return x["id"], None
+        rows = []
+        for p in r:
+            tid = (p.get("team_clan") or {}).get("team_id")
+            rows.append([p.get("steam_profile_id"), tid, p.get("player_rating"), p.get("kills"), p.get("death"),
+                         p.get("adr"), p.get("kast")])
+        return x["id"], rows
+    out, bad, shown = {}, 0, False
+    with ThreadPoolExecutor(8) as ex:
+        for i, (mid, rows) in enumerate(ex.map(one, M)):
+            if rows is None:
+                bad += 1
+            elif rows:
+                out[mid] = rows
+                if not shown:
+                    print("SAMPLE", mid, rows[:3])
+                    shown = True
+            if i % 1000 == 0:
+                print("  ", i, "with stats", len(out), "failed", bad)
+    json.dump(out, gzip.open(os.path.join(d, "bo3_pstats.json.gz"), "wt"))
+    print("saved", len(out), "matches with player stats; failed", bad, "of", len(M))
+    if os.environ.get("GITHUB_ACTIONS"):
+        subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
+
+
 # ======================================================================== the test
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REL = "https://github.com/palsk1/poly-paper-bot/releases/download/price-store/"
@@ -696,6 +735,8 @@ if __name__ == "__main__":
         fetch(*sys.argv[2:3])
     elif cmd == "peek":
         peek(*sys.argv[2:3])
+    elif cmd == "pstats":
+        pstats(*sys.argv[2:3])
     elif cmd == "pprobe":
         pprobe(*sys.argv[2:4])
     elif cmd == "jsapi":
