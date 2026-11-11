@@ -297,14 +297,48 @@ async def run():
     while True:
         try:
             async with websockets.connect(WS, ping_interval=None, max_size=2 ** 22) as ws:
+                counts = {"req": 0, "trade": 0, "other": 0}
+
+                async def dispatch(msg):
+                    typ = msg.get("type")
+                    if typ == "RFQ_REQUEST":
+                        counts["req"] += 1
+                        if counts["req"] <= 3:
+                            print("request heard:", msg.get("rfq_id"), len(msg.get("leg_position_ids") or []), "legs", flush=True)
+                        asyncio.create_task(handle_request(msg, cat, log, loop))
+                    elif typ == "RFQ_TRADE":
+                        counts["trade"] += 1
+                        if counts["trade"] <= 2:
+                            print("trade heard:", json.dumps(msg)[:600], flush=True)
+                        log.put({"k": "trade", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
+                                 "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
+                                 "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids"),
+                                 "raw": msg})
+                    elif str(typ).lower() == "ping":
+                        await ws.send(json.dumps({**msg, "type": "pong"}))   # if they ping in text, answer in text
+                    else:
+                        counts["other"] += 1
+                        if counts["other"] <= 5:
+                            print("other message:", json.dumps(msg)[:300], flush=True)
+                        log.put({"k": "note", "what": "msg", "msg": msg})
+
                 await ws.send(json.dumps(auth))
-                ok = json.loads(await asyncio.wait_for(ws.recv(), 30))
-                log.put({"k": "note", "what": "auth", "ok": ok.get("success"), "role": ok.get("role"), "err": ok.get("error")})
-                print("auth:", ok, flush=True)
+                # requests can arrive before the login answer: handle them, and wait up to 30 s for the answer itself
+                ok, t_end = None, time.time() + 30
+                while ok is None and time.time() < t_end:
+                    msg = json.loads(await asyncio.wait_for(ws.recv(), max(1, t_end - time.time())))
+                    if msg.get("type") == "auth":
+                        ok = msg
+                    else:
+                        await dispatch(msg)
+                ok = ok or {}
+                log.put({"k": "note", "what": "auth", "ok": ok.get("success"), "sig": auth["identity"]["signature_type"],
+                         "err": ok.get("error") or ok.get("message")})
+                print("login:", ok, "wallet type", auth["identity"]["signature_type"], flush=True)
                 if not ok.get("success"):
-                    # wrong wallet type is the usual cause: try the next one (0 plain, 1 email login, 2 browser wallet, 3 deposit)
+                    # a wrong wallet type is the usual cause: try the next one (0 plain, 1 email login, 2 browser wallet, 3 deposit)
                     tried.add(auth["identity"]["signature_type"])
-                    left = [x for x in (3, 2, 1, 0) if x not in tried]
+                    left = [x for x in (0, 3, 2, 1) if x not in tried]
                     if left:
                         auth["identity"]["signature_type"] = left[0]
                         continue
@@ -312,7 +346,6 @@ async def run():
                     await asyncio.sleep(300)
                     continue
                 backoff = 2
-                counts = {"req": 0, "trade": 0, "other": 0}
                 last_note = time.time()
                 while True:
                     try:
@@ -320,26 +353,10 @@ async def run():
                     except asyncio.TimeoutError:
                         raw = None
                     if raw:
-                        msg = json.loads(raw)
-                        typ = msg.get("type")
-                        if typ == "RFQ_REQUEST":
-                            counts["req"] += 1
-                            if counts["req"] <= 3:
-                                print("request heard:", msg.get("rfq_id"), len(msg.get("leg_position_ids") or []), "legs", flush=True)
-                            asyncio.create_task(handle_request(msg, cat, log, loop))
-                        elif typ == "RFQ_TRADE":
-                            counts["trade"] += 1
-                            log.put({"k": "trade", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
-                                     "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
-                                     "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids")})
-                        elif str(typ).lower() == "ping":
-                            await ws.send(json.dumps({**msg, "type": "pong"}))   # if they ping in text, answer in text
-                        else:
-                            counts["other"] += 1
-                            log.put({"k": "note", "what": "msg", "msg": msg})
+                        await dispatch(json.loads(raw))
                     if time.time() - last_note > 600:
                         last_note = time.time()
-                        log.put({"k": "note", "what": "counts", "counts": counts})
+                        log.put({"k": "note", "what": "counts", "counts": dict(counts)})
                         print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "heard so far:", counts, flush=True)
                     if time.time() - last_up > 3600:
                         last_up = time.time()
