@@ -26,6 +26,7 @@ import os
 import shutil
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -46,6 +47,7 @@ RULES = {
 }
 MAX_SPREAD = 0.10      # a leg whose book is wider than 10c (or empty) has no trustworthy middle price: no quote
 MAX_QUOTE = 0.97
+PAGE_PAUSE = 0.5     # seconds between catalog pages (Polymarket said 429 'too many requests' at full speed)
 
 
 def now_ms():
@@ -58,10 +60,19 @@ def http(method, url, body=None, headers=None, timeout=20):
     if data is not None:
         h["Content-Type"] = "application/json"
     h.update(headers or {})
-    req = urllib.request.Request(url, data=data, headers=h, method=method)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        raw = r.read()
-    return json.loads(raw.decode()) if raw else None
+    for i in range(6):
+        req = urllib.request.Request(url, data=data, headers=h, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            return json.loads(raw.decode()) if raw else None
+        except urllib.error.HTTPError as e:
+            # 429 = "slow down", 5xx = their hiccup: wait (as long as they ask, else 2, 4, 8, 16, 32 s) and try again
+            if (e.code == 429 or e.code >= 500) and i < 5:
+                wait = fnum(e.headers.get("Retry-After"), None) if e.headers else None
+                time.sleep(min(max(wait or 0, 2 ** (i + 1)), 120))
+                continue
+            raise
 
 
 def fnum(x, d=None):
@@ -90,6 +101,7 @@ class Catalog:
             cur = res.get("next_cursor")
             if not cur:
                 break
+            time.sleep(PAGE_PAUSE)
         gm = {}
         conds = [m["condition_id"] for m in markets if m.get("condition_id")]
         for i in range(0, len(conds), 50):
@@ -99,6 +111,7 @@ class Catalog:
                     gm[(g.get("conditionId") or "").lower()] = g
             except Exception as e:  # noqa: BLE001
                 print("gamma batch failed:", e)
+            time.sleep(PAGE_PAUSE)
         for m in markets:
             g = gm.get((m.get("condition_id") or "").lower()) or {}
             toks = g.get("clobTokenIds")
@@ -261,10 +274,23 @@ async def run():
     log = Log(os.environ.get("DATA_DIR", "~/quoter-data"))
     cat = Catalog()
     loop = asyncio.get_running_loop()
-    n = await loop.run_in_executor(None, cat.refresh)
-    log.put({"k": "note", "what": "start", "catalog": n, "rules": RULES})
-    print("catalog:", n, flush=True)
-    last_cat, last_up = time.time(), time.time()
+    log.put({"k": "note", "what": "start", "rules": RULES})
+
+    async def catalog_loop():
+        # in the background, so a slow or refused catalog never stops us listening; legs not known yet are logged as such
+        while True:
+            try:
+                n = await loop.run_in_executor(None, cat.refresh)
+                log.put({"k": "note", "what": "catalog", "catalog": n})
+                print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "catalog (markets, legs, legs with prices):", n, flush=True)
+                await asyncio.sleep(600)
+            except Exception as e:  # noqa: BLE001
+                log.put({"k": "note", "what": "catalog failed", "err": str(e)})
+                print("catalog failed, trying again in 2 min:", e, flush=True)
+                await asyncio.sleep(120)
+
+    asyncio.create_task(catalog_loop())
+    last_up = time.time()
     auth = creds()
     tried = set()
     backoff = 2
@@ -287,6 +313,7 @@ async def run():
                     continue
                 backoff = 2
                 counts = {"req": 0, "trade": 0, "other": 0}
+                last_note = time.time()
                 while True:
                     try:
                         raw = await asyncio.wait_for(ws.recv(), 60)
@@ -297,23 +324,23 @@ async def run():
                         typ = msg.get("type")
                         if typ == "RFQ_REQUEST":
                             counts["req"] += 1
+                            if counts["req"] <= 3:
+                                print("request heard:", msg.get("rfq_id"), len(msg.get("leg_position_ids") or []), "legs", flush=True)
                             asyncio.create_task(handle_request(msg, cat, log, loop))
                         elif typ == "RFQ_TRADE":
                             counts["trade"] += 1
                             log.put({"k": "trade", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
                                      "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
                                      "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids")})
+                        elif str(typ).lower() == "ping":
+                            await ws.send(json.dumps({**msg, "type": "pong"}))   # if they ping in text, answer in text
                         else:
                             counts["other"] += 1
                             log.put({"k": "note", "what": "msg", "msg": msg})
-                    if time.time() - last_cat > 600:
-                        last_cat = time.time()
-                        try:
-                            n = await loop.run_in_executor(None, cat.refresh)
-                            log.put({"k": "note", "what": "catalog", "catalog": n, "counts": counts})
-                            print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "catalog", n, counts, flush=True)
-                        except Exception as e:  # noqa: BLE001
-                            log.put({"k": "note", "what": "catalog failed", "err": str(e)})
+                    if time.time() - last_note > 600:
+                        last_note = time.time()
+                        log.put({"k": "note", "what": "counts", "counts": counts})
+                        print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "heard so far:", counts, flush=True)
                     if time.time() - last_up > 3600:
                         last_up = time.time()
                         try:

@@ -26,7 +26,7 @@ Environment=DATA_DIR=$HOME/quoter-data
 ExecStartPre=-/usr/bin/git -C $HOME/poly-paper-bot pull -q
 ExecStart=$HOME/qenv/bin/python -u quoter/quoter.py run
 Restart=always
-RestartSec=10
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
