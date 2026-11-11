@@ -52,6 +52,34 @@ def peek2():
     show("combo activity rows in /v2/activity", [a for a in act if a.get("is_combo")][:3], 2500)
 
 
+def peek3(n=12):
+    """Show a few 2-3 leg combo fills with each leg's question, side and chart price, to sanity-check the legs-multiplied number."""
+    import random
+    ws = wallets(40)
+    random.seed(3)
+    pos = []
+    for u in ws[:25]:
+        pos += [p for p in positions(u, 1) if 2 <= len(p.get("legs") or []) <= 3]
+    random.shuffle(pos)
+    for p in pos[:n]:
+        cid = p["combo_condition_id"]
+        fills = rows(get(DATA + "/v2/trades", {"condition": cid, "limit": 50}))
+        print(f"\nCOMBO {cid[:14]} status {p.get('status')} avg {p.get('entry_avg_price_usdc')} first {p.get('first_entry_at')} fills {len(fills)}")
+        for f in fills[:4]:
+            print(f"   fill {f.get('side')} {f.get('price'):.4f} x {f.get('size'):.1f} at {f.get('timestamp')}")
+        t = fills[-1]["timestamp"] if fills else iso_t(p["first_entry_at"])
+        prod = 1
+        for lg in p["legs"]:
+            m = lg.get("market") or {}
+            tok = leg_token(lg)
+            pr, age = price_at(tok, t) if tok else (None, None)
+            g = _tok.get(m.get("market_id"))
+            print(f"   leg {m.get('question')!r} outcome[{lg.get('leg_outcome_index')}]={lg.get('leg_outcome_label')} {lg.get('leg_status')} "
+                  f"chart {pr} ({age}s old) end {m.get('end_date')}")
+            prod *= pr or 0
+        print(f"   legs multiplied {prod:.4f} vs first fill {fills[-1]['price'] if fills else None}")
+
+
 def peek():
     cat = get(RFQ + "/v1/rfq/combo-markets", {"limit": 100})
     ms = rows(cat)
@@ -153,8 +181,8 @@ def leg_token(leg):
             except ValueError:
                 toks = None
         _tok[mid] = toks or []
-        if len(_tok) <= 3:
-            print("debug gamma", mid, str(m)[:300])
+        if len(_tok) <= 2:
+            print("debug gamma", mid, {k: m.get(k) for k in ("question", "outcomes", "clobTokenIds", "gameStartTime", "endDate")} if isinstance(m, dict) else m)
     toks = _tok[mid]
     return toks[oi] if isinstance(oi, int) and oi < len(toks) else None
 
@@ -167,7 +195,7 @@ def price_at(tok, t):
     res = get(CLOB + "/prices-history", {"market": tok, "startTs": t - 3 * 3600, "endTs": t + 60, "fidelity": 1})
     pts = [(bot.fnum(x.get("t"), 0), bot.fnum(x.get("p"), None)) for x in bot.envelope_rows(res, "history", "data") if isinstance(x, dict)]
     pts = [x for x in pts if x[1] is not None and x[0] <= t + 60]
-    if _dbg[0] < 3:
+    if _dbg[0] < 0:
         _dbg[0] += 1
         print("debug hist", tok[:12], t, str(res)[:300])
     return (pts[-1][1], t - pts[-1][0]) if pts else (None, None)
@@ -258,5 +286,5 @@ def run(cap_w=160, cap_pos=1500):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "peek2": peek2, "run": run}[cmd]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
