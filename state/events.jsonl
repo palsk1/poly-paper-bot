@@ -5949,3 +5949,6 @@
 {"fee": 0.0624, "outcome": "No", "price": 0.52, "shares": 5, "title": "Will the highest temperature in Houston be 69\u00b0F or below on November 11?", "token": "25503017908824075381048113826593530564917831702097767512375050330189733101451", "track": "wx_forecast", "ts": "2026-11-11T11:46:45Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV110645-45", "track": "kc_maker", "ts": "2026-11-11T11:46:55Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV110645-45", "track": "kc_maker_safe", "ts": "2026-11-11T11:46:55Z", "type": "kmaker_fill"}
+{"minutes_left": 7.32, "price": 0.951, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV110700-00", "track": "kc_maker_early", "ts": "2026-11-11T11:52:41Z", "type": "kmaker_order"}
+{"minutes_left": 7.32, "price": 0.902, "queue": 0, "shares": 11, "side": "yes", "ticker": "KXHYPE15M-26NOV110700-00", "track": "kc_maker_early", "ts": "2026-11-11T11:52:41Z", "type": "kmaker_order"}
+{"minutes_left": 7.32, "price": 0.932, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV110700-00", "track": "kc_maker_early", "ts": "2026-11-11T11:52:41Z", "type": "kmaker_order"}
