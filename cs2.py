@@ -184,6 +184,49 @@ def peek(team="mouz"):
                 print(re.sub(r"\s+", " ", txt)[:2500])
 
 
+def pprobe(slug="spirit-vs-fut-cs2-11-11-2026", mid="132592"):
+    """Probe `cs2_pprobe`: find where bo3.gg keeps per-player ratings for a match (Jan, 11 Nov: "what about players'
+    rating the last couple of days?")."""
+    api = "https://api.bo3.gg/api/v1/"
+    st, body = get(f"https://bo3.gg/matches/{slug}")
+    html = body.decode("utf-8", "replace")
+    js = sorted(set(re.findall(r'(/_nuxt/[A-Za-z0-9_.-]+\.js)', html)))
+    seen, todo, paths = set(), list(js), collections.Counter()
+    while todo and len(seen) < 400:
+        u = todo.pop()
+        if u in seen:
+            continue
+        seen.add(u)
+        t = get("https://bo3.gg" + u)[1].decode("utf-8", "replace")
+        for x in re.findall(r'["\'`](?:\./)?([A-Za-z0-9_.-]+\.js)["\'`]', t):
+            todo.append("/_nuxt/" + x)
+        for ep in re.findall(r'["\'`](/?(?:api/v\d/)?[a-z_]*(?:player|stat|game|round|rating)[a-z_/${}.:-]{0,70})["\'`]', t):
+            paths[ep] += 1
+    print("page", st, "scripts read", len(seen))
+    for pth, n in sorted(paths.items()):
+        print(f"  {n:3}  {pth}")
+    for u in [f"matches/{slug}", f"matches/{mid}", f"matches/{slug}?with=games,players,players_stats",
+              f"games?filter[games.match_id][eq]={mid}", f"matches/{slug}/games", f"matches/{slug}/players_stats",
+              f"matches/{mid}/players_stats", f"matches/{slug}/player_stats", f"players_stats?filter[match_id][eq]={mid}",
+              f"player_stats?filter[player_stats.match_id][eq]={mid}", f"matches/{slug}/stats", f"matches/{slug}/lineups",
+              f"matches/{slug}/players", f"game_player_stats?filter[match_id][eq]={mid}"]:
+        st, b = get(api + u)
+        t = b.decode("utf-8", "replace")
+        print("TRY", st, len(t), u, "::", re.sub(r"\s+", " ", t)[:700])
+    # follow a game id if we found one
+    st, b = get(api + f"games?filter[games.match_id][eq]={mid}")
+    try:
+        g = json.loads(b)
+        gid = (g.get("results") or g.get("data") or [{}])[0].get("id")
+    except Exception:
+        gid = None
+    if gid:
+        for u in [f"games/{gid}", f"games/{gid}/players_stats", f"games/{gid}/player_stats", f"games/{gid}/stats",
+                  f"games/{gid}/rounds", f"players_stats?filter[game_id][eq]={gid}"]:
+            st, b = get(api + u)
+            print("GAME", st, u, "::", re.sub(r"\s+", " ", b.decode("utf-8", "replace"))[:900])
+
+
 def jsapi(slug="sokerorg-vs-mouz-nxt-09-11-2026"):
     """Probe `cs2_jsapi`: read bo3.gg's page scripts to find which API paths its prediction widget calls."""
     st, pb = get("https://bo3.gg/predictions")
@@ -258,6 +301,45 @@ def ai(since="2026-02-15"):
     json.dump(out, gzip.open(os.path.join(d, "bo3_ai.json.gz"), "wt"))
     print("saved", len(out), "with ai:", sum(1 for x in out if x.get("ai_predictions")),
           "with odds:", sum(1 for x in out if x.get("bet_updates")))
+    if os.environ.get("GITHUB_ACTIONS"):
+        subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
+
+
+def pstats(since="2025-12-01"):
+    """Probe `cs2_pstats`: bo3.gg per-player stats for every finished match since `since`
+    (api matches/{slug}/players_stats: one row per player per match, bo3.gg's own rating ~6 = average)
+    -> bt_cache/cs2/bo3_pstats.json.gz (price store). Jan, 11 Nov: "what about players' rating the last couple of days?"."""
+    import subprocess
+    from concurrent.futures import ThreadPoolExecutor
+    d = os.path.join(ROOT, "bt_cache", "cs2")
+    M = [x for x in load(FILES[2]) if (x.get("start_date") or "") >= since and x.get("slug")]
+    print("matches to read", len(M))
+    api = "https://api.bo3.gg/api/v1/matches/"
+
+    def one(x):
+        r = jget(api + x["slug"] + "/players_stats", tries=3)
+        if not isinstance(r, list):
+            return x["id"], None
+        rows = []
+        for p in r:
+            tid = (p.get("team_clan") or {}).get("team_id")
+            rows.append([p.get("steam_profile_id"), tid, p.get("player_rating"), p.get("kills"), p.get("death"),
+                         p.get("adr"), p.get("kast")])
+        return x["id"], rows
+    out, bad, shown = {}, 0, False
+    with ThreadPoolExecutor(8) as ex:
+        for i, (mid, rows) in enumerate(ex.map(one, M)):
+            if rows is None:
+                bad += 1
+            elif rows:
+                out[mid] = rows
+                if not shown:
+                    print("SAMPLE", mid, rows[:3])
+                    shown = True
+            if i % 1000 == 0:
+                print("  ", i, "with stats", len(out), "failed", bad)
+    json.dump(out, gzip.open(os.path.join(d, "bo3_pstats.json.gz"), "wt"))
+    print("saved", len(out), "matches with player stats; failed", bad, "of", len(M))
     if os.environ.get("GITHUB_ACTIONS"):
         subprocess.run([sys.executable, "store.py", "push", "bt_cache"], check=False)
 
@@ -414,6 +496,162 @@ def model_p(r, s, kind):
     return e if s == 0 else 1 - e
 
 
+def _ts(s):
+    try:
+        return dt.datetime.fromisoformat(s).timestamp() if s else None
+    except ValueError:
+        return None
+
+
+def add_form(rows):
+    """Team form from bo3.gg results that ENDED before the match (no look-ahead): r['form'][side] =
+    won5 / lost3 / lost2 / new (under 15 past matches) / rest (hours since its last match) / roster (Valve list
+    changed by 1+ player since the month before, or None)."""
+    M = load("bt_cache/cs2/bo3_matches.json.gz")
+    hist = collections.defaultdict(list)
+    for x in M:
+        a_, b_, w_ = x.get("team1_id"), x.get("team2_id"), x.get("winner_team_id")
+        if not a_ or not b_ or w_ not in (a_, b_):
+            continue
+        t0 = _ts(x.get("start_date"))
+        te = _ts(x.get("end_date")) or (t0 + 3 * H if t0 else None)
+        if not te:
+            continue
+        for tid in (a_, b_):
+            hist[tid].append((te, w_ == tid))
+    for h in hist.values():
+        h.sort()
+    ends = {k: [y[0] for y in h] for k, h in hist.items()}
+    V = load("bt_cache/cs2/valve.json.gz")
+    vd = sorted(V)
+    ros = {d: {} for d in vd}
+    for d in vd:
+        for _, _, tm, pl in V[d]:
+            ros[d].setdefault(nm(tm), frozenset(p.strip().lower() for p in pl.split(",") if p.strip()))
+
+    def roster(name, t):
+        d = dt.datetime.fromtimestamp(t, dt.timezone.utc).strftime("%Y-%m-%d")
+        i = bisect.bisect_right(vd, d) - 1
+        if i < 1:
+            return None
+        a_, b_ = ros[vd[i]].get(name), ros[vd[i - 1]].get(name)
+        return None if a_ is None or b_ is None else len(a_ - b_) >= 1
+
+    for r in rows:
+        r["form"] = None
+        if not r.get("agree"):
+            continue
+        f = []
+        for tid, name in ((r["ia"], r["a"]), (r["ib"], r["b"])):
+            h = hist.get(tid, [])
+            pst = h[:bisect.bisect_left(ends.get(tid, []), r["gst"] - 60)]
+            if len(pst) < 5:
+                break
+            f.append({"won5": all(y[1] for y in pst[-5:]), "lost3": not any(y[1] for y in pst[-3:]),
+                      "lost2": not pst[-1][1] and not pst[-2][1], "new": len(pst) < 15,
+                      "rest": (r["gst"] - pst[-1][0]) / H, "roster": roster(nm(name), r["gst"])})
+        if len(f) == 2:
+            r["form"] = f
+    return rows
+
+
+def add_players(rows, days=3):
+    """Players' recent form (Jan, 11 Nov). For each team in each match: the five players who played it (lineups are
+    announced before the match), each player's average bo3.gg rating in matches that ENDED in the last `days` days
+    before the start (`hot`), and over the 60 days before that (`base`). r['pf'][side] = {hot, base, delta, n}
+    where delta = hot - base averaged over players with both, n = players with recent matches."""
+    P = load("bt_cache/cs2/bo3_pstats.json.gz")
+    M = {x["id"]: x for x in load(FILES[2])}
+    hist = collections.defaultdict(list)      # player -> [(end, rating)]
+    lineup = {}
+    for mid, ps in P.items():
+        x = M.get(int(mid))
+        if not x:
+            continue
+        te = _ts(x.get("end_date")) or ((_ts(x.get("start_date")) or 0) + 3 * H)
+        lu = collections.defaultdict(list)
+        for sp, tid, rt, *_ in ps:
+            if sp is None or rt is None:
+                continue
+            hist[sp].append((te, rt))
+            lu[tid].append(sp)
+        lineup[int(mid)] = lu
+    for h in hist.values():
+        h.sort()
+    ends = {k: [y[0] for y in h] for k, h in hist.items()}
+
+    def form(sp, t):
+        h, e = hist.get(sp, []), ends.get(sp, [])
+        j = bisect.bisect_left(e, t - 60)
+        i = bisect.bisect_left(e, t - days * 86400)
+        k = bisect.bisect_left(e, t - 60 * 86400)
+        hot = [y[1] for y in h[i:j]]
+        base = [y[1] for y in h[k:i]]
+        return (statistics.mean(hot) if hot else None, statistics.mean(base) if len(base) >= 3 else None)
+    for r in rows:
+        r["pf"] = None
+        lu = lineup.get(r.get("bo3_id"))
+        if not lu or not r.get("agree"):
+            continue
+        out = []
+        for tid in (r["ia"], r["ib"]):
+            fs = [form(sp, r["gst"]) for sp in lu.get(tid, [])]
+            if len(fs) < 4:
+                break
+            hot = [a for a, b in fs if a is not None]
+            dl = [a - b for a, b in fs if a is not None and b is not None]
+            base = [b for a, b in fs if b is not None]
+            out.append({"hot": statistics.mean(hot) if hot else None, "base": statistics.mean(base) if base else None,
+                        "delta": statistics.mean(dl) if len(dl) >= 3 else None, "n": len(hot)})
+        if len(out) == 2:
+            r["pf"] = out
+    return rows
+
+
+def players():
+    """`python3 cs2.py players`: does the players' last few days say anything the price doesn't?"""
+    for days in (2, 3, 7):
+        rows = add_players(build(), days)
+        R = [r for r in rows if r["p1"] is not None and 0.03 < r["p1"] < 0.97 and r["pf"]
+             and r["pf"][0]["delta"] is not None and r["pf"][1]["delta"] is not None]
+        R.sort(key=lambda r: r["gst"])
+        print(f"\n=== last {days} days: {len(R)} matches with both teams' recent player form ===")
+        # 1) does recent form (hot - base, team vs team) predict on top of the price? split into 5 groups
+        def g(r):
+            return r["pf"][0]["delta"] - r["pf"][1]["delta"]
+        qs = sorted(g(r) for r in R)
+        cuts = [qs[int(len(qs) * f)] for f in (0.2, 0.4, 0.6, 0.8)]
+        print("| Team A's players hot minus team B's | Matches | A won per 100: price said / really | Back A per $100 | Back B per $100 |")
+        print("|---|---|---|---|---|")
+        for lo, hi, lab in ((-9, cuts[0], "B much hotter"), (cuts[0], cuts[1], "B a bit hotter"), (cuts[1], cuts[2], "even"),
+                            (cuts[2], cuts[3], "A a bit hotter"), (cuts[3], 9, "A much hotter")):
+            sel = [r for r in R if lo <= g(r) < hi]
+            a = [100 / (r["p1"] + 0.01) * (r["w"] == 0) - 100 for r in sel]
+            b = [100 / (1 - r["p1"] + 0.01) * (r["w"] == 1) - 100 for r in sel]
+            print(f"| {lab} ({lo:+.2f} to {hi:+.2f}) | {len(sel)} | {100 * statistics.mean(r['p1'] for r in sel):.1f} / "
+                  f"{100 * statistics.mean(r['w'] == 0 for r in sel):.1f} | {statistics.mean(a):+.2f} | {statistics.mean(b):+.2f} |")
+        # 2) rules: back the hotter team (gap 0.3+ / 0.5+), and only when it's the underdog
+        for gap in (0.3, 0.5):
+            for dog in (False, True):
+                sel = []
+                for r in R:
+                    for s_ in (0, 1):
+                        d = (g(r) if s_ == 0 else -g(r))
+                        q = side_p(r, s_, "p1")
+                        if d >= gap and (not dog or q < 0.5):
+                            sel.append((r, s_, q, 1))
+                print(chart_line(f"back the team whose players are {gap}+ hotter{' (underdog only)' if dog else ''}", sel))
+        # 3) also: hot level, not change (players' recent average vs opponent's)
+        sel = [(r, s_, side_p(r, s_, "p1"), 1) for r in R for s_ in (0, 1)
+               if r["pf"][s_]["hot"] is not None and r["pf"][1 - s_]["hot"] is not None
+               and r["pf"][s_]["hot"] - r["pf"][1 - s_]["hot"] >= 0.5 and side_p(r, s_, "p1") < 0.5]
+        print(chart_line("underdog whose players' recent rating is 0.5+ above the favorite's", sel))
+        h = len(R) // 2
+        for lab, part in (("first half", R[:h]), ("second half", R[h:])):
+            sel = [(r, s_, side_p(r, s_, "p1"), 1) for r in part for s_ in (0, 1) if (g(r) if s_ == 0 else -g(r)) >= 0.5]
+            print("   ", chart_line(lab + ", hotter by 0.5+", sel))
+
+
 def rated(rows, kind):
     if kind == "elo":
         return [r for r in rows if r.get("elo") is not None and r.get("agree") and min(r["na"], r["nb"]) >= 15]
@@ -436,9 +674,21 @@ RULES = [
     ("aisweep", "CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before", "p1", 1,
      lambda r, s, q: r.get("ai") and r["ai"]["side"] == s and r["ai"]["sweep"]),
     ("ai24", "CS2: back bo3.gg's AI pick, a day before", "p24", 24, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
+    # Jan, 11 Nov: "what do the losers have in common? Upsets? Roster changes? Start of a losing streak?"
+    # Picked from the `upsets` table (34 patterns x 2 sides), so the luck bar counts them all.
+    ("dogclose", "CS2: back the underdog in a close match (favorite 50-60c), 1h before", "p1", 1,
+     lambda r, s, q: 0.40 < q < 0.50),
+    ("dogstreak", "CS2: back the underdog when the favorite won its last 5, 1h before", "p1", 1,
+     lambda r, s, q: q < 0.50 and r.get("form") and r["form"][1 - s]["won5"]),
+    ("favdrop", "CS2: back the favorite after its price fell 5c+ since a day before, 1h before", "p1", 1,
+     lambda r, s, q: 0.50 <= q < 0.97 and r["p24"] is not None and q - side_p(r, s, "p24") <= -0.05),
+    ("bo1fav", "CS2: favorite at 60-97c in a best-of-1, 1h before", "p1", 1,
+     lambda r, s, q: r.get("bo") == 1 and 0.60 <= q < 0.97),
+    ("doglost3", "CS2: back the favorite when the underdog lost its last 3, 1h before", "p1", 1,
+     lambda r, s, q: q >= 0.50 and r.get("form") and r["form"][1 - s]["lost3"]),
 ]
-TRIES = 65     # versions looked at in this dig (rating gaps x4 x2, bands, tiers x4 x4, timing, drift, volume, months,
-#                and 14 ways to bet or size the bo3.gg AI pick)
+TRIES = 155    # first dig 65 (rating gaps, bands, tiers, timing, drift, volume, months, 14 AI bets) + upset hunt 90
+#                (34 patterns x 2 sides, price-drop at 3/5/8c from 24h and 6h, bands x patterns)
 
 
 def picks(rows, rule):
@@ -469,7 +719,7 @@ def logloss(rs, f):
 
 
 def chart():
-    rows = build()
+    rows = add_form(build())
     p1 = [r for r in rows if r["p1"] is not None and 0.03 < r["p1"] < 0.97]
     print(f"{len(rows)} finished CS2 match-winner markets, {len(p1)} with a price 1h before; matched to bo3.gg "
           f"{sum(1 for r in rows if r.get('elo') is not None)}, results agree {sum(1 for r in rows if r.get('agree'))}, "
@@ -483,6 +733,52 @@ def chart():
     for rule in RULES:
         print(chart_line(rule[1], picks(rows, rule)))
     return rows
+
+
+def upsets():
+    """Jan, 11 Nov: what do the losers have in common? Each pattern: how often the favorite lost (price said vs
+    really) and what backing the underdog / the favorite made per $100 at chart prices 1h before +1c (no fee),
+    with the luck range and first/second half. Positive "really" minus "price said" = upsets happen MORE often."""
+    rows = add_form(build())
+    R = []
+    for r in rows:
+        if r["p1"] is None or not 0.03 < r["p1"] < 0.97 or not r["form"]:
+            continue
+        fs = 0 if r["p1"] >= 0.5 else 1
+        q, F, U = side_p(r, fs, "p1"), r["form"][fs], r["form"][1 - fs]
+        mv = None if r["p24"] is None else q - side_p(r, fs, "p24")
+        R.append({"q": q, "up": r["w"] != fs, "t": r["gst"], "pat": {
+            "favorite won its last 5": F["won5"], "favorite lost its last 2": F["lost2"],
+            "underdog lost its last 3": U["lost3"], "underdog won its last 5": U["won5"],
+            "favorite is a new team (under 15 matches)": F["new"], "underdog is a new team": U["new"],
+            "favorite played in the last 12h": F["rest"] < 12, "underdog played in the last 12h": U["rest"] < 12,
+            "favorite rested 14+ days": F["rest"] > 336, "underdog rested 14+ days": U["rest"] > 336,
+            "favorite changed a player this month": F["roster"] is True,
+            "underdog changed a player this month": U["roster"] is True,
+            "best-of-1": r.get("bo") == 1, "best-of-3": r.get("bo") == 3,
+            "top events (tier S/A)": r.get("tier") in ("s", "a"), "small events (tier B/C)": r.get("tier") in ("b", "c"),
+            "favorite's price fell 5c+ since a day before": mv is not None and mv <= -0.05,
+            "favorite's price rose 5c+ since a day before": mv is not None and mv >= 0.05,
+            "close match (favorite 50-60c)": q < 0.60, "big favorite (75c+)": q >= 0.75}})
+    R.sort(key=lambda f: f["t"])
+
+    def pl(sel, dog):
+        return [100 / ((1 - f["q"] if dog else f["q"]) + 0.01) * (f["up"] == dog) - 100 for f in sel]
+
+    print(f"{len(R)} matches with both teams' form, {sum(f['up'] for f in R)} upsets\n")
+    print("| Pattern | Matches | Upsets per 100: price said / really | Back underdog per $100 (halves) "
+          "| Back favorite per $100 (halves) |\n|---|---|---|---|---|")
+    for k in ["(all matches)"] + list(R[0]["pat"]):
+        sel = R if k.startswith("(") else [f for f in R if f["pat"][k]]
+        if len(sel) < 60:
+            continue
+        h, cell = len(sel) // 2, []
+        for dog in (True, False):
+            a = pl(sel, dog)
+            se = 1.645 * statistics.pstdev(a) / math.sqrt(len(a))
+            cell.append(f"{statistics.mean(a):+.2f} ±{se:.2f} ({statistics.mean(a[:h]):+.1f} / {statistics.mean(a[h:]):+.1f})")
+        print(f"| {k} | {len(sel)} | {100 * sum(1 - f['q'] for f in sel) / len(sel):.1f} / "
+              f"{100 * sum(f['up'] for f in sel) / len(sel):.1f} | {cell[0]} | {cell[1]} |")
 
 
 def exam_run(only=None):
@@ -536,12 +832,20 @@ if __name__ == "__main__":
         fetch(*sys.argv[2:3])
     elif cmd == "peek":
         peek(*sys.argv[2:3])
+    elif cmd == "pstats":
+        pstats(*sys.argv[2:3])
+    elif cmd == "pprobe":
+        pprobe(*sys.argv[2:4])
     elif cmd == "jsapi":
         jsapi(*sys.argv[2:3])
     elif cmd == "ai":
         ai(*sys.argv[2:3])
     elif cmd == "chart":
         chart()
+    elif cmd == "players":
+        players()
+    elif cmd == "upsets":
+        upsets()
     elif cmd == "exam":
         exam_run(*sys.argv[2:3])
     else:

@@ -764,6 +764,84 @@
    "verdict": "Promising, needs more bets",
    "status": "lead (needs Jan's API key on his own server for a live paper test; Jan to decide)",
    "src": "combos.py replay, backtest/combos.md"
+  },
+  {
+   "id": "cs2_back_the_underdog_in_a_close_match_favorite_50_60c_1h_be",
+   "date": "2026-11-11",
+   "what": "CS2: back the underdog in a close match (favorite 50-60c), 1h before",
+   "tries": 155,
+   "bets": 1735,
+   "groups": 1735,
+   "per100": -0.4,
+   "floor100": -8.94,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_back_the_underdog_when_the_favorite_won_its_last_5_1h_be",
+   "date": "2026-11-11",
+   "what": "CS2: back the underdog when the favorite won its last 5, 1h before",
+   "tries": 155,
+   "bets": 201,
+   "groups": 201,
+   "per100": 5.17,
+   "floor100": -37.07,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_back_the_favorite_after_its_price_fell_5c_since_a_day_be",
+   "date": "2026-11-11",
+   "what": "CS2: back the favorite after its price fell 5c+ since a day before, 1h before",
+   "tries": 155,
+   "bets": 159,
+   "groups": 159,
+   "per100": 4.11,
+   "floor100": -15.79,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_favorite_at_60_97c_in_a_best_of_1_1h_before",
+   "date": "2026-11-11",
+   "what": "CS2: favorite at 60-97c in a best-of-1, 1h before",
+   "tries": 155,
+   "bets": 288,
+   "groups": 288,
+   "per100": 1.29,
+   "floor100": -10.49,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_back_the_favorite_when_the_underdog_lost_its_last_3_1h_b",
+   "date": "2026-11-11",
+   "what": "CS2: back the favorite when the underdog lost its last 3, 1h before",
+   "tries": 155,
+   "bets": 489,
+   "groups": 488,
+   "per100": -0.68,
+   "floor100": -11.07,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "cs2.py exam"
+  },
+  {
+   "id": "cs2_player_form",
+   "date": "2026-11-11",
+   "what": "CS2: players' recent form (bo3.gg player ratings, last 2/3/7 days vs their 60-day level), back the hotter team or hot underdog, 1h before",
+   "tries": 30,
+   "bets": 945,
+   "groups": 945,
+   "per100": -7.08,
+   "floor100": null,
+   "verdict": "Losing",
+   "status": "dropped (chart prices already lose; no real-price run needed)",
+   "src": "cs2.py players"
   }
  ]
 }
