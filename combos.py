@@ -113,10 +113,10 @@ def wallets(cap=160):
     return seen[:cap]
 
 
-def positions(u, pages=3):
+def positions(u, pages=5):
     out, cur = [], None
     for _ in range(pages):
-        p = {"user": u, "limit": 100} if not cur else {"user": u, "cursor": cur}
+        p = {"user": u, "limit": 100, "status": "OPEN,RESOLVED_WIN,RESOLVED_LOSS,RESOLVED_PARTIAL"} if not cur else {"user": u, "cursor": cur}
         res = get(DATA + "/v2/positions/combos", p)
         out += rows(res)
         cur = (res.get("pagination") or {}).get("next_cursor") if isinstance(res, dict) else None
@@ -126,12 +126,24 @@ def positions(u, pages=3):
 
 
 def leg_token(leg):
-    cid, oi = leg.get("leg_condition_id"), leg.get("leg_outcome_index")
-    if cid not in _tok:
-        toks = rows(get(DATA + "/v2/tokens", {"condition": cid}))
-        _tok[cid] = {t.get("outcome_index"): t.get("token_id") for t in toks if t.get("module") == "v1_ctf"} or \
-            {t.get("outcome_index"): t.get("token_id") for t in toks}
-    return _tok[cid].get(oi)
+    """CLOB token of the leg's outcome, from the Gamma market (combo legs carry v2 condition ids the chart doesn't know)."""
+    mid, oi = (leg.get("market") or {}).get("market_id"), leg.get("leg_outcome_index")
+    if mid not in _tok:
+        m = get(f"https://gamma-api.polymarket.com/markets/{mid}")
+        toks = m.get("clobTokenIds") if isinstance(m, dict) else None
+        if isinstance(toks, str):
+            try:
+                toks = json.loads(toks)
+            except ValueError:
+                toks = None
+        _tok[mid] = toks or []
+        if len(_tok) <= 3:
+            print("debug gamma", mid, str(m)[:300])
+    toks = _tok[mid]
+    return toks[oi] if isinstance(oi, int) and oi < len(toks) else None
+
+
+_dbg = [0]
 
 
 def price_at(tok, t):
@@ -139,6 +151,9 @@ def price_at(tok, t):
     res = get(CLOB + "/prices-history", {"market": tok, "startTs": t - 3 * 3600, "endTs": t + 60, "fidelity": 1})
     pts = [(bot.fnum(x.get("t"), 0), bot.fnum(x.get("p"), None)) for x in bot.envelope_rows(res, "history", "data") if isinstance(x, dict)]
     pts = [x for x in pts if x[1] is not None and x[0] <= t + 60]
+    if _dbg[0] < 3:
+        _dbg[0] += 1
+        print("debug hist", tok[:12], t, str(res)[:300])
     return (pts[-1][1], t - pts[-1][0]) if pts else (None, None)
 
 
@@ -164,11 +179,14 @@ def one(pos):
     kinds = [(lg.get("market") or {}).get("sports_market_type") or "other" for lg in legs]
     gross = bot.fnum(pos.get("gross_entry_cost_usdc"), 0)
     fee = bot.fnum(pos.get("entry_fees_usdc"), 0)
-    size = bot.fnum(pos.get("current_size"), 0)
-    price = (gross - fee) / size if size else bot.fnum(pos.get("entry_avg_price_usdc"), 0)
+    price = bot.fnum(pos.get("entry_avg_price_usdc"), 0)
+    size = bot.fnum(pos.get("current_size"), 0) or ((gross - fee) / price if price else 0)
+    if bot.fnum(pos.get("current_size"), 0):
+        price = (gross - fee) / size
     return {"price": price, "prod": prod, "legs": len(legs), "same_game": len(set(evs)) < len(evs),
             "gross": gross, "fee": fee, "size": size, "status": pos.get("status"),
-            "payout": size if pos.get("status") == "RESOLVED_WIN" else (0.0 if pos.get("status") == "RESOLVED_LOSS" else None),
+            "payout": (bot.fnum(pos.get("realized_payout_usdc"), 0) or size) if pos.get("status") in ("RESOLVED_WIN", "REDEEMED", "REDEEMABLE")
+            else (0.0 if pos.get("status") == "RESOLVED_LOSS" else None),
             "max_age": max(ages) if ages else 0, "kinds": kinds, "t": t, "wallet": pos.get("proxy_wallet")}
 
 
@@ -178,7 +196,7 @@ def run(cap_w=160, cap_pos=1500):
     pos = []
     with ThreadPoolExecutor(8) as ex:
         for ps in ex.map(positions, ws):
-            pos += [p for p in ps if p.get("first_entry_at") and p.get("legs") and bot.fnum(p.get("current_size"), 0) > 0]
+            pos += [p for p in ps if p.get("first_entry_at") and p.get("legs") and bot.fnum(p.get("gross_entry_cost_usdc"), 0) > 0]
     print("combo positions:", len(pos), collections.Counter(p.get("status") for p in pos).most_common())
     pos = pos[:cap_pos]
     with ThreadPoolExecutor(8) as ex:
