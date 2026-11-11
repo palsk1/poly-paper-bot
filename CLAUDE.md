@@ -35,7 +35,7 @@ Owner: **Jan** (Sweden, Europe/Stockholm). This repo is a **paper-trading** expe
 |---|---|---|
 | mirror / favorites / mirror_unlimited | $20 / $20 / unlimited | Copy wallet **sabsabinxz** `0xd3ecb2aee0d65622da559ff356b00e8c2e626603` ("nothing ever happens" style: buys the boring outcome at 80–97c). `mirror_unlimited` measures how much money copying him needs. |
 | screener | $20 | His style by rule, without him |
-| claude | $50, refilled if it busts | Claude's own rules |
+| claude | $50, refilled if it busts | **Claude's sandbox** (Jan, 2026-11-11): change it often to experiment, 1-2 small changes a day, each checked on history, logged in `backtest/claude_changes.md` and reported. Not a 1 Jan candidate (the evidence keeps resetting). |
 | panic_fade | $50, refilled if it busts | Buys the boring side after a 6c+ one-day scare |
 | arb | $300 | Kalshi × Polymarket, **reviewed twin pairs only**. Holds to the end and flags MISMATCH. |
 | endgame | $100 | 95–99c on markets already decided or nearly decided. Tiers: resolved, proposed (past_deadline and ending_soon dropped 2026-11-08 after the backtest). Includes a sell-early shadow test (records only). |

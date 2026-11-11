@@ -894,6 +894,97 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_live_rules_no_volume_filter",
+   "date": "2026-11-11",
+   "what": "claude track fix: Live rules, no volume filter",
+   "tries": 12,
+   "bets": 364,
+   "groups": 182,
+   "per100": -5.02,
+   "floor100": -10.45,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_no_volume_filter",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, no volume filter",
+   "tries": 12,
+   "bets": 361,
+   "groups": 182,
+   "per100": -3.27,
+   "floor100": -11.77,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_30_60_days_no_volume_filter",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, 30-60 days, no volume filter",
+   "tries": 12,
+   "bets": 360,
+   "groups": 182,
+   "per100": -6.18,
+   "floor100": -15.4,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_live_rules_random_pick",
+   "date": "2026-11-11",
+   "what": "claude track fix: Live rules, random pick",
+   "tries": 12,
+   "bets": 364,
+   "groups": 182,
+   "per100": -3.09,
+   "floor100": -7.76,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_random_pick",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, random pick",
+   "tries": 12,
+   "bets": 359,
+   "groups": 182,
+   "per100": -8.6,
+   "floor100": -18.36,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_30_60_days_random_pick",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, 30-60 days, random pick",
+   "tries": 12,
+   "bets": 358,
+   "groups": 182,
+   "per100": -5.06,
+   "floor100": -14.09,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
+  },
+  {
+   "id": "claude_track_fix_hold_to_the_end_30_60_days_90_97c_random_pi",
+   "date": "2026-11-11",
+   "what": "claude track fix: Hold to the end, 30-60 days, 90-97c, random pick",
+   "tries": 12,
+   "bets": 359,
+   "groups": 182,
+   "per100": -4.21,
+   "floor100": -11.55,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "claudefix.py"
   }
  ]
 }

@@ -148,7 +148,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Endgame, 95c+ a day before the end:** lost about $5.50 per $100 (weather, crypto and tweet-count buckets flip).
 - **Endgame, 95c+ after the deadline but before a result:** lost $167 on 709 bets.
 - **Favorites by rule** (screener, price bands, NO only, momentum, fade the rally): lost even with free trading.
-- **The `claude` track's rules, and 4 simple fixes** (11 Nov, `claudefix.py`, `backtest/claudefix.md`): live rules lost $8.30 per $100 on 364 past bets at real costs. No 70c sell, no 97c sale, hold to the end, or 30-60 days only all lost too ($8 to $10 per $100), and random bets in the same price band did as well or better. The live track is left running unchanged.
+- **The `claude` track's rules, and 4 simple fixes** (11 Nov, `claudefix.py`, `backtest/claudefix.md`): live rules lost $8.30 per $100 on 364 past bets at real costs. No 70c sell, no 97c sale, hold to the end, or 30-60 days only all lost too ($8 to $10 per $100), and random bets in the same price band did as well or better. Jan then made `claude` Claude's sandbox (change it often, log every change in `backtest/claude_changes.md`). Change 1, same day: No at 90-97c, 30-60 days, random pick, held to the end (history -$3.99 per $100, half the old loss, still losing; `backtest/claudefix_r2.md`).
 - **Buy every answer of an event for under $1:** never once cheap on the real book.
 - **Cheap side of "sure" weather buckets:** -$18.67 per $100 on full data (the +$121 was a data hole).
 - **Crypto price model 3-30 hours out:** the markets are priced like the model.

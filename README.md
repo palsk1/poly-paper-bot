@@ -10,7 +10,7 @@
 | `favorites` | Same, but only his entries at 80c or more | $20 |
 | `mirror_unlimited` | Mirror that never runs out of money. Shows whether he has an edge and how much money copying him would need | unlimited |
 | `screener` | His "boring outcome" style by rule, without him | $20 |
-| `claude` | Claude's own rules (see `config.json` > `rules.claude.why`) | $50, refilled with $50 if it busts |
+| `claude` | Claude's sandbox (Jan, 2026-11-11): Claude may change its rules, 1-2 small changes a day, each logged in `backtest/claude_changes.md`. Now: the No side at 90-97c, 30-60 days left, a random pick, held to the end | $50, refilled with $50 if it busts |
 | `panic_fade` | Wildcard: buys the boring side right after a news scare drops it 6c+ in a day, sells on recovery. One bet per news story (since 2026-11-10: no second bet on a market naming the same person or place as an open one) | $50, refilled if it busts |
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
