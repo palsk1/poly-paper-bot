@@ -5548,3 +5548,7 @@
 {"minutes_left": 3.14, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV110100-00", "track": "kc_maker_safe", "ts": "2026-11-11T05:56:55Z", "type": "kmaker_order"}
 {"minutes_left": 3.14, "price": 0.983, "queue": 355.56, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV110100-00", "track": "kc_maker", "ts": "2026-11-11T05:56:55Z", "type": "kmaker_order"}
 {"minutes_left": 3.14, "price": 0.983, "queue": 355.56, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV110100-00", "track": "kc_maker_safe", "ts": "2026-11-11T05:56:55Z", "type": "kmaker_order"}
+{"fee": 0.0, "outcome": "No", "price": 0.993, "shares": 5, "title": "US x Cuba diplomatic meeting by October 31?", "token": "40439243758131411954071607268135558901237114973662557129435210827011298773550", "track": "endgame_97", "ts": "2026-11-11T06:02:04Z", "type": "paper_buy"}
+{"fee": 0.0163, "outcome": "Yes", "price": 0.951, "shares": 5, "title": "Will the price of Ethereum be above $2,000 on November 11?", "token": "23050388474500083409276249222681452610561974864794736122215300384887297268587", "track": "endgame_sell98", "ts": "2026-11-11T06:02:05Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV110100-00", "track": "kc_maker", "ts": "2026-11-11T06:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV110100-00", "track": "kc_maker_safe", "ts": "2026-11-11T06:02:17Z", "type": "kmaker_fill"}
