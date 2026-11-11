@@ -14,6 +14,8 @@ would we have made money? Maybe with different bet sizes too."
   (it predicts 2-0) or sizing by price doesn't fix it (table 3).
 - **bo3.gg's bookmaker odds can't be used.** They are the last odds seen, often from during or after the match, so
   they "predict" the winner far too well. Any test with them would be cheating.
+- **Upsets have no common thread the price misses.** Roster changes, slumps, winning streaks, tiredness, rust,
+  best-of-1: the price already accounts for each. The five best-looking patterns all fail at real prices (section 5).
 - **One lean: the favorite a day before.** Buying the team priced 70-97c a day before the match made **+$7.60 per
   $100** on 234 matches at real prices ("Promising, needs more bets"), and **+$15.27 on 91** in smaller leagues
   (bo3.gg tier B, the exam says "Looks real"). But: only 4 in 10 of these could be priced at all, the ones that could
@@ -96,6 +98,53 @@ guess: the real lean is smaller than the real-price card says, maybe +$5 per $10
 ($7 traded near the price in 10 minutes, a $25 bet fits in about 1 of 4). That's why it goes to the 21 Dec look
 instead of a track, and why it couldn't take real money at any size even if it passes.
 
+## 5. What do the upsets have in common? (Jan: "4,533 matches and you can't find a red thread?")
+
+Jan asked what the losing favorites share: upsets, roster changes, in-fighting, the start of a losing streak. We built
+each team's form from bo3.gg results that ended before the match (last 5 results, rest, new team, best-of-1/3) and
+roster changes from Valve's monthly player lists (a player in this month's list who wasn't in last month's).
+In-fighting isn't in any data we can reach, so it isn't tested. 4,364 matches with both teams' form, 1,513 upsets.
+
+The test for each pattern: does the price already expect it? "Price said" is how many upsets the prices implied,
+"really" is how many happened. Chart prices 1h before +1c, no fee (`python3 cs2.py upsets`).
+
+| Pattern | Matches | Upsets per 100: price said / really | Back underdog per $100 | Back favorite per $100 |
+|---|---|---|---|---|
+| All matches | 4,364 | 34.5 / 34.7 | -$5.70 | -$2.40 |
+| Favorite won its last 5 | 234 | 30.6 / 34.6 | +$8.23 (±18) | -$7.49 |
+| Favorite lost its last 2 (start of a slump) | 841 | 34.8 / 34.0 | -$10.09 | -$1.09 |
+| Underdog lost its last 3 | 524 | 32.3 / 29.2 | -$17.35 | +$2.79 |
+| Favorite changed a player this month | 1,229 | 34.5 / 33.8 | -$6.99 | -$0.68 |
+| Underdog changed a player this month | 1,198 | 35.1 / 34.6 | -$10.13 | -$1.92 |
+| Favorite is a new team (under 15 matches) | 244 | 37.9 / 41.0 | +$4.30 (±14) | -$6.81 |
+| Favorite played in the last 12h (tired) | 582 | 35.2 / 34.0 | -$8.07 | -$0.04 |
+| Favorite rested 14+ days (rusty) | 270 | 32.1 / 35.6 | +$3.93 (±16) | -$7.73 |
+| Best-of-1 | 372 | 35.0 / 30.9 | -$17.53 | +$4.37 |
+| Favorite's price fell 5c+ since a day before | 117 | 38.7 / 28.2 | -$33.08 | +$15.09 (±11) |
+| Close match (favorite 50-60c) | 1,586 | 45.2 / 48.1 | +$4.20 (±4.5) | -$6.97 |
+| Big favorite (75c+) | 900 | 17.5 / 14.6 | -$24.53 | +$2.36 |
+
+(Full 20-pattern table with first/second halves: `python3 cs2.py upsets`.)
+
+**The red thread is that there isn't one the price misses.** Roster changes, a slump, being tired or rusty: the price
+already moves for all of them, and "price said" and "really" land within 1-3 upsets per 100 of each other. Looking
+inside price bands made it worse: patterns flip sign from one band to the next (e.g. "favorite changed a player"
+is -$17 at 60-70c and +$3 at 50-60c), which is what noise looks like.
+
+The five best-looking patterns at prices people really paid ($25 bets, first real buy within 3h, +1c + fee):
+
+| Rule | Chart | Real price: bets | Per $100 | Luck range | Verdict |
+|---|---|---|---|---|---|
+| Back the underdog in a close match (favorite 50-60c) | +$3.70 (1,914) | 1,735 | -$0.40 | -$4.61 to +$3.82 | Losing |
+| Back the underdog when the favorite won its last 5 | +$7.85 (233) | 201 | +$5.17 | -$15.62 to +$25.97 | Ahead, but could be luck |
+| Back the favorite after its price fell 5c+ since a day before | +$8.65 (168) | 159 | +$4.11 | -$5.44 to +$13.66 | Ahead, but could be luck |
+| Favorite at 60-97c in a best-of-1 | +$3.73 (308) | 288 | +$1.29 | -$4.37 to +$6.95 | Ahead, but could be luck |
+| Back the favorite when the underdog lost its last 3 | +$2.56 (529) | 489 | -$0.68 | -$5.73 to +$4.36 | Losing |
+
+None survives. The "won 5 in a row" and "price fell" rules flip between halves (+$13 then -$3; -$5 then +$13), and
+the price-fell rule loses when measured from 6h instead of 24h before (-$4). Best-of-1 is ahead in both halves but by
+$1, gone at +1c worse prices. Ledger tries are now 155 for CS2 alone (34 patterns x 2 sides plus nearby versions).
+
 ## Sanity checks
 
 - Result check: bo3.gg's winner matches Polymarket's result in 5,886 of 5,902 matched games (16 left out).
@@ -110,5 +159,5 @@ instead of a track, and why it couldn't take real money at any size even if it p
 
 `cs2_fetch` (Valve standings + bo3.gg results into the price store), `cs2_ai` (bo3.gg AI picks + odds),
 `python3 cs2.py chart` (offline, tables 1-2 on chart prices), probe `cs2_exam` (all rules at real prices) or
-`cs2_exam_<ids>` with rule ids like `ai1,aisweep` (no underscores). `cs2_sources`, `cs2_peek_<team>`, `cs2_jsapi`
+`cs2_exam_<ids>` with rule ids like `ai1,aisweep` (no underscores). `python3 cs2.py upsets` (offline, section 5). `cs2_sources`, `cs2_peek_<team>`, `cs2_jsapi`
 were the source hunt.

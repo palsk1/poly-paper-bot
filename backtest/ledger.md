@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**61 ideas examined, in about 50,653 versions.** 36 dropped, 25 still being tested or waiting. **Looks real: 1.**
+**66 ideas examined, in about 51,428 versions.** 41 dropped, 25 still being tested or waiting. **Looks real: 1.**
 
-Why count: if you test 61 ideas that are all worthless, the luckiest one still looks good. With 61 tries, a result has to beat about 2.9 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 66 ideas that are all worthless, the luckiest one still looks good. With 66 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -62,8 +62,13 @@ Why count: if you test 61 ideas that are all worthless, the luckiest one still l
 | 2026-11-11 | CS2: back bo3.gg's AI pick, 1h before | 65 | 4533 | -$4.18 | Losing | dropped | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: back bo3.gg's AI pick, a day before | 65 | 555 | -$0.04 | Losing | dropped | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before | 65 | 2288 | -$1.29 | Losing | dropped | cs2.py, backtest/cs2.md |
+| 2026-11-11 | CS2: back the favorite after its price fell 5c+ since a day before, 1h before | 155 | 159 | +$4.11 | Ahead, but could be luck | dropped | cs2.py exam |
+| 2026-11-11 | CS2: back the favorite when the underdog lost its last 3, 1h before | 155 | 488 | -$0.68 | Losing | dropped | cs2.py exam |
 | 2026-11-11 | CS2: back the team our rating likes, 10c+ over the price, 1h before | 65 | 1559 | -$12.84 | Losing | dropped | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: back the team Valve's ranking likes, 10c+ over the price, 1h before | 65 | 1355 | -$17.47 | Losing | dropped | cs2.py, backtest/cs2.md |
+| 2026-11-11 | CS2: back the underdog in a close match (favorite 50-60c), 1h before | 155 | 1735 | -$0.40 | Losing | dropped | cs2.py exam |
+| 2026-11-11 | CS2: back the underdog when the favorite won its last 5, 1h before | 155 | 201 | +$5.17 | Ahead, but could be luck | dropped | cs2.py exam |
+| 2026-11-11 | CS2: favorite at 60-97c in a best-of-1, 1h before | 155 | 288 | +$1.29 | Ahead, but could be luck | dropped | cs2.py exam |
 | 2026-11-11 | CS2: favorite at 70-97c a day before, minor leagues (bo3.gg tier B) | 65 | 91 | +$15.27 | Looks real | secondary holdout 21 Dec; flattered (priced bets were the better ones), $7 of room | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: favorite at 70-97c a day before the match | 65 | 234 | +$7.60 | Promising, needs more bets | holdout test 21 Dec (cs2_fav_day) | cs2.py, backtest/cs2.md |
 | 2026-11-11 | CS2: favorite at 70-97c an hour before the match | 65 | 1671 | +$0.96 | Ahead, but could be luck | dropped | cs2.py, backtest/cs2.md |
