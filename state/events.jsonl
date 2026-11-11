@@ -5213,3 +5213,5 @@
 {"minutes_left": 8.13, "price": 0.901, "queue": 0, "shares": 11, "side": "no", "ticker": "KXHYPE15M-26NOV102115-15", "track": "kc_maker_early", "ts": "2026-11-11T02:06:53Z", "type": "kmaker_order"}
 {"fee": 0.0369, "outcome": "Draw", "price": 0.18, "shares": 5, "title": "Will New Zealand vs. India end in a draw?", "token": "42775214376322992246463579969699181000286514892503505723298815065496868012369", "track": "soccer_draw", "ts": "2026-11-11T02:12:08Z", "type": "paper_buy"}
 {"minutes_left": 2.75, "price": 0.996, "queue": 25148.06, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV102115-15", "track": "kc_maker", "ts": "2026-11-11T02:12:15Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV102115-15", "track": "kc_maker", "ts": "2026-11-11T02:17:02Z", "type": "kmaker_fill"}
+{"filled": 11.0, "pnl": 1.089, "price": 0.901, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV102115-15", "track": "kc_maker_early", "ts": "2026-11-11T02:17:03Z", "type": "kmaker_fill"}
