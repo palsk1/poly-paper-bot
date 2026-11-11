@@ -493,7 +493,8 @@ def q_match(lines, rule, result=leg_result, stake=25.0):
         if price is None or not q < price:
             continue
         won.append(r)
-        res = [result(lg["token"]) for lg in r.get("leg_info") or []]
+        toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
+        res = [result(t) for t in toks]
         if 0 in res:
             pay = stake + q * stake / (1 - q)     # parlay failed: we keep our stake and the buyer's money
         elif res and all(x == 1 for x in res):
@@ -524,7 +525,10 @@ def qscore(local=None):
     if lat:
         print(f"time to price a request: middle {lat[len(lat) // 2]} ms, slowest 1 in 10 {lat[int(len(lat) * 0.9)]} ms; "
               f"in time {sum(1 for x in reqs if x.get('in_time'))} of {len(reqs)}")
-    print("legs:", collections.Counter(len(x.get("legs") or []) for x in reqs).most_common(8))
+    print("legs:", collections.Counter(x["legs"] if isinstance(x.get("legs"), int) else len(x.get("legs") or []) for x in reqs).most_common(8))
+    for x in notes:
+        if x.get("what") == "counts":
+            print("10-min counts:", x.get("counts"), x.get("pricer"))
     for rule in ("main", "m3", "all5"):
         reqs, trades, won, pending, bets = q_match(lines, rule)
         quoted = sum(1 for r in reqs if (r.get("quotes") or {}).get(rule) is not None)
