@@ -1216,10 +1216,10 @@
       "stop_loss": null
     },
     "claude": {
-      "why": "Boring side of deadline markets only. Fee-free geopolitics first, shorter deadlines (faster time decay), no crypto price bets (too jumpy), max 2 bets per theme so one surprise can't hit everything, take profit at 97c, cut at 70c.",
-      "min_price": 0.85,
-      "max_price": 0.94,
-      "min_days": 10,
+      "why": "Sandbox (Jan, 2026-11-11): Claude may change these rules, 1-2 small changes a day, each logged in backtest/claude_changes.md. Change 1: the old 85-94c, 10-60 days, sell at 97c / 70c lost about $8 per $100 in history. Now the No side at 90-97c, 30-60 days left, a random pick among those, held to the end (history: about -$4 per $100, half the old loss).",
+      "min_price": 0.9,
+      "max_price": 0.97,
+      "min_days": 30,
       "max_days": 60,
       "min_liquidity": 10000,
       "min_volume": 100000,
@@ -1242,8 +1242,7 @@
         "above $",
         "below $"
       ],
-      "take_profit": 0.97,
-      "stop_loss": 0.7
+      "order": "random"
     },
     "panic_fade": {
       "why": "Crowds overreact to scary headlines. If the boring side of a deadline market was 82c+ and fell 6c+ in a day without anything resolving, buy it and sell when it climbs back to where it was.",

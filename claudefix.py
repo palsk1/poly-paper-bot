@@ -16,6 +16,11 @@ Versions, fixed before looking at results:
     hold      no take profit, no stop loss: held to the end
     hold_30d  held to the end, only 30-60 days left (closer to boring_no)
 
+Round 2 (same day, Jan said "go" to using `claude` as a sandbox Claude tweaks): `min_volume` is off in these
+because the history only has each market's FINAL volume (a look-ahead). `order: random` = pick at random among
+the "No" candidates instead of soonest deadline first (random bets in the same band did better in round 1).
+
+    python3 claudefix.py round2   # -> backtest/claudefix_r2.md
     python3 claudefix.py          # needs bt_cache/markets.json.gz + hist.json.gz (store.py pull, or the release)
                                   # -> backtest/claudefix.md
 """
@@ -37,6 +42,25 @@ VARIANTS = {
     "no_tp": {"take_profit": None},
     "hold": {"take_profit": None, "stop_loss": None},
     "hold_30d": {"take_profit": None, "stop_loss": None, "min_days": 30},
+}
+ROUND2 = {
+    "now_nv": {"min_volume": 0},
+    "hold_nv": {"take_profit": None, "stop_loss": None, "min_volume": 0},
+    "hold30_nv": {"take_profit": None, "stop_loss": None, "min_volume": 0, "min_days": 30},
+    "now_rand": {"min_volume": 0, "order": "random"},
+    "hold_rand": {"take_profit": None, "stop_loss": None, "min_volume": 0, "order": "random"},
+    "hold30_rand": {"take_profit": None, "stop_loss": None, "min_volume": 0, "min_days": 30, "order": "random"},
+    "hold30_9097_rand": {"take_profit": None, "stop_loss": None, "min_volume": 0, "min_days": 30,
+                         "min_price": 0.90, "max_price": 0.97, "order": "random"},
+}
+PLAIN2 = {
+    "now_nv": "Live rules, no volume filter",
+    "hold_nv": "Hold to the end, no volume filter",
+    "hold30_nv": "Hold to the end, 30-60 days, no volume filter",
+    "now_rand": "Live rules, random pick",
+    "hold_rand": "Hold to the end, random pick",
+    "hold30_rand": "Hold to the end, 30-60 days, random pick",
+    "hold30_9097_rand": "Hold to the end, 30-60 days, 90-97c, random pick",
 }
 PLAIN = {
     "now": "Live rules: sell at 97c, sell at 70c",
@@ -102,7 +126,7 @@ def run():
         a, b = bc.halves_of(rows)
         won = sum(1 for p, _, _ in rows if p > 0)
         bets = bets_of(trs[n], chk[n])
-        card = exam.score(bets, f"claude track fix: {PLAIN[k]}", tries=len(VARIANTS), src="claudefix.py",
+        card = exam.score(bets, f"claude track fix: {PLAIN[k]}", tries=len(VARIANTS) + (5 if VARIANTS is ROUND2 else 0), src="claudefix.py",
                           note="2c + 1h late, TP capped", quiet=True, log=(k != "now"))
         cards[k] = card
         tw = twins.get(n, {}).get("same")
@@ -122,4 +146,7 @@ def run():
 
 
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["round2"]:
+        VARIANTS, PLAIN = ROUND2, PLAIN2
+        OUT = os.path.join(ROOT, "backtest", "claudefix_r2.md")
     run()

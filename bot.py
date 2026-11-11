@@ -1429,6 +1429,10 @@ def boring_side_candidates(markets, r, rng=None):
     if r.get("side") == "random":
         (rng or random).shuffle(out)
         return out
+    if r.get("order") == "random":  # claude sandbox (2026-11-11): random pick among the "No" side, then the rest
+        (rng or random).shuffle(out)
+        out.sort(key=lambda c: not c["nothing_happens"])
+        return out
     # "No, nothing happens" first, then fee-free if wanted, then sooner deadlines, then deepest markets
     out.sort(key=lambda c: (not c["nothing_happens"],
                             (c["fee_rate"] > 0) if r.get("prefer_fee_free") else 0,
