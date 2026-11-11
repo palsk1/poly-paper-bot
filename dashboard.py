@@ -5,6 +5,8 @@ Reads state/ and config.json only; never writes to state/ (the scoreboard is com
     python3 dashboard.py --offline  # no network: open bets valued at their entry price (for local tests)
 Paper money only, like everything else here.
 """
+import collections
+import datetime as dt
 import json
 import os
 import shutil
@@ -100,6 +102,75 @@ def recent_closed(tr):
     return out
 
 
+TOPICS = [("weather", ("temperature", "weather", "rain", "snow", "hurricane")),
+          ("crypto", ("bitcoin", "btc", "ethereum", " eth", "solana", "xrp", "crypto", "dogecoin", "up or down")),
+          ("esports", ("dota", "lol:", "counter-strike", "cs2", "valorant", "league of legends", "(bo3)", "(bo5)")),
+          ("sports", ("nba", "nfl", "nhl", "mlb", "ufc", "premier league", " vs. ", " vs ", "win on 20", "fc ", "draw?", "spread", "o/u")),
+          ("talk ('will X say Y')", (" say ", "said", "mention", "tweet")),
+          ("economy", ("fed ", "interest rate", "cpi", "inflation", "gdp", "jobs", "unemployment", "recession", "bps")),
+          ("elections", ("election", "senate", "house seat", "governor", "mayor", "primary", "nominee", "popular vote")),
+          ("world news", ("iran", "russia", "ukraine", "israel", "china", "ceasefire", "strike", "invade", "venezuela", "military")),
+          ("politics", ("trump", "president", "out as", "secretary", "congress", "impeach", "pardon")),
+          ("stocks & companies", ("market cap", "largest company", "ipo", "stock", "nvidia", "apple", "tesla"))]
+
+
+def topic(title):
+    s = f" {title} ".lower()
+    for name, words in TOPICS:
+        if any(w in s for w in words):
+            return name
+    return "other"
+
+
+def wallet_style(tr):
+    """Copy tracks: a plain one-liner built from the bets we copied (topics, price, Yes/No, how long, how it ended)."""
+    items = list(tr.get("positions", {}).values()) + tr.get("closed", [])
+    if not items:
+        return None
+    n = len(items)
+    tc = collections.Counter(topic(x.get("title", "")) for x in items).most_common(3)
+    tops = ", ".join(f"{k} ({v})" for k, v in tc)
+    px = sorted(x["entry"] * 100 for x in items if x.get("entry"))
+    lo, mid, hi = px[len(px) // 10], px[len(px) // 2], px[min(len(px) - 1, int(len(px) * .9))]
+    no = sum(1 for x in items if str(x.get("outcome", "")).lower() == "no")
+    yes = sum(1 for x in items if str(x.get("outcome", "")).lower() == "yes")
+    side = (f"mostly No ({no} of {n})" if no >= .7 * n else f"mostly Yes ({yes} of {n})" if yes >= .7 * n
+            else f"picks a team or name ({n - yes - no} of {n})" if n - yes - no >= .7 * n
+            else f"Yes {yes}, No {no}, a team or name {n - yes - no}" if n - yes - no else f"Yes {yes}, No {no}")
+    if mid >= 85:
+        kind = "favorites (the likely side)"
+    elif mid <= 20:
+        kind = "long shots (cheap, unlikely sides)"
+    else:
+        kind = "close calls"
+    out = [f"We copied {n} bets. Topics: {tops}.",
+           (f"Typical price {mid:.0f}c (most between {lo:.0f}c and {hi:.0f}c): {kind}." if hi - lo <= 50
+            else f"Prices all over the place, from {lo:.0f}c to {hi:.0f}c (middle {mid:.0f}c).") + f" Sides: {side}."]
+    done = tr.get("closed", [])
+    if done:
+        sold = sum(1 for c in done if str(c.get("reason", "")).startswith("wallet"))
+        hours = sorted((dt.datetime.fromisoformat(c["closed_at"].replace("Z", "+00:00")) - dt.datetime.fromisoformat(c["opened"].replace("Z", "+00:00"))).total_seconds() / 3600
+                       for c in done if c.get("closed_at") and c.get("opened"))
+        held = ""
+        if hours:
+            h = hours[len(hours) // 2]
+            held = f" Usually over within {h:.0f} hours." if h < 48 else f" Usually held about {h / 24:.0f} days."
+        out.append(f"{len(done)} finished: {sum(1 for c in done if c.get('pnl', 0) > 0)} won, {sum(1 for c in done if c.get('pnl', 0) <= 0)} lost; "
+                   + (f"{sold} of them the wallet sold (or switched sides) before the end, so we sold too.{held}" if sold
+                    else f"all held to the end.{held}"))
+    return " ".join(out)
+
+
+def first_end(tr):
+    """Earliest end date among open bets (when the first one can finish)."""
+    ends = [str(p.get("end", ""))[:10] for p in tr.get("positions", {}).values()]
+    ends += [str(a.get("poly_end", ""))[:10] for a in tr.get("arbs", {}).values()]
+    ends += [str(s.get("end", ""))[:10] for s in tr.get("sets", {}).values()]
+    ends += [str(o.get("close", ""))[:10] for o in tr.get("orders", {}).values()]
+    ends = sorted(e for e in ends if len(e) == 10 and e[:2] == "20")
+    return ends[0] if ends else None
+
+
 def late_copy(tr):
     """Copy tracks: what buying after the wallet did cost us, vs the wallet's own average price."""
     items = [x for x in list(tr.get("positions", {}).values()) + tr.get("closed", []) if x.get("their_avg")]
@@ -139,6 +210,11 @@ def build(offline=False):
     names = list(stats)
     n_top = bot.CFG["push"].get("top_n", 10)
     top = [x for x in bot.ranked(stats) if bot.top_eligible(stats[x])][:n_top]
+    try:
+        with open(os.path.join(bot.ROOT, "wallet_notes.json")) as fh:
+            notes = json.load(fh).get("wallets", {})
+    except (OSError, ValueError):
+        notes = {}
     rows = []
     for n in names:
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
@@ -150,7 +226,9 @@ def build(offline=False):
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
-            "late": late_copy(tr), "rs": real_size(tr), "status": tr.get("status"),
+            "late": late_copy(tr), "first_end": first_end(tr),
+            "wnote": notes.get(str(tc.get("address", "")).lower()) if tc.get("source") == "wallet" else None,
+            "wstyle": wallet_style(tr) if tc.get("source") == "wallet" else None, "rs": real_size(tr), "status": tr.get("status"),
             "mk": {"rewards": r2(s["maker_rewards"]), "locked": r2(s["maker_locked"]), "open": r2(s["maker_open"]),
                    "exits": s.get("exits", 0)} if "maker_rewards" in s else None,
         })
