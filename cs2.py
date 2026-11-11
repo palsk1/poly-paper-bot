@@ -264,7 +264,7 @@ def ai(since="2026-02-15"):
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REL = "https://github.com/palsk1/poly-paper-bot/releases/download/price-store/"
 FILES = ["bt_cache/sports/markets.json.gz", "bt_cache/sports/hist.json.gz", "bt_cache/cs2/bo3_matches.json.gz",
-         "bt_cache/cs2/bo3_teams.json.gz", "bt_cache/cs2/valve.json.gz"]
+         "bt_cache/cs2/bo3_teams.json.gz", "bt_cache/cs2/valve.json.gz", "bt_cache/cs2/bo3_ai.json.gz"]
 HOLD = dt.datetime(2026, 11, 10, tzinfo=dt.timezone.utc).timestamp()
 H = 3600
 
@@ -371,12 +371,22 @@ def build():
         if best:
             x, ia, ib = best
             (ra, na), (rb, nb) = rating(ia, r["gst"] - 60), rating(ib, r["gst"] - 60)
-            r.update(tier=x.get("tier"), agree=(x["winner_team_id"] == ia) == (r["w"] == 0), na=na, nb=nb,
+            r.update(bo3_id=x["id"], ia=ia, ib=ib, tier=x.get("tier"), agree=(x["winner_team_id"] == ia) == (r["w"] == 0), na=na, nb=nb,
                      elo=1 / (1 + 10 ** ((rb - ra) / 400)))
         d = dt.datetime.fromtimestamp(r["gst"], dt.timezone.utc).strftime("%Y-%m-%d")
         i = bisect.bisect_right(vd, d) - 1
         va, vb = (vmap[vd[i]].get(A), vmap[vd[i]].get(B)) if i >= 0 else (None, None)
         r["valve"] = (va[0], vb[0]) if va and vb else None
+    # bo3.gg's own AI pick (a predicted map score, e.g. 2-1). Its bookmaker odds (bet_updates) are NOT used: they
+    # are the LAST odds seen, often from during or after the game (they "predict" the winner far too well: average
+    # surprise 0.33 vs 0.60 for the Polymarket price an hour before).
+    AI = {x["id"]: x.get("ai_predictions") or {} for x in load(FILES[5])}
+    for r in rows:
+        a = AI.get(r.get("bo3_id")) or {}
+        r["ai"] = None
+        if r.get("agree") and a.get("prediction_winner_team_id") in (r.get("ia"), r.get("ib")):
+            sc = sorted([a.get("prediction_team1_score") or 0, a.get("prediction_team2_score") or 0])
+            r["ai"] = {"side": 0 if a["prediction_winner_team_id"] == r["ia"] else 1, "sweep": sc[0] == 0}
     return rows
 
 
@@ -414,8 +424,14 @@ RULES = [
     ("fav24b", "CS2: favorite at 70-97c a day before, minor leagues (bo3.gg tier B)", "p24", 24,
      lambda r, s, q: 0.70 <= q < 0.97 and r.get("tier") == "b"),
     ("fav1", "CS2: favorite at 70-97c an hour before the match", "p1", 1, lambda r, s, q: 0.70 <= q < 0.97),
+    # Jan, 11 Nov: "if we just used bo3.gg's prediction model, would we have gained money?"
+    ("ai1", "CS2: back bo3.gg's AI pick, 1h before", "p1", 1, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
+    ("ai_sweep", "CS2: back bo3.gg's AI pick when it predicts a 2-0, 1h before", "p1", 1,
+     lambda r, s, q: r.get("ai") and r["ai"]["side"] == s and r["ai"]["sweep"]),
+    ("ai24", "CS2: back bo3.gg's AI pick, a day before", "p24", 24, lambda r, s, q: r.get("ai") and r["ai"]["side"] == s),
 ]
-TRIES = 50     # versions looked at in this dig (rating gaps x4 x2, bands, tiers x4 x4, timing, drift, volume, months)
+TRIES = 65     # versions looked at in this dig (rating gaps x4 x2, bands, tiers x4 x4, timing, drift, volume, months,
+#                and 14 ways to bet or size the bo3.gg AI pick)
 
 
 def picks(rows, rule):
@@ -462,7 +478,7 @@ def chart():
     return rows
 
 
-def exam_run():
+def exam_run(only=None):
     import exam
     rows = chart()
     import informed
@@ -485,6 +501,8 @@ def exam_run():
         return cache[cid]
     print()
     for rule in RULES:
+        if only and rule[0] not in only.split(","):
+            continue
         sel = picks(rows, rule)
         sig = [{"cid": r["cid"], "toks": r["toks"], "oi": s, "t": r["gst"] - hrs * H, "end": r["gst"],
                 "pay": 1.0 if r["w"] == s else 0.0, "ev": r["ev"], "q": q, "fee": r["fee"]} for r, s, q, hrs in sel]
@@ -518,6 +536,6 @@ if __name__ == "__main__":
     elif cmd == "chart":
         chart()
     elif cmd == "exam":
-        exam_run()
+        exam_run(*sys.argv[2:3])
     else:
         print(__doc__)
