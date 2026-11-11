@@ -48,6 +48,10 @@ RULES = {
 }
 MAX_SPREAD = 0.10      # a leg whose book is wider than 10c (or empty) has no trustworthy middle price: no quote
 MAX_QUOTE = 0.97
+BATCH_S = 0.3        # price waiting requests every 0.3 s, in one go
+BOOK_TTL = 3.0       # reuse a leg's book for 3 s (popular legs repeat across many requests)
+MAX_BOOK_CALLS = 4   # at most 4 /books calls (400 tokens) per batch
+MAX_PRICE_LEGS = 6   # requests with more legs are only counted
 PAGE_PAUSE = 0.5     # seconds between catalog pages (Polymarket said 429 'too many requests' at full speed)
 
 
@@ -74,6 +78,15 @@ def http(method, url, body=None, headers=None, timeout=20):
                 time.sleep(min(max(wait or 0, 2 ** (i + 1)), 120))
                 continue
             raise
+
+
+def http_fast(method, url, body=None, headers=None):
+    """One try, short timeout: a book that comes back late is no use for a 0.4 s quote."""
+    h = {"User-Agent": UA, "Accept": "application/json", "Content-Type": "application/json"}
+    req = urllib.request.Request(url, data=json.dumps(body).encode() if body is not None else None, headers=h, method=method)
+    with urllib.request.urlopen(req, timeout=5) as r:
+        raw = r.read()
+    return json.loads(raw.decode()) if raw else None
 
 
 def fnum(x, d=None):
@@ -191,9 +204,14 @@ class Log:
     def path(self, day=None):
         return os.path.join(self.d, f"quoter-{day or dt.datetime.now(dt.timezone.utc).strftime('%Y%m%d')}.jsonl")
 
+    MAX_DAY_BYTES = 400 * 2 ** 20     # a full day file stops taking request lines (the disk is only 20 GB)
+
     def put(self, obj):
         obj.setdefault("t", now_ms())
-        with open(self.path(), "a") as f:
+        path = self.path()
+        if obj.get("k") == "req" and os.path.exists(path) and os.path.getsize(path) > self.MAX_DAY_BYTES:
+            return
+        with open(path, "a") as f:
             f.write(json.dumps(obj, separators=(",", ":")) + "\n")
 
 
@@ -212,8 +230,15 @@ def upload_all(log, token):
             "body": "What the paper combo quoter saw and would have quoted (quoter/quoter.py). Paper research data only."}, headers=h)
     have = {a["name"]: a["id"] for a in http("GET", f"https://api.github.com/repos/{REPO}/releases/{rel['id']}/assets?per_page=100", headers=h)}
     n = 0
+    recent = {(dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=d)).strftime("%Y%m%d") for d in (0, 1)}
     for fn in sorted(os.listdir(log.d)):
         if not fn.endswith(".jsonl"):
+            continue
+        day = fn[len("quoter-"):len("quoter-") + 8]
+        if day < (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=10)).strftime("%Y%m%d"):
+            os.remove(os.path.join(log.d, fn))       # older than 10 days: already on GitHub, free the disk
+            continue
+        if day not in recent and (fn + ".gz") in have:
             continue
         src = os.path.join(log.d, fn)
         gz = src + ".gz"
@@ -225,7 +250,8 @@ def upload_all(log, token):
         data = open(gz, "rb").read()
         req = urllib.request.Request(f"https://uploads.github.com/repos/{REPO}/releases/{rel['id']}/assets?name={name}",
                                      data=data, method="POST", headers={**h, "Content-Type": "application/gzip", "User-Agent": UA})
-        urllib.request.urlopen(req, timeout=60).read()
+        urllib.request.urlopen(req, timeout=300).read()
+        os.remove(gz)
         n += 1
     return f"uploaded {n} files"
 
@@ -243,31 +269,102 @@ def creds():
                          "signature_type": int(os.environ["POLY_SIG_TYPE"])}}
 
 
+class Pricer:
+    """Polymarket sends ~100 requests a second (11 Nov), so requests are priced in batches: every BATCH_S seconds,
+    one /books call per 100 leg tokens not already fetched in the last BOOK_TTL seconds. Requests nobody could quote
+    under our rules (not a buy, a leg we don't know, too many legs) are only counted. Log lines are short."""
+
+    def __init__(self, cat, log):
+        self.cat, self.log = cat, log
+        self.pending = collections.deque(maxlen=5000)
+        self.cache = {}                    # token -> (time, (bid, ask, bid size, ask size))
+        self.counts = collections.Counter()
+        self.seen_tokens = set()           # tokens whose title etc. are already in today's file
+        self.day = None
+
+    def add(self, msg):
+        self.counts["heard"] += 1
+        ids = [str(x) for x in msg.get("leg_position_ids") or []]
+        if msg.get("direction") != "BUY":
+            self.counts["not a buy"] += 1
+            return
+        if not 2 <= len(ids) <= MAX_PRICE_LEGS:
+            self.counts[f"legs {len(ids)}"] += 1
+            return
+        legs = [self.cat.legs.get(i) for i in ids]
+        if any(lg is None or not lg.get("token") for lg in legs):
+            self.counts["leg not in catalog"] += 1
+            return
+        if len(self.pending) == self.pending.maxlen:
+            self.counts["dropped, too busy"] += 1
+        self.pending.append((now_ms(), msg, ids, legs))
+
+    def leg_notes(self, legs):
+        day = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d")
+        if day != self.day:
+            self.day, self.seen_tokens = day, set()
+        new = {lg["token"]: {"title": lg["title"], "out": lg["out"], "event": lg["event"], "kind": lg["kind"], "start": lg["start"]}
+               for lg in legs if lg["token"] not in self.seen_tokens}
+        if new:
+            self.seen_tokens |= set(new)
+            self.log.put({"k": "legs", "legs": new})
+
+    async def loop(self, loop):
+        while True:
+            await asyncio.sleep(BATCH_S)
+            if not self.pending:
+                continue
+            batch = list(self.pending)
+            self.pending.clear()
+            t = now_ms()
+            live = [x for x in batch if not x[1].get("submission_deadline") or int(x[1]["submission_deadline"]) > t]
+            self.counts["too late"] += len(batch) - len(live)
+            need = sorted({lg["token"] for x in live for lg in x[3]
+                           if lg["token"] not in self.cache or time.time() - self.cache[lg["token"]][0] > BOOK_TTL})
+            for i in range(0, min(len(need), 100 * MAX_BOOK_CALLS), 100):
+                try:
+                    got = await loop.run_in_executor(None, books, need[i:i + 100], http_fast)
+                    now = time.time()
+                    for tok, bk in got.items():
+                        self.cache[tok] = (now, bk)
+                except Exception as e:  # noqa: BLE001
+                    self.counts["books failed"] += 1
+                    self.counts["last error: " + str(e)[:60]] = 1
+                    await asyncio.sleep(2)
+                    break
+            if len(self.cache) > 20000:
+                old = time.time() - 60
+                self.cache = {k: v for k, v in self.cache.items() if v[0] > old}
+            for seen, msg, ids, legs in live:
+                bk = {lg["token"]: self.cache[lg["token"]][1] for lg in legs if lg["token"] in self.cache}
+                p = price_request(legs, bk)
+                if "skip" in p:
+                    self.counts[p["skip"].split(" ")[0]] += 1
+                    continue
+                q = would_quote(p, len(legs), "BUY")
+                if not any(v is not None for v in q.values()):
+                    self.counts["no rule fits"] += 1
+                    continue
+                priced = now_ms()
+                dl = msg.get("submission_deadline")
+                self.counts["priced"] += 1
+                self.leg_notes(legs)
+                self.log.put({"k": "req", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
+                              "size": (msg.get("requested_size") or {}).get("value_e6"), "deadline": dl,
+                              "legs": len(ids), "tokens": [lg["token"] for lg in legs], "mids": p["mids"],
+                              "fair": p["fair"], "same_game": p["same_game"], "quotes": q, "seen": seen, "priced": priced,
+                              "in_time": bool(dl) and priced <= int(dl)})
+
+
 async def handle_request(msg, cat, log, loop):
-    t0 = now_ms()
+    """Old one-at-a-time path, kept for the offline test only."""
     ids = [str(x) for x in msg.get("leg_position_ids") or []]
     legs = [cat.legs.get(i) for i in ids]
-    row = {"k": "req", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"), "dir": msg.get("direction"),
-           "side": msg.get("side"), "size": msg.get("requested_size"), "deadline": msg.get("submission_deadline"),
-           "legs": ids, "seen": t0}
     if any(lg is None or not lg.get("token") for lg in legs):
-        row["skip"] = "leg not in catalog"
-        log.put(row)
         return
-    try:
-        bk = await loop.run_in_executor(None, books, [lg["token"] for lg in legs])
-    except Exception as e:  # noqa: BLE001
-        row["skip"] = f"books failed: {e}"
-        log.put(row)
-        return
+    bk = await loop.run_in_executor(None, books, [lg["token"] for lg in legs])
     p = price_request(legs, bk)
-    row.update(p)
-    row["leg_info"] = [{"title": lg["title"], "out": lg["out"], "event": lg["event"], "kind": lg["kind"],
-                        "start": lg["start"], "token": lg["token"]} for lg in legs]
-    row["quotes"] = would_quote(p, len(legs), msg.get("direction"))
-    row["priced"] = now_ms()
-    row["in_time"] = bool(msg.get("submission_deadline")) and row["priced"] <= int(msg["submission_deadline"])
-    log.put(row)
+    log.put({"k": "req", "rfq": msg.get("rfq_id"), **p, "quotes": would_quote(p, len(legs), msg.get("direction"))})
 
 
 async def run():
@@ -291,6 +388,8 @@ async def run():
                 await asyncio.sleep(120)
 
     asyncio.create_task(catalog_loop())
+    pricer = Pricer(cat, log)
+    asyncio.create_task(pricer.loop(loop))
     last_up = time.time() - 3300   # first upload ~5 min after start, then hourly
     auth = creds()
     tried = set()
@@ -306,15 +405,14 @@ async def run():
                         counts["req"] += 1
                         if counts["req"] <= 3:
                             print("request heard:", msg.get("rfq_id"), len(msg.get("leg_position_ids") or []), "legs", flush=True)
-                        asyncio.create_task(handle_request(msg, cat, log, loop))
+                        pricer.add(msg)
                     elif typ == "RFQ_TRADE":
                         counts["trade"] += 1
                         if counts["trade"] <= 2:
                             print("trade heard:", json.dumps(msg)[:600], flush=True)
                         log.put({"k": "trade", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
                                  "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
-                                 "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids"),
-                                 "raw": msg})
+                                 "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids")})
                     elif typ == "RFQ_UNMET_DEMAND_SUMMARY":
                         # every 30 s: requests nobody quoted. Thousands each time, so keep a short summary, not the list
                         rs = msg.get("rfqs") or []
@@ -367,8 +465,12 @@ async def run():
                         await dispatch(json.loads(raw))
                     if time.time() - last_note > 600:
                         last_note = time.time()
-                        log.put({"k": "note", "what": "counts", "counts": dict(counts)})
-                        print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "heard so far:", counts, flush=True)
+                        log.put({"k": "note", "what": "counts", "counts": dict(counts), "pricer": dict(pricer.counts)})
+                        print(dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "last 10 min:", counts,
+                              "priced", pricer.counts.get("priced", 0), "of", pricer.counts.get("heard", 0), flush=True)
+                        pricer.counts.clear()
+                        for k in counts:
+                            counts[k] = 0
                     if time.time() - last_up > 3600:
                         last_up = time.time()
                         try:
