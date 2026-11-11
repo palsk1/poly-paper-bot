@@ -6116,3 +6116,9 @@
 {"minutes_left": 3.38, "price": 0.969, "queue": 206.2, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:26:39Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.959, "queue": 2381.31, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:26:39Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.99, "queue": 465.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:26:40Z", "type": "kmaker_order"}
+{"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "Will the highest temperature in Jeddah be 31\u00b0C on November 12?", "token": "105749251821553738694920043002807892300032831487878763758324535395927067800529", "track": "endgame_sell98", "ts": "2026-11-11T14:31:38Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": false, "ticker": "KXDOGE15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": false, "ticker": "KXXRP15M-26NOV110930-30", "track": "kc_maker", "ts": "2026-11-11T14:31:54Z", "type": "kmaker_fill"}
