@@ -6756,3 +6756,4 @@
 {"filled": 10.0, "pnl": -9.5, "price": 0.95, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV111730-30", "track": "kc_maker", "ts": "2026-11-11T22:31:27Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV111730-30", "track": "kc_maker", "ts": "2026-11-11T22:31:27Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": -9.5, "price": 0.95, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV111730-30", "track": "kc_maker_safe", "ts": "2026-11-11T22:31:27Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.0831, "price": 0.985, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in London be 10\u00b0C on November 12?", "token": "104900234218721185667083805232158700616448990510384914553365307509556573417934", "track": "endgame_sell98", "ts": "2026-11-11T22:32:56Z", "type": "paper_close"}
