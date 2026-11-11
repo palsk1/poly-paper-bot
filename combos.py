@@ -1,4 +1,4 @@
-"""Polymarket Combos (parlays) check, 2026-11-11 (Jan: "is the combos page worth exploring?").
+"""Polymarket Combos (parlays) check, 2026-11-11 (Jan: "is the combos page worth exploring?"). Report backtest/combos.md.
 
 Combos are bought through a request-for-quote: the user asks, pro market makers answer within 400 ms,
 the user can only buy (or sell back) the YES side = the parlay. So the question is how much the makers

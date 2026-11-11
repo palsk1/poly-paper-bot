@@ -635,6 +635,18 @@
    "verdict": "Ahead, but could be luck",
    "status": "lead, no track (research mode; same family as kc_maker_safe)",
    "src": "kspeed.py, backtest/kspeed.md"
+  },
+  {
+   "id": "polymarket_combos",
+   "date": "2026-11-11",
+   "what": "Polymarket Combos (parlays): price paid vs the legs multiplied, 3,897 real combo buys",
+   "tries": 14,
+   "bets": 3897,
+   "groups": null,
+   "per100": "buyers start -$13.39 (maker -$10.33, fee -$3.05); 5+ legs -$21; long shots -$22",
+   "verdict": "Losing",
+   "status": "dropped (only the maker side wins, needs keys + a 0.4 s bot; can't paper-test)",
+   "src": "combos.py, backtest/combos.md"
   }
  ]
 }
