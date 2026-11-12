@@ -562,6 +562,17 @@ if __name__ == "__main__":
     elif cmd == "all":
         fetch()
         run()
+    elif cmd == "peek":
+        d0, n, ok = list_day(tsec("2026-10-20"))
+        print("listed", n, "ok", len(ok), "cutoff", yesno.k_cutoff())
+        picks, info = pick_day(d0, ok)
+        print(info, collections.Counter(launch.kcategory(m["s"], m["q"]) for m in picks).most_common())
+        for m in sorted(picks, key=lambda m: -m["vol"])[:3] + picks[:6]:
+            tk, d = fetch_one(m)
+            print(m)
+            print("  candles", len(d["c"]), d["c"][-3:], "trades", len(d["tr"]), d["tr"][:2], d["tr"][-2:], "cov", d["cov"], d["p"])
+        print(kget(f"/series/{picks[0]['s']}"))
+        print(kget("/markets/trades", {"ticker": picks[0]["t"], "limit": 2}))
     elif cmd == "selftest":
         selftest()
     else:
