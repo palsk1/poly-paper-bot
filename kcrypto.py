@@ -14,6 +14,9 @@ in the last minutes.
     python3 kcrypto.py run         # write backtest/kcrypto.md (+ kcrypto.json)
     python3 kcrypto.py selftest    # offline check on made-up candles
     python3 kcrypto.py depth       # kc_maker_safe like a trading firm: price after the bid, loss bunches, live pass bar, $300 pot
+    python3 kcrypto.py losses      # live: Kalshi trade list + Binance seconds for every kc_maker_safe bet (probe kc_losses)
+    python3 kcrypto.py basis       # live: Binance vs Kalshi price gap at every bet (probe kc_basis)
+    python3 kcrypto.py gapcheck    # history: what a check for that gap would have kept and thrown away (backtest/kcloss.md)
   From GitHub: probe workflow with what = btkc (fetch + run), btkcfetch, btkcrun; cache and report are kept.
   (probe `kc_scan` prints the API shapes.)
 
@@ -935,6 +938,61 @@ def live_basis(track="kc_maker_safe"):
                                 "z_fixed": round(zc, 2), "gap_bp": round((basis - 1) * 1e4, 1), "sd1m": sd}))
 
 
+def zscore_usd(w, t, minutes, side):
+    """zscore() with Binance moved onto Kalshi's price scale first. Binance quotes in USDT and ran ~0.09% above the
+    US-dollar index Kalshi settles on (12 Nov). The window's strike is Kalshi's index at the open, so Binance at the
+    open / strike is the gap at that moment, known before we bid. None without data."""
+    sp, k = w["spot"], w.get("strike")
+    a, b = sp.get(str(w["open"] - 60)), sp.get(str(w["open"] - 120))
+    if not k or not a:
+        return None
+    gap = ((a + b) / 2 if b else a) / k
+    w2 = dict(w, strike=k * gap)
+    return zscore(w2, t, minutes, side)
+
+
+def gapcheck(log=False):
+    """Backtest: does the Binance-vs-Kalshi price gap explain kc_maker_safe's losses, and what would a check that
+    corrects for it cost? (12 Nov, Jan: "why did we lose and can we avoid it?"; write-up backtest/kcloss.md)"""
+    import exam
+    windows = load_windows()
+    out = {}
+    for m in (2, 3, 4):
+        sigs = signals(windows, m)
+        bys = {s["w"]["t"]: s for s in sigs}
+        f = []
+        for r in variant_trades(sigs, "improve", 0.95, None):
+            if not r["fills"][1]:
+                continue
+            s = bys[r["tk"]]
+            r["z"], r["zu"], r["side"] = zscore(s["w"], s["t"], m, s["side"]), zscore_usd(s["w"], s["t"], m, s["side"]), s["side"]
+            if r["z"] is not None and r["zu"] is not None:
+                f.append(r)
+        now_ = [r for r in f if r["z"] >= 2]
+        groups = {"now (z >= 2)": now_, "both checks": [r for r in now_ if r["zu"] >= 2],
+                  "thrown away": [r for r in now_ if r["zu"] < 2]}
+        for side in ("yes", "no"):
+            groups[f"now, {side} side"] = [r for r in now_ if r["side"] == side]
+        print(f"--- {m} min left")
+        for k, g in groups.items():
+            lost = sum(1 for r in g if not r["won"])
+            pnl = [(1.0 if r["won"] else 0.0) - r["price"] for r in g]
+            cost = sum(r["price"] for r in g)
+            row = {"bets": len(g), "lost": lost, "per100": sum(pnl) / cost * 100 if cost else 0.0,
+                   "usd10": sum(p / r["price"] * 10 for r, p in zip(g, pnl))}
+            out[(m, k)] = row
+            print(f"{k:22s} bets {row['bets']:5d} lost {lost:3d} per $100 {money(row['per100'])} "
+                  f"$10 bets {money(row['usd10'])}")
+        if m == 3 and log:
+            bets = [{"cost": r["price"] * 10, "pay": 10.0 if r["won"] else 0.0, "t": r["t"], "ev": r["t"]}
+                    for r in groups["both checks"]]
+            exam.score(bets, "kc_maker_safe + Binance price-gap check (backtest, 3 min)", tries=8,
+                       src="kcrypto.py gapcheck", note="Twin idea from the 12 Nov loss dig: same rule, but also skip "
+                       "bids where Binance only looks safe because it runs above Kalshi's price. Fewer losses, same "
+                       "profit per $100, fewer bets.")
+    return out
+
+
 def selftest():
     close = 10_000 * 900
     def win(rows, res, strike=100.0):
@@ -966,5 +1024,5 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if cmd.startswith("fetch_"):
         cmd, arg = "fetch", cmd.split("_", 1)[1]
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis,
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
