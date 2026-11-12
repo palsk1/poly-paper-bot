@@ -13,6 +13,7 @@ far from what the options market says, buy the cheap side and hold to the result
 Data in bt_cache/opt/ (shared price store). Only markets that ended before the holdout day are used.
 """
 import bisect
+import json
 import collections
 import concurrent.futures as cf
 import math
@@ -35,6 +36,8 @@ T_START = 1771113600            # 2026-02-15
 COINS = {"BTC": ("BTCUSDT", re.compile(r"\b(bitcoin|btc)\b", re.I)), "ETH": ("ETHUSDT", re.compile(r"\b(ethereum|eth)\b", re.I))}
 YEAR = 365.25 * 86400
 T0 = time.time()
+FOUND = 6                       # the first 6 files (3,000 markets) were used to look around; the rest are fresh
+TRIES = 60                      # versions looked at in this dig
 BUDGET_MIN = float(os.environ.get("OPT_MIN", "200"))
 WORKERS = int(os.environ.get("OPT_WORKERS", "8"))
 
@@ -295,6 +298,85 @@ def tapes(limit=None):
     print(f"tapes saved: {tot} markets, {cutn} cut short at {MAX_PAGES} pages")
 
 
+# ================================================================ the test on real trades
+def load_tapes(first=None, last=None):
+    """Trade lists by shard: {market id: {"cut", "n", "b": [[bucket, first, last, low, high, dollars, trades], ...]}}."""
+    out, i = {}, first or 0
+    while last is None or i < last:
+        p = os.path.join(CACHE, f"tapes_{i:02d}.json.gz")
+        if not os.path.exists(p):
+            break
+        out.update(bt.rjson(p, {}) or {})
+        i += 1
+    return out
+
+
+def load_spot1m():
+    return {c: bt.rjson(os.path.join(CACHE, f"spot1m_{c}.json.gz"), None) for c in COINS}
+
+
+def tbets(ms, tp, dvol, s1m, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_left=45 * 86400, min_age=3600,
+          vol_mult=1.0, kinds=None, sides=(0, 1), extra=0.01, stake=10.0, wait=1800, max_gap=1.0, first_only=True, fairs=None):
+    """Bets at prices people really paid. Every 5 minutes with a real trade: Polymarket's price = the last trade of those
+    5 minutes, the coin's price = Binance's last finished minute, the swing size = Deribit's DVOL. If the two disagree by
+    `gap` or more, buy the cheap side at the FIRST real trade of a later 5 minutes (within `wait` s), + `extra` + fee.
+    One bet per market (the first)."""
+    out = []
+    for mid, r in tp.items():
+        m = ms.get(mid)
+        if not m or r.get("cut") or (kinds and m["kind"] not in kinds):
+            continue
+        sp, dv, B = s1m[m["coin"]], dvol[m["coin"]], r["b"]
+        t0, C, H, Lw = sp["t0"], sp["c"], sp["h"], sp["l"]
+        touch = m["kind"] in ("up", "down")
+        mi = max(0, (m["start"] - t0) // 60)                 # minute pointer for the "already touched" check
+        dead = False
+        for i, x in enumerate(B[:-1]):
+            T_ = x[0] + 300
+            left = m["end"] - T_
+            if left < min_left:
+                break
+            j = (T_ - t0) // 60 - 1                          # the minute that finished at T_
+            if j < 0 or j >= len(C) or C[j] is None:
+                continue
+            if touch:
+                while mi <= j:
+                    if H[mi] is not None and (H[mi] >= m["k"] if m["kind"] == "up" else Lw[mi] <= m["k"]):
+                        dead = True
+                        break
+                    mi += 1
+                if dead:
+                    break
+            p = x[2]
+            if left > max_left or T_ - m["start"] < min_age or not lo <= p <= hi:
+                continue
+            v = dv.at(T_ - 3600, 6 * 3600)
+            if v is None:
+                continue
+            q = fair(m, C[j], v / 100 * vol_mult, left / YEAR)
+            if fairs is not None:
+                fairs.append((m["kind"], q, p, m["final"][0], mid))
+            side = 0 if q - p >= gap else 1 if p - q >= gap else None
+            if side is None or side not in sides or abs(q - p) > max_gap:
+                continue
+            y = B[i + 1]
+            if y[0] - T_ > wait or y[0] >= m["end"]:
+                continue
+            px = y[1] if side == 0 else 1 - y[1]
+            c = min(0.99, px + extra)
+            if c <= 0.01:
+                continue
+            sh = stake / c
+            fee = bot.taker_fee(sh, c, m["fee"])
+            win = (m["final"][0] == 1.0) == (side == 0)
+            out.append({"ev": m["ev"], "t": y[0], "cost": stake + fee, "pay": sh if win else 0.0, "sh": sh, "id": mid,
+                        "kind": m["kind"], "coin": m["coin"], "side": side, "left": left, "p": p if side == 0 else 1 - p,
+                        "fair": q if side == 0 else 1 - q, "px": px, "age": T_ - m["start"], "usd": y[5], "title": m["q"], "q": p if side == 0 else 1 - p})
+            if first_only:
+                break
+    return out
+
+
 # ================================================================ the model
 def ncdf(x):
     return 0.5 * (1 + math.erf(x / math.sqrt(2)))
@@ -493,23 +575,80 @@ def run(score=True):
             if r and r[0] >= 20:
                 P(f"| {fam} | {'all' if b == 'all' else f'{b * 10}-{b * 10 + 10} in 100'} | {r[0]} | {r[1] / r[0] * 100:.0f} | {r[2] / r[0] * 100:.0f} | {r[3] / r[0] * 100:.0f} |")
     P("")
-    P("## 2. Buy where the two disagree (chart prices + 1c + fee, $10 a bet, first disagreement per market)\n")
+    P("## 2. The trap: hourly chart prices\n")
+    P("New Polymarket markets open with a made-up price near 50c and the chart keeps showing it until real trades come in. "
+      "Buying \"where the two disagree\" at chart prices looks like a money machine, and is not real:\n")
     P(HEAD)
-    grid = []
     for fam, kinds in (("touch (reach / dip)", ("up", "down")), ("end price (above / below / between)", ("above", "below", "between"))):
-        for gap in (0.03, 0.05, 0.08, 0.12):
-            sg = signals(have, charts, dvol, spot, gap=gap, kinds=kinds)
-            b = to_bets(sg)
-            grid.append((fam, gap, b, sg))
-            P(line(f"{fam}, gap {gap * 100:.0f}c+", b))
-            for side, nm in ((0, "buy Yes"), (1, "buy No")):
-                P(line(f"&nbsp;&nbsp;{nm}", [x for x in b if x["side"] == side]))
+        for age, nm in ((0, "any hour of the chart"), (6 * 3600, "skipping the first 6 hours")):
+            P(line(f"{fam}, gap 5c+, {nm}", to_bets(signals(have, charts, dvol, spot, gap=0.05, kinds=kinds, min_age=age))))
     P("")
+    s1m = load_spot1m()
+    found, fresh = load_tapes(0, FOUND), load_tapes(FOUND, None)
+    P("## 3. The real test: prices people really paid\n")
+    P(f"Every real trade of the markets, in 5-minute steps, in a fixed shuffled order that has nothing to do with the results. "
+      f"The first {len(found)} markets were used to look around; the other {len(fresh)} were only opened once, for the rules marked "
+      f"\"fixed before\". Rule: every 5 minutes with a real trade, Polymarket's price = the last trade, the coin = Binance's last "
+      f"finished minute, swing size = Deribit's DVOL. If they disagree by the gap, buy the cheap side at the first real trade of a "
+      f"later 5 minutes (within 30 min), + 1c + the fee. One bet per market, $10 each.\n")
+    fams = (("end price", ("above", "below", "between")), ("touch", ("up", "down")))
+    P("### Who is closer, on real trades (one random look per market)\n")
+    P("| kind | markets | options miss | Polymarket miss | half-half miss | when 5c+ apart: markets | options miss | Polymarket miss |")
+    P("|---|---|---|---|---|---|---|---|")
+    F = []
+    tbets(ms, dict(found, **fresh), dvol, s1m, gap=9, fairs=F, first_only=False)
+    by = collections.defaultdict(list)
+    for k, q, p, y, mid in F:
+        by[mid].append((k, q, p, y))
+    import random
+    rng = random.Random(7)
+    for fam, kinds in fams:
+        rows = [rng.choice(v) for _, v in sorted(by.items()) if v[0][0] in kinds]
+        d = [r for r in rows if abs(r[1] - r[2]) >= 0.05]
+        br = lambda rr, f: sum((f(r) - r[3]) ** 2 for r in rr) / max(1, len(rr))
+        P(f"| {fam} | {len(rows)} | {br(rows, lambda r: r[1]):.4f} | {br(rows, lambda r: r[2]):.4f} | {br(rows, lambda r: (r[1] + r[2]) / 2):.4f} "
+          f"| {len(d)} | {br(d, lambda r: r[1]):.4f} | {br(d, lambda r: r[2]):.4f} |")
+    P("\n(\"Miss\" = average squared distance between the forecast and what happened; smaller is better.)\n")
+    cards = []
+    for title, tp in (("Markets used to look around", found), ("Fresh markets (rules fixed before)", fresh)):
+        if not tp:
+            continue
+        P(f"### {title}: {len(tp)}\n")
+        P(HEAD)
+        for fam, kinds in fams:
+            for gap in (0.03, 0.05, 0.10):
+                b = tbets(ms, tp, dvol, s1m, gap=gap, kinds=kinds)
+                P(line(f"{fam}, 6h+ left, gap {gap * 100:.0f}c+", b))
+                if gap == 0.05:
+                    for side, nm in ((0, "buy Yes"), (1, "buy No")):
+                        P(line(f"&nbsp;&nbsp;{nm}", [x for x in b if x["side"] == side]))
+                    P(line("&nbsp;&nbsp;price did not run away (2c or less)", [x for x in b if x["px"] - x["p"] <= 0.02]))
+            b = tbets(ms, tp, dvol, s1m, gap=0.05, kinds=kinds, min_left=1800, max_left=6 * 3600)
+            P(line(f"{fam}, last 30 min to 6 hours, gap 5c+", b))
+            for vm in (0.8, 1.2):
+                P(line(f"{fam}, 6h+ left, gap 5c+, swing size x{vm}", tbets(ms, tp, dvol, s1m, gap=0.05, kinds=kinds, vol_mult=vm)))
+        P("")
+    if score:
+        both = dict(found, **fresh)
+        tests = [("Options price vs Polymarket: BTC/ETH end-price markets, 5c+ apart, real trades", both, dict(kinds=fams[0][1]), False, "dropped"),
+                 ("Options price vs Polymarket: BTC/ETH reach/dip markets, 5c+ apart, real trades", both, dict(kinds=fams[1][1]), False, "dropped"),
+                 ("Options price vs Polymarket: reach/dip, last 30 min to 6 hours (fresh markets only)", fresh,
+                  dict(kinds=fams[1][1], min_left=1800, max_left=6 * 3600), True, None)]
+        P("## 4. The exam\n")
+        for name, tp, kw, prereg, status in tests:
+            b = tbets(ms, tp, dvol, s1m, gap=0.05, **kw)
+            if not b:
+                continue
+            card = exam.score(b, name, tries=TRIES if not prereg else 3, prereg=prereg, src="optfair.py", status=status, quiet=True)
+            cards.append(card)
+            print("LEDGER ROW " + json.dumps(card))
+            P(f"- **{name}**: {card['bets']} bets, {usd(card.get('per100'))} per $100, verdict **{card.get('verdict')}**.")
+        P("")
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         f.write("\n".join(L) + "\n")
     print("\n".join(L))
-    return grid
+    return cards
 
 
 def selftest():
