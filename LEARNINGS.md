@@ -48,29 +48,29 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 
 <!-- AUTO:START (learnings.py writes this part every morning, don't edit by hand) -->
 
-## Live numbers (updated 2026-11-11)
+## Live numbers (updated 2026-11-12)
 
-**51 days left** until the money decision on 1 Jan 2027.
-Ideas tried so far: **63**. Dropped: 37. Still in play: 26. Looking real: **1**.
+**50 days left** until the money decision on 1 Jan 2027.
+Ideas tried so far: **80**. Dropped: 54. Still in play: 26. Looking real: **1**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 234 | 233 / 1 | +$0.65 | Ahead, but could be luck | 1 Dec (20 days): after 2,500 bets: pass if above +$0.22 per $100 |
-| NO on 'will X say Y' (`mention_no`) | 2 | 1 / 1 | -$44.67 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
-| Boring side after a 10c scare (`panic_fade_10c`) | 2 | 2 / 0 | +$23.52 | Too early to tell (2 finished) | 21 Dec (40 days): holdout, scored once |
-| NO at 90-97c, 30+ days out (`boring_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (40 days): holdout, scored once |
-| NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (40 days): holdout, scored once |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 355 | 353 / 2 | +$0.54 | Ahead, but could be luck | 1 Dec (19 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| NO on 'will X say Y' (`mention_no`) | 2 | 1 / 1 | -$44.67 | Too early to tell (2 finished) | 21 Dec (39 days): holdout, scored once |
+| Boring side after a 10c scare (`panic_fade_10c`) | 2 | 2 / 0 | +$23.52 | Too early to tell (2 finished) | 21 Dec (39 days): holdout, scored once |
+| NO at 90-97c, 30+ days out (`boring_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (39 days): holdout, scored once |
+| NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (39 days): holdout, scored once |
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
-| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.06 locked in | 16 sets cost $77.62 and pay $80.00 if both sites agree. Nothing to judge before then. | 1 Jan (51 days): pays out on 1 Jan |
+| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.71 locked in | 19 sets cost $91.61 and pay $95.00 if both sites agree. Nothing to judge before then. | 1 Jan (50 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 237 of 2,500 bets, 1 lost, +$14.88 so far (+$0.63 per $100; the bar is +$0.22). About 132 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
-**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 125 bought, 3 lost, -$16.19 (-$1.31 per $100). Full table: `state/kfast_live/report.md`.
+**kc_maker_safe toward its locked test:** 355 of 2,500 bets, 2 lost, +$19.13 so far (+$0.55 per $100; the bar is +$0.22). About 129 bets a day, so the look is due about 29 Nov. This is only a peek: the number counts once, at 2,500.
+**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 213 bought, 4 lost, -$18.76 (-$0.89 per $100). Full table: `state/kfast_live/report.md`.
 
 ### Week by week (numbers as of the last day of each week, all bets so far)
 
 | Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` |
 |---|---|---|---|---|---|---|
-| 2026-W46 | 234 bets, +$0.65 | 2 bets, -$44.67 | 2 bets, +$23.52 | 0 bets | 0 bets | 0 bets |
+| 2026-W46 | 355 bets, +$0.54 | 2 bets, -$44.67 | 2 bets, +$23.52 | 0 bets | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
