@@ -8,6 +8,8 @@ Numbers come from `state/summary.md` and a fresh `python3 exam.py tracks` (`back
 08:32 UTC. "Per $100" means: for every $100 bet, this much came back on top (or went missing). This is a review.
 Nothing in the bot was changed.
 
+**Update 12 Nov 11:46 UTC, Jan: "Dump and fix bug".** The six "dump" tracks now have `"stopped"` in config.json (no new bets, open bets settle), and the bot reads `endDate` first.
+
 ## The short answer
 
 Three are clearly dead and should go: `fade_sure`, `wx_forecast` and `endgame_ending_soon`. A fourth,
