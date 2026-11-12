@@ -8384,3 +8384,8 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXXRPD-26NOV1217-T0.9999", "track": "kalshi_patient", "ts": "2026-11-12T17:33:44Z", "type": "kpatient_order"}
 {"fee": 0.0089, "outcome": "No", "price": 0.963, "shares": 5, "title": "Will the highest temperature in Munich be 8\u00b0C on November 13?", "token": "22338438971356285370482053395011062099463307052012441718195088110630460321689", "track": "endgame_sell98", "ts": "2026-11-12T17:36:58Z", "type": "paper_buy"}
 {"fee": 0.0138, "outcome": "Yes", "price": 0.959, "shares": 5, "title": "Will the price of Ethereum be above $1,900 on November 13?", "token": "25892047473950053501220724895310701112244311637724698723910664402852060965985", "track": "endgame_sell98", "ts": "2026-11-12T17:36:58Z", "type": "paper_buy"}
+{"minutes_left": 3.1, "price": 0.983, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV121245-45", "track": "kc_maker", "ts": "2026-11-12T17:41:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.1, "price": 0.996, "queue": 35747.73, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV121245-45", "track": "kc_maker", "ts": "2026-11-12T17:41:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.1, "price": 0.962, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV121245-45", "track": "kc_maker", "ts": "2026-11-12T17:41:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.1, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV121245-45", "track": "kc_maker", "ts": "2026-11-12T17:41:56Z", "type": "kmaker_order"}
+{"minutes_left": 3.1, "price": 0.969, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV121245-45", "track": "kc_maker", "ts": "2026-11-12T17:41:57Z", "type": "kmaker_order"}
