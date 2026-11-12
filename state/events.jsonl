@@ -7885,3 +7885,4 @@
 {"filled": 10.0, "pnl": 0.44, "price": 0.956, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV120800-00", "track": "kc_maker", "ts": "2026-11-12T13:02:28Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV120800-00", "track": "kc_maker", "ts": "2026-11-12T13:02:29Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV120800-00", "track": "kc_maker_safe", "ts": "2026-11-12T13:02:29Z", "type": "kmaker_fill"}
+{"fee": 0.0211, "outcome": "No", "price": 0.88, "shares": 5, "title": "Will FISA Section 702 reauthorization become law this year?", "token": "71334664885801955807825330010928919481514110131639634508060790735437273378545", "track": "panic_fade_4c", "ts": "2026-11-12T13:08:30Z", "type": "paper_buy"}
