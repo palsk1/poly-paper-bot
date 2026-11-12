@@ -802,6 +802,101 @@ def depth(track="kc_maker_safe", kind="improve", level=0.95, minutes=3, zmin=2.0
 
 # ================================================================ selftest
 
+def _spot_1s(sym, t0, t1):
+    """Binance 1-second closes {epoch: price} for [t0, t1]."""
+    out, cur = {}, int(t0) * 1000
+    while cur < t1 * 1000:
+        ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1s", "startTime": cur, "limit": 1000})
+        if not ks:
+            break
+        for k in ks:
+            out[int(k[0]) // 1000] = float(k[4])
+        cur = int(ks[-1][0]) + 1000
+    return out
+
+
+def losstape(track="kc_maker_safe"):
+    """Live look at one kmaker track's bets (Jan, 12 Nov: "why did we lose and can we avoid it?"). For every closed
+    bet: the real Kalshi trade tape from our bid to the close (when our paper bid would have filled, who sold to us,
+    how low it traded). For the lost bets also Binance 1-second spot around the window and Kalshi's own settle value.
+    Prints one JSON line per bet (prefix LT) for the write-up in backtest/kcloss.md. Reads only."""
+    with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+        closed = (json.load(fh).get(track) or {}).get("closed") or []
+    for c in closed:
+        if c.get("reason") != "resolved":
+            continue
+        t_pl, t_cl = bot.parse_iso(c["placed"]).timestamp(), bot.parse_iso(c["close"]).timestamp()
+        lost = c["exit"] < 0.5
+        try:
+            trades, complete = bot.kalshi_trades(c["ticker"], t_pl - (600 if lost else 0), t_cl)
+        except Exception as e:
+            print("LT", json.dumps({"ticker": c["ticker"], "err": str(e)}))
+            continue
+        rows = []
+        for t in trades:
+            ts = bot.parse_iso(t.get("created_time"))
+            yp = bot.fnum(t.get("yes_price_dollars"), None)
+            if yp is None:
+                yp = bot.fnum(t.get("yes_price"), 0) / 100
+            px = yp if c["side"] == "yes" else round(1 - yp, 6)
+            rows.append((ts.timestamp(), round(px, 4), bot.fnum(t.get("count_fp") or t.get("count"), 0),
+                         str(t.get("taker_side"))))
+        rows.sort()
+        # walk our paper bid: sells at our price eat the queue first, anything below fills us at once
+        need, q, fill_t, filled, first_t = c["shares"], c.get("queue", 0), None, 0.0, None
+        sold_to_us = []
+        for ts, px, n, ts_side in rows:
+            if ts <= t_pl or ts_side == c["side"]:
+                continue
+            if abs(px - c["entry"]) < 1e-6:
+                take = max(0.0, n - q)
+                q = max(0.0, q - n)
+            elif px < c["entry"]:
+                take = n
+            else:
+                continue
+            if take > 0:
+                filled += take
+                sold_to_us.append([round(t_cl - ts, 1), px, n])
+                first_t = ts if first_t is None else first_t
+                if filled >= need - 1e-9 and fill_t is None:
+                    fill_t = ts
+        after = [r for r in rows if r[0] > t_pl]
+        out = {"ticker": c["ticker"], "side": c["side"], "price": c["entry"], "won": not lost, "front": c.get("front"),
+               "queue": c.get("queue"), "z": c.get("spot_z"), "left": c.get("minutes_left"), "strike": c.get("strike"),
+               "fill_s_before_close": None if fill_t is None else round(t_cl - fill_t, 1),
+               "first_s_before_close": None if first_t is None else round(t_cl - first_t, 1), "filled": filled,
+               "low_after": min((r[1] for r in after), default=None), "n_trades_after": len(after),
+               "vol_after": round(sum(r[2] for r in after)), "complete": complete}
+        if lost:
+            out["sold_to_us"] = sold_to_us[:40]
+            # 10-second view of the tape: lowest and last price of our side, contracts, share sold by takers
+            buck = defaultdict(lambda: [9, 0, 0, 0])
+            for ts, px, n, s_ in rows:
+                b = int((ts - t_cl) // 10) * 10
+                buck[b][0] = min(buck[b][0], px)
+                buck[b][1] = px
+                buck[b][2] += n
+                buck[b][3] += n if s_ != c["side"] else 0
+            out["tape10"] = [[k, v[0], v[1], round(v[2]), round(v[3])] for k, v in sorted(buck.items())]
+            sym = bot.KMAKER_SPOT.get(c["series"])
+            try:
+                sp = _spot_1s(sym, t_pl - 900, t_cl + 60)
+                out["spot10"] = [[int(k - t_cl), v] for k, v in sorted(sp.items()) if int(k - t_cl) % 10 == 0]
+                ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1m", "endTime": int(t_pl * 1000), "limit": 62})
+                cl = [float(k[4]) for k in ks]
+                r_ = [math.log(b / a) for a, b in zip(cl[:-1], cl[1:])][-60:]
+                out["sd1m"] = math.sqrt(sum(x * x for x in r_) / len(r_))
+                ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1m", "endTime": int(t_cl * 1000), "limit": 240})
+                out["min_closes_4h"] = [[int(k[0]) // 1000 - int(t_cl), float(k[4])] for k in ks]
+            except Exception as e:
+                out["spot_err"] = str(e)
+            m = bot.kalshi_market(c["ticker"]) or {}
+            out["market"] = {k: m.get(k) for k in ("result", "expiration_value", "floor_strike", "settlement_value",
+                                                   "close_time", "expiration_time", "rules_secondary") if k in m}
+        print("LT", json.dumps(out))
+
+
 def selftest():
     close = 10_000 * 900
     def win(rows, res, strike=100.0):
@@ -833,5 +928,5 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if cmd.startswith("fetch_"):
         cmd, arg = "fetch", cmd.split("_", 1)[1]
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth,
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape,
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
