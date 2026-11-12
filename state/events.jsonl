@@ -7311,3 +7311,9 @@
 {"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:46:49Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:46:49Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.78, "price": 0.922, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:46:50Z", "type": "kmaker_fill"}
+{"fee": 0.048, "outcome": "Yes", "price": 0.6, "shares": 5, "title": "Jensen Huang announced resignation or removal by November 12, 2026?", "token": "94592567375755535402382514854858851873438883868449100686326493803085500123190", "track": "w_sbel", "ts": "2026-11-12T04:50:36Z", "type": "paper_buy"}
+{"fee": 0.048, "outcome": "Yes", "price": 0.6, "shares": 5, "title": "Jensen Huang announced resignation or removal by November 12, 2026?", "token": "94592567375755535402382514854858851873438883868449100686326493803085500123190", "track": "wb_sbel", "ts": "2026-11-12T04:50:36Z", "type": "paper_buy"}
+{"minutes_left": 1.7, "price": 0.954, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV120000-00", "track": "kc_maker", "ts": "2026-11-12T04:58:20Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.97, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV120000-00", "track": "kc_maker", "ts": "2026-11-12T04:58:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.97, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV120000-00", "track": "kc_maker_safe", "ts": "2026-11-12T04:58:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.959, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV120000-00", "track": "kc_maker", "ts": "2026-11-12T04:58:22Z", "type": "kmaker_order"}
