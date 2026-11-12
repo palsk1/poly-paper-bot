@@ -52,6 +52,8 @@ WORKERS = int(os.environ.get("KH_WORKERS", "6"))
 SHARD = 500
 T0 = time.time()
 kget = yesno.kget
+SEED = 0
+SKIP_EV = set()        # events already in an earlier sample (a second sample must be new events)
 
 
 def rj(path, default=None):
@@ -130,17 +132,18 @@ def klass(m):
 
 def pick_day(d0, ok):
     """One random market per event, then up to PER_DAY events per class. Returns picks and the day's weights."""
-    rng = random.Random(d0)
+    rng = random.Random(d0 + SEED)
     by_ev = collections.defaultdict(list)
     for m in ok:
-        by_ev[m["ev"]].append(m)
+        if m["ev"] not in SKIP_EV:
+            by_ev[m["ev"]].append(m)
     per = collections.defaultdict(list)
     for ev in sorted(by_ev):
         m = rng.choice(by_ev[ev])
         per[klass(m)].append(m)
     picks, info = [], {}
     for k, ms in per.items():
-        got = rng.sample(ms, min(PER_DAY[k], len(ms)))
+        got = rng.sample(ms, min(PER_DAY.get(k, 0), len(ms)))
         info[k] = [len(ms), len(got)]
         picks += got
     return picks, info
@@ -209,6 +212,20 @@ def fetch_one(m):
 
 def shard_path(i):
     return os.path.join(CACHE, f"tapes_{i:03d}.json.gz")
+
+
+def second_sample():
+    """Point the tool at a second, sports-only sample of NEW events (the replication of the pre-game sports rule)."""
+    global CACHE, MK, PER_DAY, SEED, SKIP_EV
+    first = rj(MK, {}) or {}
+    SKIP_EV = {m["ev"] for m in (first.get("markets") or {}).values()}
+    CACHE = os.path.join(ROOT, "bt_cache", "khouse2")
+    MK = os.path.join(CACHE, "markets.json.gz")
+    PER_DAY = {"sports": 150, "other": 0}
+    SEED = 7
+    if not os.path.exists(MK) and first.get("fees"):
+        wj(MK, {"days": {}, "markets": {}, "fees": first["fees"]})
+    print(f"second sample: {len(SKIP_EV)} events of the first sample are left out")
 
 
 def fetch():
@@ -562,6 +579,24 @@ if __name__ == "__main__":
     elif cmd == "all":
         fetch()
         run()
+    elif cmd == "fetch2":
+        second_sample()
+        fetch()
+    elif cmd == "peeklive":
+        rows = kget("/markets", {"status": "open", "series_ticker": "KXITFMATCH", "limit": 3}).get("markets") or []
+        rows += kget("/markets", {"status": "open", "series_ticker": "KXNBAWINMARGIN", "limit": 2}).get("markets") or []
+        for m in rows:
+            print(json.dumps({k: v for k, v in m.items() if "rules" not in k})[:1500])
+            try:
+                ev = kget(f"/events/{m['event_ticker']}").get("event") or {}
+                print("  EVENT", json.dumps(ev)[:700])
+            except Exception as e:
+                print("  event failed", e)
+            for p in ({"related_event_ticker": m["event_ticker"], "limit": 5}, ):
+                try:
+                    print("  MILESTONES", json.dumps(kget("/milestones", p))[:1200])
+                except Exception as e:
+                    print("  milestones failed", str(e)[:200])
     elif cmd == "peek":
         d0, n, ok = list_day(tsec("2026-10-20"))
         print("listed", n, "ok", len(ok), "cutoff", yesno.k_cutoff())
