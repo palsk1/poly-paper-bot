@@ -8616,3 +8616,6 @@
 {"minutes_left": 1.49, "price": 0.997, "queue": 3748.01, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV121530-30", "track": "kc_maker", "ts": "2026-11-12T20:28:32Z", "type": "kmaker_order"}
 {"minutes_left": 1.49, "price": 0.997, "queue": 3748.01, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV121530-30", "track": "kc_maker_safe", "ts": "2026-11-12T20:28:33Z", "type": "kmaker_order"}
 {"minutes_left": 1.49, "price": 0.997, "queue": 3748.01, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV121530-30", "track": "kc_maker_safe_usd", "ts": "2026-11-12T20:28:33Z", "type": "kmaker_order"}
+{"outcome": "Draw", "pnl": 3.3456, "price": 1.0, "reason": "resolved", "title": "Will Equatorial Guinea vs. Zimbabwe end in a draw?", "token": "41623494723053024818436468551331142967689474134263009453150611817107718610440", "track": "soccer_draw", "ts": "2026-11-12T20:31:01Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV121530-30", "track": "kc_maker", "ts": "2026-11-12T20:32:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV121530-30", "track": "kc_maker", "ts": "2026-11-12T20:32:25Z", "type": "kmaker_fill"}
