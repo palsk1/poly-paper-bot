@@ -897,6 +897,44 @@ def losstape(track="kc_maker_safe"):
         print("LT", json.dumps(out))
 
 
+def live_basis(track="kc_maker_safe"):
+    """Binance's coin price vs Kalshi's own price, for every live bet of a kmaker track (12 Nov). Kalshi settles on
+    CF Benchmarks' US-dollar index; Binance quotes in USDT, which ran ~0.09% higher over 60 days. The window's strike
+    IS Kalshi's index at the open, so Binance at the open / strike = the gap at that moment, known before we bid.
+    Prints one LB line per bet: the z the bot used and the z with Binance moved onto Kalshi's scale. Reads only."""
+    with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+        closed = (json.load(fh).get(track) or {}).get("closed") or []
+    for c in closed:
+        if c.get("reason") != "resolved" or not c.get("strike"):
+            continue
+        t_pl, t_cl = bot.parse_iso(c["placed"]).timestamp(), bot.parse_iso(c["close"]).timestamp()
+        t_open = t_cl - 900
+        try:
+            ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": bot.KMAKER_SPOT[c["series"]], "interval": "1m",
+                                                         "endTime": int(t_pl * 1000), "limit": 80})
+        except Exception as e:
+            print("LB", json.dumps({"ticker": c["ticker"], "err": str(e)}))
+            continue
+        by = {int(k[0]) // 1000: float(k[4]) for k in ks}
+        a, b = by.get(int(t_open) - 60), by.get(int(t_open) - 120)
+        cl = [float(k[4]) for k in ks]
+        rets = [math.log(y / x) for x, y in zip(cl[:-1], cl[1:])][-60:]
+        sd = math.sqrt(sum(r * r for r in rets) / len(rets))
+        px = cl[-1]
+        left = max(c["minutes_left"], 0.5)
+        if not a:
+            print("LB", json.dumps({"ticker": c["ticker"], "err": "no open price"}))
+            continue
+        basis = ((a + b) / 2 if b else a) / c["strike"]
+        z = (px - c["strike"]) / (sd * px * math.sqrt(left))
+        zc = (px - c["strike"] * basis) / (sd * px * math.sqrt(left))
+        if c["side"] == "no":
+            z, zc = -z, -zc
+        print("LB", json.dumps({"ticker": c["ticker"], "side": c["side"], "won": c["exit"] >= 0.5, "pnl": c["pnl"],
+                                "price": c["entry"], "front": c.get("front"), "z_bot": c.get("spot_z"), "z": round(z, 2),
+                                "z_fixed": round(zc, 2), "gap_bp": round((basis - 1) * 1e4, 1), "sd1m": sd}))
+
+
 def selftest():
     close = 10_000 * 900
     def win(rows, res, strike=100.0):
@@ -928,5 +966,5 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if cmd.startswith("fetch_"):
         cmd, arg = "fetch", cmd.split("_", 1)[1]
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape,
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis,
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
