@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**88 ideas examined, in about 51,989 versions.** 60 dropped, 28 still being tested or waiting. **Looks real: 2.**
+**89 ideas examined, in about 51,991 versions.** 61 dropped, 28 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 88 ideas that are all worthless, the luckiest one still looks good. With 88 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 89 ideas that are all worthless, the luckiest one still looks good. With 89 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -88,10 +88,11 @@ Why count: if you test 88 ideas that are all worthless, the luckiest one still l
 | 2026-11-11 | Kalshi 15-minute crypto: every minute of the window, Binance vs Kalshi's price, buying Binance jumps 0-30 s late, 45-second buy by delay | 84 |  | Binance rule -$4.75; jump buys -$5 at any delay; 45 s buy +$0.69 at 1 s, same up to 5 s | Losing | dropped (speed buys nothing we can measure; no server) | kspeed.py, backtest/kspeed.md |
 | 2026-11-11 | Paper house for Polymarket combos: sell 2-4 leg combos (no same-game legs) at legs x 1.05 when that beats the pros' real price | 15 | 1044 | +$3.99 | Promising, needs more bets | lead (needs Jan's API key on his own server for a live paper test; Jan to decide) | combos.py replay, backtest/combos.md |
 | 2026-11-11 | Polymarket Combos (parlays): price paid vs the legs multiplied, 3,897 real combo buys | 14 |  | buyers start -$13.39 (maker -$10.33, fee -$3.05); 5+ legs -$21; long shots -$22 | Losing | dropped for buyers; maker side needs Jan's API key on his own server + a 0.4 s bot (open idea) | combos.py, backtest/combos.md |
-| 2026-11-12 | Kalshi lowball orders: likely side, 10c under the going price, before a game | 93 | 369 | -$5.83 | Losing | dropped | khouse.py, backtest/khouse.md |
+| 2026-11-12 | Kalshi lowball on the unlikely side before a game (10-50c, 5c under): re-test on new games | 2 | 318 | -$8.51 | Behind, but could be bad luck | dropped (did not repeat on new games) | khouse.py, backtest/khouse.md |
+| 2026-11-12 | Kalshi lowball orders: likely side, 10c under the going price, before a game | 93 | 369 | -$5.83 | Behind, but could be bad luck | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports | 93 | 2036 | -$5.35 | Losing | dropped | khouse.py, backtest/khouse.md |
-| 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 967 | +$1.42 | Ahead, but could be luck | paper track running (untested, picked after seeing both samples) | khouse.py, backtest/khouse.md |
-| 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Losing | dropped | khouse.py, backtest/khouse.md |
+| 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 1271 | +$0.61 | Ahead, but could be luck | paper track running (untested; behind on the one fresh sample) | khouse.py, backtest/khouse.md |
+| 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Behind, but could be bad luck | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | paper twin kc_maker_safe_usd running since 12 Nov (Jan said yes) | kcrypto.py gapcheck |
 | 2026-11-12 | Polymarket 15-min bid, both checks (history, 3 min) | 6 | 149 | -$1.26 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check (history, 3 min) | 6 | 315 | -$1.43 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |

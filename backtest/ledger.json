@@ -1004,12 +1004,12 @@
    "date": "2026-11-12",
    "what": "Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports",
    "tries": 93,
-   "bets": 971,
-   "groups": 967,
-   "per100": 1.42,
-   "floor100": -1.27,
+   "bets": 1275,
+   "groups": 1271,
+   "per100": 0.61,
+   "floor100": -1.9,
    "verdict": "Ahead, but could be luck",
-   "status": "paper track running (untested, picked after seeing both samples)",
+   "status": "paper track running (untested; behind on the one fresh sample)",
    "src": "khouse.py, backtest/khouse.md"
   },
   {
@@ -1020,7 +1020,7 @@
    "bets": 2050,
    "groups": 2036,
    "per100": -5.35,
-   "floor100": -11.12,
+   "floor100": -11.14,
    "verdict": "Losing",
    "status": "dropped",
    "src": "khouse.py, backtest/khouse.md"
@@ -1033,8 +1033,8 @@
    "bets": 560,
    "groups": 559,
    "per100": -3.28,
-   "floor100": -13.06,
-   "verdict": "Losing",
+   "floor100": -13.09,
+   "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "khouse.py, backtest/khouse.md"
   },
@@ -1046,8 +1046,8 @@
    "bets": 370,
    "groups": 369,
    "per100": -5.83,
-   "floor100": -23.62,
-   "verdict": "Losing",
+   "floor100": -23.67,
+   "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "khouse.py, backtest/khouse.md"
   },
@@ -1089,6 +1089,19 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "kcrypto.py pmrun"
+  },
+  {
+   "id": "kalshi_lowball_on_the_unlikely_side_before_a_game_10_50c_5c_",
+   "date": "2026-11-12",
+   "what": "Kalshi lowball on the unlikely side before a game (10-50c, 5c under): re-test on new games",
+   "tries": 2,
+   "bets": 318,
+   "groups": 318,
+   "per100": -8.51,
+   "floor100": -25.61,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped (did not repeat on new games)",
+   "src": "khouse.py, backtest/khouse.md"
   }
  ]
 }

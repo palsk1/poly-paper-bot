@@ -686,6 +686,10 @@ def run(score=True):
     P(row("sample 1", a1))
     P(row("sample 2 (sports before the game only)", a2))
     P(row("**both**", both))
+    a3 = [b for b in sim(s3[0], s3[1], 0.90, 0.97, 0.02, "fav") if b["fam"] != LIVE] if s3 else []
+    if a3:
+        P(row("**sample 3 (new games, downloaded after the rule was fixed and the track was built)**", a3))
+        P(row("**all three**", both + a3))
     P(row("both, if every contract had cost 1c more", worse(both, 0.01)))
     P(row("both, if every contract had cost 2c more", worse(both, 0.02)))
     for fam in FAMS:
@@ -699,6 +703,10 @@ def run(score=True):
     if both:
         P(f"\nAverage bet {usd(sum(b['cost'] for b in both) / len(both))[1:]}. A win makes about 5c a contract, a loss costs about 94c, "
           "so one loss eats about 15 wins.\n")
+    if a3:
+        P("Sample 3 was downloaded for the lowball re-test, but it is also the first data this rule had never seen. "
+          f"There it was behind: {usd(per100(a3))} per $100 on {len(a3)} bets. With all three samples the lead shrinks to "
+          f"{usd(per100(both + a3))} per $100. The live paper track is now the tie-breaker.\n")
     P("Honest notes: (1) this band was picked after seeing both samples, so sample 2 is not a clean re-test of it. "
       "(2) The split by 'traded in the hour before' was also looked at afterwards. "
       "(3) Paper can't see other robots stepping in front of our order. (4) It dies if we pay 2c more.\n")
@@ -707,7 +715,7 @@ def run(score=True):
     P(f"## 6. The exam\n\nVersions looked at in this dig: about {tries} (the luck bar counts them, plus every idea in the ledger).\n")
     cards = []
     dropped_main = [b for b in sim(have, tapes, 0.5, 0.9, 0.02, "fav") if b["fam"] != LIVE]
-    exams = [("Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports", both, "paper track running (untested, picked after seeing both samples)"),
+    exams = [("Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports", both + a3, "paper track running (untested; behind on the one fresh sample)"),
              ("Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports", dropped_main, "dropped"),
              ("Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games)", w2, "dropped"),
              ("Kalshi lowball orders: likely side, 10c under the going price, before a game", stinks[1][1], "dropped")]
@@ -725,7 +733,8 @@ def run(score=True):
         cards.append(card)
         P("```\n" + exam.card_text(card) + "\n```\n")
     main = cards[0] if cards else {}
-    bd, _ = ev_band(both)
+    allb = both + a3
+    bd, _ = ev_band(allb)
     S = ["**In short.** The idea: on Kalshi, don't pay the asking price. Leave a buy order 1c above the best one and wait an hour "
          "for somebody in a hurry to sell to us. Tested on two months of real trades, with our order filled only by contracts that were really sold.",
          "",
@@ -733,9 +742,10 @@ def run(score=True):
          "The people who sell to a waiting order usually know something.",
          "- **Lowball orders on the likely side lose too** ($3 to $19 per $100).",
          f"- **A lead on wide gaps before a game was luck:** {usd(per100(w1))} per $100 where we found it, {usd(per100(w2))} on new games.",
-         f"- **One version is left: the nearly-sure side at 90-97c.** {usd(per100(both))} per $100 on {len(both)} bets "
-         f"({sum(1 for b in both if b['pay'] > 0)} won). Luck range {usd(bd[0])} to {usd(bd[1])}. Small, and gone if we pay 2c more. "
-         f"Exam: **{main.get('verdict', '-')}**. It runs as the paper track `kalshi_patient`, labelled untested.",
+         f"- **One version is left: the nearly-sure side at 90-97c.** {usd(per100(both))} per $100 on {len(both)} bets in the two samples "
+         "it was found in" + (f", but {usd(per100(a3))} on {len(a3)} bets in a third, fresh sample. All together {usd(per100(allb))} per $100 "
+                              f"on {len(allb)} bets ({sum(1 for b in allb if b['pay'] > 0)} won), luck range {usd(bd[0])} to {usd(bd[1])}. " if a3 else ". ")
+         + f"Exam: **{main.get('verdict', '-')}**. It runs as the paper track `kalshi_patient`, labelled untested; its live bets decide.",
          ("- **Lowball on the unlikely side before a game:** " + (
              "not re-tested yet." if low3 is None else
              f"{usd(per100(low))} per $100 where we found it, {usd(per100(low3))} on {len(low3)} new games. "

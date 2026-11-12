@@ -5,10 +5,10 @@
 - **It loses almost everywhere.** At 50-90c it lost $5.35 per $100. During a live game it lost $5 to $13. The people who sell to a waiting order usually know something.
 - **Lowball orders on the likely side lose too** ($3 to $19 per $100).
 - **A lead on wide gaps before a game was luck:** +$7.97 per $100 where we found it, -$3.28 on new games.
-- **One version is left: the nearly-sure side at 90-97c.** +$1.42 per $100 on 971 bets (918 won). Luck range +$0.14 to +$2.70. Small, and gone if we pay 2c more. Exam: **Ahead, but could be luck**. It runs as the paper track `kalshi_patient`, labelled untested.
-- **Lowball on the unlikely side before a game:** not re-tested yet.
+- **One version is left: the nearly-sure side at 90-97c.** +$1.42 per $100 on 971 bets in the two samples it was found in, but -$1.99 on 304 bets in a third, fresh sample. All together +$0.61 per $100 on 1275 bets (1199 won), luck range -$0.60 to +$1.82. Exam: **Ahead, but could be luck**. It runs as the paper track `kalshi_patient`, labelled untested; its live bets decide.
+- **Lowball on the unlikely side before a game:** +$25.90 per $100 where we found it, -$8.51 on 318 new games. It did not repeat. Dropped.
 
-Generated 2026-11-12T17:02:38Z. Settled Kalshi markets that closed 2026-09-11 to 2026-11-09 with 100+ contracts traded (no 15-minute crypto, no combos), one market per event. Sample 1: up to 70 sports and 110 other events a day, 10535 markets, 1,436,801 real trades from their last 7 days. Sample 2 (downloaded later, to re-check a sports lead): 8850 other sports events, 1,810,165 trades. Markets that closed from 2026-11-10 on are untouched.
+Generated 2026-11-12T18:59:41Z. Settled Kalshi markets that closed 2026-09-11 to 2026-11-09 with 100+ contracts traded (no 15-minute crypto, no combos), one market per event. Sample 1: up to 70 sports and 110 other events a day, 10535 markets, 1,436,801 real trades from their last 7 days. Sample 2 (downloaded later, to re-check a sports lead): 8850 other sports events, 1,810,165 trades. Markets that closed from 2026-11-10 on are untouched.
 
 A trap we fell into first: for very busy markets the download kept only the newest 2,000 trades. Which markets have such a cut list depends on how the game went, and it made favourites look underpriced. Those stretches are thrown away here.
 
@@ -147,7 +147,16 @@ On the likely side, whoever dumps below the going price usually knows why: dropp
 
 Rule, written into the commit before sample 3 was downloaded: sports before the game, the unlikely side (middle price 10-50c), a buy order 5c under the middle price and at least 2c under the best buy order, refreshed hourly, filled only by contracts sold below our price. Passes if sample 3 alone is ahead with the low end of its luck range above $0.
 
-Sample 3 is not downloaded yet.
+Sample 3: 8723 new sports events, 1,838,070 trades.
+
+| what | bets | won | per $100 | luck range | first half | second half |
+|---|---|---|---|---|---|---|
+| samples 1+2 (where it was found) | 469 | 149 | +$25.90 | +$4.80 to +$47.00 | +$25.62 | +$26.13 |
+| **sample 3 (new games), the test** | 318 | 94 | -$8.51 | -$25.21 to +$8.20 | -$10.34 | -$6.53 |
+| sample 3, if every contract had cost 1c more | 318 | 94 | -$12.60 | -$28.62 to +$3.41 | -$14.11 | -$10.99 |
+| sample 3, second look: middle price 30-50c only | 234 | 80 | -$6.66 | -$23.35 to +$10.04 | -$17.33 | +$4.68 |
+
+**Did not pass.**
 
 ## 5. The one that is left: the nearly-sure side
 
@@ -158,6 +167,8 @@ Rule: the likely side's best buy order stands at 90-97c, the gap to the sell pri
 | sample 1 | 645 | 612 | +$1.49 | -$0.05 to +$3.03 | -$0.15 | +$3.14 |
 | sample 2 (sports before the game only) | 326 | 306 | +$1.28 | -$1.03 to +$3.59 | +$1.21 | +$1.35 |
 | **both** | 971 | 918 | +$1.42 | +$0.14 to +$2.70 | +$0.34 | +$2.50 |
+| **sample 3 (new games, downloaded after the rule was fixed and the track was built)** | 304 | 281 | -$1.99 | -$4.98 to +$0.99 | -$3.34 | -$0.65 |
+| **all three** | 1275 | 1199 | +$0.61 | -$0.60 to +$1.82 | -$0.36 | +$1.58 |
 | both, if every contract had cost 1c more | 971 | 918 | +$0.35 | -$0.92 to +$1.62 | -$0.72 | +$1.42 |
 | both, if every contract had cost 2c more | 971 | 918 | -$0.70 | -$1.96 to +$0.56 | -$1.76 | +$0.36 |
 | both: sports before the game | 482 | 454 | +$1.68 | -$0.11 to +$3.48 | +$0.80 | +$2.55 |
@@ -172,6 +183,8 @@ Rule: the likely side's best buy order stands at 90-97c, the gap to the sell pri
 
 Average bet $7.89. A win makes about 5c a contract, a loss costs about 94c, so one loss eats about 15 wins.
 
+Sample 3 was downloaded for the lowball re-test, but it is also the first data this rule had never seen. There it was behind: -$1.99 per $100 on 304 bets. With all three samples the lead shrinks to +$0.61 per $100. The live paper track is now the tie-breaker.
+
 Honest notes: (1) this band was picked after seeing both samples, so sample 2 is not a clean re-test of it. (2) The split by 'traded in the hour before' was also looked at afterwards. (3) Paper can't see other robots stepping in front of our order. (4) It dies if we pay 2c more.
 
 ## 6. The exam
@@ -182,13 +195,13 @@ Versions looked at in this dig: about 93 (the luck bar counts them, plus every i
 
 === EXAM: Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports ===
 Verdict: Ahead, but could be luck
-Bets: 971 bets on 967 events over 64 days. Counted as 967 separate bets (bets on the same event count once).
-Result: +$1.42 per $100 bet (total +$108.93 on $7665.09). Luck range +$0.14 to +$2.70.
-Halves: first +$0.36, second +$2.48 per $100. Both ahead.
-If every price were worse: +1c +$0.35, +2c -$0.70 per $100.
-Luck bar: this is 1 of 173 tries. The luckiest of 173 worthless ideas would show about +$2.57 per $100 on this many bets.
-Worst case per $100 (one more disaster added, bar raised for all tries): -$1.27. Below $0: not proven.
-To prove it: about 2,837 more separate bets like these. At its pace (15.2 separate bets a day) that is around 2027-05-15, after 2027-01-01: too slow for the 1 Jan decision.
+Bets: 1275 bets on 1271 events over 64 days. Counted as 1271 separate bets (bets on the same event count once).
+Result: +$0.61 per $100 bet (total +$61.48 on $10047.13). Luck range -$0.60 to +$1.82.
+Halves: first -$0.34, second +$1.56 per $100. Not ahead in both: could be one good stretch.
+If every price were worse: +1c -$0.45, +2c -$1.49 per $100.
+Luck bar: this is 1 of 181 tries. The luckiest of 181 worthless ideas would show about +$2.42 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$1.90. Below $0: not proven.
+To prove it: about 26,794 more separate bets like these. At its pace (19.9 separate bets a day) that is around 2030-07-15, after 2027-01-01: too slow for the 1 Jan decision.
 ```
 
 ```
@@ -199,31 +212,43 @@ Bets: 2050 bets on 2036 events over 64 days. Counted as 2036 separate bets (bets
 Result: -$5.35 per $100 bet (total -$770.79 on $14410.23). Luck range -$8.20 to -$2.50.
 Halves: first -$6.14, second -$4.60 per $100. Not ahead in both: could be one good stretch.
 If every price were worse: +1c -$6.72, +2c -$8.05 per $100.
-Luck bar: this is 1 of 174 tries. The luckiest of 174 worthless ideas would show about +$5.64 per $100 on this many bets.
-Worst case per $100 (one more disaster added, bar raised for all tries): -$11.12. Below $0: not proven.
+Luck bar: this is 1 of 181 tries. The luckiest of 181 worthless ideas would show about +$5.66 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$11.14. Below $0: not proven.
 ```
 
 ```
 
 === EXAM: Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) ===
-Verdict: Losing
+Verdict: Behind, but could be bad luck
 Bets: 560 bets on 559 events over 64 days. Counted as 559 separate bets (bets on the same event count once).
 Result: -$3.28 per $100 bet (total -$120.92 on $3692.14). Luck range -$8.08 to +$1.53.
 Halves: first +$3.47, second -$9.38 per $100. Not ahead in both: could be one good stretch.
 If every price were worse: +1c -$4.56, +2c -$5.81 per $100.
-Luck bar: this is 1 of 175 tries. The luckiest of 175 worthless ideas would show about +$9.52 per $100 on this many bets.
-Worst case per $100 (one more disaster added, bar raised for all tries): -$13.06. Below $0: not proven.
+Luck bar: this is 1 of 181 tries. The luckiest of 181 worthless ideas would show about +$9.55 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$13.09. Below $0: not proven.
 ```
 
 ```
 
 === EXAM: Kalshi lowball orders: likely side, 10c under the going price, before a game ===
-Verdict: Losing
+Verdict: Behind, but could be bad luck
 Bets: 370 bets on 369 events over 62 days. Counted as 369 separate bets (bets on the same event count once).
 Result: -$5.83 per $100 bet (total -$144.27 on $2473.73). Luck range -$14.65 to +$2.98.
 Halves: first -$3.61, second -$7.84 per $100. Not ahead in both: could be one good stretch.
 If every price were worse: +1c -$7.69, +2c -$9.47 per $100.
-Luck bar: this is 1 of 176 tries. The luckiest of 176 worthless ideas would show about +$17.41 per $100 on this many bets.
-Worst case per $100 (one more disaster added, bar raised for all tries): -$23.62. Below $0: not proven.
+Luck bar: this is 1 of 181 tries. The luckiest of 181 worthless ideas would show about +$17.46 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$23.67. Below $0: not proven.
+```
+
+```
+
+=== EXAM: Kalshi lowball on the unlikely side before a game (10-50c, 5c under): re-test on new games ===
+Verdict: Behind, but could be bad luck
+Bets: 318 bets on 318 events over 60 days. Counted as 318 separate bets (bets on the same event count once).
+Result: -$8.51 per $100 bet (total -$178.88 on $2102.92). Luck range -$25.24 to +$8.23.
+Halves: first -$10.34, second -$6.53 per $100. Not ahead in both: could be one good stretch.
+If every price were worse: +1c -$12.60, +2c -$16.35 per $100.
+Luck bar: this is 1 of 2 tries. The luckiest of 2 worthless ideas would show about +$16.67 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$25.61. Below $0: not proven.
 ```
 
