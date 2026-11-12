@@ -957,7 +957,7 @@ def follow_leader(tracks):
         m = market_by_slug(p["slug"])
         if m and m.get("closed"):
             continue
-        end = parse_iso(p["end"]) or parse_iso((m or {}).get("endDateIso"))
+        end = parse_iso(p["end"]) or parse_iso((m or {}).get("endDate") or (m or {}).get("endDateIso"))
         if end and end < now():
             continue
         px, shares, how = quote(tok, "buy", n, m)
@@ -1113,7 +1113,7 @@ def copy_open(tracks, name, p, r, extra=None):
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
         why(name, "market closed")
         return False
-    end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
+    end = parse_iso(p["end"]) or parse_iso(m.get("endDate") or m.get("endDateIso"))
     if end and end < now():
         why(name, "market already past its end date")
         return False
@@ -1359,7 +1359,7 @@ def base_filter(m, r):
     q = str(m.get("question") or "").lower()
     if any(w in q for w in r.get("skip_words", [])):
         return None
-    end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+    end = parse_iso(m.get("endDate") or m.get("endDateIso"))
     if not end:
         return None
     days = (end - now()).total_seconds() / 86400
@@ -1382,7 +1382,7 @@ def candidate(m, i, days, liq, extra=None):
     c = {"token": toks[i], "outcome": str(outs[i]), "price": fnum(jlist(m.get("outcomePrices"))[i]), "title": q,
          "slug": str(m.get("slug") or ""), "event_slug": str(ev.get("slug") or ""),
          "event_key": str(ev.get("id") or ev.get("slug") or m.get("slug")),
-         "theme": theme_of(q), "end": (parse_iso(m.get("endDateIso") or m.get("endDate")) or now()).strftime("%Y-%m-%d"),
+         "theme": theme_of(q), "end": (parse_iso(m.get("endDate") or m.get("endDateIso")) or now()).strftime("%Y-%m-%d"),
          "days": round(days, 1), "liquidity": round(liq), "fee_rate": fee_rate(m),
          "nothing_happens": str(outs[i]).lower() == "no", "market": m}
     c.update(extra or {})
@@ -1552,6 +1552,8 @@ def story_names(title):
 
 def buy_candidates(tracks, name, cands, limit):
     tc, tr, r = CFG["tracks"][name], tracks[name], rules_for(name)
+    if tc.get("stopped"):
+        return []  # Jan stopped this track: no new bets, open ones still settle (12 Nov 2026)
     held_events = {p.get("event_key") for p in tr["positions"].values()}
     held_names = set()
     if r.get("one_per_story"):
@@ -1864,7 +1866,7 @@ def arb_propose():
         q = str(m.get("question") or "")
         if any(w in q.lower() for w in r.get("poly_skip_words", [])):
             continue
-        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        end = parse_iso(m.get("endDate") or m.get("endDateIso"))
         bb, ba = fnum(m.get("bestBid"), None), fnum(m.get("bestAsk"), None)
         if end and bb is not None and ba is not None and 0 < ba <= 1:
             txt = f"{q} {m.get('groupItemTitle') or ''}"
@@ -2010,7 +2012,7 @@ def arb_check_pair(name, tr, pair, r):
     if not kb or not pb[0] or not pb[1]:
         return
     shares = max(r["lot_shares"], pb[0]["min_size"], pb[1]["min_size"])
-    ends = [d for d in (parse_iso(km.get("close_time")), parse_iso(pm.get("endDateIso") or pm.get("endDate"))) if d]
+    ends = [d for d in (parse_iso(km.get("close_time")), parse_iso(pm.get("endDate") or pm.get("endDateIso"))) if d]
     days = max(1.0, (max(ends) - now()).total_seconds() / 86400 if ends else 30) + r["settle_buffer_days"]
     rate = fee_rate(pm)
     best = None
@@ -2204,7 +2206,7 @@ def endgame_candidates(r):
             continue
         if r.get("only_words") and not any(w in q.lower() for w in r["only_words"]):
             continue
-        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        end = parse_iso(m.get("endDate") or m.get("endDateIso"))
         if "resolved" in st:
             tier, days = "resolved", 0.2
         elif st and st[-1] == "proposed":
@@ -2235,7 +2237,7 @@ def endgame_candidates(r):
 
 def run_endgame(tracks):
     for name, tc in CFG["tracks"].items():
-        if tc["source"] == "endgame":
+        if tc["source"] == "endgame" and not tc.get("stopped"):
             try:
                 r = rules_for(name)
                 buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
@@ -2325,7 +2327,7 @@ def yes_no_tokens(m):
 
 def fullset_check(tracks):
     name, r = fullset_rules()
-    if not name:
+    if not name or CFG["tracks"][name].get("stopped"):
         return
     tr = tracks[name]
     if len(tr["sets"]) >= r["max_open"]:
@@ -2639,7 +2641,7 @@ def ladder_pairs(markets, r):
             tq, dq, nq = ladder_template(m.get("question"))
             td, dd, nd = ladder_template(m.get("description"))
             fams[(tq, td)].append({"m": m, "dq": dq, "nq": nq, "dd": dd, "nd": nd,
-                                   "end": parse_iso(m.get("endDateIso") or m.get("endDate"))})
+                                   "end": parse_iso(m.get("endDate") or m.get("endDateIso"))})
         for (tq, td), fam in fams.items():
             if len(fam) < 2 or any(x["end"] is None for x in fam):
                 continue
@@ -2704,7 +2706,7 @@ def ladder_pairs(markets, r):
 def ladder_discover():
     """Daily: find the ladder families and save their pairs for the watch job."""
     name, r = ladder_rules()
-    if not name:
+    if not name or CFG["tracks"][name].get("stopped"):
         return
     ms = scan_markets({"end_date_min": iso(now() + dt.timedelta(days=r["min_days"])),
                        "end_date_max": iso(now() + dt.timedelta(days=r["max_days"])),
@@ -2719,7 +2721,7 @@ def ladder_discover():
                            "no_token": yes_no_tokens(a)[1]},
                      "b": {"mid": str(b.get("id")), "slug": b.get("slug"), "q": b.get("question"),
                            "yes_token": yes_no_tokens(b)[0]},
-                     "end": max(a.get("endDateIso") or a.get("endDate") or "", b.get("endDateIso") or b.get("endDate") or "")})
+                     "end": max(a.get("endDate") or a.get("endDateIso") or "", b.get("endDate") or b.get("endDateIso") or "")})
     rows = rows[: r["max_pairs"]]
     save("ladder_pairs.json", {"generated": iso(), "markets_scanned": len(ms), "stats": dict(stats),
                                "pairs": len(rows), "list": rows})
@@ -2752,7 +2754,7 @@ def gamma_markets_by_id(ids, batch=50):
 
 def ladder_check(tracks, force=False):
     name, r = ladder_rules()
-    if not name or not (force or ladder_due()):
+    if not name or CFG["tracks"][name].get("stopped") or not (force or ladder_due()):
         return
     st = load("scan_state.json", {})
     st["last_ladder_check"] = iso()
@@ -2803,8 +2805,8 @@ def ladder_check(tracks, force=False):
         fa, fb = taker_fee(shares, xa, fee_rate(a)), taker_fee(shares, xb, fee_rate(b))
         cost = shares * (xa + xb) + fa + fb
         net = shares - cost
-        end = max(d for d in (parse_iso(a.get("endDateIso") or a.get("endDate")),
-                              parse_iso(b.get("endDateIso") or b.get("endDate")), now()) if d)
+        end = max(d for d in (parse_iso(a.get("endDate") or a.get("endDateIso")),
+                              parse_iso(b.get("endDate") or b.get("endDateIso")), now()) if d)
         days = max(1.0, (end - now()).total_seconds() / 86400) + 3
         edge = net / shares
         annual = (net / cost) * 365 / days if cost > 0 else 0
@@ -3421,7 +3423,7 @@ def model_pick(m, p_yes, r, extra=None):
     if not best or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] not in (["yes"], ["up"]):
         return None
     i = best[1]
-    end = parse_iso(m.get("endDateIso") or m.get("endDate")) or now()
+    end = parse_iso(m.get("endDate") or m.get("endDateIso")) or now()
     c = candidate(m, i, max((end - now()).total_seconds() / 86400, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
                   {"model_p": round(best[2], 4), "model_edge": round(best[0], 4), **(extra or {})})
     return c
@@ -3434,7 +3436,8 @@ def fast_due(name, minutes):
 
 def run_fast(tracks, force=False):
     """Scan the weather and crypto tracks that are due (each has its own scan_every_minutes)."""
-    due = [n for n in fast_tracks() if force or fast_due(n, rules_for(n).get("scan_every_minutes", 60))]
+    due = [n for n in fast_tracks() if not CFG["tracks"][n].get("stopped")
+           and (force or fast_due(n, rules_for(n).get("scan_every_minutes", 60)))]
     if not due:
         return {}
     lists = {}
