@@ -214,18 +214,22 @@ def shard_path(i):
     return os.path.join(CACHE, f"tapes_{i:03d}.json.gz")
 
 
-def second_sample():
-    """Point the tool at a second, sports-only sample of NEW events (the replication of the pre-game sports rule)."""
+def second_sample(n=2, seed=7):
+    """Point the tool at another sports-only sample of NEW events (a re-test of a lead on games nobody looked at).
+    n=2 re-tested the pre-game wide-gap rule, n=3 (seed 11) the pre-game lowball on the unlikely side."""
     global CACHE, MK, PER_DAY, SEED, SKIP_EV
     first = rj(MK, {}) or {}
     SKIP_EV = {m["ev"] for m in (first.get("markets") or {}).values()}
-    CACHE = os.path.join(ROOT, "bt_cache", "khouse2")
+    for k in range(2, n):
+        old = rj(os.path.join(ROOT, "bt_cache", f"khouse{k}", "markets.json.gz"), {}) or {}
+        SKIP_EV |= {m["ev"] for m in (old.get("markets") or {}).values()}
+    CACHE = os.path.join(ROOT, "bt_cache", f"khouse{n}")
     MK = os.path.join(CACHE, "markets.json.gz")
     PER_DAY = {"sports": 150, "other": 0}
-    SEED = 7
+    SEED = seed
     if not os.path.exists(MK) and first.get("fees"):
         wj(MK, {"days": {}, "markets": {}, "fees": first["fees"]})
-    print(f"second sample: {len(SKIP_EV)} events of the first sample are left out")
+    print(f"sample {n}: {len(SKIP_EV)} events of the earlier samples are left out")
 
 
 def fetch():
@@ -442,21 +446,132 @@ def usd(x):
     return "-" if x is None else f"{'+' if x >= 0 else '-'}${abs(x):.2f}"
 
 
-GRID_BANDS = ((0.5, 0.7), (0.7, 0.8), (0.8, 0.9), (0.9, 0.97))
+GRID = (("fav", 0.5, 0.7), ("fav", 0.7, 0.8), ("fav", 0.8, 0.9), ("fav", 0.9, 0.97),
+        ("dog", 0.03, 0.1), ("dog", 0.1, 0.3), ("dog", 0.3, 0.5))
 GRID_GAPS = (0.02, 0.05)
+LIVE = "sports, game on"
+PRE = "sports before the game"
+
+
+def clean(have, tapes):
+    """Drop the 'newest 2,000 trades' stretch of busy markets: which markets have one depends on how the
+    game went, so it flatters whoever was right. Keep whole trade lists, or the stretch that ends 4h before the close."""
+    for tk, d in tapes.items():
+        m = have["markets"][tk]
+        a = max(m["open"], m["close"] - LOOKBACK)
+        if len(d["cov"]) == 1 and d["cov"][0][0] <= a:
+            continue
+        if len(d["cov"]) == 2:
+            lo, hi = d["cov"][1]
+            d["tr"] = [x for x in d["tr"] if lo <= x[0] <= hi]
+            d["cov"] = [[lo, hi]]
+        else:
+            d["tr"], d["cov"] = [], []
+    return have, tapes
+
+
+def load_sample(name):
+    global CACHE, MK
+    keep = CACHE, MK
+    CACHE = os.path.join(ROOT, "bt_cache", name)
+    MK = os.path.join(CACHE, "markets.json.gz")
+    try:
+        return clean(*load())
+    finally:
+        CACHE, MK = keep
+
+
+def stink(have, tapes, depth, side_mode="fav", lo=0.5, hi=0.97, usd=10.0, fams=None):
+    """A lowball buy order `depth` under the middle price (and 2c+ under the best buy order), refreshed hourly.
+    Filled only by contracts sold BELOW our price."""
+    bets = []
+    for tk, d in tapes.items():
+        m = have["markets"][tk]
+        tr = d["tr"]
+        if not tr or not d["c"]:
+            continue
+        j = 0
+        for h, bid, ask, _v in d["c"]:
+            if bid is None or ask is None or not 0 < bid < ask < 1 or h >= m["close"] - 300:
+                continue
+            fam = family(m, h)
+            if fams and fam not in fams:
+                continue
+            fav_yes = (bid + ask) / 2 >= 0.5
+            sy = fav_yes if side_mode == "fav" else not fav_yes
+            b, a = (bid, ask) if sy else (1 - ask, 1 - bid)
+            ms = (a + b) / 2
+            if not lo <= ms < hi:
+                continue
+            p = round(min(ms - depth, b - 0.02), 2)
+            if p <= 0.02:
+                continue
+            end = min(h + 3600, m["close"])
+            if not covered(d, h) or not covered(d, end - 1):
+                continue
+            want = max(1, int(usd / p))
+            got, tf = 0.0, None
+            while j < len(tr) and tr[j][0] <= h + 60:
+                j += 1
+            k = j
+            while k < len(tr) and tr[k][0] <= end:
+                ts, yp, n, ty = tr[k]
+                k += 1
+                if bool(ty) == sy:
+                    continue
+                px = yp / 1000 if sy else 1 - yp / 1000
+                if px < p - 1e-9:
+                    got += n
+                    tf = tf or ts
+                    if got >= want:
+                        break
+            if got <= 0:
+                continue
+            n = min(want, got)
+            bets.append({"ev": m["ev"], "t": tf, "cost": n * p, "pay": n if (m["res"] == "yes") == sy else 0.0, "sh": n, "fam": fam})
+            break
+    return bets
+
+
+def worse(bets, c):
+    """The same bets if every contract had cost c more."""
+    return [dict(b, cost=b["cost"] + c * b["sh"]) for b in bets]
+
+
+def slim(bets):
+    return [{k: b[k] for k in ("ev", "t", "cost", "pay", "sh")} for b in bets]
+
+
+def row(name, bets):
+    if len(bets) < 10:
+        return f"| {name} | {len(bets)} | - | - | - | - | - |"
+    h1, h2 = halves(bets)
+    bd, _ = ev_band(bets)
+    return (f"| {name} | {len(bets)} | {sum(1 for b in bets if b['pay'] > 0)} | {usd(per100(bets))} | "
+            f"{'-' if not bd else usd(bd[0]) + ' to ' + usd(bd[1])} | {usd(h1)} | {usd(h2)} |")
+
+
+ROW_HEAD = "| what | bets | won | per $100 | luck range | first half | second half |\n|---|---|---|---|---|---|---|"
 
 
 def run(score=True):
-    have, tapes = load()
+    s1 = load_sample("khouse")
+    s2 = load_sample("khouse2")
+    have, tapes = s1
     L = []
     P = L.append
-    nt = sum(len(d["tr"]) for d in tapes.values())
     P("# Kalshi: be the patient buyer (khouse.py)\n")
+    P("SUMMARY_HERE\n")
     P(f"Generated {bot.iso()}. Settled Kalshi markets that closed {FIRST} to {LAST} with 100+ contracts traded "
-      f"(no 15-minute crypto, no combos): one market per event, up to {PER_DAY['sports']} sports and {PER_DAY['other']} other events a day. "
-      f"{len(tapes)} markets with data, {nt:,} real trades from their last 7 days.\n")
+      f"(no 15-minute crypto, no combos), one market per event. Sample 1: up to 70 sports and 110 other events a day, "
+      f"{len(tapes)} markets, {sum(len(d['tr']) for d in tapes.values()):,} real trades from their last 7 days. "
+      f"Sample 2 (downloaded later, to re-check a sports lead): {len(s2[1])} other sports events, "
+      f"{sum(len(d['tr']) for d in s2[1].values()):,} trades. Markets that closed from 2026-11-10 on are untouched.\n")
+    P("A trap we fell into first: for very busy markets the download kept only the newest 2,000 trades. Which markets have such a "
+      "cut list depends on how the game went, and it made favourites look underpriced. Those stretches are thrown away here.\n")
+
     tot, evs = who_earned(have, tapes)
-    P("## 1. Who earned on the real trades\n")
+    P("## 1. Who earned on the real trades (sample 1)\n")
     P("Every trade has a side in a hurry (it took the price on offer) and a patient side (its order was waiting). "
       "This is the patient side's profit per $100 it put in, held to the result, before any fee. Trades over 500 contracts count as 500.\n")
     P("| kind | patient side per $100 | luck range | contracts | events |")
@@ -479,63 +594,106 @@ def run(score=True):
         P(f"| {fam} | " + " | ".join(cells) + " |")
     P("\n(In brackets: events. Cells with under 25 events are left out.)\n")
 
-    P("## 2. The bot rule: a $10 buy order 1c above the best one, refreshed once an hour\n")
-    P("Filled only by contracts really sold at our price or lower in the next hour. One bet per market, held to the result. "
-      "'Price after' = how the middle price stood at the next hour mark compared with what we paid (minus = we were sold to just before it fell).\n")
+    P("## 2. The bot rule: a $10 buy order 1c above the best one, refreshed once an hour (sample 1)\n")
+    P("Filled only by contracts really sold at our price or lower in the next hour (after a 60-second wait). One bet per market, "
+      "held to the result, Kalshi's fee for waiting orders included where a series has one. "
+      "'Price after' = the middle price at the next hour mark compared with what we paid (minus = we were sold to just before it fell).\n")
     cells = []
-    for mode in ("fav", "dog"):
-        for lo, hi in GRID_BANDS:
-            for g in GRID_GAPS:
-                bets = sim(have, tapes, lo, hi, g, mode)
-                for fam in FAMS:
-                    fb = [b for b in bets if b["fam"] == fam]
-                    if len(fb) < 40:
-                        continue
-                    h1, h2 = halves(fb)
-                    bd, ne = ev_band(fb)
-                    mk = [b["mark"] for b in fb if b["mark"] is not None]
-                    cells.append({"mode": mode, "lo": lo, "hi": hi, "gap": g, "fam": fam, "n": len(fb), "ev": ne, "r": per100(fb),
-                                  "h1": h1, "h2": h2, "band": bd, "mark": sum(mk) / len(mk) * 100 if mk else None,
-                                  "won": sum(1 for b in fb if b["pay"] > 0)})
-    tries = len(cells)
-    P(f"{tries} versions looked at (side x price x gap x kind of market, 40+ bets each).\n")
+    for mode, lo, hi in GRID:
+        for g in GRID_GAPS:
+            bets = sim(have, tapes, lo, hi, g, mode)
+            for fam in FAMS:
+                fb = [b for b in bets if b["fam"] == fam]
+                if len(fb) < 40:
+                    continue
+                h1, h2 = halves(fb)
+                bd, ne = ev_band(fb)
+                mk = [b["mark"] for b in fb if b["mark"] is not None]
+                cells.append({"mode": mode, "lo": lo, "hi": hi, "gap": g, "fam": fam, "n": len(fb), "ev": ne, "r": per100(fb),
+                              "h1": h1, "h2": h2, "band": bd, "mark": sum(mk) / len(mk) * 100 if mk else None,
+                              "won": sum(1 for b in fb if b["pay"] > 0)})
+    grid_n = len(cells)
+    P(f"{grid_n} versions with 40+ bets (side x price x gap x kind of market).\n")
     P("| side | best buy order at | gap at least | kind | bets | won | per $100 | luck range | first half | second half | price after |")
     P("|---|---|---|---|---|---|---|---|---|---|---|")
-    for c in sorted(cells, key=lambda c: (c["mode"], FAMS.index(c["fam"]), c["lo"], c["gap"])):
+    for c in sorted(cells, key=lambda c: (c["mode"] != "fav", FAMS.index(c["fam"]), c["lo"], c["gap"])):
         bd = c["band"]
+        mark = "-" if c["mark"] is None else f"{c['mark']:+.1f}c"
         P(f"| {'the likely side' if c['mode'] == 'fav' else 'the unlikely side'} | {c['lo'] * 100:.0f}-{c['hi'] * 100:.0f}c | {c['gap'] * 100:.0f}c | {c['fam']} | {c['n']} | {c['won']} | "
-          f"{usd(c['r'])} | {'-' if not bd else usd(bd[0]) + ' to ' + usd(bd[1])} | {usd(c['h1'])} | {usd(c['h2'])} | "
-          f"{'-' if c['mark'] is None else f'{c['mark']:+.1f}c'} |")
+          f"{usd(c['r'])} | {'-' if not bd else usd(bd[0]) + ' to ' + usd(bd[1])} | {usd(c['h1'])} | {usd(c['h2'])} | {mark} |")
     good = [c for c in cells if c["h1"] is not None and c["h1"] > 0 and c["h2"] > 0 and c["band"] and c["band"][0] > 0]
-    P(f"\nAhead in both halves with the low end of the luck range above $0: **{len(good)} of {tries}**. "
-      f"Luck alone would give about {tries * 0.05 * 0.5:.0f}-{tries * 0.05:.0f}.\n")
+    P(f"\nAhead in both halves with the low end of the luck range above $0: **{len(good)} of {grid_n}**. "
+      f"Luck alone would give about {grid_n * 0.05 * 0.5:.0f}-{grid_n * 0.05:.0f}.\n")
     for c in good:
-        P(f"- {c['mode']} {c['lo'] * 100:.0f}-{c['hi'] * 100:.0f}c gap {c['gap'] * 100:.0f}c+ {c['fam']}: {usd(c['r'])} on {c['n']} bets")
+        P(f"- {'likely' if c['mode'] == 'fav' else 'unlikely'} side {c['lo'] * 100:.0f}-{c['hi'] * 100:.0f}c, gap {c['gap'] * 100:.0f}c+, {c['fam']}: {usd(c['r'])} on {c['n']} bets")
 
-    P("\n## 3. The exam\n")
-    # Fixed before looking: the plain rule. Likely side, best buy order at 80-97c, gap 2c+, no live sports.
-    main = [b for b in sim(have, tapes, 0.80, 0.97, 0.02, "fav") if b["fam"] != "sports, game on"]
+    P("\n## 3. The first lead did not repeat: wide gaps before a game\n")
+    P("The best-looking cell in sample 1 was sports before the game, likely side at 60-95c, gap 5c or more. "
+      "So we downloaded sample 2 (other games, same weeks) and ran the same rule once.\n")
+    P(ROW_HEAD)
+    w1 = sim(have, tapes, 0.60, 0.95, 0.05, "fav", fams=(PRE,))
+    w2 = sim(s2[0], s2[1], 0.60, 0.95, 0.05, "fav", fams=(PRE,))
+    P(row("sample 1 (where it was found)", w1))
+    P(row("sample 2 (new games)", w2))
+    P("\nIt was luck. Dropped.\n")
+
+    P("## 4. Lowball orders lose too\n")
+    P("A buy order far under the going price, filled only when somebody dumps below it. Both samples together.\n")
+    P(ROW_HEAD)
+    stinks = []
+    for name, depth, mode, lo, hi, fams in (
+            ("likely side 50-97c, 5c under, before a game", 0.05, "fav", 0.5, 0.97, (PRE,)),
+            ("likely side 50-97c, 10c under, before a game", 0.10, "fav", 0.5, 0.97, (PRE,)),
+            ("likely side 50-97c, 10c under, game on", 0.10, "fav", 0.5, 0.97, (LIVE,)),
+            ("likely side 50-97c, 5c under, everything but sports", 0.05, "fav", 0.5, 0.97, ("crypto price", "stocks", "weather", "slow questions")),
+            ("unlikely side 10-50c, 5c under, before a game", 0.05, "dog", 0.1, 0.5, (PRE,))):
+        bets = stink(have, tapes, depth, mode, lo, hi, fams=fams) + stink(s2[0], s2[1], depth, mode, lo, hi, fams=fams)
+        stinks.append((name, bets))
+        P(row(name, bets))
+    P("\nWhoever dumps below the going price usually knows why. Dropped.\n")
+
+    P("## 5. The one that is left: the nearly-sure side\n")
+    P("Rule: the likely side's best buy order stands at 90-97c, the gap to the sell price is 2c or more, we bid 1c above the best "
+      "buy order for an hour. Never on a sports game that has started. All kinds of markets, both samples.\n")
+    a1 = [b for b in sim(have, tapes, 0.90, 0.97, 0.02, "fav") if b["fam"] != LIVE]
+    a2 = [b for b in sim(s2[0], s2[1], 0.90, 0.97, 0.02, "fav") if b["fam"] != LIVE]
+    both = a1 + a2
+    P(ROW_HEAD)
+    P(row("sample 1", a1))
+    P(row("sample 2 (sports before the game only)", a2))
+    P(row("**both**", both))
+    P(row("both, if every contract had cost 1c more", worse(both, 0.01)))
+    P(row("both, if every contract had cost 2c more", worse(both, 0.02)))
+    for fam in FAMS:
+        fb = [b for b in both if b["fam"] == fam]
+        if fb:
+            P(row(f"both: {fam}", fb))
+    P(row("both: nothing traded in the hour before", [b for b in both if not b["vol"]]))
+    P(row("both: traded in the hour before", [b for b in both if b["vol"]]))
+    P(row("sample 1 at $25 an order", [b for b in sim(have, tapes, 0.90, 0.97, 0.02, "fav", usd=25) if b["fam"] != LIVE]))
+    P(row("sample 1 at $100 an order", [b for b in sim(have, tapes, 0.90, 0.97, 0.02, "fav", usd=100) if b["fam"] != LIVE]))
+    if both:
+        P(f"\nAverage bet {usd(sum(b['cost'] for b in both) / len(both))[1:]}. A win makes about 5c a contract, a loss costs about 94c, "
+          "so one loss eats about 15 wins.\n")
+    P("Honest notes: (1) this band was picked after seeing both samples, so sample 2 is not a clean re-test of it. "
+      "(2) The split by 'traded in the hour before' was also looked at afterwards. "
+      "(3) Paper can't see other robots stepping in front of our order. (4) It dies if we pay 2c more.\n")
+
+    tries = grid_n + len(GRID) + 2 * 5 + 6 + 8        # the grid, in-play looks, lowball versions, the wide-gap test, band picking
+    P(f"## 6. The exam\n\nVersions looked at in this dig: about {tries} (the luck bar counts them, plus every idea in the ledger).\n")
     cards = []
-    for name, bets in (("Kalshi patient buyer: likely side at 80-97c, buy order 1c above the best one, hourly, no live sports", main),):
+    dropped_main = [b for b in sim(have, tapes, 0.5, 0.9, 0.02, "fav") if b["fam"] != LIVE]
+    exams = [("Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports", both, "paper track running (untested, picked after seeing both samples)"),
+             ("Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports", dropped_main, "dropped"),
+             ("Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games)", w2, "dropped"),
+             ("Kalshi lowball orders: likely side, 10c under the going price, before a game", stinks[1][1], "dropped")]
+    for name, bets, status in exams:
         if len(bets) < 10:
             P(f"{name}: only {len(bets)} bets, no card.\n")
             continue
-        card = exam.score([{k: b[k] for k in ("ev", "t", "cost", "pay", "sh")} for b in bets], name, tries=max(1, tries),
-                          src="khouse.py, backtest/khouse.md", log=score, quiet=True)
+        card = exam.score(slim(bets), name, tries=tries, src="khouse.py, backtest/khouse.md", status=status, log=score, quiet=True)
         cards.append(card)
         P("```\n" + exam.card_text(card) + "\n```\n")
-        by = collections.defaultdict(list)
-        for b in bets:
-            by[b["fam"]].append(b)
-        P("| kind | bets | won | per $100 | first half | second half |")
-        P("|---|---|---|---|---|---|")
-        for fam in FAMS:
-            fb = by.get(fam)
-            if fb:
-                h1, h2 = halves(fb)
-                P(f"| {fam} | {len(fb)} | {sum(1 for b in fb if b['pay'] > 0)} | {usd(per100(fb))} | {usd(h1)} | {usd(h2)} |")
-        days = (tsec(LAST) - tsec(FIRST)) / DAY + 1
-        P(f"\nBets in this sample: about {len(bets) / days:.0f} a day. The sample is a slice of Kalshi, so a live bot would see more.\n")
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         f.write("\n".join(L) + "\n")
@@ -581,6 +739,9 @@ if __name__ == "__main__":
         run()
     elif cmd == "fetch2":
         second_sample()
+        fetch()
+    elif cmd == "fetch3":
+        second_sample(3, 11)
         fetch()
     elif cmd == "peeklive":
         rows = kget("/markets", {"status": "open", "series_ticker": "KXITFMATCH", "limit": 3}).get("markets") or []
