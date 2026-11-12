@@ -7,6 +7,11 @@ move its line, and change the candidate table if it changed. The "Live numbers" 
 Deeper detail: every idea tried is in `backtest/ledger.md` (kept by `exam.py`), the test rules in
 `backtest/PROTOCOL.md`, every live track in `state/summary.md`.
 
+**What's running right now, and where:** see the top of `CLAUDE.md` ("Running right now"). In short: the paper bot
+runs on GitHub; the combo "house" listener runs nonstop on **Jan's own AWS server in Stockholm** (paper, listen only,
+since 11 Nov); a **$25 real-money bot** on that server is agreed (Jan, 12 Nov) but not built, and its strategy isn't
+picked yet. 12 tracks were stopped on 12 Nov.
+
 ## The goal
 
 - Paper money only, until **1 Jan 2027**.
@@ -14,13 +19,13 @@ Deeper detail: every idea tried is in `backtest/ledger.md` (kept by `exam.py`), 
 - A strategy only gets the money if we're about 90% sure it really makes money (Jan's line).
 - "Keep your money" is a fine answer. Losing $300 on a lucky-looking fake is not.
 
-## Where we stand (10 Nov, hand-written)
+## Where we stand (12 Nov, hand-written)
 
-Nothing is proven yet. Of about 49 ideas tried, **0 look real**. That's normal: most ideas that look good on old
-data melt away once you pay real prices and fees.
+Nothing is proven with live money yet. Of about 85 ideas tried, only 2 "look real" on history, and both still need
+live bets. That's normal: most ideas that look good on old data melt away once you pay real prices and fees.
 
-Only one candidate can be **proven with live bets** by 1 Jan: `kc_maker_safe`, because it makes about 100 bets a
-day. The rest get **one fresh look** on 21 Dec (the "holdout": markets we have kept our eyes off). Passing that look
+Three candidates can be **settled with live bets** by 1 Jan: `kc_maker_safe` (about 125 bets a day, look about
+1 Dec), the combo house on Jan's server (#13: about 180 finished parlays a day so far, so its 1,000-bet look may come around 17 Nov, well before 1 Jan) and `kalshi_patient` (1 Jan). The rest get **one fresh look** on 21 Dec (the "holdout": markets we have kept our eyes off). Passing that look
 isn't proof. It just means the idea survived a test it couldn't be tuned for.
 
 **Real-money sizes (10 Nov, `backtest/bigbets.md`):** at $100 a bet, `boring_no` and `crypto_no` cost only pennies
@@ -46,32 +51,35 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 | 10 | Everything-together model (`combo_moving`) | A math model reads price, price moves, kind of market, rival choices and more together, and bets where it disagrees with the price by 12c+. Only on markets whose price is really moving | Chart +$15.39 per $100; at prices people really paid **+$7.66 on 259 bets**, anything from -$4 to +$20. For 7 in 10 of its bets nobody was selling. The plain price guessed better overall | Frozen 10 Nov. Ahead, and the low end of its luck range above -$5 per $100 (locked, PROTOCOL 5) | **21 Dec** |
 | 11 | CS2 favorite a day before (`cs2_fav_day`) | Buy the CS2 team priced 70-97c a day before the match, hold to the result | +$7.60 per $100 on 234 matches at real buys (smaller leagues +$15 on 91). Partly flattered: the matches that could be priced were the better ones. Very thin: about $7 traded near the price in 10 minutes | Ahead, and the low end of its luck range above -$5 per $100 (PROTOCOL 5, registered 11 Nov) | **21 Dec** |
 | 12 | Kalshi patient buyer (`kalshi_patient`), **untested** | On Kalshi, where the likely side stands at 90-97c and the asking price is 2c+ above the best buy order, leave a $10 buy order 1c above it for an hour and wait for somebody in a hurry | +$1.42 per $100 on 971 bets over two samples (918 won). Small: gone if we pay 2c more, one loss eats 15 wins. The price band was picked after looking. Every other version of the patient buyer lost. Exam: Ahead, but could be luck | Locked 12 Nov, Jan's OK (PROTOCOL 5d): 1,000+ live bets, ahead, low end of the luck range above $0 | **1 Jan** |
+| 13 | Combo house (`quoter/`, on Jan's AWS server) | Be the seller of Polymarket parlays: price 2-4 leg combos (no two legs from the same game) at the legs multiplied +5%, and count the bets where that beat the pro who really won. Listen only, never quotes | History +$3.99 per $100 at risk on 1,581 buys. Live paper since 11 Nov: see the live block below. Scoreboard `state/quoter.json`, dashboard card "Combo house" | Locked 11 Nov, Jan's OK (PROTOCOL 5c): above +$1.00 per $100 at risk and both halves ahead | **1 Jan or 1,000 settled bets**; first scorecard Fri 13 Nov 09:00 |
 
 <!-- AUTO:START (learnings.py writes this part every morning, don't edit by hand) -->
 
 ## Live numbers (updated 2026-11-12)
 
 **50 days left** until the money decision on 1 Jan 2027.
-Ideas tried so far: **80**. Dropped: 54. Still in play: 26. Looking real: **1**.
+Ideas tried so far: **85**. Dropped: 57. Still in play: 28. Looking real: **2**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 361 | 358 / 3 | +$0.26 | Ahead, but could be luck | 1 Dec (19 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 372 | 369 / 3 | +$0.27 | Ahead, but could be luck | 1 Dec (19 days): after 2,500 bets: pass if above +$0.22 per $100 |
 | NO on 'will X say Y' (`mention_no`) | 2 | 1 / 1 | -$44.67 | Too early to tell (2 finished) | 21 Dec (39 days): holdout, scored once |
 | Boring side after a 10c scare (`panic_fade_10c`) | 3 | 2 / 1 | +$5.64 | Too early to tell (3 finished) | 21 Dec (39 days): holdout, scored once |
 | NO at 90-97c, 30+ days out (`boring_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (39 days): holdout, scored once |
 | NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 21 Dec (39 days): holdout, scored once |
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
-| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.71 locked in | 19 sets cost $91.61 and pay $95.00 if both sites agree. Nothing to judge before then. | 1 Jan (50 days): pays out on 1 Jan |
+| Kalshi patient buyer, nearly-sure side (untested) (`kalshi_patient`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (50 days): 1,000+ bets, ahead, low end of the luck range above $0 |
+| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.87 locked in | 20 sets cost $96.27 and pay $100.00 if both sites agree. Nothing to judge before then. | 1 Jan (50 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 362 of 2,500 bets, 3 lost, +$9.77 so far (+$0.27 per $100; the bar is +$0.22). About 127 bets a day, so the look is due about 29 Nov. This is only a peek: the number counts once, at 2,500.
-**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 213 bought, 4 lost, -$18.76 (-$0.89 per $100). Full table: `state/kfast_live/report.md`.
+**kc_maker_safe toward its locked test:** 375 of 2,500 bets, 3 lost, +$10.51 so far (+$0.28 per $100; the bar is +$0.22). About 128 bets a day, so the look is due about 29 Nov. This is only a peek: the number counts once, at 2,500.
+**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 219 bought, 4 lost, -$18.34 (-$0.85 per $100). Full table: `state/kfast_live/report.md`.
+**Combo house on Jan's AWS server (Stockholm)**, paper, rule `main`: 218 parlays finished, the house won 177, +$5.40 per $100 at risk (Ahead, but could be luck), 31 still waiting. Only a peek: it counts once, at 1 Jan or 1,000 finished parlays. `state/quoter.json`.
 
 ### Week by week (numbers as of the last day of each week, all bets so far)
 
-| Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` |
-|---|---|---|---|---|---|---|
-| 2026-W46 | 361 bets, +$0.26 | 2 bets, -$44.67 | 3 bets, +$5.64 | 0 bets | 0 bets | 0 bets |
+| Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` | `kalshi_patient` |
+|---|---|---|---|---|---|---|---|
+| 2026-W46 | 372 bets, +$0.27 | 2 bets, -$44.67 | 3 bets, +$5.64 | 0 bets | 0 bets | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
@@ -98,11 +106,12 @@ A strategy gets real money only if **every** answer is yes:
 
 | Date | What happens |
 |---|---|
+| 13 Nov | **Combo house first scorecard** (09:00 Stockholm), then the $25 real-bot strategy pick with Jan |
 | 23 Nov | Gas-price recorder scored (who reads AAA first). Expected dead |
 | late Nov | Fast Kalshi bot first look |
 | about 1 Dec | **kc_maker_safe locked test** (2,500 bets). Order book shapes recheck |
 | 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c, boring No far out, crypto No, the everything-together model, CS2 favorite a day before |
-| 1 Jan 2027 | arb pays out. **Money decision** |
+| 1 Jan 2027 | arb pays out. `kalshi_patient` and combo house locked tests (combo house earlier if it reaches 1,000 bets). **Money decision** |
 | late Jan | Next GDP release (GDPNow vs Kalshi, only 19 past releases, too few to judge) |
 
 ## Big lessons so far
@@ -206,10 +215,13 @@ Still running on purpose, though the idea looks dead: the endgame lab variants `
 
 ## Open questions for Jan
 
-- **Be the house on Polymarket combos? (11 Nov, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. Jan said go (11 Nov): a listen-only paper quoter (`quoter/`) runs on Jan's own server (AWS Lightsail Stockholm, the free plan allows only that region) with a fresh empty wallet, since 11 Nov 12:17 UTC. Listen-only quoters DO get the requests and trade prices, and every 30 s Polymarket reports ~2,500-2,900 requests nobody quoted. Pass rule fixed with Jan's OK (PROTOCOL.md 5c): above +$1.00 per $100 at risk and both halves ahead, at 1 Jan or 1,000 settled bets. Score: probe `cmb_qscore`.
+- **$25 real-money bot (12 Nov):** Jan said yes to a small real bot on his AWS server with his own key (the key stays
+  on the server, never in the repo or chat). Which strategy? Waiting for the combo house scorecard on 13 Nov. Run it
+  side by side with its paper twin, so we see if real fills match paper.
+- **Be the house on Polymarket combos? (11 Nov, now candidate #13, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. Jan said go (11 Nov): a listen-only paper quoter (`quoter/`) runs on Jan's own server (AWS Lightsail Stockholm, the free plan allows only that region) with a fresh empty wallet, since 11 Nov 12:17 UTC. Listen-only quoters DO get the requests and trade prices, and every 30 s Polymarket reports ~2,500-2,900 requests nobody quoted. Pass rule fixed with Jan's OK (PROTOCOL.md 5c): above +$1.00 per $100 at risk and both halves ahead, at 1 Jan or 1,000 settled bets. Score: probe `cmb_qscore`.
 
 1. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
-2. **Merge the open research PRs** (#66 adds the exam, the ledger and the two new paper tracks).
+2. ~~**Merge the open research PRs** (#66)~~ **Merged 10 Nov.**
 3. ~~**every_horse and ladder**: keep, or stop?~~ **Stopped 12 Nov (Jan: "Dump").**
 4. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.
 5. ~~Kalshi paper fills are a bit too kind~~ **Fixed 10 Nov (Jan said "Fix it").** The bot now counts only contracts

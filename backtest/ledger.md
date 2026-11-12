@@ -92,6 +92,6 @@ Why count: if you test 85 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports | 93 | 2036 | -$5.35 | Losing | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 967 | +$1.42 | Ahead, but could be luck | paper track running (untested, picked after seeing both samples) | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Losing | dropped | khouse.py, backtest/khouse.md |
-| 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | open | kcrypto.py gapcheck |
+| 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | paper twin kc_maker_safe_usd running since 12 Nov (Jan said yes) | kcrypto.py gapcheck |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

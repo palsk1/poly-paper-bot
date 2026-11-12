@@ -16,6 +16,7 @@ import json
 import os
 import re
 import sys
+import time
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = os.path.join(ROOT, "LEARNINGS.md")
@@ -100,6 +101,20 @@ def kfast_line(path):
             "pnl": float(m.group(6)), "per100": float(m.group(7))}
 
 
+def combo_line(q, now_ts):
+    """The combo house listener on Jan's AWS server (state/quoter.json, PROTOCOL.md 5c), as plain text. A peek only."""
+    if not q or not q.get("settled") and not q.get("waiting"):
+        return None
+    txt = (f"**Combo house on Jan's AWS server (Stockholm)**, paper, rule `main`: {q.get('settled', 0):,} parlays "
+           f"finished, the house won {q.get('won_by_house', 0):,}, {usd(q.get('per100') or 0)} per $100 at risk "
+           f"({q.get('verdict') or 'too early'}), {q.get('waiting', 0)} still waiting. Only a peek: it counts once, "
+           f"at 1 Jan or 1,000 finished parlays. `state/quoter.json`.")
+    seen = q.get("last_seen")
+    if seen and now_ts - seen > 3 * 3600:
+        txt += f" **Warning: no new data from the server for {(now_ts - seen) / 3600:.0f} hours. Ask Jan to check it runs.**"
+    return txt
+
+
 def ledger_counts(path):
     L = load(path)
     if not L:
@@ -122,7 +137,7 @@ def week_key(today):
     return f"{y}-W{w:02d}"
 
 
-def build(today, summary, tracks, kfast, ledger, weeks):
+def build(today, summary, tracks, kfast, ledger, weeks, combo=None):
     st = (summary or {}).get("tracks", {})
     out = [START, "", f"## Live numbers (updated {today.isoformat()})", ""]
     left = (DECISION_DAY - today).days
@@ -161,6 +176,8 @@ def build(today, summary, tracks, kfast, ledger, weeks):
         out.append(f"**Fast Kalshi bot, last 45 seconds** (main test \"{kfast['test']}\", 10 contracts): "
                    f"{kfast['bought']} bought, {kfast['lost']} lost, {usd(kfast['pnl'])} "
                    f"({usd(kfast['per100'])} per $100). Full table: `state/kfast_live/report.md`.")
+    if combo:
+        out.append(combo)
     # the weekly scoreboard: this week's row is overwritten every day, so each past week keeps its last value
     weeks = dict(weeks or {})
     weeks[week_key(today)] = {"date": today.isoformat(), **row_week,
@@ -180,7 +197,8 @@ def refresh(page=PAGE, today=None, root=ROOT, weeks_path=WEEKS):
     tracks = load(os.path.join(root, "state", "tracks.json"), {})
     kfast = kfast_line(os.path.join(root, "state", "kfast_live", "report.md"))
     ledger = ledger_counts(os.path.join(root, "backtest", "ledger.json"))
-    block, weeks = build(today, summary, tracks, kfast, ledger, load(weeks_path, {}))
+    combo = combo_line(load(os.path.join(root, "state", "quoter.json"), {}), time.time())
+    block, weeks = build(today, summary, tracks, kfast, ledger, load(weeks_path, {}), combo)
     txt = open(page).read()
     if START not in txt or END not in txt:
         raise SystemExit("LEARNINGS.md has no AUTO markers, nothing written")
@@ -223,6 +241,12 @@ def selftest():
     assert "300 of 2,500 bets, 1 lost" in txt, "bets before the start don't count"
     assert "45 days left" in txt and "Ideas tried so far: **2**" in txt and "Looking real: **1**" in txt
     assert "24 bought, 0 lost" in txt
+    assert "Combo house" not in txt, "no quoter.json, no combo line"
+    q = {"settled": 218, "won_by_house": 177, "per100": 5.4, "verdict": "Ahead, but could be luck", "waiting": 31,
+         "last_seen": 1000.0}
+    assert "218 parlays finished, the house won 177, +$5.40" in combo_line(q, 1000.0 + 3600)
+    assert "Warning" not in combo_line(q, 1000.0 + 3600) and "Warning" in combo_line(q, 1000.0 + 4 * 3600)
+    assert combo_line({}, 0) is None
     w = load(wk)
     assert sorted(w) == ["2026-W46", "2026-W47"] and w["2026-W46"]["date"] == "2026-11-11", w
     print("learnings selftest ok")
