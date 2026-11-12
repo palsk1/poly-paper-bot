@@ -222,7 +222,7 @@ def iso_s(sec):
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(sec))
 
 
-def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None, recent=None):
+def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None, recent=None, wins=None):
     """bets: [(seconds, cost, pnl)] of finished bets, oldest first."""
     closed = [{"pnl": p, "cost": c} for _, c, p in bets if c > 0]
     tr = bot.trust({"closed": closed}, size=None)
@@ -234,7 +234,8 @@ def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None,
         run += p
         cv.append([time.strftime("%Y-%m-%dT%H:%M", time.gmtime(t)), r2(run)])
     cv = ([[cv[0][0], 0.0]] + cv if cv else [[bot.iso()[:16], 0.0]]) + [[bot.iso()[:16], r2(run)]]
-    wins = sum(1 for _, _, p in bets if p > 0)
+    if wins is None:       # pass it when a won bet can still end a hair below $0 (a 99.8c buy plus the fee)
+        wins = sum(1 for _, _, p in bets if p > 0)
     return {"name": name, "label": label, "lab": False, "control": False, "ext": True,
             "pnl": r2(pnl), "today": r2(sum(p for t, _, p in bets if time.strftime("%Y-%m-%d", time.gmtime(t)) == day)),
             "realized": r2(pnl), "open": waiting, "waiting": [], "orders": [], "closed": len(bets), "wins": wins,
@@ -289,7 +290,7 @@ def kfast_rows():
     for k, v in kf.VARIANTS.items():
         if not v.get("main"):
             continue
-        bets, recent, chances = [], [], 0
+        bets, recent, chances, won = [], [], 0, 0
         for w in sorted(ws, key=lambda w: w["close"]):
             b = (w.get("bets") or {}).get(k)
             if not b or "won" not in b:
@@ -300,6 +301,7 @@ def kfast_rows():
                 continue
             cost = f["filled"] * f["avg"] + f.get("fee", 0.0)
             bets.append((w["close"], cost, f["pnl"]))
+            won += 1 if b["won"] else 0
             recent.append({"t": w["tk"], "o": b["side"].upper(), "e": r2(f["avg"] * 100), "x": 100.0 if b["won"] else 0.0, "pnl": r2(f["pnl"]),
                            "why": "window ended", "at": iso_s(w["close"])[:16]})
         wait = "waits with a buy offer" if v["kind"] == "bid" else "buys at the asking price"
@@ -308,7 +310,7 @@ def kfast_rows():
                            f"Test: {kf.LABEL[k]}. Fixed on 10 Nov, not to be changed.",
                            bets, KFAST_POT, extra=[[f"{chances:,}", "chances seen"], [f"{len(bets):,}", "times it really got to buy"]],
                            notes=["One bet makes a few cents and one loss costs about $10, so it needs hundreds of bets without a loss before the number means anything."],
-                           recent=recent[::-1][:12]))
+                           recent=recent[::-1][:12], wins=won))
     return out
 
 
