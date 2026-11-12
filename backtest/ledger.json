@@ -998,6 +998,58 @@
    "verdict": "Looks real",
    "status": "open",
    "src": "kcrypto.py gapcheck"
+  },
+  {
+   "id": "kalshi_patient_buyer_nearly_sure_side_best_buy_order_90_97c_",
+   "date": "2026-11-12",
+   "what": "Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports",
+   "tries": 93,
+   "bets": 971,
+   "groups": 967,
+   "per100": 1.42,
+   "floor100": -1.27,
+   "verdict": "Ahead, but could be luck",
+   "status": "paper track running (untested, picked after seeing both samples)",
+   "src": "khouse.py, backtest/khouse.md"
+  },
+  {
+   "id": "kalshi_patient_buyer_likely_side_at_50_90c_bid_1c_above_the_",
+   "date": "2026-11-12",
+   "what": "Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports",
+   "tries": 93,
+   "bets": 2050,
+   "groups": 2036,
+   "per100": -5.35,
+   "floor100": -11.12,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "khouse.py, backtest/khouse.md"
+  },
+  {
+   "id": "kalshi_patient_buyer_sports_before_the_game_likely_side_60_9",
+   "date": "2026-11-12",
+   "what": "Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games)",
+   "tries": 93,
+   "bets": 560,
+   "groups": 559,
+   "per100": -3.28,
+   "floor100": -13.06,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "khouse.py, backtest/khouse.md"
+  },
+  {
+   "id": "kalshi_lowball_orders_likely_side_10c_under_the_going_price_",
+   "date": "2026-11-12",
+   "what": "Kalshi lowball orders: likely side, 10c under the going price, before a game",
+   "tries": 93,
+   "bets": 370,
+   "groups": 369,
+   "per100": -5.83,
+   "floor100": -23.62,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "khouse.py, backtest/khouse.md"
   }
  ]
 }

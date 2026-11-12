@@ -92,7 +92,7 @@ def open_bets(name, tr):
                            "e": r2(o.get("price", 0) * 100), "c": r2(o.get("cost")), "close": str(o.get("close", "")),
                            "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}"})
             continue
-        what = f"bought {str(o.get('side', '')).upper()} on Kalshi, waiting for the release"   # econ_fav holds real buys
+        what = o.get("what") or f"bought {str(o.get('side', '')).upper()} on Kalshi, waiting for the release"   # econ_fav holds real buys; kalshi_patient sets its own text
         rows.append({"t": str(o.get("title", ""))[:90], "o": what,
                      "e": r2(o.get("price", 0) * 100), "n": None, "pnl": 0.0, "c": r2(o.get("cost")),
                      "end": str(o.get("close", ""))[:16], "u": f"https://kalshi.com/markets/{o.get('series', '').lower()}",

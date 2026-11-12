@@ -88,6 +88,20 @@ change restarts the count.
 - A pass still leaves the real-money checks: a 0.4 s real quoter, the 15% "too many rejects" rule, Polymarket's
   terms for Sweden, and Jan's key on his own server.
 
+## 5d. Pre-registered live test: kalshi_patient (fixed 2026-11-12, Jan's OK)
+
+Written before the first live bet (`khouse.py`, `backtest/khouse.md`). The history says +$1.42 per $100 on 971 bets,
+"Ahead, but could be luck", and the band was picked after looking, so only live bets can settle it.
+
+- **What counts:** every finished `kalshi_patient` bet from the track's first run, rules as in config
+  `kalshi_patient` (a rule change restarts the count). Bets on the same event count once.
+- **When:** once, on 1 Jan 2027. Peeks before that don't count.
+- **Pass:** 1,000 or more finished bets, ahead, and the low end of the luck range above $0.
+- **Stop early:** after 500 finished bets, if the high end of the luck range is below $0.
+- **Anything else:** not proven, keep it on paper.
+- A pass still leaves a tiny real-money test (paper can't see other robots stepping in front of our order) and
+  Jan's check that he may trade on Kalshi from Sweden.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.

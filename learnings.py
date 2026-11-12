@@ -34,6 +34,8 @@ CANDIDATES = [
     ("boring_no", "NO at 90-97c, 30+ days out", dt.date(2026, 12, 21), "holdout, scored once"),
     ("crypto_no", "NO on crypto price, 70-90c, 3-7 days out", dt.date(2026, 12, 21), "holdout, scored once"),
     ("econ_fav", "Economy favorites the forecast backs", None, "not registered yet"),
+    ("kalshi_patient", "Kalshi patient buyer, nearly-sure side (untested)", DECISION_DAY,
+     "1,000+ bets, ahead, low end of the luck range above $0"),
     ("arb", "Same question on Kalshi and Polymarket", DECISION_DAY, "pays out on 1 Jan"),
 ]
 KC_TARGET, KC_BAR, KC_START = 2500, 0.22, "2026-11-09T19:00"

@@ -154,6 +154,12 @@
       "source": "econ",
       "rules": "econ_fav"
     },
+    "kalshi_patient": {
+      "label": "UNTESTED, added 2026-11-12. Kalshi patient buyer on the nearly-sure side: once an hour, where the likely side's best buy order is at 90-97c with a 2c+ gap to the asking price, it leaves a $10 buy order 1c above the best one for about an hour. Sports only before the game, no 15-minute crypto. Counts only contracts really sold to it on Kalshi's trade list. One bet per market, held to the result. History: +$1.42 per $100 on 967 bets, could be luck (backtest/khouse.md). $1,000 paper, no refills",
+      "start_cash": 1000,
+      "source": "kpatient",
+      "rules": "kalshi_patient"
+    },
     "sharp_pinnacle": {
       "label": "Sharp bookie price: buys a Polymarket game outcome (soccer, NBA/NHL/NFL, baseball, esports, MMA) when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and paying the fee. Pre-game only, holds to the end. Real order-book fills. $100 paper",
       "start_cash": 100,
@@ -1872,6 +1878,21 @@
       "min_edge": 0.03,
       "usd_per_bet": 5,
       "scan_minutes": 55
+    },
+    "kalshi_patient": {
+      "why": "2026-11-12 khouse.py (backtest/khouse.md): 19,385 settled Kalshi markets, 3.2 million real trades. A patient buyer loses on slow questions, weather, crypto and stocks at most prices and badly in live sports (picked off). Only the nearly-sure side (best buy order 90-97c) was ahead in both samples: +$1.42 per $100 on 967 bets, luck range +$0.14 to +$2.70, exam verdict 'Ahead, but could be luck'. Hourly orders like the backtest. Claude's track, rule changes reported; pass bar locked in PROTOCOL.md 5d (Jan's OK, 12 Nov). $1,000 because 40 waiting orders ($400) plus bets held up to a week need room; the scoreboard shows the most money ever tied up.",
+      "min_bid": 0.9,
+      "max_bid": 0.97,
+      "min_gap": 0.02,
+      "improve": 0.01,
+      "usd_per_order": 10,
+      "min_volume": 100,
+      "order_minutes": 65,
+      "scan_minutes": 55,
+      "sports_min_minutes_to_start": 75,
+      "max_days": 7,
+      "list_days": 16,
+      "max_resting": 40
     },
     "sharp_pinnacle": {
       "why": "Jan's idea (2026-11-09): Pinnacle is the bookie the pros bet with, so its odds minus its margin are a strong fair price. Polymarket market makers mostly copy Pinnacle, so gaps should be rare and short; this measures how often a 15-minute bot catches one. Fair = the lower of two de-vig methods (sharp.py). One bet per game. Claude's track, rule changes reported.",

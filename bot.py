@@ -243,6 +243,9 @@ def load_tracks():
         if tc["source"] == "econ":
             for k, v in (("orders", {}), ("done", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
+        if tc["source"] == "kpatient":
+            for k, v in (("orders", {}), ("done", []), ("unfilled", 0), ("last_check", {})):
+                tracks[name].setdefault(k, v)
     return tracks
 
 
@@ -686,7 +689,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "kpatient")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -3195,6 +3198,334 @@ def kmaker_summary(name, tr):
     return row, stats, lines
 
 
+# ================================================================ Kalshi patient buyer, nearly-sure side (added 2026-11-12, UNTESTED)
+#
+# The gap it fills: every Kalshi test so far bought at the asking price and lost the cost of buying, or sat in the
+# 15-minute crypto windows. This one is the patient buyer everywhere else. Once an hour it looks at every open
+# Kalshi market, and where the likely side's best buy order stands at 90-97c with a gap of 2c+ to the asking price,
+# it rests a $10 buy order 1c above the best one for about an hour. Sports only before the game (start time from
+# Kalshi's own schedule), never the 15-minute crypto windows. One bet per market, held to the result.
+# Paper fills from the REAL trade tape, like kc_maker: only contracts really sold at our price or lower while the
+# order was resting, never more than was sold. Backtest: khouse.py, backtest/khouse.md (+$1.42 per $100 on 967
+# bets, two samples, "Ahead, but could be luck"; every other price band and the live-sports version lost).
+# What paper can't see: other robots may step in front of a real order. Only real orders can measure that.
+
+KP_SPORT = re.compile(r"NCAA|NFL|NBA|MLB|NHL|WNBA|MLS|EPL|SERIEA|LALIGA|BUNDES|LIGUE|UCL|UEL|SOCCER|ATP|WTA|ITF|UFC|"
+                      r"PGA|LPGA|NASCAR|F1|BOXING|CRICKET|IPL|RUGBY|AFL|LNB|KBO|NPB|EUROLEAGUE|GAME$|SPREAD|TOTAL|"
+                      r"MATCH|GOAL|SCORE|ESPORT|CS2|LOL|DOTA|VALORANT|TENNIS|GOLF|NCAAF|NCAAMB|CFB|CBB")   # = launch.KSPORT
+KP_NOT_SPORT = re.compile(r"BTC|ETH|SOL|XRP|DOGE|CRYPTO|BNB|SHIBA|HYPE|HIGH|LOWT|TEMP|RAIN|SNOW|WEATHER|HURR|MENTION|SAY")
+
+
+KP_MS_KIND = Counter()
+
+
+def kpatient_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "kpatient"]
+
+
+def kpatient_is_sport(series):
+    s = series.upper()
+    return not KP_NOT_SPORT.search(s) and bool(KP_SPORT.search(s))
+
+
+def kpatient_starts(max_pages=60):
+    """{event ticker: start time} for scheduled games, from Kalshi's own schedule (milestones)."""
+    out, cur = {}, None
+    t0 = iso(now() - dt.timedelta(hours=8))
+    for _ in range(max_pages):
+        p = {"limit": 500, "minimum_start_date": t0}
+        if cur:
+            p["cursor"] = cur
+        try:
+            res = kalshi_get("/milestones", p)
+        except Exception as e:
+            print(f"kalshi schedule failed: {e}")
+            break
+        rows = res.get("milestones") or []
+        for ms in rows:
+            st = parse_iso(ms.get("start_date"))
+            if not st:
+                continue
+            KP_MS_KIND[f"{ms.get('category')}|{ms.get('type')}"] += 1
+            if str(ms.get("category") or "").lower() not in ("sports", "esports"):
+                continue                      # election nights, data releases, gas prices: not games
+            for ev in (ms.get("related_event_tickers") or []) + (ms.get("primary_event_tickers") or []):
+                if ev not in out or st < out[ev]:
+                    out[ev] = st
+        cur = res.get("cursor")
+        if not cur or not rows:
+            break
+    return out
+
+
+def kpatient_open_markets(r, budget_s=150):
+    """Every open Kalshi market that closes within list_days (sports markets carry a far-off official close)."""
+    t_now, rows, cur, t0 = now(), [], None, time.time()
+    hi = int((t_now + dt.timedelta(days=r.get("list_days", 16))).timestamp())
+    for _ in range(600):
+        p = {"status": "open", "limit": 1000, "mve_filter": "exclude", "min_close_ts": int(t_now.timestamp()), "max_close_ts": hi}
+        if cur:
+            p["cursor"] = cur
+        try:
+            res = kalshi_get("/markets", p)
+        except Exception as e:
+            print(f"kalshi open list failed after {len(rows)} rows: {e}")
+            break
+        got = res.get("markets") or []
+        rows += got
+        cur = res.get("cursor")
+        if not cur or not got:
+            break
+        if time.time() - t0 > budget_s:
+            print(f"kalshi open list: time budget used after {len(rows)} rows")
+            break
+    return rows
+
+
+def kpatient_candidate(m, r, starts, t_now):
+    """An order dict for this market if the rule fires, else a short reason (str)."""
+    tk, ev = str(m.get("ticker") or ""), str(m.get("event_ticker") or "")
+    series = ev.split("-")[0]
+    if not tk or series.endswith("15M") or tk.startswith("KXMVE"):
+        return "skipped kind"
+    yb, ya = kpx(m, "yes_bid"), kpx(m, "yes_ask")
+    if yb is None or ya is None or not (0 < yb < ya < 1):
+        return "no two-sided price"
+    side = "yes" if (yb + ya) / 2 >= 0.5 else "no"
+    bid, ask = (yb, ya) if side == "yes" else (round(1 - ya, 4), round(1 - yb, 4))
+    if not (r.get("min_bid", 0.90) - EPS <= bid < r.get("max_bid", 0.97) - EPS):
+        return "outside 90-97c"
+    if ask - bid < r.get("min_gap", 0.02) - EPS:
+        return "gap too small"
+    price = round(bid + r.get("improve", 0.01), 4)
+    if price >= ask - EPS:
+        return "gap too small"
+    if fnum(m.get("volume_fp") or m.get("volume"), 0) < r.get("min_volume", 100):
+        return "too little traded"
+    rest = dt.timedelta(minutes=r.get("order_minutes", 65))
+    far = t_now + dt.timedelta(days=r.get("max_days", 7))
+    sport = kpatient_is_sport(series) or ev in starts
+    if sport:
+        st = starts.get(ev)
+        if not st:
+            return "sports, start time unknown"
+        if st < t_now + dt.timedelta(minutes=r.get("sports_min_minutes_to_start", 75)):
+            return "sports, game on or about to start"
+        if st > far:
+            return "too far off"
+        expires = min(t_now + rest, st - dt.timedelta(minutes=10))
+        end = parse_iso(m.get("expected_expiration_time")) or st + dt.timedelta(hours=4)
+        end = max(end, st + dt.timedelta(hours=1))
+    else:
+        close = parse_iso(m.get("close_time"))
+        if not close or close < t_now + dt.timedelta(minutes=10):
+            return "closing now"
+        if close > far:
+            return "too far off"
+        expires, end = min(t_now + rest, close), close
+    shares = max(1, int(r.get("usd_per_order", 10) / price))
+    return {"ticker": tk, "series": series, "event": ev, "title": f"{m.get('title')} ({m.get('yes_sub_title', '')})"[:140],
+            "outcome": side, "side": side, "price": price, "front": True, "queue": 0.0, "shares": shares,
+            "cost": round(shares * price, 6), "placed": iso(t_now), "expires": iso(expires), "close": iso(end),
+            "bid": bid, "ask": ask, "kind": "sports" if sport else "other"}
+
+
+def kpatient_place(tracks, names, markets=None, starts=None):
+    t_now = now()
+    for n in names:
+        tr, r = tracks[n], rules_for(n)
+        last = parse_iso(tr.get("last_scan"))
+        if last and (t_now - last).total_seconds() < r.get("scan_minutes", 55) * 60:
+            continue
+        if markets is None:
+            markets = kpatient_open_markets(r)
+            starts = kpatient_starts()
+        if not markets:
+            continue
+        tr["last_scan"] = iso(t_now)
+        why, cands = Counter(), []
+        busy = {o.get("event") for o in tr["orders"].values()} | set(tr.get("done", []))
+        for m in markets:
+            c = kpatient_candidate(m, r, starts, t_now)
+            if isinstance(c, str):
+                why[c] += 1
+            elif c["ticker"] in tr["orders"] or c["event"] in busy:
+                why["already bet or waiting"] += 1   # one bet per event (the backtest took one market per event)
+            else:
+                cands.append(c)
+        random.Random(int(t_now.timestamp())).shuffle(cands)   # more candidates than money: pick blindly, not by looks
+        resting = sum(1 for o in tr["orders"].values() if not o.get("filled"))
+        placed = 0
+        for c in cands:
+            if c["event"] in busy:
+                continue
+            if resting >= r.get("max_resting", 40):
+                break
+            if c["cost"] > tr["cash"] + EPS:
+                tr["skipped_no_cash"] += 1
+                break
+            tr["cash"] = round(tr["cash"] - c["cost"], 6)
+            tr["orders"][c["ticker"]] = c
+            busy.add(c["event"])
+            resting += 1
+            placed += 1
+            log_event({"type": "kpatient_order", "track": n, "ticker": c["ticker"], "side": c["side"], "price": c["price"],
+                       "shares": c["shares"], "kind": c["kind"]})
+        tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+        tr["last_check"] = {"ts": iso(t_now), "markets": len(markets), "games_with_start": len(starts or {}),
+                            "fit": len(cands), "placed": placed, "why_not": dict(why.most_common(8))}
+        print(f"{n}: looked at {len(markets)} open Kalshi markets, {len(cands)} fit the rule, placed {placed} "
+              f"orders ({resting} waiting). Skipped: {dict(why.most_common(6))}")
+
+
+_kp_fee = {}
+
+
+def kpatient_maker_fee(series, shares, price):
+    """Most Kalshi series charge the patient side nothing; a few ("..._with_maker_fees") charge a quarter of the usual fee."""
+    if series not in _kp_fee:
+        try:
+            s = kalshi_get(f"/series/{urllib.parse.quote(series)}").get("series") or {}
+            _kp_fee[series] = (str(s.get("fee_type") or ""), fnum(s.get("fee_multiplier"), 1) or 1)
+        except Exception as e:
+            print(f"kalshi series {series} failed: {e}")
+            return math.ceil(0.0175 * shares * price * (1 - price) * 100 - 1e-9) / 100   # unknown: assume the fee
+    ft, mult = _kp_fee[series]
+    if "maker" not in ft:
+        return 0.0
+    return math.ceil(0.0175 * mult * shares * price * (1 - price) * 100 - 1e-9) / 100
+
+
+def kpatient_window(o, trades):
+    """Trades that could have filled the order: from a minute after it was placed until it was pulled."""
+    a, b = parse_iso(o["placed"]) + dt.timedelta(seconds=60), parse_iso(o["expires"])
+    out = []
+    for t in trades:
+        ts = parse_iso(t.get("created_time"))
+        if ts is not None and a < ts <= b:
+            out.append(t)
+    return out
+
+
+def kpatient_settle(tracks, names):
+    t_now = now()
+    for n in names:
+        tr = tracks[n]
+        for tk in list(tr["orders"]):
+            o = tr["orders"][tk]
+            if not o.get("filled"):
+                # 1) the order's hour is over: did anybody really sell to it?
+                if t_now < parse_iso(o["expires"]) + dt.timedelta(seconds=30):
+                    continue
+                try:
+                    trades, complete = kalshi_trades(tk, parse_iso(o["placed"]).timestamp(), parse_iso(o["expires"]).timestamp())
+                except Exception as e:
+                    print(f"{n}: trades for {tk} failed: {e}")
+                    continue
+                win = kpatient_window(o, trades)
+                o0 = {**o, "placed": "1970-01-01T00:00:00Z"}
+                filled, through = kmaker_fill(o0, win)
+                if filled <= EPS:
+                    tr["cash"] = round(tr["cash"] + o["cost"], 6)
+                    del tr["orders"][tk]
+                    tr["unfilled"] = tr.get("unfilled", 0) + 1
+                    continue
+                fee = kpatient_maker_fee(o["series"], filled, o["price"])
+                cost = round(filled * o["price"] + fee, 6)
+                tr["cash"] = round(tr["cash"] + o["cost"] - cost, 6)
+                rs = {}
+                for usd_ in rs_sizes():
+                    want = usd_ / o["price"]
+                    rs[str(usd_)] = round(max(0.0, min(want, kmaker_fill(o0, win, want)[0])), 4)
+                o.update({"filled": round(filled, 4), "shares": round(filled, 4), "cost": cost, "entry_fee": fee,
+                          "through": through, "tape_complete": complete, "rs_fill": rs, "filled_at": iso(t_now),
+                          "chance": o["price"], "what": f"bought {o['side'].upper()} on Kalshi, waiting for the result"})
+                tr["done"] = (tr.get("done", []) + [o["event"]])[-3000:]   # events we already hold or held a bet in
+                log_event({"type": "kpatient_fill", "track": n, "ticker": tk, "side": o["side"], "price": o["price"],
+                           "filled": round(filled, 2), "through": through})
+                print(f"{n}: {tk} {o['side'].upper()} {o['price'] * 100:.0f}c: {filled:.0f} contracts really sold to us")
+                continue
+            # 2) a held bet: is the result in?
+            nxt = parse_iso(o.get("check_after") or o["close"])
+            if t_now < nxt:
+                continue
+            m = kalshi_market(tk)
+            res = str((m or {}).get("result") or "").lower()
+            if res not in ("yes", "no"):
+                o["check_after"] = iso(t_now + dt.timedelta(minutes=30))
+                if t_now - parse_iso(o["close"]) > dt.timedelta(days=3):
+                    print(f"{n}: {tk} still has no result 3 days after its expected end")
+                continue
+            pay = 1.0 if res == o["side"] else 0.0
+            sh, fee = o["shares"], o.get("entry_fee", 0.0)
+            pnl = sh * pay - o["cost"]
+            tr["cash"] = round(tr["cash"] + sh * pay, 6)
+            tr["realized"] = round(tr["realized"] + pnl, 6)
+            rs = {}
+            for usd_, f2 in (o.get("rs_fill") or {}).items():
+                want = float(usd_) / o["price"]
+                fee2 = fee * f2 / sh if sh else 0.0
+                rs[usd_] = [round(f2 * o["price"] + fee2, 4), round(f2 * pay - f2 * o["price"] - fee2, 4), round(f2 / want, 4)]
+            del tr["orders"][tk]
+            rec = {**o, "entry": o["price"], "exit": pay, "exit_fee": 0.0, "pnl": round(pnl, 6),
+                   "price_source": "book", "reason": "resolved", "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs}
+            for k in ("chance", "what", "rs_fill", "check_after"):
+                rec.pop(k, None)
+            tr["closed"].append(rec)
+            log_event({"type": "kpatient_result", "track": n, "ticker": tk, "side": o["side"], "price": o["price"],
+                       "shares": sh, "pnl": round(pnl, 4)})
+            print(f"{n}: {tk} {o['side'].upper()} {o['price'] * 100:.0f}c x{sh:.0f}: result {res}, P&L {pnl:+.2f}")
+            if pnl < 0 and push_allowed(n):
+                push(f"[{n}] FLIP: a nearly-sure bet lost (${pnl:+.2f})",
+                     f"{o['title']}\nBought {o['side'].upper()} at {cents(o['price'])}. One loss like this eats about "
+                     f"15 wins. This is the risk the test is measuring.", tags="rotating_light", track=n)
+
+
+def kpatient_cycle(tracks):
+    names = kpatient_names()
+    if not names:
+        return
+    for n in names:
+        tracks[n].setdefault("orders", {})
+    kpatient_settle(tracks, names)
+    live = [n for n in names if not CFG["tracks"][n].get("stopped")]
+    if live:
+        kpatient_place(tracks, live)
+
+
+def kpatient_summary(name, tr):
+    closed = tr["closed"]
+    wins = sum(1 for c in closed if c["pnl"] > 0)
+    held = [o for o in tr.get("orders", {}).values() if o.get("filled")]
+    resting = len(tr.get("orders", {})) - len(held)
+    stats = {"pnl": round(tr["realized"], 4), "realized": round(tr["realized"], 4), "unrealized": 0.0,
+             "open": len(tr.get("orders", {})), "closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+             "cash": round(tr["cash"], 4), "deposited": tr["deposited"], "refills": tr["refills"],
+             "money_needed": round(tr["peak_open_cost"], 4), "peak_open_cost": tr["peak_open_cost"],
+             "skipped_no_cash": tr["skipped_no_cash"], "unfilled": tr.get("unfilled", 0)}
+    orders_all = len(closed) + len(held) + tr.get("unfilled", 0)
+    row = (f"| {name} | {tr['realized']:+.2f} | {len(held)} bought, {resting} waiting | {len(closed)} ({wins}/{len(closed) - wins}) "
+           f"| ${tr['cash']:.2f} | {len(closed) + len(held)} of {orders_all} hourly orders got sold to |")
+    lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
+    if closed:
+        losses = [c for c in closed if c["pnl"] < 0]
+        staked = sum(c["cost"] for c in closed)
+        lines.append(f"Finished bets: {len(closed)}, put in ${staked:.2f}, P&L ${tr['realized']:+.2f} "
+                     f"({tr['realized'] / staked * 100:+.2f} per $100)." if staked else "")
+        if losses:
+            lines.append(f"Worst loss ${min(c['pnl'] for c in losses):+.2f}; average win "
+                         f"${sum(c['pnl'] for c in closed if c['pnl'] > 0) / max(wins, 1):+.2f}.\n")
+        by = defaultdict(list)
+        for c in closed:
+            by[c.get("kind", "other")].append(c)
+        lines.append("By kind: " + "; ".join(f"{k} {len(v)} bets ${sum(c['pnl'] for c in v):+.2f}" for k, v in sorted(by.items())))
+    lc = tr.get("last_check") or {}
+    if lc:
+        lines.append(f"\nLast look {str(lc.get('ts', ''))[:16]} UTC: {lc.get('markets')} open markets, {lc.get('fit')} fit the rule, "
+                     f"{lc.get('placed')} orders placed. Skipped: {lc.get('why_not')}")
+    return row, stats, lines
+
+
 # ================================================================ econ_fav: forecast backs the favorite (added 2026-11-09)
 #
 # Kalshi data-release markets (CPI, core CPI, CPI year-on-year, jobless claims, unemployment, payrolls). 20-76 hours
@@ -4801,7 +5132,7 @@ def _track_open_cost(tr, src):
         return sum(a["cost"] for a in tr.get("arbs", {}).values())
     if src in ("fullset", "ladder"):
         return sum(x["cost"] for x in tr.get("sets", {}).values())
-    if src in ("kmaker", "econ"):
+    if src in ("kmaker", "econ", "kpatient"):
         return sum(o["cost"] for o in tr.get("orders", {}).values())
     return open_cost(tr)
 
@@ -4980,7 +5311,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle, kpatient_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -5096,9 +5427,10 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ"):
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "kpatient"):
             row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
-                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary}[src](name, tr)
+                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary,
+                                       "kpatient": kpatient_summary}[src](name, tr)
             md.append(row)
             detail += lines
             continue
@@ -5565,9 +5897,45 @@ def kmakertest():
                   f"({'through' if through else 'at price'}), {'won' if m.get('result') == side else 'lost'}")
 
 
+def kpatienttest():
+    """Dry run of the Kalshi patient buyer (no state saved): time the listing and the schedule, show what fits."""
+    names = kpatient_names()
+    tracks = {n: {"unlimited": False, "cash": 500.0, "start_cash": 500, "deposited": 500.0, "refills": 0, "min_cash": 0,
+                  "peak_open_cost": 0, "positions": {}, "closed": [], "realized": 0.0, "skipped_no_cash": 0,
+                  "orders": {}, "done": [], "unfilled": 0, "last_check": {}} for n in names}
+    r = rules_for(names[0])
+    t0 = time.time()
+    markets = kpatient_open_markets(r)
+    t1 = time.time()
+    starts = kpatient_starts()
+    print(f"open markets {len(markets)} in {t1 - t0:.0f}s; games with a start time {len(starts)} in {time.time() - t1:.0f}s")
+    print("sample schedule:", [(k, iso(v)) for k, v in list(starts.items())[:5]])
+    print("schedule kinds:", KP_MS_KIND.most_common(12))
+    kpatient_place(tracks, names, markets, starts)
+    for n in names:
+        tr = tracks[n]
+        print(n, json.dumps(tr["last_check"]))
+        kinds = Counter(o["kind"] for o in tr["orders"].values())
+        print(f"  placed {len(tr['orders'])}: {dict(kinds)}, cash left ${tr['cash']:.2f}")
+        for o in list(tr["orders"].values())[:12]:
+            print(f"   {o['ticker']} {o['side'].upper()} bid {o['price'] * 100:.0f}c (best {o['bid'] * 100:.0f}c, ask {o['ask'] * 100:.0f}c) "
+                  f"x{o['shares']} until {o['expires'][11:16]}, ends {o['close'][:16]} | {o['kind']} | {o['title'][:70]}")
+    # fill check on a market that just settled: as if we had bid 1c under its last trades an hour before the close
+    rows = kalshi_get("/markets", {"status": "settled", "limit": 200}).get("markets") or []
+    for m in [x for x in rows if fnum(x.get("volume_fp") or x.get("volume"), 0) >= 100][:3]:
+        close = parse_iso(m["close_time"])
+        o = {"side": "yes" if m.get("result") == "yes" else "no", "price": 0.95, "queue": 0.0, "shares": 10, "series": m["event_ticker"].split("-")[0],
+             "placed": iso(close - dt.timedelta(minutes=65)), "expires": iso(close)}
+        trades, complete = kalshi_trades(m["ticker"], parse_iso(o["placed"]).timestamp(), close.timestamp())
+        win = kpatient_window(o, trades)
+        got, through = kmaker_fill({**o, "placed": "1970-01-01T00:00:00Z"}, win)
+        print(f"  fill check {m['ticker']} ({m.get('result')}): {len(trades)} trades in the last 65 min, {len(win)} in the order's window, "
+              f"a 95c {o['side'].upper()} order would have got {got:.0f}/10; maker fee {kpatient_maker_fee(o['series'], 10, 0.95)}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
      "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
-     "kmakertest": kmakertest, "econtest": econtest}[cmd]()
+     "kmakertest": kmakertest, "econtest": econtest, "kpatienttest": kpatienttest}[cmd]()
