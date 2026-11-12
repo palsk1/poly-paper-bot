@@ -960,7 +960,7 @@ def follow_leader(tracks):
         m = market_by_slug(p["slug"])
         if m and m.get("closed"):
             continue
-        end = parse_iso(p["end"]) or parse_iso((m or {}).get("endDateIso"))
+        end = parse_iso(p["end"]) or parse_iso((m or {}).get("endDate") or (m or {}).get("endDateIso"))
         if end and end < now():
             continue
         px, shares, how = quote(tok, "buy", n, m)
@@ -1116,7 +1116,7 @@ def copy_open(tracks, name, p, r, extra=None):
     if not m or m.get("closed") or m.get("acceptingOrders") is False:
         why(name, "market closed")
         return False
-    end = parse_iso(p["end"]) or parse_iso(m.get("endDateIso"))
+    end = parse_iso(p["end"]) or parse_iso(m.get("endDate") or m.get("endDateIso"))
     if end and end < now():
         why(name, "market already past its end date")
         return False
@@ -1362,7 +1362,7 @@ def base_filter(m, r):
     q = str(m.get("question") or "").lower()
     if any(w in q for w in r.get("skip_words", [])):
         return None
-    end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+    end = parse_iso(m.get("endDate") or m.get("endDateIso"))
     if not end:
         return None
     days = (end - now()).total_seconds() / 86400
@@ -1385,7 +1385,7 @@ def candidate(m, i, days, liq, extra=None):
     c = {"token": toks[i], "outcome": str(outs[i]), "price": fnum(jlist(m.get("outcomePrices"))[i]), "title": q,
          "slug": str(m.get("slug") or ""), "event_slug": str(ev.get("slug") or ""),
          "event_key": str(ev.get("id") or ev.get("slug") or m.get("slug")),
-         "theme": theme_of(q), "end": (parse_iso(m.get("endDateIso") or m.get("endDate")) or now()).strftime("%Y-%m-%d"),
+         "theme": theme_of(q), "end": (parse_iso(m.get("endDate") or m.get("endDateIso")) or now()).strftime("%Y-%m-%d"),
          "days": round(days, 1), "liquidity": round(liq), "fee_rate": fee_rate(m),
          "nothing_happens": str(outs[i]).lower() == "no", "market": m}
     c.update(extra or {})
@@ -1555,6 +1555,8 @@ def story_names(title):
 
 def buy_candidates(tracks, name, cands, limit):
     tc, tr, r = CFG["tracks"][name], tracks[name], rules_for(name)
+    if tc.get("stopped"):
+        return []  # Jan stopped this track: no new bets, open ones still settle (12 Nov 2026)
     held_events = {p.get("event_key") for p in tr["positions"].values()}
     held_names = set()
     if r.get("one_per_story"):
@@ -1867,7 +1869,7 @@ def arb_propose():
         q = str(m.get("question") or "")
         if any(w in q.lower() for w in r.get("poly_skip_words", [])):
             continue
-        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        end = parse_iso(m.get("endDate") or m.get("endDateIso"))
         bb, ba = fnum(m.get("bestBid"), None), fnum(m.get("bestAsk"), None)
         if end and bb is not None and ba is not None and 0 < ba <= 1:
             txt = f"{q} {m.get('groupItemTitle') or ''}"
@@ -2013,7 +2015,7 @@ def arb_check_pair(name, tr, pair, r):
     if not kb or not pb[0] or not pb[1]:
         return
     shares = max(r["lot_shares"], pb[0]["min_size"], pb[1]["min_size"])
-    ends = [d for d in (parse_iso(km.get("close_time")), parse_iso(pm.get("endDateIso") or pm.get("endDate"))) if d]
+    ends = [d for d in (parse_iso(km.get("close_time")), parse_iso(pm.get("endDate") or pm.get("endDateIso"))) if d]
     days = max(1.0, (max(ends) - now()).total_seconds() / 86400 if ends else 30) + r["settle_buffer_days"]
     rate = fee_rate(pm)
     best = None
@@ -2207,7 +2209,7 @@ def endgame_candidates(r):
             continue
         if r.get("only_words") and not any(w in q.lower() for w in r["only_words"]):
             continue
-        end = parse_iso(m.get("endDateIso") or m.get("endDate"))
+        end = parse_iso(m.get("endDate") or m.get("endDateIso"))
         if "resolved" in st:
             tier, days = "resolved", 0.2
         elif st and st[-1] == "proposed":
@@ -2238,7 +2240,7 @@ def endgame_candidates(r):
 
 def run_endgame(tracks):
     for name, tc in CFG["tracks"].items():
-        if tc["source"] == "endgame":
+        if tc["source"] == "endgame" and not tc.get("stopped"):
             try:
                 r = rules_for(name)
                 buy_candidates(tracks, name, endgame_candidates(r), r.get("picks_per_scan", 2))
@@ -2328,7 +2330,7 @@ def yes_no_tokens(m):
 
 def fullset_check(tracks):
     name, r = fullset_rules()
-    if not name:
+    if not name or CFG["tracks"][name].get("stopped"):
         return
     tr = tracks[name]
     if len(tr["sets"]) >= r["max_open"]:
@@ -2642,7 +2644,7 @@ def ladder_pairs(markets, r):
             tq, dq, nq = ladder_template(m.get("question"))
             td, dd, nd = ladder_template(m.get("description"))
             fams[(tq, td)].append({"m": m, "dq": dq, "nq": nq, "dd": dd, "nd": nd,
-                                   "end": parse_iso(m.get("endDateIso") or m.get("endDate"))})
+                                   "end": parse_iso(m.get("endDate") or m.get("endDateIso"))})
         for (tq, td), fam in fams.items():
             if len(fam) < 2 or any(x["end"] is None for x in fam):
                 continue
@@ -2707,7 +2709,7 @@ def ladder_pairs(markets, r):
 def ladder_discover():
     """Daily: find the ladder families and save their pairs for the watch job."""
     name, r = ladder_rules()
-    if not name:
+    if not name or CFG["tracks"][name].get("stopped"):
         return
     ms = scan_markets({"end_date_min": iso(now() + dt.timedelta(days=r["min_days"])),
                        "end_date_max": iso(now() + dt.timedelta(days=r["max_days"])),
@@ -2722,7 +2724,7 @@ def ladder_discover():
                            "no_token": yes_no_tokens(a)[1]},
                      "b": {"mid": str(b.get("id")), "slug": b.get("slug"), "q": b.get("question"),
                            "yes_token": yes_no_tokens(b)[0]},
-                     "end": max(a.get("endDateIso") or a.get("endDate") or "", b.get("endDateIso") or b.get("endDate") or "")})
+                     "end": max(a.get("endDate") or a.get("endDateIso") or "", b.get("endDate") or b.get("endDateIso") or "")})
     rows = rows[: r["max_pairs"]]
     save("ladder_pairs.json", {"generated": iso(), "markets_scanned": len(ms), "stats": dict(stats),
                                "pairs": len(rows), "list": rows})
@@ -2755,7 +2757,7 @@ def gamma_markets_by_id(ids, batch=50):
 
 def ladder_check(tracks, force=False):
     name, r = ladder_rules()
-    if not name or not (force or ladder_due()):
+    if not name or CFG["tracks"][name].get("stopped") or not (force or ladder_due()):
         return
     st = load("scan_state.json", {})
     st["last_ladder_check"] = iso()
@@ -2806,8 +2808,8 @@ def ladder_check(tracks, force=False):
         fa, fb = taker_fee(shares, xa, fee_rate(a)), taker_fee(shares, xb, fee_rate(b))
         cost = shares * (xa + xb) + fa + fb
         net = shares - cost
-        end = max(d for d in (parse_iso(a.get("endDateIso") or a.get("endDate")),
-                              parse_iso(b.get("endDateIso") or b.get("endDate")), now()) if d)
+        end = max(d for d in (parse_iso(a.get("endDate") or a.get("endDateIso")),
+                              parse_iso(b.get("endDate") or b.get("endDateIso")), now()) if d)
         days = max(1.0, (end - now()).total_seconds() / 86400) + 3
         edge = net / shares
         annual = (net / cost) * 365 / days if cost > 0 else 0
@@ -2915,9 +2917,12 @@ KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSD
 _kmaker_spot = {}
 
 
-def kmaker_z(series, strike, minutes_left, side):
+def kmaker_z(series, strike, minutes_left, side, open_ts=None):
     """How many 'typical moves until the close' Binance spot sits on our side of the strike (same formula as the
-    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data."""
+    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data.
+    open_ts (epoch seconds of the window's start) = move Binance onto Kalshi's price scale first (kc_maker_safe_usd,
+    12 Nov, Jan said yes): Binance quotes in USDT and runs ~0.09% above the dollar index Kalshi settles on. The strike
+    IS Kalshi's index at the start, so Binance then / strike = the gap (same as kcrypto.zscore_usd, backtest/kcloss.md)."""
     sym = KMAKER_SPOT.get(series)
     if not sym or not strike:
         return None
@@ -2926,14 +2931,20 @@ def kmaker_z(series, strike, minutes_left, side):
             ks = http_json(f"{BINANCE}/klines", {"symbol": sym, "interval": "1m", "limit": 62})
             closes = [fnum(k[4]) for k in ks]
             rets = [math.log(b / a) for a, b in zip(closes[:-1], closes[1:]) if a > 0 and b > 0][-60:]
-            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets))) if len(rets) >= 30 else None
+            by_t = {int(fnum(k[0])) // 1000: fnum(k[4]) for k in ks}
+            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets)), by_t) if len(rets) >= 30 else None
         except Exception as e:
             print(f"binance 1m klines failed for {sym}: {e}")
             _kmaker_spot[sym] = None
     got = _kmaker_spot[sym]
     if not got or got[1] <= 0:
         return None
-    px, sd1 = got
+    px, sd1, by_t = got
+    if open_ts is not None:
+        a, b = by_t.get(int(open_ts) - 60), by_t.get(int(open_ts) - 120)
+        if not a:
+            return None
+        strike = strike * (((a + b) / 2 if b else a) / strike)
     z = (px - strike) / (sd1 * px * math.sqrt(max(minutes_left, 0.5)))
     return z if side == "yes" else -z
 
@@ -3007,6 +3018,15 @@ def kmaker_place(tracks, names):
                                                                    "bid": bid, "ask": ask, "placed": False,
                                                                    "z": None if z is None else round(z, 2)}
                         continue
+                zu = None
+                if r.get("usd_gap"):   # second check on Kalshi's price scale (kc_maker_safe_usd)
+                    zu = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side,
+                                  open_ts=(close - dt.timedelta(minutes=15)).timestamp())
+                    if zu is None or zu < r["min_spot_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z": round(z, 2), "z_usd": None if zu is None else round(zu, 2)}
+                        continue
                 queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
                 shares = max(1, int(r.get("usd_per_order", 10) / price))
                 cost = round(shares * price, 6)
@@ -3020,7 +3040,8 @@ def kmaker_place(tracks, names):
                                     "shares": shares, "cost": cost, "placed": iso(), "close": iso(close),
                                     "minutes_left": round(left, 2), "bid": bid, "ask": ask,
                                     "strike": fnum(m.get("floor_strike"), None),
-                                    "spot_z": None if z is None else round(z, 2)}
+                                    "spot_z": None if z is None else round(z, 2),
+                                    **({"spot_z_usd": round(zu, 2)} if zu is not None else {})}
                 tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
                 tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
                                                            "bid": bid, "ask": ask, "placed": True}
@@ -3752,7 +3773,7 @@ def model_pick(m, p_yes, r, extra=None):
     if not best or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] not in (["yes"], ["up"]):
         return None
     i = best[1]
-    end = parse_iso(m.get("endDateIso") or m.get("endDate")) or now()
+    end = parse_iso(m.get("endDate") or m.get("endDateIso")) or now()
     c = candidate(m, i, max((end - now()).total_seconds() / 86400, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
                   {"model_p": round(best[2], 4), "model_edge": round(best[0], 4), **(extra or {})})
     return c
@@ -3765,7 +3786,8 @@ def fast_due(name, minutes):
 
 def run_fast(tracks, force=False):
     """Scan the weather and crypto tracks that are due (each has its own scan_every_minutes)."""
-    due = [n for n in fast_tracks() if force or fast_due(n, rules_for(n).get("scan_every_minutes", 60))]
+    due = [n for n in fast_tracks() if not CFG["tracks"][n].get("stopped")
+           and (force or fast_due(n, rules_for(n).get("scan_every_minutes", 60)))]
     if not due:
         return {}
     lists = {}
@@ -4936,13 +4958,20 @@ def trust(tr, n_tracks=None, size="rank"):
     worst = max(-1.0, mean - NormalDist().inv_cdf(1 - alpha) * sd / math.sqrt(m))  # can't lose more than the bet
     avg = sum(p / b for p, b in rows) / n if n else 0.0
     proven = n >= rk.get("min_trades_proven", 30) and worst > 0
+    # 2026-11-12 (Jan: "we check for luck but not unlucky?"): the other end of the plain luck range (usual 90%, real
+    # bets only, no made-up disaster, no raised bar). Below $0 = it is behind even if we assume it was unlucky.
+    best = None
+    if n >= 2:
+        r = [p / b for p, b in rows]
+        sd_r = math.sqrt(sum((x - avg) ** 2 for x in r) / (n - 1))
+        best = round((avg + NormalDist().inv_cdf(0.95) * sd_r / math.sqrt(n)) * 100, 2)
     return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
-            "worst_per_100": round(worst * 100, 2), "proven": proven}
+            "worst_per_100": round(worst * 100, 2), "best_per_100": best, "proven": proven}
 
 
 def plain_verdict(t, control=False, few=10):
     """One plain-words verdict per strategy, from its trust numbers (wording only, no new math).
-    Returns (key, text): key is good / maybe / bad / early / luck, used for colors on the dashboard."""
+    Returns (key, text): key is good / maybe / unlucky / bad / early / luck, used for colors on the dashboard."""
     if control:
         return "luck", "Random buyer (shows what luck looks like)"
     if t["finished"] < few:
@@ -4952,6 +4981,10 @@ def plain_verdict(t, control=False, few=10):
     if t["worst_per_100"] > 0:
         return "good", "Promising, needs more bets"
     if t["avg_per_100"] < 0:
+        # 2026-11-12: losses get the same luck check as wins. "Losing" only when even the lucky end of the range is
+        # below $0; otherwise it's behind, but that could still be bad luck.
+        if t.get("best_per_100") is not None and t["best_per_100"] >= 0:
+            return "unlucky", "Behind, but could be bad luck"
         return "bad", "Losing"
     return "maybe", "Ahead, but could be luck"
 

@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**84 ideas examined, in about 51,963 versions.** 57 dropped, 27 still being tested or waiting. **Looks real: 1.**
+**85 ideas examined, in about 51,971 versions.** 57 dropped, 28 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 84 ideas that are all worthless, the luckiest one still looks good. With 84 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 85 ideas that are all worthless, the luckiest one still looks good. With 85 tries, a result has to beat about 3.0 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -92,5 +92,6 @@ Why count: if you test 84 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports | 93 | 2036 | -$5.35 | Losing | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 967 | +$1.42 | Ahead, but could be luck | paper track running (untested, picked after seeing both samples) | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Losing | dropped | khouse.py, backtest/khouse.md |
+| 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | open | kcrypto.py gapcheck |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
