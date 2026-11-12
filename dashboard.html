@@ -425,8 +425,12 @@ function detail(n) {
      <div class="m">offer to buy ${esc(o.side)} at ${cents(o.e)} · up to ${money(o.c, false)} · ${ended
         ? `ended ${esc(stockholm(o.close))}, gets counted at the next check (every 5-10 min)`
         : `ends ${esc(stockholm(o.close))}`}</div></div>`; }).join("") + `</div>`;
-  if (t.recent.length) h += `<details><summary>Last ${t.recent.length} finished bets</summary><div class="card">` + t.recent.map(c =>
-    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.e != null ? ` · bought ${cents(c.e)}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("") + `</div></details>`;
+  // Always shown, like "Open bets" (Jan, 12 Nov: "why can't I see ... last 12 finished bets on some"). It used to be a small
+  // grey fold-out that vanished when nothing had finished yet.
+  h += `<h2 style="font-size:16px">${t.recent.length < t.closed ? `Last ${t.recent.length} finished bets (of ${t.closed})` : `Finished bets (${t.closed})`}</h2><div class="card">` +
+    (t.recent.length ? t.recent.map(c =>
+    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.e != null ? ` · bought ${cents(c.e)}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("")
+    : `None finished yet${endTxt(t)}.`) + `</div>`;
   $("detail").innerHTML = h;
   curveChart($("curve"), t);
 }
