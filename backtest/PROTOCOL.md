@@ -88,7 +88,7 @@ change restarts the count.
 - A pass still leaves the real-money checks: a 0.4 s real quoter, the 15% "too many rejects" rule, Polymarket's
   terms for Sweden, and Jan's key on his own server.
 
-## 5d. Proposed live test: kalshi_patient (written 2026-11-12, NOT locked: waits for Jan's OK)
+## 5d. Pre-registered live test: kalshi_patient (fixed 2026-11-12, Jan's OK)
 
 Written before the first live bet (`khouse.py`, `backtest/khouse.md`). The history says +$1.42 per $100 on 971 bets,
 "Ahead, but could be luck", and the band was picked after looking, so only live bets can settle it.

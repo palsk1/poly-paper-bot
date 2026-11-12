@@ -220,8 +220,8 @@ One version is left: the **nearly-sure side**. Where the likely side's best buy 
 price is 2c or more above it, bid 1c above the best buy order for an hour. +$1.42 per $100 on 971 bets (918 won),
 luck range +$0.14 to +$2.70, ahead in both samples. It is small, it is gone if we pay 2c more, the band was chosen
 after seeing both samples, and one loss eats about 15 wins. The exam says "Ahead, but could be luck".
-`kalshi_patient` ($1,000 paper) runs that rule live so real bets can settle it; proposed pass bar in
-`backtest/PROTOCOL.md` 5d. Paper can't see other robots stepping in front of our order, so a pass would still need a
+`kalshi_patient` ($1,000 paper) runs that rule live so real bets can settle it; pass bar locked in
+`backtest/PROTOCOL.md` 5d (Jan's OK). Paper can't see other robots stepping in front of our order, so a pass would still need a
 tiny real test.
 
 ## Fast Kalshi paper bot: the last 45 seconds (added 2026-11-10, `kfastlive.py`)
