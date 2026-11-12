@@ -1,6 +1,6 @@
 # poly-paper-bot
 
-**Paper trading only.** This bot never places real orders and holds no keys. It reads Polymarket's and Kalshi's public data and records pretend trades so we can see which approach would actually have made money.
+**Paper trading only.** This bot never places real orders and holds no keys. What runs where (GitHub, and the combo listener on Jan's own server): `CLAUDE.md`, "Running right now". It reads Polymarket's and Kalshi's public data and records pretend trades so we can see which approach would actually have made money.
 
 ## What it tests (each track has its own paper wallet)
 
@@ -26,7 +26,7 @@
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 | `soccer_draw` | Soccer draws (2026-11-10, Jan said Go): buys YES on "will this game end in a draw" 20-28 hours before kickoff when the draw costs 15-50c, held to the result. In 4,538 past games draws won a bit more often than their price said, about 2c a bet (`backtest/census.md`, `backtest/digs_draws.md`). Skips books whose ask is 3c+ over the listed price. Also the 21 Dec holdout test `soccer_draw` (PROTOCOL 5). Claude's track, rule changes reported | $50 |
 | `kalshi_patient` | **UNTESTED (2026-11-12).** Kalshi, the patient buyer: about once an hour it looks at every open Kalshi market and, where the likely side's best buy order stands at 90-97c with a gap of 2c or more to the asking price, leaves a $10 buy order 1c above the best one for about an hour (up to 40 waiting at once, picked blindly). A bet counts only when Kalshi's own trade list shows contracts really sold at our price or lower, after a 60-second wait. Sports only before the game starts (Kalshi's schedule), no 15-minute crypto, one bet per event, held to the result. History: +$1.42 per $100 on 971 bets, 'Ahead, but could be luck' (`backtest/khouse.md`). $1,000 paper. Claude's track, rule changes reported. Dry run: probe `kpatienttest` |
-| `kc_maker`, `kc_maker_safe`, `kc_maker_early` (stopped 12 Nov) | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_safe_usd` (12 Nov, Jan said yes) = kc_maker_safe plus the same check after moving Binance onto Kalshi's price (Binance's USDT price runs ~0.09% high, `backtest/kcloss.md`), `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
+| `kc_maker`, `kc_maker_safe`, `kc_maker_safe_usd` (12 Nov), `kc_maker_early` (stopped 12 Nov) | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_safe_usd` (12 Nov, Jan said yes) = kc_maker_safe plus the same check after moving Binance onto Kalshi's price (Binance's USDT price runs ~0.09% high, `backtest/kcloss.md`), `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -248,7 +248,7 @@ The fast-bot backtest above left one small lead and two unknowns (how many contr
 Polymarket Combos are parlays. Pro quoters answer each request within 0.4 s and buyers pay about $13 per $100 over
 the legs (`backtest/combos.md`). Replaying 4,945 real buys, selling 2-4 leg combos at the legs +5% when that beat the
 pros' price would have made +$3.99 per $100 at risk ("Promising, needs more bets"). Combo requests only reach
-logged-in quoters, so the live paper test runs on Jan's own server in Ireland with a fresh empty wallet: it listens,
+logged-in quoters, so the live paper test runs on Jan's own server (AWS Lightsail, Stockholm) with a fresh empty wallet: it listens,
 writes down what it would have quoted, and sees the winning price. It never quotes and holds no private key.
 Setup and rules: `quoter/README.md`, PROTOCOL.md 5c. Score: probe `cmb_qscore`.
 

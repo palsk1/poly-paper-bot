@@ -92,7 +92,7 @@ Why count: if you test 88 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports | 93 | 2036 | -$5.35 | Losing | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 967 | +$1.42 | Ahead, but could be luck | paper track running (untested, picked after seeing both samples) | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Losing | dropped | khouse.py, backtest/khouse.md |
-| 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | open | kcrypto.py gapcheck |
+| 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | paper twin kc_maker_safe_usd running since 12 Nov (Jan said yes) | kcrypto.py gapcheck |
 | 2026-11-12 | Polymarket 15-min bid, both checks (history, 3 min) | 6 | 149 | -$1.26 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check (history, 3 min) | 6 | 315 | -$1.43 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check, strict fills only (history, 3 min) | 6 | 250 | -$2.28 | Losing | dropped | kcrypto.py pmrun |
