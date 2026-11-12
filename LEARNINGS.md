@@ -138,6 +138,11 @@ A strategy gets real money only if **every** answer is yes:
   `maker_tpsl` had lost $104 of $200 and `maker_flat` $100. The cash was right; the scoreboard wasn't. Fixed: every
   sale and pair is now a finished bet. Lesson: the stop loss sells right after a fill, into a book that was just
   emptied, often 10-28c below what it paid. The maker idea stays dead.
+- **Polymarket maker tracks stopped (12 Nov, Jan: "Dump them").** All five lost $416 of $1,000 in 3-4 days and earned
+  $7.39 in rewards. `maker_flat` sold 42 times right after a fill and never once above cost (the price was about 4c
+  lower by the next check): a bot that looks every 5 minutes only gets filled by people with fresher news. Open bets
+  were closed once at the real bid; the numbers stay on the scoreboard, frozen. Review:
+  `/mnt/project-files/research/maker-review-2026-11-12.md`.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
@@ -184,7 +189,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Kalshi 15-minute crypto, every minute of the window and every speed (11 Nov, `kspeed.py`):** 39,006 rounds. Buying either side at the asking price loses $4 to $6 per $100 in every stretch (fee plus the buy/sell gap); at the middle price it's even, so the price is fair. A rule that buys when Binance says "too cheap" lost $4.75. After big Binance moves Kalshi even gives back about 1c the next minute, too little to trade. One small lean: a side already at 95c+ with 8+ minutes left made +$0.72 per $100 on 4,406 bets, also when bought a minute late: "Ahead, but could be luck", same family as `kc_maker_safe`, no track. `backtest/kspeed.md`.
 - **CS2 rankings and bo3.gg's AI vs Polymarket (11 Nov, `cs2.py`, Jan's ask):** 6,495 CS2 matches. Backing the team Valve's ranking or our own rating likes when the price disagrees lost $12-17 per $100 at real buys; the price predicts better than both rankings. bo3.gg's AI picks the winner 61 times in 100, the plain favorite 66: backing every AI pick lost $4.18 per $100 at real buys (4,533 matches), and betting more when it predicts a 2-0 or sizing by price doesn't help. bo3.gg's bookmaker odds are after-the-game odds, unusable. HLTV blocks robots. One thin lean (favorite a day before) goes to the 21 Dec look. `backtest/cs2.md`. **Upsets (same day, Jan: "find the red thread"):** what losing favorites share. Roster changes, slumps, win streaks, tiredness, rust and best-of-1 are all already in the price (expected vs real upsets within 1-3 per 100); the 5 best patterns fail at real buys (best: underdog vs a favorite on 5 wins, +$5.17 per $100 on 201, flips between halves). In-fighting has no data. Dropped. **Players' recent form (same day, Jan asked):** bo3.gg player ratings for 10,367 matches; backing the team whose players are hotter than usual over the last 2-7 days lost $4-8 per $100 even at chart prices. Priced in. Dropped.
 
-Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
+Still running on purpose, though the idea looks dead: `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
 
 ## Open questions for Jan
