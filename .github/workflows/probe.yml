@@ -47,7 +47,7 @@ jobs:
           key: wx-cache-${{ github.run_id }}
           restore-keys: wx-cache-
       - name: Shared price store, fetch   # tops up the Actions cache with what any thread/branch saved (store.py)
-        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_') || startsWith(inputs.what, 'big_') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_')
+        if: startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'win_') || startsWith(inputs.what, 'big_') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_') || startsWith(inputs.what, 'kh_')
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 store.py pull || true
@@ -61,6 +61,7 @@ jobs:
           case "${{ inputs.what }}" in rec_once) python3 recorder.py once; exit $?;; rec_6) PYTHONUNBUFFERED=1 python3 recorder.py once 6; exit $?;; esac
           case "${{ inputs.what }}" in econ_*) pip install -q openpyxl; PYTHONUNBUFFERED=1 python3 econ.py "$(echo '${{ inputs.what }}' | sed 's/^econ_//')"; exit $?;; esac
           case "${{ inputs.what }}" in wx_*) PYTHONUNBUFFERED=1 python3 wxcast.py "$(echo '${{ inputs.what }}' | sed 's/^wx_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in kh_*) PYTHONUNBUFFERED=1 python3 khouse.py "$(echo '${{ inputs.what }}' | sed 's/^kh_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
@@ -77,7 +78,7 @@ jobs:
           case "${{ inputs.what }}" in edges_*) python3 edges.py "$(echo '${{ inputs.what }}' | sed 's/^edges_//')"; exit $?;; esac
           if [ "${{ inputs.what }}" = "arbtest" ] || [ "${{ inputs.what }}" = "dryrun" ] || [ "${{ inputs.what }}" = "discover" ] || [ "${{ inputs.what }}" = "copytest" ] || [ "${{ inputs.what }}" = "depthtest" ] || [ "${{ inputs.what }}" = "fasttest" ] || [ "${{ inputs.what }}" = "makertest" ] || [ "${{ inputs.what }}" = "kmakertest" ] || [ "${{ inputs.what }}" = "econtest" ]; then python3 bot.py "${{ inputs.what }}"; elif [ "${{ inputs.what }}" = "hunt" ] || [ "${{ inputs.what }}" = "hunt_ladders" ] || [ "${{ inputs.what }}" = "hunt_dupes" ] || [ "${{ inputs.what }}" = "hunt_rejected" ] || [ "${{ inputs.what }}" = "hunt_sports" ] || [ "${{ inputs.what }}" = "hunt_sports2" ]; then python3 arbhunt.py "${{ inputs.what }}"; else python3 probe.py "${{ inputs.what }}"; fi
       - name: Shared price store, save   # also after a failure or timeout; win_* only reads
-        if: always() && (startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_'))
+        if: always() && (startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kf_') || startsWith(inputs.what, 'kh_'))
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 store.py push || true
