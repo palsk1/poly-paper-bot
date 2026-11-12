@@ -993,6 +993,187 @@ def gapcheck(log=False):
     return out
 
 
+# ================================================================ the same bid on Polymarket's 15-minute windows (12 Nov)
+# Jan: "why is this test only running on kalshi and not both?" Polymarket lists the same "up or down in 15 minutes"
+# windows (slug <coin>-updown-15m-<start>). Makers pay no fee there either. No order-book history exists for them
+# (the recorder caught only ~400 windows late), so this replay uses every real trade of the last 8 minutes:
+#   - the "bid" at T = the lowest price the leading side traded at in the 15 s before T (needs 2+ trades)
+#   - join = bid there, counted as filled only if a later trade printed BELOW it (certain: a resting bid at a higher
+#     price is always hit first). improve = one tick higher when the last 15 s also traded above it, filled when a
+#     later trade printed at or below it (we would be first in line at that price).
+#   - the trade list doesn't say who was in a hurry, so nothing here depends on it.
+# Spot check: same z as kc_maker_safe, with Kalshi's strike for the same window as the starting price (both sites
+# start from a US-dollar price; they disagree on ~17 results in 1,000, which the real Polymarket result captures).
+PM_PREFIX = {"KXBTC15M": "btc", "KXETH15M": "eth", "KXSOL15M": "sol", "KXXRP15M": "xrp", "KXDOGE15M": "doge",
+             "KXHYPE15M": "hype", "KXBNB15M": "bnb"}
+PM_CACHE = os.path.join(bot.ROOT, "bt_cache", "pm15")
+PM_KEEP = 480      # seconds of tape kept before the close
+
+
+def _pm_markets(prefix, starts):
+    """{start: {"cid", "p": 1 Up won / 0 Down won}} from gamma, 20 slugs a call."""
+    out = {}
+
+    def batch(chunk):
+        try:
+            return bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {
+                "slug": [f"{prefix}-updown-15m-{x}" for x in chunk], "closed": "true", "limit": 100}), "markets", "data")
+        except Exception as e:
+            print(f"  gamma batch failed: {e}")
+            return []
+    chunks = [starts[i:i + 20] for i in range(0, len(starts), 20)]
+    with ThreadPoolExecutor(6) as ex:
+        for rows in ex.map(batch, chunks):
+            for m in rows:
+                try:
+                    st = int(str(m.get("slug")).rsplit("-", 1)[1])
+                    names = json.loads(m.get("outcomes") or "[]")
+                    prices = [float(x) for x in json.loads(m.get("outcomePrices") or "[]")]
+                except Exception:
+                    continue
+                up = [i for i, n in enumerate(names) if str(n).lower() == "up"]
+                if len(prices) == 2 and sorted(prices) == [0.0, 1.0] and up and m.get("conditionId"):
+                    out[st] = {"cid": m["conditionId"], "p": int(prices[up[0]] == 1.0)}
+    return out
+
+
+def _pm_tape(cid, close, max_pages=40):
+    """Trades of the last PM_KEEP seconds as [seconds before close, Up price, size], oldest first; (rows, complete)."""
+    rows, cur, done = [], None, False
+    for _ in range(max_pages):
+        p = {"condition_id": cid, "limit": 500}
+        if cur:
+            p["cursor"] = cur
+        res = bot.http_json(f"{bot.DATA}/v2/trades", p)
+        page = bot.envelope_rows(res, "data", "trades")
+        cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
+        ts = []
+        for r in page:
+            t = bot.fnum(r.get("timestamp"))
+            t = t / 1000 if t > 1e11 else t
+            px, sz = bot.fnum(r.get("price")), bot.fnum(r.get("size"))
+            ts.append(t)
+            if not 0 < px < 1 or sz <= 0 or not (close - PM_KEEP <= t <= close):
+                continue
+            up = str(r.get("outcome", "")).lower() == "up"
+            rows.append([round(close - t, 1), round(px if up else 1 - px, 4), round(sz, 2)])
+        newest_first = len(ts) < 2 or ts[0] >= ts[-1]
+        if not page or not cur or (newest_first and ts and min(ts) < close - PM_KEEP):
+            done = True
+            break
+    rows.sort(key=lambda r: -r[0])
+    return rows, done
+
+
+def pm_fetch(days=30):
+    days = int(days)
+    os.makedirs(PM_CACHE, exist_ok=True)
+    t0 = time.time() - days * 86400
+    for series, prefix in PM_PREFIX.items():
+        t_s = time.time()
+        path = os.path.join(PM_CACHE, f"tapes_{series}.json.gz")
+        have = rjson(path, {}) or {}
+        ms = [m for m in rjson(os.path.join(CACHE, f"markets_{series}.json.gz"), []) if m["close"] >= t0]
+        todo = [m["close"] - 900 for m in ms if str(m["close"]) not in have]
+        mk = _pm_markets(prefix, todo)
+
+        def one(st):
+            try:
+                tr, ok = _pm_tape(mk[st]["cid"], st + 900)
+                return st, {"p": mk[st]["p"], "tr": tr, "ok": ok}
+            except Exception as e:
+                return st, {"err": str(e)[:80]}
+        n = bad = 0
+        with ThreadPoolExecutor(WORKERS) as ex:
+            for st, row in ex.map(one, list(mk)):
+                if "err" in row:
+                    bad += 1
+                    continue
+                have[str(st + 900)] = row
+                n += 1
+                if n % 500 == 0:
+                    wjson(path, have)
+        wjson(path, have)
+        ex_ = next((v for v in have.values() if v.get("tr")), None)
+        if ex_:
+            sizes = sorted(len(v.get("tr") or []) for v in have.values())
+            print(f"  sample tape: {len(ex_['tr'])} trades, first {ex_['tr'][0]}, last {ex_['tr'][-1]}; trades per window "
+                  f"median {sizes[len(sizes) // 2]}, max {sizes[-1]}; incomplete {sum(1 for v in have.values() if not v.get('ok'))}")
+        print(f"{series}: {len(ms)} Kalshi windows, {len(mk)} found on Polymarket, {n} tapes fetched, {bad} failed, "
+              f"{len(have)} cached ({time.time() - t_s:.0f}s)")
+
+
+def pm_bets(minutes=3, look=15, level=0.95):
+    """One row per window where the rule could bid: both fill models, z with and without the price-gap fix."""
+    out = []
+    for series in PM_PREFIX:
+        tapes = rjson(os.path.join(PM_CACHE, f"tapes_{series}.json.gz"), {}) or {}
+        for w in load_windows([series]):
+            row = tapes.get(str(w["close"]))
+            if not row or not row.get("ok") or not row.get("tr"):
+                continue
+            left = 60 * minutes
+            before = [r for r in row["tr"] if left <= r[0] <= left + look]
+            if len(before) < 2:
+                continue
+            side = "yes" if before[-1][1] >= 0.5 else "no"
+            f = (lambda x: x) if side == "yes" else (lambda x: round(1 - x, 4))
+            lo, hi = min(f(r[1]) for r in before), max(f(r[1]) for r in before)
+            if lo < level - EPS or lo >= 1 - EPS:
+                continue
+            tick = 0.001 if lo >= 0.96 - EPS else 0.01
+            later = [f(r[1]) for r in row["tr"] if 0 <= r[0] < left]
+            low_after = min(later) if later else None
+            front = hi > lo + tick + EPS
+            price = round(lo + tick, 4) if front else lo
+            t = w["close"] - left
+            out.append({"t": t, "day": t // 86400, "s": series, "tk": w["t"], "side": side, "won": (row["p"] == 1) == (side == "yes"),
+                        "k_won": w["res"] == side, "lo": lo, "price": price, "front": front,
+                        "fill_join": low_after is not None and low_after < lo - EPS,
+                        "fill": low_after is not None and (low_after <= price + EPS if front else low_after < price - EPS),
+                        "z": zscore(w, t, minutes, side), "zu": zscore_usd(w, t, minutes, side)})
+    return out
+
+
+def pm_run(log=False):
+    import exam
+
+    def show_(label, g, key="fill", px="price"):
+        f = [r for r in g if r[key]]
+        lost = sum(1 for r in f if not r["won"])
+        pnl = [(1.0 if r["won"] else 0.0) - r[px] for r in f]
+        cost = sum(r[px] for r in f)
+        print(f"{label:34s} signals {len(g):5d} bets {len(f):5d} lost {lost:3d} (1 in {len(f) / max(lost, 1):4.0f}) avg price "
+              f"{cost / max(len(f), 1) * 100:.1f}c per $100 {money(sum(pnl) / cost * 100 if cost else 0)} "
+              f"$10 bets {money(sum(p / r[px] * 10 for r, p in zip(f, pnl)))}")
+        return f
+    for m in (2, 3, 4):
+        rows = [r for r in pm_bets(m) if r["z"] is not None and r["zu"] is not None]
+        if not rows:
+            print("no cached Polymarket tapes: run `kcrypto.py pmfetch` first")
+            return
+        days = len({r["day"] for r in rows})
+        print(f"--- Polymarket, {m} min left, {days} days, sites disagreed on {sum(1 for r in rows if r['won'] != r['k_won'])} of {len(rows)} signals")
+        show_("no spot check, improve", rows)
+        safe = [r for r in rows if r["z"] >= 2]
+        main = show_("z >= 2, improve (as kc_maker_safe)", safe)
+        show_("z >= 2, join only (strict fills)", safe, "fill_join", "lo")
+        both = show_("both checks (price-gap fix)", [r for r in safe if r["zu"] >= 2])
+        show_("  both checks, join (strict)", [r for r in safe if r["zu"] >= 2], "fill_join", "lo")
+        for side in ("yes", "no"):
+            show_(f"  z >= 2, {'Up' if side == 'yes' else 'Down'} side", [r for r in safe if r["side"] == side])
+        for s_ in PM_PREFIX:
+            show_(f"  z >= 2, {s_}", [r for r in safe if r["s"] == s_])
+        if m == 3:
+            for name, g, key, px in (("Polymarket 15-min bid, spot check (history, 3 min)", safe, "fill", "price"),
+                                     ("Polymarket 15-min bid, spot check, strict fills only (history, 3 min)", safe, "fill_join", "lo"),
+                                     ("Polymarket 15-min bid, both checks (history, 3 min)", [r for r in safe if r["zu"] >= 2], "fill", "price")):
+                bets = [{"cost": r[px] * 10, "pay": 10.0 if r["won"] else 0.0, "t": r["t"], "ev": r["t"]} for r in g if r[key]]
+                exam.score(bets, name, tries=6, src="kcrypto.py pmrun", log=log,
+                           note="Jan's ask 12 Nov: the kc_maker_safe bid on Polymarket's 15-minute crypto windows, "
+                           "replayed on every real trade of the last 8 minutes (no order-book history exists).")
+
+
 def selftest():
     close = 10_000 * 900
     def win(rows, res, strike=100.0):
@@ -1022,7 +1203,9 @@ def selftest():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     arg = sys.argv[2] if len(sys.argv) > 2 else None
-    if cmd.startswith("fetch_"):
-        cmd, arg = "fetch", cmd.split("_", 1)[1]
+    if "_" in cmd:   # probe form: kc_fetch_30, kc_pmfetch_2
+        cmd, arg = cmd.split("_", 1)
     {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
+     "pmfetch": lambda: pm_fetch(arg or 30), "pmrun": lambda: pm_run(log=arg == "log"),
+     "pmall": lambda: (fetch(60), pm_fetch(arg or 30), pm_run()),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
