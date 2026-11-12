@@ -8,6 +8,7 @@ Paper money only, like everything else here.
 import collections
 import datetime as dt
 import json
+import time
 import os
 import shutil
 import sys
@@ -208,6 +209,109 @@ def real_size(tr):
     return out
 
 
+# ---------------------------------------------------------------- tests that run outside the paper bot
+# The combo house (Jan's server) and the fast Kalshi bot (its own workflow) keep their own notes. Jan, 12 Nov:
+# "Why doesn't this one have a graph? The dashboard doesn't feel standardized". So they are turned into rows of
+# the same shape as a paper-bot strategy: same top line, verdict (bot.plain_verdict), worst case (bot.trust), graph
+# and finished-bets list. Anything special to them goes in "extra" tiles and notes under the standard card.
+COMBO_POT, COMBO_STAKE = 300.0, 5.0    # display only: the locked pass rule (PROTOCOL 5c) is per $100 and doesn't change
+KFAST_POT = 100.0                      # like the kc_maker tracks: $100, about $10 an order
+
+
+def iso_s(sec):
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(sec))
+
+
+def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None, recent=None):
+    """bets: [(seconds, cost, pnl)] of finished bets, oldest first."""
+    closed = [{"pnl": p, "cost": c} for _, c, p in bets if c > 0]
+    tr = bot.trust({"closed": closed}, size=None)
+    pnl = sum(p for _, _, p in bets)
+    risk = sum(c for _, c, _ in bets)
+    day = time.strftime("%Y-%m-%d", time.gmtime())
+    run, cv = 0.0, []
+    for t, _, p in bets:
+        run += p
+        cv.append([time.strftime("%Y-%m-%dT%H:%M", time.gmtime(t)), r2(run)])
+    cv = ([[cv[0][0], 0.0]] + cv if cv else [[bot.iso()[:16], 0.0]]) + [[bot.iso()[:16], r2(run)]]
+    wins = sum(1 for _, _, p in bets if p > 0)
+    return {"name": name, "label": label, "lab": False, "control": False, "ext": True,
+            "pnl": r2(pnl), "today": r2(sum(p for t, _, p in bets if time.strftime("%Y-%m-%d", time.gmtime(t)) == day)),
+            "realized": r2(pnl), "open": waiting, "waiting": [], "orders": [], "closed": len(bets), "wins": wins,
+            "losses": len(bets) - wins, "cash": r2(pot + pnl - tied), "deposited": r2(pot), "needed": None, "risked": r2(risk),
+            "trust": tr, "paper": None, "pv": bot.plain_verdict(tr), "verdict": None, "curve": cv, "bets": [], "n_bets": waiting,
+            "recent": recent or [], "late": None, "first_end": None, "wnote": None, "wstyle": None, "rs": None,
+            "status": None, "mk": None, "extra": extra or [], "notes": notes or [],
+            "legend": "Profit from finished bets, added up over time"}
+
+
+def combo_row(q):
+    if not q or "all" not in q:
+        return None
+    k = COMBO_STAKE / 25.0      # the server's notes count $25 at risk a parlay; the card shows a pot Jan could really fund
+    bets = [(t, c * k, (pay - c) * k) for t, c, pay in q["all"]]
+    cents = lambda v: f"{round(v * 100)}c"
+    recent, wait = [], []
+    for b in q.get("bets") or []:
+        legs = " + ".join(f"{lg['title']}{' ' + lg['out'] if lg.get('out') else ''}" for lg in b.get("legs") or [])
+        if b["end"] == "waiting":
+            wait.append(legs)
+        else:
+            recent.append({"t": legs, "o": "A leg lost, we keep the buyer's money" if b["end"] == "kept" else f"Every leg won, we pay out ${COMBO_STAKE:.0f}",
+                           "e": None, "x": None, "pnl": r2(b["gain"] * k), "why": f"buyer paid a pro {cents(b['price'])} per $1, we'd have asked {cents(b['q'])}",
+                           "at": iso_s(b["t"])[:16]})
+    last = iso_s(q["last_seen"]) if q.get("last_seen") else None
+    tied = COMBO_STAKE * (q.get("waiting") or 0)
+    extra = [[f"{q['heard']:,}", "price requests heard"], [f"{q['trades']:,}", "parlays really sold"],
+             [f"{q['would_win']:,}", "we'd have been cheapest"]]
+    notes = [f"It starts with ${COMBO_POT:.0f} and risks ${COMBO_STAKE:.0f} on every parlay it would have sold. Per $100 the result is the same at any bet size.",
+             q.get("pass_rule", "") + ".",
+             {"last_seen": last}]
+    if tied > COMBO_POT:
+        notes.insert(1, f"Right now {q.get('waiting')} parlays are waiting, which needs ${tied:,.0f}. That is more than the ${COMBO_POT:.0f} pot, "
+                        f"so a real pot this size would have had to skip some of them.")
+    row = ext_row("combo_house", "Combo house (practice, on your AWS server): the server listens to people asking for parlay prices. "
+                  "For each one it writes down the price we would have offered (the legs multiplied, plus 5%; 2-4 legs, no two from the same game). "
+                  "When the parlay really sells and our price was lower than the pro's, we count it as our sale. No real money moves.",
+                  bets, COMBO_POT, tied=tied, waiting=q.get("waiting") or 0, extra=extra, notes=notes, recent=recent[:12])
+    row["open_list"] = wait[:30]
+    return row
+
+
+def kfast_rows():
+    try:
+        import kfastlive as kf
+        ws = [w for w in kf.rows() if w.get("result") in ("yes", "no")]
+    except Exception as e:
+        print(f"dashboard: fast Kalshi notes not read ({e})")
+        return []
+    out = []
+    for k, v in kf.VARIANTS.items():
+        if not v.get("main"):
+            continue
+        bets, recent, chances = [], [], 0
+        for w in sorted(ws, key=lambda w: w["close"]):
+            b = (w.get("bets") or {}).get(k)
+            if not b or "won" not in b:
+                continue
+            chances += 1
+            f = b.get("10") or {}
+            if not f.get("filled"):
+                continue
+            cost = f["filled"] * f["avg"] + f.get("fee", 0.0)
+            bets.append((w["close"], cost, f["pnl"]))
+            recent.append({"t": w["tk"], "o": b["side"].upper(), "e": r2(f["avg"] * 100), "x": 100.0 if b["won"] else 0.0, "pnl": r2(f["pnl"]),
+                           "why": "window ended", "at": iso_s(w["close"])[:16]})
+        wait = "waits with a buy offer" if v["kind"] == "bid" else "buys at the asking price"
+        out.append(ext_row("kfast_" + k, f"Fast Kalshi bot (its own nonstop job, practice only): Kalshi 15-minute crypto, {v['L']} seconds before "
+                           f"the end. It {wait} for the side Binance says is safely ahead, 10 contracts a time (about $10). "
+                           f"Test: {kf.LABEL[k]}. Fixed on 10 Nov, not to be changed.",
+                           bets, KFAST_POT, extra=[[f"{chances:,}", "chances seen"], [f"{len(bets):,}", "times it really got to buy"]],
+                           notes=["One bet makes a few cents and one loss costs about $10, so it needs hundreds of bets without a loss before the number means anything."],
+                           recent=recent[::-1][:12]))
+    return out
+
+
 def build(offline=False):
     if offline:
         def no_net(*a, **k):
@@ -228,7 +332,7 @@ def build(offline=False):
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
         ob, n_open, waiting, orders = open_bets(n, tr)
         rows.append({
-            "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "control": n.startswith("control_"),
+            "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "stopped": bool(tc.get("stopped") or tc.get("retired")), "control": n.startswith("control_"),
             "pnl": r2(s["pnl"]), "today": r2(s.get("today", 0)), "realized": r2(s.get("realized")),
             "open": s["open"] - len(waiting) - len(orders), "waiting": waiting, "orders": orders, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
@@ -245,8 +349,13 @@ def build(offline=False):
             quoter = {k: v for k, v in json.load(fh).items() if k != "leg_results"}
     except (OSError, ValueError):
         quoter = None
-    data = {"generated": bot.iso(), "quoter": quoter, "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
-            "order": bot.ranked(stats), "tracks": rows, "trial_end": "2027-01-01",
+    ext = [r for r in [combo_row(quoter)] + kfast_rows() if r]
+    order = bot.ranked(stats)
+    rows += ext
+    if ext:            # same ranking rule as bot.ranked: worst case first, then P&L
+        order = [r["name"] for r in sorted(rows, key=lambda r: (-r["trust"]["worst_per_100"], -r["pnl"]))]
+    data = {"generated": bot.iso(), "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
+            "order": order, "tracks": rows, "trial_end": "2027-01-01",
             "min_proven": bot.CFG.get("ranking", {}).get("min_trades_proven", 30),
             "repo": "https://github.com/palsk1/poly-paper-bot"}
     with open(os.path.join(bot.ROOT, "dashboard.html")) as fh:
