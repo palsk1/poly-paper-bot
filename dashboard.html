@@ -99,9 +99,9 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <p class="note">The 10 strategies we trust most right now. We rank by how sure we are, not by who made the most, because a big win can be pure luck. To get on the list, a strategy needs at least 3 finished bets and must be ahead. Only these 10 send pushes to your phone. Tap one for details.</p>
   <div id="top"></div>
 
-  <h2>Combo house (practice, on your server)</h2>
-  <p class="note">Your AWS server listens to people asking for parlay prices. For each one it writes down the price we would have offered (the legs multiplied, plus 5%). When the parlay really sells, we see what the pro got. If our price was lower, we count it as our sale. When the games end, we see if we'd have kept the money. No real money moves.</p>
-  <div class="card" id="quoter"></div>
+  <h2>Tests outside the paper bot</h2>
+  <p class="note">These run on their own: the combo house on your AWS server, the fast Kalshi bot in its own nonstop job. Practice money only. They get the same card, verdict and graph as every other strategy. Tap one for details.</p>
+  <div id="ext"></div>
 
   <h2>Skill or luck?</h2>
   <p class="note">A quick verdict for every strategy that has finished at least 3 bets.</p>
@@ -290,63 +290,22 @@ function curveChart(el, t) {
 }
 
 // ---------- top 10
-(function quoter() {
-  const q = D.quoter, el = $("quoter");
-  if (!q) { el.innerHTML = "No notes from the server yet."; return; }
-  const ageH = q.last_seen ? (Date.now() / 1000 - q.last_seen) / 3600 : null;
-  const usd = v => v == null ? "–" : (v < 0 ? "-$" : "+$") + Math.abs(v).toFixed(2);
-  const cls = v => v == null ? "" : (v < 0 ? "neg" : "pos");
-  const warn = ageH == null || ageH > 2.5 ? `<p class="neg">The server has been quiet for ${ageH == null ? "a while" : Math.round(ageH) + " hours"}. It may need a restart.</p>` : "";
-  const tiles = [
-    [q.heard.toLocaleString(), "price requests heard"],
-    [q.trades.toLocaleString(), "parlays really sold"],
-    [q.would_win.toLocaleString(), "we'd have been cheapest"],
-    [`${q.settled} (${q.won_by_house} kept)`, "finished, house kept the money"],
-    [`<span class="${cls(q.pnl)}">${usd(q.pnl)}</span>`, `pretend P&L on all ${q.settled} finished bets together`],
-    [`<span class="${cls(q.per100)}">${usd(q.per100)}</span>`, "P&L per $100 at risk"],
-  ];
-  const vq = q.verdict || "";
-  const vcls = /real|Promising/.test(vq) ? "good" : /bad luck/.test(vq) ? "unlucky" : /Losing/.test(vq) ? "bad" : /Ahead/.test(vq) ? "maybe" : "early";
-  const risk = q.at_risk != null ? q.at_risk : 25 * q.settled;
-  const whole = v => "$" + Math.round(v).toLocaleString("en-US");
-  const head = q.settled ? `<div class="pot">Pretend money risked ${whole(risk)} → got back ${whole(risk + q.pnl)} <span class="${cls(q.pnl)}">(${usd(q.pnl)})</span></div>
-    <p class="note">We pretend to risk $25 on every parlay we'd have sold, ${q.settled} finished so far. So ${usd(q.pnl)} is the total on ${whole(risk)} of pretend money, not on $25.${q.lo100 != null ? ` By luck alone the per-$100 number could be anywhere from ${usd(q.lo100)} to ${usd(q.hi100)}.` : ""}</p>
-    <div style="margin:6px 0"><span class="vd ${vcls}">${esc(q.verdict || "Too early to tell")}</span></div><div id="qcurve"></div>` : "";
-  el.innerHTML = warn + head + `<div class="tiles">${tiles.map(([v, k]) => `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>` +
-    (q.waiting ? `<p class="note">${q.waiting} more parlays are still waiting for their games to end.</p>` : "") +
-    `<p class="note">${esc(q.pass_rule)}. Last heard from the server: ${q.last_seen ? esc(stockholm(new Date(q.last_seen * 1000).toISOString().slice(0, 16))) : "never"} Stockholm time.</p>` + qbets(q);
-  const drawQ = () => { if (q.curve && q.curve.length > 2 && $("qcurve")) curveChart($("qcurve"), {name: "Combo house", curve: q.curve, legend: "Pretend profit from finished parlays, added up over time"}); };
-  drawQ(); addEventListener("resize", drawQ);
-})();
-
-function qbets(q) {
-  const bs = q.bets || [];
-  if (!bs.length) return "";
-  const c = v => Math.round(v * 100) + "c";
-  const mark = r => r === 1 ? "✅" : r === 0 ? "❌" : "⏳";
-  const end = b => b.end === "kept" ? `<span class="pos">A leg lost, we keep +$${b.gain.toFixed(2)}</span>`
-    : b.end === "paid" ? `<span class="neg">Every leg won, we pay out $25.00</span>` : `<span>Games not over yet</span>`;
-  const row = b => `<div style="padding:8px 0;border-top:1px solid #8883">
-      <div class="meta">${esc(stockholm(new Date(b.t * 1000).toISOString().slice(0, 16)))} · buyer paid a pro ${c(b.price)} per $1, we'd have asked ${c(b.q)}</div>
-      ${b.legs.map(l => `<div>${mark(l.res)} ${esc(l.title)}${l.out ? ` <b>${esc(l.out)}</b>` : ""}</div>`).join("")}
-      <div style="margin-top:2px">${end(b)}</div></div>`;
-  const done = bs.filter(b => b.end !== "waiting"), wait = bs.filter(b => b.end === "waiting");
-  return `<details style="margin-top:8px"><summary><b>Our latest parlays (${done.length} finished, ${wait.length} waiting)</b></summary>
-    <p class="note">The buyer bets that every leg wins. We'd be the house: if any leg loses (❌), we keep their money. If every leg wins (✅), we pay out our $25.</p>
-    ${done.map(row).join("")}${wait.map(row).join("")}</details>`;
-}
-
-(function top() {
-  if (!D.top.length) { $("top").innerHTML = `<div class="card">No strategy is ahead after 3+ finished bets yet. Patience.</div>`; return; }
-  $("top").innerHTML = D.top.map((n, i) => {
-    const t = byName[n];
-    return `<div class="card top" data-n="${esc(n)}"><div class="row">
-      <div class="rank">${i + 1}</div>
-      <div class="grow"><div class="name">${esc(n)}${t.lab ? '<span class="tag">lab</span>' : ""}</div>
+// one compact card, the same for every strategy wherever it is listed
+const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + (t.stopped ? '<span class="tag">stopped</span>' : "") + (t.ext ? '<span class="tag">own test</span>' : "");
+function miniCard(t, rank) {
+  return `<div class="card top" data-n="${esc(t.name)}"><div class="row">
+      ${rank ? `<div class="rank">${rank}</div>` : ""}
+      <div class="grow"><div class="name">${esc(t.name)}${tags(t)}</div>
         <div class="pot">${pot(t)}</div>
         <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished · ${worstLine(t)}</div><div style="margin-top:4px">${vd(t)}</div></div>
       <div>${spark(t)}</div></div></div>`;
-  }).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies made the list so far.</p>` : "");
+}
+(function top() {
+  if (!D.top.length) $("top").innerHTML = `<div class="card">No strategy is ahead after 3+ finished bets yet. Patience.</div>`;
+  else $("top").innerHTML = D.top.map((n, i) => miniCard(byName[n], i + 1)).join("") + (D.top.length < 10 ? `<p class="note">Only ${D.top.length} strategies made the list so far.</p>` : "");
+  $("ext").innerHTML = D.ext.map(n => miniCard(byName[n])).join("") +
+    (D.quoter_pending ? `<div class="card">The combo house numbers are being re-counted. They show up here within 30 minutes.</div>` : "") +
+    (!D.ext.length && !D.quoter_pending ? `<div class="card">No notes from these tests yet.</div>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
 })();
 
@@ -392,26 +351,28 @@ function detail(n) {
   const aside = (t.orders || []).reduce((a, o) => a + (o.c || 0), 0), no = (t.orders || []).length;
   const cash = t.cash == null ? `It has no spending limit and has used ${money(t.needed, false)} so far.`
     : "Right now " + [`${money(t.cash, false)} is free cash`, no ? `${money(aside, false)} is set aside for ${no} waiting order${no === 1 ? "" : "s"}` : "",
-        t.open ? "the rest is in open bets" : ""].filter(Boolean).reduce((a, x, i, l) => a + (i ? (i === l.length - 1 ? " and " : ", ") : "") + x, "") + ".";
+        t.open ? (t.ext ? "the rest is tied up in bets waiting for a result" : "the rest is in open bets") : ""].filter(Boolean).reduce((a, x, i, l) => a + (i ? (i === l.length - 1 ? " and " : ", ") : "") + x, "") + ".";
   const tr = t.trust;
-  let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}</div>
+  let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tags(t)}</div>
     <div class="pot big">${pot(t)}</div>
     <div style="margin:4px 0">${vd(t)}</div>
     <p class="sub">${esc(t.label)}</p>
     ${t.wnote ? `<p class="sub"><b>What this wallet does</b> (from its whole history): ${esc(t.wnote)}</p>` : ""}
     ${t.wstyle ? `<p class="sub"><b>What we copied so far:</b> ${esc(t.wstyle)}</p>` : (/^wb?_/.test(t.name) ? `<p class="sub"><b>What we copied so far:</b> nothing yet. The wallet hasn't opened a new bet since we started watching.</p>` : "")}
     <div class="tiles" style="margin-top:6px">
-      <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
+      <div class="tile"><div class="v">${t.open}</div><div class="k">${t.ext ? "waiting for a result" : "open bets"}</div></div>
       <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
       <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
       ${tr.finished ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100${tr.finished < FEW ? ` (only ${tr.finished} bet${tr.finished === 1 ? "" : "s"})` : FLOOR(tr.worst_per_100) ? " (the floor)" : ""}</div></div>` : `<div class="tile"><div class="v">–</div><div class="k">worst case per $100 (no finished bets yet)</div></div>`}
       ${tr.best_per_100 != null ? `<div class="tile"><div class="v ${cls(tr.best_per_100)}">${money(tr.best_per_100)}</div><div class="k">best case per $100</div></div>` : ""}
+      ${(t.extra || []).map(([v, k]) => `<div class="tile"><div class="v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`).join("")}
     </div>
     <p class="sub" style="margin-top:8px">${tr.finished >= FEW
-      ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100.${tr.best_per_100 != null ? ` Best case, if it was unlucky: ${M(tr.best_per_100)} per $100.` : ""} The worst case decides the ranking.${FLOOR(tr.worst_per_100) ? " It sits at the −$100 floor: the bets swing too much (or there are too few) to say anything yet. That is not the same as \"it loses everything\"." : ""}${tr.avg_per_100 < 0 && tr.best_per_100 != null ? (tr.best_per_100 < 0 ? " Even the best case is below $0, so the losses aren't just bad luck." : " The best case is still above $0, so the losses could be bad luck.") : ""}`
+      ? `For every $100 it bet${D.rank_size && !t.ext ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100.${tr.best_per_100 != null ? ` Best case, if it was unlucky: ${M(tr.best_per_100)} per $100.` : ""} The worst case decides the ranking.${FLOOR(tr.worst_per_100) ? " It sits at the −$100 floor: the bets swing too much (or there are too few) to say anything yet. That is not the same as \"it loses everything\"." : ""}${tr.avg_per_100 < 0 && tr.best_per_100 != null ? (tr.best_per_100 < 0 ? " Even the best case is below $0, so the losses aren't just bad luck." : " The best case is still above $0, so the losses could be bad luck.") : ""}`
       : tr.finished ? `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. For every $100 it bet it made ${M(tr.avg_per_100)}, and the worst case is ${M(tr.worst_per_100)} per $100. With this few bets the worst case is mostly luck (one loss can drag it to −$100), so don't read much into it until ${FEW}+ bets have finished.`
       : `No bet has finished yet${endTxt(t)}, so there's no worst case to show. It appears after the first finished bet.`}</p>
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
+    ${(t.notes || []).map(x => typeof x === "string" ? `<p class="sub">${esc(x)}</p>` : `<p class="sub">Last heard from the server: ${x.last_seen ? esc(stockholm(x.last_seen)) + " Stockholm time" : "never"}.${x.last_seen && Date.now() - new Date(x.last_seen) > 9e6 ? ` <b class="neg">It has been quiet for ${Math.round((Date.now() - new Date(x.last_seen)) / 36e5)} hours. It may need a restart.</b>` : ""}</p>`).join("")}
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
     <div id="curve"></div></div>`;
   if (t.status) {
@@ -423,7 +384,9 @@ function detail(n) {
   if (t.late && t.late.n) h += `<div class="card"><b>Cost of copying late</b><p class="sub">${t.late.usd >= 0
       ? `We buy after the wallet does, so we usually pay a bit more. On ${t.late.n} copied buys we paid <span class="num neg">$${t.late.usd.toFixed(2)}</span> more than the wallet did (about ${cents(t.late.c_per_share)} more per share). That's already taken out of the profit above.`
       : `We buy after the wallet does, but here we got lucky: on ${t.late.n} copied buys we paid <span class="num pos">$${Math.abs(t.late.usd).toFixed(2)}</span> less than the wallet did.`}</p></div>`;
-  h += `<h2 style="font-size:16px">Open bets (${t.n_bets})</h2><div class="card">` + (t.bets.length ? t.bets.map(b =>
+  if (t.ext) { if (t.open_list && t.open_list.length) h += `<h2 style="font-size:16px">Waiting for the games to end (${t.n_bets})</h2><div class="card">` +
+    t.open_list.map(x => `<div class="bet"><div class="t">${esc(x)}</div></div>`).join("") + (t.n_bets > t.open_list.length ? `<p class="note">Showing ${t.open_list.length} of ${t.n_bets}.</p>` : "") + `</div>`; }
+  else h += `<h2 style="font-size:16px">Open bets (${t.n_bets})</h2><div class="card">` + (t.bets.length ? t.bets.map(b =>
     `<div class="bet"><div class="t"><a href="${esc(b.u)}" target="_blank" rel="noopener">${esc(b.t)}</a></div>
      <div class="m">${esc(b.o)}${b.e != null ? ` · bought ${cents(b.e)}` : ""}${b.n != null ? ` · now ${cents(b.n)}` : ""} · cost ${money(b.c, false)} · ${b.locked ? "expected P&L" : "P&L"} ${M(b.pnl)}${b.end ? ` · ends ${esc(b.end)}` : ""}</div></div>`).join("") +
     (t.n_bets > t.bets.length ? `<p class="note">Showing the ${t.bets.length} that moved most.</p>` : "") : "No open bets.") + `</div>`;
