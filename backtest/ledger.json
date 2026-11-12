@@ -1141,6 +1141,58 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "optfair.py"
+  },
+  {
+   "id": "post_count_markets_buy_no_10c_where_the_counting_model_says_",
+   "date": "2026-11-12",
+   "what": "Post-count markets: buy No (10c+) where the counting model says Yes is 10c+ too dear",
+   "tries": 55,
+   "bets": 825,
+   "groups": 213,
+   "per100": 4.16,
+   "floor100": -2.07,
+   "verdict": "Promising, needs more bets",
+   "status": "lead: wants a live paper test",
+   "src": "tweets.py, backtest/tweets.md"
+  },
+  {
+   "id": "post_count_markets_counting_model_both_sides_5c_apart",
+   "date": "2026-11-12",
+   "what": "Post-count markets: counting model, both sides, 5c+ apart",
+   "tries": 55,
+   "bets": 1457,
+   "groups": 214,
+   "per100": -0.89,
+   "floor100": -17.89,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "tweets.py, backtest/tweets.md"
+  },
+  {
+   "id": "post_count_markets_counting_model_says_yes_is_10c_too_cheap_",
+   "date": "2026-11-12",
+   "what": "Post-count markets: counting model says Yes is 10c+ too cheap (buy Yes)",
+   "tries": 55,
+   "bets": 665,
+   "groups": 212,
+   "per100": -4.08,
+   "floor100": -30.23,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "tweets.py, backtest/tweets.md"
+  },
+  {
+   "id": "post_count_markets_always_buy_no_yardstick",
+   "date": "2026-11-12",
+   "what": "Post-count markets: always buy No (yardstick)",
+   "tries": 55,
+   "bets": 1798,
+   "groups": 207,
+   "per100": -0.25,
+   "floor100": -2.81,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "tweets.py, backtest/tweets.md"
   }
  ]
 }
