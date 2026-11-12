@@ -3136,7 +3136,9 @@ def kmaker_cycle(tracks):
     for n in names:
         tracks[n].setdefault("orders", {})
     kmaker_settle(tracks, names)
-    kmaker_place(tracks, names)
+    live = [n for n in names if not CFG["tracks"][n].get("stopped")]   # stopped tracks only settle what's open
+    if live:
+        kmaker_place(tracks, live)
 
 
 def kmaker_summary(name, tr):
