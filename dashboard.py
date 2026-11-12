@@ -8,6 +8,7 @@ Paper money only, like everything else here.
 import collections
 import datetime as dt
 import json
+import re
 import time
 import os
 import shutil
@@ -312,6 +313,18 @@ def kfast_rows():
     return out
 
 
+def stopped_info(tc, tr):
+    """Jan, 12 Nov: stopped tracks stay on the page but must look closed. "stopped" (no new bets, open ones settle) or
+    "retired" (maker: everything closed). Returns {"on": "2026-11-12", "why": "..."} or None."""
+    why = tc.get("stopped") or tc.get("retired")
+    if not why:
+        return None
+    why = why if isinstance(why, str) else ""
+    m = re.match(r"(\d{4}-\d{2}-\d{2})[:\s]*(.*)", why)
+    on = m.group(1) if m else str((tr.get("retired") or {}).get("on", ""))[:10] or None
+    return {"on": on, "why": (m.group(2) if m else why)[:300]}
+
+
 def build(offline=False):
     if offline:
         def no_net(*a, **k):
@@ -332,7 +345,7 @@ def build(offline=False):
         s, tr, tc = stats[n], tracks[n], bot.CFG["tracks"].get(n, {})
         ob, n_open, waiting, orders = open_bets(n, tr)
         rows.append({
-            "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "stopped": bool(tc.get("stopped") or tc.get("retired")), "control": n.startswith("control_"),
+            "name": n, "label": tc.get("label", ""), "lab": bool(tc.get("lab")), "stopped": stopped_info(tc, tr), "control": n.startswith("control_"),
             "pnl": r2(s["pnl"]), "today": r2(s.get("today", 0)), "realized": r2(s.get("realized")),
             "open": s["open"] - len(waiting) - len(orders), "waiting": waiting, "orders": orders, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
