@@ -182,6 +182,119 @@ def fetch():
     print(f"charts saved: {len(charts)}, with points: {sum(1 for h in charts.values() if h[0])}")
 
 
+# ================================================================ real trades (5-minute buckets) and 1-minute spot
+def fetch_spot1m(symbol, path):
+    """1-minute Binance candles since T_START as {"t0": first minute, "c": closes, "h": highs, "l": lows} (None = no candle)."""
+    d = bt.rjson(path, None) or {"t0": T_START - T_START % 60, "c": [], "h": [], "l": []}
+    t = (d["t0"] + 60 * len(d["c"])) * 1000
+    n = 0
+    while True:
+        rows = bot.http_json(BINANCE, {"symbol": symbol, "interval": "1m", "startTime": t, "limit": 1000})
+        if not rows:
+            break
+        for r in rows:
+            i = int(r[0] // 1000 - d["t0"]) // 60
+            while len(d["c"]) < i:
+                for k in "chl":
+                    d[k].append(None)
+            if len(d["c"]) == i:
+                d["c"].append(float(r[4])); d["h"].append(float(r[2])); d["l"].append(float(r[3]))
+        n += 1
+        if n % 100 == 0:
+            print(f"  {symbol} 1m: {len(d['c'])} minutes", flush=True)
+        if len(rows) < 1000:
+            break
+        t = rows[-1][0] + 60000
+    bt.wjson(path, d)
+    return d
+
+
+def order_key(mid):
+    """A fixed shuffle of the markets that has nothing to do with their result: any first N are a fair sample."""
+    import hashlib
+    return hashlib.md5(("opt" + str(mid)).encode()).hexdigest()
+
+
+MAX_PAGES = int(os.environ.get("OPT_PAGES", "1200"))
+
+
+def fetch_tape(job):
+    """Every trade of one market, squeezed to 5-minute buckets in YES terms: [bucket, first, last, low, high, dollars, trades]."""
+    import informed
+    m, cid = job
+    try:
+        rows, cut = informed.tape(cid, MAX_PAGES)
+    except Exception as ex:
+        return m["id"], None
+    tt = []
+    for r in rows:
+        t = bot.fnum(bot.pick(r, "timestamp", "time"))
+        t = t / 1000 if t > 1e11 else t
+        px, sh = bot.fnum(r.get("price")), bot.fnum(r.get("size"))
+        oi = r.get("outcome_index", r.get("outcomeIndex"))
+        if oi not in (0, 1):
+            tok = str(bot.pick(r, "token_id", "asset", default=""))
+            oi = 0 if tok == m["toks"][0] else 1 if tok == m["toks"][1] else None
+        if not t or oi is None or not 0 < px < 1 or sh <= 0:
+            continue
+        tt.append((int(t), px if oi == 0 else 1 - px, px * sh))
+    tt.sort()
+    B = []
+    for t, p, usd_ in tt:
+        b = t // 300 * 300
+        p = round(p, 4)
+        if B and B[-1][0] == b:
+            x = B[-1]
+            x[2] = p; x[3] = min(x[3], p); x[4] = max(x[4], p); x[5] += usd_; x[6] += 1
+        else:
+            B.append([b, p, p, p, p, usd_, 1])
+    for x in B:
+        x[5] = round(x[5], 1)
+    return m["id"], {"cut": bool(cut), "n": len(tt), "b": B}
+
+
+SHARD = 500
+
+
+def tapes(limit=None):
+    """Download trade lists for the markets in the fixed shuffled order, in files of SHARD markets (resumable)."""
+    import ideas, informed
+    os.makedirs(CACHE, exist_ok=True)
+    for coin, (sym, _) in COINS.items():
+        d = fetch_spot1m(sym, os.path.join(CACHE, f"spot1m_{coin}.json.gz"))
+        print(f"{coin}: {len(d['c'])} spot minutes", flush=True)
+    markets, _, _ = ideas.load_full()
+    ms = pick_markets(markets)
+    cut = T(btcheck.HOLDOUT_FROM)
+    ms = {k: m for k, m in ms.items() if m["end"] < cut and m["final"]}
+    order = sorted(ms, key=order_key)
+    if limit:
+        order = order[:limit]
+    nsh = (len(order) + SHARD - 1) // SHARD
+    tot = cutn = 0
+    for si in range(nsh):
+        path = os.path.join(CACHE, f"tapes_{si:02d}.json.gz")
+        ids = order[si * SHARD:(si + 1) * SHARD]
+        have = bt.rjson(path, {}) or {}
+        todo = [i for i in ids if i not in have]
+        if todo:
+            cids = informed.cids_for(todo)
+            jobs = [(ms[i], cids[i]) for i in todo if cids.get(i)]
+            with cf.ThreadPoolExecutor(WORKERS) as ex:
+                for mid, r in ex.map(fetch_tape, jobs):
+                    if r is not None:
+                        have[mid] = r
+            bt.wjson(path, have)
+        tot += len(have)
+        cutn += sum(1 for r in have.values() if r["cut"])
+        print(f"  shard {si + 1}/{nsh}: {len(have)}/{len(ids)} markets, {sum(r['n'] for r in have.values())} trades, "
+              f"{sum(1 for r in have.values() if r['cut'])} cut short ({(time.time() - T0) / 60:.0f} min)", flush=True)
+        if (time.time() - T0) / 60 > BUDGET_MIN:
+            print("time budget used, run again to continue")
+            break
+    print(f"tapes saved: {tot} markets, {cutn} cut short at {MAX_PAGES} pages")
+
+
 # ================================================================ the model
 def ncdf(x):
     return 0.5 * (1 + math.erf(x / math.sqrt(2)))
@@ -257,7 +370,7 @@ def touched_since(m, spot, t):
 
 
 def signals(ms, charts, dvol, spot, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_left=45 * 86400, vol_mult=1.0,
-            kinds=None, step=1, first_only=True):
+            kinds=None, step=1, first_only=True, min_age=6 * 3600):
     """Walk each market's hourly chart; where the options price disagrees with Polymarket by `gap` or more
     (after the fee), that is a signal to buy the cheap side. One signal per market (the first)."""
     out = []
@@ -272,6 +385,8 @@ def signals(ms, charts, dvol, spot, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 360
             t, p = h[0][i], h[1][i]
             left = m["end"] - t
             if left < min_left or left > max_left or not lo <= p <= hi:
+                continue
+            if t - m["start"] < min_age:           # new markets open with a made-up 50c price (launch.py): skip the first hours
                 continue
             c = sp.at(t - 3600, 2 * 3600)          # the candle that CLOSED before t (candle stamps are opens)
             v = dv.at(t - 3600, 6 * 3600)
@@ -289,7 +404,7 @@ def signals(ms, charts, dvol, spot, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 360
             if side is None:
                 continue
             out.append({"id": mid, "t": t, "side": side, "p": price, "fair": fairp, "end": m["end"], "ev": m["ev"], "toks": m["toks"],
-                        "kind": m["kind"], "coin": m["coin"], "left": left, "fee": m["fee"],
+                        "kind": m["kind"], "coin": m["coin"], "left": left, "fee": m["fee"], "age": t - m["start"],
                         "win": (m["final"][0] == 1.0) == (side == 0), "q": m["q"]})
             if first_only:
                 break
@@ -304,7 +419,7 @@ def to_bets(sigs, extra=0.01, stake=10.0):
         sh = stake / c
         fee = bot.taker_fee(sh, c, s["fee"])
         bets.append({"ev": s["ev"], "t": s["t"], "cost": sh * c + fee, "pay": sh if s["win"] else 0.0, "sh": sh,
-                     "kind": s["kind"], "coin": s["coin"], "side": s["side"], "left": s["left"], "p": s["p"], "fair": s["fair"]})
+                     "kind": s["kind"], "coin": s["coin"], "side": s["side"], "left": s["left"], "p": s["p"], "fair": s["fair"], "age": s.get("age"), "id": s["id"]})
     return bets
 
 
@@ -339,7 +454,7 @@ def calibration(ms, charts, dvol, spot):
         # one look per market: the first chart point with 1-3 days left (or the first point at all for short markets)
         for t, p in zip(h[0], h[1]):
             left = m["end"] - t
-            if left > 3 * 86400 or left < 6 * 3600:
+            if left > 3 * 86400 or left < 6 * 3600 or t - m["start"] < 6 * 3600:
                 continue
             c, v = sp.at(t - 3600, 2 * 3600), dv.at(t - 3600, 6 * 3600)
             if c is None or v is None or not 0.02 <= p <= 0.98:
@@ -431,4 +546,7 @@ def selftest():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"fetch": fetch, "run": run, "selftest": selftest}.get(cmd, lambda: sys.exit(f"unknown command {cmd}"))()
+    if cmd.startswith("tapes"):
+        tapes(int(cmd[5:].strip("_") or 0) or None)
+    else:
+        {"fetch": fetch, "run": run, "selftest": selftest}.get(cmd, lambda: sys.exit(f"unknown command {cmd}"))()
