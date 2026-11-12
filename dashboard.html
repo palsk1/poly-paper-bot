@@ -432,7 +432,6 @@ addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("cur
     ["rules", "Test rules", t => t.lab && !/^wb?_/.test(t.name)],
     ["up", "Ahead", t => t.pnl > 0.004],
     ["down", "Behind", t => t.pnl < -0.004],
-    ["stopped", "Stopped", t => !!t.stopped],
   ];
   const cols = [
     ["name", "Strategy", t => t.name, false],

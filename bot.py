@@ -5569,10 +5569,17 @@ def top_eligible(s):
     return s["trust"]["finished"] >= 3 and s["trust"]["avg_per_100"] > 0 and s["pnl"] > 0
 
 
+def is_stopped(name):
+    """Jan stopped this track (12 Nov 2026): "stopped" (no new bets) or "retired" (maker, closed out) in config."""
+    tc = CFG["tracks"].get(name, {})
+    return bool(tc.get("stopped") or tc.get("retired"))
+
+
 def save_top(stats):
-    """Pick the top 10 (only strategies actually ahead on 3+ finished trades) and save it to state/top.json."""
+    """Pick the top 10 (only strategies actually ahead on 3+ finished trades) and save it to state/top.json.
+    Stopped tracks never make the list (Jan, 12 Nov: drop them from the dashboard)."""
     n = CFG["push"].get("top_n", 10)
-    top = [x for x in ranked(stats) if top_eligible(stats[x])][:n]
+    top = [x for x in ranked(stats) if top_eligible(stats[x]) and not is_stopped(x)][:n]
     save("top.json", {"generated": iso(), "tracks": top})
     return top
 
