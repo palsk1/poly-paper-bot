@@ -3195,7 +3195,7 @@ KP_SPORT = re.compile(r"NCAA|NFL|NBA|MLB|NHL|WNBA|MLS|EPL|SERIEA|LALIGA|BUNDES|L
 KP_NOT_SPORT = re.compile(r"BTC|ETH|SOL|XRP|DOGE|CRYPTO|BNB|SHIBA|HYPE|HIGH|LOWT|TEMP|RAIN|SNOW|WEATHER|HURR|MENTION|SAY")
 
 
-KP_MS_KIND, KP_MS_EV = Counter(), {}
+KP_MS_KIND = Counter()
 
 
 def kpatient_names():
@@ -3226,8 +3226,8 @@ def kpatient_starts(max_pages=60):
             if not st:
                 continue
             KP_MS_KIND[f"{ms.get('category')}|{ms.get('type')}"] += 1
-            for ev in (ms.get("related_event_tickers") or []) + (ms.get("primary_event_tickers") or []):
-                KP_MS_EV[ev] = f"{ms.get('category')}|{ms.get('type')}"
+            if str(ms.get("category") or "").lower() not in ("sports", "esports"):
+                continue                      # election nights, data releases, gas prices: not games
             for ev in (ms.get("related_event_tickers") or []) + (ms.get("primary_event_tickers") or []):
                 if ev not in out or st < out[ev]:
                     out[ev] = st
@@ -5877,12 +5877,7 @@ def kpatienttest():
     starts = kpatient_starts()
     print(f"open markets {len(markets)} in {t1 - t0:.0f}s; games with a start time {len(starts)} in {time.time() - t1:.0f}s")
     print("sample schedule:", [(k, iso(v)) for k, v in list(starts.items())[:5]])
-    print("schedule kinds:", KP_MS_KIND.most_common(60))
-    odd = Counter()
-    for ev, k in KP_MS_EV.items():
-        if not kpatient_is_sport(ev.split("-")[0]):
-            odd[(k, ev.split("-")[0])] += 1
-    print("on the schedule but not sports by name:", odd.most_common(80))
+    print("schedule kinds:", KP_MS_KIND.most_common(12))
     kpatient_place(tracks, names, markets, starts)
     for n in names:
         tr = tracks[n]
