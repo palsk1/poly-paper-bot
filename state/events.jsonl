@@ -6946,3 +6946,11 @@
 {"minutes_left": 2.93, "price": 0.994, "queue": 4579.02, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:12:05Z", "type": "kmaker_order"}
 {"minutes_left": 2.93, "price": 0.985, "queue": 34.86, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:12:05Z", "type": "kmaker_order"}
 {"minutes_left": 2.93, "price": 0.965, "queue": 159.1, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:12:06Z", "type": "kmaker_order"}
+{"fee": 0.0, "outcome": "No", "price": 0.61, "shares": 5, "title": "Next US-Iran senior diplomatic meeting by December 31, 2026?", "token": "75551022246763091734855607590270811995304821212808923468996332043383609182029", "track": "w_anoin123", "ts": "2026-11-12T00:15:35Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "No", "price": 0.61, "shares": 5, "title": "Next US-Iran senior diplomatic meeting by December 31, 2026?", "token": "75551022246763091734855607590270811995304821212808923468996332043383609182029", "track": "wb_anoin123", "ts": "2026-11-12T00:15:36Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:16:45Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:16:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:16:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV111915-15", "track": "kc_maker", "ts": "2026-11-12T00:16:46Z", "type": "kmaker_fill"}
+{"filled": 11.0, "pnl": -9.911, "price": 0.901, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV111915-15", "track": "kc_maker_early", "ts": "2026-11-12T00:16:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.82, "price": 0.918, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV111915-15", "track": "kc_maker_early", "ts": "2026-11-12T00:16:47Z", "type": "kmaker_fill"}
