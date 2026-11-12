@@ -7280,3 +7280,4 @@
 {"outcome": "No", "pnl": -0.6019, "price": 0.622, "reason": "wallet exit (book)", "title": "Will the Democratic Progressive Party (DPP) win the most head of local government elections in the 2026 Taiwan local elections?", "token": "91004506882941445266754771479824617369805789899332711132070603219216406556613", "track": "wb_bigggggggg", "ts": "2026-11-12T04:15:38Z", "type": "paper_close"}
 {"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV112315-15", "track": "kc_maker", "ts": "2026-11-12T04:16:53Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV112315-15", "track": "kc_maker_safe", "ts": "2026-11-12T04:16:53Z", "type": "kmaker_fill"}
+{"minutes_left": 3.0, "price": 0.966, "queue": 182.68, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV112330-30", "track": "kc_maker", "ts": "2026-11-12T04:27:00Z", "type": "kmaker_order"}
