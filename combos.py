@@ -618,18 +618,14 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
     c = exam.score(bets, "Paper combo quoter, live (main)", tries=1, prereg=True, log=False, quiet=True) if bets else {}
     paid = sum(b["cost"] for b in bets)
     back = sum(b["pay"] for b in bets)
-    # running total for the dashboard graph (same shape as a track's curve: start, one point per finished bet, now)
-    curve, run_ = [], 0.0
-    for b_ in sorted(bets, key=lambda b_: b_.get("t") or 0):
-        run_ += b_["pay"] - b_["cost"]
-        curve.append([time.strftime("%Y-%m-%dT%H:%M", time.gmtime(b_.get("t") or 0)), round(run_, 2)])
-    if curve:
-        curve = [[curve[0][0], 0.0]] + curve + [[time.strftime("%Y-%m-%dT%H:%M", time.gmtime()), round(run_, 2)]]
+    # every finished bet as [seconds, money at risk, money back]: the dashboard builds the same card, graph and
+    # worst case from this as for any paper-bot strategy
+    every = [[round(b_.get("t") or 0), round(b_["cost"], 2), round(b_["pay"], 2)] for b_ in sorted(bets, key=lambda b_: b_.get("t") or 0)]
     out = {"generated_ts": time.time(), "last_seen": last / 1000 if last else None,
            "days": sorted({time.strftime("%Y-%m-%d", time.gmtime((x.get("t") or 0) / 1000)) for x in lines if x.get("t")}),
            "heard": heard, "priced": len(reqs), "trades": len(trades), "would_win": len(won), "settled": len(bets),
            "waiting": pending, "won_by_house": sum(1 for b in bets if b["pay"] > 0),
-           "pnl": round(back - paid, 2), "at_risk": round(paid, 2), "curve": curve, "per100": c.get("per100"), "lo100": c.get("lo100"), "hi100": c.get("hi100"),
+           "pnl": round(back - paid, 2), "at_risk": round(paid, 2), "all": every, "per100": c.get("per100"), "lo100": c.get("lo100"), "hi100": c.get("hi100"),
            "verdict": c.get("verdict") if bets else "Too early to tell",
            "rule": "2-4 legs, no two legs from the same game, our price = the legs multiplied, +5%, $25 at risk a bet",
            "pass_rule": "Pass (fixed 11 Nov): above +$1.00 per $100 and both halves ahead, at 1 Jan or 1,000 finished bets",
