@@ -14,6 +14,9 @@ in the last minutes.
     python3 kcrypto.py run         # write backtest/kcrypto.md (+ kcrypto.json)
     python3 kcrypto.py selftest    # offline check on made-up candles
     python3 kcrypto.py depth       # kc_maker_safe like a trading firm: price after the bid, loss bunches, live pass bar, $300 pot
+    python3 kcrypto.py losses      # live: Kalshi trade list + Binance seconds for every kc_maker_safe bet (probe kc_losses)
+    python3 kcrypto.py basis       # live: Binance vs Kalshi price gap at every bet (probe kc_basis)
+    python3 kcrypto.py gapcheck    # history: what a check for that gap would have kept and thrown away (backtest/kcloss.md)
   From GitHub: probe workflow with what = btkc (fetch + run), btkcfetch, btkcrun; cache and report are kept.
   (probe `kc_scan` prints the API shapes.)
 
@@ -802,6 +805,194 @@ def depth(track="kc_maker_safe", kind="improve", level=0.95, minutes=3, zmin=2.0
 
 # ================================================================ selftest
 
+def _spot_1s(sym, t0, t1):
+    """Binance 1-second closes {epoch: price} for [t0, t1]."""
+    out, cur = {}, int(t0) * 1000
+    while cur < t1 * 1000:
+        ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1s", "startTime": cur, "limit": 1000})
+        if not ks:
+            break
+        for k in ks:
+            out[int(k[0]) // 1000] = float(k[4])
+        cur = int(ks[-1][0]) + 1000
+    return out
+
+
+def losstape(track="kc_maker_safe"):
+    """Live look at one kmaker track's bets (Jan, 12 Nov: "why did we lose and can we avoid it?"). For every closed
+    bet: the real Kalshi trade tape from our bid to the close (when our paper bid would have filled, who sold to us,
+    how low it traded). For the lost bets also Binance 1-second spot around the window and Kalshi's own settle value.
+    Prints one JSON line per bet (prefix LT) for the write-up in backtest/kcloss.md. Reads only."""
+    with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+        closed = (json.load(fh).get(track) or {}).get("closed") or []
+    for c in closed:
+        if c.get("reason") != "resolved":
+            continue
+        t_pl, t_cl = bot.parse_iso(c["placed"]).timestamp(), bot.parse_iso(c["close"]).timestamp()
+        lost = c["exit"] < 0.5
+        try:
+            trades, complete = bot.kalshi_trades(c["ticker"], t_pl - (600 if lost else 0), t_cl)
+        except Exception as e:
+            print("LT", json.dumps({"ticker": c["ticker"], "err": str(e)}))
+            continue
+        rows = []
+        for t in trades:
+            ts = bot.parse_iso(t.get("created_time"))
+            yp = bot.fnum(t.get("yes_price_dollars"), None)
+            if yp is None:
+                yp = bot.fnum(t.get("yes_price"), 0) / 100
+            px = yp if c["side"] == "yes" else round(1 - yp, 6)
+            rows.append((ts.timestamp(), round(px, 4), bot.fnum(t.get("count_fp") or t.get("count"), 0),
+                         str(t.get("taker_side"))))
+        rows.sort()
+        # walk our paper bid: sells at our price eat the queue first, anything below fills us at once
+        need, q, fill_t, filled, first_t = c["shares"], c.get("queue", 0), None, 0.0, None
+        sold_to_us = []
+        for ts, px, n, ts_side in rows:
+            if ts <= t_pl or ts_side == c["side"]:
+                continue
+            if abs(px - c["entry"]) < 1e-6:
+                take = max(0.0, n - q)
+                q = max(0.0, q - n)
+            elif px < c["entry"]:
+                take = n
+            else:
+                continue
+            if take > 0:
+                filled += take
+                sold_to_us.append([round(t_cl - ts, 1), px, n])
+                first_t = ts if first_t is None else first_t
+                if filled >= need - 1e-9 and fill_t is None:
+                    fill_t = ts
+        after = [r for r in rows if r[0] > t_pl]
+        out = {"ticker": c["ticker"], "side": c["side"], "price": c["entry"], "won": not lost, "front": c.get("front"),
+               "queue": c.get("queue"), "z": c.get("spot_z"), "left": c.get("minutes_left"), "strike": c.get("strike"),
+               "fill_s_before_close": None if fill_t is None else round(t_cl - fill_t, 1),
+               "first_s_before_close": None if first_t is None else round(t_cl - first_t, 1), "filled": filled,
+               "low_after": min((r[1] for r in after), default=None), "n_trades_after": len(after),
+               "vol_after": round(sum(r[2] for r in after)), "complete": complete}
+        if lost:
+            out["sold_to_us"] = sold_to_us[:40]
+            # 10-second view of the tape: lowest and last price of our side, contracts, share sold by takers
+            buck = defaultdict(lambda: [9, 0, 0, 0])
+            for ts, px, n, s_ in rows:
+                b = int((ts - t_cl) // 10) * 10
+                buck[b][0] = min(buck[b][0], px)
+                buck[b][1] = px
+                buck[b][2] += n
+                buck[b][3] += n if s_ != c["side"] else 0
+            out["tape10"] = [[k, v[0], v[1], round(v[2]), round(v[3])] for k, v in sorted(buck.items())]
+            sym = bot.KMAKER_SPOT.get(c["series"])
+            try:
+                sp = _spot_1s(sym, t_pl - 900, t_cl + 60)
+                out["spot10"] = [[int(k - t_cl), v] for k, v in sorted(sp.items()) if int(k - t_cl) % 10 == 0]
+                ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1m", "endTime": int(t_pl * 1000), "limit": 62})
+                cl = [float(k[4]) for k in ks]
+                r_ = [math.log(b / a) for a, b in zip(cl[:-1], cl[1:])][-60:]
+                out["sd1m"] = math.sqrt(sum(x * x for x in r_) / len(r_))
+                ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": sym, "interval": "1m", "endTime": int(t_cl * 1000), "limit": 240})
+                out["min_closes_4h"] = [[int(k[0]) // 1000 - int(t_cl), float(k[4])] for k in ks]
+            except Exception as e:
+                out["spot_err"] = str(e)
+            m = bot.kalshi_market(c["ticker"]) or {}
+            out["market"] = {k: m.get(k) for k in ("result", "expiration_value", "floor_strike", "settlement_value",
+                                                   "close_time", "expiration_time", "rules_secondary") if k in m}
+        print("LT", json.dumps(out))
+
+
+def live_basis(track="kc_maker_safe"):
+    """Binance's coin price vs Kalshi's own price, for every live bet of a kmaker track (12 Nov). Kalshi settles on
+    CF Benchmarks' US-dollar index; Binance quotes in USDT, which ran ~0.09% higher over 60 days. The window's strike
+    IS Kalshi's index at the open, so Binance at the open / strike = the gap at that moment, known before we bid.
+    Prints one LB line per bet: the z the bot used and the z with Binance moved onto Kalshi's scale. Reads only."""
+    with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+        closed = (json.load(fh).get(track) or {}).get("closed") or []
+    for c in closed:
+        if c.get("reason") != "resolved" or not c.get("strike"):
+            continue
+        t_pl, t_cl = bot.parse_iso(c["placed"]).timestamp(), bot.parse_iso(c["close"]).timestamp()
+        t_open = t_cl - 900
+        try:
+            ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": bot.KMAKER_SPOT[c["series"]], "interval": "1m",
+                                                         "endTime": int(t_pl * 1000), "limit": 80})
+        except Exception as e:
+            print("LB", json.dumps({"ticker": c["ticker"], "err": str(e)}))
+            continue
+        by = {int(k[0]) // 1000: float(k[4]) for k in ks}
+        a, b = by.get(int(t_open) - 60), by.get(int(t_open) - 120)
+        cl = [float(k[4]) for k in ks]
+        rets = [math.log(y / x) for x, y in zip(cl[:-1], cl[1:])][-60:]
+        sd = math.sqrt(sum(r * r for r in rets) / len(rets))
+        px = cl[-1]
+        left = max(c["minutes_left"], 0.5)
+        if not a:
+            print("LB", json.dumps({"ticker": c["ticker"], "err": "no open price"}))
+            continue
+        basis = ((a + b) / 2 if b else a) / c["strike"]
+        z = (px - c["strike"]) / (sd * px * math.sqrt(left))
+        zc = (px - c["strike"] * basis) / (sd * px * math.sqrt(left))
+        if c["side"] == "no":
+            z, zc = -z, -zc
+        print("LB", json.dumps({"ticker": c["ticker"], "side": c["side"], "won": c["exit"] >= 0.5, "pnl": c["pnl"],
+                                "price": c["entry"], "front": c.get("front"), "z_bot": c.get("spot_z"), "z": round(z, 2),
+                                "z_fixed": round(zc, 2), "gap_bp": round((basis - 1) * 1e4, 1), "sd1m": sd}))
+
+
+def zscore_usd(w, t, minutes, side):
+    """zscore() with Binance moved onto Kalshi's price scale first. Binance quotes in USDT and ran ~0.09% above the
+    US-dollar index Kalshi settles on (12 Nov). The window's strike is Kalshi's index at the open, so Binance at the
+    open / strike is the gap at that moment, known before we bid. None without data."""
+    sp, k = w["spot"], w.get("strike")
+    a, b = sp.get(str(w["open"])), sp.get(str(w["open"] - 60))   # Binance closes at the start and a minute before (keys = minute end)
+    if not k or not a:
+        return None
+    gap = ((a + b) / 2 if b else a) / k
+    w2 = dict(w, strike=k * gap)
+    return zscore(w2, t, minutes, side)
+
+
+def gapcheck(log=False):
+    """Backtest: does the Binance-vs-Kalshi price gap explain kc_maker_safe's losses, and what would a check that
+    corrects for it cost? (12 Nov, Jan: "why did we lose and can we avoid it?"; write-up backtest/kcloss.md)"""
+    import exam
+    windows = load_windows()
+    out = {}
+    for m in (2, 3, 4):
+        sigs = signals(windows, m)
+        bys = {s["w"]["t"]: s for s in sigs}
+        f = []
+        for r in variant_trades(sigs, "improve", 0.95, None):
+            if not r["fills"][1]:
+                continue
+            s = bys[r["tk"]]
+            r["z"], r["zu"], r["side"] = zscore(s["w"], s["t"], m, s["side"]), zscore_usd(s["w"], s["t"], m, s["side"]), s["side"]
+            if r["z"] is not None and r["zu"] is not None:
+                f.append(r)
+        now_ = [r for r in f if r["z"] >= 2]
+        groups = {"now (z >= 2)": now_, "both checks": [r for r in now_ if r["zu"] >= 2],
+                  "thrown away": [r for r in now_ if r["zu"] < 2]}
+        for side in ("yes", "no"):
+            groups[f"now, {side} side"] = [r for r in now_ if r["side"] == side]
+        print(f"--- {m} min left")
+        for k, g in groups.items():
+            lost = sum(1 for r in g if not r["won"])
+            pnl = [(1.0 if r["won"] else 0.0) - r["price"] for r in g]
+            cost = sum(r["price"] for r in g)
+            row = {"bets": len(g), "lost": lost, "per100": sum(pnl) / cost * 100 if cost else 0.0,
+                   "usd10": sum(p / r["price"] * 10 for r, p in zip(g, pnl))}
+            out[(m, k)] = row
+            print(f"{k:22s} bets {row['bets']:5d} lost {lost:3d} per $100 {money(row['per100'])} "
+                  f"$10 bets {money(row['usd10'])}")
+        if m == 3 and log:
+            bets = [{"cost": r["price"] * 10, "pay": 10.0 if r["won"] else 0.0, "t": r["t"], "ev": r["t"]}
+                    for r in groups["both checks"]]
+            exam.score(bets, "kc_maker_safe + Binance price-gap check (backtest, 3 min)", tries=8,
+                       src="kcrypto.py gapcheck", note="Twin idea from the 12 Nov loss dig: same rule, but also skip "
+                       "bids where Binance only looks safe because it runs above Kalshi's price. Fewer losses, same "
+                       "profit per $100, fewer bets.")
+    return out
+
+
 def selftest():
     close = 10_000 * 900
     def win(rows, res, strike=100.0):
@@ -833,5 +1024,5 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if cmd.startswith("fetch_"):
         cmd, arg = "fetch", cmd.split("_", 1)[1]
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth,
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()

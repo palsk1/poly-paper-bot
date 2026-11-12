@@ -194,6 +194,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 Still running on purpose, though the idea looks dead: the endgame lab variants `endgame_strict` and `endgame_sell98`,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
 - **`kc_maker_early`, Kalshi 15-minute crypto bids at 90c+ with 6.5-11.5 minutes left (stopped 12 Nov, Jan: "dump it"):** lost $79.62 on 341 live bets (-$2.45 per $100). The backtest said +$0.61 to +$1.43; live luck range -$5.82 to +$0.92, so it's broken, not unlucky. The 90-91c bids lost $72 of it: with 8+ minutes left, whoever sells into your bid often sees the coin turning. No new bids; history kept.
+- **Why `kc_maker_safe` lost 3 of 362 bets (12 Nov, `kcrypto.py losses / basis / gapcheck`, Jan's ask):** normal, not a bug: one loss eats about 90 wins and it loses 1 in 120 live (1 in 160 in history). The fills were real. Shared pattern: Binance (USDT) runs about 0.09% above the dollar price Kalshi pays on, so on "yes" bets the cushion looks bigger than it is; on Kalshi's scale all 3 losses were under the 2-move bar. Skipping those (history, 60 days): losses 54 to 20, worst day -$22 to -$11, +$0.57 to +$0.54 per $100, 25 in 100 fewer bets, about $2.40 a day less in total. The locked rule stays; Jan said yes to a twin, `kc_maker_safe_usd`, live since 12 Nov. `backtest/kcloss.md`.
 
 ## Open questions for Jan
 

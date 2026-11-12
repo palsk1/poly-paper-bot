@@ -2914,9 +2914,12 @@ KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSD
 _kmaker_spot = {}
 
 
-def kmaker_z(series, strike, minutes_left, side):
+def kmaker_z(series, strike, minutes_left, side, open_ts=None):
     """How many 'typical moves until the close' Binance spot sits on our side of the strike (same formula as the
-    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data."""
+    backtest, kcrypto.zscore): last hour's 1-minute moves, scaled to the minutes left. None without data.
+    open_ts (epoch seconds of the window's start) = move Binance onto Kalshi's price scale first (kc_maker_safe_usd,
+    12 Nov, Jan said yes): Binance quotes in USDT and runs ~0.09% above the dollar index Kalshi settles on. The strike
+    IS Kalshi's index at the start, so Binance then / strike = the gap (same as kcrypto.zscore_usd, backtest/kcloss.md)."""
     sym = KMAKER_SPOT.get(series)
     if not sym or not strike:
         return None
@@ -2925,14 +2928,20 @@ def kmaker_z(series, strike, minutes_left, side):
             ks = http_json(f"{BINANCE}/klines", {"symbol": sym, "interval": "1m", "limit": 62})
             closes = [fnum(k[4]) for k in ks]
             rets = [math.log(b / a) for a, b in zip(closes[:-1], closes[1:]) if a > 0 and b > 0][-60:]
-            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets))) if len(rets) >= 30 else None
+            by_t = {int(fnum(k[0])) // 1000: fnum(k[4]) for k in ks}
+            _kmaker_spot[sym] = (closes[-1], math.sqrt(sum(r * r for r in rets) / len(rets)), by_t) if len(rets) >= 30 else None
         except Exception as e:
             print(f"binance 1m klines failed for {sym}: {e}")
             _kmaker_spot[sym] = None
     got = _kmaker_spot[sym]
     if not got or got[1] <= 0:
         return None
-    px, sd1 = got
+    px, sd1, by_t = got
+    if open_ts is not None:
+        a, b = by_t.get(int(open_ts) - 60), by_t.get(int(open_ts) - 120)
+        if not a:
+            return None
+        strike = strike * (((a + b) / 2 if b else a) / strike)
     z = (px - strike) / (sd1 * px * math.sqrt(max(minutes_left, 0.5)))
     return z if side == "yes" else -z
 
@@ -3006,6 +3015,15 @@ def kmaker_place(tracks, names):
                                                                    "bid": bid, "ask": ask, "placed": False,
                                                                    "z": None if z is None else round(z, 2)}
                         continue
+                zu = None
+                if r.get("usd_gap"):   # second check on Kalshi's price scale (kc_maker_safe_usd)
+                    zu = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side,
+                                  open_ts=(close - dt.timedelta(minutes=15)).timestamp())
+                    if zu is None or zu < r["min_spot_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z": round(z, 2), "z_usd": None if zu is None else round(zu, 2)}
+                        continue
                 queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
                 shares = max(1, int(r.get("usd_per_order", 10) / price))
                 cost = round(shares * price, 6)
@@ -3019,7 +3037,8 @@ def kmaker_place(tracks, names):
                                     "shares": shares, "cost": cost, "placed": iso(), "close": iso(close),
                                     "minutes_left": round(left, 2), "bid": bid, "ask": ask,
                                     "strike": fnum(m.get("floor_strike"), None),
-                                    "spot_z": None if z is None else round(z, 2)}
+                                    "spot_z": None if z is None else round(z, 2),
+                                    **({"spot_z_usd": round(zu, 2)} if zu is not None else {})}
                 tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
                 tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
                                                            "bid": bid, "ask": ask, "placed": True}

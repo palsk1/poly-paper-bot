@@ -985,6 +985,19 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "claudefix.py"
+  },
+  {
+   "id": "kc_maker_safe_binance_price_gap_check_backtest_3_min",
+   "date": "2026-11-12",
+   "what": "kc_maker_safe + Binance price-gap check (backtest, 3 min)",
+   "tries": 8,
+   "bets": 6470,
+   "groups": 2665,
+   "per100": 0.54,
+   "floor100": 0.27,
+   "verdict": "Looks real",
+   "status": "open",
+   "src": "kcrypto.py gapcheck"
   }
  ]
 }
