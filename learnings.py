@@ -37,6 +37,8 @@ CANDIDATES = [
     ("econ_fav", "Economy favorites the forecast backs", None, "not registered yet"),
     ("kalshi_patient", "Kalshi patient buyer, nearly-sure side (untested)", DECISION_DAY,
      "1,000+ bets, ahead, low end of the luck range above $0"),
+    ("postcount_no", "NO on post counts the counter says are overpriced (untested)", DECISION_DAY,
+     "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
     ("arb", "Same question on Kalshi and Polymarket", DECISION_DAY, "pays out on 1 Jan"),
 ]
 KC_TARGET, KC_BAR, KC_START = 2500, 0.22, "2026-11-09T19:00"

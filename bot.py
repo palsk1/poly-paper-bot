@@ -3707,7 +3707,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3793,7 +3793,7 @@ def run_fast(tracks, force=False):
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
                      ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
-                     ("draws", draw_candidates)):
+                     ("draws", draw_candidates), ("postcount", postcount_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -3945,6 +3945,85 @@ def draw_candidates(names):
     for n in out:
         out[n].sort(key=lambda c: -c["liquidity"])
     print(f"draws: {len(games)} games, {seen} draw markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
+    return out
+
+
+def postcount_candidates(names):
+    """Post-count markets ("Will Elon Musk post 90-114 tweets from ... to ...?"), tweets.py, backtest/tweets.md,
+    2026-11-12. A counting model (count so far on Polymarket's own counter + what the same stretch of the week brought
+    in the last 8 weeks) gives each count range a chance. Where the listed YES price is `min_gap` or more above the
+    model, buy NO (only when NO costs min_price or more). One bet per market, several ranges of one event allowed."""
+    import tweets
+    rs = {n: rules_for(n) for n in names}
+    out = {n: [] for n in names}
+    t_now = int(now().timestamp())
+    try:
+        tr = json.loads(tweets.raw(f"{tweets.X}/trackings")).get("data") or []
+    except Exception as e:
+        print(f"postcount: counter site failed: {e}")
+        return out
+    posts, seen_ev, looked = {}, set(), 0
+    for t in tr:
+        u = t.get("user") or {}
+        h, slug = u.get("handle"), str(t.get("marketLink") or "").rstrip("/").split("/")[-1]
+        try:
+            start, end = tweets.ts(t["startDate"]), tweets.ts(t["endDate"])
+        except Exception:
+            continue
+        if not h or not slug or slug in seen_ev or end - t_now < 3600:
+            continue
+        seen_ev.add(slug)
+        if h not in posts:
+            got = {}
+            a = t_now - 120 * 86400
+            while a < t_now:
+                b = min(a + 20 * 86400, t_now + 86400)
+                f = lambda x: time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(x))
+                try:
+                    for p in json.loads(tweets.raw(f"{tweets.X}/users/{h}/posts?startDate={f(a)}&endDate={f(b)}")).get("data") or []:
+                        got[p["id"]] = [tweets.ts(p["createdAt"]), tweets.ts(p.get("importedAt") or p["createdAt"])]
+                except Exception as e:
+                    print(f"postcount: posts of {h} failed: {str(e)[:100]}")
+                    got = None
+                    break
+                a = b
+            posts[h] = tweets.Counter(sorted(got.values())) if got else None
+        cn = posts[h]
+        if cn is None or not cn.c:
+            continue
+        fc = tweets.forecast(cn, start, end, t_now)
+        if fc is None:
+            continue
+        n0, mean, var = fc
+        top = int(mean + 8 * math.sqrt(var) + 10)
+        cdf = tweets.nb_cdf(mean, var, top)
+        F = lambda x: 0.0 if x < 0 else cdf[min(x, top)]
+        e = event_by_slug(slug)
+        if not e:
+            continue
+        for m in event_markets(e):
+            bk = tweets.bucket(str(m.get("question") or ""))
+            prices = binary(m)
+            if not bk or not prices or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] != ["yes"]:
+                continue
+            looked += 1
+            q_yes = F(bk[1] - n0) - F(bk[0] - n0 - 1)
+            p_yes = prices[0]
+            for n, r in rs.items():
+                gap = p_yes - q_yes
+                if VERBOSE and gap >= r["min_gap"] / 2:
+                    print(f"   near: listed Yes {cents(p_yes)} vs counter {q_yes * 100:.0f}/100 ({n0} so far, about {mean:.0f} more) {m.get('question')}")
+                if gap < r["min_gap"] or not (r["min_price"] <= 1 - p_yes <= r["max_price"]):
+                    continue
+                c = candidate(m, 1, max((end - t_now) / 86400, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                              {"model_p": round(1 - q_yes, 4), "model_edge": round(gap, 4),
+                               "signal": f"{n0} posts so far, about {mean:.0f} more expected; Yes listed {cents(p_yes)}, counter says {q_yes * 100:.0f} in 100"})
+                c["event_key"] = str(m.get("slug") or c["token"])     # one bet per market, not per event
+                c["theme"] = "post count"
+                out[n].append(c)
+    for n in out:
+        out[n].sort(key=lambda c: -c["model_edge"])
+    print(f"postcount: {len(seen_ev)} open count windows, {looked} markets looked at, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
 
 
