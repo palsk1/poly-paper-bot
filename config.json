@@ -158,31 +158,36 @@
       "rules": "every_horse"
     },
     "maker": {
-      "label": "Maker (added 2026-11-08): gets paid Polymarket's liquidity rewards for leaving buy and sell orders near the middle price, and pays for every time someone better informed picks those orders off. Fills from the real trade tape, back of the queue. $200 paper",
+      "retired": "Jan said dump them, 12 Nov 2026",
+      "label": "STOPPED 12 Nov 2026 (lost money every way we tried; Jan said dump them). Maker (added 2026-11-08): gets paid Polymarket's liquidity rewards for leaving buy and sell orders near the middle price, and pays for every time someone better informed picks those orders off. Fills from the real trade tape, back of the queue. $200 paper",
       "start_cash": 200,
       "source": "maker",
       "rules": "maker"
     },
     "maker_tp": {
-      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells what it holds at the real bid once it is up 3c a share after the fee, then keeps quoting. $200 paper",
+      "retired": "Jan said dump them, 12 Nov 2026",
+      "label": "STOPPED 12 Nov 2026 (lost money every way we tried; Jan said dump them). Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells what it holds at the real bid once it is up 3c a share after the fee, then keeps quoting. $200 paper",
       "start_cash": 200,
       "source": "maker",
       "rules": "maker_tp"
     },
     "maker_tpsl": {
-      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells at the real bid once up 3c a share (take profit) or down 5c a share (stop loss), then keeps quoting. $200 paper",
+      "retired": "Jan said dump them, 12 Nov 2026",
+      "label": "STOPPED 12 Nov 2026 (lost money every way we tried; Jan said dump them). Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: sells at the real bid once up 3c a share (take profit) or down 5c a share (stop loss), then keeps quoting. $200 paper",
       "start_cash": 200,
       "source": "maker",
       "rules": "maker_tpsl"
     },
     "maker_flat": {
-      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: never keeps a bet: whatever fills is sold at the real bid on the next run. Pays the spread each time, but a price move can't hurt it much. $200 paper",
+      "retired": "Jan said dump them, 12 Nov 2026",
+      "label": "STOPPED 12 Nov 2026 (lost money every way we tried; Jan said dump them). Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: never keeps a bet: whatever fills is sold at the real bid on the next run. Pays the spread each time, but a price move can't hurt it much. $200 paper",
       "start_cash": 200,
       "source": "maker",
       "rules": "maker_flat"
     },
     "maker_short": {
-      "label": "Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: only quotes markets that end within 30 days (and not within 7). $200 paper",
+      "retired": "Jan said dump them, 12 Nov 2026",
+      "label": "STOPPED 12 Nov 2026 (lost money every way we tried; Jan said dump them). Maker variant (added 2026-11-09, Jan's 'maker with a twist'): quotes exactly like `maker` (the control), plus: only quotes markets that end within 30 days (and not within 7). $200 paper",
       "start_cash": 200,
       "source": "maker",
       "rules": "maker_short"
