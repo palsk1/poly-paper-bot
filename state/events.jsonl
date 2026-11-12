@@ -8593,3 +8593,9 @@
 {"filled": 1.0, "price": 0.92, "side": "no", "through": false, "ticker": "KXNASDAQ100U-26NOV12H1500-T28409.99", "track": "kalshi_patient", "ts": "2026-11-12T20:03:06Z", "type": "kpatient_fill"}
 {"edge": 0.067, "pair": "KXRUBIORUN-28-27APR01|will-marco-rubio-announce-a-presidential-run-by-march-31-2027", "price": 0.916, "title": "Will Marco Rubio announce a presidential run by March 31, 2027?", "track": "arb", "ts": "2026-11-12T20:06:02Z", "type": "arb_open"}
 {"pnl": 0.08, "price": 0.92, "shares": 1.0, "side": "no", "ticker": "KXNASDAQ100U-26NOV12H1500-T28409.99", "track": "kalshi_patient", "ts": "2026-11-12T20:07:18Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": 3.3965, "price": 1.0, "reason": "resolved", "title": "Will Madagascar vs. Guinea-Bissau end in a draw?", "token": "53397556250907183869757355968193792221461179936570792553353920918475116900530", "track": "soccer_draw", "ts": "2026-11-12T20:10:43Z", "type": "paper_close"}
+{"minutes_left": 2.53, "price": 0.993, "queue": 28.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV121515-15", "track": "kc_maker", "ts": "2026-11-12T20:12:28Z", "type": "kmaker_order"}
+{"minutes_left": 2.53, "price": 0.994, "queue": 2013.13, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV121515-15", "track": "kc_maker", "ts": "2026-11-12T20:12:29Z", "type": "kmaker_order"}
+{"minutes_left": 2.53, "price": 0.99, "queue": 710.72, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV121515-15", "track": "kc_maker", "ts": "2026-11-12T20:12:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.53, "price": 0.988, "queue": 152.21, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV121515-15", "track": "kc_maker", "ts": "2026-11-12T20:12:32Z", "type": "kmaker_order"}
+{"minutes_left": 2.53, "price": 0.977, "queue": 9.77, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV121515-15", "track": "kc_maker", "ts": "2026-11-12T20:12:32Z", "type": "kmaker_order"}
