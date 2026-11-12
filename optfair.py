@@ -37,7 +37,7 @@ COINS = {"BTC": ("BTCUSDT", re.compile(r"\b(bitcoin|btc)\b", re.I)), "ETH": ("ET
 YEAR = 365.25 * 86400
 T0 = time.time()
 FOUND = 6                       # the first 6 files (3,000 markets) were used to look around; the rest are fresh
-TRIES = 60                      # versions looked at in this dig
+TRIES = 80                      # versions looked at in this dig
 BUDGET_MIN = float(os.environ.get("OPT_MIN", "200"))
 WORKERS = int(os.environ.get("OPT_WORKERS", "8"))
 
@@ -633,7 +633,7 @@ def run(score=True):
         tests = [("Options price vs Polymarket: BTC/ETH end-price markets, 5c+ apart, real trades", both, dict(kinds=fams[0][1]), False, "dropped"),
                  ("Options price vs Polymarket: BTC/ETH reach/dip markets, 5c+ apart, real trades", both, dict(kinds=fams[1][1]), False, "dropped"),
                  ("Options price vs Polymarket: reach/dip, last 30 min to 6 hours (fresh markets only)", fresh,
-                  dict(kinds=fams[1][1], min_left=1800, max_left=6 * 3600), True, None)]
+                  dict(kinds=fams[1][1], min_left=1800, max_left=6 * 3600), True, "dropped")]
         P("## 4. The exam\n")
         for name, tp, kw, prereg, status in tests:
             b = tbets(ms, tp, dvol, s1m, gap=0.05, **kw)

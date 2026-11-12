@@ -1102,6 +1102,45 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped (did not repeat on new games)",
    "src": "khouse.py, backtest/khouse.md"
+  },
+  {
+   "id": "options_price_vs_polymarket_btc_eth_end_price_markets_5c_apa",
+   "date": "2026-11-12",
+   "what": "Options price vs Polymarket: BTC/ETH end-price markets, 5c+ apart, real trades",
+   "tries": 80,
+   "bets": 3122,
+   "groups": 248,
+   "per100": -3.23,
+   "floor100": -22.5,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "optfair.py"
+  },
+  {
+   "id": "options_price_vs_polymarket_btc_eth_reach_dip_markets_5c_apa",
+   "date": "2026-11-12",
+   "what": "Options price vs Polymarket: BTC/ETH reach/dip markets, 5c+ apart, real trades",
+   "tries": 80,
+   "bets": 2464,
+   "groups": 463,
+   "per100": 1.8,
+   "floor100": -12.71,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "optfair.py"
+  },
+  {
+   "id": "options_price_vs_polymarket_reach_dip_last_30_min_to_6_hours",
+   "date": "2026-11-12",
+   "what": "Options price vs Polymarket: reach/dip, last 30 min to 6 hours (fresh markets only)",
+   "tries": 3,
+   "bets": 433,
+   "groups": 280,
+   "per100": -8.9,
+   "floor100": -24.98,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "optfair.py"
   }
  ]
 }
