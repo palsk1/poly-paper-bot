@@ -79,7 +79,7 @@ svg text { fill: var(--muted); font-size: 11px; font-family: inherit; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 6px 0; }
 .vd { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--border); color: var(--ink2); white-space: nowrap; }
 .vd.good { color: var(--good); border-color: var(--good); } .vd.bad { color: var(--bad); border-color: var(--bad); }
-.vd.maybe { color: var(--s2); border-color: var(--s2); } .vd.luck { color: var(--ink2); border-style: dashed; }
+.vd.maybe { color: var(--s2); border-color: var(--s2); } .vd.unlucky { color: var(--s2); border-color: var(--bad); border-style: dashed; } .vd.luck { color: var(--ink2); border-style: dashed; }
 .vrow { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--grid); cursor: pointer; font-size: 13px; }
 .vrow:last-child { border-bottom: 0; }
 .vrow .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
@@ -107,8 +107,10 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <p class="note">A quick verdict for every strategy that has finished at least 3 bets.</p>
   <p class="note"><b class="pos">Looks real</b>: it keeps winning, even if we assume some bad luck. That's what we're looking for.<br>
   <b style="color:var(--s2)">Ahead, but could be luck</b>: it's making money, but its worst case per $100 is still below $0.<br>
-  <b class="neg">Losing</b>: it's losing money so far.<br>
+  <b style="color:var(--s2)">Behind, but could be bad luck</b>: it's losing money, but not by enough to rule out bad luck yet.<br>
+  <b class="neg">Losing</b>: it's losing money, even if we assume it was unlucky.<br>
   <b>Too early to tell</b>: fewer than 10 finished bets. Ignore it for now.</p>
+  <p class="note"><b>What "worst case per $100" means:</b> it is <i>not</i> "what if every open bet loses". It looks only at finished bets, adds one made-up bet that lost everything, and asks: how bad could this strategy really be and still give the results we saw? We set that bar high because we run over 100 strategies at once. <b>−$100 is the floor.</b> It usually means "too few bets to say", or bets that swing a lot (cheap long shots), not "this is a disaster". "Best case" is the other end: if even that is below $0, the losses aren't just bad luck.</p>
   <p class="note">We also run random buyers that pick bets by coin flip. A strategy that can't beat them is just luck.</p>
   <div class="counts" id="luckcounts"></div>
   <div class="card" id="luck"></div>
@@ -150,7 +152,9 @@ const FEW = 10;  // below this many finished bets, per-$100 numbers are noise
 // worst case per $100, always shown once a bet has finished; under FEW finished bets it gets a grey "mostly luck" tag
 const endTxt = t => t.first_end ? `, first one ends ${esc(t.first_end)}` : "";
 const worstLine = t => t.trust.finished === 0 ? `worst case: no finished bets yet${endTxt(t)}`
-  : `worst case ${M(t.trust.worst_per_100)} per $100${t.trust.finished < FEW ? ` <span class="tag">only ${t.trust.finished} bet${t.trust.finished === 1 ? "" : "s"}, mostly luck</span>` : ""}`;
+  : `worst case ${worstTxt(t.trust.worst_per_100)} per $100${t.trust.finished < FEW ? ` <span class="tag">only ${t.trust.finished} bet${t.trust.finished === 1 ? "" : "s"}, mostly luck</span>` : ""}`;
+const FLOOR = x => x != null && x <= -99.99;  // worst case hit the -$100 floor: too few or too swingy bets to say anything
+const worstTxt = x => FLOOR(x) ? `${M(x)} <span class="tag">the floor: too few bets to say</span>` : M(x);
 const vd = t => `<span class="vd ${t.pv[0]}">${esc(t.pv[1])}</span>`;  // plain verdict, computed in bot.plain_verdict
 const why = r => String(r || "").replace(/,? \(?(book|estimate)\)?$/, "").replace(/^resolved$/, "market ended")
   .replace(/^take profit \(now (\d+c)\)$/, "sold early for a profit at $1").replace(/^wallet exit$/, "the wallet sold, so we sold")
@@ -344,7 +348,7 @@ function luck() {
   const rows = D.order.map(n => byName[n]).filter(t => t.trust.finished >= 3);
   const ctrl = rows.filter(t => t.control);
   const shown = luckAll ? rows : rows.filter(t => !t.control).slice(0, 15).concat(ctrl);
-  const keys = [["good", "Looks real"], ["maybe", "Could be luck"], ["bad", "Losing"], ["early", "Too early"]];
+  const keys = [["good", "Looks real"], ["maybe", "Could be luck"], ["unlucky", "Could be bad luck"], ["bad", "Losing"], ["early", "Too early"]];
   const real = rows.filter(t => !t.control);
   $("luckcounts").innerHTML = keys.map(([k, l]) => `<span class="vd ${k}">${l}: ${real.filter(t => t.pv[0] === k).length}</span>`).join("");
   if (!shown.length) { el.innerHTML = "No strategy has 3 finished bets yet."; $("luckmore").style.display = "none"; return; }
@@ -391,10 +395,11 @@ function detail(n) {
       <div class="tile"><div class="v">${t.open}</div><div class="k">open bets</div></div>
       <div class="tile"><div class="v ${cls(t.today)}">${money(t.today)}</div><div class="k">today</div></div>
       <div class="tile"><div class="v">${t.wins} / ${t.losses}</div><div class="k">won / lost</div></div>
-      ${tr.finished ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100${tr.finished < FEW ? ` (only ${tr.finished} bet${tr.finished === 1 ? "" : "s"})` : ""}</div></div>` : `<div class="tile"><div class="v">–</div><div class="k">worst case per $100 (no finished bets yet)</div></div>`}
+      ${tr.finished ? `<div class="tile"><div class="v ${cls(tr.worst_per_100)}">${money(tr.worst_per_100)}</div><div class="k">worst case per $100${tr.finished < FEW ? ` (only ${tr.finished} bet${tr.finished === 1 ? "" : "s"})` : FLOOR(tr.worst_per_100) ? " (the floor)" : ""}</div></div>` : `<div class="tile"><div class="v">–</div><div class="k">worst case per $100 (no finished bets yet)</div></div>`}
+      ${tr.best_per_100 != null ? `<div class="tile"><div class="v ${cls(tr.best_per_100)}">${money(tr.best_per_100)}</div><div class="k">best case per $100</div></div>` : ""}
     </div>
     <p class="sub" style="margin-top:8px">${tr.finished >= FEW
-      ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100. The worst case decides the ranking.`
+      ? `For every $100 it bet${D.rank_size ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100.${tr.best_per_100 != null ? ` Best case, if it was unlucky: ${M(tr.best_per_100)} per $100.` : ""} The worst case decides the ranking.${FLOOR(tr.worst_per_100) ? " It sits at the −$100 floor: the bets swing too much (or there are too few) to say anything yet. That is not the same as \"it loses everything\"." : ""}${tr.avg_per_100 < 0 && tr.best_per_100 != null ? (tr.best_per_100 < 0 ? " Even the best case is below $0, so the losses aren't just bad luck." : " The best case is still above $0, so the losses could be bad luck.") : ""}`
       : tr.finished ? `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. For every $100 it bet it made ${M(tr.avg_per_100)}, and the worst case is ${M(tr.worst_per_100)} per $100. With this few bets the worst case is mostly luck (one loss can drag it to −$100), so don't read much into it until ${FEW}+ bets have finished.`
       : `No bet has finished yet${endTxt(t)}, so there's no worst case to show. It appears after the first finished bet.`}</p>
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
@@ -476,7 +481,7 @@ addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("cur
       rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td class="allname">${esc(t.name)}${t.control ? '<span class="tag luck">random</span>' : ""}${t.trust.proven ? '<span class="tag proven">✓</span>' : ""}</td>` +
         `<td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.wins} / ${t.losses}</td>` +
         `<td class="r">${t.trust.finished ? `<span class="num ${cls(t.trust.worst_per_100)}" style="${t.trust.finished < FEW ? "opacity:.55" : ""}">${money(Math.round(t.trust.worst_per_100)).replace(".00", "")}</span>` : '<span class="num">–</span>'}</td></tr>`).join("") +
-      `</tbody></table><p class="note">Worst = worst case per $100. Faded = fewer than ${FEW} finished bets, mostly luck. – = nothing finished yet.</p>`;
+      `</tbody></table><p class="note">Worst = worst case per $100 (from finished bets only, not "every open bet loses"). −$100 is the floor: too few or too swingy bets to say. Faded = fewer than ${FEW} finished bets, mostly luck. – = nothing finished yet.</p>`;
     $("all").querySelectorAll("th[data-k]").forEach(th => th.onclick = () => {
       if (sortBy === th.dataset.k) desc = !desc; else { sortBy = th.dataset.k; desc = sortBy !== "name"; }
       draw();

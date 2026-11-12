@@ -58,7 +58,7 @@ STAKE = 25.0                # dollars per bet when the exam prices a signal itse
 DEADLINE = "2027-01-01"     # Jan's decision day
 
 VERDICTS = {"good": "Looks real", "promising": "Promising, needs more bets", "maybe": "Ahead, but could be luck",
-            "bad": "Losing", "early": "Too early to tell"}
+            "unlucky": "Behind, but could be bad luck", "bad": "Losing", "early": "Too early to tell"}
 
 
 # ================================================================ small helpers
@@ -232,7 +232,7 @@ def score(bets, name, tries=1, prereg=False, src="", note="", status=None, log=T
     if k < MIN_GROUPS:
         key = "early"
     elif rate < 0:
-        key = "bad"
+        key = "unlucky" if hi >= 0 else "bad"     # 2026-11-12: losses get the luck check too
     elif floor > 0 and k >= MIN_REAL and h1 > 0 and h2 > 0:
         key = "good"
     elif lo > 0 and soft > 0 and h1 >= 0 and h2 >= 0:
@@ -265,7 +265,7 @@ def _finish(card, status, log, ledger, quiet, now):
         row = {"id": card["id"], "date": day(now or dt.datetime.now(dt.timezone.utc).timestamp()), "what": card["name"],
                "tries": card["tries"], "bets": card["bets"], "groups": card.get("groups"), "per100": card.get("per100"),
                "floor100": card.get("floor100"), "verdict": card["verdict"],
-               "status": status or ("dropped" if card["key"] in ("bad", "maybe") else "open"), "src": card.get("src", "")}
+               "status": status or ("dropped" if card["key"] in ("bad", "unlucky", "maybe") else "open"), "src": card.get("src", "")}
         try:
             ledger_add(row, ledger)
         except OSError as e:
@@ -449,13 +449,13 @@ def tracks(path=None, out=None, now=None):
         bets = track_bets(tr)
         c = score(bets, name, tries=n_tr, prereg=True, log=False, quiet=True, now=now)
         c["by_deadline"] = None
-        if c.get("pace") and c["groups"] >= MIN_GROUPS and c["key"] != "bad":
+        if c.get("pace") and c["groups"] >= MIN_GROUPS and c["key"] not in ("bad", "unlucky"):
             fresh = int(c["groups"] + c["pace"] * left)
             c["fresh"] = fresh
             if fresh >= MIN_REAL:
                 c["by_deadline"] = power(bets, min(fresh, 4000), bar=bar_real, sims=200, tries=n_tr)
         cards.append(c)
-    order = {"good": 0, "promising": 1, "maybe": 2, "early": 3, "bad": 4}
+    order = {"good": 0, "promising": 1, "maybe": 2, "early": 3, "unlucky": 4, "bad": 5}
     cards.sort(key=lambda c: (order[c["key"]], -(c.get("floor100") if c.get("floor100") is not None else -999), c["name"]))
     graded = [c for c in cards if c["bets"]]
     cnt = collections.Counter(c["verdict"] for c in graded)
@@ -476,7 +476,7 @@ def tracks(path=None, out=None, now=None):
           "|---|---|---|---|---|---|---|---|---|"]
     for c in [c for c in graded if c["key"] != "early"]:
         rng = f"{usd(c['lo100'])} to {usd(c['hi100'])}" if c.get("lo100") is not None else "too few"
-        ans = "" if c["key"] in ("bad", "good") else (c.get("eta") or "can't say") + ("" if c.get("in_time") or not c.get("eta") else " (too slow)")
+        ans = "" if c["key"] in ("bad", "unlucky", "good") else (c.get("eta") or "can't say") + ("" if c.get("in_time") or not c.get("eta") else " (too slow)")
         pw = f"{c['by_deadline'][0]} / {c['by_deadline'][1]}" if c.get("by_deadline") else ""
         md.append(f"| {c['name']} | {c['verdict']} | {c['bets']} | {c['groups']}{' (by day)' if c.get('bunched') else ''} | "
                   f"{usd(c['per100'])} | {rng} | {usd(c['floor100']) if c.get('floor100') is not None else ''} | {ans} | {pw} |")

@@ -60,7 +60,8 @@ def verdict(t, few=10):
     if t.get("worst_per_100", 0) > 0:
         return "Promising, needs more bets"
     if t.get("avg_per_100", 0) < 0:
-        return "Losing"
+        b = t.get("best_per_100")
+        return "Behind, but could be bad luck" if b is not None and b >= 0 else "Losing"
     return "Ahead, but could be luck"
 
 
