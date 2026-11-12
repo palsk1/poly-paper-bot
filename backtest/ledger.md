@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**89 ideas examined, in about 51,991 versions.** 61 dropped, 28 still being tested or waiting. **Looks real: 2.**
+**92 ideas examined, in about 52,154 versions.** 64 dropped, 28 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 89 ideas that are all worthless, the luckiest one still looks good. With 89 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 92 ideas that are all worthless, the luckiest one still looks good. With 92 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -94,6 +94,9 @@ Why count: if you test 89 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Kalshi patient buyer: nearly-sure side (best buy order 90-97c, gap 2c+), bid 1c above it, no live sports | 93 | 1271 | +$0.61 | Ahead, but could be luck | paper track running (untested; behind on the one fresh sample) | khouse.py, backtest/khouse.md |
 | 2026-11-12 | Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games) | 93 | 559 | -$3.28 | Behind, but could be bad luck | dropped | khouse.py, backtest/khouse.md |
 | 2026-11-12 | kc_maker_safe + Binance price-gap check (backtest, 3 min) | 8 | 2665 | +$0.54 | Looks real | paper twin kc_maker_safe_usd running since 12 Nov (Jan said yes) | kcrypto.py gapcheck |
+| 2026-11-12 | Options price vs Polymarket: BTC/ETH end-price markets, 5c+ apart, real trades | 80 | 248 | -$3.23 | Behind, but could be bad luck | dropped | optfair.py |
+| 2026-11-12 | Options price vs Polymarket: BTC/ETH reach/dip markets, 5c+ apart, real trades | 80 | 463 | +$1.80 | Ahead, but could be luck | dropped | optfair.py |
+| 2026-11-12 | Options price vs Polymarket: reach/dip, last 30 min to 6 hours (fresh markets only) | 3 | 280 | -$8.90 | Behind, but could be bad luck | dropped | optfair.py |
 | 2026-11-12 | Polymarket 15-min bid, both checks (history, 3 min) | 6 | 149 | -$1.26 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check (history, 3 min) | 6 | 315 | -$1.43 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check, strict fills only (history, 3 min) | 6 | 250 | -$2.28 | Losing | dropped | kcrypto.py pmrun |
