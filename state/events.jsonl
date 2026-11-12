@@ -7127,3 +7127,8 @@
 {"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV112045-45", "track": "kc_maker_safe", "ts": "2026-11-12T01:47:43Z", "type": "kmaker_fill"}
 {"fee": 0.0461, "outcome": "No", "price": 0.64, "shares": 5, "title": "Howard Lutnick out as Secretary of Commerce by December 31?", "token": "82692230429085962332087100577188813982306586963207664883754661991712274897474", "track": "w_anoin123", "ts": "2026-11-12T01:50:36Z", "type": "paper_buy"}
 {"fee": 0.0461, "outcome": "No", "price": 0.64, "shares": 5, "title": "Howard Lutnick out as Secretary of Commerce by December 31?", "token": "82692230429085962332087100577188813982306586963207664883754661991712274897474", "track": "wb_anoin123", "ts": "2026-11-12T01:50:37Z", "type": "paper_buy"}
+{"minutes_left": 2.6, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV112100-00", "track": "kc_maker", "ts": "2026-11-12T01:57:24Z", "type": "kmaker_order"}
+{"minutes_left": 2.6, "price": 0.997, "queue": 30.0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV112100-00", "track": "kc_maker", "ts": "2026-11-12T01:57:25Z", "type": "kmaker_order"}
+{"minutes_left": 2.6, "price": 0.961, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV112100-00", "track": "kc_maker", "ts": "2026-11-12T01:57:26Z", "type": "kmaker_order"}
+{"minutes_left": 2.6, "price": 0.995, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV112100-00", "track": "kc_maker", "ts": "2026-11-12T01:57:27Z", "type": "kmaker_order"}
+{"minutes_left": 2.6, "price": 0.993, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV112100-00", "track": "kc_maker", "ts": "2026-11-12T01:57:28Z", "type": "kmaker_order"}
