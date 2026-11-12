@@ -334,6 +334,9 @@ def build(offline=False):
         bot.http_json = no_net
     tracks = bot.load_tracks()
     stats = scoreboard(tracks)
+    # Jan, 12 Nov evening: "Dump it and any other stopped from the dashboard". Stopped tracks still run in the bot
+    # (their open bets settle) and stay in summary.md; the phone page just doesn't show them.
+    stats = {n: s for n, s in stats.items() if not bot.is_stopped(n)}
     names = list(stats)
     n_top = bot.CFG["push"].get("top_n", 10)
     top = [x for x in bot.ranked(stats) if bot.top_eligible(stats[x])][:n_top]
