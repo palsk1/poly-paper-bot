@@ -7812,3 +7812,9 @@
 {"pnl": 0.0969, "reason": "strategy stopped (Jan said dump them, 12 Nov 2026)", "title": "Will Anthropic IPO by November 20, 2026?", "track": "maker_short", "ts": "2026-11-12T11:51:50Z", "type": "maker_close"}
 {"pnl": -9.2434, "reason": "strategy stopped (Jan said dump them, 12 Nov 2026)", "title": "Over $20M committed to the Mori Finance public sale?", "track": "maker_short", "ts": "2026-11-12T11:51:50Z", "type": "maker_close"}
 {"reason": "Jan said dump them, 12 Nov 2026", "track": "maker_short", "ts": "2026-11-12T11:51:50Z", "type": "maker_retired"}
+{"minutes_left": 3.37, "price": 0.987, "queue": 1785.42, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:38Z", "type": "kmaker_order"}
+{"minutes_left": 3.37, "price": 0.968, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:39Z", "type": "kmaker_order"}
+{"minutes_left": 3.37, "price": 0.997, "queue": 3112.77, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:39Z", "type": "kmaker_order"}
+{"minutes_left": 3.37, "price": 0.997, "queue": 3112.77, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV120700-00", "track": "kc_maker_safe", "ts": "2026-11-12T11:56:40Z", "type": "kmaker_order"}
+{"minutes_left": 3.37, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:40Z", "type": "kmaker_order"}
+{"minutes_left": 3.37, "price": 0.967, "queue": 121.81, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:41Z", "type": "kmaker_order"}
