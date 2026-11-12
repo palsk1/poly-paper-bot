@@ -7291,3 +7291,10 @@
 {"fee": 0.0061, "outcome": "No", "price": 0.975, "shares": 5, "title": "Will Stephen Curry win the 2026-27 NBA MVP?", "token": "1556379346707878740548410106762635018878531889408749738516983378471827552907", "track": "boring_no", "ts": "2026-11-12T04:32:22Z", "type": "paper_buy"}
 {"fee": 0.0, "outcome": "No", "price": 0.968, "shares": 5, "title": "Will Russia capture Mala Tokmachka by December 31, 2026?", "token": "27808257223937878640979629127454059477492995624853361623648487174277278493793", "track": "boring_no", "ts": "2026-11-12T04:32:22Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV112330-30", "track": "kc_maker", "ts": "2026-11-12T04:32:26Z", "type": "kmaker_fill"}
+{"minutes_left": 8.68, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.951, "queue": 1360.63, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.912, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.956, "queue": 426.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.972, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.969, "queue": 11.24, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:19Z", "type": "kmaker_order"}
+{"minutes_left": 8.68, "price": 0.922, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV112345-45", "track": "kc_maker_early", "ts": "2026-11-12T04:36:20Z", "type": "kmaker_order"}
