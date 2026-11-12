@@ -138,6 +138,11 @@ A strategy gets real money only if **every** answer is yes:
   `maker_tpsl` had lost $104 of $200 and `maker_flat` $100. The cash was right; the scoreboard wasn't. Fixed: every
   sale and pair is now a finished bet. Lesson: the stop loss sells right after a fill, into a book that was just
   emptied, often 10-28c below what it paid. The maker idea stays dead.
+- **Polymarket maker tracks stopped (12 Nov, Jan: "Dump them").** All five lost $416 of $1,000 in 3-4 days and earned
+  $7.39 in rewards. `maker_flat` sold 42 times right after a fill and never once above cost (the price was about 4c
+  lower by the next check): a bot that looks every 5 minutes only gets filled by people with fresher news. Open bets
+  were closed once at the real bid; the numbers stay on the scoreboard, frozen. Review:
+  `/mnt/project-files/research/maker-review-2026-11-12.md`.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
@@ -186,8 +191,9 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 
 - **Review of the worst Polymarket rule tracks (12 Nov, `backtest/review_worst_poly.md`, Jan's ask):** live bets now agree with the history tests. `fade_sure` (2 won, 44 lost, -$77.84 per $100), `wx_forecast` (-$11.09 on 114), `endgame_ending_soon` (-$3.97 on 101) and `endgame_97` (-$3.33 on 112) are suggested for removal (Jan decides). `endgame_sell98` is the one endgame variant still ahead (+$0.21 on 188, could be luck). Bug found: `bot.py` reads the end date without the time, so markets 'end' at 00:00 UTC; 133 of 161 lab 'past the deadline' buys were on the end day itself. Fix waits for Jan's OK.
 
-Still running on purpose, though the idea looks dead: maker tracks, `wx_forecast`, the endgame lab variants,
+Still running on purpose, though the idea looks dead: `wx_forecast`, the endgame lab variants,
 `sharp_pinnacle`, `quiet_no` (Jan's pick), the 80 wallet copies. They show the drop was right.
+- **`kc_maker_early`, Kalshi 15-minute crypto bids at 90c+ with 6.5-11.5 minutes left (stopped 12 Nov, Jan: "dump it"):** lost $79.62 on 341 live bets (-$2.45 per $100). The backtest said +$0.61 to +$1.43; live luck range -$5.82 to +$0.92, so it's broken, not unlucky. The 90-91c bids lost $72 of it: with 8+ minutes left, whoever sells into your bid often sees the coin turning. No new bids; history kept.
 
 ## Open questions for Jan
 

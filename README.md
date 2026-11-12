@@ -15,8 +15,8 @@
 | `arb` | Kalshi x Polymarket arbitrage: YES on one site + NO on the other when both cost under $1 after both fees. Reviewed twin markets only, held to the end | $300 |
 | `endgame` | Buys the 95-99c side of markets whose result is basically known: already resolved, result proposed (2h challenge window), past their deadline, or ending within 24h. Skips disputed markets and live sports; election markets only on resolved/proposed (not past_deadline/ending_soon, votes may still be counting) | $100 |
 | `ladder` | Two markets of one Polymarket event where the stricter one can only say YES if the looser one does ("BTC above 120k" vs "above 110k"; "ceasefire by Dec 31" vs "by Mar 31"). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser comes true. Same site, same rules text, so no cross-site mismatch | $100 |
-| `maker` | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
-| `maker_tp`, `maker_tpsl`, `maker_flat`, `maker_short` | Maker with a twist (2026-11-09): same quoting, plus take profit, take profit + stop loss, never hold, or short-dated markets only (see "Maker" below) | $200 each |
+| `maker` (stopped 12 Nov 2026) | Leaves buy and sell orders near the middle price to earn Polymarket's liquidity rewards, and counts every time it gets picked off (see "Maker" below) | $200 |
+| `maker_tp`, `maker_tpsl`, `maker_flat`, `maker_short` (stopped 12 Nov 2026) | Maker with a twist (2026-11-09): same quoting, plus take profit, take profit + stop loss, never hold, or short-dated markets only (see "Maker" below) | $200 each |
 | `every_horse` | Buys one share of every outcome in a multi-candidate event when the whole set costs less than it is guaranteed to pay. All-YES only on complete lists ("Other"/"No change" included); all-NO always pays at least n-1 | $100 |
 | `fade_sure` | The mirror image of the dropped endgame signal: in weather markets that end within a day, buys the **cheap** side (2-10c) when the other side looks sure at 90-98c. Most bets lose 10-50c; a win pays about $5. Added 2026-11-08 (see "Fade the sure thing" below) | $25 |
 | `mention_no` | "Will X say Y" markets (earnings calls, speeches, podcasts) that end within 7 days: buys **NO** at 25-90c, one word per event, real order-book fills, skips thin books where the ask is 5c+ above the listed price. Added 2026-11-09 (see "Calibration hunt" below) | $50 |
@@ -25,7 +25,7 @@
 | `crypto_no` | "Will Bitcoin reach / dip to / be above $X" markets with 3-7 days left: buys **NO** at 70-90c, one bet per event, same fill rules. Added 2026-11-10 with `boring_no`: +$6.95 per $100 on 115 bets, ahead in all 9 months, but the exam says it could be luck | $50 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 | `soccer_draw` | Soccer draws (2026-11-10, Jan said Go): buys YES on "will this game end in a draw" 20-28 hours before kickoff when the draw costs 15-50c, held to the result. In 4,538 past games draws won a bit more often than their price said, about 2c a bet (`backtest/census.md`, `backtest/digs_draws.md`). Skips books whose ask is 3c+ over the listed price. Also the 21 Dec holdout test `soccer_draw` (PROTOCOL 5). Claude's track, rule changes reported | $50 |
-| `kc_maker`, `kc_maker_safe`, `kc_maker_early` | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
+| `kc_maker`, `kc_maker_safe`, `kc_maker_early` (stopped 12 Nov) | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
 
@@ -234,6 +234,8 @@ writes down what it would have quoted, and sees the winning price. It never quot
 Setup and rules: `quoter/README.md`, PROTOCOL.md 5c. Score: probe `cmb_qscore`.
 
 ## Maker: get paid to quote (added 2026-11-08)
+
+**Stopped 12 Nov 2026 (Jan: "Dump them").** All five maker tracks lost $416 of $1,000 in 3-4 days and earned $7.39 in rewards: a bot that looks every 5 minutes only gets filled by people with fresher news. A track with `"retired"` in config closes its open markets once (pairs merged, the rest sold at the real bid) and then stays frozen on the scoreboard (`bot.maker_retire`).
 
 Polymarket hands out about **$190,000 a day** in "liquidity rewards" to anyone who leaves buy and sell orders close to the middle price (each market has its own daily pool, a max distance from the middle and a min order size). The `maker` track ($200 paper) tries to collect that the way a slow 5-minute bot could:
 

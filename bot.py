@@ -3136,7 +3136,9 @@ def kmaker_cycle(tracks):
     for n in names:
         tracks[n].setdefault("orders", {})
     kmaker_settle(tracks, names)
-    kmaker_place(tracks, names)
+    live = [n for n in names if not CFG["tracks"][n].get("stopped")]   # stopped tracks only settle what's open
+    if live:
+        kmaker_place(tracks, live)
 
 
 def kmaker_summary(name, tr):
@@ -4312,9 +4314,27 @@ def maker_recap_rewards(tr, r):
     print(f"maker: rewards capped, removed ${cut:.2f} of modelled rewards")
 
 
+def maker_retire(tr, name, why):
+    """Jan, 12 Nov 2026 ("Dump them"): a track with "retired" in config stops quoting. Its open markets are closed
+    once like any other episode end (pairs merged, leftovers sold at the real bid), then it stays frozen."""
+    for key in list(tr.get("books", {})):
+        try:
+            maker_close(tr, name, key, f"strategy stopped ({why})")
+        except Exception as e:
+            print(f"maker {name}: closing {key} failed: {e}")
+            return
+    tr["retired"] = {"on": iso(), "why": why}
+    tr["status"] = {"at": iso(), "msg": f"Stopped: {why}. Final numbers, no new bets.", "skips": {}}
+    log_event({"type": "maker_retired", "track": name, "reason": why})
+
+
 def maker_cycle_one(tracks, name, r, pick_new=True):
     tr = tracks[name]
     tr.setdefault("books", {})
+    if CFG["tracks"][name].get("retired"):
+        if not tr.get("retired"):
+            maker_retire(tr, name, CFG["tracks"][name]["retired"])
+        return
     for k, v in (("rewards", 0.0), ("fills", 0), ("merges", 0), ("last_pick", "")):
         tr.setdefault(k, v)
     maker_recap_rewards(tr, r)
