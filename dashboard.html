@@ -274,7 +274,7 @@ function curveChart(el, t) {
   g += `<circle cx="${X(now[0])}" cy="${Y(now[1])}" r="4.5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>`;
   g += `<line id="xh" y1="${T}" y2="${H - B}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/><circle id="xd" r="4" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="Profit over time for ${esc(t.name)}">${g}<rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/></svg>
-    <div class="legend"><span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span></div>`;
+    <div class="legend">${t.legend ? `<span>${esc(t.legend)}</span>` : `<span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span>`}</div>`;
   const svg = el.querySelector("svg"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
   const move = ev => {
     const r = svg.getBoundingClientRect(), mx = (ev.clientX - r.left) * W / r.width;
@@ -282,7 +282,7 @@ function curveChart(el, t) {
     const a = p[best];
     xh.setAttribute("x1", X(a[0])); xh.setAttribute("x2", X(a[0])); xh.setAttribute("visibility", "visible");
     xd.setAttribute("cx", X(a[0])); xd.setAttribute("cy", Y(a[1])); xd.setAttribute("visibility", "visible");
-    const label = best === p.length - 1 ? "now, counting open bets" : best === 0 ? "start" : "after a bet finished";
+    const label = best === p.length - 1 ? (t.legend ? "now" : "now, counting open bets") : best === 0 ? "start" : "after a bet finished";
     showTip(`<b>${money(a[1])}</b><br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
   };
   svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
@@ -302,12 +302,21 @@ function curveChart(el, t) {
     [q.trades.toLocaleString(), "parlays really sold"],
     [q.would_win.toLocaleString(), "we'd have been cheapest"],
     [`${q.settled} (${q.won_by_house} kept)`, "finished, house kept the money"],
-    [`<span class="${cls(q.pnl)}">${usd(q.pnl)}</span>`, "P&L at $25 a bet"],
-    [`<span class="${cls(q.per100)}">${usd(q.per100)}</span>`, "per $100 at risk"],
+    [`<span class="${cls(q.pnl)}">${usd(q.pnl)}</span>`, `pretend P&L on all ${q.settled} finished bets together`],
+    [`<span class="${cls(q.per100)}">${usd(q.per100)}</span>`, "P&L per $100 at risk"],
   ];
-  el.innerHTML = warn + `<div class="tiles">${tiles.map(([v, k]) => `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>` +
-    `<p class="note"><b>Verdict:</b> ${esc(q.verdict || "Too early to tell")}${q.waiting ? ` · ${q.waiting} still waiting for games to end` : ""}</p>` +
+  const vq = q.verdict || "";
+  const vcls = /real|Promising/.test(vq) ? "good" : /bad luck/.test(vq) ? "unlucky" : /Losing/.test(vq) ? "bad" : /Ahead/.test(vq) ? "maybe" : "early";
+  const risk = q.at_risk != null ? q.at_risk : 25 * q.settled;
+  const whole = v => "$" + Math.round(v).toLocaleString("en-US");
+  const head = q.settled ? `<div class="pot">Pretend money risked ${whole(risk)} → got back ${whole(risk + q.pnl)} <span class="${cls(q.pnl)}">(${usd(q.pnl)})</span></div>
+    <p class="note">We pretend to risk $25 on every parlay we'd have sold, ${q.settled} finished so far. So ${usd(q.pnl)} is the total on ${whole(risk)} of pretend money, not on $25.${q.lo100 != null ? ` By luck alone the per-$100 number could be anywhere from ${usd(q.lo100)} to ${usd(q.hi100)}.` : ""}</p>
+    <div style="margin:6px 0"><span class="vd ${vcls}">${esc(q.verdict || "Too early to tell")}</span></div><div id="qcurve"></div>` : "";
+  el.innerHTML = warn + head + `<div class="tiles">${tiles.map(([v, k]) => `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>` +
+    (q.waiting ? `<p class="note">${q.waiting} more parlays are still waiting for their games to end.</p>` : "") +
     `<p class="note">${esc(q.pass_rule)}. Last heard from the server: ${q.last_seen ? esc(stockholm(new Date(q.last_seen * 1000).toISOString().slice(0, 16))) : "never"} Stockholm time.</p>` + qbets(q);
+  const drawQ = () => { if (q.curve && q.curve.length > 2 && $("qcurve")) curveChart($("qcurve"), {name: "Combo house", curve: q.curve, legend: "Pretend profit from finished parlays, added up over time"}); };
+  drawQ(); addEventListener("resize", drawQ);
 })();
 
 function qbets(q) {
@@ -322,7 +331,7 @@ function qbets(q) {
       ${b.legs.map(l => `<div>${mark(l.res)} ${esc(l.title)}${l.out ? ` <b>${esc(l.out)}</b>` : ""}</div>`).join("")}
       <div style="margin-top:2px">${end(b)}</div></div>`;
   const done = bs.filter(b => b.end !== "waiting"), wait = bs.filter(b => b.end === "waiting");
-  return `<details style="margin-top:8px"><summary><b>Our parlays (${done.length} finished, ${wait.length} waiting)</b></summary>
+  return `<details style="margin-top:8px"><summary><b>Our latest parlays (${done.length} finished, ${wait.length} waiting)</b></summary>
     <p class="note">The buyer bets that every leg wins. We'd be the house: if any leg loses (❌), we keep their money. If every leg wins (✅), we pay out our $25.</p>
     ${done.map(row).join("")}${wait.map(row).join("")}</details>`;
 }
