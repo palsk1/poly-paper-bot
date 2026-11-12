@@ -42,6 +42,13 @@
       "source": "kmaker",
       "rules": "kc_maker_safe"
     },
+    "kc_maker_safe_usd": {
+      "label": "Twin of kc_maker_safe with a price-gap check (12 Nov, Jan said yes): same rule, but the 2-typical-moves check must also pass after moving Binance onto Kalshi's price (Binance quotes in USDT and runs about 0.09% higher). History: half the losses, same +$0.57 per $100, about 25 in 100 fewer bets (backtest/kcloss.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_safe_usd"
+    },
     "kc_maker_early": {
       "label": "STOPPED 12 Nov (Jan: dump it). Kalshi favorite, earlier: one tick in front of the best bid on the winning side (90c+) with 6.5-11.5 minutes left instead of the last 5 (backtest: 7-10 minutes left did better than the last 1-3). $100 paper",
       "start_cash": 100,
@@ -1183,6 +1190,10 @@
     "kc_maker_safe": {
       "inherit": "kc_maker",
       "min_spot_z": 2.0
+    },
+    "kc_maker_safe_usd": {
+      "inherit": "kc_maker_safe",
+      "usd_gap": true
     },
     "kc_maker_early": {
       "inherit": "kc_maker",

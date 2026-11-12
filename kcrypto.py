@@ -943,7 +943,7 @@ def zscore_usd(w, t, minutes, side):
     US-dollar index Kalshi settles on (12 Nov). The window's strike is Kalshi's index at the open, so Binance at the
     open / strike is the gap at that moment, known before we bid. None without data."""
     sp, k = w["spot"], w.get("strike")
-    a, b = sp.get(str(w["open"] - 60)), sp.get(str(w["open"] - 120))
+    a, b = sp.get(str(w["open"])), sp.get(str(w["open"] - 60))   # Binance closes at the start and a minute before (keys = minute end)
     if not k or not a:
         return None
     gap = ((a + b) / 2 if b else a) / k

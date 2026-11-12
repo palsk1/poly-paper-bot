@@ -21,8 +21,8 @@ Code: `kcrypto.py losses` (live trade list + Binance seconds for every bet, prob
   All 3 losses were "yes" bets. With the gap taken out, their cushions were 0.95, 1.32 and 1.72 "typical moves",
   not 3.47, 2.35 and 2.53, so the "2 typical moves" check would have skipped all three.
 - **But it's not free money.** Kalshi's own price already knows about the gap: those bets are cheaper. In 60 days of
-  history the bets the fix throws away lost more often (1 in 64) but still made money (+$0.58 per $100).
-  The fix halves the losses and keeps the profit per $100 the same, but makes fewer bets, so less profit in total.
+  history the bets the fix throws away lost more often (1 in 64) but still made money (+$0.66 per $100).
+  The fix cuts the losses by more than half and keeps the profit per $100 about the same, but makes fewer bets, so less profit in total.
 
 ## The 3 losses
 
@@ -70,21 +70,23 @@ That looks great, but it is hindsight: I found the fix by looking at these 3 los
 | | Bets | Lost | 1 loss per | P&L per $100 | Total on $10 bets | Worst day | Worst fall | Losing days |
 |---|---|---|---|---|---|---|---|---|
 | Today's rule | 8,655 | 54 | 160 bets | +$0.57 | +$497 | -$22.14 | -$31.84 | 12 of 61 |
-| Both checks | 6,538 | 21 | 311 bets | +$0.57 | +$373 | -$9.67 | -$24.98 | 8 of 61 |
-| Bets the fix throws away | 2,117 | 33 | 64 bets | +$0.58 | +$124 | | | |
+| Both checks | 6,470 | 20 | 324 bets | +$0.54 | +$352 | -$10.74 | -$24.30 | 8 of 61 |
+| Bets the fix throws away | 2,185 | 34 | 64 bets | +$0.66 | +$145 | | | |
 
-At 2 minutes left: +$0.40 → +$0.35 per $100. At 4 minutes left: +$0.62 → +$0.70. The exam (`exam.py`, 8 tries):
-"Looks real" on history, worst case +$0.29 per $100, both halves ahead. That is the same history today's rule
+At 2 minutes left: +$0.40 → +$0.36 per $100. At 4 minutes left: +$0.62 → +$0.62. The exam (`exam.py`, 8 tries):
+"Looks real" on history, both halves ahead. That is the same history today's rule
 passed too, and live bets are the real test.
 
-**So:** the fix doesn't make more money per $100. It makes the ride smoother: half the losses, worst day about
-$10 instead of $22, about 107 bets a day instead of 142, and about $2 a day less in total on $10 bets.
+**So:** the fix doesn't make more money per $100. It makes the ride smoother: less than half the losses, worst day about
+$11 instead of $22, about 106 bets a day instead of 142, and about $2.40 a day less in total on $10 bets.
 For a small real pot, smoother is worth something. It's Jan's call.
+
+(Numbers use Binance at the window's start and one minute before, the same minutes the live twin reads.)
 
 ## Recommendation
 
 - Don't touch `kc_maker_safe`: its locked test is the only live proof we can get by 1 Jan.
-- If Jan says go: add a twin track (`kc_maker_safe_usd`, $100 paper) with both checks, so the two run side by side
-  on the same windows. It needs no new data (the line itself is Kalshi's price at the start).
+- Jan said yes (12 Nov): twin track `kc_maker_safe_usd` ($100 paper, rule `usd_gap` in config) runs both checks next
+  to kc_maker_safe on the same windows. It needs no new data (the line itself is Kalshi's price at the start).
 - The fill model, the payouts and the bot's own z numbers all checked out (the bot's z matched a fresh recompute
   within about 0.2). This is a blind spot in the rule, not a code bug.
