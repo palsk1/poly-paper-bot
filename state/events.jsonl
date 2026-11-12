@@ -7725,3 +7725,10 @@
 {"filled": 10.0, "pnl": 0.62, "price": 0.938, "side": "no", "through": true, "ticker": "KXETH15M-26NOV120600-00", "track": "kc_maker_early", "ts": "2026-11-12T11:02:13Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.65, "price": 0.935, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV120600-00", "track": "kc_maker_early", "ts": "2026-11-12T11:02:13Z", "type": "kmaker_fill"}
 {"fee": 0.0295, "outcome": "Yes", "price": 0.82, "shares": 5, "title": "Will Alberto N\u00fa\u00f1ez Feij\u00f3o be the next Prime Minister of Spain?", "token": "30446115040994756735976163960167805883187697808359254957130669387440187908610", "track": "panic_fade_10c", "ts": "2026-11-12T11:07:02Z", "type": "paper_buy"}
+{"minutes_left": 2.44, "price": 0.953, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV120615-15", "track": "kc_maker", "ts": "2026-11-12T11:12:34Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.971, "queue": 2157.33, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV120615-15", "track": "kc_maker", "ts": "2026-11-12T11:12:35Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.995, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV120615-15", "track": "kc_maker", "ts": "2026-11-12T11:12:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.995, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV120615-15", "track": "kc_maker_safe", "ts": "2026-11-12T11:12:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV120615-15", "track": "kc_maker", "ts": "2026-11-12T11:12:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV120615-15", "track": "kc_maker_safe", "ts": "2026-11-12T11:12:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.44, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV120615-15", "track": "kc_maker", "ts": "2026-11-12T11:12:39Z", "type": "kmaker_order"}
