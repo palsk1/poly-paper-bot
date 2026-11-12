@@ -25,6 +25,7 @@
 | `crypto_no` | "Will Bitcoin reach / dip to / be above $X" markets with 3-7 days left: buys **NO** at 70-90c, one bet per event, same fill rules. Added 2026-11-10 with `boring_no`: +$6.95 per $100 on 115 bets, ahead in all 9 months, but the exam says it could be luck | $50 |
 | `sharp_pinnacle` | Uses Pinnacle (the bookie the pros bet with) as the fair price: buys a Polymarket game outcome when it costs at least 3c less than Pinnacle's odds say it's worth, after removing Pinnacle's margin and the fee. Pre-game, held to the result. Added 2026-11-09 (see "Sharp bookie price" below) | $100 |
 | `soccer_draw` | Soccer draws (2026-11-10, Jan said Go): buys YES on "will this game end in a draw" 20-28 hours before kickoff when the draw costs 15-50c, held to the result. In 4,538 past games draws won a bit more often than their price said, about 2c a bet (`backtest/census.md`, `backtest/digs_draws.md`). Skips books whose ask is 3c+ over the listed price. Also the 21 Dec holdout test `soccer_draw` (PROTOCOL 5). Claude's track, rule changes reported | $50 |
+| `kalshi_patient` | **UNTESTED (2026-11-12).** Kalshi, the patient buyer: about once an hour it looks at every open Kalshi market and, where the likely side's best buy order stands at 90-97c with a gap of 2c or more to the asking price, leaves a $10 buy order 1c above the best one for about an hour (up to 40 waiting at once, picked blindly). A bet counts only when Kalshi's own trade list shows contracts really sold at our price or lower, after a 60-second wait. Sports only before the game starts (Kalshi's schedule), no 15-minute crypto, one bet per event, held to the result. History: +$1.42 per $100 on 971 bets, 'Ahead, but could be luck' (`backtest/khouse.md`). $1,000 paper. Claude's track, rule changes reported. Dry run: probe `kpatienttest` |
 | `kc_maker`, `kc_maker_safe`, `kc_maker_early` (stopped 12 Nov) | Kalshi late favorite (2026-11-09, from a Reddit "$50 to $3,000" post): in Kalshi's 15-minute crypto up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+) and holds it to the result. Maker orders pay no fee there. `kc_maker` = the Reddit way (last 0.75-5.5 min), `kc_maker_safe` = same but only when Binance spot is 2+ typical moves past the strike, `kc_maker_early` = 90c+ with 6.5-11.5 min left (see "Kalshi 15-minute crypto" below) | $100 each, $10 an order |
 
 ## The lab (added 2026-11-08, runs until 2027-01-01)
@@ -204,6 +205,24 @@ The idea, inferred from a Reddit post: a few minutes before the close, rest a bu
   - *The last seconds:* settlement is the average of the last 60 seconds, so with 45 seconds left it's three-quarters known. Buying the side the running average favours at the next real trade made +$0.37-0.40 per $100 only when the model was very sure (z 4+), at 99.1-99.3c, ~20-55 fills a day across 7 coins, both halves ahead. Later than 45 seconds the fills you get are the ones the market disagrees with, and it loses. Resting bids at 99.5c/99.8c with 45 seconds left filled 5-15 times in 100 and won 0.2-0.5c a contract with 0-2 losses. One loss eats 150-500 wins, and our Binance estimate disagreed with Kalshi's result on 178 of 8,499 windows (BRTI is not Binance).
   - Kalshi pays no maker rewards on these series (`kf_incentives`: 0 programs; its incentive programs are US-only anyway), and two Designated Liquidity Providers (paid pro market makers) quote them.
   - Probe routes: `btkf` (fetch + run, `KF_DAYS` default 14, cached in `bt_cache/kf/`), `btkffetch`, `btkfrun`, `btkf2` (2-day smoke test), `kf_<cmd>`. Trade sizes aren't kept, so "fills" don't say how many contracts.
+
+## Kalshi: the patient buyer (added 2026-11-12, `khouse.py`, UNTESTED)
+
+Every trade has a side in a hurry (it pays the price on offer) and a patient side (its order was waiting). `khouse.py`
+asks whether the patient side earns on Kalshi: 19,385 settled markets from 11 Sep to 9 Nov, 3.2 million real trades,
+our paper order filled only by contracts that were really sold at its price (`backtest/khouse.md`).
+
+Mostly it doesn't. A buy order 1c above the best one lost about $5 per $100 at 50-90c, $5 to $13 during live games
+(the sellers there have seen the last play), and lowball orders on the likely side lost too. A good-looking lead on wide gaps
+before a game (+$7.97 per $100) fell to -$3.28 on new games: luck.
+
+One version is left: the **nearly-sure side**. Where the likely side's best buy order is at 90-97c and the asking
+price is 2c or more above it, bid 1c above the best buy order for an hour. +$1.42 per $100 on 971 bets (918 won),
+luck range +$0.14 to +$2.70, ahead in both samples. It is small, it is gone if we pay 2c more, the band was chosen
+after seeing both samples, and one loss eats about 15 wins. The exam says "Ahead, but could be luck".
+`kalshi_patient` ($1,000 paper) runs that rule live so real bets can settle it; proposed pass bar in
+`backtest/PROTOCOL.md` 5d. Paper can't see other robots stepping in front of our order, so a pass would still need a
+tiny real test.
 
 ## Fast Kalshi paper bot: the last 45 seconds (added 2026-11-10, `kfastlive.py`)
 

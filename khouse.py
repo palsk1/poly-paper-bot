@@ -650,7 +650,31 @@ def run(score=True):
         bets = stink(have, tapes, depth, mode, lo, hi, fams=fams) + stink(s2[0], s2[1], depth, mode, lo, hi, fams=fams)
         stinks.append((name, bets))
         P(row(name, bets))
-    P("\nWhoever dumps below the going price usually knows why. Dropped.\n")
+    P("\nOn the likely side, whoever dumps below the going price usually knows why: dropped. "
+      "The last row is the odd one out: lowball orders on the UNLIKELY side before a game came out well ahead in both samples. "
+      "It was version number 90-something, it lives on a handful of long-shot wins, and nobody had asked the question beforehand, "
+      "so it got its own re-test on new games (below).\n")
+    low = stinks[-1][1]
+    s3 = load_sample("khouse3") if os.path.exists(os.path.join(ROOT, "bt_cache", "khouse3", "tapes_000.json.gz")) else None
+    low3 = None
+    P("### 4b. Re-test of the unlikely-side lowball on new games (rule fixed before the download)\n")
+    P("Rule, written into the commit before sample 3 was downloaded: sports before the game, the unlikely side (middle price 10-50c), "
+      "a buy order 5c under the middle price and at least 2c under the best buy order, refreshed hourly, filled only by contracts "
+      "sold below our price. Passes if sample 3 alone is ahead with the low end of its luck range above $0.\n")
+    if not s3:
+        P("Sample 3 is not downloaded yet.\n")
+    else:
+        low3 = stink(s3[0], s3[1], 0.05, "dog", 0.1, 0.5, fams=(PRE,))
+        mid3 = stink(s3[0], s3[1], 0.05, "dog", 0.3, 0.5, fams=(PRE,))
+        P(f"Sample 3: {len(s3[1])} new sports events, {sum(len(d['tr']) for d in s3[1].values()):,} trades.\n")
+        P(ROW_HEAD)
+        P(row("samples 1+2 (where it was found)", low))
+        P(row("**sample 3 (new games), the test**", low3))
+        P(row("sample 3, if every contract had cost 1c more", worse(low3, 0.01)))
+        P(row("sample 3, second look: middle price 30-50c only", mid3))
+        bd3, _ = ev_band(low3) if len(low3) >= 10 else (None, 0)
+        ok3 = bool(bd3 and bd3[0] > 0)
+        P(f"\n**{'Passed' if ok3 else 'Did not pass'}.**\n")
 
     P("## 5. The one that is left: the nearly-sure side\n")
     P("Rule: the likely side's best buy order stands at 90-97c, the gap to the sell price is 2c or more, we bid 1c above the best "
@@ -687,13 +711,36 @@ def run(score=True):
              ("Kalshi patient buyer: likely side at 50-90c, bid 1c above the best buy order, no live sports", dropped_main, "dropped"),
              ("Kalshi patient buyer: sports before the game, likely side 60-95c, gap 5c+ (lead from sample 1, re-run on new games)", w2, "dropped"),
              ("Kalshi lowball orders: likely side, 10c under the going price, before a game", stinks[1][1], "dropped")]
+    if low3 is not None and len(low3) >= 10:
+        bd3, _ = ev_band(low3)
+        exams.append(("Kalshi lowball on the unlikely side before a game (10-50c, 5c under): re-test on new games", low3,
+                      "lead: passed a fresh-data test, no track yet" if bd3 and bd3[0] > 0 else "dropped (did not repeat on new games)"))
     for name, bets, status in exams:
         if len(bets) < 10:
             P(f"{name}: only {len(bets)} bets, no card.\n")
             continue
-        card = exam.score(slim(bets), name, tries=tries, src="khouse.py, backtest/khouse.md", status=status, log=score, quiet=True)
+        fixed = "re-test on new games" in name and bets is low3
+        card = exam.score(slim(bets), name, tries=2 if fixed else tries, prereg=fixed, src="khouse.py, backtest/khouse.md",
+                          status=status, log=score, quiet=True)
         cards.append(card)
         P("```\n" + exam.card_text(card) + "\n```\n")
+    main = cards[0] if cards else {}
+    bd, _ = ev_band(both)
+    S = ["**In short.** The idea: on Kalshi, don't pay the asking price. Leave a buy order 1c above the best one and wait an hour "
+         "for somebody in a hurry to sell to us. Tested on two months of real trades, with our order filled only by contracts that were really sold.",
+         "",
+         f"- **It loses almost everywhere.** At 50-90c it lost {usd(per100(dropped_main))[1:]} per $100. During a live game it lost $5 to $13. "
+         "The people who sell to a waiting order usually know something.",
+         "- **Lowball orders on the likely side lose too** ($3 to $19 per $100).",
+         f"- **A lead on wide gaps before a game was luck:** {usd(per100(w1))} per $100 where we found it, {usd(per100(w2))} on new games.",
+         f"- **One version is left: the nearly-sure side at 90-97c.** {usd(per100(both))} per $100 on {len(both)} bets "
+         f"({sum(1 for b in both if b['pay'] > 0)} won). Luck range {usd(bd[0])} to {usd(bd[1])}. Small, and gone if we pay 2c more. "
+         f"Exam: **{main.get('verdict', '-')}**. It runs as the paper track `kalshi_patient`, labelled untested.",
+         ("- **Lowball on the unlikely side before a game:** " + (
+             "not re-tested yet." if low3 is None else
+             f"{usd(per100(low))} per $100 where we found it, {usd(per100(low3))} on {len(low3)} new games. "
+             + ("It repeated. A lead, no track yet." if (ev_band(low3)[0] and ev_band(low3)[0][0] > 0) else "It did not repeat. Dropped.")))]
+    L[L.index("SUMMARY_HERE\n")] = "\n".join(S) + "\n"
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         f.write("\n".join(L) + "\n")

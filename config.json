@@ -147,8 +147,8 @@
       "rules": "econ_fav"
     },
     "kalshi_patient": {
-      "label": "UNTESTED, added 2026-11-12. Kalshi patient buyer on the nearly-sure side: once an hour, where the likely side's best buy order is at 90-97c with a 2c+ gap to the asking price, it leaves a $10 buy order 1c above the best one for about an hour. Sports only before the game, no 15-minute crypto. Counts only contracts really sold to it on Kalshi's trade list. One bet per market, held to the result. History: +$1.42 per $100 on 967 bets, could be luck (backtest/khouse.md). $500 paper, no refills",
-      "start_cash": 500,
+      "label": "UNTESTED, added 2026-11-12. Kalshi patient buyer on the nearly-sure side: once an hour, where the likely side's best buy order is at 90-97c with a 2c+ gap to the asking price, it leaves a $10 buy order 1c above the best one for about an hour. Sports only before the game, no 15-minute crypto. Counts only contracts really sold to it on Kalshi's trade list. One bet per market, held to the result. History: +$1.42 per $100 on 967 bets, could be luck (backtest/khouse.md). $1,000 paper, no refills",
+      "start_cash": 1000,
       "source": "kpatient",
       "rules": "kalshi_patient"
     },
@@ -1863,7 +1863,7 @@
       "scan_minutes": 55
     },
     "kalshi_patient": {
-      "why": "2026-11-12 khouse.py (backtest/khouse.md): 19,385 settled Kalshi markets, 5.1 million real trades. A patient buyer loses on slow questions, weather, crypto and stocks at most prices and badly in live sports (picked off). Only the nearly-sure side (best buy order 90-97c) was ahead in both samples: +$1.42 per $100 on 967 bets, luck range +$0.14 to +$2.70, exam verdict 'Ahead, but could be luck'. Hourly orders like the backtest. Claude's track, rule changes reported; pass bar proposed in PROTOCOL.md 5d.",
+      "why": "2026-11-12 khouse.py (backtest/khouse.md): 19,385 settled Kalshi markets, 3.2 million real trades. A patient buyer loses on slow questions, weather, crypto and stocks at most prices and badly in live sports (picked off). Only the nearly-sure side (best buy order 90-97c) was ahead in both samples: +$1.42 per $100 on 967 bets, luck range +$0.14 to +$2.70, exam verdict 'Ahead, but could be luck'. Hourly orders like the backtest. Claude's track, rule changes reported; pass bar proposed in PROTOCOL.md 5d (not locked, waits for Jan's OK). $1,000 because 40 waiting orders ($400) plus bets held up to a week need room; the scoreboard shows the most money ever tied up.",
       "min_bid": 0.9,
       "max_bid": 0.97,
       "min_gap": 0.02,
