@@ -49,6 +49,8 @@ p { margin: 4px 0 10px; }
 .tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border); color: var(--ink2); margin-left: 4px; vertical-align: 1px; }
 .tag.luck { border-color: var(--s2); color: var(--ink); }
 .tag.proven { border-color: var(--good); color: var(--good); }
+.tag.stop { border-color: var(--ink2); background: var(--ink2); color: var(--surface); font-weight: 700; letter-spacing: .3px; }
+.isstop { opacity: .55; }
 .top { cursor: pointer; }
 .pot { font-weight: 650; font-size: 15px; margin: 2px 0; font-variant-numeric: tabular-nums; }
 .pot.big { font-size: 20px; margin: 6px 0 4px; }
@@ -291,9 +293,14 @@ function curveChart(el, t) {
 
 // ---------- top 10
 // one compact card, the same for every strategy wherever it is listed
-const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + (t.stopped ? '<span class="tag">stopped</span>' : "") + (t.ext ? '<span class="tag">own test</span>' : "");
+// Stopped tracks (Jan, 12 Nov: "something to distinguish that they've been closed"): dark badge + faded row everywhere.
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const stopDay = t => t.stopped && t.stopped.on ? ` ${+t.stopped.on.slice(8, 10)} ${MON[+t.stopped.on.slice(5, 7) - 1]}` : "";
+const stopTag = t => t.stopped ? `<span class="tag stop">STOPPED${stopDay(t)}</span>` : "";
+const stopCls = t => t.stopped ? " isstop" : "";
+const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + stopTag(t) + (t.ext ? '<span class="tag">own test</span>' : "");
 function miniCard(t, rank) {
-  return `<div class="card top" data-n="${esc(t.name)}"><div class="row">
+  return `<div class="card top${stopCls(t)}" data-n="${esc(t.name)}"><div class="row">
       ${rank ? `<div class="rank">${rank}</div>` : ""}
       <div class="grow"><div class="name">${esc(t.name)}${tags(t)}</div>
         <div class="pot">${pot(t)}</div>
@@ -320,7 +327,7 @@ function luck() {
   const real = rows.filter(t => !t.control);
   $("luckcounts").innerHTML = keys.map(([k, l]) => `<span class="vd ${k}">${l}: ${real.filter(t => t.pv[0] === k).length}</span>`).join("");
   if (!shown.length) { el.innerHTML = "No strategy has 3 finished bets yet."; $("luckmore").style.display = "none"; return; }
-  el.innerHTML = shown.map(t => `<div class="vrow" data-n="${esc(t.name)}">
+  el.innerHTML = shown.map(t => `<div class="vrow${stopCls(t)}" data-n="${esc(t.name)}">
       <div class="n">${esc(t.name)}<div style="margin-top:3px;font-weight:400">${vd(t)}</div></div>
       <div class="m">${t.wins} won, ${t.losses} lost<br>${M(t.pnl)}</div></div>`).join("");
   $("luckmore").textContent = luckAll ? "Show fewer" : `Show all ${rows.length}`;
@@ -334,15 +341,15 @@ luck();
 (function main() {
   const rows = D.tracks.filter(t => !t.lab);
   $("main").innerHTML = `<table><thead><tr><th>Strategy</th><th class="r">Money in</th><th class="r">P&amp;L</th><th class="r">Open bets</th><th class="r">Won / lost</th></tr></thead><tbody>` +
-    rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td><a href="#detail-h">${esc(t.name)}</a></td><td class="r num">${t.cash == null ? "no limit" : money(t.deposited, false).replace(".00", "")}</td><td class="r">${M(t.pnl)}</td><td class="r num">${t.open}</td><td class="r num">${t.wins} / ${t.losses}</td></tr>`).join("") +
+    rows.map(t => `<tr class="${stopCls(t)}" data-n="${esc(t.name)}" style="cursor:pointer"><td><a href="#detail-h">${esc(t.name)}</a>${stopTag(t)}</td><td class="r num">${t.cash == null ? "no limit" : money(t.deposited, false).replace(".00", "")}</td><td class="r">${M(t.pnl)}</td><td class="r num">${t.open}</td><td class="r num">${t.wins} / ${t.losses}</td></tr>`).join("") +
     `</tbody></table>`;
   document.querySelectorAll("#main tr[data-n]").forEach(r => r.onclick = ev => { ev.preventDefault(); openDetail(r.dataset.n); });
 })();
 
 // ---------- detail
 const pick = $("pick");
-pick.innerHTML = `<optgroup label="Main tracks">` + D.tracks.filter(t => !t.lab).map(t => `<option>${esc(t.name)}</option>`).join("") +
-  `</optgroup><optgroup label="Lab (ranked)">` + D.order.filter(n => byName[n].lab).map(n => `<option>${esc(n)}</option>`).join("") + `</optgroup>`;
+pick.innerHTML = `<optgroup label="Main tracks">` + D.tracks.filter(t => !t.lab).map(t => `<option value="${esc(t.name)}">${esc(t.name)}${t.stopped ? " (stopped)" : ""}</option>`).join("") +
+  `</optgroup><optgroup label="Lab (ranked)">` + D.order.filter(n => byName[n].lab).map(n => `<option value="${esc(n)}">${esc(n)}${byName[n].stopped ? " (stopped)" : ""}</option>`).join("") + `</optgroup>`;
 pick.onchange = () => detail(pick.value);
 function openDetail(n) { pick.value = n; detail(n); $("detail-h").scrollIntoView({behavior: "smooth"}); }
 function detail(n) {
@@ -354,6 +361,7 @@ function detail(n) {
         t.open ? (t.ext ? "the rest is tied up in bets waiting for a result" : "the rest is in open bets") : ""].filter(Boolean).reduce((a, x, i, l) => a + (i ? (i === l.length - 1 ? " and " : ", ") : "") + x, "") + ".";
   const tr = t.trust;
   let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tags(t)}</div>
+    ${t.stopped ? `<p class="sub warn"><b>Stopped${stopDay(t)}.</b> It makes no new bets. Bets it already had still finish and count. Its history stays here so you can look back.${t.stopped.why ? ` Why: ${esc(t.stopped.why)}` : ""}</p>` : ""}
     <div class="pot big">${pot(t)}</div>
     <div style="margin:4px 0">${vd(t)}</div>
     <p class="sub">${esc(t.label)}</p>
@@ -450,10 +458,10 @@ addEventListener("resize", () => { const t = byName[pick.value]; if (t && $("cur
       [rows.reduce((a, t) => a + t.open, 0), "open bets"],
     ].map(([v, k]) => `<div class="tile"><div class="v" style="font-size:18px">${v}</div><div class="k">${k}</div></div>`).join("");
     $("all").innerHTML = `<table><thead><tr>${cols.map(([k, l]) => `<th class="${k === "name" ? "" : "r"}" data-k="${k}" style="cursor:pointer;white-space:nowrap">${l}${k === sortBy ? (desc ? " ▾" : " ▴") : ""}</th>`).join("")}</tr></thead><tbody>` +
-      rows.map(t => `<tr data-n="${esc(t.name)}" style="cursor:pointer"><td class="allname">${esc(t.name)}${t.control ? '<span class="tag luck">random</span>' : ""}${t.trust.proven ? '<span class="tag proven">✓</span>' : ""}</td>` +
+      rows.map(t => `<tr class="${stopCls(t)}" data-n="${esc(t.name)}" style="cursor:pointer"><td class="allname">${t.stopped ? '<span class="tag stop" style="margin:0 3px 0 0;font-size:9px;padding:0 2px">STOP</span>' : ""}${esc(t.name)}${t.control ? '<span class="tag luck">random</span>' : ""}${t.trust.proven ? '<span class="tag proven">✓</span>' : ""}</td>` +
         `<td class="r">${M(t.pnl)}</td><td class="r">${M(t.today)}</td><td class="r num">${t.wins} / ${t.losses}</td>` +
         `<td class="r">${t.trust.finished ? `<span class="num ${cls(t.trust.worst_per_100)}" style="${t.trust.finished < FEW ? "opacity:.55" : ""}">${money(Math.round(t.trust.worst_per_100)).replace(".00", "")}</span>` : '<span class="num">–</span>'}</td></tr>`).join("") +
-      `</tbody></table><p class="note">Worst = worst case per $100 (from finished bets only, not "every open bet loses"). −$100 is the floor: too few or too swingy bets to say. Faded = fewer than ${FEW} finished bets, mostly luck. – = nothing finished yet.</p>`;
+      `</tbody></table><p class="note">Worst = worst case per $100 (from finished bets only, not "every open bet loses"). −$100 is the floor: too few or too swingy bets to say. Faded number = fewer than ${FEW} finished bets, mostly luck. – = nothing finished yet. Grey row with STOP = stopped, no new bets.</p>`;
     $("all").querySelectorAll("th[data-k]").forEach(th => th.onclick = () => {
       if (sortBy === th.dataset.k) desc = !desc; else { sortBy = th.dataset.k; desc = sortBy !== "name"; }
       draw();

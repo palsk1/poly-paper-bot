@@ -161,6 +161,25 @@ A strategy gets real money only if **every** answer is yes:
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
 
+## The 12 stopped tracks (12 Nov): what they taught us
+
+Jan stopped these on 12 Nov and took them off the dashboard the same evening. They still sit in `state/summary.md`,
+and open bets finish there. Numbers are from the evening of 12 Nov, P&L counting open bets at today's price.
+
+| Track | Final P&L | Finished bets (won / lost) | What we learned |
+|---|---|---|---|
+| `fade_sure` (weather long shots at 2-10c) | +$7.88 on $25 | 55 (4 / 51) | One lucky day (12 Nov: 5 long shots in one go) turned it from -$7 to +$8. 13,000 past bets lost $18.67 per $100, lucky days included. **Bets on the same day's weather are one bet, not thirty.** |
+| `wx_forecast` (free forecasts vs temperature buckets) | -$24.48 | 130 (58 / 72) | The markets know the weather better than free forecasts. Live agreed with the history test, only worse |
+| `endgame_ending_soon` (93-98c, ends within a day) | -$48.87 | 114 (101 / 13) | Winning 9 times in 10 still loses when one loss costs 20 wins. Crypto "dip to", tweet counts and TV-show markets flip late |
+| `endgame_97` (97-99c, every signal) | -$32.06 | 122 (115 / 7) | At 99c one loss eats about 100 wins. It also bought "past the deadline" bets before the day was over (the end-time bug, fixed 12 Nov) |
+| `ladder` (two linked markets for under $1) | $0 | 0 | 6,458 pairs watched, never one cheap enough. Pros close these gaps before a 5-minute bot looks |
+| `every_horse` (every answer for under $1) | +$0.54 expected | 0 (3 sets open) | 3 sets in 9 days. It would need about 69 to prove anything |
+| `kc_maker_early` (Kalshi crypto bids 90c+, early) | -$70.36 | 355 (329 / 26) | Bidding early catches the windows that later flip. The kc_maker_safe spot check is what keeps the safe twin alive |
+| 5 Polymarket maker tracks | -$421 of $1,000 | 117 | Rewards paid about $8 in total. A 5-minute bot gets picked off: people sell to us just before the price drops |
+
+The two lessons for the rest: **a strategy that wins small often and loses big rarely needs hundreds of bets before
+its total means anything**, and **a day of correlated wins is luck, however good it looks on the phone**.
+
 ## Tried and dropped (one line each)
 
 Don't re-test these the same way. Only with something new (new data, a new filter).
