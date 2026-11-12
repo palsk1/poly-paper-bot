@@ -7867,3 +7867,6 @@
 {"minutes_left": 3.92, "price": 0.979, "queue": 171.29, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV120745-45", "track": "kc_maker", "ts": "2026-11-12T12:41:06Z", "type": "kmaker_order"}
 {"minutes_left": 3.92, "price": 0.996, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV120745-45", "track": "kc_maker", "ts": "2026-11-12T12:41:08Z", "type": "kmaker_order"}
 {"minutes_left": 3.92, "price": 0.996, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV120745-45", "track": "kc_maker_safe", "ts": "2026-11-12T12:41:08Z", "type": "kmaker_order"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in Buenos Aires be 26\u00b0C on November 13?", "token": "113633886318536753485780110873454027976136662492298955435757452755655543348520", "track": "endgame_sell98", "ts": "2026-11-12T12:42:22Z", "type": "paper_buy"}
+{"minutes_left": 2.54, "price": 0.994, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV120745-45", "track": "kc_maker_safe", "ts": "2026-11-12T12:42:28Z", "type": "kmaker_order"}
+{"minutes_left": 2.54, "price": 0.96, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV120745-45", "track": "kc_maker", "ts": "2026-11-12T12:42:28Z", "type": "kmaker_order"}
