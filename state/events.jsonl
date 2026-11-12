@@ -7818,3 +7818,10 @@
 {"minutes_left": 3.37, "price": 0.997, "queue": 3112.77, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV120700-00", "track": "kc_maker_safe", "ts": "2026-11-12T11:56:40Z", "type": "kmaker_order"}
 {"minutes_left": 3.37, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:40Z", "type": "kmaker_order"}
 {"minutes_left": 3.37, "price": 0.967, "queue": 121.81, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T11:56:41Z", "type": "kmaker_order"}
+{"fee": 0.0098, "outcome": "No", "price": 0.959, "shares": 5, "title": "Will the highest temperature in New York City be between 44-45\u00b0F on November 13?", "token": "46561496967949468793030426418093273387849200520912303970250364948292907683187", "track": "endgame_sell98", "ts": "2026-11-12T12:02:02Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T12:02:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.32, "price": 0.968, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T12:02:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXETH15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T12:02:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T12:02:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV120700-00", "track": "kc_maker", "ts": "2026-11-12T12:02:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXETH15M-26NOV120700-00", "track": "kc_maker_safe", "ts": "2026-11-12T12:02:20Z", "type": "kmaker_fill"}
