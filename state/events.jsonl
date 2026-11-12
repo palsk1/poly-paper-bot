@@ -8454,3 +8454,9 @@
 {"fee": 0.0, "outcome": "No", "price": 0.92, "shares": 5, "title": "Will the U.S. invade Iran before 2027?", "token": "1910830010387565971650098373488592514702818137344973088263643820608151819241", "track": "w_jjo", "ts": "2026-11-12T18:30:57Z", "type": "paper_buy"}
 {"fee": 0.0, "outcome": "No", "price": 0.92, "shares": 5, "title": "Will the U.S. invade Iran before 2027?", "token": "1910830010387565971650098373488592514702818137344973088263643820608151819241", "track": "wb_jjo", "ts": "2026-11-12T18:30:57Z", "type": "paper_buy"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXTRUMPAPPROVE-26NOV13-U38.4", "track": "kalshi_patient", "ts": "2026-11-12T18:32:18Z", "type": "kpatient_order"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXAAAGASDGA-26NOV13-3.3900", "track": "kalshi_patient", "ts": "2026-11-12T18:42:15Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNBA3PT-26NOV12CHAPHX-PHXJGOODWIN23-5", "track": "kalshi_patient", "ts": "2026-11-12T18:42:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBA3PTPROT-26NOV12DETWAS-WASTJOHNSON12-5", "track": "kalshi_patient", "ts": "2026-11-12T18:42:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "yes", "through": false, "ticker": "KXNCAAWBGAME-26NOV12PRSTUCSD-UCSD", "track": "kalshi_patient", "ts": "2026-11-12T18:42:21Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KXNETFLIXTOPVIEWSMOVIE-26NOV16-9", "track": "kalshi_patient", "ts": "2026-11-12T18:42:22Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "yes", "through": true, "ticker": "KXNFLTEAMTOTAL-26NOV12WASNYG-WAS8", "track": "kalshi_patient", "ts": "2026-11-12T18:42:22Z", "type": "kpatient_fill"}
