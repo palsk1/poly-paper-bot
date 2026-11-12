@@ -4608,13 +4608,20 @@ def trust(tr, n_tracks=None, size="rank"):
     worst = max(-1.0, mean - NormalDist().inv_cdf(1 - alpha) * sd / math.sqrt(m))  # can't lose more than the bet
     avg = sum(p / b for p, b in rows) / n if n else 0.0
     proven = n >= rk.get("min_trades_proven", 30) and worst > 0
+    # 2026-11-12 (Jan: "we check for luck but not unlucky?"): the other end of the plain luck range (usual 90%, real
+    # bets only, no made-up disaster, no raised bar). Below $0 = it is behind even if we assume it was unlucky.
+    best = None
+    if n >= 2:
+        r = [p / b for p, b in rows]
+        sd_r = math.sqrt(sum((x - avg) ** 2 for x in r) / (n - 1))
+        best = round((avg + NormalDist().inv_cdf(0.95) * sd_r / math.sqrt(n)) * 100, 2)
     return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
-            "worst_per_100": round(worst * 100, 2), "proven": proven}
+            "worst_per_100": round(worst * 100, 2), "best_per_100": best, "proven": proven}
 
 
 def plain_verdict(t, control=False, few=10):
     """One plain-words verdict per strategy, from its trust numbers (wording only, no new math).
-    Returns (key, text): key is good / maybe / bad / early / luck, used for colors on the dashboard."""
+    Returns (key, text): key is good / maybe / unlucky / bad / early / luck, used for colors on the dashboard."""
     if control:
         return "luck", "Random buyer (shows what luck looks like)"
     if t["finished"] < few:
@@ -4624,6 +4631,10 @@ def plain_verdict(t, control=False, few=10):
     if t["worst_per_100"] > 0:
         return "good", "Promising, needs more bets"
     if t["avg_per_100"] < 0:
+        # 2026-11-12: losses get the same luck check as wins. "Losing" only when even the lucky end of the range is
+        # below $0; otherwise it's behind, but that could still be bad luck.
+        if t.get("best_per_100") is not None and t["best_per_100"] >= 0:
+            return "unlucky", "Behind, but could be bad luck"
         return "bad", "Losing"
     return "maybe", "Ahead, but could be luck"
 
