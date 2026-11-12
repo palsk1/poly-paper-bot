@@ -8231,3 +8231,7 @@
 {"minutes_left": 2.14, "price": 0.998, "queue": 2547.77, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV121145-45", "track": "kc_maker", "ts": "2026-11-12T16:42:53Z", "type": "kmaker_order"}
 {"minutes_left": 2.14, "price": 0.998, "queue": 2547.77, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV121145-45", "track": "kc_maker_safe", "ts": "2026-11-12T16:42:53Z", "type": "kmaker_order"}
 {"minutes_left": 2.14, "price": 0.998, "queue": 2547.77, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV121145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-12T16:42:53Z", "type": "kmaker_order"}
+{"fee": 0.0063, "outcome": "maybe", "price": 0.974, "shares": 5, "title": "Counter-Strike: LPH Gaming vs maybe (BO3) - ESL Challenger League Europe Cup #12 Group B", "token": "68591841737700382633576660518631879959304725495621842380566619884961894650727", "track": "endgame_sell98", "ts": "2026-11-12T16:47:10Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV121145-45", "track": "kc_maker", "ts": "2026-11-12T16:47:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV121145-45", "track": "kc_maker_safe", "ts": "2026-11-12T16:47:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV121145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-12T16:47:18Z", "type": "kmaker_fill"}
