@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**92 ideas examined, in about 52,154 versions.** 64 dropped, 28 still being tested or waiting. **Looks real: 2.**
+**96 ideas examined, in about 52,374 versions.** 67 dropped, 29 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 92 ideas that are all worthless, the luckiest one still looks good. With 92 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 96 ideas that are all worthless, the luckiest one still looks good. With 96 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -100,5 +100,9 @@ Why count: if you test 92 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Polymarket 15-min bid, both checks (history, 3 min) | 6 | 149 | -$1.26 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check (history, 3 min) | 6 | 315 | -$1.43 | Behind, but could be bad luck | dropped | kcrypto.py pmrun |
 | 2026-11-12 | Polymarket 15-min bid, spot check, strict fills only (history, 3 min) | 6 | 250 | -$2.28 | Losing | dropped | kcrypto.py pmrun |
+| 2026-11-12 | Post-count markets: always buy No (yardstick) | 55 | 207 | -$0.25 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
+| 2026-11-12 | Post-count markets: buy No (10c+) where the counting model says Yes is 10c+ too dear | 55 | 213 | +$4.16 | Promising, needs more bets | lead: wants a live paper test | tweets.py, backtest/tweets.md |
+| 2026-11-12 | Post-count markets: counting model, both sides, 5c+ apart | 55 | 214 | -$0.89 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
+| 2026-11-12 | Post-count markets: counting model says Yes is 10c+ too cheap (buy Yes) | 55 | 212 | -$4.08 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
