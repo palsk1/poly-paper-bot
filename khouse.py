@@ -413,7 +413,7 @@ def sim(have, tapes, lo, hi, min_gap, side_mode="fav", usd=10.0, improve=0.01, f
                 mid = (nxt[1] + nxt[2]) / 2
                 mark = (mid if side_yes else 1 - mid) - p
             bets.append({"ev": m["ev"], "t": t_fill, "cost": n * p + fee, "pay": n if win else 0.0, "sh": n,
-                         "fam": fam, "left": lb, "p": p, "gap": a - b, "mark": mark, "tk": tk, "s": m["s"]})
+                         "fam": fam, "left": lb, "p": p, "gap": a - b, "mark": mark, "tk": tk, "s": m["s"], "vol": _v or 0})
             break                                 # one bet per market
     return bets
 
