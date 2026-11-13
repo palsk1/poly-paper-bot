@@ -2,15 +2,108 @@
 """Earnings markets ("Will Nvidia beat quarterly earnings?"): each company's own record vs Polymarket's price.
 
   python3 earn.py peek     how Polymarket tags these markets, how many there are
+  python3 earn.py fetch    every finished earnings market + real trades -> bt_cache/ern/
 """
 import collections
+import concurrent.futures as cf
+import hashlib
+import os
 import re
 import sys
+import time
 
 import backtest as bt
 import bot
 
 G = bt.G
+CACHE = os.path.join(bt.CACHE, "ern")
+TAG = 1013                    # Gamma tag "Earnings"
+SHARD = 400
+T0 = time.time()
+BUDGET_MIN = float(os.environ.get("ERN_BUDGET_MIN", "150"))
+
+
+def pages(closed="true", extra=None):
+    out, cur = [], None
+    for _ in range(2000):
+        p = dict(extra or {}, tag_id=TAG, closed=closed, limit=50)
+        if cur:
+            p["after_cursor"] = cur
+        r = bot.http_json(f"{G}/events/keyset", p)
+        rows = [e for e in bot.envelope_rows(r, "events", "data") if isinstance(e, dict)]
+        out += rows
+        cur = r.get("next_cursor") if isinstance(r, dict) else None
+        if not rows or not cur:
+            break
+    return out
+
+
+def slim(e, m):
+    """One 'will X beat quarterly earnings' market. The slug carries the ticker, GAAP or not, the day and the estimate:
+    xom-quarterly-earnings-nongaap-eps-05-01-2026-1pt00, mrna-...-gaap-eps-05-01-2026-neg2pt67."""
+    m = dict(m)
+    m.setdefault("events", [{"id": e.get("id"), "slug": e.get("slug")}])
+    s = bt.slim_market(m)
+    s["cid"] = m.get("conditionId")
+    s["title"] = e.get("title")
+    s["series"] = [x.get("slug") for x in e.get("series") or [] if isinstance(x, dict)]
+    s["desc"] = str(m.get("description") or "")[:900]
+    slug = str(e.get("slug") or "")
+    x = re.match(r"([a-z0-9]+)-quarterly-earnings-(nongaap|gaap)-eps-(\d\d)-(\d\d)-(\d{4})-(neg)?(\d+)pt(\d+)", slug)
+    y = re.match(r"will-([a-z0-9]+)-beat-earnings-estimate-(\d{4})-(\d\d)-(\d\d)-(neg)?(\d+)pt(\d+)", slug)
+    if x:
+        s["tick"], s["gaap"] = x.group(1), x.group(2) == "gaap"
+        s["day"] = f"{x.group(5)}-{x.group(3)}-{x.group(4)}"
+        s["est"] = (-1 if x.group(6) else 1) * float(f"{x.group(7)}.{x.group(8)}")
+    elif y:
+        s["tick"], s["gaap"] = y.group(1), "non-GAAP" not in s["desc"]
+        s["day"] = f"{y.group(2)}-{y.group(3)}-{y.group(4)}"
+        s["est"] = (-1 if y.group(5) else 1) * float(f"{y.group(6)}.{y.group(7)}")
+    return s
+
+
+def fetch():
+    """Every finished 'beat quarterly earnings' market before the holdout, and every real trade of each."""
+    import btcheck
+    import optfair
+    os.makedirs(CACHE, exist_ok=True)
+    ms = {}
+    odd = 0
+    for e in pages():
+        for m in e.get("markets") or []:
+            if not isinstance(m, dict):
+                continue
+            s = slim(e, m)
+            if "tick" not in s:
+                odd += 1
+                continue
+            if len(s["toks"]) == 2 and s["end"] and s.get("cid"):
+                ms[s["id"]] = s
+    cut = btcheck.T(btcheck.HOLDOUT_FROM)
+    n_all = len(ms)
+    ms = {k: m for k, m in ms.items() if m["end"] < cut}          # the holdout stays unseen until 21 Dec
+    bt.wjson(os.path.join(CACHE, "markets.json.gz"), ms)
+    res = collections.Counter(tuple(m["final"]) for m in ms.values())
+    print(f"earnings markets {n_all} ({odd} other shapes skipped), before the holdout {len(ms)}, results {res.most_common(4)}, "
+          f"companies {len({m['tick'] for m in ms.values()})}", flush=True)
+    want = sorted((m for m in ms.values() if m.get("closed")), key=lambda m: hashlib.md5(("ern" + m["ev_slug"]).encode()).hexdigest())
+    n_sh = (len(want) + SHARD - 1) // SHARD
+    for i in range(n_sh):
+        path = os.path.join(CACHE, f"tapes_{i:02d}.json.gz")
+        if os.path.exists(path):
+            continue
+        chunk = want[i * SHARD:(i + 1) * SHARD]
+        out = {}
+        with cf.ThreadPoolExecutor(8) as ex:
+            for mid, r in ex.map(optfair.fetch_tape, [(m, m["cid"]) for m in chunk]):
+                if r is not None:
+                    out[mid] = r
+        bt.wjson(path, out)
+        print(f"  tapes file {i + 1}/{n_sh}: {len(out)}/{len(chunk)} ({(time.time() - T0) / 60:.0f} min), "
+              f"cut short {sum(1 for r in out.values() if r['cut'])}", flush=True)
+        if (time.time() - T0) / 60 > BUDGET_MIN:
+            print("time budget used, run again to continue")
+            break
 
 
 def peek():
@@ -70,4 +163,4 @@ def peek():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": peek}[cmd]()
+    {"peek": peek, "fetch": fetch}[cmd]()
