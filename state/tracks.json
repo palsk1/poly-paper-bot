@@ -899,223 +899,223 @@
     "annual": -0.01,
     "edge": -0.0015,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:57Z"
+    "ts": "2026-11-13T12:20:48Z"
    },
    "KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.151,
     "edge": -0.0626,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:02Z"
+    "ts": "2026-11-13T12:20:51Z"
    },
    "KXAOCRUN-28-27JAN01|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027": {
     "annual": -0.039,
     "edge": -0.0055,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:05Z"
+    "ts": "2026-11-13T12:20:52Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.251,
     "edge": 0.0347,
     "opportunity": true,
-    "ts": "2026-11-13T12:15:58Z"
+    "ts": "2026-11-13T12:20:49Z"
    },
    "KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027": {
-    "annual": -0.1,
-    "edge": -0.0145,
+    "annual": -0.045,
+    "edge": -0.0065,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:00Z"
+    "ts": "2026-11-13T12:20:50Z"
    },
    "KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088": {
     "annual": 0.036,
     "edge": 0.0052,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:02Z"
+    "ts": "2026-11-13T12:20:51Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": 0.059,
     "edge": 0.0083,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:59Z"
+    "ts": "2026-11-13T12:20:49Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
     "annual": -0.139,
     "edge": -0.0203,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:59Z"
+    "ts": "2026-11-13T12:20:49Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": -0.149,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:00Z"
+    "ts": "2026-11-13T12:20:49Z"
    },
    "KXKELLYRUN-28-27JAN01|will-mark-kelly-announce-a-presidential-run-before-2027": {
     "annual": -0.024,
     "edge": -0.0034,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:06Z"
+    "ts": "2026-11-13T12:20:53Z"
    },
    "KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027": {
     "annual": -0.023,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:08Z"
+    "ts": "2026-11-13T12:20:54Z"
    },
    "KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.072,
     "edge": -0.0289,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:01Z"
+    "ts": "2026-11-13T12:20:50Z"
    },
    "KXOSSOFFRUN-28-27JUL01|will-jon-ossoff-announce-a-presidential-run-by-june-30-2027": {
     "annual": -0.072,
     "edge": -0.048,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:03Z"
+    "ts": "2026-11-13T12:20:51Z"
    },
    "KXREACTOR-26DEC31|us-grants-license-for-new-nuclear-reactor-in-2026": {
     "annual": -0.132,
     "edge": -0.019,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:05Z"
+    "ts": "2026-11-13T12:20:52Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.049,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:58Z"
+    "ts": "2026-11-13T12:20:48Z"
    },
    "KXRUBIORUN-28-27APR01|will-marco-rubio-announce-a-presidential-run-by-march-31-2027": {
     "annual": 0.03,
     "edge": 0.0114,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:01Z"
+    "ts": "2026-11-13T12:20:50Z"
    },
    "KXRUBIORUN-28-27JUL01|will-marco-rubio-announce-a-presidential-run-by-june-30-2027": {
     "annual": 0.037,
     "edge": 0.0233,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:04Z"
+    "ts": "2026-11-13T12:20:52Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.033,
     "edge": 0.0046,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:45Z"
+    "ts": "2026-11-13T12:20:41Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
     "annual": -0.186,
     "edge": -0.0271,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:56Z"
+    "ts": "2026-11-13T12:20:48Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
-    "annual": -0.153,
-    "edge": -0.0221,
+    "annual": -0.159,
+    "edge": -0.0231,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:54Z"
+    "ts": "2026-11-13T12:20:46Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.151,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:48Z"
+    "ts": "2026-11-13T12:20:42Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.132,
     "edge": -0.0191,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:51Z"
+    "ts": "2026-11-13T12:20:44Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.058,
     "edge": -0.0083,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:46Z"
+    "ts": "2026-11-13T12:20:42Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.061,
     "edge": -0.0087,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:55Z"
+    "ts": "2026-11-13T12:20:47Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.129,
     "edge": -0.0187,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:47Z"
+    "ts": "2026-11-13T12:20:42Z"
    },
    "KXTIME-26-LUI|will-lula-da-silva-be-time-person-of-the-year-2026": {
     "annual": -0.101,
     "edge": -0.0145,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:07Z"
+    "ts": "2026-11-13T12:20:53Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.09,
     "edge": -0.0129,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:53Z"
+    "ts": "2026-11-13T12:20:46Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.009,
     "edge": 0.0012,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:53Z"
+    "ts": "2026-11-13T12:20:46Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.028,
     "edge": -0.004,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:52Z"
+    "ts": "2026-11-13T12:20:45Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.139,
     "edge": -0.0201,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:55Z"
+    "ts": "2026-11-13T12:20:47Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.081,
     "edge": -0.0115,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:49Z"
+    "ts": "2026-11-13T12:20:44Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": -0.068,
     "edge": -0.0097,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:48Z"
+    "ts": "2026-11-13T12:20:43Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.068,
     "edge": -0.0097,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:56Z"
+    "ts": "2026-11-13T12:20:47Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.144,
     "edge": -0.0208,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:50Z"
+    "ts": "2026-11-13T12:20:44Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.042,
     "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:51Z"
+    "ts": "2026-11-13T12:20:45Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": -0.02,
     "edge": -0.0029,
     "opportunity": false,
-    "ts": "2026-11-13T12:15:49Z"
+    "ts": "2026-11-13T12:20:43Z"
    },
    "KXTRUMPFLAVIOMEET-26DEC01-JAN01|will-trump-meet-with-flavio-bolsonaro-in-2026": {
     "annual": -0.387,
     "edge": -0.058,
     "opportunity": false,
-    "ts": "2026-11-13T12:16:07Z"
+    "ts": "2026-11-13T12:20:53Z"
    }
   },
   "min_cash": 0.0,
@@ -5608,8 +5608,8 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "164 markets held by 2+ of the copied wallets right now (40 wallets read).",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "157 markets held by 2+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
   "unlimited": true
@@ -6983,7 +6983,7 @@
   "skipped_other_side": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "49 markets held by 3+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
@@ -9424,7 +9424,7 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
@@ -11112,7 +11112,7 @@
   "skipped_no_cash": 0,
   "start_cash": 100,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
@@ -64222,11 +64222,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "22 markets matched its rules, bought 1",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "28 markets matched its rules, bought 0",
    "skips": {
-    "already holds this market": 13,
-    "real price outside its range": 5
+    "already holds this market": 14,
+    "real price outside its range": 11
    }
   },
   "tp_thin_skips": 101,
@@ -64447,7 +64447,7 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
@@ -76602,14 +76602,14 @@
   "skipped_no_cash": 0,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching his 74 open positions. Last new one seen: 2026-11-10.",
    "skips": {}
   },
   "unlimited": false
  },
  "kalshi_patient": {
-  "cash": 624.9606,
+  "cash": 674.9606,
   "closed": [
    {
     "ask": 0.99,
@@ -78068,6 +78068,276 @@
     "through": true,
     "ticker": "KXTEMPMIAH-26NOV1304-T71.99",
     "title": "Will the temp in Miami be above 71.99\u00b0 on Nov 13, 2026 at 4am EST? (72\u00b0 or above)"
+   },
+   {
+    "ask": 0.97,
+    "bid": 0.95,
+    "close": "2026-11-13T04:59:00Z",
+    "closed_at": "2026-11-13T12:21:24Z",
+    "cost": 9.6,
+    "entry": 0.96,
+    "entry_fee": 0.0,
+    "event": "KXAAAGASDGA-26NOV13",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-12T18:38:00Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-12T18:42:15Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-12T17:33:00Z",
+    "outcome": "no",
+    "placed": "2026-11-12T17:33:00Z",
+    "pnl": 0.4,
+    "price": 0.96,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.4167,
+      1.0
+     ],
+     "100": [
+      41.9424,
+      1.7476,
+      0.4194
+     ],
+     "25": [
+      25.0,
+      1.0417,
+      1.0
+     ],
+     "50": [
+      41.9424,
+      1.7476,
+      0.8388
+     ]
+    },
+    "series": "KXAAAGASDGA",
+    "shares": 10.0,
+    "side": "no",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXAAAGASDGA-26NOV13-3.3900",
+    "title": "Will average **gas prices** be above $3.3900? (Above 3.3900)"
+   },
+   {
+    "ask": 0.99,
+    "bid": 0.94,
+    "close": "2026-11-13T06:00:00Z",
+    "closed_at": "2026-11-13T12:21:24Z",
+    "cost": 9.5,
+    "entry": 0.95,
+    "entry_fee": 0.0,
+    "event": "KXLOWTATL-26NOV12",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-13T00:17:22Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-13T00:21:30Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-12T23:12:22Z",
+    "outcome": "no",
+    "placed": "2026-11-12T23:12:22Z",
+    "pnl": 0.5,
+    "price": 0.95,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.5263,
+      1.0
+     ],
+     "100": [
+      14.8485,
+      0.7815,
+      0.1485
+     ],
+     "25": [
+      14.8485,
+      0.7815,
+      0.5939
+     ],
+     "50": [
+      14.8485,
+      0.7815,
+      0.297
+     ]
+    },
+    "series": "KXLOWTATL",
+    "shares": 10.0,
+    "side": "no",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXLOWTATL-26NOV12-T51",
+    "title": "Will the minimum temperature be >51\u00b0 on Nov 12, 2026? (52\u00b0 or above)"
+   },
+   {
+    "ask": 0.99,
+    "bid": 0.94,
+    "close": "2026-11-13T06:00:00Z",
+    "closed_at": "2026-11-13T12:21:24Z",
+    "cost": 9.5,
+    "entry": 0.95,
+    "entry_fee": 0.0,
+    "event": "KXLOWTMIA-26NOV12",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-13T00:17:22Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-13T00:21:30Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-12T23:12:22Z",
+    "outcome": "yes",
+    "placed": "2026-11-12T23:12:22Z",
+    "pnl": 0.5,
+    "price": 0.95,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      9.576,
+      0.504,
+      0.9576
+     ],
+     "100": [
+      9.576,
+      0.504,
+      0.0958
+     ],
+     "25": [
+      9.576,
+      0.504,
+      0.383
+     ],
+     "50": [
+      9.576,
+      0.504,
+      0.1915
+     ]
+    },
+    "series": "KXLOWTMIA",
+    "shares": 10.0,
+    "side": "yes",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXLOWTMIA-26NOV12-B72.5",
+    "title": "Will the minimum temperature be 72-73\u00b0 on Nov 12, 2026? (72\u00b0 to 73\u00b0)"
+   },
+   {
+    "ask": 0.99,
+    "bid": 0.96,
+    "close": "2026-11-13T06:00:00Z",
+    "closed_at": "2026-11-13T12:21:24Z",
+    "cost": 9.7,
+    "entry": 0.97,
+    "entry_fee": 0.0,
+    "event": "KXLOWTPHIL-26NOV12",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-12T20:32:16Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-12T20:36:45Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-12T19:27:16Z",
+    "outcome": "no",
+    "placed": "2026-11-12T19:27:16Z",
+    "pnl": 0.3,
+    "price": 0.97,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.3093,
+      1.0
+     ],
+     "100": [
+      100.0,
+      3.0928,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.7732,
+      1.0
+     ],
+     "50": [
+      50.0,
+      1.5464,
+      1.0
+     ]
+    },
+    "series": "KXLOWTPHIL",
+    "shares": 10.0,
+    "side": "no",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXLOWTPHIL-26NOV12-B47.5",
+    "title": "Will the minimum temperature be 47-48\u00b0 on Nov 12, 2026? (47\u00b0 to 48\u00b0)"
+   },
+   {
+    "ask": 0.99,
+    "bid": 0.93,
+    "close": "2026-11-13T06:00:00Z",
+    "closed_at": "2026-11-13T12:21:24Z",
+    "cost": 9.4,
+    "entry": 0.94,
+    "entry_fee": 0.0,
+    "event": "KXLOWTSDF-26NOV12",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-13T00:17:22Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-13T00:21:30Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-12T23:12:22Z",
+    "outcome": "no",
+    "placed": "2026-11-12T23:12:22Z",
+    "pnl": 0.6,
+    "price": 0.94,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.6383,
+      1.0
+     ],
+     "100": [
+      40.42,
+      2.58,
+      0.4042
+     ],
+     "25": [
+      25.0,
+      1.5957,
+      1.0
+     ],
+     "50": [
+      40.42,
+      2.58,
+      0.8084
+     ]
+    },
+    "series": "KXLOWTSDF",
+    "shares": 10.0,
+    "side": "no",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXLOWTSDF-26NOV12-B36.5",
+    "title": "Will the minimum temperature be 36-37\u00b0 on Nov 12, 2026? (36\u00b0 to 37\u00b0)"
    }
   ],
   "created": "2026-11-12T17:30:47Z",
@@ -78163,39 +78433,6 @@
   "last_scan": "2026-11-13T11:41:52Z",
   "min_cash": 0.0,
   "orders": {
-   "KXAAAGASDGA-26NOV13-3.3900": {
-    "ask": 0.97,
-    "bid": 0.95,
-    "chance": 0.96,
-    "check_after": "2026-11-13T12:21:07Z",
-    "close": "2026-11-13T04:59:00Z",
-    "cost": 9.6,
-    "entry_fee": 0.0,
-    "event": "KXAAAGASDGA-26NOV13",
-    "expires": "2026-11-12T18:38:00Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-12T18:42:15Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "no",
-    "placed": "2026-11-12T17:33:00Z",
-    "price": 0.96,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.4167,
-     "100": 43.69,
-     "25": 26.0417,
-     "50": 43.69
-    },
-    "series": "KXAAAGASDGA",
-    "shares": 10.0,
-    "side": "no",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXAAAGASDGA-26NOV13-3.3900",
-    "title": "Will average **gas prices** be above $3.3900? (Above 3.3900)",
-    "what": "bought NO on Kalshi, waiting for the result"
-   },
    "KXAFCONTOTAL-26NOV13COMCOG-5": {
     "ask": 0.95,
     "bid": 0.93,
@@ -78644,44 +78881,11 @@
     "title": "Luis Carlos Alvarez Valdes wins (Luis Carlos Alvarez Valdes)",
     "what": "bought YES on Kalshi, waiting for the result"
    },
-   "KXLOWTATL-26NOV12-T51": {
-    "ask": 0.99,
-    "bid": 0.94,
-    "chance": 0.95,
-    "check_after": "2026-11-13T12:21:07Z",
-    "close": "2026-11-13T06:00:00Z",
-    "cost": 9.5,
-    "entry_fee": 0.0,
-    "event": "KXLOWTATL-26NOV12",
-    "expires": "2026-11-13T00:17:22Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-13T00:21:30Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "no",
-    "placed": "2026-11-12T23:12:22Z",
-    "price": 0.95,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.5263,
-     "100": 15.63,
-     "25": 15.63,
-     "50": 15.63
-    },
-    "series": "KXLOWTATL",
-    "shares": 10.0,
-    "side": "no",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXLOWTATL-26NOV12-T51",
-    "title": "Will the minimum temperature be >51\u00b0 on Nov 12, 2026? (52\u00b0 or above)",
-    "what": "bought NO on Kalshi, waiting for the result"
-   },
    "KXLOWTCHI-26NOV12-B34.5": {
     "ask": 0.95,
     "bid": 0.91,
     "chance": 0.92,
-    "check_after": "2026-11-13T12:21:07Z",
+    "check_after": "2026-11-13T12:51:24Z",
     "close": "2026-11-13T07:00:00Z",
     "cost": 9.2,
     "entry_fee": 0.0,
@@ -78714,7 +78918,7 @@
     "ask": 0.99,
     "bid": 0.94,
     "chance": 0.95,
-    "check_after": "2026-11-13T12:21:07Z",
+    "check_after": "2026-11-13T12:51:24Z",
     "close": "2026-11-13T08:00:00Z",
     "cost": 9.5,
     "entry_fee": 0.0,
@@ -78775,105 +78979,6 @@
     "title": "Will the minimum temperature be <33\u00b0 on Nov 13, 2026? (32\u00b0 or below)",
     "what": "bought NO on Kalshi, waiting for the result"
    },
-   "KXLOWTMIA-26NOV12-B72.5": {
-    "ask": 0.99,
-    "bid": 0.94,
-    "chance": 0.95,
-    "check_after": "2026-11-13T12:21:07Z",
-    "close": "2026-11-13T06:00:00Z",
-    "cost": 9.5,
-    "entry_fee": 0.0,
-    "event": "KXLOWTMIA-26NOV12",
-    "expires": "2026-11-13T00:17:22Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-13T00:21:30Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "yes",
-    "placed": "2026-11-12T23:12:22Z",
-    "price": 0.95,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.08,
-     "100": 10.08,
-     "25": 10.08,
-     "50": 10.08
-    },
-    "series": "KXLOWTMIA",
-    "shares": 10.0,
-    "side": "yes",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXLOWTMIA-26NOV12-B72.5",
-    "title": "Will the minimum temperature be 72-73\u00b0 on Nov 12, 2026? (72\u00b0 to 73\u00b0)",
-    "what": "bought YES on Kalshi, waiting for the result"
-   },
-   "KXLOWTPHIL-26NOV12-B47.5": {
-    "ask": 0.99,
-    "bid": 0.96,
-    "chance": 0.97,
-    "check_after": "2026-11-13T12:21:07Z",
-    "close": "2026-11-13T06:00:00Z",
-    "cost": 9.7,
-    "entry_fee": 0.0,
-    "event": "KXLOWTPHIL-26NOV12",
-    "expires": "2026-11-12T20:32:16Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-12T20:36:45Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "no",
-    "placed": "2026-11-12T19:27:16Z",
-    "price": 0.97,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.3093,
-     "100": 103.0928,
-     "25": 25.7732,
-     "50": 51.5464
-    },
-    "series": "KXLOWTPHIL",
-    "shares": 10.0,
-    "side": "no",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXLOWTPHIL-26NOV12-B47.5",
-    "title": "Will the minimum temperature be 47-48\u00b0 on Nov 12, 2026? (47\u00b0 to 48\u00b0)",
-    "what": "bought NO on Kalshi, waiting for the result"
-   },
-   "KXLOWTSDF-26NOV12-B36.5": {
-    "ask": 0.99,
-    "bid": 0.93,
-    "chance": 0.94,
-    "check_after": "2026-11-13T12:21:07Z",
-    "close": "2026-11-13T06:00:00Z",
-    "cost": 9.4,
-    "entry_fee": 0.0,
-    "event": "KXLOWTSDF-26NOV12",
-    "expires": "2026-11-13T00:17:22Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-13T00:21:30Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "no",
-    "placed": "2026-11-12T23:12:22Z",
-    "price": 0.94,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.6383,
-     "100": 43.0,
-     "25": 26.5957,
-     "50": 43.0
-    },
-    "series": "KXLOWTSDF",
-    "shares": 10.0,
-    "side": "no",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXLOWTSDF-26NOV12-B36.5",
-    "title": "Will the minimum temperature be 36-37\u00b0 on Nov 12, 2026? (36\u00b0 to 37\u00b0)",
-    "what": "bought NO on Kalshi, waiting for the result"
-   },
    "KXNBA1H-26NOV13GSWSAS-TIE": {
     "ask": 0.99,
     "bid": 0.96,
@@ -78910,7 +79015,7 @@
     "ask": 0.9647,
     "bid": 0.9196,
     "chance": 0.9296,
-    "check_after": "2026-11-13T12:21:07Z",
+    "check_after": "2026-11-13T12:51:24Z",
     "close": "2026-11-13T04:00:00Z",
     "cost": 9.296,
     "entry_fee": 0.0,
@@ -79231,7 +79336,7 @@
     "ask": 0.98,
     "bid": 0.96,
     "chance": 0.97,
-    "check_after": "2026-11-13T12:21:07Z",
+    "check_after": "2026-11-13T12:51:24Z",
     "close": "2026-11-13T06:00:00Z",
     "cost": 9.7,
     "entry_fee": 0.0,
@@ -79519,7 +79624,7 @@
   },
   "peak_open_cost": 726.4343,
   "positions": {},
-  "realized": -6.1051,
+  "realized": -3.8051,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 1000,
@@ -182216,7 +182321,7 @@
   "skipped_no_cash": 2,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching his 74 open positions. Last new one seen: 2026-11-10.",
    "skips": {}
   },
@@ -182424,7 +182529,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching his 74 open positions. Last new one seen: 2026-11-10.",
    "skips": {}
   },
@@ -187596,7 +187701,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching his 74 open positions. Last new one seen: 2026-11-10.",
    "skips": {}
   },
@@ -187748,7 +187853,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching his 74 open positions. Last new one seen: 2026-11-10.",
    "skips": {}
   },
@@ -192117,7 +192222,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 13 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -192260,7 +192365,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -192781,7 +192886,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 1356 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -194885,7 +194990,7 @@
   "skipped_split": 67,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 897 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -195029,7 +195134,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 105 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -195174,7 +195279,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -195435,7 +195540,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 70 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -198234,8 +198339,8 @@
   "skipped_split": 17,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 3791 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 3785 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -199007,7 +199112,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 46 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -201953,11 +202058,9 @@
   "skipped_split": 309,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 3999 open positions of this wallet; 8 new since the last check. Watching since 2026-11-08.",
-   "skips": {
-    "daily copy limit reached": 8
-   }
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 3998 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "skips": {}
   },
   "unlimited": true
  },
@@ -202507,7 +202610,7 @@
   "skipped_split": 5,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 388 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -202797,7 +202900,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 18 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -203195,7 +203298,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -203367,7 +203470,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 63 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -203617,7 +203720,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 61 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -204042,7 +204145,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 214 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -204066,7 +204169,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 411 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -205043,7 +205146,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 170 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -205142,7 +205245,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 16 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -205385,7 +205488,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 6 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -208180,7 +208283,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 866 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -209589,7 +209692,7 @@
   "skipped_split": 9,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 81 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -209613,7 +209716,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 39 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -209757,7 +209860,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 177 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -209920,8 +210023,8 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 1715 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 1714 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -210064,7 +210167,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 98 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -210087,7 +210190,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 120 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -210376,7 +210479,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 116 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -210745,7 +210848,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 1210 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -210768,7 +210871,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 20 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -211469,7 +211572,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 933 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -214314,13 +214417,15 @@
   "realized": -9.702736,
   "refills": 0,
   "skipped_cap": 32,
-  "skipped_chase": 6,
+  "skipped_chase": 7,
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 70 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 71 open positions of this wallet; 1 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "too late (price 5c+ above what they paid)": 1
+   }
   },
   "unlimited": true
  },
@@ -214462,7 +214567,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 26 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -214622,7 +214727,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 67 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -218062,7 +218167,7 @@
   "skipped_split": 54,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 199 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -218454,7 +218559,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 48 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -219455,7 +219560,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 12 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -219480,7 +219585,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -219946,7 +220051,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 368 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -219971,7 +220076,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -220789,7 +220894,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 13 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -221150,7 +221255,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -222279,7 +222384,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 1356 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -225262,7 +225367,7 @@
   "skipped_split": 67,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 897 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -225787,7 +225892,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 105 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -226682,7 +226787,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -227552,7 +227657,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 70 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -230931,8 +231036,8 @@
   "skipped_split": 17,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 3791 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 3785 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -232674,7 +232779,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 46 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -236812,11 +236917,9 @@
   "skipped_split": 309,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 3999 open positions of this wallet; 8 new since the last check. Watching since 2026-11-08.",
-   "skips": {
-    "daily copy limit reached": 8
-   }
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 3998 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "skips": {}
   },
   "unlimited": true
  },
@@ -238043,7 +238146,7 @@
   "skipped_split": 5,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 388 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -238683,7 +238786,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 18 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -239659,7 +239762,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -240086,7 +240189,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 63 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -241560,7 +241663,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 61 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -242507,7 +242610,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 214 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -243111,7 +243214,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 411 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -245353,7 +245456,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 170 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -246156,7 +246259,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 16 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -246816,7 +246919,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 6 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -251198,7 +251301,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 866 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -253284,7 +253387,7 @@
   "skipped_split": 9,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 81 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -253528,7 +253631,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 39 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -253915,7 +254018,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 177 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -254386,8 +254489,8 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 1715 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 1714 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -255613,7 +255716,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 98 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -256042,7 +256145,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 120 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -256644,7 +256747,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 116 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -257094,7 +257197,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 1210 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -257133,7 +257236,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 20 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -258903,7 +259006,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 933 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -262253,13 +262356,15 @@
   "realized": -18.091636,
   "refills": 0,
   "skipped_cap": 32,
-  "skipped_chase": 6,
+  "skipped_chase": 7,
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
-   "msg": "Watching 70 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-13T12:21:24Z",
+   "msg": "Watching 71 open positions of this wallet; 1 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "too late (price 5c+ above what they paid)": 1
+   }
   },
   "unlimited": true
  },
@@ -263160,7 +263265,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 26 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -264067,7 +264172,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 67 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -268615,7 +268720,7 @@
   "skipped_split": 54,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 199 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -269154,7 +269259,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 48 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -270092,7 +270197,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 12 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -270336,7 +270441,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -271424,7 +271529,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 368 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -272688,7 +272793,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-13T12:17:10Z",
+   "at": "2026-11-13T12:21:24Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
