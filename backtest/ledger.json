@@ -1557,6 +1557,19 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "families.py report, backtest/families_comb.md"
+  },
+  {
+   "id": "eight_families_commodities_ufc_f1_golf_music_youtube_rotten_",
+   "date": "2026-11-13",
+   "what": "Eight families (commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes): always No",
+   "tries": 400,
+   "bets": 10164,
+   "groups": 3050,
+   "per100": -4.92,
+   "floor100": -9.25,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "families.py report2, backtest/families_comb2.md"
   }
  ]
 }
