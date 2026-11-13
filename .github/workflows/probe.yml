@@ -65,6 +65,7 @@ jobs:
           case "${{ inputs.what }}" in tw_*) PYTHONUNBUFFERED=1 python3 tweets.py "$(echo '${{ inputs.what }}' | sed 's/^tw_//')"; exit $?;; esac
           case "${{ inputs.what }}" in men_*) PYTHONUNBUFFERED=1 python3 mentions.py "$(echo '${{ inputs.what }}' | sed 's/^men_//')"; exit $?;; esac
           case "${{ inputs.what }}" in ern_*) PYTHONUNBUFFERED=1 python3 earn.py "$(echo '${{ inputs.what }}' | sed 's/^ern_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in fam_*) PYTHONUNBUFFERED=1 python3 families.py peek "$(echo '${{ inputs.what }}' | sed 's/^fam_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kh_*) PYTHONUNBUFFERED=1 python3 khouse.py "$(echo '${{ inputs.what }}' | sed 's/^kh_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
