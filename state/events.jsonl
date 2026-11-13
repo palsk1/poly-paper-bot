@@ -9354,3 +9354,6 @@
 {"fee": 0.0058, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the Washington Commanders make the 2027 NFL Playoffs?", "token": "91849533645496354757754581927093055254331827774408717350398774673534252594357", "track": "wb_cigarettes", "ts": "2026-11-13T04:10:44Z", "type": "paper_buy"}
 {"fee": 0.0107, "outcome": "No", "price": 0.955, "shares": 5, "title": "Will Elon Musk post 240-259 tweets from November 6 to November 13, 2026?", "token": "37559222943216493520874893809228093783556241213493400827721104283668182776997", "track": "endgame_sell98", "ts": "2026-11-13T04:11:40Z", "type": "paper_buy"}
 {"pnl": -9.5, "price": 0.95, "shares": 10.0, "side": "yes", "ticker": "KXBTCD-26NOV1223-T69299.99", "track": "kalshi_patient", "ts": "2026-11-13T04:11:41Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFL1HFT-26NOV12WASNYG-TIENYG", "track": "kalshi_patient", "ts": "2026-11-13T04:16:55Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFL1QSPREAD-26NOV12WASNYG-WAS8", "track": "kalshi_patient", "ts": "2026-11-13T04:16:55Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "yes", "ticker": "KXNFLTEAMTOTAL-26NOV12WASNYG-WAS8", "track": "kalshi_patient", "ts": "2026-11-13T04:16:55Z", "type": "kpatient_result"}
