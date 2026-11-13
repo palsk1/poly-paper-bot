@@ -102,6 +102,20 @@ Written before the first live bet (`khouse.py`, `backtest/khouse.md`). The histo
 - A pass still leaves a tiny real-money test (paper can't see other robots stepping in front of our order) and
   Jan's check that he may trade on Kalshi from Sweden.
 
+## 5e. Proposed live test: postcount_no (written 2026-11-12, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`tweets.py`, `backtest/tweets.md`). The history says +$4.16 per $100 on 825 bets,
+"Promising, needs more bets", but the rule (No only, No at 10c or more) was picked after looking, and it made only
++$1.53 on the count windows opened later. Only live bets can settle it.
+
+- **What counts:** every finished `postcount_no` bet from the track's first run, rules as in config `postcount_no`
+  (a rule change restarts the count). Bets in the same count window count once.
+- **When:** once, on 1 Jan 2027. Peeks before that don't count.
+- **Pass:** 150 or more finished bets, ahead, and the low end of the luck range above -$5 per $100 (the same bar
+  as the holdout tests in section 5).
+- **Honest note:** at about 3 bets a day this cannot be proven by 1 Jan; a pass only means "still alive".
+- **Anything else:** not proven, keep it on paper.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.

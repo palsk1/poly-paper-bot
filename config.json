@@ -134,6 +134,12 @@
       "source": "draws",
       "rules": "soccer_draw"
     },
+    "postcount_no": {
+      "label": "UNTESTED (added 2026-11-12). Post counts, buy NO: in 'how many posts will Elon Musk / Trump / the White House make' markets, a counter (posts so far + what the same days brought in the last 8 weeks) says how likely each count range is. Where the Yes price is 10c or more above the counter, buys No (only when No costs 10c or more). History: +$4.16 per $100 on 825 bets, 'Promising, needs more bets', thin (backtest/tweets.md). One bet per market, real order-book fills. $100 paper",
+      "start_cash": 100,
+      "source": "postcount",
+      "rules": "postcount_no"
+    },
     "quiet_no": {
       "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1807,6 +1813,23 @@
       "scan_every_minutes": 60,
       "picks_per_scan": 10,
       "max_open": 40,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "postcount_no": {
+      "why": "2026-11-12 tweets.py (backtest/tweets.md, new-strategy thread): on 216 finished count windows (3,267 markets), checked every 30 minutes and bought at the next real trade + 1c + fee, buying No where Yes was 10c+ above a simple counting model made +$4.16 per $100 on 825 bets (exam: Promising, needs more bets). Weak spots: +$1.53 on the windows opened later, Elon alone +$1.57, gone at +3c cost. Buying Yes and betting both sides lost. No under 10c is excluded (one 2c lottery ticket made half the unfiltered profit). UNTESTED live. Claude's track, rule changes reported.",
+      "min_gap": 0.10,
+      "min_gap_note": "Listed Yes price minus the counter's chance must be 10c or more.",
+      "min_price": 0.10,
+      "max_price": 0.97,
+      "min_model_edge": 0.07,
+      "min_model_edge_note": "After the real asking price and the fee, No must still be 7c under the counter's chance (10c gap minus up to 2c of slip and about 1c of fee).",
+      "max_over_listed": 0.02,
+      "max_over_listed_note": "Skip when the real ask is 2c+ above the listed price: the history test dies at +3c.",
+      "scan_every_minutes": 30,
+      "picks_per_scan": 10,
+      "max_open": 60,
       "max_per_theme": 999,
       "take_profit": null,
       "stop_loss": null
