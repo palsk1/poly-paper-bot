@@ -9689,3 +9689,7 @@
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV130145-45", "track": "kc_maker_safe", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV130145-45", "track": "kc_maker_safe", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV130145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": -0.0969, "price": 0.891, "reason": "wallet exit (book)", "title": "Viktor Orb\u00e1n arrested by...?", "token": "91371990443905427084183653154205644501304831560775759416239896135938845721474", "track": "wb_blondbeast", "ts": "2026-11-13T06:55:27Z", "type": "paper_close"}
+{"minutes_left": 3.47, "price": 0.973, "queue": 2570.96, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV130200-00", "track": "kc_maker", "ts": "2026-11-13T06:56:32Z", "type": "kmaker_order"}
+{"minutes_left": 3.47, "price": 0.986, "queue": 252.7, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV130200-00", "track": "kc_maker", "ts": "2026-11-13T06:56:33Z", "type": "kmaker_order"}
+{"minutes_left": 3.47, "price": 0.978, "queue": 290.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV130200-00", "track": "kc_maker", "ts": "2026-11-13T06:56:34Z", "type": "kmaker_order"}
