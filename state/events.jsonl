@@ -10234,3 +10234,5 @@
 {"fee": 0.0544, "outcome": "Yes", "price": 0.32, "shares": 5, "title": "Will Jensen Huang be the #1 searched person on Google this year?", "token": "85043101954632833366776217713008253527526240281425655340845629774871693945979", "track": "wb_betwick", "ts": "2026-11-13T13:10:36Z", "type": "paper_buy"}
 {"minutes_left": 3.53, "price": 0.981, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV130815-15", "track": "kc_maker", "ts": "2026-11-13T13:11:29Z", "type": "kmaker_order"}
 {"minutes_left": 3.53, "price": 0.981, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV130815-15", "track": "kc_maker_safe", "ts": "2026-11-13T13:11:29Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.19, "price": 0.981, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV130815-15", "track": "kc_maker", "ts": "2026-11-13T13:16:35Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.19, "price": 0.981, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV130815-15", "track": "kc_maker_safe", "ts": "2026-11-13T13:16:35Z", "type": "kmaker_fill"}
