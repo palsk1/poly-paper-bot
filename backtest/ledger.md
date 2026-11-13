@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**125 ideas examined, in about 55,255 versions.** 88 dropped, 37 still being tested or waiting. **Looks real: 2.**
+**128 ideas examined, in about 56,455 versions.** 91 dropped, 37 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 125 ideas that are all worthless, the luckiest one still looks good. With 125 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 128 ideas that are all worthless, the luckiest one still looks good. With 128 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -104,6 +104,8 @@ Why count: if you test 125 ideas that are all worthless, the luckiest one still 
 | 2026-11-12 | Post-count markets: buy No (10c+) where the counting model says Yes is 10c+ too dear | 55 | 213 | +$4.16 | Promising, needs more bets | lead: wants a live paper test | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model, both sides, 5c+ apart | 55 | 214 | -$0.89 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model says Yes is 10c+ too cheap (buy Yes) | 55 | 212 | -$4.08 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
+| 2026-11-13 | always No, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes | 400 | 3050 | -$4.92 | Losing | dropped | families.py report2, backtest/families_comb2.md |
+| 2026-11-13 | always Yes, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes | 400 | 3036 | -$20.94 | Losing | dropped | families.py report2, backtest/families_comb2.md |
 | 2026-11-13 | Box office: bet against an 8c+ jump within a day | 45 | 141 | -$34.02 | Losing | dropped | boxoffice.py, backtest/boxoffice.md |
 | 2026-11-13 | Box office: buy No where Yes is under 25c before the weekend | 45 | 65 | +$2.25 | Ahead, but could be luck | dropped | boxoffice.py, backtest/boxoffice.md |
 | 2026-11-13 | Box office: buy Yes on brackets at 65c+ before the weekend | 45 | 34 | +$14.77 | Ahead, but could be luck | dropped | boxoffice.py, backtest/boxoffice.md |
@@ -117,12 +119,13 @@ Why count: if you test 125 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Earthquake markets: buy where a counting model and the price are 20c+ apart | 70 | 40 | +$13.32 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
 | 2026-11-13 | Earthquake markets: No on long shots (Yes 3-25c), prices alone | 70 | 79 | +$1.26 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
 | 2026-11-13 | Earthquake markets: same, 10c+ apart | 70 | 59 | +$11.46 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
-| 2026-11-13 | Eight families (commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes): always No | 400 | 3050 | -$4.92 | Losing | dropped | families.py report2, backtest/families_comb2.md |
 | 2026-11-13 | Mention markets: always buy No, since Apr 2026 (+3c) | 85 | 667 | -$1.27 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: buy No where Yes is 20c+ above the word's own record (since Apr 2026, worst price +3c) | 85 | 244 | +$15.25 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: buy Yes where the word's record is 20c+ above the price (since Apr 2026) | 85 | 233 | -$10.79 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: same rule if buying costs 5c more (since Apr 2026) | 85 | 243 | +$7.74 | Ahead, but could be luck | lead: cost check | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: same rule, June 2024 - Nov 2026 | 85 | 427 | +$15.66 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
+| 2026-11-13 | No on long shots, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes | 400 | 1663 | -$3.53 | Losing | dropped | families.py report2, backtest/families_comb2.md |
+| 2026-11-13 | No where Yes is 50-75c, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes | 400 | 629 | +$4.18 | Ahead, but could be luck | dropped | families.py report2, backtest/families_comb2.md |
 | 2026-11-13 | Rotten Tomatoes: No where Yes is 50-75c, early in the market's life | 200 | 45 | +$23.08 | Ahead, but could be luck | lean: 63 bets, no track | families.py report, backtest/families_comb.md |
 | 2026-11-13 | Rotten Tomatoes: same, Yes at 40-80c | 200 | 50 | +$16.97 | Ahead, but could be luck | lean: small, no track | families.py report, backtest/families_comb.md |
 | 2026-11-13 | Stock price markets: buy where a swing model and the price are 10c+ apart | 40 | 392 | -$26.06 | Losing | dropped | stocks.py, backtest/stocks.md |

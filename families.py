@@ -339,7 +339,7 @@ def report2():
               "which is a different bet, and still unproven).\n")
         print("## The exam\n")
         for nm, _, _, st in POOL:
-            name = "Eight families (commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes): " + nm.split(" (the")[0]
+            name = nm.split(" (")[0].split(", first")[0] + ", pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes"
             card = exam.score(pool[nm], name, tries=TRIES2, src="families.py report2, backtest/families_comb2.md", status=st, quiet=True)
             print(f"- **{nm}**: {card['bets']} bets in {card.get('groups')} separate groups, {earn.usd(card.get('per100'))} per $100, "
                   f"luck range {earn.usd(card.get('lo100'))} to {earn.usd(card.get('hi100'))}, verdict **{card.get('verdict')}**.")
