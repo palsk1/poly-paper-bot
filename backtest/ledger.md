@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**117 ideas examined, in about 53,894 versions.** 83 dropped, 34 still being tested or waiting. **Looks real: 2.**
+**120 ideas examined, in about 54,104 versions.** 86 dropped, 34 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 117 ideas that are all worthless, the luckiest one still looks good. With 117 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 120 ideas that are all worthless, the luckiest one still looks good. With 120 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -114,6 +114,9 @@ Why count: if you test 117 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Earnings markets: buy Yes on companies that missed 2+ times before | 60 | 60 | +$10.28 | Ahead, but could be luck | dropped | earn.py, backtest/earn.md |
 | 2026-11-13 | Earnings markets: buy Yes under 40c a day before the release | 60 | 116 | -$12.07 | Behind, but could be bad luck | dropped | earn.py, backtest/earn.md |
 | 2026-11-13 | Earnings markets: follow an 8c+ jump in the last 3 days | 60 | 505 | -$21.48 | Losing | dropped | earn.py, backtest/earn.md |
+| 2026-11-13 | Earthquake markets: buy where a counting model and the price are 20c+ apart | 70 | 40 | +$13.32 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
+| 2026-11-13 | Earthquake markets: No on long shots (Yes 3-25c), prices alone | 70 | 79 | +$1.26 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
+| 2026-11-13 | Earthquake markets: same, 10c+ apart | 70 | 59 | +$11.46 | Ahead, but could be luck | dropped | quakes.py, backtest/quakes.md |
 | 2026-11-13 | Mention markets: always buy No, since Apr 2026 (+3c) | 85 | 667 | -$1.27 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: buy No where Yes is 20c+ above the word's own record (since Apr 2026, worst price +3c) | 85 | 244 | +$15.25 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: buy Yes where the word's record is 20c+ above the price (since Apr 2026) | 85 | 233 | -$10.79 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |

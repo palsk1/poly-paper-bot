@@ -1466,6 +1466,45 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "stocks.py comb, backtest/stocks_comb.md"
+  },
+  {
+   "id": "earthquake_markets_buy_where_a_counting_model_and_the_price_",
+   "date": "2026-11-13",
+   "what": "Earthquake markets: buy where a counting model and the price are 20c+ apart",
+   "tries": 70,
+   "bets": 64,
+   "groups": 40,
+   "per100": 13.32,
+   "floor100": -41.42,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "quakes.py, backtest/quakes.md"
+  },
+  {
+   "id": "earthquake_markets_same_10c_apart",
+   "date": "2026-11-13",
+   "what": "Earthquake markets: same, 10c+ apart",
+   "tries": 70,
+   "bets": 116,
+   "groups": 59,
+   "per100": 11.46,
+   "floor100": -45.82,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "quakes.py, backtest/quakes.md"
+  },
+  {
+   "id": "earthquake_markets_no_on_long_shots_yes_3_25c_prices_alone",
+   "date": "2026-11-13",
+   "what": "Earthquake markets: No on long shots (Yes 3-25c), prices alone",
+   "tries": 70,
+   "bets": 212,
+   "groups": 79,
+   "per100": 1.26,
+   "floor100": -6.25,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "quakes.py, backtest/quakes.md"
   }
  ]
 }
