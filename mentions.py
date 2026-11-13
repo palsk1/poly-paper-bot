@@ -78,12 +78,11 @@ def slim(e, m):
 
 def pages():
     """Every finished event carrying the Mentions tag. Tries the listing styles Gamma has, keeps the first that answers."""
-    tries = [("keyset", {"tag_slug": "mention-markets"}), ("keyset", {"tag_id": 100343}),
-             ("offset", {"tag_slug": "mention-markets"}), ("offset", {"tag_id": 100343})]
+    tries = [("keyset", {"tag_id": 100343}), ("offset", {"tag_id": 100343})]   # more than 50 a page answers HTTP 406
     for kind, base in tries:
         out, cur, off, bad = [], None, 0, 0
-        for _ in range(3000):
-            p = dict(base, closed="true", limit=100)
+        for _ in range(6000):
+            p = dict(base, closed="true", limit=50)
             if kind == "keyset" and cur:
                 p["after_cursor"] = cur
             if kind == "offset":
@@ -101,7 +100,7 @@ def pages():
             if not rows:
                 break
             out += rows
-            off += 100
+            off += 50
             cur = r.get("next_cursor") if isinstance(r, dict) else None
             if len(out) % 2000 == 0:
                 print(f"  {kind} {base}: {len(out)} events ({(time.time() - T0) / 60:.0f} min)", flush=True)
