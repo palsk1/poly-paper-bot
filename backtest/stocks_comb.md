@@ -77,3 +77,7 @@ No stock stands out: No beats Yes on most of them, and both lose. Following or b
 - **Stock price markets: No on long shots (Yes 5-25c), 4 and 2 hours before the close**: 339 bets in 298 separate groups, +$5.33 per $100, luck range +$1.34 to +$9.32, worst case -$3.68 per $100, verdict **Promising, needs more bets**.
 - **Stock price markets: same, one-day markets only**: 258 bets in 224 separate groups, +$5.93 per $100, luck range +$2.03 to +$9.84, worst case -$2.58 per $100, verdict **Promising, needs more bets**.
 - **Stock price markets: same, at the worst price of the next 2 hours**: 589 bets in 483 separate groups, -$5.58 per $100, luck range -$8.90 to -$2.26, worst case -$12.76 per $100, verdict **Losing**.
+
+## Correction, same day (13 Nov)
+
+The earthquake dig (`quakes.md`) found that Polymarket's trade list sometimes shows trades on the wrong side, also in bigger trades. Checked here: 33 of the lead's 339 bets "bought" No under 70c although Yes had just traded at 5-25c, and those 33 made about half of the profit. The paper track `stock_no` only buys No at 75-95c. On just those buys the history is **+$2.60 per $100 on 254 bets** (first half +$1.23, second half +$3.98), exam verdict **Ahead, but could be luck**; +$1.48 at 1c more, +$0.38 at 2c more. Weaker than first reported. The live track still decides.

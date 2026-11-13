@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**120 ideas examined, in about 54,104 versions.** 86 dropped, 34 still being tested or waiting. **Looks real: 2.**
+**121 ideas examined, in about 54,255 versions.** 86 dropped, 35 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 120 ideas that are all worthless, the luckiest one still looks good. With 120 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 121 ideas that are all worthless, the luckiest one still looks good. With 121 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -123,6 +123,7 @@ Why count: if you test 120 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Mention markets: same rule if buying costs 5c more (since Apr 2026) | 85 | 243 | +$7.74 | Ahead, but could be luck | lead: cost check | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: same rule, June 2024 - Nov 2026 | 85 | 427 | +$15.66 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Stock price markets: buy where a swing model and the price are 10c+ apart | 40 | 392 | -$26.06 | Losing | dropped | stocks.py, backtest/stocks.md |
+| 2026-11-13 | Stock price markets: No on long shots, only buys at 75-95c like the live track | 151 | 230 | +$2.60 | Ahead, but could be luck | live paper track stock_no | stocks.py comb, backtest/stocks_comb.md |
 | 2026-11-13 | Stock price markets: No on long shots (Yes 5-25c), 4 and 2 hours before the close | 150 | 298 | +$5.33 | Promising, needs more bets | lean: thin, depends on the buy price | stocks.py comb, backtest/stocks_comb.md |
 | 2026-11-13 | Stock price markets: same, at the worst price of the next 2 hours | 150 | 483 | -$5.58 | Losing | dropped | stocks.py comb, backtest/stocks_comb.md |
 | 2026-11-13 | Stock price markets: same, one-day markets only | 150 | 224 | +$5.93 | Promising, needs more bets | lean: thin, depends on the buy price | stocks.py comb, backtest/stocks_comb.md |
