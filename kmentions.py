@@ -31,7 +31,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(ROOT, "bt_cache", "kmen")
 MK = os.path.join(CACHE, "markets.json.gz")
 OUT = os.path.join(ROOT, "backtest", "kmentions.md")
-BUDGET_MIN = float(os.environ.get("KMN_MIN", "40"))
+BUDGET_MIN = float(os.environ.get("KMN_MIN", "200"))
 WORKERS = int(os.environ.get("KMN_WORKERS", "8"))
 MIN_VOL = 100
 SHARD = 500
@@ -164,7 +164,8 @@ def shard_path(i):
     return os.path.join(CACHE, f"tapes_{i:03d}.json.gz")
 
 
-def do_tapes():
+def do_tapes(part=0, parts=1):
+    """part/parts: several probe runs can work side by side (kmn_tapes-0-4 ... kmn_tapes-3-4), each on its own shards."""
     have = rj(MK, None)
     if not have:
         print("no markets.json.gz, run list first")
@@ -176,6 +177,8 @@ def do_tapes():
         if time.time() - T0 > BUDGET_MIN * 60:
             print("time budget used, run again to resume")
             break
+        if (i // SHARD) % parts != part:
+            continue
         sp = shard_path(i // SHARD)
         got = rj(sp, {}) or {}
         todo = [have["markets"][t] for t in order[i:i + SHARD] if t not in got]
@@ -192,4 +195,8 @@ def do_tapes():
 
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"list": do_list, "tapes": do_tapes}[mode]()
+    if mode.startswith("tapes-"):
+        _, a, b = mode.split("-")
+        do_tapes(int(a), int(b))
+    else:
+        {"list": do_list, "tapes": do_tapes}[mode]()
