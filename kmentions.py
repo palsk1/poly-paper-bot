@@ -24,6 +24,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 import bot
+import exam
 import khouse
 import yesno
 
@@ -191,6 +192,133 @@ def do_tapes(part=0, parts=1):
         print(f"  shard {i // SHARD}: {len(got)} markets, {sum(len(d['tr']) for d in got.values())} trades, "
               f"{sum(1 for d in got.values() if not d['c'])} without quotes, {sum(1 for d in got.values() if not d['tr'])} without trades, "
               f"{sum(1 for d in got.values() if not d['full'])} cut short ({time.time() - T0:.0f}s)")
+
+
+# ================================================================ analysis
+FOUND = 7                  # shards 0-6 were looked at first; the rules in backtest/kmentions_prereg.md came from them
+TRIES = 60                 # cuts looked at on the first 3,500 markets before the rules were fixed
+SPORT = ("NBA", "NFL", "MLB", "NCAA", "WCMENTION", "SNF", "TNF", "MNF", "WNBA", "FIGHT", "NHL", "WOMENTION", "ATHLETE", "UFC")
+
+
+def kind(s):
+    if "EARNINGS" in s:
+        return "earnings"
+    if any(k in s for k in SPORT):
+        return "sports"
+    if "TRUMP" in s or "DJT" in s:
+        return "trump"
+    return "other"
+
+
+def norm(w):
+    return re.sub(r"\s+", " ", re.sub(r"\(.*?\)", "", w.lower())).strip()
+
+
+def fee(p):
+    return 0.07 * p * (1 - p)
+
+
+def load():
+    """-> markets, tapes ({ticker: {"c": hourly [end, yes bid, yes ask, volume], "tr": trades, "new": fresh-test market}}).
+    Trap: Kalshi's live candle endpoint gives prices in dollars under the cents name, so most hourly quotes came
+    out 100 times too small. A market whose quotes never pass 1c while its trades do is scaled back up here."""
+    ms = (rj(MK, {}) or {}).get("markets") or {}
+    tp, i = {}, 0
+    while os.path.exists(shard_path(i)) or i < 150:
+        if os.path.exists(shard_path(i)):
+            for tk, v in (rj(shard_path(i), {}) or {}).items():
+                vals = [x for c in v["c"] for x in c[1:3] if x is not None]
+                if vals and max(vals) <= 0.0101 and v["tr"] and max(t[1] for t in v["tr"]) > 20:
+                    for c in v["c"]:
+                        c[1] = None if c[1] is None else round(c[1] * 100, 4)
+                        c[2] = None if c[2] is None else round(c[2] * 100, 4)
+                v["new"] = i >= FOUND
+                tp[tk] = v
+        i += 1
+    return ms, tp
+
+
+class Record:
+    """How often each word came up before in its series, read only up to a moment."""
+
+    def __init__(self, ms):
+        self.d = collections.defaultdict(lambda: ([], [0]))
+        for m in sorted(ms.values(), key=lambda m: m["close"]):
+            if m["s"].startswith("KXMVE"):
+                continue
+            for k in ((m["s"], norm(m["w"])), m["s"]):
+                ts, cs = self.d[k]
+                ts.append(m["close"])
+                cs.append(cs[-1] + (m["res"] == "yes"))
+
+    def upto(self, k, t):
+        import bisect
+        ts, cs = self.d.get(k) or ([], [0])
+        i = bisect.bisect_left(ts, t)
+        return cs[i], i
+
+
+def looks(ms, tp, hours=(48, 24, 12, 6, 3, 1)):
+    """One row per market and look time. The look time counts back from the FIRST close in the event, because a
+    market's own close time gives the result away (markets close early once the word is said)."""
+    first = {}
+    for m in ms.values():
+        first[m["ev"]] = min(first.get(m["ev"], 1e18), m["close"])
+    rec, rows = Record(ms), []
+    for tk, v in tp.items():
+        m = ms.get(tk)
+        if not m or m["s"].startswith("KXMVE") or not v["c"]:
+            continue
+        for h in hours:
+            t = first[m["ev"]] - h * 3600
+            if t < m["open"] + 3600:
+                continue
+            c = None
+            for x in v["c"]:
+                if x[0] > t:
+                    break
+                c = x
+            if not c or c[1] is None or c[2] is None or t - c[0] > 3 * 3600:
+                continue
+            y, n = rec.upto((m["s"], norm(m["w"])), t)
+            rows.append({"tk": tk, "s": m["s"], "ev": m["ev"], "h": h, "t": t, "bid": c[1], "ask": c[2], "y": y, "n": n,
+                         "yes": m["res"] == "yes", "vol": m["vol"], "new": v["new"], "k": kind(m["s"]), "w": m["w"]})
+    return rows
+
+
+def ok(r, gap=0.10):
+    return r["bid"] >= 0.03 and r["ask"] <= 0.97 and r["ask"] - r["bid"] <= gap
+
+
+def no_bets(rows, extra=0.0):
+    out = []
+    for r in rows:
+        p = 1 - r["bid"] + extra
+        if p >= 0.995:
+            continue
+        cost = p + fee(p)
+        out.append({"cost": cost, "pay": 0.0 if r["yes"] else 1.0, "pnl": (0.0 if r["yes"] else 1.0) - cost, "ev": r["ev"], "t": r["t"], "tk": r["tk"], "w": r["w"], "p": p})
+    return out
+
+
+def yes_bets(rows, extra=0.0):
+    out = []
+    for r in rows:
+        p = r["ask"] + extra
+        if p >= 0.995:
+            continue
+        cost = p + fee(p)
+        out.append({"cost": cost, "pay": 1.0 if r["yes"] else 0.0, "pnl": (1.0 if r["yes"] else 0.0) - cost, "ev": r["ev"], "t": r["t"], "tk": r["tk"], "w": r["w"], "p": p})
+    return out
+
+
+def per100(b):
+    c = sum(x["cost"] for x in b)
+    return 100 * sum(x["pnl"] for x in b) / c if c else 0.0
+
+
+RULES = {"T1": lambda r: r["k"] == "earnings", "T2": lambda r: r["k"] != "earnings" and 1 <= r["n"] <= 2,
+         "T3": lambda r: r["k"] != "earnings" and r["n"] >= 3}
 
 
 if __name__ == "__main__":
