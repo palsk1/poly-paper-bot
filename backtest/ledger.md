@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**106 ideas examined, in about 53,099 versions.** 74 dropped, 32 still being tested or waiting. **Looks real: 2.**
+**111 ideas examined, in about 53,324 versions.** 79 dropped, 32 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 106 ideas that are all worthless, the luckiest one still looks good. With 106 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 111 ideas that are all worthless, the luckiest one still looks good. With 111 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -104,6 +104,11 @@ Why count: if you test 106 ideas that are all worthless, the luckiest one still 
 | 2026-11-12 | Post-count markets: buy No (10c+) where the counting model says Yes is 10c+ too dear | 55 | 213 | +$4.16 | Promising, needs more bets | lead: wants a live paper test | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model, both sides, 5c+ apart | 55 | 214 | -$0.89 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model says Yes is 10c+ too cheap (buy Yes) | 55 | 212 | -$4.08 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
+| 2026-11-13 | Box office: bet against an 8c+ jump within a day | 45 | 141 | -$34.02 | Losing | dropped | boxoffice.py, backtest/boxoffice.md |
+| 2026-11-13 | Box office: buy No where Yes is under 25c before the weekend | 45 | 65 | +$2.25 | Ahead, but could be luck | dropped | boxoffice.py, backtest/boxoffice.md |
+| 2026-11-13 | Box office: buy Yes on brackets at 65c+ before the weekend | 45 | 34 | +$14.77 | Ahead, but could be luck | dropped | boxoffice.py, backtest/boxoffice.md |
+| 2026-11-13 | Box office: buy Yes on brackets under 25c before the weekend | 45 | 72 | -$48.18 | Losing | dropped | boxoffice.py, backtest/boxoffice.md |
+| 2026-11-13 | Box office: follow an 8c+ jump within a day | 45 | 138 | -$4.66 | Behind, but could be bad luck | dropped | boxoffice.py, backtest/boxoffice.md |
 | 2026-11-13 | Earnings markets: bet against an 8c+ jump in the last 3 days (worst price of 2h +1c) | 60 | 512 | +$6.03 | Ahead, but could be luck | dropped | earn.py, backtest/earn.md |
 | 2026-11-13 | Earnings markets: buy No on official-number markets at 80-90c | 60 | 65 | +$38.32 | Ahead, but could be luck | dropped | earn.py, backtest/earn.md |
 | 2026-11-13 | Earnings markets: buy Yes on companies that missed 2+ times before | 60 | 60 | +$10.28 | Ahead, but could be luck | dropped | earn.py, backtest/earn.md |
