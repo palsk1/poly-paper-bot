@@ -28,51 +28,39 @@ TAGS = ("mentions", "mention-markets")
 
 
 def peek():
-    for u, p in [(f"{G}/tags/slug/mentions", {}), (f"{G}/tags/slug/mention-markets", {}), (f"{G}/tags", {"limit": 5}),
-                 (f"{G}/events", {"tag_slug": "mentions", "closed": "true", "limit": 3}),
-                 (f"{G}/events", {"tag_slug": "mentions", "closed": "false", "limit": 3}),
-                 (f"{G}/events/keyset", {"tag_slug": "mentions", "closed": "true", "limit": 3}),
-                 (f"{G}/events/keyset", {"tag_slug": "mentions", "closed": "true", "limit": 3, "order": "endDate", "ascending": "true"})]:
+    tests = []
+    for lim in (5, 20, 50, 100):
+        tests.append((f"{G}/events", {"tag_slug": "mention-markets", "closed": "true", "limit": lim}))
+    tests += [(f"{G}/events", {"tag_slug": "mention-markets", "closed": "true", "limit": 20, "offset": 20}),
+              (f"{G}/events", {"tag_slug": "mention-markets", "closed": "false", "limit": 100}),
+              (f"{G}/events", {"tag_id": 100343, "closed": "true", "limit": 20}),
+              (f"{G}/events", {"tag_id": 100343, "closed": "true", "limit": 20, "order": "endDate", "ascending": "false"}),
+              (f"{G}/events", {"tag_id": 100343, "closed": "true", "limit": 20, "end_date_min": "2026-10-01T00:00:00Z", "end_date_max": "2026-10-03T00:00:00Z"}),
+              (f"{G}/events/keyset", {"tag_slug": "mention-markets", "closed": "true", "limit": 20}),
+              (f"{G}/events/keyset", {"tag_id": 100343, "closed": "true", "limit": 20}),
+              (f"{G}/events/keyset", {"tag_id": 100343, "closed": "true", "limit": 20, "end_date_min": "2026-10-01T00:00:00Z", "end_date_max": "2026-10-03T00:00:00Z"}),
+              (f"{G}/events/pagination", {"tag_slug": "mention-markets", "closed": "true", "limit": 20}),
+              (f"{G}/markets", {"tag_id": 100343, "closed": "true", "limit": 100}),
+              (f"{G}/markets/keyset", {"tag_id": 100343, "closed": "true", "limit": 100}),
+              (f"{G}/markets", {"tag_id": 100343, "closed": "true", "limit": 100, "offset": 100, "order": "endDate", "ascending": "true"})]
+    for u, p in tests:
         try:
             r = bot.http_json(u, p)
-            rows = bot.envelope_rows(r, "events", "data") if "events" in u else None
-            if rows:
-                print(f"\n== {u} {p}\n   {len(rows)} rows, keys {list(r.keys()) if isinstance(r, dict) else 'list'}")
-                for e in rows[:3]:
+            key = "events" if "/events" in u else "markets"
+            rows = bot.envelope_rows(r, key, "data")
+            print(f"\n== {u} {p}\n   {len(rows)} rows, keys {list(r.keys())[:8] if isinstance(r, dict) else 'list'}", flush=True)
+            for e in rows[:3]:
+                if key == "events":
                     print("   ", e.get("id"), e.get("slug"), e.get("endDate"), "markets", len(e.get("markets") or []),
-                          "tags", [t.get("slug") for t in e.get("tags") or []], "series", [s.get("slug") for s in e.get("series") or []])
-                    for m in (e.get("markets") or [])[:2]:
+                          "tags", [t.get("slug") for t in e.get("tags") or []][:6], "series", [s.get("slug") for s in e.get("series") or []])
+                    for m in (e.get("markets") or [])[:1]:
                         print("       ", m.get("id"), m.get("question"), m.get("outcomePrices"), m.get("volumeNum"), m.get("conditionId"), m.get("endDate"), m.get("closedTime"))
-                        print("        desc:", str(m.get("description"))[:400].replace("\n", " "))
-            else:
-                print(f"\n== {u} {p}\n   {str(r)[:600]}")
+                        print("        desc:", str(m.get("description"))[:300].replace("\n", " "))
+                else:
+                    print("   ", e.get("id"), e.get("question"), e.get("endDate"), e.get("outcomePrices"), e.get("volumeNum"),
+                          [x.get("slug") for x in e.get("events") or []])
         except Exception as e:
-            print(f"\n== {u} {p}\n   FAILED {str(e)[:200]}")
-    # how many: page through closed events with the tag, 100 at a time, count only
-    for tag in TAGS:
-        n = nm = 0
-        first = last = None
-        fam = collections.Counter()
-        off = 0
-        while off < 60000:
-            try:
-                r = bot.http_json(f"{G}/events", {"tag_slug": tag, "closed": "true", "limit": 100, "offset": off, "order": "endDate", "ascending": "true"})
-            except Exception as e:
-                print("  page failed", off, str(e)[:120])
-                break
-            rows = bot.envelope_rows(r, "events", "data")
-            if not rows:
-                break
-            for e in rows:
-                n += 1
-                nm += len(e.get("markets") or [])
-                d = str(e.get("endDate"))[:7]
-                first = first or d
-                last = d
-                fam[re.sub(r"[-0-9]+$", "", re.sub(r"\d+", "", str(e.get("slug"))))[:38]] += 1
-            off += 100
-        print(f"\ntag {tag}: {n} finished events, {nm} markets, months {first} .. {last}")
-        print("  biggest families:", fam.most_common(60))
+            print(f"\n== {u} {p}\n   FAILED {str(e)[:200]}", flush=True)
 
 
 def slim(e, m):
