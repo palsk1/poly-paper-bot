@@ -1,0 +1,1761 @@
+{
+ "delta": {
+  "G": [
+   60,
+   142
+  ],
+  "S:andy burnham": [
+   4,
+   9
+  ],
+  "S:applied materials": [
+   8,
+   11
+  ],
+  "S:avengers doomsday trailer": [
+   1,
+   18
+  ],
+  "S:cisco": [
+   6,
+   11
+  ],
+  "S:constellation energy": [
+   9,
+   10
+  ],
+  "S:coreweave": [
+   8,
+   16
+  ],
+  "S:joe rogan experience": [
+   7,
+   15
+  ],
+  "S:mamdani": [
+   9,
+   26
+  ],
+  "S:mrbeast": [
+   4,
+   13
+  ],
+  "S:trump": [
+   4,
+   13
+  ],
+  "ST:andy burnham|billion/million/trillion#5+": [
+   1,
+   1
+  ],
+  "ST:andy burnham|defence": [
+   1,
+   1
+  ],
+  "ST:andy burnham|immigration": [
+   0,
+   1
+  ],
+  "ST:andy burnham|mr speaker#30+": [
+   0,
+   1
+  ],
+  "ST:andy burnham|nhs": [
+   0,
+   1
+  ],
+  "ST:andy burnham|reform": [
+   1,
+   1
+  ],
+  "ST:andy burnham|scotland": [
+   1,
+   1
+  ],
+  "ST:andy burnham|trump": [
+   0,
+   1
+  ],
+  "ST:andy burnham|wales": [
+   0,
+   1
+  ],
+  "ST:applied materials|ai#7+": [
+   1,
+   1
+  ],
+  "ST:applied materials|bandwidth": [
+   1,
+   1
+  ],
+  "ST:applied materials|customer#25+": [
+   1,
+   1
+  ],
+  "ST:applied materials|deposition": [
+   1,
+   1
+  ],
+  "ST:applied materials|dram#10+": [
+   1,
+   1
+  ],
+  "ST:applied materials|forecast": [
+   1,
+   1
+  ],
+  "ST:applied materials|growth#20+": [
+   1,
+   1
+  ],
+  "ST:applied materials|hyperscaler": [
+   0,
+   1
+  ],
+  "ST:applied materials|pvd": [
+   1,
+   1
+  ],
+  "ST:applied materials|tariff": [
+   0,
+   1
+  ],
+  "ST:applied materials|tsmc": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|avenger": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|brother": [
+   1,
+   1
+  ],
+  "ST:avengers doomsday trailer|doom/doomsday#5+": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|fantastic": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|galactus/thanos": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|hope": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|hulk": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|kang": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|multiverse/universe": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|mutant": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|parker/peter": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|planet/world": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|professor": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|son": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|space": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|strange": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|tony": [
+   0,
+   1
+  ],
+  "ST:avengers doomsday trailer|wakanda": [
+   0,
+   1
+  ],
+  "ST:cisco|ai#25+": [
+   1,
+   1
+  ],
+  "ST:cisco|backlog": [
+   0,
+   1
+  ],
+  "ST:cisco|debt": [
+   0,
+   1
+  ],
+  "ST:cisco|ebitda": [
+   0,
+   1
+  ],
+  "ST:cisco|infrastructure": [
+   1,
+   1
+  ],
+  "ST:cisco|meraki": [
+   0,
+   1
+  ],
+  "ST:cisco|quantum": [
+   1,
+   1
+  ],
+  "ST:cisco|revenue#5+": [
+   1,
+   1
+  ],
+  "ST:cisco|router": [
+   0,
+   1
+  ],
+  "ST:cisco|security#15+": [
+   1,
+   1
+  ],
+  "ST:cisco|splunk": [
+   1,
+   1
+  ],
+  "ST:constellation energy|auction": [
+   1,
+   1
+  ],
+  "ST:constellation energy|calpine": [
+   1,
+   1
+  ],
+  "ST:constellation energy|crane": [
+   1,
+   1
+  ],
+  "ST:constellation energy|energy#10+": [
+   1,
+   1
+  ],
+  "ST:constellation energy|limerick": [
+   1,
+   1
+  ],
+  "ST:constellation energy|nuclear#20+": [
+   1,
+   1
+  ],
+  "ST:constellation energy|pjm": [
+   1,
+   1
+  ],
+  "ST:constellation energy|power#5+": [
+   1,
+   1
+  ],
+  "ST:constellation energy|trump": [
+   1,
+   1
+  ],
+  "ST:constellation energy|uranium": [
+   0,
+   1
+  ],
+  "ST:coreweave|arr": [
+   1,
+   1
+  ],
+  "ST:coreweave|capital": [
+   1,
+   1
+  ],
+  "ST:coreweave|churn": [
+   0,
+   1
+  ],
+  "ST:coreweave|customer#30+": [
+   1,
+   1
+  ],
+  "ST:coreweave|dividend": [
+   0,
+   1
+  ],
+  "ST:coreweave|fiscal#10+": [
+   0,
+   1
+  ],
+  "ST:coreweave|infrastructure#5+": [
+   1,
+   1
+  ],
+  "ST:coreweave|iran": [
+   0,
+   1
+  ],
+  "ST:coreweave|latency": [
+   0,
+   1
+  ],
+  "ST:coreweave|macroeconomy": [
+   0,
+   1
+  ],
+  "ST:coreweave|openai": [
+   0,
+   1
+  ],
+  "ST:coreweave|pipeline": [
+   1,
+   1
+  ],
+  "ST:coreweave|price#5+": [
+   1,
+   1
+  ],
+  "ST:coreweave|quarter#10+": [
+   1,
+   1
+  ],
+  "ST:coreweave|revenue#20+": [
+   1,
+   1
+  ],
+  "ST:coreweave|trump": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|alien": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|bill gates": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|buddy of mine": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|chimp/monkey": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|cocktail": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|dmt": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|elon/musk": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|fuck/fucking#10+": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|guitar": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|hundred/million/thousand#30+": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|ironic/ironically": [
+   0,
+   1
+  ],
+  "ST:joe rogan experience|question": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|right#50+": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|space": [
+   1,
+   1
+  ],
+  "ST:joe rogan experience|tesla": [
+   0,
+   1
+  ],
+  "ST:mamdani|afford/affordability/affordable": [
+   1,
+   2
+  ],
+  "ST:mamdani|ai/artificial intelligence": [
+   0,
+   2
+  ],
+  "ST:mamdani|billionaire": [
+   0,
+   2
+  ],
+  "ST:mamdani|budget": [
+   0,
+   2
+  ],
+  "ST:mamdani|community": [
+   2,
+   2
+  ],
+  "ST:mamdani|economic/economy": [
+   0,
+   2
+  ],
+  "ST:mamdani|family": [
+   1,
+   2
+  ],
+  "ST:mamdani|grocery": [
+   0,
+   1
+  ],
+  "ST:mamdani|health": [
+   2,
+   2
+  ],
+  "ST:mamdani|heat/weather": [
+   0,
+   2
+  ],
+  "ST:mamdani|nypd": [
+   0,
+   2
+  ],
+  "ST:mamdani|president/trump": [
+   1,
+   2
+  ],
+  "ST:mamdani|safe/safer/safety": [
+   1,
+   1
+  ],
+  "ST:mamdani|school": [
+   1,
+   2
+  ],
+  "ST:mrbeast|build": [
+   0,
+   1
+  ],
+  "ST:mrbeast|chameleon": [
+   0,
+   1
+  ],
+  "ST:mrbeast|chandler": [
+   0,
+   1
+  ],
+  "ST:mrbeast|contestant": [
+   0,
+   1
+  ],
+  "ST:mrbeast|dream": [
+   0,
+   1
+  ],
+  "ST:mrbeast|feastable/feastables": [
+   1,
+   1
+  ],
+  "ST:mrbeast|fight": [
+   0,
+   1
+  ],
+  "ST:mrbeast|find/hide": [
+   1,
+   1
+  ],
+  "ST:mrbeast|grand theft auto/gta": [
+   0,
+   1
+  ],
+  "ST:mrbeast|karl": [
+   0,
+   1
+  ],
+  "ST:mrbeast|minecraft": [
+   1,
+   1
+  ],
+  "ST:mrbeast|prize": [
+   1,
+   1
+  ],
+  "ST:mrbeast|race": [
+   0,
+   1
+  ],
+  "ST:trump|allah": [
+   0,
+   1
+  ],
+  "ST:trump|bibi": [
+   0,
+   1
+  ],
+  "ST:trump|biden (3+ times)": [
+   0,
+   1
+  ],
+  "ST:trump|china/chinese": [
+   1,
+   1
+  ],
+  "ST:trump|election": [
+   0,
+   1
+  ],
+  "ST:trump|hegseth": [
+   1,
+   1
+  ],
+  "ST:trump|hormuz/strait": [
+   0,
+   1
+  ],
+  "ST:trump|iran/iranian (3+ times)": [
+   1,
+   1
+  ],
+  "ST:trump|israel": [
+   0,
+   1
+  ],
+  "ST:trump|putin": [
+   0,
+   1
+  ],
+  "ST:trump|rigged": [
+   0,
+   1
+  ],
+  "ST:trump|russia/ukraine": [
+   1,
+   1
+  ],
+  "ST:trump|tariff": [
+   0,
+   1
+  ],
+  "T:afford/affordability/affordable": [
+   1,
+   2
+  ],
+  "T:ai#25+": [
+   1,
+   1
+  ],
+  "T:ai#7+": [
+   1,
+   1
+  ],
+  "T:ai/artificial intelligence": [
+   0,
+   2
+  ],
+  "T:alien": [
+   0,
+   1
+  ],
+  "T:allah": [
+   0,
+   1
+  ],
+  "T:arr": [
+   1,
+   1
+  ],
+  "T:auction": [
+   1,
+   1
+  ],
+  "T:avenger": [
+   0,
+   1
+  ],
+  "T:backlog": [
+   0,
+   1
+  ],
+  "T:bandwidth": [
+   1,
+   1
+  ],
+  "T:bibi": [
+   0,
+   1
+  ],
+  "T:biden (3+ times)": [
+   0,
+   1
+  ],
+  "T:bill gates": [
+   0,
+   1
+  ],
+  "T:billion/million/trillion#5+": [
+   1,
+   1
+  ],
+  "T:billionaire": [
+   0,
+   2
+  ],
+  "T:brother": [
+   1,
+   1
+  ],
+  "T:buddy of mine": [
+   1,
+   1
+  ],
+  "T:budget": [
+   0,
+   2
+  ],
+  "T:build": [
+   0,
+   1
+  ],
+  "T:calpine": [
+   1,
+   1
+  ],
+  "T:capital": [
+   1,
+   1
+  ],
+  "T:chameleon": [
+   0,
+   1
+  ],
+  "T:chandler": [
+   0,
+   1
+  ],
+  "T:chimp/monkey": [
+   0,
+   1
+  ],
+  "T:china/chinese": [
+   1,
+   1
+  ],
+  "T:churn": [
+   0,
+   1
+  ],
+  "T:cocktail": [
+   0,
+   1
+  ],
+  "T:community": [
+   2,
+   2
+  ],
+  "T:contestant": [
+   0,
+   1
+  ],
+  "T:crane": [
+   1,
+   1
+  ],
+  "T:customer#25+": [
+   1,
+   1
+  ],
+  "T:customer#30+": [
+   1,
+   1
+  ],
+  "T:debt": [
+   0,
+   1
+  ],
+  "T:defence": [
+   1,
+   1
+  ],
+  "T:deposition": [
+   1,
+   1
+  ],
+  "T:dividend": [
+   0,
+   1
+  ],
+  "T:dmt": [
+   0,
+   1
+  ],
+  "T:doom/doomsday#5+": [
+   0,
+   1
+  ],
+  "T:dram#10+": [
+   1,
+   1
+  ],
+  "T:dream": [
+   0,
+   1
+  ],
+  "T:ebitda": [
+   0,
+   1
+  ],
+  "T:economic/economy": [
+   0,
+   2
+  ],
+  "T:election": [
+   0,
+   1
+  ],
+  "T:elon/musk": [
+   0,
+   1
+  ],
+  "T:energy#10+": [
+   1,
+   1
+  ],
+  "T:family": [
+   1,
+   2
+  ],
+  "T:fantastic": [
+   0,
+   1
+  ],
+  "T:feastable/feastables": [
+   1,
+   1
+  ],
+  "T:fight": [
+   0,
+   1
+  ],
+  "T:find/hide": [
+   1,
+   1
+  ],
+  "T:fiscal#10+": [
+   0,
+   1
+  ],
+  "T:forecast": [
+   1,
+   1
+  ],
+  "T:fuck/fucking#10+": [
+   1,
+   1
+  ],
+  "T:galactus/thanos": [
+   0,
+   1
+  ],
+  "T:grand theft auto/gta": [
+   0,
+   1
+  ],
+  "T:grocery": [
+   0,
+   1
+  ],
+  "T:growth#20+": [
+   1,
+   1
+  ],
+  "T:guitar": [
+   1,
+   1
+  ],
+  "T:health": [
+   2,
+   2
+  ],
+  "T:heat/weather": [
+   0,
+   2
+  ],
+  "T:hegseth": [
+   1,
+   1
+  ],
+  "T:hope": [
+   0,
+   1
+  ],
+  "T:hormuz/strait": [
+   0,
+   1
+  ],
+  "T:hulk": [
+   0,
+   1
+  ],
+  "T:hundred/million/thousand#30+": [
+   1,
+   1
+  ],
+  "T:hyperscaler": [
+   0,
+   1
+  ],
+  "T:immigration": [
+   0,
+   1
+  ],
+  "T:infrastructure": [
+   1,
+   1
+  ],
+  "T:infrastructure#5+": [
+   1,
+   1
+  ],
+  "T:iran": [
+   0,
+   1
+  ],
+  "T:iran/iranian (3+ times)": [
+   1,
+   1
+  ],
+  "T:ironic/ironically": [
+   0,
+   1
+  ],
+  "T:israel": [
+   0,
+   1
+  ],
+  "T:kang": [
+   0,
+   1
+  ],
+  "T:karl": [
+   0,
+   1
+  ],
+  "T:latency": [
+   0,
+   1
+  ],
+  "T:limerick": [
+   1,
+   1
+  ],
+  "T:macroeconomy": [
+   0,
+   1
+  ],
+  "T:meraki": [
+   0,
+   1
+  ],
+  "T:minecraft": [
+   1,
+   1
+  ],
+  "T:mr speaker#30+": [
+   0,
+   1
+  ],
+  "T:multiverse/universe": [
+   0,
+   1
+  ],
+  "T:mutant": [
+   0,
+   1
+  ],
+  "T:nhs": [
+   0,
+   1
+  ],
+  "T:nuclear#20+": [
+   1,
+   1
+  ],
+  "T:nypd": [
+   0,
+   2
+  ],
+  "T:openai": [
+   0,
+   1
+  ],
+  "T:parker/peter": [
+   0,
+   1
+  ],
+  "T:pipeline": [
+   1,
+   1
+  ],
+  "T:pjm": [
+   1,
+   1
+  ],
+  "T:planet/world": [
+   0,
+   1
+  ],
+  "T:power#5+": [
+   1,
+   1
+  ],
+  "T:president/trump": [
+   1,
+   2
+  ],
+  "T:price#5+": [
+   1,
+   1
+  ],
+  "T:prize": [
+   1,
+   1
+  ],
+  "T:professor": [
+   0,
+   1
+  ],
+  "T:putin": [
+   0,
+   1
+  ],
+  "T:pvd": [
+   1,
+   1
+  ],
+  "T:quantum": [
+   1,
+   1
+  ],
+  "T:quarter#10+": [
+   1,
+   1
+  ],
+  "T:question": [
+   1,
+   1
+  ],
+  "T:race": [
+   0,
+   1
+  ],
+  "T:reform": [
+   1,
+   1
+  ],
+  "T:revenue#20+": [
+   1,
+   1
+  ],
+  "T:revenue#5+": [
+   1,
+   1
+  ],
+  "T:rigged": [
+   0,
+   1
+  ],
+  "T:right#50+": [
+   1,
+   1
+  ],
+  "T:router": [
+   0,
+   1
+  ],
+  "T:russia/ukraine": [
+   1,
+   1
+  ],
+  "T:safe/safer/safety": [
+   1,
+   1
+  ],
+  "T:school": [
+   1,
+   2
+  ],
+  "T:scotland": [
+   1,
+   1
+  ],
+  "T:security#15+": [
+   1,
+   1
+  ],
+  "T:son": [
+   0,
+   1
+  ],
+  "T:space": [
+   1,
+   2
+  ],
+  "T:splunk": [
+   1,
+   1
+  ],
+  "T:strange": [
+   0,
+   1
+  ],
+  "T:tariff": [
+   0,
+   2
+  ],
+  "T:tesla": [
+   0,
+   1
+  ],
+  "T:tony": [
+   0,
+   1
+  ],
+  "T:trump": [
+   1,
+   3
+  ],
+  "T:tsmc": [
+   0,
+   1
+  ],
+  "T:uranium": [
+   0,
+   1
+  ],
+  "T:wakanda": [
+   0,
+   1
+  ],
+  "T:wales": [
+   0,
+   1
+  ],
+  "W:earnings-call-mentions": [
+   31,
+   48
+  ],
+  "W:mamdani-announcement-mentions": [
+   9,
+   26
+  ],
+  "W:movie-trailer-mention": [
+   1,
+   18
+  ],
+  "W:mrbeast-gaming-mentions": [
+   4,
+   13
+  ],
+  "W:rogan-mentions": [
+   7,
+   15
+  ],
+  "W:starmer-pmqs": [
+   4,
+   9
+  ],
+  "W:what will trump say veterans day remarks arlington": [
+   4,
+   13
+  ],
+  "WT:earnings-call-mentions|ai#25+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|ai#7+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|arr": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|auction": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|backlog": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|bandwidth": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|calpine": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|capital": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|churn": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|crane": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|customer#25+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|customer#30+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|debt": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|deposition": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|dividend": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|dram#10+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|ebitda": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|energy#10+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|fiscal#10+": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|forecast": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|growth#20+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|hyperscaler": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|infrastructure": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|infrastructure#5+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|iran": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|latency": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|limerick": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|macroeconomy": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|meraki": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|nuclear#20+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|openai": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|pipeline": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|pjm": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|power#5+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|price#5+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|pvd": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|quantum": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|quarter#10+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|revenue#20+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|revenue#5+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|router": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|security#15+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|splunk": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|tariff": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|trump": [
+   1,
+   2
+  ],
+  "WT:earnings-call-mentions|tsmc": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|uranium": [
+   0,
+   1
+  ],
+  "WT:mamdani-announcement-mentions|afford/affordability/affordable": [
+   1,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|ai/artificial intelligence": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|billionaire": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|budget": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|community": [
+   2,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|economic/economy": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|family": [
+   1,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|grocery": [
+   0,
+   1
+  ],
+  "WT:mamdani-announcement-mentions|health": [
+   2,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|heat/weather": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|nypd": [
+   0,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|president/trump": [
+   1,
+   2
+  ],
+  "WT:mamdani-announcement-mentions|safe/safer/safety": [
+   1,
+   1
+  ],
+  "WT:mamdani-announcement-mentions|school": [
+   1,
+   2
+  ],
+  "WT:movie-trailer-mention|avenger": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|brother": [
+   1,
+   1
+  ],
+  "WT:movie-trailer-mention|doom/doomsday#5+": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|fantastic": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|galactus/thanos": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|hope": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|hulk": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|kang": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|multiverse/universe": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|mutant": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|parker/peter": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|planet/world": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|professor": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|son": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|space": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|strange": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|tony": [
+   0,
+   1
+  ],
+  "WT:movie-trailer-mention|wakanda": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|build": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|chameleon": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|chandler": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|contestant": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|dream": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|feastable/feastables": [
+   1,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|fight": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|find/hide": [
+   1,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|grand theft auto/gta": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|karl": [
+   0,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|minecraft": [
+   1,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|prize": [
+   1,
+   1
+  ],
+  "WT:mrbeast-gaming-mentions|race": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|alien": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|bill gates": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|buddy of mine": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|chimp/monkey": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|cocktail": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|dmt": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|elon/musk": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|fuck/fucking#10+": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|guitar": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|hundred/million/thousand#30+": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|ironic/ironically": [
+   0,
+   1
+  ],
+  "WT:rogan-mentions|question": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|right#50+": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|space": [
+   1,
+   1
+  ],
+  "WT:rogan-mentions|tesla": [
+   0,
+   1
+  ],
+  "WT:starmer-pmqs|billion/million/trillion#5+": [
+   1,
+   1
+  ],
+  "WT:starmer-pmqs|defence": [
+   1,
+   1
+  ],
+  "WT:starmer-pmqs|immigration": [
+   0,
+   1
+  ],
+  "WT:starmer-pmqs|mr speaker#30+": [
+   0,
+   1
+  ],
+  "WT:starmer-pmqs|nhs": [
+   0,
+   1
+  ],
+  "WT:starmer-pmqs|reform": [
+   1,
+   1
+  ],
+  "WT:starmer-pmqs|scotland": [
+   1,
+   1
+  ],
+  "WT:starmer-pmqs|trump": [
+   0,
+   1
+  ],
+  "WT:starmer-pmqs|wales": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|allah": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|bibi": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|biden (3+ times)": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|china/chinese": [
+   1,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|election": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|hegseth": [
+   1,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|hormuz/strait": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|iran/iranian (3+ times)": [
+   1,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|israel": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|putin": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|rigged": [
+   0,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|russia/ukraine": [
+   1,
+   1
+  ],
+  "WT:what will trump say veterans day remarks arlington|tariff": [
+   0,
+   1
+  ]
+ },
+ "seen": {
+  "2941693": 1797638340,
+  "2941694": 1797638340,
+  "2941695": 1797638340,
+  "2941696": 1797638340,
+  "2941697": 1797638340,
+  "2941698": 1797638340,
+  "2941699": 1797638340,
+  "2941700": 1797638340,
+  "2941701": 1797638340,
+  "2941702": 1797638340,
+  "2941703": 1797638340,
+  "2941704": 1797638340,
+  "2941705": 1797638340,
+  "2941706": 1797638340,
+  "2941707": 1797638340,
+  "2941708": 1797638340,
+  "2941709": 1797638340,
+  "2941710": 1797638340,
+  "5394221": 1796083140,
+  "5394222": 1796083140,
+  "5394223": 1796083140,
+  "5394224": 1796083140,
+  "5394225": 1796083140,
+  "5394226": 1796083140,
+  "5394227": 1796083140,
+  "5394228": 1796083140,
+  "5394229": 1796083140,
+  "5394230": 1796083140,
+  "5394231": 1796083140,
+  "5394232": 1796083140,
+  "5394233": 1796083140,
+  "5950986": 1796101140,
+  "5950987": 1796101140,
+  "5950988": 1796101140,
+  "5950989": 1796101140,
+  "5950990": 1796101140,
+  "5950991": 1796101140,
+  "5950992": 1796101140,
+  "5950993": 1796101140,
+  "5950994": 1796101140,
+  "5950995": 1796101140,
+  "5950996": 1796101140,
+  "5950997": 1796101140,
+  "5950998": 1796101140,
+  "5950999": 1796101140,
+  "6083647": 1796101140,
+  "6083648": 1796101140,
+  "6083649": 1796101140,
+  "6083650": 1796101140,
+  "6083651": 1796101140,
+  "6083652": 1796101140,
+  "6083653": 1796101140,
+  "6083654": 1796101140,
+  "6083655": 1796101140,
+  "6083656": 1796101140,
+  "6083657": 1796101140,
+  "6083658": 1796101140,
+  "6364852": 1794459540,
+  "6364853": 1794459540,
+  "6364854": 1794459540,
+  "6364855": 1794459540,
+  "6364856": 1794459540,
+  "6364857": 1794459540,
+  "6364858": 1794459540,
+  "6364859": 1794459540,
+  "6364860": 1794459540,
+  "6763333": 1794286740,
+  "6763334": 1794286740,
+  "6763335": 1794286740,
+  "6763336": 1794373140,
+  "6763337": 1794286740,
+  "6763338": 1794373140,
+  "6763339": 1794286740,
+  "6763340": 1794373140,
+  "6763341": 1794286740,
+  "6763342": 1794286740,
+  "6763343": 1794373140,
+  "6763344": 1794286740,
+  "6763345": 1794373140,
+  "6763346": 1794286740,
+  "6763347": 1794373140,
+  "6763348": 1794373140,
+  "6763349": 1794286740,
+  "6763350": 1794373140,
+  "6763352": 1794545940,
+  "6763353": 1794373140,
+  "6763354": 1794545940,
+  "6763355": 1794373140,
+  "6763356": 1794545940,
+  "6763357": 1794373140,
+  "6763358": 1794545940,
+  "6763359": 1794373140,
+  "6763360": 1794545940,
+  "6763361": 1794373140,
+  "6763362": 1794545940,
+  "6763363": 1794373140,
+  "6763364": 1794545940,
+  "6763365": 1794545940,
+  "6763366": 1794373140,
+  "6763367": 1794373140,
+  "6763368": 1794545940,
+  "6763369": 1794545940,
+  "6763371": 1794545940,
+  "6763373": 1794545940,
+  "6763374": 1794545940,
+  "6763375": 1794545940,
+  "6763376": 1794545940,
+  "6763377": 1794545940,
+  "6763378": 1794545940,
+  "6763379": 1794545940,
+  "6763380": 1794545940,
+  "6763381": 1794545940,
+  "6763382": 1794545940,
+  "6763383": 1794545940,
+  "6763648": 1794805140,
+  "6763649": 1794805140,
+  "6763650": 1794805140,
+  "6763651": 1794805140,
+  "6763652": 1794805140,
+  "6763653": 1794805140,
+  "6763654": 1794805140,
+  "6763655": 1794805140,
+  "6763656": 1794805140,
+  "6763657": 1794805140,
+  "6763658": 1794805140,
+  "6763659": 1794805140,
+  "6763660": 1794805140,
+  "6763661": 1794805140,
+  "6763662": 1794805140,
+  "6964823": 1794441540,
+  "6964824": 1794441540,
+  "6964825": 1794441540,
+  "6964826": 1794441540,
+  "6964827": 1794441540,
+  "6964828": 1794441540,
+  "6964829": 1794441540,
+  "6964830": 1794441540,
+  "6964831": 1794441540,
+  "6964832": 1794441540,
+  "6964833": 1794441540,
+  "6964840": 1794441540,
+  "6964841": 1794441540
+ },
+ "synced": 1794567042
+}
