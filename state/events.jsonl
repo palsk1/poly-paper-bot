@@ -10978,3 +10978,6 @@
 {"minutes_left": 2.58, "price": 0.997, "queue": 644.38, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV131645-45", "track": "kc_maker_safe_usd", "ts": "2026-11-13T21:42:27Z", "type": "kmaker_order"}
 {"minutes_left": 2.58, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV131645-45", "track": "kc_maker", "ts": "2026-11-13T21:42:27Z", "type": "kmaker_order"}
 {"minutes_left": 2.58, "price": 0.977, "queue": 186.42, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV131645-45", "track": "kc_maker", "ts": "2026-11-13T21:42:28Z", "type": "kmaker_order"}
+{"cost": 3.912, "title": "Will the price of Bitcoin be above $70,000 on November 17?", "token": "311957989004312567103800167205328035676258707013447115957396283129838818153", "track": "crypto_no", "ts": "2026-11-13T21:51:25Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV131645-45", "track": "kc_maker", "ts": "2026-11-13T21:51:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV131645-45", "track": "kc_maker", "ts": "2026-11-13T21:51:58Z", "type": "kmaker_fill"}
