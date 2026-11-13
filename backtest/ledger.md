@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**96 ideas examined, in about 52,374 versions.** 67 dropped, 29 still being tested or waiting. **Looks real: 2.**
+**101 ideas examined, in about 52,799 versions.** 69 dropped, 32 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 96 ideas that are all worthless, the luckiest one still looks good. With 96 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 101 ideas that are all worthless, the luckiest one still looks good. With 101 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -104,5 +104,10 @@ Why count: if you test 96 ideas that are all worthless, the luckiest one still l
 | 2026-11-12 | Post-count markets: buy No (10c+) where the counting model says Yes is 10c+ too dear | 55 | 213 | +$4.16 | Promising, needs more bets | lead: wants a live paper test | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model, both sides, 5c+ apart | 55 | 214 | -$0.89 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
 | 2026-11-12 | Post-count markets: counting model says Yes is 10c+ too cheap (buy Yes) | 55 | 212 | -$4.08 | Behind, but could be bad luck | dropped | tweets.py, backtest/tweets.md |
+| 2026-11-13 | Mention markets: always buy No, since Apr 2026 (+3c) | 85 | 667 | -$1.27 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
+| 2026-11-13 | Mention markets: buy No where Yes is 20c+ above the word's own record (since Apr 2026, worst price +3c) | 85 | 244 | +$15.25 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
+| 2026-11-13 | Mention markets: buy Yes where the word's record is 20c+ above the price (since Apr 2026) | 85 | 233 | -$10.79 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
+| 2026-11-13 | Mention markets: same rule if buying costs 5c more (since Apr 2026) | 85 | 243 | +$7.74 | Ahead, but could be luck | lead: cost check | mentions.py, backtest/mentions.md |
+| 2026-11-13 | Mention markets: same rule, June 2024 - Nov 2026 | 85 | 427 | +$15.66 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

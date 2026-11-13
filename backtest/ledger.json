@@ -1193,6 +1193,71 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "tweets.py, backtest/tweets.md"
+  },
+  {
+   "id": "mention_markets_buy_no_where_yes_is_20c_above_the_word_s_own",
+   "date": "2026-11-13",
+   "what": "Mention markets: buy No where Yes is 20c+ above the word's own record (since Apr 2026, worst price +3c)",
+   "tries": 85,
+   "bets": 533,
+   "groups": 244,
+   "per100": 15.25,
+   "floor100": -12.4,
+   "verdict": "Promising, needs more bets",
+   "status": "lead: wants a live paper test",
+   "src": "mentions.py, backtest/mentions.md"
+  },
+  {
+   "id": "mention_markets_same_rule_june_2024_nov_2026",
+   "date": "2026-11-13",
+   "what": "Mention markets: same rule, June 2024 - Nov 2026",
+   "tries": 85,
+   "bets": 896,
+   "groups": 427,
+   "per100": 15.66,
+   "floor100": -4.43,
+   "verdict": "Promising, needs more bets",
+   "status": "lead: wants a live paper test",
+   "src": "mentions.py, backtest/mentions.md"
+  },
+  {
+   "id": "mention_markets_same_rule_if_buying_costs_5c_more_since_apr_",
+   "date": "2026-11-13",
+   "what": "Mention markets: same rule if buying costs 5c more (since Apr 2026)",
+   "tries": 85,
+   "bets": 523,
+   "groups": 243,
+   "per100": 7.74,
+   "floor100": -18.09,
+   "verdict": "Ahead, but could be luck",
+   "status": "lead: cost check",
+   "src": "mentions.py, backtest/mentions.md"
+  },
+  {
+   "id": "mention_markets_always_buy_no_since_apr_2026_3c",
+   "date": "2026-11-13",
+   "what": "Mention markets: always buy No, since Apr 2026 (+3c)",
+   "tries": 85,
+   "bets": 7669,
+   "groups": 667,
+   "per100": -1.27,
+   "floor100": -8.38,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "mentions.py, backtest/mentions.md"
+  },
+  {
+   "id": "mention_markets_buy_yes_where_the_word_s_record_is_20c_above",
+   "date": "2026-11-13",
+   "what": "Mention markets: buy Yes where the word's record is 20c+ above the price (since Apr 2026)",
+   "tries": 85,
+   "bets": 553,
+   "groups": 233,
+   "per100": -10.79,
+   "floor100": -34.19,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "mentions.py, backtest/mentions.md"
   }
  ]
 }
