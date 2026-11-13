@@ -10928,3 +10928,13 @@
 {"minutes_left": 2.28, "price": 0.997, "queue": 690.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker", "ts": "2026-11-13T21:12:47Z", "type": "kmaker_order"}
 {"minutes_left": 2.28, "price": 0.997, "queue": 690.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker_safe", "ts": "2026-11-13T21:12:47Z", "type": "kmaker_order"}
 {"minutes_left": 2.28, "price": 0.997, "queue": 690.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T21:12:47Z", "type": "kmaker_order"}
+{"fee": 0.0484, "outcome": "No", "price": 0.59, "shares": 5, "title": "Will Trump say \"Epstein\" in November?", "token": "108419601895499598951002617392250022794297325628503363756042524599009932742338", "track": "word_no", "ts": "2026-11-13T21:18:16Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV131615-15", "track": "kc_maker", "ts": "2026-11-13T21:18:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV131615-15", "track": "kc_maker", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV131615-15", "track": "kc_maker_safe", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker_safe", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV131615-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV131615-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T21:18:20Z", "type": "kmaker_fill"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXTEMPMIAH-26NOV1317-T76.99", "track": "kalshi_patient", "ts": "2026-11-13T21:19:23Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNBASPREAD-26NOV13PORSAC-POR35", "track": "kalshi_patient", "ts": "2026-11-13T21:19:23Z", "type": "kpatient_order"}
