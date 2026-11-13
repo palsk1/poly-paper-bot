@@ -282,6 +282,62 @@ class Hist:
         return p_wt, {"n_s": n_s, "n_w": n_w, "n_t": n_t, "n_st": n_st, "n_wt": n_wt, "p_w": p_w}
 
 
+COUNTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mention_counts.json.gz")
+
+
+def keys_of(m):
+    w, s, tm = who(m), speaker(m), term(m)
+    return ("G", "W:" + w, "S:" + s, "WT:" + w + "|" + tm, "ST:" + s + "|" + tm, "T:" + tm)
+
+
+def export_counts(path=COUNTS):
+    """The score sheet the live track starts from: for every speaker / occasion / word, how many finished markets and
+    how many ended Yes (everything before the holdout). Small enough to sit in the repo."""
+    import gzip
+    ms = bt.rjson(os.path.join(CACHE, "markets.json.gz"), {}) or {}
+    c = {}
+    last = 0
+    for m in ms.values():
+        if m.get("final") not in ([0.0, 1.0], [1.0, 0.0]) or not real(m):
+            continue
+        last = max(last, m["end"])
+        for k in keys_of(m):
+            x = c.setdefault(k, [0, 0])
+            x[0] += int(m["final"][0])
+            x[1] += 1
+    with gzip.open(path, "wt", encoding="utf-8") as f:
+        json.dump({"until": btcheck.HOLDOUT_FROM, "last_end": last, "markets": c["G"][1], "counts": c}, f, separators=(",", ":"), sort_keys=True)
+    print(f"score sheet: {c['G'][1]} markets, {len(c)} keys, {os.path.getsize(path) / 1e6:.2f} MB -> {path}")
+
+
+class Counts(Hist):
+    """The live version of Hist: the saved score sheet + markets that finished since (`delta`, kept in state/)."""
+
+    def __init__(self, base, delta=None):
+        self.keys = {}
+        self.base = base or {}
+        self.delta = delta if delta is not None else {}
+
+    def key(self, m):
+        return keys_of(m)
+
+    def upto(self, name, t=None):
+        a, b = self.base.get(name) or (0, 0), self.delta.get(name) or (0, 0)
+        return a[0] + b[0], a[1] + b[1]
+
+    def add(self, m, yes):
+        for k in keys_of(m):
+            x = self.delta.setdefault(k, [0, 0])
+            x[0] += int(bool(yes))
+            x[1] += 1
+
+
+def load_counts(path=COUNTS):
+    import gzip
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def load():
     ms = bt.rjson(os.path.join(CACHE, "markets.json.gz"), {}) or {}
     tp = {}
@@ -549,9 +605,14 @@ def selftest():
     ms["x"] = dict(m, id="x", ev_slug="e", closed_t=90000, end=90000, final=[0.0, 1.0], fee=0)
     b = rule_bets(ms, tp, H)
     assert len(b) == 1 and abs(b[0]["px"] - 0.34) < 1e-9 and b[0]["pay"] > 0, b
+    C = Counts({})
+    for i in range(12):
+        C.add(m, i % 4 == 0)
+    qc, ic = C.chance(dict(m, id="z"), 0)
+    assert abs(qc - q) < 1e-9 and ic["n_st"] == 12, (qc, q)       # the live score sheet agrees with the backtest one
     print("mentions selftest ok")
 
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"peek": peek, "fetch": fetch, "run": run, "selftest": selftest}[cmd]()
+    {"peek": peek, "fetch": fetch, "run": run, "selftest": selftest, "counts": export_counts}[cmd]()

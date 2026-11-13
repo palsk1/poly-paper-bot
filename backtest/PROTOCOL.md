@@ -116,6 +116,21 @@ Written before the first live bet (`tweets.py`, `backtest/tweets.md`). The histo
 - **Honest note:** at about 3 bets a day this cannot be proven by 1 Jan; a pass only means "still alive".
 - **Anything else:** not proven, keep it on paper.
 
+## 5f. Proposed live test: word_no (written 2026-11-13, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`mentions.py`, `backtest/mentions.md`). The history says +$15.25 per $100 on 533
+bets since April 2026, "Promising, needs more bets", but the rule was picked after looking at 85 versions and there
+is no untouched test set (the same months were used to find it). Only live bets can settle it.
+
+- **What counts:** every finished `word_no` bet from the track's first run, rules as in config `word_no` (a rule
+  change restarts the count). Bets in the same event count once.
+- **When:** once, on 1 Jan 2027. Peeks before that don't count.
+- **Pass:** 150 or more finished bets, ahead, and the low end of the luck range above -$5 per $100 (the same bar
+  as the holdout tests in section 5).
+- **Side check:** `mention_no` (blind No, no word record) runs next to it. If both do the same, the word record adds
+  nothing.
+- **Anything else:** not proven, keep it on paper.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.

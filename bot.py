@@ -3707,7 +3707,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3793,7 +3793,8 @@ def run_fast(tracks, force=False):
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
                      ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
-                     ("draws", draw_candidates), ("postcount", postcount_candidates)):
+                     ("draws", draw_candidates), ("postcount", postcount_candidates),
+                     ("wordno", wordno_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -4024,6 +4025,101 @@ def postcount_candidates(names):
     for n in out:
         out[n].sort(key=lambda c: -c["model_edge"])
     print(f"postcount: {len(seen_ev)} open count windows, {looked} markets looked at, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
+    return out
+
+
+def _mention_pages(params, max_pages):
+    """Events carrying Polymarket's Mentions tag (id 100343). This tag answers HTTP 406 above 50 a page."""
+    out, cur = [], None
+    for _ in range(max_pages):
+        p = dict(params, tag_id=100343, limit=50)
+        if cur:
+            p["after_cursor"] = cur
+        res = http_json(f"{GAMMA}/events/keyset", p)
+        rows = [e for e in envelope_rows(res, "events", "data") if isinstance(e, dict)]
+        out += rows
+        cur = res.get("next_cursor") if isinstance(res, dict) else None
+        if not rows or not cur:
+            break
+    return out
+
+
+def wordno_candidates(names):
+    """Mention markets ("Will Trump say 'Tariff' during ...?") vs each word's own record, mentions.py,
+    backtest/mentions.md, 2026-11-13. The record: how often this word came up in earlier finished markets with the same
+    speaker (score sheet mention_counts.json.gz + everything that finished since, kept in state/wordno_hist.json).
+    Where the listed YES price is `min_gap` or more above that record, and the speaker has `min_hist`+ earlier markets
+    with this word, buy NO. One bet per market, several words of one event allowed."""
+    import mentions
+    rs = {n: rules_for(n) for n in names}
+    out = {n: [] for n in names}
+    t_now = int(now().timestamp())
+    base = mentions.load_counts()
+    st = load("wordno_hist.json", {})
+    st.setdefault("delta", {})
+    st.setdefault("seen", {})
+    C = mentions.Counts(base["counts"], st["delta"])
+    cut = int(mentions.btcheck.T(base["until"]))           # the score sheet holds markets that ended before this day
+    since = max(cut, int(st.get("synced") or 0)) - 5 * 86400
+    added = 0
+    try:
+        done = _mention_pages({"closed": "true", "end_date_min": iso(dt.datetime.fromtimestamp(since, dt.timezone.utc))}, 60)
+    except Exception as e:
+        print(f"wordno: finished events failed: {str(e)[:120]}")
+        return out                                              # no fresh record, no bets this round
+    for e in done:
+        for m in e.get("markets") or []:
+            if not isinstance(m, dict) or not m.get("closed"):
+                continue
+            s = mentions.slim(e, m)
+            if s["id"] in st["seen"] or not s["end"] or s["end"] < cut or len(s["toks"]) != 2:
+                continue
+            if s["final"] not in ([0.0, 1.0], [1.0, 0.0]) or not mentions.real(s):
+                continue
+            if [o.lower() for o in s["outs"]][:1] != ["yes"]:
+                continue
+            C.add(s, s["final"][0] == 1.0)
+            st["seen"][s["id"]] = s["end"]
+            added += 1
+    st["synced"] = t_now
+    save("wordno_hist.json", st)
+    try:
+        live = _mention_pages({"closed": "false"}, 40)
+    except Exception as e:
+        print(f"wordno: open events failed: {str(e)[:120]}")
+        return out
+    looked = known = 0
+    for e in live:
+        for m in event_markets(e):
+            prices = binary(m)
+            if not prices or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] != ["yes"]:
+                continue
+            s = mentions.slim(e, m)
+            if not s["end"] or not s["start"] or not mentions.real(s):
+                continue
+            looked += 1
+            q_yes, info = C.chance(s, t_now)
+            p_yes = prices[0]
+            gap = p_yes - q_yes
+            hours_left, hours_old = (s["end"] - t_now) / 3600, (t_now - s["start"]) / 3600
+            known += info["n_st"] >= 3
+            for n, r in rs.items():
+                if info["n_st"] < r["min_hist"] or hours_left < r["min_hours_to_end"] or hours_old < r.get("min_hours_old", 0):
+                    continue
+                if VERBOSE and gap >= r["min_gap"] / 2:
+                    print(f"   near: listed Yes {cents(p_yes)} vs record {q_yes * 100:.0f}/100 ({info['n_st']} earlier) {m.get('question')}")
+                if gap < r["min_gap"] or not (r["min_price"] <= 1 - p_yes <= r["max_price"]):
+                    continue
+                c = candidate(m, 1, max(hours_left / 24, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                              {"model_p": round(1 - q_yes, 4), "model_edge": round(gap, 4),
+                               "signal": f"Yes listed {cents(p_yes)}; this word's own record with this speaker says {q_yes * 100:.0f} in 100 ({info['n_st']} earlier markets)"})
+                c["event_key"] = str(m.get("slug") or c["token"])     # one bet per market, not per event
+                c["theme"] = "mention word"
+                out[n].append(c)
+    for n in out:
+        out[n].sort(key=lambda c: -c["model_edge"])
+    print(f"wordno: {added} newly finished markets added to the record, {len(live)} open events, {looked} markets looked at, "
+          f"{known} with 3+ earlier markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
 
 
