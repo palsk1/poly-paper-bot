@@ -9994,3 +9994,8 @@
 {"minutes_left": 2.69, "price": 0.952, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:19Z", "type": "kmaker_order"}
 {"minutes_left": 2.69, "price": 0.995, "queue": 5986.35, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:19Z", "type": "kmaker_order"}
 {"minutes_left": 2.69, "price": 0.984, "queue": 17.73, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:21Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.0292, "price": 0.89, "reason": "wallet exit (book)", "title": "Will the Chicago Bears win the 2027 NFL league championship?", "token": "58391467081855327160506735992195157760163010112382131578233801495091502400832", "track": "wb_cigarettes", "ts": "2026-11-13T10:30:54Z", "type": "paper_close"}
+{"outcome": "Yes", "pnl": 0.1866, "price": 1.0, "reason": "resolved", "title": "Will Ethereum reach $1,950 on November 13?", "token": "54579218733057384984157405488738248942136594868980378067765888520781396929453", "track": "endgame_sell98", "ts": "2026-11-13T10:31:00Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.48, "price": 0.952, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:32:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:32:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.16, "price": 0.984, "side": "no", "through": true, "ticker": "KXETH15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:32:01Z", "type": "kmaker_fill"}
