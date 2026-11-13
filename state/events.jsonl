@@ -9681,3 +9681,11 @@
 {"kind": "other", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXPJMWESTW-06NOV26-T50", "track": "kalshi_patient", "ts": "2026-11-13T06:43:18Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDSPROT-26NOV15MIAIND-INDSMCGOWAN20-80", "track": "kalshi_patient", "ts": "2026-11-13T06:43:18Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXBTC-26NOV1302-B68450", "track": "kalshi_patient", "ts": "2026-11-13T06:43:18Z", "type": "kpatient_order"}
+{"fee": 0.0, "outcome": "Yes", "price": 0.1, "shares": 5, "title": "Major airlines suspend Ben Gurion flights by November 30, 2026?", "token": "98742372466207760883798618216710289983674437374663426505409146768194448380588", "track": "w_anoin123", "ts": "2026-11-13T06:45:38Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "Yes", "price": 0.1, "shares": 5, "title": "Major airlines suspend Ben Gurion flights by November 30, 2026?", "token": "98742372466207760883798618216710289983674437374663426505409146768194448380588", "track": "wb_anoin123", "ts": "2026-11-13T06:45:39Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV130145-45", "track": "kc_maker", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV130145-45", "track": "kc_maker", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV130145-45", "track": "kc_maker", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV130145-45", "track": "kc_maker_safe", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV130145-45", "track": "kc_maker_safe", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV130145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-13T06:46:36Z", "type": "kmaker_fill"}
