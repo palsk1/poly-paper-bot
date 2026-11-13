@@ -4,6 +4,9 @@
 Research only, paper only. Daily "Up or Down" was tested in census.py (dropped); this is the strike ladders.
 
   python3 stocks.py peek     what is there (tickers, shapes, timing, money) + which price sources Actions can read
+  python3 stocks.py src      which minute-by-minute price sources this machine can read
+  python3 stocks.py fetch    strike markets + real trades + daily prices -> bt_cache/stk/
+  python3 stocks.py run      the test -> backtest/stocks.md
 """
 import collections
 import json
@@ -233,6 +236,205 @@ def fetch():
         print(f"  tapes file {i + 1}/{n_sh}: {len(out)}/{len(chunk)} ({(time.time() - T0) / 60:.0f} min), cut short {sum(1 for r in out.values() if r['cut'])}", flush=True)
 
 
+# ================================================================ the test
+OUT = "backtest/stocks.md"
+TRIES = 40
+FEE = 0.04                 # today's fee on these markets
+MIN_PRINT = 5.0            # 5-minute steps with under $5 traded are dropped: such crumbs are often booked on the wrong side
+
+
+def load():
+    """markets whose result the daily closing prices reproduce, + their real trades (crumbs dropped) + daily prices."""
+    import os
+    ms = bt.rjson(os.path.join(CACHE, "markets.json.gz"), {}) or {}
+    D = bt.rjson(os.path.join(CACHE, "daily.json.gz"), {}) or {}
+    tp, i = {}, 0
+    while os.path.exists(os.path.join(CACHE, f"tapes_{i:02d}.json.gz")):
+        tp.update(bt.rjson(os.path.join(CACHE, f"tapes_{i:02d}.json.gz"), {}) or {})
+        i += 1
+    for v in tp.values():
+        v["b"] = [x for x in v["b"] if x[5] >= MIN_PRINT]
+    good, n_bad = {}, 0
+    for k, m in ms.items():
+        d = D.get(m["tk"], {}).get(_day(m["end"]))
+        if not d or (m["tk"] == "NFLX" and _day(m["end"]) < "2025-12"):     # holiday weeks; Netflix before its share split
+            n_bad += 1
+            continue
+        yes = (m["lo"] is None or d[3] > m["lo"]) and (m["hi"] is None or d[3] < m["hi"])
+        if yes != (m["final"][0] == 1.0):
+            n_bad += 1
+            continue
+        good[k] = m
+    return good, tp, D, len(ms), n_bad
+
+
+def _day(t):
+    return time.strftime("%Y-%m-%d", time.gmtime(t))
+
+
+def _ncdf(x):
+    import math
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+
+def model_chance(m, s, sd):
+    """Chance of Yes if the stock is at s now and its log move until the close has a typical size sd."""
+    import math
+    above = lambda k: 1.0 if k <= 0 else 1 - _ncdf(math.log(k / s) / sd)
+    p = 1.0
+    if m["lo"] is not None:
+        p = above(m["lo"])
+    if m["hi"] is not None:
+        p -= above(m["hi"])
+    return min(1.0, max(0.0, p))
+
+
+def looks(m, D, order, idx):
+    """The moments we can price a market from daily numbers alone: the open of the result day, and the close of each
+    of up to 4 trading days before. -> [(label, time, model chance)]. Swings come from the 60 trading days before."""
+    import datetime as dt
+    import math
+    tk, de = m["tk"], _day(m["end"])
+    i = idx[tk].get(de)
+    if i is None or i < 30:
+        return []
+    v, ds = D[tk], order[tk]
+    rng = range(max(1, i - 60), i)
+    f = lambda a: math.sqrt(sum(x * x for x in a) / len(a))
+    cc = f([math.log(v[ds[j]][3] / v[ds[j - 1]][3]) for j in rng])
+    oc = f([math.log(v[ds[j]][3] / v[ds[j]][0]) for j in rng])
+    out = [("open", m["end"] - 6.5 * 3600 + 300, model_chance(m, v[ds[i]][0], oc))]
+    for k in (1, 2, 3, 4):
+        if i - k < 0:
+            break
+        t = m["end"] - (dt.date.fromisoformat(de) - dt.date.fromisoformat(ds[i - k])).days * 86400
+        if t < (m["start"] or 0) + 3600:
+            break
+        out.append((f"close-{k}", t + 300, model_chance(m, v[ds[i - k]][3], cc * math.sqrt(k))))
+    return out
+
+
+def buy(m, b, t, yes, extra=0.01, stake=10.0, lo=0.05, hi=0.95, window=7200):
+    """Like earn.buy: the worst price anyone paid over the next `window` seconds + extra + fee."""
+    nxt = [x for x in b if t <= x[0] < min(t + window, m["end"] - 1800)]
+    if not nxt:
+        return None
+    px = max(x[4] for x in nxt) if yes else 1 - min(x[3] for x in nxt)
+    if not lo <= px <= hi:
+        return None
+    c = min(0.99, px + extra)
+    sh = stake / c
+    win = (m["final"][0] == 1.0) == yes
+    return {"ev": m["ev_slug"], "t": nxt[0][0], "cost": stake + bot.taker_fee(sh, c, FEE), "pay": sh if win else 0.0, "sh": sh,
+            "px": px, "yes": yes, "id": m["id"]}
+
+
+def rows_of(ms, tp, D):
+    import earn
+    order = {tk: sorted(v) for tk, v in D.items()}
+    idx = {tk: {d: i for i, d in enumerate(ds)} for tk, ds in order.items()}
+    rows = []
+    for k, m in ms.items():
+        b = (tp.get(k) or {}).get("b")
+        if not b:
+            continue
+        for lab, t, pm in looks(m, D, order, idx):
+            pp = earn.last_before(b, t)
+            if pp is None or not any(t - 3 * 3600 <= x[0] and x[0] + 300 <= t for x in b):   # needs a trade in the 3 hours before
+                continue
+            rows.append((k, m, lab, t, pm, pp))
+    return rows
+
+
+def gap_bets(rows, tp, gap=0.10, labs=None, kinds=None, extra=0.01, window=7200, side=None):
+    out = []
+    for k, m, lab, t, pm, pp in rows:
+        if (labs and lab not in labs) or (kinds and m["kind"] not in kinds) or abs(pm - pp) < gap:
+            continue
+        yes = pm > pp
+        if side is not None and yes != side:
+            continue
+        x = buy(m, tp[k]["b"], t, yes, extra, window=window)
+        if x and (pm if yes else 1 - pm) - x["px"] >= gap / 2:          # still cheap at the price paid
+            out.append(x)
+    return out
+
+
+def run():
+    import btcheck
+    import earn
+    import exam
+    ms, tp, D, n_all, n_bad = load()
+    rows = rows_of(ms, tp, D)
+    L = []
+    P = L.append
+    P("# Stock price markets against the stock's own swings (stocks.py)\n")
+    P(f"Generated {bot.iso()}. Paper only. The holdout from {btcheck.HOLDOUT_FROM} is not in here.\n")
+    P("\"Will Nvidia close above $180 on Friday?\", \"Will Apple finish the week above $240?\", \"Will Tesla close at $330-$340?\" "
+      f"Polymarket has run these every day and week since late 2025: {n_all:,} finished markets on {len(D)} stocks, "
+      f"{sum(1 for k in ms if (tp.get(k) or {}).get('b')):,} with real trades. Daily prices (open, high, low, close) from Nasdaq's website "
+      f"reproduce the result of {n_all - n_bad:,} of them; the rest are holiday weeks and Netflix before its share split, left out.\n")
+    P("They trade thinly: the middle market saw about $350, and the gap between buyers and sellers is often 5-20c.\n")
+    P("## The idea\n")
+    P("A stock's price right now and how much it usually moves in a day give a fair chance of ending above a line. "
+      "Compare that with Polymarket's price at moments when the stock's price is known exactly from daily numbers: at the "
+      "open of the result day, and at the close 1 to 4 trading days before. Only markets that traded in the 3 hours before.\n")
+    P("## Who forecasts better?\n")
+    P("Score = average squared miss, smaller is better.\n")
+    P("| moment | kind | markets | the model | Polymarket | half and half |")
+    P("|---|---|---|---|---|---|")
+    y = lambda m: m["final"][0]
+    names = {"day": "above a line, one day", "week": "above a line, end of week", "range": "inside a bracket, end of week"}
+    for lab in ("open", "close-1", "close-2", "close-3", "close-4"):
+        for kind in ("day", "week", "range"):
+            R = [r for r in rows if r[2] == lab and r[1]["kind"] == kind]
+            if len(R) < 150:
+                continue
+            br = lambda f: sum((f(r) - y(r[1])) ** 2 for r in R) / len(R)
+            P(f"| {'the open of the last day' if lab == 'open' else 'the close ' + lab[-1] + ' day(s) before'} | {names[kind]} | {len(R):,} | "
+              f"{br(lambda r: r[4]):.4f} | {br(lambda r: r[5]):.4f} | {br(lambda r: (r[4] + r[5]) / 2):.4f} |")
+    P("\nA tie. A plain \"usual swing\" model is as good as the market, and no better.\n")
+    P("## Buying where the two disagree\n")
+    P("$10 on the side the model calls cheap, at the worst price anyone paid in the next 2 hours + 1c + the fee, and only "
+      "if it is still cheap at that price.\n")
+    P(earn.HEAD)
+    main = gap_bets(rows, tp, 0.10)
+    after = gap_bets(rows, tp, 0.10, labs=("close-1", "close-2", "close-3", "close-4"))
+    quick = gap_bets(rows, tp, 0.10, window=300)
+    for g in (0.05, 0.10, 0.15, 0.25):
+        P(earn.line(f"all, model and price {g * 100:.0f}c+ apart", gap_bets(rows, tp, g)))
+    P(earn.line("at the open of the last day, 10c+", gap_bets(rows, tp, 0.10, labs=("open",))))
+    P(earn.line("after a close, 1-4 days before, 10c+", after))
+    for kind in ("day", "week", "range"):
+        P(earn.line(f"{names[kind]}, 10c+", gap_bets(rows, tp, 0.10, kinds=(kind,))))
+    P(earn.line("only buying Yes, 10c+", gap_bets(rows, tp, 0.10, side=True)))
+    P(earn.line("only buying No, 10c+", gap_bets(rows, tp, 0.10, side=False)))
+    P(earn.line("10c+, at the next 5 minutes' worst price instead of 2 hours", quick))
+    P("\nIt loses at the open and is about even after a close (126 bets, first half up, second half down). Where the price disagrees with the model, the price usually knows "
+      "something the daily numbers don't (news, the stock moving before the open), and the gap between buyers and sellers "
+      "eats the rest.\n")
+    P("## The exam\n")
+    import json
+    for name, bb in (("Stock price markets: buy where a swing model and the price are 10c+ apart", main),
+                     ("Stock price markets: same, only after a close 1-4 days before", after),
+                     ("Stock price markets: same, priced at the next 5 minutes instead of 2 hours", quick)):
+        card = exam.score(bb, name, tries=TRIES, src="stocks.py, backtest/stocks.md", status="dropped", quiet=True)
+        print("LEDGER ROW " + json.dumps(card))
+        P(f"- **{name}**: {card['bets']} bets in {card.get('groups')} separate groups, {earn.usd(card.get('per100'))} per $100, "
+          f"luck range {earn.usd(card.get('lo100'))} to {earn.usd(card.get('hi100'))}, verdict **{card.get('verdict')}**.")
+    P("\n**Verdict: dropped, no track.** Same story as the Bitcoin price markets (`optfair.md`): the market is as good "
+      "as the model, and thin trading makes every disagreement expensive to buy.\n")
+    P("## Traps found\n")
+    P(f"- **Crumb trades on the wrong side.** Trades of under $1 often show up at the mirror price (a 5c market \"trading\" at "
+      f"95c). When such a crumb is the only trade in the buying window, a backtest buys the winning side for pennies. 5-minute "
+      f"steps with under ${MIN_PRINT:.0f} traded are dropped here; without that, \"buy No on long shots after the close\" looked like +$26 per $100.")
+    P("- **No free minute-by-minute stock prices.** From GitHub: Yahoo answers 429, Stooq wants a browser check, Pyth's old "
+      "chart address is gone. Nasdaq's website gives daily open/high/low/close (`stocks.nasdaq_daily`), which is why the test "
+      "only looks at opens and closes.")
+    open(OUT, "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": peek, "src": src, "fetch": fetch}[cmd]()
+    {"peek": peek, "src": src, "fetch": fetch, "run": run}[cmd]()
