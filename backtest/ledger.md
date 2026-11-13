@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**121 ideas examined, in about 54,255 versions.** 86 dropped, 35 still being tested or waiting. **Looks real: 2.**
+**124 ideas examined, in about 54,855 versions.** 87 dropped, 37 still being tested or waiting. **Looks real: 2.**
 
-Why count: if you test 121 ideas that are all worthless, the luckiest one still looks good. With 121 tries, a result has to beat about 3.1 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 124 ideas that are all worthless, the luckiest one still looks good. With 124 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -122,6 +122,8 @@ Why count: if you test 121 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Mention markets: buy Yes where the word's record is 20c+ above the price (since Apr 2026) | 85 | 233 | -$10.79 | Behind, but could be bad luck | dropped | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: same rule if buying costs 5c more (since Apr 2026) | 85 | 243 | +$7.74 | Ahead, but could be luck | lead: cost check | mentions.py, backtest/mentions.md |
 | 2026-11-13 | Mention markets: same rule, June 2024 - Nov 2026 | 85 | 427 | +$15.66 | Promising, needs more bets | lead: wants a live paper test | mentions.py, backtest/mentions.md |
+| 2026-11-13 | Rotten Tomatoes: No where Yes is 50-75c, early in the market's life | 200 | 45 | +$23.08 | Ahead, but could be luck | lean: 63 bets, no track | families.py report, backtest/families_comb.md |
+| 2026-11-13 | Rotten Tomatoes: same, Yes at 40-80c | 200 | 50 | +$16.97 | Ahead, but could be luck | lean: small, no track | families.py report, backtest/families_comb.md |
 | 2026-11-13 | Stock price markets: buy where a swing model and the price are 10c+ apart | 40 | 392 | -$26.06 | Losing | dropped | stocks.py, backtest/stocks.md |
 | 2026-11-13 | Stock price markets: No on long shots, only buys at 75-95c like the live track | 151 | 230 | +$2.60 | Ahead, but could be luck | live paper track stock_no | stocks.py comb, backtest/stocks_comb.md |
 | 2026-11-13 | Stock price markets: No on long shots (Yes 5-25c), 4 and 2 hours before the close | 150 | 298 | +$5.33 | Promising, needs more bets | lean: thin, depends on the buy price | stocks.py comb, backtest/stocks_comb.md |
@@ -129,5 +131,6 @@ Why count: if you test 121 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Stock price markets: same, one-day markets only | 150 | 224 | +$5.93 | Promising, needs more bets | lean: thin, depends on the buy price | stocks.py comb, backtest/stocks_comb.md |
 | 2026-11-13 | Stock price markets: same, only after a close 1-4 days before | 40 | 82 | +$1.99 | Ahead, but could be luck | dropped | stocks.py, backtest/stocks.md |
 | 2026-11-13 | Stock price markets: same, priced at the next 5 minutes instead of 2 hours | 40 | 196 | -$11.03 | Behind, but could be bad luck | dropped | stocks.py, backtest/stocks.md |
+| 2026-11-13 | YouTube view counts: always No, prices alone | 200 | 231 | -$6.28 | Losing | dropped | families.py report, backtest/families_comb.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

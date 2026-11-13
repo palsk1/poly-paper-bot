@@ -1518,6 +1518,45 @@
    "verdict": "Ahead, but could be luck",
    "status": "live paper track stock_no",
    "src": "stocks.py comb, backtest/stocks_comb.md"
+  },
+  {
+   "id": "rotten_tomatoes_no_where_yes_is_50_75c_early_in_the_market_s",
+   "date": "2026-11-13",
+   "what": "Rotten Tomatoes: No where Yes is 50-75c, early in the market's life",
+   "tries": 200,
+   "bets": 63,
+   "groups": 45,
+   "per100": 23.08,
+   "floor100": -37.84,
+   "verdict": "Ahead, but could be luck",
+   "status": "lean: 63 bets, no track",
+   "src": "families.py report, backtest/families_comb.md"
+  },
+  {
+   "id": "rotten_tomatoes_same_yes_at_40_80c",
+   "date": "2026-11-13",
+   "what": "Rotten Tomatoes: same, Yes at 40-80c",
+   "tries": 200,
+   "bets": 86,
+   "groups": 50,
+   "per100": 16.97,
+   "floor100": -35.17,
+   "verdict": "Ahead, but could be luck",
+   "status": "lean: small, no track",
+   "src": "families.py report, backtest/families_comb.md"
+  },
+  {
+   "id": "youtube_view_counts_always_no_prices_alone",
+   "date": "2026-11-13",
+   "what": "YouTube view counts: always No, prices alone",
+   "tries": 200,
+   "bets": 922,
+   "groups": 231,
+   "per100": -6.28,
+   "floor100": -13.62,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "families.py report, backtest/families_comb.md"
   }
  ]
 }
