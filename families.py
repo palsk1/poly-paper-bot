@@ -282,6 +282,73 @@ def report():
     print(buf.getvalue())
 
 
+OUT2 = "backtest/families_comb2.md"
+TRIES2 = 400
+BIG = (("commodities", "Oil, gold, silver, gas prices (\"will gold hit $X this week\", \"WTI closes above $X\")"),
+       ("ufc", "UFC fights (winner, how it ends, rounds)"), ("f1", "Formula 1 (winner, pole, fastest lap, podium)"),
+       ("golf", "Golf (winner, top 5/10/20, round leaders)"), ("music", "Music (Billboard number ones, Spotify, awards, Eurovision)"))
+POOL = (("No where Yes is 50-75c, first third of the market's life (the Rotten Tomatoes lean)", lambda m, f, h, pp: f < .33 and h > 24 and .5 <= pp < .75, False, "dropped"),
+        ("No on long shots (Yes at 10-25c), any time", lambda m, f, h, pp: .10 <= pp < .25, False, "dropped"),
+        ("always Yes", lambda m, f, h, pp: .03 <= pp < .97, True, "dropped"),
+        ("always No", lambda m, f, h, pp: .03 <= pp < .97, False, "dropped"))
+
+
+def report2():
+    """Five bigger families nobody had tested, prices alone, + one pooled table over all eight -> backtest/families_comb2.md"""
+    import contextlib
+    import io
+    import btcheck
+    import earn
+    import exam
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        print("# Five bigger families, prices alone: commodities, UFC, Formula 1, golf, music (families.py report2)\n")
+        print(f"Generated {bot.iso()}. Paper only. The holdout from {btcheck.HOLDOUT_FROM} is not in here.\n")
+        print("A first look at 16 more Polymarket tags (probe `fam_...`) showed five big families that were in no earlier dig. "
+              "Same comb as `families_comb.md`: every price band, four moments of a market's life, both sides, one $10 bet per market "
+              "at the worst price of the next hour + 2c + the fee, wrong-side trades filtered out. Per $100 (bets). "
+              f"About {TRIES2} cuts looked at over all the families.")
+        pool = {nm: [] for nm, _, _, _ in POOL}
+        rows = []
+        for slug, name in BIG + (("youtube", ""), ("rotten-tomatoes", "")):
+            if name:
+                ms, tp, S = comb(slug, name=name)
+            else:
+                ms, tp = load(slug)
+                S = looks(ms, tp)
+            for nm, sel, yes, _ in POOL:
+                b = bets(ms, tp, S, sel, yes)
+                pool[nm] += b
+                rows.append(earn.line(f"{slug}: {nm.split(' (')[0]}", b))
+        print("\n## The same four simple rules in every family\n")
+        print(earn.HEAD)
+        for r in rows:
+            print(r)
+        print("\n## All eight families together\n")
+        print(earn.HEAD)
+        for nm, b in pool.items():
+            print(earn.line(nm, b))
+        print("\nWhat it says, in plain words:\n")
+        print("- **Buying Yes loses everywhere**: about $21 per $100 over 10,000 bets, in every family, in both halves. "
+              "People overpay for \"it will happen\".")
+        print("- **Buying No does not win it back**: about -$5 per $100. The gap between buyers and sellers eats the lean.")
+        print("- **The Rotten Tomatoes lean does not travel.** No on \"probably yes\" early in a market's life is ahead in the first half of "
+              "the bets and behind in the second, in almost every family. The boxes that look good for No on near-sure things "
+              "(Yes at 75-97c in commodities and music) are a handful of No tickets bought for 4-12c that came in.")
+        print("- **No on long shots loses a little** when bought at any time of a market's life (the stock track only buys in the last afternoon, "
+              "which is a different bet, and still unproven).\n")
+        print("## The exam\n")
+        for nm, _, _, st in POOL:
+            name = nm.split(" (")[0].split(", first")[0] + ", pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes"
+            card = exam.score(pool[nm], name, tries=TRIES2, src="families.py report2, backtest/families_comb2.md", status=st, quiet=True)
+            print(f"- **{nm}**: {card['bets']} bets in {card.get('groups')} separate groups, {earn.usd(card.get('per100'))} per $100, "
+                  f"luck range {earn.usd(card.get('lo100'))} to {earn.usd(card.get('hi100'))}, verdict **{card.get('verdict')}**.")
+        print("\n**Verdict: nothing to build.** Prices alone don't give a buyer anything in these families. A lead here would need "
+              "outside knowledge (like the word record or the post counter), or being the one who waits instead of the one who buys.")
+    open(OUT2, "w").write(buf.getvalue())
+    print(buf.getvalue())
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1]
-    report() if cmd == "report" else {"peek": peek, "fetch": fetch, "comb": comb}[cmd](sys.argv[2])
+    report() if cmd == "report" else report2() if cmd == "report2" else {"peek": peek, "fetch": fetch, "comb": comb}[cmd](sys.argv[2])

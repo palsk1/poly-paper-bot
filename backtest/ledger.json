@@ -1557,6 +1557,58 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "families.py report, backtest/families_comb.md"
+  },
+  {
+   "id": "no_where_yes_is_50_75c_pooled_over_commodities_ufc_f1_golf_m",
+   "date": "2026-11-13",
+   "what": "No where Yes is 50-75c, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes",
+   "tries": 400,
+   "bets": 1086,
+   "groups": 629,
+   "per100": 4.18,
+   "floor100": -9.89,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "families.py report2, backtest/families_comb2.md"
+  },
+  {
+   "id": "no_on_long_shots_pooled_over_commodities_ufc_f1_golf_music_y",
+   "date": "2026-11-13",
+   "what": "No on long shots, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes",
+   "tries": 400,
+   "bets": 3825,
+   "groups": 1663,
+   "per100": -3.53,
+   "floor100": -6.11,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "families.py report2, backtest/families_comb2.md"
+  },
+  {
+   "id": "always_yes_pooled_over_commodities_ufc_f1_golf_music_youtube",
+   "date": "2026-11-13",
+   "what": "always Yes, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes",
+   "tries": 400,
+   "bets": 10285,
+   "groups": 3036,
+   "per100": -20.94,
+   "floor100": -26.68,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "families.py report2, backtest/families_comb2.md"
+  },
+  {
+   "id": "always_no_pooled_over_commodities_ufc_f1_golf_music_youtube_",
+   "date": "2026-11-13",
+   "what": "always No, pooled over commodities, UFC, F1, golf, music, YouTube, Rotten Tomatoes",
+   "tries": 400,
+   "bets": 10164,
+   "groups": 3050,
+   "per100": -4.92,
+   "floor100": -9.25,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "families.py report2, backtest/families_comb2.md"
   }
  ]
 }
