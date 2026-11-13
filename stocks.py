@@ -7,6 +7,7 @@ Research only, paper only. Daily "Up or Down" was tested in census.py (dropped);
   python3 stocks.py src      which minute-by-minute price sources this machine can read
   python3 stocks.py fetch    strike markets + real trades + daily prices -> bt_cache/stk/
   python3 stocks.py run      the test -> backtest/stocks.md
+  python3 stocks.py comb     second pass, patterns in the prices alone -> backtest/stocks_comb.md
 """
 import collections
 import json
@@ -435,6 +436,139 @@ def run():
     print("\n".join(L))
 
 
+# ================================================================ second pass: patterns in the prices alone
+OUT2 = "backtest/stocks_comb.md"
+TRIES2 = 150
+MOMENTS = ((30, "the afternoon before"), (24, "a day before the close"), (6.4, "just after the open"), (4, "4 hours before the close"),
+           (2, "2 hours before the close"), (1, "1 hour before the close"))
+
+
+def _price(b, t, fresh=3 * 3600):
+    """Last real trade price before t, only if there was a trade in the `fresh` seconds before."""
+    p, ok = None, False
+    for x in b:
+        if x[0] + 300 <= t:
+            p, ok = x[2], x[0] >= t - fresh
+        else:
+            break
+    return p if ok else None
+
+
+def comb_rows(ms, tp):
+    R = []
+    for k, m in ms.items():
+        b = (tp.get(k) or {}).get("b")
+        if not b:
+            continue
+        for H, _ in MOMENTS:
+            t = m["end"] - H * 3600
+            if t < (m["start"] or 0) + 1800:
+                continue
+            pp = _price(b, t)
+            if pp is not None:
+                R.append((k, m, H, t, pp))
+    return R
+
+
+def comb_bets(R, tp, sel, yes, lo=0.03, hi=0.97, window=900, extra=0.02):
+    """sel(k, m, H, t, price) -> falsy to skip; with yes=None its sign picks the side. Default buy: the worst price of
+    the next 15 minutes + 2c + fee. (Two hours is too harsh while the stock market is open: the stock itself moves.)"""
+    out = []
+    for k, m, H, t, pp in R:
+        s_ = sel(k, m, H, t, pp)
+        if not s_:
+            continue
+        x = buy(m, tp[k]["b"], t, yes if yes is not None else s_ > 0, extra, lo=lo, hi=hi, window=window)
+        if x:
+            out.append(x)
+    return out
+
+
+def comb():
+    import json
+    import btcheck
+    import earn
+    import exam
+    ms, tp, D, n_all, n_bad = load()
+    R = comb_rows(ms, tp)
+    B = lambda sel, yes, **kw: comb_bets(R, tp, sel, yes, **kw)
+    cell = lambda b: f"{earn.usd(earn.per100(b))} ({len(b)})" if len(b) >= 20 else f"- ({len(b)})"
+    L = []
+    P = L.append
+    P("# Stock price markets, second pass: patterns in the prices alone (stocks.py comb)\n")
+    P(f"Generated {bot.iso()}. Paper only. The holdout from {btcheck.HOLDOUT_FROM} is not in here. Jan's ask (13 Nov): "
+      "\"we have so much data downloaded, it's worth combing through it\". The first pass (`stocks.md`) only compared "
+      "the price with a swing model.\n")
+    P(f"{len(R):,} looks at {len({r[0] for r in R}):,} markets, at six moments of each market's life, only where it had traded in "
+      "the 3 hours before. Every buy is $10 at the worst price anyone paid in the next 15 minutes + 2c + the fee. About "
+      f"{TRIES2} cuts were looked at, so the exam's luck bar is set for that.\n")
+    P("## 1. Every price band, every moment, both sides\n")
+    P("Per $100 (number of bets).\n")
+    bands = ((0.03, .10), (.10, .25), (.25, .50), (.50, .75), (.75, .90), (.90, .97))
+    P("| moment | side | " + " | ".join(f"Yes at {a * 100:.0f}-{b * 100:.0f}c" for a, b in bands) + " |")
+    P("|---|---|" + "---|" * len(bands))
+    for H, nm in MOMENTS:
+        for yes in (True, False):
+            P(f"| {nm} | buy {'Yes' if yes else 'No'} | " + " | ".join(
+                cell(B(lambda k, m, h, t, pp, a=a, b=b: h == H and a <= pp < b, yes)) for a, b in bands) + " |")
+    P("\nBuying Yes loses almost everywhere, and long shots (Yes under 25c) lose most: $25 to $90 per $100. People overpay "
+      "for the small chance. The other side of that, No on long shots, is the only corner that is ahead.\n")
+    P("## 2. The one lean: No on long shots in the afternoon\n")
+    P(earn.HEAD)
+    ls = lambda Hs, kinds=None: (lambda k, m, h, t, pp: h in Hs and .05 <= pp < .25 and (not kinds or m["kind"] in kinds))
+    lead = B(ls((4, 2)), False)
+    lead_day = B(ls((4, 2), ("day",)), False)
+    P(earn.line("No where Yes is 5-25c, 4 and 2 hours before the close", lead))
+    P(earn.line("the same, one-day markets only", lead_day))
+    P(earn.line("the same, end-of-week line markets", B(ls((4, 2), ("week",)), False)))
+    P(earn.line("the same, end-of-week bracket markets", B(ls((4, 2), ("range",)), False)))
+    harsh = B(ls((4, 2)), False, window=7200, extra=0.01)
+    P(earn.line("all kinds, at the worst price of the next 2 hours + 1c", harsh))
+    P(earn.line("all kinds, at the worst price of the next 15 minutes + 4c", B(ls((4, 2)), False, extra=0.04)))
+    P(earn.line("just after the open instead", B(ls((6.4,)), False)))
+    P(earn.line("1 hour before the close instead", B(ls((1,)), False)))
+    P(earn.line("a day before instead", B(ls((30, 24)), False)))
+    P("\nAhead with 4 and 2 hours left, behind at the open and in the last hour, and behind if the buy costs what the "
+      "worst buyer of the next 2 hours paid. A thin lean that lives or dies on the price you really get.\n")
+    P("## 3. Other cuts\n")
+    P(earn.HEAD)
+    P(earn.line("Yes on favorites (Yes at 75-97c), last 4 hours", B(lambda k, m, h, t, pp: h in (4, 2, 1) and .75 <= pp < .97, True)))
+
+    def mv(H, sign):
+        def f(k, m, h, t, pp):
+            if h != H:
+                return 0
+            p0 = _price(tp[k]["b"], t - 3 * 3600, fresh=10 ** 9)
+            if p0 is None or abs(pp - p0) < 0.08:
+                return 0
+            return sign if pp > p0 else -sign
+        return f
+    for H, nm in MOMENTS[2:]:
+        P(earn.line(f"price moved 8c+ in 3 hours, follow it, {nm}", B(mv(H, 1), None, lo=.10, hi=.90)))
+        P(earn.line(f"price moved 8c+ in 3 hours, bet against it, {nm}", B(mv(H, -1), None, lo=.10, hi=.90)))
+    P("\nBy stock, all moments, buys at 10-90c (Yes side / No side per $100):\n")
+    P("| stock | buy Yes | buy No |")
+    P("|---|---|---|")
+    for tk in sorted({m["tk"] for m in ms.values()}):
+        y, n = (B(lambda k, m, h, t, pp, s_=s_: m["tk"] == tk and .1 <= pp <= .9, s_, lo=.10, hi=.90) for s_ in (True, False))
+        if len(y) >= 30:
+            P(f"| {tk} | {cell(y)} | {cell(n)} |")
+    P("\nNo stock stands out: No beats Yes on most of them, and both lose. Following or betting against a move loses at "
+      "every moment. Brackets that don't add up to $1 and lines priced out of order are too rare to bet on (under 25 "
+      "cases at any moment).\n")
+    P("## The exam\n")
+    for name, bb, st in (("Stock price markets: No on long shots (Yes 5-25c), 4 and 2 hours before the close", lead, "lean: thin, depends on the buy price"),
+                         ("Stock price markets: same, one-day markets only", lead_day, "lean: thin, depends on the buy price"),
+                         ("Stock price markets: same, at the worst price of the next 2 hours", harsh, "dropped")):
+        card = exam.score(bb, name, tries=TRIES2, src="stocks.py comb, backtest/stocks_comb.md", status=st, quiet=True)
+        print("LEDGER ROW " + json.dumps(card))
+        P(f"- **{name}**: {card['bets']} bets in {card.get('groups')} separate groups, {earn.usd(card.get('per100'))} per $100, "
+          f"luck range {earn.usd(card.get('lo100'))} to {earn.usd(card.get('hi100'))}, worst case {earn.usd(card.get('floor100'))} per $100, "
+          f"verdict **{card.get('verdict')}**.")
+    open(OUT2, "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": peek, "src": src, "fetch": fetch, "run": run}[cmd]()
+    {"peek": peek, "src": src, "fetch": fetch, "run": run, "comb": comb}[cmd]()

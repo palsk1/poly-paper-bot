@@ -1427,6 +1427,45 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "stocks.py, backtest/stocks.md"
+  },
+  {
+   "id": "stock_price_markets_no_on_long_shots_yes_5_25c_4_and_2_hours",
+   "date": "2026-11-13",
+   "what": "Stock price markets: No on long shots (Yes 5-25c), 4 and 2 hours before the close",
+   "tries": 150,
+   "bets": 339,
+   "groups": 298,
+   "per100": 5.33,
+   "floor100": -3.68,
+   "verdict": "Promising, needs more bets",
+   "status": "lean: thin, depends on the buy price",
+   "src": "stocks.py comb, backtest/stocks_comb.md"
+  },
+  {
+   "id": "stock_price_markets_same_one_day_markets_only",
+   "date": "2026-11-13",
+   "what": "Stock price markets: same, one-day markets only",
+   "tries": 150,
+   "bets": 258,
+   "groups": 224,
+   "per100": 5.93,
+   "floor100": -2.58,
+   "verdict": "Promising, needs more bets",
+   "status": "lean: thin, depends on the buy price",
+   "src": "stocks.py comb, backtest/stocks_comb.md"
+  },
+  {
+   "id": "stock_price_markets_same_at_the_worst_price_of_the_next_2_ho",
+   "date": "2026-11-13",
+   "what": "Stock price markets: same, at the worst price of the next 2 hours",
+   "tries": 150,
+   "bets": 589,
+   "groups": 483,
+   "per100": -5.58,
+   "floor100": -12.76,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "stocks.py comb, backtest/stocks_comb.md"
   }
  ]
 }
