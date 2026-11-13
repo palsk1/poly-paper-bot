@@ -9990,3 +9990,7 @@
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV130515-15", "track": "kc_maker_safe", "ts": "2026-11-13T10:17:31Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV130515-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T10:17:31Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV130515-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T10:17:31Z", "type": "kmaker_fill"}
+{"fee": 0.0045, "outcome": "No", "price": 0.977, "shares": 5, "title": "Will Kathy Hochul underperform Kamala in New York?", "token": "34298495120011676703428418361161742578809926117264800748201738394880139751649", "track": "endgame_sell98", "ts": "2026-11-13T10:27:12Z", "type": "paper_buy"}
+{"minutes_left": 2.69, "price": 0.952, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:19Z", "type": "kmaker_order"}
+{"minutes_left": 2.69, "price": 0.995, "queue": 5986.35, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:19Z", "type": "kmaker_order"}
+{"minutes_left": 2.69, "price": 0.984, "queue": 17.73, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV130530-30", "track": "kc_maker", "ts": "2026-11-13T10:27:21Z", "type": "kmaker_order"}
