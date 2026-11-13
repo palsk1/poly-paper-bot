@@ -127,6 +127,112 @@ def src():
     try_source("hyperliquid", "https://api.hyperliquid.xyz/info")
 
 
+# ================================================================ collect
+CACHE = __import__("os").path.join(bt.CACHE, CACHE_DIR)
+SHARD = 500
+ETF = {"SPY", "QQQ", "EWY", "GLD", "SLV", "IWM", "DIA"}
+RX_ABOVE = re.compile(r"\(([A-Z.]+)\)\s+(?:finish(?:es)? (?:the )?week of .+? above|closes? above)\s+\$?([\d,]+(?:\.\d+)?)", re.I)
+RX_RANGE = re.compile(r"\(([A-Z.]+)\)\s+closes? at\s+\$?([\d,]+(?:\.\d+)?)\s*-\s*\$?([\d,]+(?:\.\d+)?)", re.I)
+RX_EDGE = re.compile(r"\(([A-Z.]+)\)\s+closes? at\s+(<|>|less than|below|above|greater than|more than)\s*\$?([\d,]+(?:\.\d+)?)", re.I)
+
+
+def parse(q):
+    """-> (ticker, kind, low, high): the closing price must be above low and/or below high for Yes."""
+    f = lambda x: float(x.replace(",", ""))
+    q = q or ""
+    m = RX_ABOVE.search(q)
+    if m:
+        return m.group(1).upper(), "week" if re.search("week", q, re.I) else "day", f(m.group(2)), None
+    m = RX_RANGE.search(q)
+    if m:
+        return m.group(1).upper(), "range", f(m.group(2)), f(m.group(3))
+    m = RX_EDGE.search(q)
+    if m:
+        up = m.group(2).lower() in (">", "above", "greater than", "more than")
+        return m.group(1).upper(), "range", f(m.group(3)) if up else None, None if up else f(m.group(3))
+    return None
+
+
+def nasdaq_daily(tk):
+    import datetime as dt
+    cls = "etf" if tk in ETF else "stocks"
+    r = json.loads(boxoffice.raw(f"https://api.nasdaq.com/api/quote/{tk}/historical?assetclass={cls}&fromdate=2025-06-01&limit=9999&todate={dt.date.today()}"))
+    out = {}
+    n = lambda x: float(str(x).replace("$", "").replace(",", ""))
+    for row in (((r.get("data") or {}).get("tradesTable") or {}).get("rows") or []):
+        try:
+            mo, d, y = row["date"].split("/")
+            out[f"{y}-{mo}-{d}"] = [n(row["open"]), n(row["high"]), n(row["low"]), n(row["close"])]
+        except Exception:
+            pass
+    return out
+
+
+def fetch():
+    import concurrent.futures as cf
+    import hashlib
+    import os
+    import btcheck
+    import optfair
+    T0 = time.time()
+    os.makedirs(CACHE, exist_ok=True)
+    ms, skipped = {}, collections.Counter()
+    for e in pages():
+        for m in e.get("markets") or []:
+            if not isinstance(m, dict):
+                continue
+            p = parse(m.get("question"))
+            if not p:
+                skipped[shape(m.get("question"))] += 1
+                continue
+            m = dict(m)
+            m.setdefault("events", [{"id": e.get("id"), "slug": e.get("slug")}])
+            s = bt.slim_market(m)
+            s["cid"] = m.get("conditionId")
+            s["tk"], s["kind"], s["lo"], s["hi"] = p
+            s["pyth"] = "pyth" in str(m.get("description") or "").lower()
+            if len(s["toks"]) == 2 and s["end"] and s.get("cid"):
+                ms[s["id"]] = s
+    cut = btcheck.T(btcheck.HOLDOUT_FROM)
+    n_all = len(ms)
+    ms = {k: m for k, m in ms.items() if m["end"] < cut}          # the holdout stays unseen until 21 Dec
+    bt.wjson(os.path.join(CACHE, "markets.json.gz"), ms)
+    print(f"strike markets {n_all}, before the holdout {len(ms)}, events {len({m['ev_slug'] for m in ms.values()})}, "
+          f"kinds {collections.Counter(m['kind'] for m in ms.values()).most_common()}, not strike markets: {skipped.most_common()}", flush=True)
+    tks = sorted({m["tk"] for m in ms.values()})
+    dpath = os.path.join(CACHE, "daily.json.gz")
+    daily = bt.rjson(dpath, {}) or {}
+    for tk in tks:
+        try:
+            d = nasdaq_daily(tk)
+            if d:
+                daily[tk] = d
+            print(f"  daily {tk}: {len(d)} days {min(d) if d else ''}..{max(d) if d else ''}", flush=True)
+        except Exception as ex:
+            print(f"  daily {tk}: FAILED {str(ex)[:120]}", flush=True)
+        time.sleep(1.0)
+    bt.wjson(dpath, daily)
+    want = sorted((m for m in ms.values() if m.get("closed") and (m.get("vol") or 0) >= 200),
+                  key=lambda m: hashlib.md5(("stk" + m["ev_slug"]).encode()).hexdigest())
+    n_sh = (len(want) + SHARD - 1) // SHARD
+    print(f"tapes wanted: {len(want)} markets with $200+ traded, {n_sh} files", flush=True)
+    for i in range(n_sh):
+        path = os.path.join(CACHE, f"tapes_{i:02d}.json.gz")
+        if os.path.exists(path):
+            continue
+        if time.time() - T0 > 100 * 60:
+            print("  out of time, run again to continue", flush=True)
+            break
+        chunk = want[i * SHARD:(i + 1) * SHARD]
+        out = {}
+        with cf.ThreadPoolExecutor(8) as ex:
+            for mid, r in ex.map(optfair.fetch_tape, [(m, m["cid"]) for m in chunk]):
+                if r is not None:
+                    out[mid] = r
+        bt.wjson(path, out)
+        print(f"  tapes file {i + 1}/{n_sh}: {len(out)}/{len(chunk)} ({(time.time() - T0) / 60:.0f} min), cut short {sum(1 for r in out.values() if r['cut'])}", flush=True)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": peek, "src": src}[cmd]()
+    {"peek": peek, "src": src, "fetch": fetch}[cmd]()
