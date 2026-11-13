@@ -9144,3 +9144,6 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV122115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T02:16:45Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXETH15M-26NOV122115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T02:16:45Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": false, "ticker": "KXSOL15M-26NOV122115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-13T02:16:45Z", "type": "kmaker_fill"}
+{"outcome": "Yes", "pnl": 0.2127, "price": 0.92, "reason": "take profit (now 92c), book", "title": "Will Xi meet with Takaichi by December 31, 2026?", "token": "60869407730980948985853180776811871982085362415775378914572922276056245597456", "track": "panic_fade_4c", "ts": "2026-11-13T02:25:36Z", "type": "paper_close"}
+{"minutes_left": 3.32, "price": 0.978, "queue": 60.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV122130-30", "track": "kc_maker", "ts": "2026-11-13T02:26:40Z", "type": "kmaker_order"}
+{"minutes_left": 3.32, "price": 0.971, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV122130-30", "track": "kc_maker", "ts": "2026-11-13T02:26:41Z", "type": "kmaker_order"}
