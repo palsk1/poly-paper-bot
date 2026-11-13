@@ -279,13 +279,50 @@ def push_allowed(track):
     return any(n in top.get("tracks", []) for n in names)
 
 
+def push_log(title, track, result):
+    """Remember every phone push (state/push_log.json): sent, failed, or muted (muted ones only counted per day).
+    Lets us prove what reached ntfy and when; summary.md shows it under "Phone alerts"."""
+    try:
+        d = load("push_log.json", {"recent": [], "days": {}})
+        day = d.setdefault("days", {}).setdefault(today_utc(), {"sent": 0, "failed": 0, "muted": 0})
+        day[result if result in ("sent", "muted") else "failed"] += 1
+        if result != "muted":
+            d.setdefault("recent", []).append({"ts": iso(), "title": title[:120], "track": track if isinstance(track, str) else None,
+                                               "result": result[:200]})
+            d["recent"] = d["recent"][-200:]
+        d["days"] = {k: d["days"][k] for k in sorted(d["days"])[-30:]}
+        save("push_log.json", d)
+    except Exception as e:
+        print(f"push log failed: {e}")
+
+
+def push_md():
+    d = load("push_log.json", {})
+    out = ["\n## Phone alerts\n", "What the bot sent to Jan's phone (ntfy). Muted = a trade by a strategy outside the top 10."]
+    days = d.get("days", {})
+    if not days:
+        return out + ["Nothing logged yet."]
+    for k in sorted(days)[-3:][::-1]:
+        v = days[k]
+        out.append(f"- {k}: {v['sent']} sent, {v['failed']} failed, {v['muted']} muted")
+    last_ok = next((r for r in reversed(d.get("recent", [])) if r["result"] == "sent"), None)
+    last_bad = next((r for r in reversed(d.get("recent", [])) if r["result"] != "sent"), None)
+    if last_ok:
+        out.append(f"- Last sent: {last_ok['ts']} \"{last_ok['title']}\"")
+    if last_bad:
+        out.append(f"- Last failure: {last_bad['ts']} \"{last_bad['title']}\": {last_bad['result']}")
+    return out
+
+
 def push(title, body, click=None, tags=None, track=None):
     if not push_allowed(track):
         print(f"[push muted, not in top {CFG['push'].get('top_n', 10)}] {title}")
+        push_log(title, track, "muted")
         return
     topic = os.environ.get("NTFY_TOPIC", "").strip()
     if not topic:
         print(f"[push skipped, no NTFY_TOPIC] {title} | {body}")
+        push_log(title, track, "failed: no NTFY_TOPIC secret")
         return
     headers = {"Title": title.encode("ascii", "ignore").decode(), "User-Agent": UA}
     if click:
@@ -296,10 +333,19 @@ def push(title, body, click=None, tags=None, track=None):
         f"https://ntfy.sh/{urllib.parse.quote(topic)}",
         data=body.encode("utf-8"), headers=headers, method="POST",
     )
-    try:
-        urllib.request.urlopen(req, timeout=15).read()
-    except Exception as e:
-        print(f"push failed: {e}")
+    err = None
+    for attempt in range(2):  # one retry: ntfy.sh sometimes drops a request
+        try:
+            urllib.request.urlopen(req, timeout=15).read()
+            err = None
+            break
+        except Exception as e:
+            err = f"{e}"
+            print(f"push failed (try {attempt + 1}): {e}")
+            if isinstance(e, urllib.error.HTTPError) and e.code == 429:
+                break  # rate limited: retrying makes it worse
+            time.sleep(3)
+    push_log(title, track, "sent" if err is None else f"failed: {err}")
 
 
 def market_link(slug="", event_slug=""):
@@ -5734,6 +5780,7 @@ def write_summary(tracks):
         print(f"real money summary failed: {e}")
     try:
         md += integrity_md()
+        md += push_md()
     except Exception as e:
         print(f"data check summary failed: {e}")
     try:
