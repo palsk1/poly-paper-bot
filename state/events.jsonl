@@ -10658,3 +10658,11 @@
 {"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV131230-30", "track": "kc_maker_safe", "ts": "2026-11-13T17:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV131230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-13T17:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV131230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-13T17:32:41Z", "type": "kmaker_fill"}
+{"fee": 0.0569, "outcome": "Yes", "price": 0.65, "shares": 5, "title": "Will Portugal win on 2026-11-14?", "token": "107452296048580988482389090157018661879731737178677405712757852049702459662331", "track": "w_sbel", "ts": "2026-11-13T17:35:29Z", "type": "paper_buy"}
+{"fee": 0.0569, "outcome": "Yes", "price": 0.65, "shares": 5, "title": "Will Portugal win on 2026-11-14?", "token": "107452296048580988482389090157018661879731737178677405712757852049702459662331", "track": "wb_sbel", "ts": "2026-11-13T17:35:29Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.91, "side": "yes", "through": true, "ticker": "KXBOXING-26NOV14JRMAY-JR", "track": "kalshi_patient", "ts": "2026-11-13T17:36:52Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXHEGSETHANNOUNCEOUT-26AUG-26NOV20", "track": "kalshi_patient", "ts": "2026-11-13T17:36:54Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "yes", "through": true, "ticker": "KXINTLFRIENDLYGAME-26NOV17SINBRA-BRA", "track": "kalshi_patient", "ts": "2026-11-13T17:36:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXINXDUD-26NOV13H1600-T7592.95", "track": "kalshi_patient", "ts": "2026-11-13T17:36:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNBA1H-26NOV13CLEMIA-TIE", "track": "kalshi_patient", "ts": "2026-11-13T17:36:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLRSHYDS-26NOV15KCATL-KCEJOHNSON10-40", "track": "kalshi_patient", "ts": "2026-11-13T17:36:59Z", "type": "kpatient_fill"}
