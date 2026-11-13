@@ -9977,3 +9977,4 @@
 {"minutes_left": 2.67, "price": 0.993, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV130500-00", "track": "kc_maker", "ts": "2026-11-13T09:57:22Z", "type": "kmaker_order"}
 {"fee": 0.0, "outcome": "No", "price": 0.979, "shares": 5, "title": "Military action against Saudi Oil Pipeline (East-West) by October 31?", "token": "31532854516311325002836621252120864459615989579671593818809583157219126911626", "track": "endgame_sell98", "ts": "2026-11-13T10:02:29Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV130500-00", "track": "kc_maker", "ts": "2026-11-13T10:02:37Z", "type": "kmaker_fill"}
+{"fee": 0.0134, "outcome": "Yes", "price": 0.96, "shares": 5, "title": "Will Ethereum reach $1,950 on November 13?", "token": "54579218733057384984157405488738248942136594868980378067765888520781396929453", "track": "endgame_sell98", "ts": "2026-11-13T10:06:24Z", "type": "paper_buy"}
