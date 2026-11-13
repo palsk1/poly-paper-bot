@@ -142,14 +142,16 @@ def fetch():
         d += dt.timedelta(days=1)
     print(f"daily numbers: have {len(days)} days, need {len(todo)} more", flush=True)
     bad = 0
-    with cf.ThreadPoolExecutor(4) as ex:
+    todo.sort(reverse=True)                                       # newest first: those are the days the markets need
+    with cf.ThreadPoolExecutor(1) as ex:
         def one(day):
+            time.sleep(0.7)                                       # Box Office Mojo answers 503 when asked faster
             for k in range(3):
                 try:
                     return day, mojo_day(day)
                 except Exception as e:
                     err = e
-                    time.sleep(2 + 3 * k)
+                    time.sleep(5 + 10 * k)
             return day, str(err)[:100]
         for n, (day, rows) in enumerate(ex.map(one, todo)):
             if isinstance(rows, str) or not rows:
