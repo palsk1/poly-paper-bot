@@ -288,6 +288,14 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Both need an in-person meeting with direct interaction (calls/video excluded), both end Dec 31 11:59 PM ET; Poly window starts Oct 27, Kalshi at issuance, and Poly Yes at 14c shows no meeting yet.",
    "approved": "2026-11-12"
+  },
+  {
+   "id": "KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027",
+   "kalshi": "KXNEWSOMRUN-28-27JAN01",
+   "poly_slug": "will-gavin-newsom-announce-a-presidential-run-before-2027",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same Newsom 2028 run announcement by the person/official campaign, by Dec 31 2026 11:59 PM ET on both; paperwork/exploratory statements don't count; same pattern as approved run pairs.",
+   "approved": "2026-11-13"
   }
  ],
  "rejected": [
@@ -1610,6 +1618,251 @@
    "id": "KXEBOLACOUNTRY-27-SOMA|will-somalia-have-an-ebola-case-in-2026",
    "reason": "Kalshi needs an official report of 'Ebola disease' after its own issuance; Polymarket accepts media consensus from its own creation date. Sources and windows differ.",
    "date": "2026-11-12"
+  },
+  {
+   "id": "KXLUTNICKOUT-26SEP-27JAN01|howard-lutnick-out-as-secretary-of-commerce-by-december-31",
+   "reason": "Polymarket resolves Yes on an announced resignation/removal; Kalshi needs an actual departure.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL-26NOV16-TAK|will-taken-natalee-holloway-season-1-be-the-top-us-netflix-show-this-week",
+   "reason": "Kalshi is the global #1 show chart; Polymarket is the US #1 chart.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL2-26NOV16-TAK|will-taken-natalee-holloway-season-1-be-the-2-us-netflix-show-this-week",
+   "reason": "Kalshi is the global #2 show chart; Polymarket is the US #2 chart.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL2-26NOV16-BLA|will-black-doves-season-2-be-the-top-global-netflix-show-this-week",
+   "reason": "Different outcome: Kalshi is #2 global show, Polymarket is #1 global show.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXVETOOVERRIDE-29JAN20-27|will-congress-override-any-veto-in-2026-20260624150337322",
+   "reason": "Kalshi counts only Trump's vetoes and has no extra rules; Polymarket counts any president's veto with its own sources.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXWHVISIT-27-MCAR|will-mark-carney-visit-ukraine-by-december-31-2026-20260729210126057",
+   "reason": "Different events: Kalshi is a White House visit, Polymarket is a visit to Ukraine.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXBABELMANDEBWEEKLY-26NOV15-T190|will-190-209-ships-transit-the-bab-el-mandeb-strait-between-november-9-november-15",
+   "reason": "Different outcome: Kalshi is above 190 transits, Polymarket is the 190-209 bucket.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXGTEMP-27-P0|will-november-2026-be-the-2nd-hottest-on-record",
+   "reason": "Different events: Kalshi is 2026 hottest year, Polymarket is November 2026 2nd hottest.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXGAMEAWARDS-BAD-RES|will-resident-evil-requiem-win-game-of-the-year-at-the-2026-game-awards-20260804145651076",
+   "reason": "Different award: Kalshi is Best Audio Design, Polymarket is Game of the Year.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTRUMPHUANGMEET-27JAN01-JAN01|will-jensen-huang-be-the-1-searched-person-on-google-this-year-20260717214426300",
+   "reason": "Different events: Kalshi is a Trump-Huang meeting, Polymarket is Google's #1 searched person.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXGABBARDRETURN-27JAN01-TGAB-27JAN01|will-tulsi-gabbard-announce-a-presidential-run-before-2027",
+   "reason": "Different events: Kalshi is Gabbard rejoining the administration, Polymarket is a presidential run.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTOPARTISTRUNNERUPUSA-26-BRUN|will-bruno-mars-be-the-top-artist-in-the-us-for-2026-20260714171850372",
+   "reason": "Different outcome: Kalshi is #2 Spotify US artist, Polymarket is #1.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNHLATLANTIC-27-MTL|will-the-montreal-canadiens-record-90-points",
+   "reason": "Different events: Kalshi is winning the Atlantic Division, Polymarket is 90+ points.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXCHIPEXPORTLAW-26NOV-27JAN01|will-export-control-chip-security-become-law-this-year",
+   "reason": "Kalshi counts any chip export restriction law; Polymarket needs location-verification legislation (Chip Security Act type).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNETFLIXRANKMOVIEGLOBAL-26NOV16-ADO|will-a-dogs-perfect-christmas-be-the-top-global-netflix-movie-this-week",
+   "reason": "Polymarket uses the English-only global movie list and breaks ties alphabetically; Kalshi names neither list nor tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXRT-AVE-95|will-avengers-doomsday-score-at-least-95-on-the-rotten-tomatoes-tomatometer-20261221",
+   "reason": "Kalshi needs a score above 95, Polymarket at least 95 (a 95 splits them); check dates are worded differently too.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXRT-AVE-90|will-avengers-doomsday-score-at-least-90-on-the-rotten-tomatoes-tomatometer-20261221",
+   "reason": "Kalshi needs a score above 90, Polymarket at least 90 (a 90 splits them).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTRUMPPARDON-27JAN01-JHUA|will-trump-pardon-jensen-huang-before-2027",
+   "reason": "Kalshi counts any presidential pardon in Trump's second term; Polymarket needs Trump himself in a set window (same as rejected SBF pair).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXECONSTATU3-26NOV-T4.2|will-the-november-2026-unemployment-rate-be-4pt2",
+   "reason": "Kalshi gives no source, revision or delayed-release rules; Polymarket fixes BLS first release and its own fallbacks.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXUFCLIGHTWEIGHTTITLE-26-ATSA|will-arman-tsarukyan-be-the-ufc-lightweight-champion-on-december-31-2026",
+   "reason": "Kalshi rule doesn't exclude interim champions; Polymarket does. Vacant handling also differs.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXABRAHAMSA-27-JAN01-BELI|israel-and-lebanon-normalize-relations-before-2027",
+   "reason": "Different events: Kalshi is Israel-Belize, Polymarket is Israel-Lebanon.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-LEE|will-leeds-united-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXCBDCHILE-26DEC15-HOLD|will-the-central-bank-of-chile-increase-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different outcome: Kalshi is hold, Polymarket is a 25bps hike.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXDWTSELIMINATION-26NOV18-MHIG|dwts-35-week-10-elimination-mauhig",
+   "reason": "Kalshi counts eliminations declared on social media or press releases with its own window; Polymarket only the broadcast in week 10. Under 1c before fees anyway.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXSYRIA-26-27|will-the-us-reopen-its-embassy-in-iran-in-2026",
+   "reason": "Different country: Kalshi is Syria, Polymarket is Iran.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXUFCHEAVYWEIGHTTITLE-26-JHOK|will-josh-hokit-be-the-ufc-heavyweight-champion-on-december-31-2026",
+   "reason": "Kalshi rule doesn't exclude interim champions; Polymarket does. Vacant handling also differs.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXHOUSEDEMLEADRUN-26-27JAN01-AOCA|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027",
+   "reason": "Different office: Kalshi is House Democratic leader, Polymarket is President.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXUSACOMPANYSTAKE-27JAN01-PFE|will-the-us-federal-government-take-a-stake-in-pfizer-inc",
+   "reason": "Kalshi counts an announced stake and pre-existing stakes; Polymarket needs the stake actually taken.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP4-LFC|will-liverpool-finish-in-the-top-4-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP2-CFC|will-chelsea-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTRUMPPARDON-27JAN01-EMUS|will-trump-pardon-elon-musk-before-2027",
+   "reason": "Kalshi counts any presidential pardon in Trump's second term; Polymarket needs Trump himself in a set window (same as rejected SBF pair).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTIME-26-EM|will-elon-musk-be-the-2-searched-person-on-google-this-year-20260914",
+   "reason": "Different events: Kalshi is TIME Person of the Year, Polymarket is Google's #2 searched person.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXCODINGMODEL-26DEC-OPEN|will-openai-have-the-best-ai-model-on-livebench-coding-at-the-end-of-december-2026",
+   "reason": "Polymarket checks at 12 PM ET with a cost-per-task tie-break; Kalshi gives no check time or tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNEXTTEAMNFL-26THILL-KC|will-tyreek-hill-sign-with-the-kansas-city-chiefs-in-2026",
+   "reason": "Kalshi ends Dec 30 11:59 PM ET, Polymarket Dec 31 11:59 PM ET (and counts practice squads).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP4-ARS|will-arsenal-finish-in-the-top-4-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTOKENLAUNCH-27JAN01-FELI|will-felix-protocol-launch-a-token-by-december-31-2026",
+   "reason": "Kalshi needs a liquidity pool and a set list of launch criteria; Polymarket only needs a transferable, tradable token.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXPOPEVISIT-27JAN01-ISR|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "reason": "Different events: Kalshi is the Pope visiting Israel, Polymarket is Trump meeting the Pope.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXACQANNOUNCEEBAY-27JAN01-JAN01|will-gamestop-acquire-ebay",
+   "reason": "Kalshi needs a definitive binding agreement; Polymarket counts any official announcement, including a controlling stake.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXVICTORIA3RD-26NOV28-GRN|will-greens-win-the-third-most-seats-in-the-next-victorian-state-election",
+   "reason": "Polymarket counts Liberal-National as one bloc; Kalshi counts parties separately and splits ties, so third place can differ.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXUFCWELTERWEIGHTTITLE-26-IMAK|will-islam-makhachev-be-the-ufc-welterweight-champion-on-december-31-2026",
+   "reason": "Kalshi rule doesn't exclude interim champions; Polymarket does. Vacant handling also differs.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXFEDDECISION-27MAR-C25|will-the-fed-decrease-interest-rates-by-25-bps-after-the-march-2027-meeting",
+   "reason": "Polymarket rounds odd-size moves up to 25bps; Kalshi's rounding/cancel rules differ (same as rejected Fed pairs).",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXNCAAFACCLEADER-26RSHYDS-DUKENSHE|will-nate-sheppard-be-the-2026-d1-rushing-yards-leader-20260803210835739",
+   "reason": "Different events: Kalshi is the ACC rushing leader, Polymarket is the whole D1 (FBS) leader.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "TESLAOPTIMUS-26DEC31|will-tesla-release-optimus-by-december-31-2026",
+   "reason": "Kalshi counts any humanoid robot on sale by Dec 30 ET; Polymarket needs Tesla and counts paid preorders through Dec 31.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXVENEZUELALEADER-26DEC31-NMAD|will-nicols-maduro-be-the-leader-of-venezuela-end-of-2026",
+   "reason": "Check time differs (10 AM vs 12 PM ET) and Polymarket has a UN fallback Kalshi lacks.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXTOPAI-27-JAN01-MIST|will-mistral-have-a-1-ai-model-by-december-31-2026",
+   "reason": "Kalshi names no leaderboard; Polymarket uses LMArena text overall, style control off.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXUFCBANTAMWEIGHTTITLE-26-PYAN|will-petr-yan-be-the-ufc-bantamweight-champion-on-december-31-2026",
+   "reason": "Kalshi rule doesn't exclude interim champions; Polymarket does. Vacant handling also differs.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP6-BOU|will-bournemouth-finish-in-the-top-6-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXEPLTOP-27TOP4-BRI|will-brighton-finish-in-the-top-4-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause and no tie rule.",
+   "date": "2026-11-13"
+  },
+  {
+   "id": "KXRELEASEMAXWELL-26JAN01-27|will-trump-pardon-ghislaine-maxwell-before-2027",
+   "reason": "Different events: Kalshi is Maxwell released from custody, Polymarket is a Trump pardon.",
+   "date": "2026-11-13"
   }
  ],
  "rejected_events": [
