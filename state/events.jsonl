@@ -10893,3 +10893,4 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLPASSYDS-26NOV15JACTEN-JACTLAWRENCE16-375", "track": "kalshi_patient", "ts": "2026-11-13T20:23:39Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV15JACTEN-TEN8", "track": "kalshi_patient", "ts": "2026-11-13T20:23:39Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXART-RENCAN18NOV26-55000000", "track": "kalshi_patient", "ts": "2026-11-13T20:23:39Z", "type": "kpatient_order"}
+{"minutes_left": 2.61, "price": 0.952, "queue": 811.72, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV131530-30", "track": "kc_maker", "ts": "2026-11-13T20:27:24Z", "type": "kmaker_order"}
