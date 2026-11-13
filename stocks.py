@@ -110,6 +110,23 @@ def peek():
     try_source("pyth benchmarks 5m old", f"https://benchmarks.pyth.network/v1/shims/tradingview/history?symbol=Equity.US.NVDA%2FUSD&resolution=5&from={now - 300 * 86400}&to={now - 295 * 86400}")
 
 
+def src():
+    """Which intraday price sources can this machine read?"""
+    now = int(time.time())
+    P = "https://benchmarks.pyth.network/v1/shims/tradingview"
+    try_source("pyth symbols", f"{P}/symbols?symbol=Equity.US.NVDA/USD")
+    try_source("pyth search", f"{P}/search?query=NVDA&limit=10")
+    for res, back, span in (("5", 3, 2), ("1", 3, 1), ("5", 200, 5), ("60", 300, 20), ("1", 300, 1), ("D", 400, 300)):
+        try_source(f"pyth res {res}, {back} days back", f"{P}/history?symbol=Equity.US.NVDA/USD&resolution={res}&from={now - back * 86400}&to={now - (back - span) * 86400}")
+    try_source("nasdaq chart", "https://api.nasdaq.com/api/quote/NVDA/chart?assetclass=stocks&fromdate=2026-10-01&todate=2026-11-13")
+    try_source("yahoo query2 1h", "https://query2.finance.yahoo.com/v8/finance/chart/NVDA?interval=1h&range=730d")
+    try_source("yahoo spark", "https://query1.finance.yahoo.com/v7/finance/spark?symbols=NVDA&range=60d&interval=5m")
+    try_source("binance xstock", "https://data-api.binance.vision/api/v3/klines?symbol=NVDAXUSDT&interval=5m&limit=5")
+    try_source("bybit xstock", "https://api.bybit.com/v5/market/kline?category=spot&symbol=NVDAXUSDT&interval=5&limit=5")
+    try_source("kraken xstock", "https://api.kraken.com/0/public/OHLC?pair=NVDAxUSD&interval=5")
+    try_source("hyperliquid", "https://api.hyperliquid.xyz/info")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": peek}[cmd]()
+    {"peek": peek, "src": src}[cmd]()
