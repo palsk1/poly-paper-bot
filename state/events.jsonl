@@ -10309,3 +10309,7 @@
 {"minutes_left": 5.25, "price": 0.973, "queue": 108.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:09:45Z", "type": "kmaker_order"}
 {"minutes_left": 3.39, "price": 0.992, "queue": 3378.81, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:11:37Z", "type": "kmaker_order"}
 {"minutes_left": 3.39, "price": 0.988, "queue": 6.18, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:11:38Z", "type": "kmaker_order"}
+{"fee": 0.0103, "outcome": "No", "price": 0.957, "shares": 5, "title": "Will the highest temperature in Seattle be between 54-55\u00b0F on November 14?", "token": "41718358654536960904427550602552332216435241338512571818360233616205527479239", "track": "endgame_sell98", "ts": "2026-11-13T14:16:58Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.27, "price": 0.973, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:17:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:17:04Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV130915-15", "track": "kc_maker", "ts": "2026-11-13T14:17:04Z", "type": "kmaker_fill"}
