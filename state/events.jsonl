@@ -9224,3 +9224,8 @@
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV15SEALV-LVBBOWERS89", "track": "kalshi_patient", "ts": "2026-11-13T03:01:12Z", "type": "kpatient_order"}
 {"fee": 0.04, "outcome": "No", "price": 0.8, "shares": 5, "title": "Will the 10-year Treasury yield hit 5.4% before 2027?", "token": "109690414673304987306459908612940478642163414789116111385473988266671855870091", "track": "panic_fade_4c", "ts": "2026-11-13T03:01:50Z", "type": "paper_buy"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXLOWTDEN-26NOV12-B37.5", "track": "kalshi_patient", "ts": "2026-11-13T03:06:39Z", "type": "kpatient_fill"}
+{"minutes_left": 3.13, "price": 0.981, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV122215-15", "track": "kc_maker", "ts": "2026-11-13T03:11:52Z", "type": "kmaker_order"}
+{"minutes_left": 3.13, "price": 0.99, "queue": 5622.58, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV122215-15", "track": "kc_maker", "ts": "2026-11-13T03:11:52Z", "type": "kmaker_order"}
+{"minutes_left": 3.13, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV122215-15", "track": "kc_maker", "ts": "2026-11-13T03:11:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.13, "price": 0.963, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV122215-15", "track": "kc_maker", "ts": "2026-11-13T03:11:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.13, "price": 0.968, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV122215-15", "track": "kc_maker", "ts": "2026-11-13T03:11:55Z", "type": "kmaker_order"}
