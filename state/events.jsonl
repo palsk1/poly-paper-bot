@@ -10819,3 +10819,15 @@
 {"outcome": "No", "pnl": -2.8119, "price": 0.0, "reason": "resolved", "title": "Will the highest temperature in Karachi be 32\u00b0C on November 13?", "token": "23414841556322729633685430782921602556020188184794649658915631923861370018270", "track": "wx_forecast", "ts": "2026-11-13T19:40:05Z", "type": "paper_close"}
 {"minutes_left": 3.84, "price": 0.985, "queue": 39.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:41:09Z", "type": "kmaker_order"}
 {"minutes_left": 3.84, "price": 0.985, "queue": 39.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:41:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.996, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV131445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-13T19:42:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.95, "queue": 523.47, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:42:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.95, "queue": 523.47, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:42:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.98, "queue": 337.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:42:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.98, "queue": 337.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:42:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:42:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:42:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.991, "queue": 35.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:42:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.991, "queue": 35.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:42:41Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.997, "queue": 2.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:42:41Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.997, "queue": 2.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:42:42Z", "type": "kmaker_order"}
+{"minutes_left": 2.37, "price": 0.997, "queue": 2.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV131445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-13T19:42:42Z", "type": "kmaker_order"}
