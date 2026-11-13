@@ -131,6 +131,20 @@ is no untouched test set (the same months were used to find it). Only live bets 
   nothing.
 - **Anything else:** not proven, keep it on paper.
 
+## 5g. Proposed live test: stock_no (written 2026-11-13, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`stocks.py comb`, `backtest/stocks_comb.md`). The history says +$5.33 per $100 on
+339 bets when a buy costs the worst price of the next 15 minutes + 2c, and -$5.58 when it costs the worst price of
+the next 2 hours. The rule was picked after looking at about 150 cuts. Only live bets at real asks can settle it.
+
+- **What counts:** every finished `stock_no` bet from the track's first run, rules as in config `stock_no` (a rule
+  change restarts the count). Bets on the same stock and day count once.
+- **When:** once, on 1 Jan 2027. Peeks before that don't count.
+- **Pass:** 150 or more finished bets, ahead, and the low end of the luck range above -$5 per $100 (the same bar
+  as the holdout tests in section 5).
+- **If it buys fewer than 150:** not proven. That alone says the asks are too far from the last price to use it.
+- **Anything else:** not proven, keep it on paper.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.
