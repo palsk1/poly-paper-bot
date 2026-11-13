@@ -88,39 +88,72 @@ def slim(e, m):
     return s
 
 
+def pages():
+    """Every finished event carrying the Mentions tag. Tries the listing styles Gamma has, keeps the first that answers."""
+    tries = [("keyset", {"tag_slug": "mention-markets"}), ("keyset", {"tag_id": 100343}),
+             ("offset", {"tag_slug": "mention-markets"}), ("offset", {"tag_id": 100343})]
+    for kind, base in tries:
+        out, cur, off, bad = [], None, 0, 0
+        for _ in range(3000):
+            p = dict(base, closed="true", limit=100)
+            if kind == "keyset" and cur:
+                p["after_cursor"] = cur
+            if kind == "offset":
+                p["offset"] = off
+            try:
+                r = bot.http_json(f"{G}/events/keyset" if kind == "keyset" else f"{G}/events", p)
+            except Exception as e:
+                bad += 1
+                print(f"  {kind} {base} failed: {str(e)[:120]}", flush=True)
+                if bad > 3 or not out:
+                    break
+                time.sleep(3)
+                continue
+            rows = [e for e in bot.envelope_rows(r, "events", "data") if isinstance(e, dict)]
+            if not rows:
+                break
+            out += rows
+            off += 100
+            cur = r.get("next_cursor") if isinstance(r, dict) else None
+            if len(out) % 2000 == 0:
+                print(f"  {kind} {base}: {len(out)} events ({(time.time() - T0) / 60:.0f} min)", flush=True)
+            if kind == "keyset" and not cur:
+                break
+            if len(out) > 120000:
+                break
+        tagged = sum(1 for e in out if any((t.get("slug") == "mention-markets") for t in e.get("tags") or [] if isinstance(t, dict)))
+        print(f"{kind} {base}: {len(out)} events, {tagged} carry the tag", flush=True)
+        if len(out) >= 200:
+            if tagged and tagged < len(out):
+                out = [e for e in out if any((t.get("slug") == "mention-markets") for t in e.get("tags") or [] if isinstance(t, dict))]
+            return out
+    return []
+
+
 def fetch():
     """Every finished mention market (any size, back to the start) and the real trades of the ones before the holdout."""
     import optfair
     os.makedirs(CACHE, exist_ok=True)
     mpath = os.path.join(CACHE, "markets.json.gz")
     ms = {}
-    for tag in TAGS:
-        off = 0
-        while off < 80000:
-            try:
-                r = bot.http_json(f"{G}/events", {"tag_slug": tag, "closed": "true", "limit": 100, "offset": off, "order": "endDate", "ascending": "true"})
-            except Exception as e:
-                print("  page failed, once more", off, str(e)[:120], flush=True)
-                time.sleep(3)
-                try:
-                    r = bot.http_json(f"{G}/events", {"tag_slug": tag, "closed": "true", "limit": 100, "offset": off, "order": "endDate", "ascending": "true"})
-                except Exception:
-                    break
-            rows = bot.envelope_rows(r, "events", "data")
-            if not rows:
-                break
-            for e in rows:
-                for m in e.get("markets") or []:
-                    if isinstance(m, dict):
-                        s = slim(e, m)
-                        if len(s["toks"]) == 2 and s["end"] and s.get("cid"):
-                            ms[s["id"]] = s
-            off += 100
-            if off % 2000 == 0:
-                print(f"  {tag}: {off} events read, {len(ms)} markets ({(time.time() - T0) / 60:.0f} min)", flush=True)
-        print(f"tag {tag}: {len(ms)} markets so far", flush=True)
-    bt.wjson(mpath, ms)
+    evs = pages()
+    fam = collections.Counter()
+    for e in evs:
+        fam[re.sub(r"[-0-9]+$", "", re.sub(r"\d+", "", str(e.get("slug"))))[:40]] += 1
+        for m in e.get("markets") or []:
+            if isinstance(m, dict):
+                s = slim(e, m)
+                if len(s["toks"]) == 2 and s["end"] and s.get("cid"):
+                    ms[s["id"]] = s
+    ends = sorted(m["end"] for m in ms.values())
+    print(f"events {len(evs)}, markets {len(ms)}, ends {time.strftime('%Y-%m-%d', time.gmtime(ends[0])) if ends else '-'} .. "
+          f"{time.strftime('%Y-%m-%d', time.gmtime(ends[-1])) if ends else '-'}", flush=True)
+    print("biggest families:", fam.most_common(80), flush=True)
+    if not ms:
+        return
     cut = btcheck.T(btcheck.HOLDOUT_FROM)
+    ms = {k: m for k, m in ms.items() if m["end"] < cut}   # the holdout stays unseen until 21 Dec
+    bt.wjson(mpath, ms)
     want = [m for m in ms.values() if m["end"] < cut and m.get("closed") and (m.get("vol") or 0) >= 200]
     want.sort(key=lambda m: order_key(m["ev_slug"]))
     print(f"markets: {len(ms)}, before the holdout with $200+ traded: {len(want)}", flush=True)
