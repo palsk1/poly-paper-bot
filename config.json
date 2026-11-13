@@ -140,6 +140,12 @@
       "source": "postcount",
       "rules": "postcount_no"
     },
+    "word_no": {
+      "label": "UNTESTED (added 2026-11-13). Word record, buy NO: in 'will X say Y' markets, checks how often that word really came up in the same speaker's earlier markets. Where the Yes price is 20c or more above that record (3+ earlier markets needed), buys No at 10-90c, at least 6 hours before the listed end. History since April: +$15.25 per $100 on 533 bets, 'Promising, needs more bets', no fresh test set (backtest/mentions.md). One bet per market, real order-book fills. $100 paper",
+      "start_cash": 100,
+      "source": "wordno",
+      "rules": "word_no"
+    },
     "quiet_no": {
       "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1813,6 +1819,28 @@
       "scan_every_minutes": 60,
       "picks_per_scan": 10,
       "max_open": 40,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "word_no": {
+      "why": "2026-11-13 mentions.py (backtest/mentions.md, new-strategy thread, Jan said go 13 Nov): 24,228 finished mention markets. Since April 2026 (when blind 'always No' stopped paying), buying No where Yes traded 20c+ above the word's own record with that speaker (3+ earlier markets) made +$15.25 per $100 on 533 bets at the worst price of the next 5 minutes + 3c + fee (exam: Promising, needs more bets). Same rule without word knowledge about $0. Weak spots: no untouched test set, +$7.74 at +5c cost, $0 at +8c, June and August lost, bets in the last 6 hours lose. Buying Yes loses. UNTESTED live. Claude's track, rule changes reported.",
+      "min_gap": 0.20,
+      "min_gap_note": "Listed Yes price minus the word's own record must be 20c or more.",
+      "min_hist": 3,
+      "min_hist_note": "The speaker needs 3 or more earlier finished markets with this word.",
+      "min_price": 0.10,
+      "max_price": 0.90,
+      "min_model_edge": 0.10,
+      "min_model_edge_note": "After the real asking price and the fee, No must still be 10c under the record's chance (same bar as the history test).",
+      "max_over_listed": 0.05,
+      "max_over_listed_note": "Skip when the real ask is 5c+ above the listed price (thin book): the history lead is about gone at +8c.",
+      "min_hours_to_end": 6,
+      "min_hours_to_end_note": "In the history, bets in the last 6 hours before the listed end lost.",
+      "min_hours_old": 1,
+      "scan_every_minutes": 30,
+      "picks_per_scan": 10,
+      "max_open": 80,
       "max_per_theme": 999,
       "take_profit": null,
       "stop_loss": null
