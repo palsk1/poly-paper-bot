@@ -1505,6 +1505,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "quakes.py, backtest/quakes.md"
+  },
+  {
+   "id": "stock_price_markets_no_on_long_shots_only_buys_at_75_95c_lik",
+   "date": "2026-11-13",
+   "what": "Stock price markets: No on long shots, only buys at 75-95c like the live track",
+   "tries": 151,
+   "bets": 254,
+   "groups": 230,
+   "per100": 2.6,
+   "floor100": -5.19,
+   "verdict": "Ahead, but could be luck",
+   "status": "live paper track stock_no",
+   "src": "stocks.py comb, backtest/stocks_comb.md"
   }
  ]
 }

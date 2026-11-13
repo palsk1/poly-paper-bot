@@ -565,6 +565,11 @@ def comb():
         P(f"- **{name}**: {card['bets']} bets in {card.get('groups')} separate groups, {earn.usd(card.get('per100'))} per $100, "
           f"luck range {earn.usd(card.get('lo100'))} to {earn.usd(card.get('hi100'))}, worst case {earn.usd(card.get('floor100'))} per $100, "
           f"verdict **{card.get('verdict')}**.")
+    live = [x for x in lead if 0.75 <= x["px"] <= 0.95]
+    P("\n## Correction, same day (13 Nov)\n")
+    P(f"Polymarket's trade list sometimes shows trades on the wrong side, also in bigger trades (`quakes.md`). {sum(1 for x in lead if x['px'] < 0.70)} of the "
+      f"lead's {len(lead)} bets \"bought\" No under 70c although Yes had just traded at 5-25c. The paper track `stock_no` only buys No at 75-95c: "
+      f"on just those buys the history is {earn.usd(earn.per100(live))} per $100 on {len(live)} bets. Weaker than first reported. The live track still decides.")
     open(OUT2, "w").write("\n".join(L) + "\n")
     print("\n".join(L))
 

@@ -147,7 +147,7 @@
       "rules": "word_no"
     },
     "stock_no": {
-      "label": "UNTESTED (added 2026-11-13). Stock long shots, buy NO: in 'will Nvidia close above $X' style markets, when Yes is listed at 5-25c with 1.5 to 4.5 hours left before the stock market closes, buys No, held to the close. History: +$5.33 per $100 on 339 bets at one way of pricing the buy, -$5.58 at a harsher one, so only real asking prices can tell (backtest/stocks_comb.md). One bet per market, real order-book fills. $100 paper",
+      "label": "UNTESTED (added 2026-11-13). Stock long shots, buy NO: in 'will Nvidia close above $X' style markets, when Yes is listed at 5-25c with 1.5 to 4.5 hours left before the stock market closes, buys No, held to the close. History: +$5.33 per $100 on 339 bets (corrected 13 Nov: 33 of those bets bought No under 70c, prices the live track never takes, and made half the profit; the 254 bets bought at 75-95c, like the live track, made +$2.60 per $100, exam verdict Ahead, but could be luck) at one way of pricing the buy, -$5.58 at a harsher one, so only real asking prices can tell (backtest/stocks_comb.md). One bet per market, real order-book fills. $100 paper",
       "start_cash": 100,
       "source": "stocklong",
       "rules": "stock_no"
@@ -1852,7 +1852,7 @@
       "stop_loss": null
     },
     "stock_no": {
-      "why": "2026-11-13 stocks.py comb (backtest/stocks_comb.md, new-strategy thread, Jan picked 'Yes, $100 paper track' 13 Nov): about 150 price-only cuts on 14,506 finished stock price markets. Buying Yes loses almost everywhere (long shots $25-90 per $100). The other side, No where Yes last traded at 5-25c with 4 and 2 hours left before the close, made +$5.33 per $100 on 339 bets at the worst price of the next 15 minutes + 2c + fee (exam: Promising, needs more bets), but -$5.58 at the worst price of the next 2 hours, and it was behind at the open and in the last hour. Trade history can't say what a buyer really pays in these thin markets, so this track buys only at real asks close to the listed price. UNTESTED live. Claude's track, rule changes reported.",
+      "why": "2026-11-13 stocks.py comb (backtest/stocks_comb.md, new-strategy thread, Jan picked 'Yes, $100 paper track' 13 Nov): about 150 price-only cuts on 14,506 finished stock price markets. Buying Yes loses almost everywhere (long shots $25-90 per $100). The other side, No where Yes last traded at 5-25c with 4 and 2 hours left before the close, made +$5.33 per $100 on 339 bets (corrected 13 Nov: 33 of those bets bought No under 70c, prices the live track never takes, and made half the profit; the 254 bets bought at 75-95c, like the live track, made +$2.60 per $100, exam verdict Ahead, but could be luck) at the worst price of the next 15 minutes + 2c + fee (exam: Promising, needs more bets), but -$5.58 at the worst price of the next 2 hours, and it was behind at the open and in the last hour. Trade history can't say what a buyer really pays in these thin markets, so this track buys only at real asks close to the listed price. UNTESTED live. Claude's track, rule changes reported.",
       "min_yes": 0.05,
       "max_yes": 0.25,
       "min_yes_note": "Listed Yes price must be 5c to under 25c: the long shots people overpay for.",
