@@ -10816,3 +10816,6 @@
 {"filled": 9.4, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLFIRSTTD-26NOV15CARNO-CARTMCMILLAN4", "track": "kalshi_patient", "ts": "2026-11-13T19:39:17Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV15MINGB-MINJJEFFERSON18-150", "track": "kalshi_patient", "ts": "2026-11-13T19:39:18Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV13NSHVGK-VGKTHERTL48", "track": "kalshi_patient", "ts": "2026-11-13T19:39:20Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": -2.8119, "price": 0.0, "reason": "resolved", "title": "Will the highest temperature in Karachi be 32\u00b0C on November 13?", "token": "23414841556322729633685430782921602556020188184794649658915631923861370018270", "track": "wx_forecast", "ts": "2026-11-13T19:40:05Z", "type": "paper_close"}
+{"minutes_left": 3.84, "price": 0.985, "queue": 39.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV131445-45", "track": "kc_maker", "ts": "2026-11-13T19:41:09Z", "type": "kmaker_order"}
+{"minutes_left": 3.84, "price": 0.985, "queue": 39.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV131445-45", "track": "kc_maker_safe", "ts": "2026-11-13T19:41:10Z", "type": "kmaker_order"}
