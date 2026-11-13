@@ -1388,6 +1388,45 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "boxoffice.py, backtest/boxoffice.md"
+  },
+  {
+   "id": "stock_price_markets_buy_where_a_swing_model_and_the_price_ar",
+   "date": "2026-11-13",
+   "what": "Stock price markets: buy where a swing model and the price are 10c+ apart",
+   "tries": 40,
+   "bets": 493,
+   "groups": 392,
+   "per100": -26.06,
+   "floor100": -49.32,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "stocks.py, backtest/stocks.md"
+  },
+  {
+   "id": "stock_price_markets_same_only_after_a_close_1_4_days_before",
+   "date": "2026-11-13",
+   "what": "Stock price markets: same, only after a close 1-4 days before",
+   "tries": 40,
+   "bets": 126,
+   "groups": 82,
+   "per100": 1.99,
+   "floor100": -37.71,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "stocks.py, backtest/stocks.md"
+  },
+  {
+   "id": "stock_price_markets_same_priced_at_the_next_5_minutes_instea",
+   "date": "2026-11-13",
+   "what": "Stock price markets: same, priced at the next 5 minutes instead of 2 hours",
+   "tries": 40,
+   "bets": 226,
+   "groups": 196,
+   "per100": -11.03,
+   "floor100": -39.87,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "stocks.py, backtest/stocks.md"
   }
  ]
 }
