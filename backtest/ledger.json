@@ -1323,6 +1323,71 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "earn.py, backtest/earn.md"
+  },
+  {
+   "id": "box_office_buy_yes_on_brackets_at_65c_before_the_weekend",
+   "date": "2026-11-13",
+   "what": "Box office: buy Yes on brackets at 65c+ before the weekend",
+   "tries": 45,
+   "bets": 34,
+   "groups": 34,
+   "per100": 14.77,
+   "floor100": -16.69,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "boxoffice.py, backtest/boxoffice.md"
+  },
+  {
+   "id": "box_office_buy_yes_on_brackets_under_25c_before_the_weekend",
+   "date": "2026-11-13",
+   "what": "Box office: buy Yes on brackets under 25c before the weekend",
+   "tries": 45,
+   "bets": 111,
+   "groups": 72,
+   "per100": -48.18,
+   "floor100": -95.5,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "boxoffice.py, backtest/boxoffice.md"
+  },
+  {
+   "id": "box_office_buy_no_where_yes_is_under_25c_before_the_weekend",
+   "date": "2026-11-13",
+   "what": "Box office: buy No where Yes is under 25c before the weekend",
+   "tries": 45,
+   "bets": 95,
+   "groups": 65,
+   "per100": 2.25,
+   "floor100": -11.91,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "boxoffice.py, backtest/boxoffice.md"
+  },
+  {
+   "id": "box_office_bet_against_an_8c_jump_within_a_day",
+   "date": "2026-11-13",
+   "what": "Box office: bet against an 8c+ jump within a day",
+   "tries": 45,
+   "bets": 290,
+   "groups": 141,
+   "per100": -34.02,
+   "floor100": -56.55,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "boxoffice.py, backtest/boxoffice.md"
+  },
+  {
+   "id": "box_office_follow_an_8c_jump_within_a_day",
+   "date": "2026-11-13",
+   "what": "Box office: follow an 8c+ jump within a day",
+   "tries": 45,
+   "bets": 272,
+   "groups": 138,
+   "per100": -4.66,
+   "floor100": -21.71,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "boxoffice.py, backtest/boxoffice.md"
   }
  ]
 }
