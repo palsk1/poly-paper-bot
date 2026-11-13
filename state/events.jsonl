@@ -8921,3 +8921,11 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV121900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-13T00:02:25Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV121900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-13T00:02:25Z", "type": "kmaker_fill"}
 {"filled": 2.34, "price": 0.96, "side": "no", "through": false, "ticker": "KXWTIH-26NOV1219-T88.19", "track": "kalshi_patient", "ts": "2026-11-13T00:02:28Z", "type": "kpatient_fill"}
+{"outcome": "draw: No", "pnl": 2.4375, "price": 1.0, "reason": "resolved", "title": "Will Sport Lisboa e Benfica vs. FK Austria Wien end in a draw?", "token": "81186852837719722486471691043724372804863614286541804544368422924907285101060", "track": "sharp_pinnacle", "ts": "2026-11-13T00:05:36Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": -1.8576, "price": 0.0, "reason": "resolved", "title": "Will Sport Lisboa e Benfica vs. FK Austria Wien end in a draw?", "token": "84427270802239434018461361930767882755981517903360152496720023617601903633852", "track": "soccer_draw", "ts": "2026-11-13T00:05:36Z", "type": "paper_close"}
+{"pnl": 0.0936, "price": 0.96, "shares": 2.34, "side": "no", "ticker": "KXWTIH-26NOV1219-T88.19", "track": "kalshi_patient", "ts": "2026-11-13T00:07:22Z", "type": "kpatient_result"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV15PITCIN-PITGBERNARD17", "track": "kalshi_patient", "ts": "2026-11-13T00:08:20Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXMISOINDW-06NOV26-T50", "track": "kalshi_patient", "ts": "2026-11-13T00:08:20Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV15MINGB-GBSWILLIAMS83", "track": "kalshi_patient", "ts": "2026-11-13T00:08:20Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXJBLEAGUEGAME-26NOV130530DIDANH-DID", "track": "kalshi_patient", "ts": "2026-11-13T00:08:20Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXUEFANLTOTAL-26NOV16MKDSLO-5", "track": "kalshi_patient", "ts": "2026-11-13T00:08:20Z", "type": "kpatient_order"}
