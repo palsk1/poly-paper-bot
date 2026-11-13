@@ -41,6 +41,8 @@ CANDIDATES = [
      "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
     ("word_no", "NO on mention words priced far above the word's own record (untested)", DECISION_DAY,
      "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
+    ("stock_no", "NO on stock long shots in the afternoon (untested)", DECISION_DAY,
+     "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
     ("arb", "Same question on Kalshi and Polymarket", DECISION_DAY, "pays out on 1 Jan"),
 ]
 KC_TARGET, KC_BAR, KC_START = 2500, 0.22, "2026-11-09T19:00"

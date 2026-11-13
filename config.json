@@ -146,6 +146,12 @@
       "source": "wordno",
       "rules": "word_no"
     },
+    "stock_no": {
+      "label": "UNTESTED (added 2026-11-13). Stock long shots, buy NO: in 'will Nvidia close above $X' style markets, when Yes is listed at 5-25c with 1.5 to 4.5 hours left before the stock market closes, buys No, held to the close. History: +$5.33 per $100 on 339 bets at one way of pricing the buy, -$5.58 at a harsher one, so only real asking prices can tell (backtest/stocks_comb.md). One bet per market, real order-book fills. $100 paper",
+      "start_cash": 100,
+      "source": "stocklong",
+      "rules": "stock_no"
+    },
     "quiet_no": {
       "label": "Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week (less than 2c), buys NO at 50-75c. The only one of 33,823 screened ideas that passed, but about even when replayed the way a bot buys, so this is a live test (Jan's call, 9 Nov). One bet per event, real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1841,6 +1847,25 @@
       "scan_every_minutes": 30,
       "picks_per_scan": 10,
       "max_open": 80,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "stock_no": {
+      "why": "2026-11-13 stocks.py comb (backtest/stocks_comb.md, new-strategy thread, Jan picked 'Yes, $100 paper track' 13 Nov): about 150 price-only cuts on 14,506 finished stock price markets. Buying Yes loses almost everywhere (long shots $25-90 per $100). The other side, No where Yes last traded at 5-25c with 4 and 2 hours left before the close, made +$5.33 per $100 on 339 bets at the worst price of the next 15 minutes + 2c + fee (exam: Promising, needs more bets), but -$5.58 at the worst price of the next 2 hours, and it was behind at the open and in the last hour. Trade history can't say what a buyer really pays in these thin markets, so this track buys only at real asks close to the listed price. UNTESTED live. Claude's track, rule changes reported.",
+      "min_yes": 0.05,
+      "max_yes": 0.25,
+      "min_yes_note": "Listed Yes price must be 5c to under 25c: the long shots people overpay for.",
+      "min_hours_to_end": 1.5,
+      "max_hours_to_end": 4.5,
+      "hours_note": "History: ahead with 4 and 2 hours left, behind just after the open and in the last hour.",
+      "min_price": 0.75,
+      "max_price": 0.95,
+      "max_over_listed": 0.03,
+      "max_over_listed_note": "Skip when the real ask for No is 3c+ above the listed price: the history lead is +$3 at 4c of extra cost and gone at the harsher price.",
+      "scan_every_minutes": 30,
+      "picks_per_scan": 10,
+      "max_open": 60,
       "max_per_theme": 999,
       "take_profit": null,
       "stop_loss": null

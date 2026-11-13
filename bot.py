@@ -3707,7 +3707,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno", "stocklong")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3794,7 +3794,7 @@ def run_fast(tracks, force=False):
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
                      ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
                      ("draws", draw_candidates), ("postcount", postcount_candidates),
-                     ("wordno", wordno_candidates)):
+                     ("wordno", wordno_candidates), ("stocklong", stocklong_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -4120,6 +4120,55 @@ def wordno_candidates(names):
         out[n].sort(key=lambda c: -c["model_edge"])
     print(f"wordno: {added} newly finished markets added to the record, {len(live)} open events, {looked} markets looked at, "
           f"{known} with 3+ earlier markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
+    return out
+
+
+def stocklong_candidates(names):
+    """Stock price markets ("will Nvidia close above $180 today?"), stocks.py comb, backtest/stocks_comb.md, 2026-11-13.
+    People overpay for the long shot. Where the listed YES price is in [min_yes, max_yes) and the stock market closes
+    in min_hours_to_end..max_hours_to_end hours, buy NO. One bet per market; the real ask must be close to the listed
+    price (rule max_over_listed), because the history lead only exists at prices near the last trade."""
+    import stocks
+    rs = {n: rules_for(n) for n in names}
+    out = {n: [] for n in names}
+    t_now = now().timestamp()
+    live, cur = [], None
+    for _ in range(40):
+        p = {"tag_id": stocks.TAG, "closed": "false", "limit": 50}
+        if cur:
+            p["after_cursor"] = cur
+        res = http_json(f"{GAMMA}/events/keyset", p)
+        rows = [e for e in envelope_rows(res, "events", "data") if isinstance(e, dict)]
+        live += rows
+        cur = res.get("next_cursor") if isinstance(res, dict) else None
+        if not rows or not cur:
+            break
+    looked = soon = 0
+    for e in live:
+        for m in event_markets(e):
+            prices = binary(m)
+            if not prices or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] != ["yes"] or not stocks.parse(m.get("question")):
+                continue
+            end = parse_iso(m.get("endDate") or m.get("endDateIso"))
+            if not end:
+                continue
+            looked += 1
+            hours_left, p_yes = (end.timestamp() - t_now) / 3600, prices[0]
+            for n, r in rs.items():
+                if not r["min_hours_to_end"] <= hours_left <= r["max_hours_to_end"]:
+                    continue
+                soon += 1
+                if not r["min_yes"] <= p_yes < r["max_yes"]:
+                    continue
+                c = candidate(m, 1, max(hours_left / 24, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                              {"signal": f"Yes listed {cents(p_yes)} with {hours_left:.1f} hours left before the close"})
+                c["event_key"] = str(m.get("slug") or c["token"])     # one bet per market, not per event
+                c["theme"] = "stock long shot"
+                out[n].append(c)
+    for n in out:
+        out[n].sort(key=lambda c: -c["liquidity"])
+    print(f"stocklong: {len(live)} open events, {looked} stock price markets, {soon} closing in the time window, "
+          + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
 
 
