@@ -9306,3 +9306,4 @@
 {"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV122245-45", "track": "kc_maker", "ts": "2026-11-13T03:46:40Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXETH15M-26NOV122245-45", "track": "kc_maker", "ts": "2026-11-13T03:46:40Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV122245-45", "track": "kc_maker", "ts": "2026-11-13T03:46:40Z", "type": "kmaker_fill"}
+{"outcome": "Draw", "pnl": 3.6519, "price": 1.0, "reason": "resolved", "title": "Will Cerro Largo FC vs. CA Progreso end in a draw?", "token": "5331638011299817739998172212918217638092361354752871248345621048919833094884", "track": "soccer_draw", "ts": "2026-11-13T03:50:39Z", "type": "paper_close"}
