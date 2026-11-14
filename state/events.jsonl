@@ -13306,3 +13306,4 @@
 {"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141630-30", "track": "kc_maker_safe", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV141630-30", "track": "kc_maker_safe", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV141630-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV14SEACAR-CARLSTANKOVEN22", "track": "kalshi_patient", "ts": "2026-11-14T21:36:52Z", "type": "kpatient_result"}
