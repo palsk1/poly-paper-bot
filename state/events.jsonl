@@ -13039,3 +13039,4 @@
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV14MINBOS-BOSJPETERKA10", "track": "kalshi_patient", "ts": "2026-11-14T18:44:21Z", "type": "kpatient_fill"}
 {"filled": 1.8, "price": 0.96, "side": "no", "through": true, "ticker": "KXNHLGOAL-26NOV14PHICBJ-PHICYORK8-1", "track": "kalshi_patient", "ts": "2026-11-14T18:44:22Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUFCVICROUND-26NOV14HEIDIA-DIA3", "track": "kalshi_patient", "ts": "2026-11-14T18:44:24Z", "type": "kpatient_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV141345-45", "track": "kc_maker", "ts": "2026-11-14T18:47:49Z", "type": "kmaker_fill"}
