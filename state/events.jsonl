@@ -11455,3 +11455,4 @@
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": false, "ticker": "KXHYPE15M-26NOV132130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:32:13Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV132130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:32:13Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": false, "ticker": "KXXRP15M-26NOV132130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:32:13Z", "type": "kmaker_fill"}
+{"fee": 0.0463, "outcome": "Yes", "price": 0.843, "shares": 5, "title": "Will the price of Bitcoin be above $66,000 on November 15?", "token": "79566267538951089370898069479067802264690696620967470789802145945622103284770", "track": "w_tokor", "ts": "2026-11-14T02:32:40Z", "type": "paper_buy"}
