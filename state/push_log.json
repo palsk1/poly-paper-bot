@@ -7,8 +7,8 @@
   },
   "2026-11-14": {
    "failed": 0,
-   "muted": 19,
-   "sent": 8
+   "muted": 37,
+   "sent": 10
   }
  },
  "recent": [
@@ -59,6 +59,18 @@
    "title": "[arb] locked in 2.1c a share",
    "track": null,
    "ts": "2026-11-14T04:50:59Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame] bought 1 (practice money)",
+   "track": "endgame",
+   "ts": "2026-11-14T05:02:14Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-14T05:05:57Z"
   }
  ]
 }
