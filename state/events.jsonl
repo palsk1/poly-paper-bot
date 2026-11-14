@@ -11695,3 +11695,5 @@
 {"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV132345-45", "track": "kc_maker_safe", "ts": "2026-11-14T04:47:56Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV132345-45", "track": "kc_maker_safe", "ts": "2026-11-14T04:47:56Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV132345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T04:47:56Z", "type": "kmaker_fill"}
+{"annual": 0.152, "edge": 0.0209, "pair": "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027", "title": "Will Ron DeSantis announce a presidential run before 2027?", "track": "arb", "ts": "2026-11-14T04:50:59Z", "type": "arb_opportunity"}
+{"edge": 0.0209, "pair": "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027", "price": 0.974, "title": "Will Ron DeSantis announce a presidential run before 2027?", "track": "arb", "ts": "2026-11-14T04:50:59Z", "type": "arb_open"}
