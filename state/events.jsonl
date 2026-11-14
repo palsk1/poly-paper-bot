@@ -12461,3 +12461,14 @@
 {"minutes_left": 2.89, "price": 0.998, "queue": 3558.56, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker", "ts": "2026-11-14T12:57:09Z", "type": "kmaker_order"}
 {"minutes_left": 2.89, "price": 0.998, "queue": 3558.56, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker_safe", "ts": "2026-11-14T12:57:09Z", "type": "kmaker_order"}
 {"minutes_left": 2.89, "price": 0.998, "queue": 3558.56, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:57:09Z", "type": "kmaker_order"}
+{"cost": 4.4843, "title": "Will the price of Bitcoin be above $70,000 on November 17?", "token": "311957989004312567103800167205328035676258707013447115957396283129838818153", "track": "crypto_no", "ts": "2026-11-14T13:09:06Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140800-00", "track": "kc_maker", "ts": "2026-11-14T13:09:07Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140800-00", "track": "kc_maker", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140800-00", "track": "kc_maker_safe", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker_safe", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140800-00", "track": "kc_maker_safe_usd", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV140800-00", "track": "kc_maker_safe_usd", "ts": "2026-11-14T13:09:08Z", "type": "kmaker_fill"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXHIGHTHOU-26NOV13-B79.5", "track": "kalshi_patient", "ts": "2026-11-14T13:09:11Z", "type": "kpatient_result"}
+{"pnl": 0.7911, "price": 0.91, "shares": 8.79, "side": "no", "ticker": "KXHIGHTSATX-26NOV13-B80.5", "track": "kalshi_patient", "ts": "2026-11-14T13:09:11Z", "type": "kpatient_result"}
+{"fee": 0.0, "outcome": "No", "price": 0.86, "shares": 5, "title": "Russia x Ukraine ceasefire agreement by December 31, 2026?", "token": "69565284411089708271128692790745152090129066525382935764397092493923596997488", "track": "panic_fade_4c", "ts": "2026-11-14T13:09:46Z", "type": "paper_buy"}
