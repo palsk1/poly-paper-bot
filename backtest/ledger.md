@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**128 ideas examined, in about 56,455 versions.** 91 dropped, 37 still being tested or waiting. **Looks real: 2.**
+**140 ideas examined, in about 58,144 versions.** 103 dropped, 37 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 128 ideas that are all worthless, the luckiest one still looks good. With 128 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 140 ideas that are all worthless, the luckiest one still looks good. With 140 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -136,5 +136,17 @@ Why count: if you test 128 ideas that are all worthless, the luckiest one still 
 | 2026-11-13 | Stock price markets: same, only after a close 1-4 days before | 40 | 82 | +$1.99 | Ahead, but could be luck | dropped | stocks.py, backtest/stocks.md |
 | 2026-11-13 | Stock price markets: same, priced at the next 5 minutes instead of 2 hours | 40 | 196 | -$11.03 | Behind, but could be bad luck | dropped | stocks.py, backtest/stocks.md |
 | 2026-11-13 | YouTube view counts: always No, prices alone | 200 | 231 | -$6.28 | Losing | dropped | families.py report, backtest/families_comb.md |
+| 2026-11-14 | Kalshi mentions: always buy No at the asking price, 24h before | 250 | 2299 | -$0.12 | Behind, but could be bad luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions: always buy Yes at the asking price, 24h before | 250 | 2299 | -$11.31 | Losing | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions: buy No where Yes is 20c+ above the word's own record, since July 2026 | 250 | 232 | +$2.83 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, first 3,500: Earnings-call markets: buy No | 60 | 191 | +$10.24 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, first 3,500: Word listed 3+ times before (not earnings): buy No | 60 | 586 | -$6.83 | Losing | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, first 3,500: Word listed only 1-2 times before (not earnings): buy No | 60 | 96 | +$14.49 | Promising, needs more bets | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, fresh test: Earnings-call markets: buy No | 3 | 485 | +$0.91 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, fresh test: Word listed 3+ times before (not earnings): buy No | 3 | 1495 | -$2.12 | Losing | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, fresh test: Word listed only 1-2 times before (not earnings): buy No | 3 | 804 | +$3.35 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, waiting side: buy Yes 1c above the best buy order | 250 | 3712 | -$10.00 | Losing | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, waiting side: sell Yes 1c under the asking price (all of 2025-2026) | 250 | 3785 | +$4.98 | Looks real | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Kalshi mentions, waiting side since July 2026: sell Yes 1c under the asking price | 250 | 990 | +$0.67 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
