@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**140 ideas examined, in about 58,144 versions.** 103 dropped, 37 still being tested or waiting. **Looks real: 3.**
+**142 ideas examined, in about 58,184 versions.** 105 dropped, 37 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 140 ideas that are all worthless, the luckiest one still looks good. With 140 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 142 ideas that are all worthless, the luckiest one still looks good. With 142 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -148,5 +148,7 @@ Why count: if you test 140 ideas that are all worthless, the luckiest one still 
 | 2026-11-14 | Kalshi mentions, waiting side: buy Yes 1c above the best buy order | 250 | 3712 | -$10.00 | Losing | dropped | kmentions.py, backtest/kmentions.md |
 | 2026-11-14 | Kalshi mentions, waiting side: sell Yes 1c under the asking price (all of 2025-2026) | 250 | 3785 | +$4.98 | Looks real | dropped | kmentions.py, backtest/kmentions.md |
 | 2026-11-14 | Kalshi mentions, waiting side since July 2026: sell Yes 1c under the asking price | 250 | 990 | +$0.67 | Ahead, but could be luck | dropped | kmentions.py, backtest/kmentions.md |
+| 2026-11-14 | Polymarket mentions vs Kalshi's price: buy No where Polymarket is 10c+ above Kalshi | 20 | 118 | +$0.63 | Ahead, but could be luck | dropped | kmentions.py cross, backtest/kmentions.md |
+| 2026-11-14 | Polymarket mentions vs Kalshi's price: buy Yes where Polymarket is 10c+ below Kalshi | 20 | 71 | -$5.78 | Behind, but could be bad luck | dropped | kmentions.py cross, backtest/kmentions.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

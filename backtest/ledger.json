@@ -1618,7 +1618,7 @@
    "bets": 255,
    "groups": 191,
    "per100": 10.24,
-   "floor100": -10.47,
+   "floor100": -10.38,
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
@@ -1644,7 +1644,7 @@
    "bets": 109,
    "groups": 96,
    "per100": 14.49,
-   "floor100": -12.1,
+   "floor100": -12.0,
    "verdict": "Promising, needs more bets",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
@@ -1670,7 +1670,7 @@
    "bets": 844,
    "groups": 586,
    "per100": -6.83,
-   "floor100": -16.74,
+   "floor100": -16.71,
    "verdict": "Losing",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
@@ -1709,7 +1709,7 @@
    "bets": 29213,
    "groups": 2299,
    "per100": -11.31,
-   "floor100": -13.51,
+   "floor100": -13.5,
    "verdict": "Losing",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
@@ -1722,7 +1722,7 @@
    "bets": 871,
    "groups": 232,
    "per100": 2.83,
-   "floor100": -18.02,
+   "floor100": -18.01,
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
@@ -1765,6 +1765,32 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "kmentions.py, backtest/kmentions.md"
+  },
+  {
+   "id": "polymarket_mentions_vs_kalshi_s_price_buy_no_where_polymarke",
+   "date": "2026-11-14",
+   "what": "Polymarket mentions vs Kalshi's price: buy No where Polymarket is 10c+ above Kalshi",
+   "tries": 20,
+   "bets": 204,
+   "groups": 118,
+   "per100": 0.63,
+   "floor100": -28.82,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "kmentions.py cross, backtest/kmentions.md"
+  },
+  {
+   "id": "polymarket_mentions_vs_kalshi_s_price_buy_yes_where_polymark",
+   "date": "2026-11-14",
+   "what": "Polymarket mentions vs Kalshi's price: buy Yes where Polymarket is 10c+ below Kalshi",
+   "tries": 20,
+   "bets": 107,
+   "groups": 71,
+   "per100": -5.78,
+   "floor100": -43.23,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kmentions.py cross, backtest/kmentions.md"
   }
  ]
 }

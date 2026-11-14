@@ -501,10 +501,127 @@ def run(score=True):
     return card
 
 
+# ================================================================ Kalshi's price as the outside number for Polymarket
+STOP = set("what will say during the a an of on in at to and or his her their next originally scheduled for with by from this that be is before after".split())
+
+
+def _toks(x):
+    return {w for w in re.findall(r"[a-z0-9]+", x.lower()) if w not in STOP and len(w) > 1}
+
+
+def _words(w):
+    n = re.search(r"(\d+)\+", w)
+    w = re.sub(r"\d+\+\s*times?", "", re.sub(r"\(.*?\)", "", w), flags=re.I)
+    return frozenset(x for x in (re.sub(r"[^a-z0-9 ]", "", p.lower()).strip() for p in re.split(r"/| or ", w)) if x), int(n.group(1)) if n else 1
+
+
+def twins(pm, km, overlap=0.67):
+    """Polymarket mention market -> the Kalshi market on the same speech and the same word list (same count needed,
+    listed ends within 36 hours, two thirds of the title words shared). -> [(polymarket id, kalshi ticker)]"""
+    idx = collections.defaultdict(list)
+    for m in km.values():
+        if not m["s"].startswith("KXMVE"):
+            ws, c = _words(m["w"])
+            for w in ws:
+                idx[w].append((m, ws, c, _toks(m["q"])))
+    out = []
+    for p in pm.values():
+        try:
+            pe, pc = float(p["end"]), float(p["closed_t"] or p["end"])
+        except (TypeError, ValueError):
+            continue
+        ws, c = _words(p.get("item") or "")
+        pt, best = _toks(p["title"]), None
+        for w in ws:
+            for m, kws, kc, kt in idx.get(w, ()):
+                if kc != c or kws != ws or (abs(m["close"] - pe) > 36 * 3600 and abs(m["close"] - pc) > 36 * 3600):
+                    continue
+                ov = len(pt & kt) / max(1, min(len(pt), len(kt)))
+                if ov >= overlap and (not best or ov > best[0]):
+                    best = (ov, m["t"])
+        if best:
+            out.append((p["id"], best[1]))
+    return out
+
+
+def cross_bets(pm, ptp, km, ktp, pairs, gap, side, window=1, extra=0.02, since=0):
+    """Each hour: Kalshi's real Yes bid/ask (at most 6c apart) against Polymarket's last trade (at most 2 hours old,
+    $5+ steps only). side "no": Polymarket Yes is `gap`+ above Kalshi's asking price -> buy No on Polymarket.
+    side "yes": `gap`+ below Kalshi's buy order -> buy Yes. Price: the worst Polymarket trade of the next `window`
+    hours (never less than the signal price) + extra + fee; a buy 15c+ dearer than the signal price is thrown out. One bet per market, $10."""
+    import bisect
+    import mentions
+    first = {}
+    for m in km.values():
+        first[m["ev"]] = min(first.get(m["ev"], 1e18), m["close"])
+    out = []
+    for pid, kt in pairs:
+        p, k, kv, pv = pm[pid], km[kt], ktp.get(kt), ptp.get(pid)
+        if not kv or not pv or not kv["c"] or p.get("final") not in ([0.0, 1.0], [1.0, 0.0]):
+            continue
+        b = [x for x in pv["b"] if x[5] >= 5]
+        bt_ = [x[0] for x in b]
+        stop = min(first[k["ev"]], float(p["end"])) - 3600
+        for c in kv["c"]:
+            t = c[0]
+            if t > stop:
+                break
+            if t < since or c[1] is None or c[2] is None or c[1] < 0.02 or c[2] > 0.98 or c[2] - c[1] > 0.06:
+                continue
+            i = bisect.bisect_right(bt_, t) - 1
+            if i < 0 or t - bt_[i] > 7200 or not 0.10 <= b[i][2] <= 0.90:
+                continue
+            pp = b[i][2]
+            if not (pp - c[2] >= gap if side == "no" else c[1] - pp >= gap):
+                continue
+            nx = [x for x in b[i + 1:i + 200] if t < x[0] <= t + window * 3600]
+            if not nx:
+                continue
+            raw = 1 - min(x[3] for x in nx) if side == "no" else max(x[4] for x in nx)
+            sig = 1 - pp if side == "no" else pp
+            if raw - sig > 0.15 or raw + extra >= 0.99:
+                continue
+            px = max(raw, sig) + extra        # never cheaper than the price at the signal: a move our way came after we would have bought
+            sh = 10 / px
+            fee_ = bot.taker_fee(sh, px, p.get("fee") or 0)
+            win = (p["final"][0] == 1.0) == (side == "yes")
+            out.append({"ev": p["ev_slug"], "t": t, "cost": 10 + fee_, "pay": sh if win else 0.0, "pnl": (sh if win else 0.0) - 10 - fee_,
+                        "title": p["q"], "kt": kt, "same": (k["res"] == "yes") == (p["final"][0] == 1.0)})
+            break
+    return out
+
+
+def cross(score=True):
+    """Section 4 of the report: is Kalshi's price a usable outside number for Polymarket's mention markets?"""
+    import mentions
+    pm, ptp = mentions.load()[:2]
+    km, ktp = load()
+    pairs = twins(pm, km)
+    agree = sum((km[k]["res"] == "yes") == (pm[p].get("final") == [1.0, 0.0]) for p, k in pairs)
+    L = ["", "## 4. Kalshi's price as the outside number for Polymarket's mention markets", "",
+         f"{len(pairs):,} Polymarket mention markets have a Kalshi twin (same speech, same word list). The two sites settled the same way in {agree:,} of them.",
+         "Each hour, where Polymarket's last trade was 5c / 10c / 15c away from Kalshi's real orders, buy Polymarket's side that Kalshi says is cheap,",
+         "at the worst Polymarket trade of the next hour + 2c + fee.", "",
+         "| what | bets | events | per $100 | luck range | first half / second half | exam |", "|---|---|---|---|---|---|---|"]
+    for g in (0.05, 0.10, 0.15):
+        for side in ("no", "yes"):
+            b = cross_bets(pm, ptp, km, ktp, pairs, g, side)
+            nm = f"Polymarket mentions vs Kalshi's price: buy {side.capitalize()} where Polymarket is {int(g * 100)}c+ {'above' if side == 'no' else 'below'} Kalshi"
+            c = exam.score(b, nm, tries=20, src="kmentions.py cross, backtest/kmentions.md", status="dropped", log=score and g == 0.10, quiet=True)
+            L.append(f"| buy {side.capitalize()}, {int(g * 100)}c+ apart | {len(b):,} | {c['events']:,} | {usd(c['per100'])} | {usd(c['lo100'])} to {usd(c['hi100'])} | "
+                     f"{usd(c['half1'])} / {usd(c['half2'])} | {c['verdict']} |")
+    L += ["", "Polymarket's mention prices already follow Kalshi's. Gaps of 10c+ are rare and buying them is a coin flip. Dropped.",
+          "Traps: with a looser match (\"God or Evil\" on Polymarket against \"God\" on Kalshi) this looked like +$11 per $100, because Polymarket's wider word list is a different bet.",
+          "And when Polymarket's price jumps 15c+ in the hour after the signal (the word was said), a bot would already have bought at the old price: pricing those bets at the new price, or dropping them, hides the losses (it looked like +$14 per $100)."]
+    with open(OUT, "a") as f:
+        f.write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "run"
     if mode.startswith("tapes-"):
         _, a, b = mode.split("-")
         do_tapes(int(a), int(b))
     else:
-        {"list": do_list, "tapes": do_tapes, "run": run, "dry": lambda: run(False)}[mode]()
+        {"list": do_list, "tapes": do_tapes, "run": lambda: (run(), cross()), "cross": cross, "dry": lambda: run(False)}[mode]()
