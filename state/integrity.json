@@ -1,13 +1,13 @@
 {
  "alerted": {},
- "checked": "2026-11-14T16:41:53Z",
+ "checked": "2026-11-14T16:48:27Z",
  "deep_checked": "2026-11-14T05:05:56Z",
  "deep_problems": [],
  "problems": [
   {
    "key": "too_good",
    "track": "kc_maker_safe_usd",
-   "what": "197 finished trades and not one loss: check the fills before trusting it"
+   "what": "198 finished trades and not one loss: check the fills before trusting it"
   }
  ]
 }
