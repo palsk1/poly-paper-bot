@@ -327,6 +327,38 @@ def stopped_info(tc, tr):
     return {"on": on, "why": (m.group(2) if m else why)[:300]}
 
 
+def plain_words(rows):
+    """Jan, 14 Nov: "I can barely explain the explanations to my friend". Adds a plain card ("plain": say / example /
+    wins / loses / status) to every row from plain_words.json. Display only. Wallet copies use the w_ / wb_ templates."""
+    try:
+        with open(os.path.join(bot.ROOT, "plain_words.json")) as fh:
+            pw = json.load(fh)
+    except (OSError, ValueError) as e:
+        print(f"dashboard: plain_words.json not read ({e})")
+        return
+    groups, fams, tr = pw.get("groups", {}), pw.get("families", {}), pw.get("tracks", {})
+    missing = []
+    for r in rows:
+        n = r["name"]
+        e = dict(tr.get(n) or {})
+        if not e:
+            for pre in ("wb_", "w_"):
+                if n.startswith(pre) and pre in fams:
+                    m = re.match(r"Copy wallet (.+?)(?:, filled up)?:", r.get("label") or "")
+                    who = m.group(1) if m else n[len(pre):]
+                    if len(who) > 20:
+                        who = who[:6] + "..." + who[-4:]
+                    e = {k: v.format(who=who, twin="w_" + n[3:]) if isinstance(v, str) else v for k, v in fams[pre].items()}
+                    break
+        if not e:
+            missing.append(n)
+            continue
+        g = groups.get(e.pop("group", ""), {})
+        r["plain"] = {k: e.get(k) or g.get(k) for k in ("say", "example", "wins", "loses", "status") if e.get(k) or g.get(k)}
+    if missing:
+        print(f"dashboard: no plain words for {len(missing)} strategies: {', '.join(missing)} (add them to plain_words.json)")
+
+
 def build(offline=False):
     if offline:
         def no_net(*a, **k):
@@ -370,6 +402,7 @@ def build(offline=False):
     ext = [r for r in [combo_row(quoter)] + kfast_rows() if r]
     order = bot.ranked(stats)
     rows += ext
+    plain_words(rows)
     if ext:            # same ranking rule as bot.ranked: worst case first, then P&L
         order = [r["name"] for r in sorted(rows, key=lambda r: (-r["trust"]["worst_per_100"], -r["pnl"]))]
     data = {"generated": bot.iso(), "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,

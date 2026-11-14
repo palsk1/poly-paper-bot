@@ -97,7 +97,7 @@ and you read the result in the run log. All of it is paper only.
 | `config.json`, `arb_pairs.json` | Every track's rules; reviewed arb pairs |
 | `bot.integrity()` | Data check after every run, `state/integrity.json`, "Data check" in summary (PR #22) |
 | `bot.plain_verdict()` | Plain-word verdicts used by dashboard, pushes and the morning review (PR #34) |
-| `dashboard.py` | Phone page https://palsk1.github.io/poly-paper-bot/ (PR #11, #34, #35) |
+| `dashboard.py` | Phone page https://palsk1.github.io/poly-paper-bot/ (PR #11, #34, #35). Since 14 Nov: plain card per strategy from `plain_words.json` (say / example / wins / loses); add an entry for every new track, `python3 dashboard.py --offline` warns about missing ones |
 | `state/summary.md` | Live scoreboard |
 | `LEARNINGS.md` + `learnings.py` | **The main "what we've learned" page**: goal, candidates with pass rules and check dates, 1 Jan checklist, dropped ideas, open questions. Every finished dig updates it by hand; `python3 learnings.py` (run by daily.yml) rewrites its live-numbers block (incl. the combo house line from `state/quoter.json`, with a warning if Jan's server sent nothing for 3+ hours) and the week-by-week table (`state/learnings_weeks.json`). `python3 learnings.py selftest` checks it offline |
 
