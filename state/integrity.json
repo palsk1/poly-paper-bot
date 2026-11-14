@@ -1,9 +1,8 @@
 {
  "alerted": {
-  "scan_failing:sharp_pinnacle": "2026-11-14T13:57:47Z",
   "scan_failing:soccer_draw": "2026-11-14T13:57:47Z"
  },
- "checked": "2026-11-14T14:04:43Z",
+ "checked": "2026-11-14T14:07:31Z",
  "deep_checked": "2026-11-14T05:05:56Z",
  "deep_problems": [],
  "problems": [
@@ -11,11 +10,6 @@
    "key": "too_good",
    "track": "kc_maker_safe_usd",
    "what": "185 finished trades and not one loss: check the fills before trusting it"
-  },
-  {
-   "key": "scan_failing",
-   "track": "sharp_pinnacle",
-   "what": "scans run but none got through since 2026-11-12 12:38 (check the watch log)"
   },
   {
    "key": "scan_failing",
