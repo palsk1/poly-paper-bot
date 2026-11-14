@@ -11525,3 +11525,11 @@
 {"minutes_left": 3.38, "price": 0.997, "queue": 1191.42, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker", "ts": "2026-11-14T03:26:40Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.997, "queue": 1191.42, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker_safe", "ts": "2026-11-14T03:26:41Z", "type": "kmaker_order"}
 {"minutes_left": 3.38, "price": 0.997, "queue": 1191.42, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T03:26:41Z", "type": "kmaker_order"}
+{"fee": 0.0112, "outcome": "Down", "price": 0.967, "shares": 5, "title": "Bitcoin Up or Down - November 13, 10PM ET", "token": "24993647178897283678387679052583130869885362857270989659501237172694738747450", "track": "crypto_late", "ts": "2026-11-14T03:32:25Z", "type": "paper_buy"}
+{"fee": 0.0197, "outcome": "Down", "price": 0.94, "shares": 5, "title": "Solana Up or Down - November 13, 10PM ET", "token": "10148935631856987445996857558081415011357446540890750241011911813225152093174", "track": "crypto_late", "ts": "2026-11-14T03:32:25Z", "type": "paper_buy"}
+{"filled": 8.93, "pnl": 0.0893, "price": 0.99, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV132230-30", "track": "kc_maker", "ts": "2026-11-14T03:32:25Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.29, "price": 0.971, "side": "no", "through": true, "ticker": "KXETH15M-26NOV132230-30", "track": "kc_maker", "ts": "2026-11-14T03:32:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV132230-30", "track": "kc_maker", "ts": "2026-11-14T03:32:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker", "ts": "2026-11-14T03:32:28Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker_safe", "ts": "2026-11-14T03:32:28Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV132230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T03:32:28Z", "type": "kmaker_fill"}
