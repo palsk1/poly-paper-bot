@@ -11477,3 +11477,15 @@
 {"minutes_left": 2.92, "price": 0.997, "queue": 2623.69, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker", "ts": "2026-11-14T02:42:09Z", "type": "kmaker_order"}
 {"minutes_left": 2.92, "price": 0.997, "queue": 2623.69, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker_safe", "ts": "2026-11-14T02:42:10Z", "type": "kmaker_order"}
 {"minutes_left": 2.92, "price": 0.997, "queue": 2623.69, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:42:10Z", "type": "kmaker_order"}
+{"fee": 0.0, "outcome": "No", "price": 0.65, "shares": 5, "title": "Will Russia capture all of Kostyantynivka by March 31, 2027?", "token": "5083225169478022076157100450222877609036024265540153967158754212617334419962", "track": "w_anoin123", "ts": "2026-11-14T02:45:46Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "No", "price": 0.65, "shares": 5, "title": "Will Russia capture all of Kostyantynivka by March 31, 2027?", "token": "5083225169478022076157100450222877609036024265540153967158754212617334419962", "track": "wb_anoin123", "ts": "2026-11-14T02:45:46Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV132145-45", "track": "kc_maker", "ts": "2026-11-14T02:48:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV132145-45", "track": "kc_maker", "ts": "2026-11-14T02:48:29Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV132145-45", "track": "kc_maker", "ts": "2026-11-14T02:48:30Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV132145-45", "track": "kc_maker_safe", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV132145-45", "track": "kc_maker_safe", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV132145-45", "track": "kc_maker_safe", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker_safe", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV132145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV132145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T02:48:31Z", "type": "kmaker_fill"}
