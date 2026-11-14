@@ -13014,3 +13014,9 @@
 {"minutes_left": 2.83, "price": 0.969, "queue": 38.28, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV141315-15", "track": "kc_maker", "ts": "2026-11-14T18:12:11Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV141315-15", "track": "kc_maker", "ts": "2026-11-14T18:17:03Z", "type": "kmaker_fill"}
 {"fee": 0.0059, "outcome": "No", "price": 0.976, "shares": 5, "title": "Will the highest temperature in Dallas be between 46-47\u00b0F on November 15?", "token": "35872303074528053361055023868065236746704148788884423459723496816413194255641", "track": "endgame_sell98", "ts": "2026-11-14T18:23:19Z", "type": "paper_buy"}
+{"minutes_left": 2.36, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV141330-30", "track": "kc_maker", "ts": "2026-11-14T18:27:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.36, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV141330-30", "track": "kc_maker_safe", "ts": "2026-11-14T18:27:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.36, "price": 0.983, "queue": 367.36, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV141330-30", "track": "kc_maker", "ts": "2026-11-14T18:27:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.36, "price": 0.985, "queue": 26.0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV141330-30", "track": "kc_maker", "ts": "2026-11-14T18:27:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.36, "price": 0.962, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV141330-30", "track": "kc_maker", "ts": "2026-11-14T18:27:41Z", "type": "kmaker_order"}
+{"minutes_left": 2.36, "price": 0.969, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV141330-30", "track": "kc_maker", "ts": "2026-11-14T18:27:41Z", "type": "kmaker_order"}
