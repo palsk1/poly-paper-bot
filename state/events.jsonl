@@ -11904,3 +11904,8 @@
 {"minutes_left": 3.0, "price": 0.966, "queue": 44.74, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV140130-30", "track": "kc_maker", "ts": "2026-11-14T06:27:01Z", "type": "kmaker_order"}
 {"minutes_left": 3.0, "price": 0.966, "queue": 44.74, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV140130-30", "track": "kc_maker_safe", "ts": "2026-11-14T06:27:01Z", "type": "kmaker_order"}
 {"minutes_left": 3.0, "price": 0.968, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140130-30", "track": "kc_maker", "ts": "2026-11-14T06:27:02Z", "type": "kmaker_order"}
+{"cost": 4.5315, "title": "Will the price of Bitcoin be above $72,000 on November 20?", "token": "54714472023027384267862739262778379794534063144433975949037842522049668687550", "track": "crypto_no", "ts": "2026-11-14T06:36:18Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV140130-30", "track": "kc_maker", "ts": "2026-11-14T06:36:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.32, "price": 0.968, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140130-30", "track": "kc_maker", "ts": "2026-11-14T06:36:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV140130-30", "track": "kc_maker_safe", "ts": "2026-11-14T06:36:19Z", "type": "kmaker_fill"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV13NSHVGK-VGKTHERTL48", "track": "kalshi_patient", "ts": "2026-11-14T06:36:20Z", "type": "kpatient_result"}
