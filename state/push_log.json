@@ -8,8 +8,21 @@
   "2026-11-14": {
    "failed": 0,
    "muted": 1,
-   "sent": 0
+   "sent": 2
   }
  },
- "recent": []
+ "recent": [
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.64)",
+   "track": "kc_maker",
+   "ts": "2026-11-14T00:18:14Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.64)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-14T00:18:16Z"
+  }
+ ]
 }
