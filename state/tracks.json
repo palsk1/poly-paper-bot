@@ -1076,226 +1076,226 @@
   "deposited": 300.0,
   "last_check": {
    "KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249": {
-    "annual": -0.027,
-    "edge": -0.0038,
+    "annual": -0.02,
+    "edge": -0.0028,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:56Z"
+    "ts": "2026-11-14T17:16:06Z"
    },
    "KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027": {
-    "annual": -0.088,
-    "edge": -0.0351,
+    "annual": -0.135,
+    "edge": -0.0551,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:01Z"
+    "ts": "2026-11-14T17:16:11Z"
    },
    "KXAOCRUN-28-27JAN01|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027": {
     "annual": -0.083,
     "edge": -0.0118,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:03Z"
+    "ts": "2026-11-14T17:16:13Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
     "annual": 0.349,
     "edge": 0.0464,
     "opportunity": true,
-    "ts": "2026-11-14T17:10:57Z"
+    "ts": "2026-11-14T17:16:07Z"
    },
    "KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027": {
     "annual": -0.172,
     "edge": -0.0245,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:59Z"
+    "ts": "2026-11-14T17:16:09Z"
    },
    "KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088": {
     "annual": -0.093,
     "edge": -0.0132,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:01Z"
+    "ts": "2026-11-14T17:16:11Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": 0.123,
     "edge": 0.0169,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:57Z"
+    "ts": "2026-11-14T17:16:08Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
     "annual": -0.13,
     "edge": -0.0184,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:58Z"
+    "ts": "2026-11-14T17:16:08Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": -0.16,
     "edge": -0.0228,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:58Z"
+    "ts": "2026-11-14T17:16:09Z"
    },
    "KXKELLYRUN-28-27JAN01|will-mark-kelly-announce-a-presidential-run-before-2027": {
     "annual": -0.2,
     "edge": -0.0287,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:04Z"
+    "ts": "2026-11-14T17:16:14Z"
    },
    "KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027": {
     "annual": -0.002,
     "edge": -0.0003,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:06Z"
+    "ts": "2026-11-14T17:16:17Z"
    },
    "KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.073,
     "edge": -0.0289,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:00Z"
+    "ts": "2026-11-14T17:16:10Z"
    },
    "KXOSSOFFRUN-28-27JUL01|will-jon-ossoff-announce-a-presidential-run-by-june-30-2027": {
-    "annual": -0.118,
-    "edge": -0.0813,
+    "annual": -0.132,
+    "edge": -0.0913,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:02Z"
+    "ts": "2026-11-14T17:16:12Z"
    },
    "KXREACTOR-26DEC31|us-grants-license-for-new-nuclear-reactor-in-2026": {
     "annual": -0.121,
     "edge": -0.017,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:04Z"
+    "ts": "2026-11-14T17:16:14Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.05,
     "edge": -0.007,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:57Z"
+    "ts": "2026-11-14T17:16:07Z"
    },
    "KXRUBIORUN-28-27APR01|will-marco-rubio-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.095,
     "edge": -0.0382,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:00Z"
+    "ts": "2026-11-14T17:16:10Z"
    },
    "KXRUBIORUN-28-27JUL01|will-marco-rubio-announce-a-presidential-run-by-june-30-2027": {
     "annual": 0.054,
     "edge": 0.0333,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:02Z"
+    "ts": "2026-11-14T17:16:13Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
     "annual": 0.018,
     "edge": 0.0025,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:44Z"
+    "ts": "2026-11-14T17:15:54Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
     "annual": -0.065,
     "edge": -0.0091,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:55Z"
+    "ts": "2026-11-14T17:16:05Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.17,
     "edge": -0.024,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:53Z"
+    "ts": "2026-11-14T17:16:03Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.154,
     "edge": -0.0218,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:46Z"
+    "ts": "2026-11-14T17:15:56Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.135,
     "edge": -0.0191,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:49Z"
+    "ts": "2026-11-14T17:15:59Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.107,
     "edge": -0.015,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:44Z"
+    "ts": "2026-11-14T17:15:54Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.028,
     "edge": -0.004,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:54Z"
+    "ts": "2026-11-14T17:16:04Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.132,
     "edge": -0.0187,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:45Z"
+    "ts": "2026-11-14T17:15:55Z"
    },
    "KXTIME-26-LUI|will-lula-da-silva-be-time-person-of-the-year-2026": {
     "annual": 0.04,
     "edge": 0.0055,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:05Z"
+    "ts": "2026-11-14T17:16:15Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.092,
     "edge": -0.0129,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:51Z"
+    "ts": "2026-11-14T17:16:02Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": 0.009,
     "edge": 0.0012,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:52Z"
+    "ts": "2026-11-14T17:16:02Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.029,
     "edge": -0.004,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:50Z"
+    "ts": "2026-11-14T17:16:01Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.135,
     "edge": -0.0191,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:53Z"
+    "ts": "2026-11-14T17:16:04Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
-    "annual": -0.082,
+    "annual": -0.083,
     "edge": -0.0115,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:48Z"
+    "ts": "2026-11-14T17:15:58Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
-    "annual": -0.19,
-    "edge": -0.027,
+    "annual": -0.1,
+    "edge": -0.0141,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:46Z"
+    "ts": "2026-11-14T17:15:57Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.123,
     "edge": -0.0174,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:55Z"
+    "ts": "2026-11-14T17:16:05Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.147,
     "edge": -0.0208,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:48Z"
+    "ts": "2026-11-14T17:15:59Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.043,
     "edge": -0.0059,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:50Z"
+    "ts": "2026-11-14T17:16:00Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
     "annual": 0.056,
     "edge": 0.0077,
     "opportunity": false,
-    "ts": "2026-11-14T17:10:47Z"
+    "ts": "2026-11-14T17:15:57Z"
    },
    "KXTRUMPFLAVIOMEET-26DEC01-JAN01|will-trump-meet-with-flavio-bolsonaro-in-2026": {
     "annual": -0.305,
     "edge": -0.044,
     "opportunity": false,
-    "ts": "2026-11-14T17:11:06Z"
+    "ts": "2026-11-14T17:16:16Z"
    }
   },
   "min_cash": 0.0,
@@ -7031,8 +7031,8 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "162 markets held by 2+ of the copied wallets right now (40 wallets read).",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "165 markets held by 2+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
   "unlimited": true
@@ -8406,7 +8406,7 @@
   "skipped_other_side": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "55 markets held by 3+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
@@ -11813,14 +11813,14 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
   "unlimited": false
  },
  "crypto_no": {
-  "cash": 0.911565,
+  "cash": 15.911565,
   "closed": [
    {
     "closed_at": "2026-11-13T06:18:20Z",
@@ -11969,6 +11969,302 @@
     "theme": null,
     "title": "Will Ethereum dip to $1,900 November 9-15?",
     "token": "96601129706885269848570461549105897873222240446748529498406803873313750189948"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:48Z",
+    "end": "2026-11-14",
+    "entry": 0.79,
+    "entry_fee": 0.058065,
+    "event_key": "1333340",
+    "event_slug": "bitcoin-above-on-november-14-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.79,
+     "s": 31
+    },
+    "opened": "2026-11-10T22:27:11Z",
+    "outcome": "No",
+    "pnl": 0.991935,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.658,
+       10.147,
+       true
+      ],
+      "100": [
+       125.3,
+       101.4134,
+       true
+      ],
+      "25": [
+       31.646,
+       25.3675,
+       true
+      ],
+      "50": [
+       63.25,
+       50.7332,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.147,
+      2.511,
+      true
+     ],
+     "100": [
+      101.4134,
+      23.8866,
+      true
+     ],
+     "25": [
+      25.3675,
+      6.2785,
+      true
+     ],
+     "50": [
+      50.7332,
+      12.5168,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "listed 78c",
+    "slug": "bitcoin-above-76k-on-november-14-2026",
+    "source": "crypto_no",
+    "theme": null,
+    "title": "Will the price of Bitcoin be above $76,000 on November 14?",
+    "token": "55149491349561195914825958208076117099739581165088197612019828847253640737723"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:48Z",
+    "end": "2026-11-14",
+    "entry": 0.74,
+    "entry_fee": 0.06734,
+    "event_key": "1333346",
+    "event_slug": "solana-price-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.74,
+     "s": 31
+    },
+    "opened": "2026-11-10T19:15:44Z",
+    "outcome": "No",
+    "pnl": -3.76734,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       13.514,
+       10.182,
+       true
+      ],
+      "100": [
+       135.135,
+       101.82,
+       true
+      ],
+      "25": [
+       33.784,
+       25.455,
+       true
+      ],
+      "50": [
+       67.568,
+       50.91,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.182,
+      -10.182,
+      true
+     ],
+     "100": [
+      101.82,
+      -101.82,
+      true
+     ],
+     "25": [
+      25.455,
+      -25.455,
+      true
+     ],
+     "50": [
+      50.91,
+      -50.91,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "listed 72c",
+    "slug": "will-the-price-of-solana-be-between-70-80-on-november-14-2026",
+    "source": "crypto_no",
+    "theme": null,
+    "title": "Will the price of Solana be between $70 and $80 on November 14?",
+    "token": "72576985107066289583513221719279917523109937409732280475563016992510697797662"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:48Z",
+    "end": "2026-11-14",
+    "entry": 0.83,
+    "entry_fee": 0.049385,
+    "event_key": "1333331",
+    "event_slug": "bitcoin-price-on-november-14-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.83,
+     "s": 32
+    },
+    "opened": "2026-11-10T20:18:46Z",
+    "outcome": "No",
+    "pnl": 0.800615,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.048,
+       10.119,
+       true
+      ],
+      "100": [
+       120.482,
+       101.19,
+       true
+      ],
+      "25": [
+       30.12,
+       25.2975,
+       true
+      ],
+      "50": [
+       60.241,
+       50.595,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.119,
+      1.929,
+      true
+     ],
+     "100": [
+      101.19,
+      19.292,
+      true
+     ],
+     "25": [
+      25.2975,
+      4.8225,
+      true
+     ],
+     "50": [
+      50.595,
+      9.646,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "listed 82c",
+    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
+    "source": "crypto_no",
+    "theme": null,
+    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?",
+    "token": "74578228923029741418784729468929768656607615674280538118950458164955062920824"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:48Z",
+    "end": "2026-11-14",
+    "entry": 0.76,
+    "entry_fee": 0.06384,
+    "event_key": "1333341",
+    "event_slug": "ethereum-price-on-november-14-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.76,
+     "s": 31
+    },
+    "opened": "2026-11-10T21:23:25Z",
+    "outcome": "No",
+    "pnl": 1.13616,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       13.158,
+       10.168,
+       true
+      ],
+      "100": [
+       131.071,
+       101.6594,
+       true
+      ],
+      "25": [
+       32.895,
+       25.42,
+       true
+      ],
+      "50": [
+       65.789,
+       50.84,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.168,
+      2.99,
+      true
+     ],
+     "100": [
+      101.6594,
+      29.4116,
+      true
+     ],
+     "25": [
+      25.42,
+      7.475,
+      true
+     ],
+     "50": [
+      50.84,
+      14.949,
+      true
+     ]
+    },
+    "shares": 5,
+    "signal": "listed 75c",
+    "slug": "will-the-price-of-ethereum-be-between-2100-2200-on-november-14-2026",
+    "source": "crypto_no",
+    "theme": null,
+    "title": "Will the price of Ethereum be between $2,100 and $2,200 on November 14?",
+    "token": "76338554407306087585972381673070249326504789251210873009278531342410837642457"
    }
   ],
   "created": "2026-11-10T19:10:26Z",
@@ -12160,52 +12456,6 @@
     "theme": null,
     "title": "Will the price of XRP be between $0.90 and $1.00 on November 16?"
    },
-   "55149491349561195914825958208076117099739581165088197612019828847253640737723": {
-    "end": "2026-11-14",
-    "entry": 0.79,
-    "entry_fee": 0.058065,
-    "event_key": "1333340",
-    "event_slug": "bitcoin-above-on-november-14-2026",
-    "late": {
-     "px": 0.79,
-     "s": 31
-    },
-    "opened": "2026-11-10T22:27:11Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.658,
-       10.147,
-       true
-      ],
-      "100": [
-       125.3,
-       101.4134,
-       true
-      ],
-      "25": [
-       31.646,
-       25.3675,
-       true
-      ],
-      "50": [
-       63.25,
-       50.7332,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "listed 78c",
-    "slug": "bitcoin-above-76k-on-november-14-2026",
-    "source": "crypto_no",
-    "theme": null,
-    "title": "Will the price of Bitcoin be above $76,000 on November 14?"
-   },
    "57364073099229752767364573466216701699259737689348974987552666544603260044107": {
     "end": "2026-11-15",
     "entry": 0.75,
@@ -12251,144 +12501,6 @@
     "source": "crypto_no",
     "theme": null,
     "title": "Will the price of Bitcoin be above $76,000 on November 15?"
-   },
-   "72576985107066289583513221719279917523109937409732280475563016992510697797662": {
-    "end": "2026-11-14",
-    "entry": 0.74,
-    "entry_fee": 0.06734,
-    "event_key": "1333346",
-    "event_slug": "solana-price-on-november-14-2026",
-    "late": {
-     "px": 0.74,
-     "s": 31
-    },
-    "opened": "2026-11-10T19:15:44Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       13.514,
-       10.182,
-       true
-      ],
-      "100": [
-       135.135,
-       101.82,
-       true
-      ],
-      "25": [
-       33.784,
-       25.455,
-       true
-      ],
-      "50": [
-       67.568,
-       50.91,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "listed 72c",
-    "slug": "will-the-price-of-solana-be-between-70-80-on-november-14-2026",
-    "source": "crypto_no",
-    "theme": null,
-    "title": "Will the price of Solana be between $70 and $80 on November 14?"
-   },
-   "74578228923029741418784729468929768656607615674280538118950458164955062920824": {
-    "end": "2026-11-14",
-    "entry": 0.83,
-    "entry_fee": 0.049385,
-    "event_key": "1333331",
-    "event_slug": "bitcoin-price-on-november-14-2026",
-    "late": {
-     "px": 0.83,
-     "s": 32
-    },
-    "opened": "2026-11-10T20:18:46Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.048,
-       10.119,
-       true
-      ],
-      "100": [
-       120.482,
-       101.19,
-       true
-      ],
-      "25": [
-       30.12,
-       25.2975,
-       true
-      ],
-      "50": [
-       60.241,
-       50.595,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "listed 82c",
-    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
-    "source": "crypto_no",
-    "theme": null,
-    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?"
-   },
-   "76338554407306087585972381673070249326504789251210873009278531342410837642457": {
-    "end": "2026-11-14",
-    "entry": 0.76,
-    "entry_fee": 0.06384,
-    "event_key": "1333341",
-    "event_slug": "ethereum-price-on-november-14-2026",
-    "late": {
-     "px": 0.76,
-     "s": 31
-    },
-    "opened": "2026-11-10T21:23:25Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       13.158,
-       10.168,
-       true
-      ],
-      "100": [
-       131.071,
-       101.6594,
-       true
-      ],
-      "25": [
-       32.895,
-       25.42,
-       true
-      ],
-      "50": [
-       65.789,
-       50.84,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "signal": "listed 75c",
-    "slug": "will-the-price-of-ethereum-be-between-2100-2200-on-november-14-2026",
-    "source": "crypto_no",
-    "theme": null,
-    "title": "Will the price of Ethereum be between $2,100 and $2,200 on November 14?"
    },
    "96718180126184081609363569982097961864694927628967579025689953494281672137902": {
     "end": "2026-11-16",
@@ -12437,7 +12549,7 @@
     "title": "Will the price of Ethereum be between $1,900 and $2,000 on November 16?"
    }
   },
-  "realized": -8.10633,
+  "realized": -8.94496,
   "refills": 0,
   "skipped_no_cash": 31,
   "start_cash": 50,
@@ -13747,8 +13859,8 @@
   "skipped_no_cash": 0,
   "start_cash": 100,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "24 markets matched its rules, bought 0",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "17 markets matched its rules, bought 0",
    "skips": {}
   },
   "unlimited": false
@@ -74497,10 +74609,10 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "21 markets matched its rules, bought 0",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "19 markets matched its rules, bought 0",
    "skips": {
-    "already holds this market": 10,
+    "already holds this market": 11,
     "real price outside its range": 1
    }
   },
@@ -74980,8 +75092,8 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "34 markets matched its rules, bought 0",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "23 markets matched its rules, bought 0",
    "skips": {}
   },
   "unlimited": false
@@ -87883,7 +87995,7 @@
   "skipped_no_cash": 1,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching his 75 open positions. Last new one seen: 2026-11-13.",
    "skips": {}
   },
@@ -95020,7 +95132,7 @@
   "unlimited": false
  },
  "kc_maker": {
-  "cash": 96.49897,
+  "cash": 136.49897,
   "closed": [
    {
     "ask": 0.997,
@@ -160489,15 +160601,219 @@
     "through": true,
     "ticker": "KXXRP15M-26NOV141145-45",
     "title": "XRP price up in next 15 mins? (Target Price: $0.9581)"
+   },
+   {
+    "ask": 0.977,
+    "bid": 0.976,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:36Z",
+    "cost": 9.76,
+    "entry": 0.976,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:37Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:37Z",
+    "pnl": 0.24,
+    "price": 0.976,
+    "price_source": "book",
+    "queue": 1334.91,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.2459,
+      1.0
+     ],
+     "100": [
+      100.0,
+      2.459,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.6148,
+      1.0
+     ],
+     "50": [
+      50.0,
+      1.2295,
+      1.0
+     ]
+    },
+    "series": "KXBTC15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": null,
+    "strike": 65316.74,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXBTC15M-26NOV141215-15",
+    "title": "BTC price up in next 15 mins? (Target Price: $65,316.74)"
+   },
+   {
+    "ask": 0.986,
+    "bid": 0.985,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:36Z",
+    "cost": 9.85,
+    "entry": 0.985,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:38Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:38Z",
+    "pnl": 0.15,
+    "price": 0.985,
+    "price_source": "book",
+    "queue": 1.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.1523,
+      1.0
+     ],
+     "100": [
+      100.0,
+      1.5228,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.3807,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.7614,
+      1.0
+     ]
+    },
+    "series": "KXETH15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": null,
+    "strike": 1824.9,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXETH15M-26NOV141215-15",
+    "title": "ETH price up in next 15 mins? (Target Price: $1,824.90)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:39Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:39Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 450.01,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXHYPE15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": null,
+    "strike": 65.9936,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXHYPE15M-26NOV141215-15",
+    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:40Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:40Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 116.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXXRP15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": null,
+    "strike": 0.9568,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXXRP15M-26NOV141215-15",
+    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
    }
   ],
   "created": "2026-11-09T19:01:00Z",
   "deposited": 100.0,
   "done": [
-   "KXHYPE15M-26NOV131315-15",
-   "KXDOGE15M-26NOV131330-30",
-   "KXBNB15M-26NOV131345-45",
-   "KXBTC15M-26NOV131345-45",
    "KXDOGE15M-26NOV131345-45",
    "KXETH15M-26NOV131345-45",
    "KXSOL15M-26NOV131345-45",
@@ -160793,7 +161109,11 @@
    "KXXRP15M-26NOV141115-15",
    "KXDOGE15M-26NOV141145-45",
    "KXETH15M-26NOV141145-45",
-   "KXXRP15M-26NOV141145-45"
+   "KXXRP15M-26NOV141145-45",
+   "KXBTC15M-26NOV141215-15",
+   "KXETH15M-26NOV141215-15",
+   "KXHYPE15M-26NOV141215-15",
+   "KXXRP15M-26NOV141215-15"
   ],
   "last_check": {
    "KXBNB15M": {
@@ -160854,87 +161174,10 @@
    }
   },
   "min_cash": 0.0,
-  "orders": {
-   "KXBTC15M-26NOV141215-15": {
-    "ask": 0.977,
-    "bid": 0.976,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.76,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:37Z",
-    "price": 0.976,
-    "queue": 1334.91,
-    "series": "KXBTC15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": null,
-    "strike": 65316.74,
-    "ticker": "KXBTC15M-26NOV141215-15",
-    "title": "BTC price up in next 15 mins? (Target Price: $65,316.74)"
-   },
-   "KXETH15M-26NOV141215-15": {
-    "ask": 0.986,
-    "bid": 0.985,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.85,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:38Z",
-    "price": 0.985,
-    "queue": 1.0,
-    "series": "KXETH15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": null,
-    "strike": 1824.9,
-    "ticker": "KXETH15M-26NOV141215-15",
-    "title": "ETH price up in next 15 mins? (Target Price: $1,824.90)"
-   },
-   "KXHYPE15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:39Z",
-    "price": 0.997,
-    "queue": 450.01,
-    "series": "KXHYPE15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": null,
-    "strike": 65.9936,
-    "ticker": "KXHYPE15M-26NOV141215-15",
-    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
-   },
-   "KXXRP15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:40Z",
-    "price": 0.997,
-    "queue": 116.0,
-    "series": "KXXRP15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": null,
-    "strike": 0.9568,
-    "ticker": "KXXRP15M-26NOV141215-15",
-    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
-   }
-  },
+  "orders": {},
   "peak_open_cost": 69.82,
   "positions": {},
-  "realized": 36.04897,
+  "realized": 36.49897,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -181153,7 +181396,7 @@
   "unlimited": false
  },
  "kc_maker_safe": {
-  "cash": 107.91492,
+  "cash": 127.91492,
   "closed": [
    {
     "ask": 0.997,
@@ -214902,13 +215145,115 @@
     "through": true,
     "ticker": "KXDOGE15M-26NOV141145-45",
     "title": "DOGE price up in next 15 mins? (Target Price: $0.0598740)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:39Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:39Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 450.01,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXHYPE15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": 2.97,
+    "strike": 65.9936,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXHYPE15M-26NOV141215-15",
+    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:40Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:40Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 116.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXXRP15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": 3.07,
+    "strike": 0.9568,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXXRP15M-26NOV141215-15",
+    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
    }
   ],
   "created": "2026-11-09T19:01:00Z",
   "deposited": 100.0,
   "done": [
-   "KXBNB15M-26NOV121900-00",
-   "KXBTC15M-26NOV121900-00",
    "KXDOGE15M-26NOV121900-00",
    "KXETH15M-26NOV121900-00",
    "KXHYPE15M-26NOV121900-00",
@@ -215206,7 +215551,9 @@
    "KXDOGE15M-26NOV141115-15",
    "KXETH15M-26NOV141115-15",
    "KXXRP15M-26NOV141115-15",
-   "KXDOGE15M-26NOV141145-45"
+   "KXDOGE15M-26NOV141145-45",
+   "KXHYPE15M-26NOV141215-15",
+   "KXXRP15M-26NOV141215-15"
   ],
   "last_check": {
    "KXBNB15M": {
@@ -215269,49 +215616,10 @@
    }
   },
   "min_cash": 0.0,
-  "orders": {
-   "KXHYPE15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:39Z",
-    "price": 0.997,
-    "queue": 450.01,
-    "series": "KXHYPE15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": 2.97,
-    "strike": 65.9936,
-    "ticker": "KXHYPE15M-26NOV141215-15",
-    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
-   },
-   "KXXRP15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:40Z",
-    "price": 0.997,
-    "queue": 116.0,
-    "series": "KXXRP15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": 3.07,
-    "strike": 0.9568,
-    "ticker": "KXXRP15M-26NOV141215-15",
-    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
-   }
-  },
+  "orders": {},
   "peak_open_cost": 69.82,
   "positions": {},
-  "realized": 27.85492,
+  "realized": 27.91492,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -216101,7 +216409,7 @@
   "unlimited": false
  },
  "kc_maker_safe_usd": {
-  "cash": 91.93,
+  "cash": 111.93,
   "closed": [
    {
     "ask": 0.999,
@@ -226596,6 +226904,112 @@
     "through": true,
     "ticker": "KXDOGE15M-26NOV141145-45",
     "title": "DOGE price up in next 15 mins? (Target Price: $0.0598740)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:39Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:39Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 450.01,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXHYPE15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": 2.97,
+    "spot_z_usd": 2.93,
+    "strike": 65.9936,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXHYPE15M-26NOV141215-15",
+    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
+   },
+   {
+    "ask": 0.998,
+    "bid": 0.997,
+    "close": "2026-11-14T17:15:00Z",
+    "closed_at": "2026-11-14T17:17:37Z",
+    "cost": 9.97,
+    "entry": 0.997,
+    "entry_fee": 0.0,
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "front": false,
+    "minutes_left": 2.39,
+    "opened": "2026-11-14T17:12:40Z",
+    "outcome": "no",
+    "placed": "2026-11-14T17:12:40Z",
+    "pnl": 0.03,
+    "price": 0.997,
+    "price_source": "book",
+    "queue": 116.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.0301,
+      1.0
+     ],
+     "100": [
+      100.0,
+      0.3009,
+      1.0
+     ],
+     "25": [
+      25.0,
+      0.0752,
+      1.0
+     ],
+     "50": [
+      50.0,
+      0.1505,
+      1.0
+     ]
+    },
+    "series": "KXXRP15M",
+    "shares": 10.0,
+    "side": "no",
+    "spot_z": 3.07,
+    "spot_z_usd": 3.34,
+    "strike": 0.9568,
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXXRP15M-26NOV141215-15",
+    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
    }
   ],
   "created": "2026-11-12T16:35:19Z",
@@ -226840,7 +227254,9 @@
    "KXDOGE15M-26NOV141115-15",
    "KXETH15M-26NOV141115-15",
    "KXXRP15M-26NOV141115-15",
-   "KXDOGE15M-26NOV141145-45"
+   "KXDOGE15M-26NOV141145-45",
+   "KXHYPE15M-26NOV141215-15",
+   "KXXRP15M-26NOV141215-15"
   ],
   "last_check": {
    "KXBNB15M": {
@@ -226903,51 +227319,10 @@
    }
   },
   "min_cash": 0.0,
-  "orders": {
-   "KXHYPE15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:39Z",
-    "price": 0.997,
-    "queue": 450.01,
-    "series": "KXHYPE15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": 2.97,
-    "spot_z_usd": 2.93,
-    "strike": 65.9936,
-    "ticker": "KXHYPE15M-26NOV141215-15",
-    "title": "HYPE price up in next 15 mins? (Target Price: $65.9936)"
-   },
-   "KXXRP15M-26NOV141215-15": {
-    "ask": 0.998,
-    "bid": 0.997,
-    "close": "2026-11-14T17:15:00Z",
-    "cost": 9.97,
-    "front": false,
-    "minutes_left": 2.39,
-    "outcome": "no",
-    "placed": "2026-11-14T17:12:40Z",
-    "price": 0.997,
-    "queue": 116.0,
-    "series": "KXXRP15M",
-    "shares": 10,
-    "side": "no",
-    "spot_z": 3.07,
-    "spot_z_usd": 3.34,
-    "strike": 0.9568,
-    "ticker": "KXXRP15M-26NOV141215-15",
-    "title": "XRP price up in next 15 mins? (Target Price: $0.9568)"
-   }
-  },
+  "orders": {},
   "peak_open_cost": 69.8,
   "positions": {},
-  "realized": 11.87,
+  "realized": 11.93,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 100,
@@ -229899,7 +230274,7 @@
   "skipped_no_cash": 3,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching his 75 open positions. Last new one seen: 2026-11-13.",
    "skips": {}
   },
@@ -230151,7 +230526,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching his 75 open positions. Last new one seen: 2026-11-13.",
    "skips": {}
   },
@@ -236575,7 +236950,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching his 75 open positions. Last new one seen: 2026-11-13.",
    "skips": {}
   },
@@ -236771,7 +237146,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching his 75 open positions. Last new one seen: 2026-11-13.",
    "skips": {}
   },
@@ -244340,7 +244715,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 31 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -244483,7 +244858,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -245049,7 +245424,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1356 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -247603,7 +247978,7 @@
   "skipped_split": 91,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 919 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -247747,7 +248122,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 105 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -247965,7 +248340,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -248271,14 +248646,14 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 71 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
  },
  "w_bigggggggg": {
-  "cash": -32.882535,
+  "cash": -44.697285,
   "closed": [
    {
     "closed_at": "2026-11-09T05:04:52Z",
@@ -250835,7 +251210,7 @@
   "created": "2026-11-08T15:15:28Z",
   "day_opens": {
    "date": "2026-11-14",
-   "n": 1
+   "n": 4
   },
   "deposited": 0.0,
   "min_cash": -53.636369,
@@ -250975,6 +251350,141 @@
     "their_avg": 0.07,
     "their_size": 990.0,
     "title": "Will Matan Kahana be the next Speaker of the Knesset?"
+   },
+   "14370733639529017533127837210921127968005014826412550764630814105059492830546": {
+    "end": "2026-11-16",
+    "entry": 0.93,
+    "entry_fee": 0.016275,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.94,
+     "s": 116
+    },
+    "opened": "2026-11-14T17:15:42Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.753,
+       10.035,
+       true
+      ],
+      "100": [
+       106.705,
+       100.3142,
+       true
+      ],
+      "25": [
+       26.882,
+       25.0875,
+       true
+      ],
+      "50": [
+       53.513,
+       50.1641,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-115-139",
+    "source": "w_bigggggggg",
+    "their_avg": 0.9399,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 115-139 tweets from November 14 to November 16, 2026?"
+   },
+   "22826618144294250580041225874784344931021455214022766484568607757067620063597": {
+    "end": "2026-11-16",
+    "entry": 0.6,
+    "entry_fee": 0.06,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.6,
+     "s": 115
+    },
+    "opened": "2026-11-14T17:15:43Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       16.667,
+       10.2,
+       true
+      ],
+      "100": [
+       164.738,
+       101.9649,
+       true
+      ],
+      "25": [
+       41.667,
+       25.5,
+       true
+      ],
+      "50": [
+       82.77,
+       50.9898,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-65-89",
+    "source": "w_bigggggggg",
+    "their_avg": 0.583,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 65-89 tweets from November 14 to November 16, 2026?"
+   },
+   "49889480342655314845792254348278002203392742099914532497353515011639605486889": {
+    "end": "2026-11-16",
+    "entry": 0.81,
+    "entry_fee": 0.038475,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.8,
+     "s": 116
+    },
+    "opened": "2026-11-14T17:15:42Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       12.346,
+       10.095,
+       true
+      ],
+      "100": [
+       123.457,
+       100.95,
+       true
+      ],
+      "25": [
+       30.864,
+       25.2375,
+       true
+      ],
+      "50": [
+       61.728,
+       50.475,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-40-64",
+    "source": "w_bigggggggg",
+    "their_avg": 0.79,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 40-64 tweets from November 14 to November 16, 2026?"
    },
    "53026829390251629849564997366368669797836591132562451461182233316509420386054": {
     "end": "2026-11-29",
@@ -251255,9 +251765,12 @@
   "skipped_split": 28,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 3782 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 3782 open positions of this wallet; 9 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "no order book": 1,
+    "price under 3c or over 97c": 5
+   }
   },
   "unlimited": true
  },
@@ -252056,7 +252569,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 45 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -255530,17 +256043,16 @@
   },
   "realized": -13.186321,
   "refills": 0,
-  "skipped_cap": 4741,
+  "skipped_cap": 4745,
   "skipped_chase": 29,
   "skipped_no_cash": 0,
   "skipped_split": 380,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 3999 open positions of this wallet; 6 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 3998 open positions of this wallet; 4 new since the last check. Watching since 2026-11-08.",
    "skips": {
-    "daily copy limit reached": 5,
-    "too small (under $20)": 1
+    "daily copy limit reached": 4
    }
   },
   "unlimited": true
@@ -256091,7 +256603,7 @@
   "skipped_split": 5,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 393 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -256382,7 +256894,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 21 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -256780,7 +257292,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 158 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -256952,7 +257464,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 63 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -257383,7 +257895,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 59 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -257999,7 +258511,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 216 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -258023,7 +258535,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 411 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -259045,7 +259557,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 173 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -259144,7 +259656,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 15 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -259433,7 +259945,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 6 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -262228,7 +262740,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 866 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -263727,7 +264239,7 @@
   "skipped_split": 11,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 79 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -263797,7 +264309,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 40 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -263986,7 +264498,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 178 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -264149,7 +264661,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1560 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -264293,7 +264805,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 98 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -264317,7 +264829,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 121 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -264606,7 +265118,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 116 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -265132,7 +265644,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1215 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -265155,7 +265667,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 20 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -265856,7 +266368,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 935 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -269458,7 +269970,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 60 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -269737,7 +270249,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 32 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -269897,14 +270409,14 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 67 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
  },
  "w_tokor": {
-  "cash": -106.834354,
+  "cash": -101.834354,
   "closed": [
    {
     "closed_at": "2026-11-08T22:10:30Z",
@@ -272611,6 +273123,371 @@
     "their_size": 261.95,
     "title": "Will Bitcoin dip to $66,000 November 9-15?",
     "token": "37349201581692759106195274161509534738425192515739596936102415306011032294982"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:40Z",
+    "end": "2026-11-14",
+    "entry": 0.39,
+    "entry_fee": 0.083265,
+    "event_slug": "bitcoin-price-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.39,
+     "s": 413
+    },
+    "opened": "2026-11-13T02:55:27Z",
+    "outcome": "Yes",
+    "pnl": -2.033265,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       25.25,
+       10.4228,
+       true
+      ],
+      "100": [
+       250.25,
+       104.2028,
+       true
+      ],
+      "25": [
+       62.75,
+       26.0528,
+       true
+      ],
+      "50": [
+       125.25,
+       52.1028,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.4228,
+      -10.4228,
+      true
+     ],
+     "100": [
+      104.2028,
+      -104.2028,
+      true
+     ],
+     "25": [
+      26.0528,
+      -26.0528,
+      true
+     ],
+     "50": [
+      52.1028,
+      -52.1028,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
+    "source": "w_tokor",
+    "their_avg": 0.38,
+    "their_size": 310.0,
+    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?",
+    "token": "113768963366990745093637303981957860864240373464456904850949129423161720447581"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:40Z",
+    "end": "2026-11-14",
+    "entry": 0.78,
+    "entry_fee": 0.06006,
+    "event_slug": "bitcoin-above-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.78,
+     "s": 97
+    },
+    "opened": "2026-11-10T13:45:40Z",
+    "outcome": "Yes",
+    "pnl": -3.96006,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.821,
+       10.154,
+       true
+      ],
+      "100": [
+       128.205,
+       101.54,
+       true
+      ],
+      "25": [
+       32.051,
+       25.385,
+       true
+      ],
+      "50": [
+       64.103,
+       50.77,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.154,
+      -10.154,
+      true
+     ],
+     "100": [
+      101.54,
+      -101.54,
+      true
+     ],
+     "25": [
+      25.385,
+      -25.385,
+      true
+     ],
+     "50": [
+      50.77,
+      -50.77,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bitcoin-above-72k-on-november-14-2026",
+    "source": "w_tokor",
+    "their_avg": 0.74,
+    "their_size": 68.0,
+    "title": "Will the price of Bitcoin be above $72,000 on November 14?",
+    "token": "18345286293722602680890415437370815057933055834959499020822556508960554450741"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:40Z",
+    "end": "2026-11-14",
+    "entry": 0.819,
+    "entry_fee": 0.051884,
+    "event_slug": "bitcoin-price-on-november-14-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.819,
+     "s": 107
+    },
+    "opened": "2026-11-13T00:30:58Z",
+    "outcome": "No",
+    "pnl": 0.853116,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.21,
+       10.1267,
+       true
+      ],
+      "100": [
+       122.1,
+       101.267,
+       true
+      ],
+      "25": [
+       30.525,
+       25.3167,
+       true
+      ],
+      "50": [
+       61.05,
+       50.6335,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.1267,
+      2.0833,
+      true
+     ],
+     "100": [
+      101.267,
+      20.833,
+      true
+     ],
+     "25": [
+      25.3167,
+      5.2083,
+      true
+     ],
+     "50": [
+      50.6335,
+      10.4165,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-bitcoin-be-between-68000-70000-on-november-14-2026",
+    "source": "w_tokor",
+    "their_avg": 0.821,
+    "their_size": 220.0,
+    "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 14?",
+    "token": "44020857602682936708622619032541349868746855305529076840958745873268080689405"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:40Z",
+    "end": "2026-11-14",
+    "entry": 0.58,
+    "entry_fee": 0.08526,
+    "event_slug": "bitcoin-above-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.58,
+     "s": 153
+    },
+    "opened": "2026-11-11T19:45:39Z",
+    "outcome": "Yes",
+    "pnl": -2.98526,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       17.241,
+       10.294,
+       true
+      ],
+      "100": [
+       172.414,
+       102.94,
+       true
+      ],
+      "25": [
+       43.103,
+       25.735,
+       true
+      ],
+      "50": [
+       86.207,
+       51.47,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.294,
+      -10.294,
+      true
+     ],
+     "100": [
+      102.94,
+      -102.94,
+      true
+     ],
+     "25": [
+      25.735,
+      -25.735,
+      true
+     ],
+     "50": [
+      51.47,
+      -51.47,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bitcoin-above-74k-on-november-14-2026",
+    "source": "w_tokor",
+    "their_avg": 0.56,
+    "their_size": 105.84,
+    "title": "Will the price of Bitcoin be above $74,000 on November 14?",
+    "token": "52340758416122759352056647303976643853563376870356401378039257061952959700558"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:40Z",
+    "end": "2026-11-14",
+    "entry": 0.882,
+    "entry_fee": 0.036427,
+    "event_slug": "ethereum-price-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.818,
+     "s": 140
+    },
+    "opened": "2026-11-13T03:20:39Z",
+    "outcome": "No",
+    "pnl": -4.446427,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       11.338,
+       10.0826,
+       true
+      ],
+      "100": [
+       113.379,
+       100.826,
+       true
+      ],
+      "25": [
+       28.345,
+       25.2065,
+       true
+      ],
+      "50": [
+       56.689,
+       50.413,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0826,
+      -10.0826,
+      true
+     ],
+     "100": [
+      100.826,
+      -100.826,
+      true
+     ],
+     "25": [
+      25.2065,
+      -25.2065,
+      true
+     ],
+     "50": [
+      50.413,
+      -50.413,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-ethereum-be-between-1800-1900-on-november-14-2026",
+    "source": "w_tokor",
+    "their_avg": 0.863,
+    "their_size": 150.0,
+    "title": "Will the price of Ethereum be between $1,800 and $1,900 on November 14?",
+    "token": "62116416911921811175030182166067374099952955717877018626477327810306000351882"
    }
   ],
   "created": "2026-11-08T15:15:28Z",
@@ -272802,51 +273679,6 @@
     "their_size": 2106.25,
     "title": "Will Bitcoin dip to $60,000 in November?"
    },
-   "113768963366990745093637303981957860864240373464456904850949129423161720447581": {
-    "end": "2026-11-14",
-    "entry": 0.39,
-    "entry_fee": 0.083265,
-    "event_slug": "bitcoin-price-on-november-14-2026",
-    "late": {
-     "px": 0.39,
-     "s": 413
-    },
-    "opened": "2026-11-13T02:55:27Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       25.25,
-       10.4228,
-       true
-      ],
-      "100": [
-       250.25,
-       104.2028,
-       true
-      ],
-      "25": [
-       62.75,
-       26.0528,
-       true
-      ],
-      "50": [
-       125.25,
-       52.1028,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
-    "source": "w_tokor",
-    "their_avg": 0.38,
-    "their_size": 310.0,
-    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?"
-   },
    "115073150182514126293694440368951120861423462721453481525864996767633231244286": {
     "end": "2026-11-16",
     "entry": 0.739,
@@ -272891,51 +273723,6 @@
     "their_avg": 0.758,
     "their_size": 225.02,
     "title": "Will the price of Bitcoin be above $68,000 on November 16?"
-   },
-   "18345286293722602680890415437370815057933055834959499020822556508960554450741": {
-    "end": "2026-11-14",
-    "entry": 0.78,
-    "entry_fee": 0.06006,
-    "event_slug": "bitcoin-above-on-november-14-2026",
-    "late": {
-     "px": 0.78,
-     "s": 97
-    },
-    "opened": "2026-11-10T13:45:40Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.821,
-       10.154,
-       true
-      ],
-      "100": [
-       128.205,
-       101.54,
-       true
-      ],
-      "25": [
-       32.051,
-       25.385,
-       true
-      ],
-      "50": [
-       64.103,
-       50.77,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bitcoin-above-72k-on-november-14-2026",
-    "source": "w_tokor",
-    "their_avg": 0.74,
-    "their_size": 68.0,
-    "title": "Will the price of Bitcoin be above $72,000 on November 14?"
    },
    "18374453431027270916246060202070258878110981723841044570279861415827594958576": {
     "end": "2026-12-01",
@@ -273162,51 +273949,6 @@
     "their_size": 2368.1,
     "title": "Will Apple be the largest company in the world by market cap on November 30, 2026?"
    },
-   "44020857602682936708622619032541349868746855305529076840958745873268080689405": {
-    "end": "2026-11-14",
-    "entry": 0.819,
-    "entry_fee": 0.051884,
-    "event_slug": "bitcoin-price-on-november-14-2026",
-    "late": {
-     "px": 0.819,
-     "s": 107
-    },
-    "opened": "2026-11-13T00:30:58Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.21,
-       10.1267,
-       true
-      ],
-      "100": [
-       122.1,
-       101.267,
-       true
-      ],
-      "25": [
-       30.525,
-       25.3167,
-       true
-      ],
-      "50": [
-       61.05,
-       50.6335,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-bitcoin-be-between-68000-70000-on-november-14-2026",
-    "source": "w_tokor",
-    "their_avg": 0.821,
-    "their_size": 220.0,
-    "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 14?"
-   },
    "46236399058375625623008787835855580395633003573535021912301487126524071905568": {
     "end": "2026-12-01",
     "entry": 0.03,
@@ -273387,51 +274129,6 @@
     "their_size": 250.0,
     "title": "Will the price of Bitcoin be above $66,000 on November 17?"
    },
-   "52340758416122759352056647303976643853563376870356401378039257061952959700558": {
-    "end": "2026-11-14",
-    "entry": 0.58,
-    "entry_fee": 0.08526,
-    "event_slug": "bitcoin-above-on-november-14-2026",
-    "late": {
-     "px": 0.58,
-     "s": 153
-    },
-    "opened": "2026-11-11T19:45:39Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       17.241,
-       10.294,
-       true
-      ],
-      "100": [
-       172.414,
-       102.94,
-       true
-      ],
-      "25": [
-       43.103,
-       25.735,
-       true
-      ],
-      "50": [
-       86.207,
-       51.47,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bitcoin-above-74k-on-november-14-2026",
-    "source": "w_tokor",
-    "their_avg": 0.56,
-    "their_size": 105.84,
-    "title": "Will the price of Bitcoin be above $74,000 on November 14?"
-   },
    "53528602945715008059155858683844718451869242641101674841730993862572569720390": {
     "end": "2026-11-15",
     "entry": 0.68,
@@ -273566,51 +274263,6 @@
     "their_avg": 0.92,
     "their_size": 241.93,
     "title": "Will Bitcoin reach $69,000 on November 14?"
-   },
-   "62116416911921811175030182166067374099952955717877018626477327810306000351882": {
-    "end": "2026-11-14",
-    "entry": 0.882,
-    "entry_fee": 0.036427,
-    "event_slug": "ethereum-price-on-november-14-2026",
-    "late": {
-     "px": 0.818,
-     "s": 140
-    },
-    "opened": "2026-11-13T03:20:39Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       11.338,
-       10.0826,
-       true
-      ],
-      "100": [
-       113.379,
-       100.826,
-       true
-      ],
-      "25": [
-       28.345,
-       25.2065,
-       true
-      ],
-      "50": [
-       56.689,
-       50.413,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-ethereum-be-between-1800-1900-on-november-14-2026",
-    "source": "w_tokor",
-    "their_avg": 0.863,
-    "their_size": 150.0,
-    "title": "Will the price of Ethereum be between $1,800 and $1,900 on November 14?"
    },
    "62627364861319279508794363102738967616052435748777687297620510275152567426303": {
     "end": "2026-12-01",
@@ -274059,7 +274711,7 @@
     "title": "Will Anthropic's valuation hit (HIGH) $2.25T by December 31?"
    }
   },
-  "realized": -9.707537,
+  "realized": -22.279433,
   "refills": 0,
   "skipped_cap": 101,
   "skipped_chase": 11,
@@ -274067,8 +274719,8 @@
   "skipped_split": 87,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 209 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 205 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -274504,7 +275156,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -275505,7 +276157,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 12 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -275530,7 +276182,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -275996,7 +276648,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 368 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -276021,7 +276673,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -277210,7 +277862,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 31 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -277571,7 +278223,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -278745,7 +279397,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1356 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -282206,7 +282858,7 @@
   "skipped_split": 91,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 919 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -282731,7 +283383,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 105 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -283699,7 +284351,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -284614,7 +285266,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 71 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -284655,7 +285307,7 @@
    "3810775117887584",
    "2709103038643968"
   ],
-  "cash": -40.271794,
+  "cash": -52.086544,
   "closed": [
    {
     "closed_at": "2026-11-09T05:04:52Z",
@@ -287702,7 +288354,7 @@
   "created": "2026-11-08T18:40:25Z",
   "day_opens": {
    "date": "2026-11-14",
-   "n": 1
+   "n": 4
   },
   "deposited": 0.0,
   "min_cash": -66.626337,
@@ -287843,6 +288495,96 @@
     "their_size": 990.0,
     "title": "Will Matan Kahana be the next Speaker of the Knesset?"
    },
+   "14370733639529017533127837210921127968005014826412550764630814105059492830546": {
+    "end": "2026-11-16",
+    "entry": 0.93,
+    "entry_fee": 0.016275,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.94,
+     "s": 114
+    },
+    "opened": "2026-11-14T17:15:44Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       10.753,
+       10.035,
+       true
+      ],
+      "100": [
+       106.705,
+       100.3142,
+       true
+      ],
+      "25": [
+       26.882,
+       25.0875,
+       true
+      ],
+      "50": [
+       53.513,
+       50.1641,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-115-139",
+    "source": "wb_bigggggggg",
+    "their_avg": 0.9399,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 115-139 tweets from November 14 to November 16, 2026?"
+   },
+   "22826618144294250580041225874784344931021455214022766484568607757067620063597": {
+    "end": "2026-11-16",
+    "entry": 0.6,
+    "entry_fee": 0.06,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.6,
+     "s": 114
+    },
+    "opened": "2026-11-14T17:15:44Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       16.667,
+       10.2,
+       true
+      ],
+      "100": [
+       164.738,
+       101.9649,
+       true
+      ],
+      "25": [
+       41.667,
+       25.5,
+       true
+      ],
+      "50": [
+       82.77,
+       50.9898,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-65-89",
+    "source": "wb_bigggggggg",
+    "their_avg": 0.583,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 65-89 tweets from November 14 to November 16, 2026?"
+   },
    "34215103566839885910350774244658713146768366751315354196689270332803814839943": {
     "backfill": true,
     "end": "2027-01-01",
@@ -287884,6 +288626,51 @@
     "their_avg": 0.0232,
     "their_size": 143.83,
     "title": "Will Inter Miami CF win the 2026 MLS Cup?"
+   },
+   "49889480342655314845792254348278002203392742099914532497353515011639605486889": {
+    "end": "2026-11-16",
+    "entry": 0.81,
+    "entry_fee": 0.038475,
+    "event_slug": "elon-musk-of-tweets-november-14-november-16-2026",
+    "late": {
+     "px": 0.8,
+     "s": 114
+    },
+    "opened": "2026-11-14T17:15:44Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       12.346,
+       10.095,
+       true
+      ],
+      "100": [
+       123.457,
+       100.95,
+       true
+      ],
+      "25": [
+       30.864,
+       25.2375,
+       true
+      ],
+      "50": [
+       61.728,
+       50.475,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-14-november-16-2026-40-64",
+    "source": "wb_bigggggggg",
+    "their_avg": 0.79,
+    "their_size": 145.0,
+    "title": "Will Elon Musk post 40-64 tweets from November 14 to November 16, 2026?"
    },
    "53026829390251629849564997366368669797836591132562451461182233316509420386054": {
     "end": "2026-11-29",
@@ -288206,9 +288993,12 @@
   "skipped_split": 28,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 3782 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 3782 open positions of this wallet; 9 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "no order book": 1,
+    "price under 3c or over 97c": 5
+   }
   },
   "unlimited": true
  },
@@ -289977,7 +290767,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 45 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -294755,17 +295545,16 @@
   },
   "realized": -19.793987,
   "refills": 0,
-  "skipped_cap": 4443,
+  "skipped_cap": 4447,
   "skipped_chase": 29,
   "skipped_no_cash": 0,
   "skipped_split": 380,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 3999 open positions of this wallet; 6 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 3998 open positions of this wallet; 4 new since the last check. Watching since 2026-11-08.",
    "skips": {
-    "daily copy limit reached": 5,
-    "too small (under $20)": 1
+    "daily copy limit reached": 4
    }
   },
   "unlimited": true
@@ -295993,7 +296782,7 @@
   "skipped_split": 5,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 393 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -296634,7 +297423,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 21 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -297610,7 +298399,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 158 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -298037,7 +298826,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 63 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -299692,7 +300481,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 59 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -300830,7 +301619,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 216 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -301434,7 +302223,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 411 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -303721,7 +304510,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 173 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -304524,7 +305313,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 15 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -305229,7 +306018,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 6 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -309611,7 +310400,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 866 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -311815,7 +312604,7 @@
   "skipped_split": 11,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 79 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -312104,7 +312893,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 40 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -312536,7 +313325,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 178 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -313007,7 +313796,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1560 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -314234,7 +315023,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 98 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -314664,7 +315453,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 121 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -315266,7 +316055,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 116 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -315873,7 +316662,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 1215 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -315912,7 +316701,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 20 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -317682,7 +318471,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 935 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -321789,7 +322578,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 60 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -322827,7 +323616,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 32 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -323734,7 +324523,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 67 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -323774,7 +324563,7 @@
    "1076831078702528",
    "4635622153059016"
   ],
-  "cash": -155.976147,
+  "cash": -150.976147,
   "closed": [
    {
     "backfill": true,
@@ -327024,6 +327813,371 @@
     "their_size": 4888.78,
     "title": "Will Ethereum dip to $1,800 in November?",
     "token": "16795906982274758795629579117648323407087890848036387019110102931380055470723"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:43Z",
+    "end": "2026-11-14",
+    "entry": 0.39,
+    "entry_fee": 0.083265,
+    "event_slug": "bitcoin-price-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.39,
+     "s": 412
+    },
+    "opened": "2026-11-13T02:55:28Z",
+    "outcome": "Yes",
+    "pnl": -2.033265,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       25.25,
+       10.4228,
+       true
+      ],
+      "100": [
+       250.25,
+       104.2028,
+       true
+      ],
+      "25": [
+       62.75,
+       26.0528,
+       true
+      ],
+      "50": [
+       125.25,
+       52.1028,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.4228,
+      -10.4228,
+      true
+     ],
+     "100": [
+      104.2028,
+      -104.2028,
+      true
+     ],
+     "25": [
+      26.0528,
+      -26.0528,
+      true
+     ],
+     "50": [
+      52.1028,
+      -52.1028,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
+    "source": "wb_tokor",
+    "their_avg": 0.38,
+    "their_size": 310.0,
+    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?",
+    "token": "113768963366990745093637303981957860864240373464456904850949129423161720447581"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:43Z",
+    "end": "2026-11-14",
+    "entry": 0.78,
+    "entry_fee": 0.06006,
+    "event_slug": "bitcoin-above-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.78,
+     "s": 97
+    },
+    "opened": "2026-11-10T13:45:41Z",
+    "outcome": "Yes",
+    "pnl": -3.96006,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.821,
+       10.154,
+       true
+      ],
+      "100": [
+       128.205,
+       101.54,
+       true
+      ],
+      "25": [
+       32.051,
+       25.385,
+       true
+      ],
+      "50": [
+       64.103,
+       50.77,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.154,
+      -10.154,
+      true
+     ],
+     "100": [
+      101.54,
+      -101.54,
+      true
+     ],
+     "25": [
+      25.385,
+      -25.385,
+      true
+     ],
+     "50": [
+      50.77,
+      -50.77,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bitcoin-above-72k-on-november-14-2026",
+    "source": "wb_tokor",
+    "their_avg": 0.74,
+    "their_size": 68.0,
+    "title": "Will the price of Bitcoin be above $72,000 on November 14?",
+    "token": "18345286293722602680890415437370815057933055834959499020822556508960554450741"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:43Z",
+    "end": "2026-11-14",
+    "entry": 0.819,
+    "entry_fee": 0.051884,
+    "event_slug": "bitcoin-price-on-november-14-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.819,
+     "s": 106
+    },
+    "opened": "2026-11-13T00:30:58Z",
+    "outcome": "No",
+    "pnl": 0.853116,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       12.21,
+       10.1267,
+       true
+      ],
+      "100": [
+       122.1,
+       101.267,
+       true
+      ],
+      "25": [
+       30.525,
+       25.3167,
+       true
+      ],
+      "50": [
+       61.05,
+       50.6335,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.1267,
+      2.0833,
+      true
+     ],
+     "100": [
+      101.267,
+      20.833,
+      true
+     ],
+     "25": [
+      25.3167,
+      5.2083,
+      true
+     ],
+     "50": [
+      50.6335,
+      10.4165,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-bitcoin-be-between-68000-70000-on-november-14-2026",
+    "source": "wb_tokor",
+    "their_avg": 0.821,
+    "their_size": 220.0,
+    "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 14?",
+    "token": "44020857602682936708622619032541349868746855305529076840958745873268080689405"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:43Z",
+    "end": "2026-11-14",
+    "entry": 0.58,
+    "entry_fee": 0.08526,
+    "event_slug": "bitcoin-above-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.58,
+     "s": 152
+    },
+    "opened": "2026-11-11T19:45:39Z",
+    "outcome": "Yes",
+    "pnl": -2.98526,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       17.241,
+       10.294,
+       true
+      ],
+      "100": [
+       172.414,
+       102.94,
+       true
+      ],
+      "25": [
+       43.103,
+       25.735,
+       true
+      ],
+      "50": [
+       86.207,
+       51.47,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.294,
+      -10.294,
+      true
+     ],
+     "100": [
+      102.94,
+      -102.94,
+      true
+     ],
+     "25": [
+      25.735,
+      -25.735,
+      true
+     ],
+     "50": [
+      51.47,
+      -51.47,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bitcoin-above-74k-on-november-14-2026",
+    "source": "wb_tokor",
+    "their_avg": 0.56,
+    "their_size": 105.84,
+    "title": "Will the price of Bitcoin be above $74,000 on November 14?",
+    "token": "52340758416122759352056647303976643853563376870356401378039257061952959700558"
+   },
+   {
+    "closed_at": "2026-11-14T17:15:43Z",
+    "end": "2026-11-14",
+    "entry": 0.876,
+    "entry_fee": 0.038018,
+    "event_slug": "ethereum-price-on-november-14-2026",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.818,
+     "s": 139
+    },
+    "opened": "2026-11-13T03:20:41Z",
+    "outcome": "No",
+    "pnl": -4.418018,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.07,
+     "s": {
+      "10": [
+       11.416,
+       10.0868,
+       true
+      ],
+      "100": [
+       114.155,
+       100.868,
+       true
+      ],
+      "25": [
+       28.539,
+       25.217,
+       true
+      ],
+      "50": [
+       57.078,
+       50.434,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0868,
+      -10.0868,
+      true
+     ],
+     "100": [
+      100.868,
+      -100.868,
+      true
+     ],
+     "25": [
+      25.217,
+      -25.217,
+      true
+     ],
+     "50": [
+      50.434,
+      -50.434,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-ethereum-be-between-1800-1900-on-november-14-2026",
+    "source": "wb_tokor",
+    "their_avg": 0.863,
+    "their_size": 150.0,
+    "title": "Will the price of Ethereum be between $1,800 and $1,900 on November 14?",
+    "token": "62116416911921811175030182166067374099952955717877018626477327810306000351882"
    }
   ],
   "created": "2026-11-08T18:40:25Z",
@@ -327257,51 +328411,6 @@
     "their_size": 2106.25,
     "title": "Will Bitcoin dip to $60,000 in November?"
    },
-   "113768963366990745093637303981957860864240373464456904850949129423161720447581": {
-    "end": "2026-11-14",
-    "entry": 0.39,
-    "entry_fee": 0.083265,
-    "event_slug": "bitcoin-price-on-november-14-2026",
-    "late": {
-     "px": 0.39,
-     "s": 412
-    },
-    "opened": "2026-11-13T02:55:28Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       25.25,
-       10.4228,
-       true
-      ],
-      "100": [
-       250.25,
-       104.2028,
-       true
-      ],
-      "25": [
-       62.75,
-       26.0528,
-       true
-      ],
-      "50": [
-       125.25,
-       52.1028,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-bitcoin-be-between-70000-72000-on-november-14-2026",
-    "source": "wb_tokor",
-    "their_avg": 0.38,
-    "their_size": 310.0,
-    "title": "Will the price of Bitcoin be between $70,000 and $72,000 on November 14?"
-   },
    "114033095271617070714983865791504478906266507670567428753203001241312040895286": {
     "backfill": true,
     "end": "2027-01-01",
@@ -327388,51 +328497,6 @@
     "their_avg": 0.758,
     "their_size": 225.02,
     "title": "Will the price of Bitcoin be above $68,000 on November 16?"
-   },
-   "18345286293722602680890415437370815057933055834959499020822556508960554450741": {
-    "end": "2026-11-14",
-    "entry": 0.78,
-    "entry_fee": 0.06006,
-    "event_slug": "bitcoin-above-on-november-14-2026",
-    "late": {
-     "px": 0.78,
-     "s": 97
-    },
-    "opened": "2026-11-10T13:45:41Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.821,
-       10.154,
-       true
-      ],
-      "100": [
-       128.205,
-       101.54,
-       true
-      ],
-      "25": [
-       32.051,
-       25.385,
-       true
-      ],
-      "50": [
-       64.103,
-       50.77,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bitcoin-above-72k-on-november-14-2026",
-    "source": "wb_tokor",
-    "their_avg": 0.74,
-    "their_size": 68.0,
-    "title": "Will the price of Bitcoin be above $72,000 on November 14?"
    },
    "18374453431027270916246060202070258878110981723841044570279861415827594958576": {
     "end": "2026-12-01",
@@ -327827,51 +328891,6 @@
     "their_size": 51975.98,
     "title": "Will Bitcoin dip to $50,000 by December 31, 2026?"
    },
-   "44020857602682936708622619032541349868746855305529076840958745873268080689405": {
-    "end": "2026-11-14",
-    "entry": 0.819,
-    "entry_fee": 0.051884,
-    "event_slug": "bitcoin-price-on-november-14-2026",
-    "late": {
-     "px": 0.819,
-     "s": 106
-    },
-    "opened": "2026-11-13T00:30:58Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       12.21,
-       10.1267,
-       true
-      ],
-      "100": [
-       122.1,
-       101.267,
-       true
-      ],
-      "25": [
-       30.525,
-       25.3167,
-       true
-      ],
-      "50": [
-       61.05,
-       50.6335,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-bitcoin-be-between-68000-70000-on-november-14-2026",
-    "source": "wb_tokor",
-    "their_avg": 0.821,
-    "their_size": 220.0,
-    "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 14?"
-   },
    "45703704411582499464332374069133096759975115041207788028520907227627254299472": {
     "backfill": true,
     "end": "2027-01-01",
@@ -328178,51 +329197,6 @@
     "their_size": 68596.39,
     "title": "Will Ethereum reach $3,500 by December 31, 2026?"
    },
-   "52340758416122759352056647303976643853563376870356401378039257061952959700558": {
-    "end": "2026-11-14",
-    "entry": 0.58,
-    "entry_fee": 0.08526,
-    "event_slug": "bitcoin-above-on-november-14-2026",
-    "late": {
-     "px": 0.58,
-     "s": 152
-    },
-    "opened": "2026-11-11T19:45:39Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       17.241,
-       10.294,
-       true
-      ],
-      "100": [
-       172.414,
-       102.94,
-       true
-      ],
-      "25": [
-       43.103,
-       25.735,
-       true
-      ],
-      "50": [
-       86.207,
-       51.47,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bitcoin-above-74k-on-november-14-2026",
-    "source": "wb_tokor",
-    "their_avg": 0.56,
-    "their_size": 105.84,
-    "title": "Will the price of Bitcoin be above $74,000 on November 14?"
-   },
    "53528602945715008059155858683844718451869242641101674841730993862572569720390": {
     "end": "2026-11-15",
     "entry": 0.68,
@@ -328486,51 +329460,6 @@
     "their_avg": 0.92,
     "their_size": 241.93,
     "title": "Will Bitcoin reach $69,000 on November 14?"
-   },
-   "62116416911921811175030182166067374099952955717877018626477327810306000351882": {
-    "end": "2026-11-14",
-    "entry": 0.876,
-    "entry_fee": 0.038018,
-    "event_slug": "ethereum-price-on-november-14-2026",
-    "late": {
-     "px": 0.818,
-     "s": 139
-    },
-    "opened": "2026-11-13T03:20:41Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.07,
-     "s": {
-      "10": [
-       11.416,
-       10.0868,
-       true
-      ],
-      "100": [
-       114.155,
-       100.868,
-       true
-      ],
-      "25": [
-       28.539,
-       25.217,
-       true
-      ],
-      "50": [
-       57.078,
-       50.434,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "will-the-price-of-ethereum-be-between-1800-1900-on-november-14-2026",
-    "source": "wb_tokor",
-    "their_avg": 0.863,
-    "their_size": 150.0,
-    "title": "Will the price of Ethereum be between $1,800 and $1,900 on November 14?"
    },
    "62627364861319279508794363102738967616052435748777687297620510275152567426303": {
     "end": "2026-12-01",
@@ -329060,7 +329989,7 @@
     "title": "Will Anthropic's valuation hit (HIGH) $2.25T by December 31?"
    }
   },
-  "realized": -21.578283,
+  "realized": -34.12177,
   "refills": 0,
   "skipped_cap": 96,
   "skipped_chase": 14,
@@ -329068,8 +329997,8 @@
   "skipped_split": 87,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
-   "msg": "Watching 209 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
+   "at": "2026-11-14T17:17:38Z",
+   "msg": "Watching 205 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
@@ -329652,7 +330581,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -330590,7 +331519,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 12 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -330834,7 +331763,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -331922,7 +332851,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 368 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -333214,7 +334143,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-14T17:12:40Z",
+   "at": "2026-11-14T17:17:38Z",
    "msg": "Watching 154 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
