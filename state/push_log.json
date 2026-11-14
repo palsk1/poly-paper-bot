@@ -7,8 +7,8 @@
   },
   "2026-11-14": {
    "failed": 0,
-   "muted": 14,
-   "sent": 4
+   "muted": 15,
+   "sent": 5
   }
  },
  "recent": [
@@ -35,6 +35,12 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
    "track": null,
    "ts": "2026-11-14T03:45:49Z"
+  },
+  {
+   "result": "sent",
+   "title": "[arb] locked in 2.1c a share",
+   "track": null,
+   "ts": "2026-11-14T03:50:48Z"
   }
  ]
 }
