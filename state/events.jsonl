@@ -11260,3 +11260,5 @@
 {"minutes_left": 1.29, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV131945-45", "track": "kc_maker", "ts": "2026-11-14T00:43:45Z", "type": "kmaker_order"}
 {"minutes_left": 1.29, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV131945-45", "track": "kc_maker_safe", "ts": "2026-11-14T00:43:45Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV131945-45", "track": "kc_maker", "ts": "2026-11-14T00:47:46Z", "type": "kmaker_fill"}
+{"fee": 0.0077, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the FAA's nationwide ground stop be lifted by November 13, 9:00 PM ET?", "token": "50739393404337581271239634476633760507853520943555541962550558815121887270194", "track": "endgame_sell98", "ts": "2026-11-14T00:52:01Z", "type": "paper_buy"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXINXDUD-26NOV13H1600-T7592.95", "track": "kalshi_patient", "ts": "2026-11-14T00:52:06Z", "type": "kpatient_result"}
