@@ -11294,3 +11294,7 @@
 {"kind": "sports", "price": 0.9289, "shares": 10, "side": "no", "ticker": "KXNBAESCALATOR3PT-26NOV13PORSAC-SACDACUFF5", "track": "kalshi_patient", "ts": "2026-11-14T01:13:23Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBTC-26NOV1417-B67625", "track": "kalshi_patient", "ts": "2026-11-14T01:13:23Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNCAAFTOTAL-26NOV14WAKESMU-39", "track": "kalshi_patient", "ts": "2026-11-14T01:13:23Z", "type": "kpatient_order"}
+{"outcome": "Yes", "pnl": -0.3902, "price": 0.85, "reason": "wallet exit (book)", "title": "NVIDIA (NVDA) Q3 adjusted gross margin 73% to 75%?", "token": "12184345390140772513332883679626608175715846723917987793045546957490562215909", "track": "wb_youngalphagoat", "ts": "2026-11-14T01:13:58Z", "type": "paper_close"}
+{"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXAAAGASDNY-26NOV14-4.1500", "track": "kalshi_patient", "ts": "2026-11-14T01:15:45Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXEWSLGAME-26NOV14MNUCRY-CRY", "track": "kalshi_patient", "ts": "2026-11-14T01:15:47Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBA2D-26NOV13UTAHOU-UTAABAILEY19", "track": "kalshi_patient", "ts": "2026-11-14T01:15:47Z", "type": "kpatient_fill"}
