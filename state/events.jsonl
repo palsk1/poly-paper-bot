@@ -13123,3 +13123,4 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV141500-00", "track": "kc_maker_safe", "ts": "2026-11-14T20:03:25Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV141500-00", "track": "kc_maker_safe_usd", "ts": "2026-11-14T20:03:25Z", "type": "kmaker_fill"}
 {"pnl": -9.3, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXCOUPEDEFRANCEGAME-26NOV14BETASN-TIE", "track": "kalshi_patient", "ts": "2026-11-14T20:03:27Z", "type": "kpatient_result"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will \"The Cat in the Hat\" 2nd Weekend Box Office be between 9m and 10m?", "token": "39227427420161191630120326439101796387085341191102301462241799171879767496673", "track": "endgame_sell98", "ts": "2026-11-14T20:07:33Z", "type": "paper_buy"}
