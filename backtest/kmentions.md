@@ -90,3 +90,22 @@ The paper fill is also kind to us: a real order would be undercut by those robot
 - **Final volume is not a clean filter.** Cutting by a market's total volume looked like a huge lead (+$17 per $100 under 1,000 contracts); it is only because volume depends on how the market ended.
 - **A random 1 in 20 sample of markets was not enough.** Two leads of +$10 to +$14 per $100 on 100-250 bets were gone on the other 19 in 20.
 - **Holdout note:** this data runs to 13 Nov 2026, so it includes Kalshi mention markets that ended on or after 10 Nov. No test registered for 21 Dec uses Kalshi mention markets, so none of them is touched.
+
+## 4. Kalshi's price as the outside number for Polymarket's mention markets
+
+3,056 Polymarket mention markets have a Kalshi twin (same speech, same word list). The two sites settled the same way in 2,999 of them.
+Each hour, where Polymarket's last trade was 5c / 10c / 15c away from Kalshi's real orders, buy Polymarket's side that Kalshi says is cheap,
+at the worst Polymarket trade of the next hour + 2c + fee.
+
+| what | bets | events | per $100 | luck range | first half / second half | exam |
+|---|---|---|---|---|---|---|
+| buy No, 5c+ apart | 522 | 202 | +$1.98 | -$6.62 to +$10.57 | +$9.83 / -$6.30 | Ahead, but could be luck |
+| buy Yes, 5c+ apart | 332 | 164 | -$10.63 | -$19.62 to -$1.64 | -$10.31 / -$10.95 | Losing |
+| buy No, 10c+ apart | 204 | 118 | +$0.63 | -$13.63 to +$14.89 | +$6.31 / -$5.95 | Ahead, but could be luck |
+| buy Yes, 10c+ apart | 107 | 71 | -$5.78 | -$23.61 to +$12.05 | +$13.65 / -$22.67 | Behind, but could be bad luck |
+| buy No, 15c+ apart | 91 | 71 | +$3.98 | -$17.08 to +$25.03 | +$7.91 / +$0.34 | Ahead, but could be luck |
+| buy Yes, 15c+ apart | 45 | 34 | +$12.18 | -$24.22 to +$48.58 | +$35.17 / -$4.44 | Ahead, but could be luck |
+
+Polymarket's mention prices already follow Kalshi's. Gaps of 10c+ are rare and buying them is a coin flip. Dropped.
+Traps: with a looser match ("God or Evil" on Polymarket against "God" on Kalshi) this looked like +$11 per $100, because Polymarket's wider word list is a different bet.
+And when Polymarket's price jumps 15c+ in the hour after the signal (the word was said), a bot would already have bought at the old price: pricing those bets at the new price, or dropping them, hides the losses (it looked like +$14 per $100).
