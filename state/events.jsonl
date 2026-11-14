@@ -12417,3 +12417,4 @@
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:17:59Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe", "ts": "2026-11-14T12:18:00Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:18:00Z", "type": "kmaker_fill"}
+{"fee": 0.0096, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the highest temperature in San Francisco be between 60-61\u00b0F on November 15?", "token": "55713514642290622264120715322015285339873807795381789731644360848327573292368", "track": "endgame_sell98", "ts": "2026-11-14T12:23:14Z", "type": "paper_buy"}
