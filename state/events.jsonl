@@ -13139,3 +13139,10 @@
 {"minutes_left": 1.22, "price": 0.998, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:28:49Z", "type": "kmaker_order"}
 {"minutes_left": 1.22, "price": 0.998, "queue": 1307.54, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:28:50Z", "type": "kmaker_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV15JACTEN-TEN11", "track": "kalshi_patient", "ts": "2026-11-14T20:29:52Z", "type": "kpatient_order"}
+{"fee": 0.0455, "outcome": "No", "price": 0.35, "shares": 5, "title": "Will exactly 1 Israeli legislative election occur before a government is formed?", "token": "43272985214638307576007185524634138013037174904081742096710463601338130087334", "track": "w_groth", "ts": "2026-11-14T20:31:07Z", "type": "paper_buy"}
+{"fee": 0.0455, "outcome": "No", "price": 0.35, "shares": 5, "title": "Will exactly 1 Israeli legislative election occur before a government is formed?", "token": "43272985214638307576007185524634138013037174904081742096710463601338130087334", "track": "wb_groth", "ts": "2026-11-14T20:31:07Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:32:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:32:55Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:32:55Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXETH15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:32:55Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV141530-30", "track": "kc_maker", "ts": "2026-11-14T20:32:56Z", "type": "kmaker_fill"}
