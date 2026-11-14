@@ -358,6 +358,7 @@ A book is saved only when it changed. One gzipped JSON-lines file per UTC hour i
 - `backtest/kfast.md`: what a fast (every-second) bot could add on Kalshi 15-minute crypto (`kfast.py`)
 - `state/kfast_live/report.md`: live paper scoreboard of the last-45-seconds tests (`kfastlive.py`)
 - `arb_pairs.json`: approved and rejected twin pairs (edited by the review, not by the bot)
+- `plain_words.json`: the plain-words card every strategy shows on the dashboard (one-line summary, a tiny example, when it wins, when it loses). Display only. Every new track needs an entry; `dashboard.py` prints a warning for any strategy without one
 
 ## Setup
 

@@ -1,0 +1,232 @@
+{
+  "_about": "Jan, 14 Nov 2026: 'I can barely explain the explanations to my friend'. One plain card per strategy on the dashboard: say = one or two sentences you could retell to a friend, example = a tiny made-up market, wins / loses = when it makes or loses money. Display only: nothing here changes how a track trades. Every strategy that shows on the dashboard needs an entry (or a group below); dashboard.py prints a warning for any that is missing. Write for someone who has never seen a betting market: no maker, bid, ask, edge, fill, book, percentages.",
+  "groups": {
+    "fav": {
+      "example": "A market asks 'Will the Lakers win tonight?' and Yes costs 92c. The bot buys it. If the Lakers win, it gets $1.00 back: an 8c win. If they lose, the 92c is gone.",
+      "wins": "The likely thing happens. Small win, most of the time.",
+      "loses": "The surprise happens. One loss wipes out about 10 wins, so it needs to be right nearly every time."
+    },
+    "wallet": {
+      "example": "The trader buys 'No, there won't be a ceasefire this week' at 85c. A few minutes later we buy the same thing, a little dearer, say 86c. When they sell, we sell.",
+      "wins": "The trader is good at picking, and we don't pay much more than they did.",
+      "loses": "The trader's bets lose, or we buy so late that the good price is already gone."
+    },
+    "kfast": {
+      "example": "Bitcoin started the 15 minutes at $95,000. With 45 seconds left it is at $95,400. 'Will Bitcoin be up?' costs 99c. The bot buys and gets $1.00 at the end: a 1c win.",
+      "wins": "The price doesn't flip in the last 45 seconds. Almost always.",
+      "loses": "Bitcoin jumps across the line in the last seconds. One loss costs as much as about 100 wins."
+    },
+    "kcmaker": {
+      "example": "Bitcoin started the 15 minutes at $95,000 and is at $95,300 with 3 minutes left. 'Will Bitcoin be up?' costs 96c. The bot puts in an offer to buy at 96c and waits. If someone sells to it and Bitcoin stays up, it gets $1.00: a 4c win.",
+      "wins": "Someone sells to it and the price stays on the winning side until the end.",
+      "loses": "Bitcoin dips back below the start price in the last minutes. One loss costs about 25 wins."
+    }
+  },
+  "families": {
+    "w_": {
+      "say": "Copies the new bets of {who}, a trader who made a lot of money on Polymarket. We buy 5 shares a few minutes after them, and sell when they sell.",
+      "group": "wallet"
+    },
+    "wb_": {
+      "say": "Copies {who}, like its twin {twin}, but on day one it also jumped into all the bets {who} already had open. Tells us if joining a good trader late still pays.",
+      "group": "wallet"
+    }
+  },
+  "tracks": {
+    "word_no": {
+      "say": "Bets that a speaker will NOT say a word, when people are paying too much for 'yes, they'll say it'. It checks how often that person really said that word before.",
+      "example": "A market asks 'Will Trump say crypto in tonight's speech?' and Yes costs 60c. In his last 10 speeches he said crypto only twice. So the bot thinks 60c is far too much and buys No for about 40c. If he doesn't say it, the No pays $1.00: a 60c win.",
+      "wins": "The person doesn't say the word. Each win is often bigger than the money bet.",
+      "loses": "They say it after all. Then the whole bet is lost.",
+      "status": "New since 13 Nov. The history looked good, but it hasn't been tested live yet."
+    },
+    "mention_no": {
+      "say": "The simple version of word_no: in every 'Will X say Y' market ending within a week, it bets No. It doesn't check any history.",
+      "example": "'Will the Apple boss say AI on the earnings call?' Yes costs 40c, so No costs 60c. The bot buys No. If he never says AI, it gets $1.00 back: a 40c win.",
+      "wins": "The word isn't said.",
+      "loses": "The word is said, and the bet is gone. Our history check says this simple trick stopped working in April 2026, so it mostly shows how much better word_no does."
+    },
+    "postcount_no": {
+      "say": "Bets against post counts that look too high. It counts how many times Elon Musk, Trump or the White House posted so far this week, adds what a normal week brings, and bets No on counts that look out of reach.",
+      "example": "'Will Elon post 400 to 424 times this week?' It's Thursday and he's at 250. A normal week adds about 100 more by the end. So 400+ is a stretch, but Yes costs 30c. The bot buys No for 70c. If he ends under 400 (or over 424), No pays $1.00: a 30c win.",
+      "wins": "The real count lands somewhere else.",
+      "loses": "He has a crazy posting spree (or a quiet one) and lands right in that range.",
+      "status": "New since 12 Nov, not tested live yet."
+    },
+    "stock_no": {
+      "say": "Bets that a stock will NOT make a big jump in the last few hours of the trading day.",
+      "example": "At 6 pm Stockholm time Nvidia is at $180. A market asks 'Will Nvidia close above $185 today?' and Yes costs 15c. The bot buys No for 85c. If Nvidia closes under $185 at 10 pm, No pays $1.00: a 15c win.",
+      "wins": "The stock stays calm until the close. That's the usual day.",
+      "loses": "The stock jumps (news, a big order). One loss costs about 6 wins.",
+      "status": "New since 13 Nov, not tested live yet."
+    },
+    "boring_no": {
+      "say": "Bets that unlikely things stay unlikely, when the deadline is more than a month away. Small win almost every time, but the money is stuck for weeks.",
+      "example": "'Will the US confirm aliens exist before 2027?' No costs 95c. The bot buys No. If nothing happens (spoiler: it won't), it gets $1.00 at the deadline: a 5c win, after a month or more of waiting.",
+      "wins": "Nothing happens. In the history it won 100 of 101 times.",
+      "loses": "The surprise happens. One loss wipes out about 19 wins."
+    },
+    "crypto_no": {
+      "say": "Bets that Bitcoin (or another coin) will NOT reach a far-away price in the next few days.",
+      "example": "Bitcoin is at $95,000. 'Will Bitcoin reach $105,000 by Friday?' Yes costs 20c, No costs 80c. The bot buys No. If Bitcoin doesn't get there, it gets $1.00: a 20c win.",
+      "wins": "Bitcoin stays in its usual range.",
+      "loses": "Bitcoin rockets (or crashes) to that price. Then the 80c is gone, about 4 wins' worth."
+    },
+    "soccer_draw": {
+      "say": "Bets on soccer games ending in a draw. In the history, draws happened a bit more often than their price said.",
+      "example": "Lazio vs Torino tomorrow. 'Will it be a draw?' costs 28c. The bot buys Yes. If it's a draw, it gets $1.00: a 72c win. If anyone wins, the 28c is lost.",
+      "wins": "The game ends level. That's about 1 game in 4, but each win is big.",
+      "loses": "Someone wins the game. It loses most bets, so expect long losing streaks."
+    },
+    "quiet_no": {
+      "say": "Bets No on questions that end in 1 to 3 days where the price hasn't moved all week. The idea: if nothing moved, probably nothing will happen.",
+      "example": "'Will the Fed boss resign this week?' sat at 35c for Yes all week. The bot buys No for 65c. If nothing happens, it gets $1.00: a 35c win.",
+      "wins": "Nothing happens before the end.",
+      "loses": "Something does happen. The history said this is about even, so it's a long-shot test you asked for."
+    },
+    "econ_fav": {
+      "say": "Bets on US economy numbers (prices, jobs) a day or two before they come out, but only when a free official forecast agrees with the favorite.",
+      "example": "Kalshi asks 'Will fewer than 230,000 people file for unemployment this week?' Yes costs 85c. Last week it was 215,000, so the forecast says Yes is even safer than 85c. The bot buys Yes. If the number comes in under 230,000, it gets $1.00: a 15c win.",
+      "wins": "The number comes in the way the forecast said.",
+      "loses": "The number surprises. One loss costs several wins. Few bets, because these numbers come out only a few times a month."
+    },
+    "endgame": {
+      "say": "Buys the winning side of a question that's basically over, but hasn't paid out yet. Like buying a lottery ticket after the draw, if you could.",
+      "example": "The game ended 3-0 and the result has been sent in, but the payout comes a few hours later. The winner still costs 97c. The bot buys it and gets $1.00 at payout: a 3c win.",
+      "wins": "The result stands. Nearly always.",
+      "loses": "The result gets challenged and overturned, which is rare. Then the 97c is gone, about 30 wins' worth."
+    },
+    "arb": {
+      "say": "Finds the same question on two sites, Kalshi and Polymarket. It buys Yes on one and No on the other when both together cost less than $1. One of them must pay $1, so it wins either way.",
+      "example": "'Will Satoshi be revealed this year?' No costs 94c on Kalshi, Yes costs 3c on Polymarket. Together 97c. Whatever happens, one side pays $1.00: a 3c win, minus fees.",
+      "wins": "Both sites settle the question the same way. That's the normal case.",
+      "loses": "The two sites read the question differently (different deadline or rules) and both sides lose. That's why every pair is checked by hand first."
+    },
+    "sharp_pinnacle": {
+      "say": "Buys a sports bet on Polymarket when it's cheaper than what Pinnacle, the bookie that pro gamblers use, says it's worth.",
+      "example": "Pinnacle's odds say an Arsenal win is worth 60c. On Polymarket it costs 56c. The bot buys at 56c. If Arsenal wins, it gets $1.00.",
+      "wins": "Over many games, buying 4c cheaper than fair should add up, even though single games are a coin toss.",
+      "loses": "The team loses. Expect lots of losses; only the total over many bets matters. Few bets, because Polymarket is rarely that much cheaper."
+    },
+    "mirror": {
+      "say": "Copies every bet of one trader, sabsabinxz, who made money buying the boring 'nothing happens' outcome. It buys when he buys and sells when he sells. $20 to play with.",
+      "example": "He buys 'No, there won't be a ceasefire by Friday' at 90c. A few minutes later we buy the same. If nothing happens, $1.00 back: a 10c win.",
+      "wins": "He's right, and we didn't pay much more than him.",
+      "loses": "The surprise happens, or we buy too late at a worse price."
+    },
+    "favorites": {
+      "say": "Like mirror, but only copies his safest-looking bets (80c and up).",
+      "example": "He buys a Yes at 88c, we copy it. He buys something at 40c, we skip it.",
+      "wins": "His sure-looking bets come true.",
+      "loses": "One goes wrong. Each loss costs several wins."
+    },
+    "mirror_unlimited": {
+      "say": "Like mirror, but it never runs out of money. Shows whether copying him really pays, and how much money you'd need to copy all of it.",
+      "example": "He opens 40 bets this week. With $20 the normal mirror can only copy a few. This one copies all 40.",
+      "wins": "His bets win overall.",
+      "loses": "His bets lose overall, or we always buy a bit too late."
+    },
+    "screener": {
+      "say": "Copies his style without him: buys the likely side at 80-95c in busy markets that end in 1 week to 3 months. 3 picks a day, $20 to play with.",
+      "example": "'Will the government shut down this month?' No costs 88c. The bot buys No. If nothing happens, $1.00 back: a 12c win.",
+      "wins": "The likely thing happens.",
+      "loses": "The surprise happens. One loss wipes out about 7 wins."
+    },
+    "claude": {
+      "say": "My (Claude's) playground. I change its rules often to try ideas, so its score never counts as proof. Right now it buys No at 90-97c on questions that end in 1 to 2 months, picked at random.",
+      "example": "'Will a new country join NATO by January?' No costs 94c. It buys No. If nothing happens, $1.00 back: a 6c win.",
+      "wins": "Nothing happens.",
+      "loses": "The surprise happens. One loss costs about 15 wins."
+    },
+    "panic_fade": {
+      "say": "When scary news suddenly knocks the 'nothing happens' side down, it buys it, betting the scare blows over. It sells when the price climbs back.",
+      "example": "'Peace deal by March?' No was 88c. A rumor knocks it to 80c in one day. The bot buys No at 80c and sells when it's back near 88c: an 8c win.",
+      "wins": "The panic was overdone and the price bounces back.",
+      "loses": "The news was real. If the price keeps falling, it sells at 45c to stop the bleeding."
+    },
+    "kalshi_patient": {
+      "say": "On Kalshi, instead of paying the full price for a near-sure thing, it puts in a slightly lower offer and waits an hour, hoping someone in a hurry sells to it.",
+      "example": "Someone sells 'Yes' at 96c, and the best offer to buy is 93c. The bot offers 94c and waits. If someone sells to it and the thing happens, it gets $1.00: a 6c win. If nobody sells, nothing happens and nothing is lost.",
+      "wins": "Someone sells to it cheaply and the near-sure thing comes true.",
+      "loses": "The near-sure thing doesn't happen (94c gone). Also: people who sell to a waiting offer sometimes know something we don't.",
+      "status": "New since 12 Nov. Its pass test is fixed for 1 Jan: 1,000+ bets and clearly ahead."
+    },
+    "kc_maker": {
+      "say": "Kalshi's 15-minute 'Will Bitcoin be up or down?' bets. In the last few minutes, it offers to buy the side that's winning at 95c or more, and holds to the end. Waiting offers pay no fee on Kalshi.",
+      "group": "kcmaker"
+    },
+    "kc_maker_safe": {
+      "say": "Same as kc_maker, but only when Bitcoin is well clear of the start price, checked against the price on Binance, a big crypto exchange.",
+      "group": "kcmaker",
+      "status": "Its pass test is fixed for about 1 Dec: 2,500 bets."
+    },
+    "kc_maker_safe_usd": {
+      "say": "Same as kc_maker_safe, with one fix: Binance prices run a hair higher than Kalshi's, so it corrects for that before deciding Bitcoin is 'well clear'.",
+      "group": "kcmaker"
+    },
+    "combo_house": {
+      "say": "Pretends to be the 'house' for parlays (bets that combine 2-4 games, where every game must win). When someone asks for a price, we write down what we'd offer. We keep their money if any game loses, and pay out if they all win. Runs on your AWS server, no real money.",
+      "example": "Someone wants to bet that Arsenal AND the Lakers both win. Each is about a coin flip, so a fair price is about 25c for every $1 they could win. We'd ask 26c (the extra 1c is our profit). If a pro asked more, we count it as our sale. Either team loses: we keep the 26c. Both win: we pay $1.",
+      "wins": "Over many parlays, the little extra we charge adds up, since most parlays lose.",
+      "loses": "Lots of parlays come true at once, or people only buy from us when our price is too low.",
+      "status": "Its pass test is fixed: at 1 Jan or 1,000 finished parlays."
+    },
+    "kfast_take45_z4": {
+      "say": "Kalshi's 15-minute 'Will Bitcoin be up or down?' bets. 45 seconds before the end, if Bitcoin is far enough from the start price, it buys the winning side right away for about 99c.",
+      "group": "kfast"
+    },
+    "kfast_take45_z6": {
+      "say": "Same as the one above, but only when Bitcoin is extremely far from the start price. Fewer bets, safer ones.",
+      "group": "kfast"
+    },
+    "kfast_bid995_45_z4": {
+      "say": "Kalshi's 15-minute Bitcoin bets, 45 seconds before the end: instead of paying 99c+, it offers 99.5c for the winning side and waits for someone to sell.",
+      "group": "kfast"
+    },
+    "kfast_bid998_45_z2": {
+      "say": "Like the 99.5c one, but offers 99.8c and is less picky about how safe the lead is. More bets, a bit more risk.",
+      "group": "kfast"
+    },
+    "fav_short_90_95": {"say": "Buys the likely side at 90-95c when the question ends in 2 to 14 days.", "group": "fav"},
+    "fav_short_95_98": {"say": "Buys the very likely side at 95-98c when the question ends within a week. Tiny wins, fast.", "group": "fav"},
+    "fav_mid_80_90": {"say": "Buys the likely side at 80-90c, ending in 1 to 6 weeks. Bigger wins than the 90c+ ones, but more losses.", "group": "fav"},
+    "fav_bigvol_85_95": {"say": "Buys the likely side at 85-95c, but only in the busiest markets (over $1 million traded).", "group": "fav"},
+    "no_only_90_97": {"say": "Buys only 'nothing happens' (No) at 90-97c, ending in 3 to 30 days.", "group": "fav"},
+    "yes_fav_85_95": {"say": "Buys only 'it happens' (Yes) at 85-95c, ending in 3 to 30 days. The mirror image of no_only.", "group": "fav"},
+    "fav_fee_free": {"say": "Buys the likely side at 88-96c, only in markets without a fee, ending in 3 to 30 days.", "group": "fav"},
+    "fav_cut_losses": {"say": "Buys the likely side at 85-93c, then sells early: at 97c to take the win, or at 75c to stop a loss.", "group": "fav"},
+    "control_random": {
+      "say": "A coin flip picks the bet. It's here on purpose to show what pure luck looks like. If a strategy can't beat this one, it's just luck.",
+      "example": "The coin says 'Yes' on 'Will it rain in Paris on Friday?' at 45c. The bot buys it, no thinking involved.",
+      "wins": "Luck.",
+      "loses": "Luck. Over time it should slowly lose the fees."
+    },
+    "control_longshot": {
+      "say": "Buys long shots at 3-10c. That's a known losing habit. If this one tops the board, luck is winning and nothing above it can be trusted.",
+      "example": "'Will a 40-year-old win the NBA MVP?' Yes costs 4c. It buys it. If it happens, 4c turns into $1.00.",
+      "wins": "A miracle happens (rarely, but it pays 10 to 30 times the bet).",
+      "loses": "Almost always. Each loss is small."
+    },
+    "momentum_week": {
+      "say": "Buys whatever went up 10c or more this week, betting it keeps going up. Sells at +8c, gives up at -12c.",
+      "example": "'Will X win the election?' rose from 55c to 70c this week. The bot buys at 70c and sells at 78c, or at 58c if it turns.",
+      "wins": "The trend keeps going.",
+      "loses": "The price turns back down."
+    },
+    "fade_rally": {
+      "say": "The opposite of momentum: buys whatever fell 10c or more this week, betting it bounces back. Sells at +8c, gives up at -15c.",
+      "example": "'Will X happen by June?' fell from 70c to 55c this week. The bot buys at 55c, sells at 63c, or at 40c if it keeps falling.",
+      "wins": "The drop was an overreaction and it bounces.",
+      "loses": "The drop was real news and it keeps falling."
+    },
+    "panic_fade_4c": {"say": "Like panic_fade, but jumps in after smaller scares (a 4c drop in a day instead of 6c). More bets, weaker signal.", "example": "No falls from 88c to 84c in a day on a rumor. It buys at 84c and sells when it's back near 88c.", "wins": "The scare blows over.", "loses": "The news was real."},
+    "panic_fade_10c": {"say": "Like panic_fade, but only after big scares (a 10c+ drop in a day, from 75c or more). Fewer bets.", "example": "No falls from 85c to 72c in a day. It buys at 72c and sells when it climbs back.", "wins": "The scare blows over.", "loses": "The news was real."},
+    "endgame_strict": {"say": "Like endgame, but only when the result is already official or formally sent in. Buys at 95-99.5c.", "example": "The result is posted and waiting for payout; the winner costs 98c. It buys and gets $1.00: a 2c win.", "wins": "The result stands.", "loses": "The result is overturned, which is rare but costs a lot."},
+    "endgame_sell98": {"say": "Like endgame, but instead of waiting for the payout it sells as soon as someone pays 98.5c. Tests if selling early beats waiting.", "example": "Buys the winner at 96c, sells at 98.5c an hour later: a 2.5c win, money back sooner.", "wins": "The price creeps up to 98.5c.", "loses": "The result flips before it can sell."},
+    "sab_big": {"say": "Copies sabsabinxz (the mirror trader), but only his big bets of $1,000 or more. Does he pick better when he bets big?", "group": "wallet"},
+    "sab_hold": {"say": "Copies sabsabinxz's buys, but ignores when he sells early and holds to the end instead.", "group": "wallet"},
+    "consensus_2": {"say": "Watches our 40 copied traders. When 2 or more of them bet on the same side ($50+ each), it joins in. Sells when they've all left.", "example": "Two of the traders both buy 'No ceasefire by Friday'. The bot buys it too.", "wins": "The crowd of good traders is right.", "loses": "They're wrong, or we join too late."},
+    "consensus_3": {"say": "Same as consensus_2, but needs 3 or more of the 40 traders to agree. Fewer bets, stronger signal.", "example": "Three traders all buy 'Yes, the Fed cuts rates'. The bot buys it too.", "wins": "The crowd of good traders is right.", "loses": "They're wrong, or we join too late."},
+    "crypto_late": {"say": "Hourly 'Will Bitcoin be up or down this hour?' bets. In the last 45 minutes, it buys the side our math says is almost certain, if it still costs 96c or less.", "example": "20 minutes left, Bitcoin is well above the start price. 'Up' costs 95c. It buys and gets $1.00: a 5c win.", "wins": "Bitcoin stays on the same side.", "loses": "Bitcoin swings back across the line. One loss costs about 20 wins."}
+  }
+}

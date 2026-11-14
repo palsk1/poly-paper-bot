@@ -88,6 +88,11 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
 .vrow .m { color: var(--ink2); white-space: nowrap; text-align: right; }
 .counts { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
 .warn { border-left: 3px solid var(--s2); padding-left: 10px; }
+.plain { border-left: 3px solid var(--s1); padding: 2px 0 2px 10px; margin: 8px 0; font-size: 14px; }
+.plain p { margin: 4px 0 6px; }
+.plain .say { font-size: 15px; color: var(--ink); }
+.plain .lbl { font-weight: 650; }
+.oneliner { font-size: 12px; color: var(--ink2); margin: 2px 0 2px; }
 </style>
 </head>
 <body>
@@ -96,6 +101,15 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <div class="sub" id="updated"></div>
   <div class="tiles" id="tiles"></div>
   <p class="note" style="margin-top:8px"><a href="#all-h">Jump to all strategies ↓</a></p>
+
+  <details class="card" id="primer"><summary><b>New here? How these bets work, in 30 seconds</b></summary>
+  <p class="sub">Every market is a yes-or-no question, like <i>"Will it snow in Stockholm on Friday?"</i></p>
+  <p class="sub">You buy a <b>Yes</b> or a <b>No</b>. If you're right, each one pays <b>$1.00</b>. If you're wrong, you get <b>$0</b>.</p>
+  <p class="sub">The price shows what people expect. A Yes at <b>10c</b> means people think it's unlikely. A No at <b>90c</b> is the "safe" side: you win 10c if nothing happens, and lose your 90c if it does.</p>
+  <p class="sub">So a cheap bet wins rarely but big. An expensive bet wins often but small, and one loss eats many wins.</p>
+  <p class="sub">Every strategy here is a robot with a simple rule for which side to buy. All with practice money. We're checking which rules really make money over many bets.</p>
+  <p class="sub"><b>The score:</b> "per $100" means: for every $100 it bet, how much it made or lost. <b>Worst case per $100</b> is the careful version: it assumes some of the wins were luck. If even the worst case is above $0, the strategy is probably real.</p>
+  </details>
 
   <h2>Top 10 today</h2>
   <p class="note">The 10 strategies we trust most right now. We rank by how sure we are, not by who made the most, because a big win can be pure luck. To get on the list, a strategy needs at least 3 finished bets and must be ahead. Only these 10 send pushes to your phone. Tap one for details.</p>
@@ -303,6 +317,7 @@ function miniCard(t, rank) {
   return `<div class="card top${stopCls(t)}" data-n="${esc(t.name)}"><div class="row">
       ${rank ? `<div class="rank">${rank}</div>` : ""}
       <div class="grow"><div class="name">${esc(t.name)}${tags(t)}</div>
+        ${t.plain && t.plain.say ? `<div class="oneliner">${esc(t.plain.say)}</div>` : ""}
         <div class="pot">${pot(t)}</div>
         <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished · ${worstLine(t)}</div><div style="margin-top:4px">${vd(t)}</div></div>
       <div>${spark(t)}</div></div></div>`;
@@ -351,6 +366,28 @@ const pick = $("pick");
 pick.innerHTML = `<optgroup label="Main tracks">` + D.tracks.filter(t => !t.lab).map(t => `<option value="${esc(t.name)}">${esc(t.name)}${t.stopped ? " (stopped)" : ""}</option>`).join("") +
   `</optgroup><optgroup label="Lab (ranked)">` + D.order.filter(n => byName[n].lab).map(n => `<option value="${esc(n)}">${esc(n)}${byName[n].stopped ? " (stopped)" : ""}</option>`).join("") + `</optgroup>`;
 pick.onchange = () => detail(pick.value);
+// Jan, 14 Nov: "I can barely explain the explanations to my friend". plain_words.json, one card per strategy.
+const VMEAN = {
+  "Looks real": "Good: it keeps winning, even if we assume some of it was luck.",
+  "Promising, needs more bets": "Good so far: it's winning, even assuming some luck. A few more bets to be sure.",
+  "Ahead, but could be luck": "It's making money, but not enough bets yet to know if that's skill or luck. Wait.",
+  "Behind, but could be bad luck": "It's losing a bit, but that could still be bad luck. Wait.",
+  "Losing": "Bad: it's losing, and that's not just bad luck."};
+function scoreLine(t) {
+  const tr = t.trust, v = t.pv[1], mean = VMEAN[v] || (t.pv[0] === "early" ? "Too few finished bets to say anything yet. Ignore the numbers for now." : t.pv[0] === "luck" ? "This one is luck on purpose, to compare against." : "");
+  if (!tr.finished) return `No bet has finished yet${endTxt(t)}. ${mean}`;
+  return `${tr.finished} bet${tr.finished === 1 ? "" : "s"} finished. On those, for every $100 it bet, it ${tr.avg_per_100 >= 0 ? "made" : "lost"} ${M(Math.abs(tr.avg_per_100), false)}. ${mean}`;
+}
+function plainCard(t) {
+  const p = t.plain; if (!p) return "";
+  return `<div class="plain">
+    <p class="say">${esc(p.say)}</p>
+    ${p.example ? `<p><span class="lbl">Example:</span> ${esc(p.example)}</p>` : ""}
+    ${p.wins ? `<p><span class="lbl pos">Wins when:</span> ${esc(p.wins)}</p>` : ""}
+    ${p.loses ? `<p><span class="lbl neg">Loses when:</span> ${esc(p.loses)}</p>` : ""}
+    ${p.status ? `<p class="sub">${esc(p.status)}</p>` : ""}
+    <p><span class="lbl">Score so far:</span> ${scoreLine(t)}</p></div>`;
+}
 function openDetail(n) { pick.value = n; detail(n); $("detail-h").scrollIntoView({behavior: "smooth"}); }
 function detail(n) {
   const t = byName[n]; if (!t) return;
@@ -364,7 +401,8 @@ function detail(n) {
     ${t.stopped ? `<p class="sub warn"><b>Stopped${stopDay(t)}.</b> It makes no new bets. Bets it already had still finish and count. Its history stays here so you can look back.${t.stopped.why ? ` Why: ${esc(t.stopped.why)}` : ""}</p>` : ""}
     <div class="pot big">${pot(t)}</div>
     <div style="margin:4px 0">${vd(t)}</div>
-    <p class="sub">${esc(t.label)}</p>
+    ${plainCard(t)}
+    ${t.plain ? `<details><summary>The exact rule (for the nerds)</summary><p class="sub">${esc(t.label)}</p></details>` : `<p class="sub">${esc(t.label)}</p>`}
     ${t.wnote ? `<p class="sub"><b>What this wallet does</b> (from its whole history): ${esc(t.wnote)}</p>` : ""}
     ${t.wstyle ? `<p class="sub"><b>What we copied so far:</b> ${esc(t.wstyle)}</p>` : (/^wb?_/.test(t.name) ? `<p class="sub"><b>What we copied so far:</b> nothing yet. The wallet hasn't opened a new bet since we started watching.</p>` : "")}
     <div class="tiles" style="margin-top:6px">
@@ -375,10 +413,10 @@ function detail(n) {
       ${tr.best_per_100 != null ? `<div class="tile"><div class="v ${cls(tr.best_per_100)}">${money(tr.best_per_100)}</div><div class="k">best case per $100</div></div>` : ""}
       ${(t.extra || []).map(([v, k]) => `<div class="tile"><div class="v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`).join("")}
     </div>
-    <p class="sub" style="margin-top:8px">${tr.finished >= FEW
+    ${t.plain ? `<details><summary>More about these numbers</summary>` : ""}<p class="sub" style="margin-top:8px">${tr.finished >= FEW
       ? `For every $100 it bet${D.rank_size && !t.ext ? ` (as real $${D.rank_size} bets)` : ""}, it made ${M(tr.avg_per_100)} on average. Worst case, if part of that was luck: ${M(tr.worst_per_100)} per $100.${tr.best_per_100 != null ? ` Best case, if it was unlucky: ${M(tr.best_per_100)} per $100.` : ""} The worst case decides the ranking.${FLOOR(tr.worst_per_100) ? " It sits at the −$100 floor: the bets swing too much (or there are too few) to say anything yet. That is not the same as \"it loses everything\"." : ""}${tr.avg_per_100 < 0 && tr.best_per_100 != null ? (tr.best_per_100 < 0 ? " Even the best case is below $0, so the losses aren't just bad luck." : " The best case is still above $0, so the losses could be bad luck.") : ""}`
       : tr.finished ? `Only ${tr.finished} bet${tr.finished === 1 ? " has" : "s have"} finished. For every $100 it bet it made ${M(tr.avg_per_100)}, and the worst case is ${M(tr.worst_per_100)} per $100. With this few bets the worst case is mostly luck (one loss can drag it to −$100), so don't read much into it until ${FEW}+ bets have finished.`
-      : `No bet has finished yet${endTxt(t)}, so there's no worst case to show. It appears after the first finished bet.`}</p>
+      : `No bet has finished yet${endTxt(t)}, so there's no worst case to show. It appears after the first finished bet.`}</p>${t.plain ? "</details>" : ""}
     <p class="sub">${cash} ${tr.proven ? "It has passed the test: it clearly works." : `To count as "clearly works" it needs ${D.min_proven}+ finished bets, and its worst case must be above $0.`}</p>
     ${(t.notes || []).map(x => typeof x === "string" ? `<p class="sub">${esc(x)}</p>` : `<p class="sub">Last heard from the server: ${x.last_seen ? esc(stockholm(x.last_seen)) + " Stockholm time" : "never"}.${x.last_seen && Date.now() - new Date(x.last_seen) > 9e6 ? ` <b class="neg">It has been quiet for ${Math.round((Date.now() - new Date(x.last_seen)) / 36e5)} hours. It may need a restart.</b>` : ""}</p>`).join("")}
     ${t.verdict ? `<p class="sub warn">${esc(t.verdict)}</p>` : ""}
