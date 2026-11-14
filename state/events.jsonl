@@ -12142,3 +12142,11 @@
 {"minutes_left": 2.98, "price": 0.998, "queue": 1015.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker", "ts": "2026-11-14T09:27:02Z", "type": "kmaker_order"}
 {"minutes_left": 2.98, "price": 0.998, "queue": 1015.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker_safe", "ts": "2026-11-14T09:27:03Z", "type": "kmaker_order"}
 {"minutes_left": 2.98, "price": 0.998, "queue": 1015.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T09:27:03Z", "type": "kmaker_order"}
+{"fee": 0.0165, "outcome": "No", "price": 0.929, "shares": 5, "title": "Will there be no new be CEO of NVIDIA by December 31, 2028?", "token": "1235542575596688477313848611478957797754574132778744552334368030605653599770", "track": "w_ecash", "ts": "2026-11-14T09:30:54Z", "type": "paper_buy"}
+{"fee": 0.0165, "outcome": "No", "price": 0.929, "shares": 5, "title": "Will there be no new be CEO of NVIDIA by December 31, 2028?", "token": "1235542575596688477313848611478957797754574132778744552334368030605653599770", "track": "wb_ecash", "ts": "2026-11-14T09:30:54Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": -9.57, "price": 0.957, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140430-30", "track": "kc_maker", "ts": "2026-11-14T09:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV140430-30", "track": "kc_maker", "ts": "2026-11-14T09:32:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker", "ts": "2026-11-14T09:32:25Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker_safe", "ts": "2026-11-14T09:32:25Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140430-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T09:32:25Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNBA3PT-26NOV13OKCLAC-OKCBSTIRTZ14-5", "track": "kalshi_patient", "ts": "2026-11-14T09:32:25Z", "type": "kpatient_result"}
