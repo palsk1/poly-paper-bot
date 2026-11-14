@@ -11250,3 +11250,6 @@
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV131915-15", "track": "kc_maker_safe", "ts": "2026-11-14T00:18:16Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV131915-15", "track": "kc_maker_safe_usd", "ts": "2026-11-14T00:18:16Z", "type": "kmaker_fill"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXINXU-26NOV13H1600-T7589.9999", "track": "kalshi_patient", "ts": "2026-11-14T00:18:18Z", "type": "kpatient_result"}
+{"fee": 0.0205, "outcome": "No", "price": 0.91, "shares": 5, "title": "Will there be no new be CEO of NVIDIA by December 31, 2028?", "token": "1235542575596688477313848611478957797754574132778744552334368030605653599770", "track": "w_tunatyler", "ts": "2026-11-14T00:38:30Z", "type": "paper_buy"}
+{"fee": 0.0205, "outcome": "No", "price": 0.91, "shares": 5, "title": "Will there be no new be CEO of NVIDIA by December 31, 2028?", "token": "1235542575596688477313848611478957797754574132778744552334368030605653599770", "track": "wb_tunatyler", "ts": "2026-11-14T00:38:31Z", "type": "paper_buy"}
+{"minutes_left": 3.79, "price": 0.978, "queue": 100.01, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV131945-45", "track": "kc_maker", "ts": "2026-11-14T00:41:13Z", "type": "kmaker_order"}
