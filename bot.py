@@ -5485,6 +5485,8 @@ def integrity(tracks, deep=False):
         if src in FAST_SOURCES and not tc.get("stopped"):
             ran = parse_iso(load("scan_state.json", {}).get("fast_last", {}).get(name))
             seen = parse_iso((tr.get("status") or {}).get("at"))
+            if (_STATUS.get(name) or {}).get("msg"):
+                seen = now()  # this run's scan got through; stamp_status only copies it in after this check
             gap = dt.timedelta(minutes=max(360, 4 * rules_for(name).get("scan_every_minutes", 60)))
             if ran and ran > now() - gap and (seen is None or seen < now() - gap):
                 bad("scan_failing", name, f"scans run but none got through since {str(seen)[:16] if seen else 'the start'} (check the watch log)")
