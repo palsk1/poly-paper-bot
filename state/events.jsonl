@@ -12092,3 +12092,13 @@
 {"minutes_left": 2.89, "price": 0.993, "queue": 1437.9, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T08:57:09Z", "type": "kmaker_order"}
 {"minutes_left": 2.89, "price": 0.992, "queue": 344.59, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T08:57:10Z", "type": "kmaker_order"}
 {"minutes_left": 2.89, "price": 0.954, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T08:57:11Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 2.4375, "price": 1.0, "reason": "resolved", "title": "Will Elon Musk post 40-64 tweets from November 12 to November 14, 2026?", "token": "73530310718571083034211183729094040011943043039659029248457847857504442525295", "track": "postcount_no", "ts": "2026-11-14T09:01:10Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T09:02:48Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T09:02:49Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T09:02:49Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T09:02:49Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.46, "price": 0.954, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV140400-00", "track": "kc_maker", "ts": "2026-11-14T09:02:50Z", "type": "kmaker_fill"}
+{"filled": 1.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXBTC-26NOV1417-B68375", "track": "kalshi_patient", "ts": "2026-11-14T09:02:51Z", "type": "kpatient_fill"}
+{"filled": 1.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXHUANGNW-26NOV16-T150", "track": "kalshi_patient", "ts": "2026-11-14T09:02:52Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLLM1-26NOV16-ANTH", "track": "kalshi_patient", "ts": "2026-11-14T09:02:52Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNCAAFSPREAD-26NOV14ALAVAN-ALA39", "track": "kalshi_patient", "ts": "2026-11-14T09:02:53Z", "type": "kpatient_fill"}
