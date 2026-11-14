@@ -3762,14 +3762,32 @@ def fast_tracks(kind=None):
 
 
 def gamma_events(params, max_pages=10):
-    """Events list, 100 per page (the API's cap), with nested markets."""
+    """Events list with nested markets, up to max_pages x 100 events.
+    Bug fix 2026-11-14: since about 12 Nov 13:00 UTC Gamma answers HTTP 406 to a tag-filtered /events page of 100
+    (the sports tag 100639 broke sharp_pinnacle and soccer_draw for two days). Pages of 50 via /events/keyset work
+    (the mention, stock and family scans use them), so use those, and fall back to plain /events pages of 50."""
+    out, cur, want = [], None, max_pages * 100
+    try:
+        while len(out) < want:
+            p = {**params, "limit": 50}
+            if cur:
+                p["after_cursor"] = cur
+            res = http_json(f"{GAMMA}/events/keyset", p)
+            rows = [e for e in envelope_rows(res, "events", "data") if isinstance(e, dict)]
+            out += rows
+            cur = res.get("next_cursor") if isinstance(res, dict) else None
+            if not rows or not cur:
+                break
+        return out
+    except Exception as e:
+        print(f"events keyset listing failed ({str(e)[:100]}), trying plain pages")
     out, off = [], 0
-    for _ in range(max_pages):
-        rows = envelope_rows(http_json(f"{GAMMA}/events", {**params, "limit": 100, "offset": off}), "events", "data")
+    while len(out) < want:
+        rows = envelope_rows(http_json(f"{GAMMA}/events", {**params, "limit": 50, "offset": off}), "events", "data")
         out += [e for e in rows if isinstance(e, dict)]
-        if len(rows) < 100:
+        if len(rows) < 50:
             break
-        off += 100
+        off += 50
     return out
 
 
@@ -5462,6 +5480,14 @@ def integrity(tracks, deep=False):
             per = tr.get("rewards", 0.0) / max(days, 0.01) / max(tr["start_cash"], 1) * 100
             if days >= 0.5 and per > 5:
                 bad("maker_rewards_high", name, f"modelled rewards ~${per:.0f}/day per $100: unverified, likely optimistic")
+        # 6) a scan that keeps failing (added 2026-11-14: sharp_pinnacle and soccer_draw went 2 days silent on an
+        #    HTTP 406 and nothing flagged it). Fast tracks write `status` on every scan that gets through.
+        if src in FAST_SOURCES and not tc.get("stopped"):
+            ran = parse_iso(load("scan_state.json", {}).get("fast_last", {}).get(name))
+            seen = parse_iso((tr.get("status") or {}).get("at"))
+            gap = dt.timedelta(minutes=max(360, 4 * rules_for(name).get("scan_every_minutes", 60)))
+            if ran and ran > now() - gap and (seen is None or seen < now() - gap):
+                bad("scan_failing", name, f"scans run but none got through since {str(seen)[:16] if seen else 'the start'} (check the watch log)")
     if deep:
         prefetch_markets(p.get("slug") for tr in tracks.values() for p in tr["positions"].values())
         for name, tr in tracks.items():
