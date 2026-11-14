@@ -2,9 +2,33 @@
  "days": {
   "2026-11-13": {
    "failed": 0,
-   "muted": 58,
+   "muted": 68,
    "sent": 0
+  },
+  "2026-11-14": {
+   "failed": 0,
+   "muted": 11,
+   "sent": 3
   }
  },
- "recent": []
+ "recent": [
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.64)",
+   "track": "kc_maker",
+   "ts": "2026-11-14T00:18:14Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.64)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-14T00:18:16Z"
+  },
+  {
+   "result": "sent",
+   "title": "[arb] locked in 2.1c a share",
+   "track": null,
+   "ts": "2026-11-14T02:50:46Z"
+  }
+ ]
 }
