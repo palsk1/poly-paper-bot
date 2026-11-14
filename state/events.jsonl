@@ -13298,3 +13298,11 @@
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDSPROT-26NOV15MIAIND-INDSMCGOWAN20-80", "track": "kalshi_patient", "ts": "2026-11-14T21:29:17Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV15KCATL-KCKCDST", "track": "kalshi_patient", "ts": "2026-11-14T21:29:17Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV14FLASTL-FLABTKACHUK8", "track": "kalshi_patient", "ts": "2026-11-14T21:29:17Z", "type": "kpatient_order"}
+{"fee": 0.037, "outcome": "Down", "price": 0.88, "shares": 5, "title": "Dogecoin Up or Down - November 14, 4PM ET", "token": "84503879750792601865747960902532320891611597704260622943209040912961875951801", "track": "crypto_late", "ts": "2026-11-14T21:32:38Z", "type": "paper_buy"}
+{"fee": 0.0166, "outcome": "Down", "price": 0.95, "shares": 5, "title": "XRP Up or Down - November 14, 4PM ET", "token": "99251175302006101805635132850570207862575498626652982461024936760518772240359", "track": "crypto_late", "ts": "2026-11-14T21:32:38Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141630-30", "track": "kc_maker", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV141630-30", "track": "kc_maker", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV141630-30", "track": "kc_maker", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141630-30", "track": "kc_maker_safe", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV141630-30", "track": "kc_maker_safe", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV141630-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T21:32:39Z", "type": "kmaker_fill"}
