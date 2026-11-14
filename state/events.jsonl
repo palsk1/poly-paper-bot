@@ -12445,3 +12445,12 @@
 {"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV140745-45", "track": "kc_maker", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140745-45", "track": "kc_maker_safe", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140745-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"fee": 0.0619, "outcome": "Yes", "price": 0.45, "shares": 5, "title": "Will the highest temperature in Tel Aviv be 26\u00b0C on November 15?", "token": "79051203396796678210301012458065487647889860371787595073503852753617317592915", "track": "w_sbel", "ts": "2026-11-14T12:50:38Z", "type": "paper_buy"}
+{"fee": 0.0619, "outcome": "Yes", "price": 0.45, "shares": 5, "title": "Will the highest temperature in Tel Aviv be 26\u00b0C on November 15?", "token": "79051203396796678210301012458065487647889860371787595073503852753617317592915", "track": "wb_sbel", "ts": "2026-11-14T12:50:38Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXITFMATCH-26NOV14ALVTHO-THO", "track": "kalshi_patient", "ts": "2026-11-14T12:52:47Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "yes", "through": true, "ticker": "KXNETFLIXRANKMOVIEGLOBAL-26NOV16-ADO", "track": "kalshi_patient", "ts": "2026-11-14T12:52:49Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLTDPROT-26NOV15LARARI-ARICBECK19-1", "track": "kalshi_patient", "ts": "2026-11-14T12:52:51Z", "type": "kpatient_fill"}
+{"filled": 1.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXNFLWINMARGIN-26NOV15SFDAL-DAL15PLUS", "track": "kalshi_patient", "ts": "2026-11-14T12:52:52Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV14SEACAR-CARLSTANKOVEN22", "track": "kalshi_patient", "ts": "2026-11-14T12:52:52Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "yes", "through": true, "ticker": "KXRAIN-26NOV15-SEA", "track": "kalshi_patient", "ts": "2026-11-14T12:52:53Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXUEFANLSCORE-26NOV14PORDEN-POR1DEN2", "track": "kalshi_patient", "ts": "2026-11-14T12:52:53Z", "type": "kpatient_fill"}
