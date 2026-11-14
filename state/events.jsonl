@@ -13028,3 +13028,14 @@
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV141330-30", "track": "kc_maker_safe", "ts": "2026-11-14T18:33:31Z", "type": "kmaker_fill"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV15JACTEN-JACCRODRIGUEZ24-2", "track": "kalshi_patient", "ts": "2026-11-14T18:34:36Z", "type": "kpatient_order"}
 {"cost": 4.3421, "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 20?", "token": "25672491650010577726229563273926202580062281339805358561744145819130501558354", "track": "crypto_no", "ts": "2026-11-14T18:40:22Z", "type": "skip_no_cash"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Utah @ Arizona be cancelled or postponed?", "token": "18217287656726872400979500103806735879419249309563297311610993934523121746882", "track": "endgame_sell98", "ts": "2026-11-14T18:43:17Z", "type": "paper_buy"}
+{"minutes_left": 0.77, "price": 0.994, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV141345-45", "track": "kc_maker", "ts": "2026-11-14T18:44:14Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXBTC-26NOV2017-B65750", "track": "kalshi_patient", "ts": "2026-11-14T18:44:15Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXBTCD-26NOV2017-T73499.99", "track": "kalshi_patient", "ts": "2026-11-14T18:44:16Z", "type": "kpatient_fill"}
+{"filled": 1.56, "price": 0.97, "side": "no", "through": false, "ticker": "KXHIGHDEN-26NOV14-B56.5", "track": "kalshi_patient", "ts": "2026-11-14T18:44:16Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXLOWTPHIL-26NOV15-B37.5", "track": "kalshi_patient", "ts": "2026-11-14T18:44:16Z", "type": "kpatient_fill"}
+{"filled": 1.09, "price": 0.96, "side": "no", "through": true, "ticker": "KXNCAAWBGAME-26NOV14UNMBYU-UNM", "track": "kalshi_patient", "ts": "2026-11-14T18:44:19Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV15PITCIN-CINSPERINE34-30", "track": "kalshi_patient", "ts": "2026-11-14T18:44:19Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV14MINBOS-BOSJPETERKA10", "track": "kalshi_patient", "ts": "2026-11-14T18:44:21Z", "type": "kpatient_fill"}
+{"filled": 1.8, "price": 0.96, "side": "no", "through": true, "ticker": "KXNHLGOAL-26NOV14PHICBJ-PHICYORK8-1", "track": "kalshi_patient", "ts": "2026-11-14T18:44:22Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUFCVICROUND-26NOV14HEIDIA-DIA3", "track": "kalshi_patient", "ts": "2026-11-14T18:44:24Z", "type": "kpatient_fill"}
