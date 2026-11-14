@@ -33,6 +33,19 @@ more (deep books, $300-500 fits easily). Soccer draws are too thin for $100 bets
 `kc_maker_safe` can use the money (it turns over every 15 minutes) but earns only about 14-18c per $100 on the real
 trade tape.
 
+**Health check of every live track (14 Nov, `review` thread):** one real bug. Since about 12 Nov 13:00 UTC
+Polymarket refused the game-list request the two sports tracks use (HTTP 406 on pages of 100), so `sharp_pinnacle`
+and `soccer_draw` scanned every run, failed, and placed no bets for two days with no alert. Fixed (pages of 50, the
+same listing the other scans use; a live test found 447 games and 48 draws again), plus a new data check that flags
+any scan that keeps failing. Everything else bets when it should and fills at real prices. Status on 14 Nov:
+`kc_maker_safe` +$0.40 per $100 on 620 bets (its bar is +$0.22 after 2,500); `kalshi_patient` +$1.30 on 76;
+`kc_maker_safe_usd` 174 wins, 0 losses (normal for a rule that loses about 1 in 300); **combo house +$2.20 per $100
+on 517 parlays, but the first half made +$9.00 and the second half lost $4.58**, so the "both halves ahead" bar is in
+danger; fast Kalshi tests all near $0 (the main 45-second test -$0.70 per $100, one loss). `crypto_no` ($50) has been
+full since 10 Nov (10 open bets), so it adds bets very slowly. `stock_no` can bet twice on one stock move ("META
+above $640 today" and "META finishes the week above $640" are the same thing on a Friday); its first 2 losses were
+that pair. Everything else has under 50 finished bets: too early.
+
 ## The candidates and their check dates
 
 Each one has a pass rule written down before the result. "Locked" means Jan OK'd it and it can't be moved.
