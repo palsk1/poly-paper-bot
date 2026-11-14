@@ -12751,3 +12751,7 @@
 {"minutes_left": 2.36, "price": 0.989, "queue": 2090.99, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker", "ts": "2026-11-14T15:42:39Z", "type": "kmaker_order"}
 {"minutes_left": 2.36, "price": 0.989, "queue": 2090.99, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker_safe", "ts": "2026-11-14T15:42:39Z", "type": "kmaker_order"}
 {"minutes_left": 2.36, "price": 0.989, "queue": 2090.99, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T15:42:39Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker", "ts": "2026-11-14T15:47:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker_safe", "ts": "2026-11-14T15:47:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV141045-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T15:47:58Z", "type": "kmaker_fill"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXEWSLGAME-26NOV14MNUCRY-CRY", "track": "kalshi_patient", "ts": "2026-11-14T15:47:59Z", "type": "kpatient_result"}
