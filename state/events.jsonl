@@ -13397,3 +13397,9 @@
 {"minutes_left": 3.47, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV141730-30", "track": "kc_maker", "ts": "2026-11-14T22:26:32Z", "type": "kmaker_order"}
 {"minutes_left": 3.47, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV141730-30", "track": "kc_maker_safe", "ts": "2026-11-14T22:26:33Z", "type": "kmaker_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXBRASILEIROTOTAL-26NOV18CRCHA-6", "track": "kalshi_patient", "ts": "2026-11-14T22:26:56Z", "type": "kpatient_order"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXBRASILEIROSPREAD-26NOV14CHAVDG-CHA2", "track": "kalshi_patient", "ts": "2026-11-14T22:36:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNBAPTS-26NOV14DETMIA-DETDJENKINS24-25", "track": "kalshi_patient", "ts": "2026-11-14T22:36:58Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNCAAMBGAME-26NOV15CHSLMU-CHS", "track": "kalshi_patient", "ts": "2026-11-14T22:36:58Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV15NEDET-NECKINER9-2", "track": "kalshi_patient", "ts": "2026-11-14T22:37:03Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV14COLMTL-COLMNECAS88", "track": "kalshi_patient", "ts": "2026-11-14T22:37:03Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV14FLASTL-FLABTKACHUK8", "track": "kalshi_patient", "ts": "2026-11-14T22:37:04Z", "type": "kpatient_fill"}
