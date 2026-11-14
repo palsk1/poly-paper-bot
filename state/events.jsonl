@@ -12691,3 +12691,4 @@
 {"minutes_left": 2.69, "price": 0.99, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV141030-30", "track": "kc_maker", "ts": "2026-11-14T15:27:23Z", "type": "kmaker_order"}
 {"minutes_left": 2.69, "price": 0.99, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV141030-30", "track": "kc_maker_safe", "ts": "2026-11-14T15:27:24Z", "type": "kmaker_order"}
 {"minutes_left": 2.69, "price": 0.99, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV141030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T15:27:24Z", "type": "kmaker_order"}
+{"fee": 0.0197, "outcome": "Down", "price": 0.94, "shares": 5, "title": "Bitcoin Up or Down - November 14, 10AM ET", "token": "8562608135640275150811539216729268982622449364501427144844451893992284629504", "track": "crypto_late", "ts": "2026-11-14T15:29:50Z", "type": "paper_buy"}
