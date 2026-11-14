@@ -11756,3 +11756,6 @@
 {"fee": 0.0, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Russia capture Mykolaivka by December 31, 2026?", "token": "33420035150181480293584639135852230155302565140693032127849329351010380520507", "track": "boring_no", "ts": "2026-11-14T05:08:10Z", "type": "paper_buy"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXETHD-26NOV1400-T1854.99", "track": "kalshi_patient", "ts": "2026-11-14T05:08:10Z", "type": "kpatient_result"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNBA2D-26NOV13UTAHOU-UTAABAILEY19", "track": "kalshi_patient", "ts": "2026-11-14T05:08:10Z", "type": "kpatient_result"}
+{"minutes_left": 2.38, "price": 0.989, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV140015-15", "track": "kc_maker", "ts": "2026-11-14T05:12:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.38, "price": 0.989, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV140015-15", "track": "kc_maker_safe", "ts": "2026-11-14T05:12:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.38, "price": 0.962, "queue": 1126.64, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV140015-15", "track": "kc_maker", "ts": "2026-11-14T05:12:38Z", "type": "kmaker_order"}
