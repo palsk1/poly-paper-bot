@@ -12410,3 +12410,10 @@
 {"minutes_left": 2.84, "price": 0.987, "queue": 2036.96, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:10Z", "type": "kmaker_order"}
 {"minutes_left": 2.84, "price": 0.99, "queue": 1510.88, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:11Z", "type": "kmaker_order"}
 {"minutes_left": 2.84, "price": 0.989, "queue": 518.83, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:12Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.2405, "price": 1.0, "reason": "resolved", "title": "Howard Lutnick out as Secretary of Commerce by November 13?", "token": "1922932163859284243145236788504811563841985560455978758940657488857810485820", "track": "w_blondbeast", "ts": "2026-11-14T12:15:46Z", "type": "paper_close"}
+{"outcome": "No", "pnl": 0.2405, "price": 1.0, "reason": "resolved", "title": "Howard Lutnick out as Secretary of Commerce by November 13?", "token": "1922932163859284243145236788504811563841985560455978758940657488857810485820", "track": "wb_blondbeast", "ts": "2026-11-14T12:15:46Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:17:55Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:17:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:17:59Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe", "ts": "2026-11-14T12:18:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:18:00Z", "type": "kmaker_fill"}
