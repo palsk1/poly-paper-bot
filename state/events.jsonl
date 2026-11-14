@@ -12627,3 +12627,11 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140930-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T14:32:24Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140930-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T14:32:24Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV140930-30", "track": "kc_maker_safe_usd", "ts": "2026-11-14T14:32:24Z", "type": "kmaker_fill"}
+{"fee": 0.0054, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will Thailand be the Jury Winner in the Eurovision Asia 2026 Grand Final?", "token": "52649863770260796466473744811496643433476155301405668643187389013218008300344", "track": "endgame_sell98", "ts": "2026-11-14T14:37:10Z", "type": "paper_buy"}
+{"fee": 0.0051, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will \"Godzilla Minus Zero\" 2nd Weekend Box Office be between 10m and 11m?", "token": "95598463265794213494636049926574760020854510929713649013896209451478824221338", "track": "endgame_sell98", "ts": "2026-11-14T14:37:10Z", "type": "paper_buy"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNCAAF1QSPREAD-26NOV14USCIND-USC8", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFL1HFT-26NOV15BUFNYJ-BUFNYJ", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXTRUTHSOCIALD-26NOV14-B34", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXBTCD-26NOV2017-T57999.99", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXUE-AUS26OCT-5.0", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNCAAMBSPREAD-26NOV14LSUGONZ-GONZ28", "track": "kalshi_patient", "ts": "2026-11-14T14:38:09Z", "type": "kpatient_order"}
