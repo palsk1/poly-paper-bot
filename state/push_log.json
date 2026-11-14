@@ -8,7 +8,7 @@
   "2026-11-14": {
    "failed": 0,
    "muted": 134,
-   "sent": 21
+   "sent": 22
   }
  },
  "recent": [
@@ -137,6 +137,12 @@
    "title": "[crypto_late] bought 2 (practice money)",
    "track": "crypto_late",
    "ts": "2026-11-14T22:16:49Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
+   "track": null,
+   "ts": "2026-11-14T22:40:42Z"
   }
  ]
 }
