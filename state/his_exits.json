@@ -629,5 +629,25 @@
   "title": "Will the Republican Party win the FL-26 House seat?",
   "token": "40617506054166922538352737983211722002439765026316001500193847105832422306759",
   "ts": "2026-11-10T00:45:31Z"
+ },
+ {
+  "days_left": 228.1,
+  "early": true,
+  "end": "2027-07-01",
+  "event_slug": "next-israeli-government-formed-by",
+  "exit_price": 0.5223,
+  "first_seen": null,
+  "his_avg": 0.69,
+  "kind": "sold",
+  "left_on_table_per_share": 0.4777,
+  "outcome": "No",
+  "price_source": "his trades",
+  "profit_per_share": -0.1677,
+  "profit_usd": -135.9,
+  "shares": 810.48,
+  "slug": "next-israeli-government-formed-by-december-31-2026",
+  "title": "Next Israeli government formed by December 31, 2026?",
+  "token": "54733769191302064072268075843557311686314513774364292862357372122754582297727",
+  "ts": "2026-11-14T21:00:58Z"
  }
 ]
