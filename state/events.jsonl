@@ -11963,3 +11963,9 @@
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXHIGHTSATX-26NOV14-T67", "track": "kalshi_patient", "ts": "2026-11-14T07:03:00Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNCAAFTOTAL-26NOV14DUKEMIA-79", "track": "kalshi_patient", "ts": "2026-11-14T07:03:04Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXRAIN-26NOV14-NYC", "track": "kalshi_patient", "ts": "2026-11-14T07:03:08Z", "type": "kpatient_fill"}
+{"minutes_left": 2.49, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.49, "price": 0.971, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:31Z", "type": "kmaker_order"}
+{"minutes_left": 2.49, "price": 0.993, "queue": 291.86, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:32Z", "type": "kmaker_order"}
+{"minutes_left": 2.49, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:33Z", "type": "kmaker_order"}
+{"minutes_left": 2.49, "price": 0.996, "queue": 2130.41, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:33Z", "type": "kmaker_order"}
+{"minutes_left": 2.49, "price": 0.985, "queue": 456.64, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV140215-15", "track": "kc_maker", "ts": "2026-11-14T07:12:34Z", "type": "kmaker_order"}
