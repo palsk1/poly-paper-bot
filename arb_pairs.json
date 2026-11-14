@@ -1863,6 +1863,131 @@
    "id": "KXRELEASEMAXWELL-26JAN01-27|will-trump-pardon-ghislaine-maxwell-before-2027",
    "reason": "Different events: Kalshi is Maxwell released from custody, Polymarket is a Trump pardon.",
    "date": "2026-11-13"
+  },
+  {
+   "id": "KXGROUNDSTOPCAUSE-26DEC01-SMRT|faa-ground-stop-cause-smart-ai-system",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGROUNDSTOPCAUSE-26DEC01-FAIL|faa-ground-stop-cause-equipment-or-system-failure",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGROUNDSTOPCAUSE-26DEC01-DMGE|faa-ground-stop-cause-cable-cut-or-physical-damage",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXLUTNICKOUT-26SEP-26DEC01|howard-lutnick-out-as-secretary-of-commerce-by-november-30",
+   "reason": "Polymarket resolves Yes on an announced resignation/removal; Kalshi needs an actual departure.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXSTARSHIPSPACE-26B-6|will-5-6-spacex-starship-launches-successfully-reach-space-in-2026",
+   "reason": "Different buckets: Kalshi is above 6 launches, Polymarket is 5-6.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXTOKENLAUNCH-27JAN01-EXPO|will-exponent-launch-a-token-by-december-31-2026",
+   "reason": "Kalshi counts any token with a real liquidity pool; Polymarket needs a governance token, publicly tradable.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXNETFLIXRANKMOVIEGLOBAL2-26NOV16-ADO|will-a-dogs-perfect-christmas-be-the-2-us-netflix-movie-this-week",
+   "reason": "Different charts: Kalshi is the Global movie list, Polymarket the US list.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGAMEAWARDS-BNAR-GRA|will-grand-theft-auto-vi-win-game-of-the-year-at-the-2026-game-awards-20260804145651075",
+   "reason": "Different awards: Kalshi is Best Narrative, Polymarket is Game of the Year.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXLOLMVPROLE-WORLDS26-TOP|will-on-win-worlds-2026-finals-mvp",
+   "reason": "Different questions: Kalshi is the MVP's role (Top), Polymarket is one player (ON); tie rules differ too.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXNETFLIXRANKMOVIE-26NOV16-HEA|will-heartland-be-the-top-global-netflix-movie-this-week",
+   "reason": "Different charts: Kalshi is the US list, Polymarket the global list.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGTEMP-26-P0|will-november-2026-be-the-2nd-hottest-on-record",
+   "reason": "Different questions: Kalshi is 2026 hottest year, Polymarket is November 2nd hottest.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXCPICORE-26NOV-T0.2|will-november-2026-core-cpi-mom-be-0pt2",
+   "reason": "Kalshi is above 0.2%, Polymarket is exactly 0.2%.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXPREMIERLEAGUE-27-MCI|will-manchester-united-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Different clubs and outcomes: Kalshi is Man City to win, Polymarket is Man United top 2.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXEPLTOP-27TOP2-LFC|will-liverpool-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Polymarket resolves No if the season is cancelled or postponed past Jun 13 2027; Kalshi has no such clause.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXPOPEVISIT-27JAN01-UKR|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "reason": "Different events: Kalshi is the Pope visiting Ukraine, Polymarket is Trump meeting the Pope.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXTRUMPMEETM-26DEC01-KJON|will-trump-meet-with-kim-jong-un-by-november-30-2026",
+   "reason": "Kalshi counts phone calls; Polymarket needs an in-person meeting.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXCBDECISIONJAPAN-26DEC17-H25|will-the-central-bank-of-chile-decrease-the-monetary-policy-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different central banks: Bank of Japan hike vs Central Bank of Chile cut.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXTRUMPHUANGMEET-27JAN01-JAN01|will-trump-pardon-jensen-huang-before-2027",
+   "reason": "Different events: Kalshi is a Trump-Huang meeting, Polymarket is a pardon.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXCPIYOY-26NOV-T3.9|will-annual-inflation-be-3pt9-in-november",
+   "reason": "Kalshi is above 3.9%, Polymarket is exactly 3.9%.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXCPICOREYOY-26NOV-T2.8|will-november-2026-core-cpi-yoy-be-2pt8",
+   "reason": "Kalshi is above 2.8%, Polymarket is exactly 2.8%.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXHOUSEDEMLEADRUN-26-27JAN01-KCLA|will-katherine-clark-be-the-first-house-majority-leader-after-the-2026-midterms",
+   "reason": "Different events: Kalshi is announcing a run for leader, Polymarket is being chosen Majority Leader.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXNHLHART-27-KKAPRIZOV97|will-kirill-kaprizov-win-the-2026-27-hart-memorial-trophy",
+   "reason": "Polymarket goes to 'Other' if the season is cancelled/postponed and breaks shared wins alphabetically; Kalshi has neither.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL-26NOV16-TAK|will-taken-natalee-holloway-season-1-be-the-2-global-netflix-show-this-week",
+   "reason": "Different ranks: Kalshi is #1, Polymarket is #2.",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGROUNDSTOPCAUSE-26DEC01-UPGR|faa-ground-stop-cause-maintenance-or-upgrade-work",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
+  },
+  {
+   "id": "KXGROUNDSTOPCAUSE-26DEC01-VEND|faa-ground-stop-cause-telecom-carrier-or-contractor-fault",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
   }
  ],
  "rejected_events": [
@@ -1935,6 +2060,11 @@
    "event": "KXRANKLISTGOOGLESEARCHTOP5-26DEC",
    "reason": "Polymarket waits until Mar 31 2027 then resolves No if no list; Kalshi has no such rule.",
    "date": "2026-11-09"
+  },
+  {
+   "event": "KXGROUNDSTOPCAUSE-26DEC01",
+   "reason": "Kalshi needs a 'Source Agency' (not defined in its text) to confirm; Polymarket needs official US government attribution, and the SMART wording differs (rollout counts on Polymarket).",
+   "date": "2026-11-14"
   }
  ]
 }
