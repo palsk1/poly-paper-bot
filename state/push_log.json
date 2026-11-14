@@ -8,7 +8,7 @@
   "2026-11-14": {
    "failed": 0,
    "muted": 62,
-   "sent": 12
+   "sent": 13
   }
  },
  "recent": [
@@ -83,6 +83,12 @@
    "title": "[kc_maker] FLIP: a late favorite lost ($-9.57)",
    "track": "kc_maker",
    "ts": "2026-11-14T09:32:24Z"
+  },
+  {
+   "result": "sent",
+   "title": "DATA CHECK: something doesn't add up",
+   "track": null,
+   "ts": "2026-11-14T13:57:47Z"
   }
  ]
 }
