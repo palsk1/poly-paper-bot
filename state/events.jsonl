@@ -12399,3 +12399,6 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXUFCVICROUND-26NOV14MILMCK-OTHER", "track": "kalshi_patient", "ts": "2026-11-14T11:47:31Z", "type": "kpatient_order"}
 {"cost": 4.3421, "title": "Will the price of Bitcoin be above $70,000 on November 17?", "token": "311957989004312567103800167205328035676258707013447115957396283129838818153", "track": "crypto_no", "ts": "2026-11-14T12:01:08Z", "type": "skip_no_cash"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXTEMPNYCHS-26NOV1407-T37.99", "track": "kalshi_patient", "ts": "2026-11-14T12:01:09Z", "type": "kpatient_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXAAAGASDNY-26NOV14-4.1500", "track": "kalshi_patient", "ts": "2026-11-14T12:05:11Z", "type": "kpatient_result"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXAAAGASDWI-26NOV14-3.6950", "track": "kalshi_patient", "ts": "2026-11-14T12:05:11Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXDIESELD-26NOV14-T6.040", "track": "kalshi_patient", "ts": "2026-11-14T12:05:11Z", "type": "kpatient_result"}
