@@ -7,8 +7,8 @@
   },
   "2026-11-14": {
    "failed": 0,
-   "muted": 106,
-   "sent": 13
+   "muted": 109,
+   "sent": 16
   }
  },
  "recent": [
@@ -89,6 +89,24 @@
    "title": "DATA CHECK: something doesn't add up",
    "track": null,
    "ts": "2026-11-14T13:57:47Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.84)",
+   "track": null,
+   "ts": "2026-11-14T17:40:01Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.87)",
+   "track": null,
+   "ts": "2026-11-14T17:40:02Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.83)",
+   "track": null,
+   "ts": "2026-11-14T17:40:03Z"
   }
  ]
 }
