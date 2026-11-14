@@ -109,3 +109,18 @@ at the worst Polymarket trade of the next hour + 2c + fee.
 Polymarket's mention prices already follow Kalshi's. Gaps of 10c+ are rare and buying them is a coin flip. Dropped.
 Traps: with a looser match ("God or Evil" on Polymarket against "God" on Kalshi) this looked like +$11 per $100, because Polymarket's wider word list is a different bet.
 And when Polymarket's price jumps 15c+ in the hour after the signal (the word was said), a bot would already have bought at the old price: pricing those bets at the new price, or dropping them, hides the losses (it looked like +$14 per $100).
+
+## 5. The Polymarket `word_no` lead, split by whether Kalshi lists the same thing
+
+The 533 history bets of `word_no` since April 2026 (`mentions.rule_bets`), sorted by what Kalshi had on offer.
+
+| group | bets | events | won | per $100 | luck range | exam |
+|---|---|---|---|---|---|---|
+| Kalshi lists the same word for the same speech | 143 | 85 | 46 | -$7.44 | -$33.32 to +$18.44 | Behind, but could be bad luck |
+| Kalshi has the speech, not this word | 137 | 75 | 56 | +$4.34 | -$17.28 to +$25.96 | Ahead, but could be luck |
+| no Kalshi match found | 253 | 128 | 134 | +$34.01 | +$14.28 to +$53.74 | Promising, needs more bets |
+
+Where Kalshi lists the same word, `word_no` has no lead: Polymarket's price is kept honest there. Its history profit sits in markets
+without a Kalshi twin, above all "what will Trump / Elon post this week" and Big Brother episodes, plus two single events (the Xi and King Charles meetings).
+"No Kalshi match found" is not the same as "Kalshi doesn't have it": the matcher misses Kalshi's weekly and monthly Trump markets.
+So this is a warning about the live track, not a new rule: watch whether its live wins also come only from the post and TV-show markets.

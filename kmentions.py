@@ -618,10 +618,37 @@ def cross(score=True):
     print("\n".join(L))
 
 
+def wordno_split():
+    """Where does the Polymarket word_no lead (mentions.rule_bets, since April 2026) come from? Splits its bets by
+    whether Kalshi listed the same word for the same speech, the same speech only, or nothing we could match."""
+    import mentions
+    pm, ptp = mentions.load()[:2]
+    km = (rj(MK, {}) or {}).get("markets") or {}
+    tw = dict(twins(pm, km))
+    evs = {pm[p]["ev_slug"] for p in tw}
+    b = mentions.rule_bets(pm, ptp, mentions.Hist(pm), since=mentions.NEW_ERA)
+    L = ["", "## 5. The Polymarket `word_no` lead, split by whether Kalshi lists the same thing", "",
+         f"The {len(b)} history bets of `word_no` since April 2026 (`mentions.rule_bets`), sorted by what Kalshi had on offer.", "",
+         "| group | bets | events | won | per $100 | luck range | exam |", "|---|---|---|---|---|---|---|"]
+    for nm, f in (("Kalshi lists the same word for the same speech", lambda x: x["id"] in tw),
+                  ("Kalshi has the speech, not this word", lambda x: x["id"] not in tw and x["ev"] in evs),
+                  ("no Kalshi match found", lambda x: x["id"] not in tw and x["ev"] not in evs)):
+        v = [x for x in b if f(x)]
+        c = exam.score(v, nm, tries=90, log=False, quiet=True)
+        L.append(f"| {nm} | {len(v)} | {c['events']} | {sum(1 for x in v if x['pay'] > 0)} | {usd(c['per100'])} | {usd(c['lo100'])} to {usd(c['hi100'])} | {c['verdict']} |")
+    L += ["", "Where Kalshi lists the same word, `word_no` has no lead: Polymarket's price is kept honest there. Its history profit sits in markets",
+          "without a Kalshi twin, above all \"what will Trump / Elon post this week\" and Big Brother episodes, plus two single events (the Xi and King Charles meetings).",
+          "\"No Kalshi match found\" is not the same as \"Kalshi doesn't have it\": the matcher misses Kalshi's weekly and monthly Trump markets.",
+          "So this is a warning about the live track, not a new rule: watch whether its live wins also come only from the post and TV-show markets."]
+    with open(OUT, "a") as f:
+        f.write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "run"
     if mode.startswith("tapes-"):
         _, a, b = mode.split("-")
         do_tapes(int(a), int(b))
     else:
-        {"list": do_list, "tapes": do_tapes, "run": lambda: (run(), cross()), "cross": cross, "dry": lambda: run(False)}[mode]()
+        {"list": do_list, "tapes": do_tapes, "run": lambda: (run(), cross(), wordno_split()), "split": wordno_split, "cross": cross, "dry": lambda: run(False)}[mode]()
