@@ -12403,3 +12403,10 @@
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXAAAGASDWI-26NOV14-3.6950", "track": "kalshi_patient", "ts": "2026-11-14T12:05:11Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXDIESELD-26NOV14-T6.040", "track": "kalshi_patient", "ts": "2026-11-14T12:05:11Z", "type": "kpatient_result"}
 {"fee": 0.0061, "outcome": "No", "price": 0.975, "shares": 5, "title": "Will \"Ebenezer\" Opening Weekend Box Office be less than 16m?", "token": "38377926325067573853795661394702494211066412826155745457712664422586640344434", "track": "endgame_sell98", "ts": "2026-11-14T12:07:18Z", "type": "paper_buy"}
+{"fee": 0.0072, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will Solana reach $80 on November 14?", "token": "28295788729316565670492257445454759519966605293068216334616938978214191520418", "track": "endgame_sell98", "ts": "2026-11-14T12:12:05Z", "type": "paper_buy"}
+{"minutes_left": 2.84, "price": 0.997, "queue": 15.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.84, "price": 0.997, "queue": 15.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe", "ts": "2026-11-14T12:12:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.84, "price": 0.997, "queue": 15.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV140715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:12:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.84, "price": 0.987, "queue": 2036.96, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.84, "price": 0.99, "queue": 1510.88, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.84, "price": 0.989, "queue": 518.83, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV140715-15", "track": "kc_maker", "ts": "2026-11-14T12:12:12Z", "type": "kmaker_order"}
