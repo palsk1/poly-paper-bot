@@ -13336,3 +13336,6 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXHYPE15M-26NOV141645-45", "track": "kc_maker_safe", "ts": "2026-11-14T21:47:35Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV141645-45", "track": "kc_maker_safe", "ts": "2026-11-14T21:47:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXHYPE15M-26NOV141645-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T21:47:36Z", "type": "kmaker_fill"}
+{"fee": 0.0619, "outcome": "UTEP", "price": 0.55, "shares": 5, "title": "Spread: Wyoming (-7.5)", "token": "72539107164510434343535135195152297133324604640746363719792214667977366970455", "track": "w_0x448861", "ts": "2026-11-14T21:50:38Z", "type": "paper_buy"}
+{"fee": 0.0619, "outcome": "UTEP", "price": 0.55, "shares": 5, "title": "Spread: Wyoming (-7.5)", "token": "72539107164510434343535135195152297133324604640746363719792214667977366970455", "track": "wb_0x448861", "ts": "2026-11-14T21:50:38Z", "type": "paper_buy"}
+{"cost": 4.247, "title": "Will the price of Ethereum be above $1,900 on November 18?", "token": "69566972271497857619974611908028302118254419226063157888687439563489610000684", "track": "crypto_no", "ts": "2026-11-14T21:58:05Z", "type": "skip_no_cash"}
