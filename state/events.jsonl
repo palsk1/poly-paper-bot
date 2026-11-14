@@ -12439,3 +12439,9 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV15KCATL-KCJDOWNS2", "track": "kalshi_patient", "ts": "2026-11-14T12:43:46Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXGOOGSHARE-26NOV16-15.5", "track": "kalshi_patient", "ts": "2026-11-14T12:43:46Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXINTLFRIENDLYGAME-26NOV17ARGCRI-CRI", "track": "kalshi_patient", "ts": "2026-11-14T12:43:46Z", "type": "kpatient_order"}
+{"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV140745-45", "track": "kc_maker", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.26, "price": 0.974, "side": "no", "through": true, "ticker": "KXETH15M-26NOV140745-45", "track": "kc_maker", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140745-45", "track": "kc_maker", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV140745-45", "track": "kc_maker", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140745-45", "track": "kc_maker_safe", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV140745-45", "track": "kc_maker_safe_usd", "ts": "2026-11-14T12:46:58Z", "type": "kmaker_fill"}
