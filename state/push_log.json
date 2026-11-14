@@ -7,8 +7,8 @@
   },
   "2026-11-14": {
    "failed": 0,
-   "muted": 134,
-   "sent": 22
+   "muted": 135,
+   "sent": 24
   }
  },
  "recent": [
@@ -143,6 +143,18 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
    "track": null,
    "ts": "2026-11-14T22:40:42Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold No at 31c (-$2.51)",
+   "track": "panic_fade",
+   "ts": "2026-11-14T22:50:39Z"
+  },
+  {
+   "result": "sent",
+   "title": "[crypto_late] bought 1 (practice money)",
+   "track": "crypto_late",
+   "ts": "2026-11-14T22:51:55Z"
   }
  ]
 }
