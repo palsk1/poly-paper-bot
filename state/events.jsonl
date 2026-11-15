@@ -15266,3 +15266,9 @@
 {"minutes_left": 3.09, "price": 0.957, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV151315-15", "track": "kc_maker", "ts": "2026-11-15T18:11:55Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV151315-15", "track": "kc_maker", "ts": "2026-11-15T18:17:18Z", "type": "kmaker_fill"}
 {"outcome": "No", "pnl": 0.0574, "price": 0.981, "reason": "take profit (now 98c), book", "title": "Will the highest temperature in Paris be 15\u00b0C on November 16?", "token": "98491460332375613988704814573198585659158745736774297334757993277058290337342", "track": "endgame_sell98", "ts": "2026-11-15T18:20:41Z", "type": "paper_close"}
+{"minutes_left": 3.67, "price": 0.953, "queue": 295.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV151330-30", "track": "kc_maker", "ts": "2026-11-15T18:26:19Z", "type": "kmaker_order"}
+{"minutes_left": 3.67, "price": 0.977, "queue": 1039.59, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV151330-30", "track": "kc_maker", "ts": "2026-11-15T18:26:20Z", "type": "kmaker_order"}
+{"minutes_left": 3.67, "price": 0.977, "queue": 1039.59, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV151330-30", "track": "kc_maker_safe", "ts": "2026-11-15T18:26:21Z", "type": "kmaker_order"}
+{"minutes_left": 3.67, "price": 0.956, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV151330-30", "track": "kc_maker", "ts": "2026-11-15T18:26:21Z", "type": "kmaker_order"}
+{"minutes_left": 3.67, "price": 0.988, "queue": 80.0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV151330-30", "track": "kc_maker", "ts": "2026-11-15T18:26:22Z", "type": "kmaker_order"}
+{"minutes_left": 3.67, "price": 0.961, "queue": 347.91, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV151330-30", "track": "kc_maker", "ts": "2026-11-15T18:26:23Z", "type": "kmaker_order"}
