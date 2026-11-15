@@ -14839,3 +14839,6 @@
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "yes", "ticker": "KXBOXING-26NOV14JRMAY-JR", "track": "kalshi_patient", "ts": "2026-11-15T12:42:47Z", "type": "kpatient_result"}
 {"pnl": -9.2, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXHIGHMIA-26NOV14-B70.5", "track": "kalshi_patient", "ts": "2026-11-15T12:42:47Z", "type": "kpatient_result"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXRAIN-26NOV14-NYC", "track": "kalshi_patient", "ts": "2026-11-15T12:42:48Z", "type": "kpatient_result"}
+{"fee": 0.0375, "outcome": "Yes", "price": 0.75, "shares": 5, "title": "Will Zoran Jankovi\u0107 win the 2026 Ljubljana mayoral election?", "token": "5120256463293465889277073275291166447801079452194936740107528577653758247331", "track": "w_balerinacapuchina", "ts": "2026-11-15T12:45:40Z", "type": "paper_buy"}
+{"fee": 0.0375, "outcome": "Yes", "price": 0.75, "shares": 5, "title": "Will Zoran Jankovi\u0107 win the 2026 Ljubljana mayoral election?", "token": "5120256463293465889277073275291166447801079452194936740107528577653758247331", "track": "wb_balerinacapuchina", "ts": "2026-11-15T12:45:40Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV150745-45", "track": "kc_maker", "ts": "2026-11-15T12:47:20Z", "type": "kmaker_fill"}
