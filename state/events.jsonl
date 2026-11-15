@@ -14167,3 +14167,5 @@
 {"filled": 10.0, "pnl": 0.16, "price": 0.984, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:16:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.19, "price": 0.981, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:16:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:16:36Z", "type": "kmaker_fill"}
+{"fee": 0.0075, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will Ethereum dip to $1,600 on November 15?", "token": "93245124224188551425562760535519901416853443265750935299781722281083135117496", "track": "endgame_sell98", "ts": "2026-11-15T05:26:15Z", "type": "paper_buy"}
+{"minutes_left": 3.45, "price": 0.956, "queue": 218.86, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV150030-30", "track": "kc_maker", "ts": "2026-11-15T05:26:33Z", "type": "kmaker_order"}
