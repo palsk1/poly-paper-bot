@@ -14156,3 +14156,7 @@
 {"minutes_left": 2.76, "price": 0.981, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:12:18Z", "type": "kmaker_order"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXINTLFRIENDLYGAME-26NOV17ARGCRI-CRI", "track": "kalshi_patient", "ts": "2026-11-15T05:12:19Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFL1HTOTAL-26NOV15SFDAL-43", "track": "kalshi_patient", "ts": "2026-11-15T05:12:19Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.3742, "price": 1.0, "reason": "resolved", "title": "Will Bitcoin reach $69,000 on November 14?", "token": "61847773586383946034495344171805589319304606004979493846361313647887488705088", "track": "w_tokor", "ts": "2026-11-15T05:12:44Z", "type": "paper_close"}
+{"outcome": "No", "pnl": 0.3742, "price": 1.0, "reason": "resolved", "title": "Will Bitcoin reach $69,000 on November 14?", "token": "61847773586383946034495344171805589319304606004979493846361313647887488705088", "track": "wb_tokor", "ts": "2026-11-15T05:12:44Z", "type": "paper_close"}
+{"minutes_left": 1.0, "price": 0.984, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:14:03Z", "type": "kmaker_order"}
+{"minutes_left": 1.0, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:14:04Z", "type": "kmaker_order"}
