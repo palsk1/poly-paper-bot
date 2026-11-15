@@ -14931,3 +14931,5 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXSERIEAGAME-26NOV21PARROM-PAR", "track": "kalshi_patient", "ts": "2026-11-15T14:04:05Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRECYDS-26NOV15JACTEN-JACBTHOMAS7-50", "track": "kalshi_patient", "ts": "2026-11-15T14:04:05Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLPASSYDS-26NOV15JACTEN-TENCWARD1-300", "track": "kalshi_patient", "ts": "2026-11-15T14:04:05Z", "type": "kpatient_order"}
+{"fee": 0.0365, "outcome": "Bengals", "price": 0.42, "shares": 5, "title": "Spread: Bengals (-6.5)", "token": "7216011020998820121293047764201844288252498055783353448241036857350785165890", "track": "w_0x448861", "ts": "2026-11-15T14:05:32Z", "type": "paper_buy"}
+{"fee": 0.0365, "outcome": "Bengals", "price": 0.42, "shares": 5, "title": "Spread: Bengals (-6.5)", "token": "7216011020998820121293047764201844288252498055783353448241036857350785165890", "track": "wb_0x448861", "ts": "2026-11-15T14:05:32Z", "type": "paper_buy"}
