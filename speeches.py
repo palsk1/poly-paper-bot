@@ -82,5 +82,71 @@ def peek3():
         print("TWITTER FAIL", str(e)[:100], flush=True)
 
 
+def wj(path, obj):
+    import gzip, json, os
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with gzip.open(path + ".tmp", "wt") as f:
+        json.dump(obj, f, separators=(",", ":"))
+    os.replace(path + ".tmp", path)
+
+
+def rj(path, default=None):
+    import gzip, json
+    try:
+        with gzip.open(path, "rt") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def cache(name):
+    import os
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "bt_cache", "sp", name)
+
+
+KEEP = ("date", "document_id", "factbase_url", "record_type", "media_type", "place", "record_title", "slug", "speaker_id", "version_number")
+
+
+def do_list():
+    """every Trump record Roll Call lists (speeches, interviews, remarks...), newest first -> bt_cache/sp/list.json.gz"""
+    import json, time
+    out, page, pages = {}, 1, 1
+    while page <= pages:
+        for a in range(4):
+            try:
+                d = json.loads(raw(API.format(page), 60))
+                break
+            except Exception as e:
+                print("  list page failed", page, str(e)[:100], flush=True)
+                time.sleep(3 + 3 * a)
+                d = None
+        if not d:
+            page += 1
+            continue
+        pages = d["meta"]["total_pages"]
+        for x in d["data"]:
+            r = {k: x.get(k) for k in KEEP}
+            doc = x.get("document") or {}
+            r["words"] = doc.get("word_count")
+            r["dur"] = doc.get("duration")
+            r["speakers"] = [(p.get("speaker"), p.get("words")) for p in (x.get("stresslens") or [])]
+            out[x["document_id"]] = r
+        if page % 20 == 0:
+            print("  list page", page, "of", pages, len(out), flush=True)
+        page += 1
+        time.sleep(0.3)
+    wj(cache("list.json.gz"), out)
+    import collections
+    print("records", len(out), collections.Counter(r["record_type"] for r in out.values()).most_common(), flush=True)
+    print("by year", sorted(collections.Counter(r["date"][:4] for r in out.values()).items()), flush=True)
+    # how does the page body mark who is speaking?
+    u = "https://rollcall.com/factbase/trump/transcript/donald-trump-interview-stephen-a-smith-online-show-november-12-2026/"
+    s = raw(u, 60)
+    hits = [g.start() for g in re.finditer("I can have it both ways", s)]
+    print("phrase at", hits, "of", len(s), flush=True)
+    for h in hits[1:3]:
+        print("BODY", s[h - 3500:h + 800], flush=True)
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
