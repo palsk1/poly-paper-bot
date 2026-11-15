@@ -14328,3 +14328,6 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150145-45", "track": "kc_maker", "ts": "2026-11-15T06:52:29Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150145-45", "track": "kc_maker_safe", "ts": "2026-11-15T06:52:29Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-15T06:52:29Z", "type": "kmaker_fill"}
+{"outcome": "UTEP", "pnl": -2.8119, "price": 0.0, "reason": "resolved", "title": "Spread: Wyoming (-7.5)", "token": "72539107164510434343535135195152297133324604640746363719792214667977366970455", "track": "w_0x448861", "ts": "2026-11-15T06:53:54Z", "type": "paper_close"}
+{"outcome": "UTEP", "pnl": -2.8119, "price": 0.0, "reason": "resolved", "title": "Spread: Wyoming (-7.5)", "token": "72539107164510434343535135195152297133324604640746363719792214667977366970455", "track": "wb_0x448861", "ts": "2026-11-15T06:53:54Z", "type": "paper_close"}
+{"minutes_left": 5.07, "price": 0.955, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV150200-00", "track": "kc_maker", "ts": "2026-11-15T06:54:57Z", "type": "kmaker_order"}
