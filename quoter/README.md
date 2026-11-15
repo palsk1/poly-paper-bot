@@ -15,6 +15,11 @@ price), and writes down what we *would* have quoted under each rule. When the tr
 quoter the winning price. If our quote was cheaper, we'd have got that bet. When the games end, `combos.py qscore`
 works out what those bets would have paid.
 
+**Only sold requests are written (15 Nov fix).** About 100 requests a second arrive. Written in full they filled the
+400 MB day file by about 02:00 UTC, and from then on that day's requests were dropped: 11-15 Nov only scored parlays
+sold 00:00-02:20 UTC (01:00-03:20 Stockholm). Now each priced request waits in memory for 10 minutes and is written
+only if its trade arrives (trades come 6-50 s after the request). Restart the server to pick it up (see below).
+
 **What it never does:** send a quote, sign anything, or move money. There's no code for it. It doesn't hold a private
 key. It only has an API login, which can't move money by itself.
 
