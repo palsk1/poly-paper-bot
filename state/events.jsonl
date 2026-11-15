@@ -15151,3 +15151,11 @@
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV15SFDAL-SFCMCCAFFREY23-120", "track": "kalshi_patient", "ts": "2026-11-15T17:02:48Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXF1FASTLAP-LASV26-LEC", "track": "kalshi_patient", "ts": "2026-11-15T17:02:48Z", "type": "kpatient_order"}
 {"outcome": "Draw", "pnl": -1.3481, "price": 0.0, "reason": "resolved", "title": "Will CD Tenerife vs. AD Ceuta FC end in a draw?", "token": "114493081137707090777108188496925039834738760886643141319771964241617890580835", "track": "soccer_draw", "ts": "2026-11-15T17:05:28Z", "type": "paper_close"}
+{"minutes_left": 2.17, "price": 0.954, "queue": 25.15, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV151215-15", "track": "kc_maker", "ts": "2026-11-15T17:12:50Z", "type": "kmaker_order"}
+{"filled": 6.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLOWTSEA-26NOV15-T48", "track": "kalshi_patient", "ts": "2026-11-15T17:12:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNBA3PT-26NOV15LALPHX-LALSMAMUKELASHVILI54-4", "track": "kalshi_patient", "ts": "2026-11-15T17:12:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLRSHYDS-26NOV15CARNO-CARTETIENNE23-40", "track": "kalshi_patient", "ts": "2026-11-15T17:12:58Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "yes", "through": false, "ticker": "KXNFLRSHYDSPROT-26NOV15KCATL-KCEJOHNSON10-25", "track": "kalshi_patient", "ts": "2026-11-15T17:12:59Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV15JACTEN-TEN7", "track": "kalshi_patient", "ts": "2026-11-15T17:12:59Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLTOTAL-26NOV15PITCIN-70", "track": "kalshi_patient", "ts": "2026-11-15T17:13:00Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "yes", "through": false, "ticker": "KXSOLD-26NOV1517-T68.9999", "track": "kalshi_patient", "ts": "2026-11-15T17:13:00Z", "type": "kpatient_fill"}
