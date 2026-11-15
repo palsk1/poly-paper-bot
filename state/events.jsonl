@@ -15752,3 +15752,6 @@
 {"fee": 0.0605, "outcome": "Deportes Recoleta: No", "price": 0.59, "shares": 5, "title": "Will Deportes Recoleta win on 2026-11-15?", "token": "79095750081192893758421023179612811826144437908677283824513038014425419385597", "track": "sharp_pinnacle", "ts": "2026-11-15T23:02:14Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV151800-00", "track": "kc_maker", "ts": "2026-11-15T23:02:14Z", "type": "kmaker_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXBTC-26NOV1518-B64950", "track": "kalshi_patient", "ts": "2026-11-15T23:02:15Z", "type": "kpatient_fill"}
+{"minutes_left": 3.54, "price": 0.991, "queue": 757.31, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV151815-15", "track": "kc_maker", "ts": "2026-11-15T23:11:28Z", "type": "kmaker_order"}
+{"minutes_left": 3.54, "price": 0.991, "queue": 757.31, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV151815-15", "track": "kc_maker_safe", "ts": "2026-11-15T23:11:28Z", "type": "kmaker_order"}
+{"minutes_left": 3.54, "price": 0.991, "queue": 757.31, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV151815-15", "track": "kc_maker_safe_usd", "ts": "2026-11-15T23:11:28Z", "type": "kmaker_order"}
