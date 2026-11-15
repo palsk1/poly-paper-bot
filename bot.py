@@ -4190,7 +4190,7 @@ def wordno_candidates(names):
 def stocklong_candidates(names):
     """Stock price markets ("will Nvidia close above $180 today?"), stocks.py comb, backtest/stocks_comb.md, 2026-11-13.
     People overpay for the long shot. Where the listed YES price is in [min_yes, max_yes) and the stock market closes
-    in min_hours_to_end..max_hours_to_end hours, buy NO. One bet per market; the real ask must be close to the listed
+    in min_hours_to_end..max_hours_to_end hours, buy NO. One bet per stock per closing day (15 Nov); the real ask must be close to the listed
     price (rule max_over_listed), because the history lead only exists at prices near the last trade."""
     import stocks
     rs = {n: rules_for(n) for n in names}
@@ -4226,7 +4226,9 @@ def stocklong_candidates(names):
                     continue
                 c = candidate(m, 1, max(hours_left / 24, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
                               {"signal": f"Yes listed {cents(p_yes)} with {hours_left:.1f} hours left before the close"})
-                c["event_key"] = str(m.get("slug") or c["token"])     # one bet per market, not per event
+                # one bet per stock per closing day (Jan, 15 Nov): on a Friday "META above $640 today" and "META
+                # finishes the week above $640" are the same bet, and the first 2 losses were such a pair
+                c["event_key"] = f"{stocks.parse(m.get('question'))[0]}|{end.strftime('%Y-%m-%d')}"
                 c["theme"] = "stock long shot"
                 out[n].append(c)
     for n in out:
