@@ -1791,6 +1791,19 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "kmentions.py cross, backtest/kmentions.md"
+  },
+  {
+   "id": "post_word_markets_no_where_yes_15c_above_the_text_record_20_",
+   "date": "2026-11-15",
+   "what": "Post-word markets: No where Yes 15c+ above the text record (20-60c)",
+   "tries": 40,
+   "bets": 148,
+   "groups": 41,
+   "per100": 6.44,
+   "floor100": -20.21,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "postwords.py"
   }
  ]
 }
