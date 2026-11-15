@@ -44,7 +44,7 @@ on 517 parlays, but the first half made +$9.00 and the second half lost $4.58**,
 danger; fast Kalshi tests all near $0 (the main 45-second test -$0.70 per $100, one loss). `crypto_no` ($50) has been
 full since 10 Nov (10 open bets), so it adds bets very slowly. `stock_no` can bet twice on one stock move ("META
 above $640 today" and "META finishes the week above $640" are the same thing on a Friday); its first 2 losses were
-that pair. Everything else has under 50 finished bets: too early.
+that pair (fixed 15 Nov, Jan said stop it: now one bet per stock per closing day). Everything else has under 50 finished bets: too early.
 
 ## The candidates and their check dates
 
