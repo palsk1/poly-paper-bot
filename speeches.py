@@ -148,5 +148,62 @@ def do_list():
         print("BODY", s[h - 3500:h + 800], flush=True)
 
 
+BLOCK = re.compile(r'<h2 class="text-md inline">(.*?)</h2>(.*?)<div class=" flex-auto text-md text-gray-600 leading-loose">(.*?)</div>', re.S)
+SINCE = "2024-07-01"
+SHARD = 150
+
+
+def parse(s):
+    import html
+    out = []
+    for g in BLOCK.finditer(s):
+        t = re.search(r"(\d\d):(\d\d):(\d\d)-", g[2])
+        sec = int(t[1]) * 3600 + int(t[2]) * 60 + int(t[3]) if t else None
+        txt = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", g[3]))).strip()
+        out.append([html.unescape(g[1]).strip(), sec, txt])
+    return out
+
+
+def do_texts(budget_min=150):
+    """every transcript since SINCE, split by who is speaking -> bt_cache/sp/texts_NNN.json.gz (resumable)"""
+    import concurrent.futures, glob, time
+    L = rj(cache("list.json.gz"), {})
+    ids = sorted((d for d, r in L.items() if (r["date"] or "") >= SINCE and "no-transcript" not in (r["slug"] or "")
+                  and r["record_type"] not in ("Op-Ed", "Position Paper", "Official Document")), key=lambda d: (L[d]["date"], d))
+    have = {}
+    for p in glob.glob(cache("texts_*.json.gz")):
+        have.update(rj(p, {}))
+    todo = [d for d in ids if d not in have]
+    print("records", len(ids), "have", len(have), "todo", len(todo), flush=True)
+    t0 = time.time()
+
+    def one(d):
+        for a in range(3):
+            try:
+                return d, parse(raw(L[d]["factbase_url"], 90))
+            except Exception as e:
+                err = str(e)[:80]
+                time.sleep(2 + 4 * a)
+        print("  failed", d, err, flush=True)
+        return d, None
+
+    n_sh = len(glob.glob(cache("texts_*.json.gz")))
+    for i in range(0, len(todo), SHARD):
+        if time.time() - t0 > budget_min * 60:
+            print("out of time, run again to continue", flush=True)
+            break
+        with concurrent.futures.ThreadPoolExecutor(4) as ex:
+            got = dict(ex.map(one, todo[i:i + SHARD]))
+        got = {d: v for d, v in got.items() if v is not None}
+        wj(cache(f"texts_{n_sh:03d}.json.gz"), got)
+        n_sh += 1
+        emp = sum(1 for v in got.values() if not v)
+        print(f"  shard {n_sh} done: {len(got)} records, {emp} empty, {sum(len(v) for v in got.values())} blocks, "
+              f"{(time.time() - t0) / 60:.1f} min", flush=True)
+        if i == 0:
+            for d, v in list(got.items())[:3]:
+                print("   sample", L[d]["record_title"], len(v), v[:3], flush=True)
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
