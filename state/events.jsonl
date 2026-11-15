@@ -15743,3 +15743,7 @@
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNBATOTAL-26NOV15OKCSAC-250", "track": "kalshi_patient", "ts": "2026-11-15T22:48:33Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXWT20MATCH-26NOV160415SRIUAE-SRI", "track": "kalshi_patient", "ts": "2026-11-15T22:48:33Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV15VANVGK-VGKJEICHEL9", "track": "kalshi_patient", "ts": "2026-11-15T22:48:33Z", "type": "kpatient_order"}
+{"minutes_left": 2.3, "price": 0.969, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV151800-00", "track": "kc_maker", "ts": "2026-11-15T22:57:42Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXINTLFRIENDLYGAME-26NOV17ECUBOL-BOL", "track": "kalshi_patient", "ts": "2026-11-15T22:57:44Z", "type": "kpatient_fill"}
+{"filled": 1.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXLOWTOKC-26NOV15-B37.5", "track": "kalshi_patient", "ts": "2026-11-15T22:57:44Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXUEFANLSPREAD-26NOV16GERNED-NED3", "track": "kalshi_patient", "ts": "2026-11-15T22:57:47Z", "type": "kpatient_fill"}
