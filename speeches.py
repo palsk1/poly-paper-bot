@@ -205,5 +205,211 @@ def do_texts(budget_min=150):
                 print("   sample", L[d]["record_title"], len(v), v[:3], flush=True)
 
 
+# ================================================================ the test: "What will Trump say this week / this month"
+WIN = re.compile(r"between (\w+) (\d+)(?:, (\d{4}))?(?:, [\d:]+ [AP]M ET)? and (\w+) (\d+), (\d{4}), 11:59 PM ET")
+TRIES = 50
+RULE = dict(gap=0.15, side=0, pre=True)
+
+
+def window(m):
+    """the market's stretch in ET, from its rules text"""
+    import datetime
+    import postwords as pw
+    g = WIN.search(m.get("desc") or "")
+    if not g or g[1].lower() not in pw.MON or g[4].lower() not in pw.MON:
+        return None
+    y2, m1, m2 = int(g[6]), pw.MON[g[1].lower()], pw.MON[g[4].lower()]
+    y1 = int(g[3]) if g[3] else (y2 - 1 if m1 > m2 else y2)
+    a = datetime.datetime(y1, m1, int(g[2]), tzinfo=pw.ET)
+    b = datetime.datetime(y2, m2, int(g[5]), 23, 59, 59, tzinfo=pw.ET)
+    return int(a.timestamp()), int(b.timestamp())
+
+
+class Words:
+    """Trump's own words per day (ET), and on which days he said a term"""
+
+    def __init__(self):
+        import collections, datetime, glob
+        import postwords as pw
+        self.L = rj(cache("list.json.gz"), {})
+        T = {}
+        for p in sorted(glob.glob(cache("texts_*.json.gz"))):
+            T.update(rj(p, {}))
+        self.n = len(T)
+        days = collections.defaultdict(list)
+        for d, v in T.items():
+            x = " ".join(b[2] for b in v if b[0] == "Donald Trump")
+            if x:
+                y, mo, dd = map(int, self.L[d]["date"].split("-"))
+                days[int(datetime.datetime(y, mo, dd, tzinfo=pw.ET).timestamp())].append(x.lower().replace("\u2019", "'"))
+        self.days = {d: " \n ".join(v) for d, v in days.items()}
+        self.keys = sorted(self.days)
+        self.c = {}
+
+    def said(self, item):
+        import postwords as pw
+        if item not in self.c:
+            r = pw.rx(item)
+            self.c[item] = [d for d in self.keys if r.search(self.days[d])]
+        return self.c[item]
+
+    def record(self, item, t, n=8):
+        """in how many of the n 7-day stretches before t did he say it (only days that had ended by t)"""
+        import bisect
+        sd, k = self.said(item), 0
+        for i in range(n):
+            a, b = t - (i + 1) * 7 * 86400, t - i * 7 * 86400
+            j = bisect.bisect_left(sd, a - 86400 + 1)
+            k += j < len(sd) and sd[j] + 86400 <= b
+        return (k + 1) / (n + 2), k
+
+
+def load():
+    import mentions
+    ms, tp = mentions.load()
+    sel = [m for m in ms.values() if "trump" in str(mentions.speaker(m)).lower() and "post" not in m["title"].lower()
+           and re.search(r"this week|in (january|february|march|april|may|june|july|august|september|october|november|december)\b|this month",
+                         m["title"].lower()) and window(m) and m.get("item") and m.get("final") in ([1.0, 0.0], [0.0, 1.0])
+           and not re.search(r"\d\+? times|\d\+", m["q"])]
+    return sel, {m["id"]: tp[m["id"]] for m in sel if m["id"] in tp}
+
+
+def looks(W, sel, tp, n=8):
+    """every 5-minute step with trades, until the market closes or we could have read the word in a transcript"""
+    for m in sel:
+        w, r = window(m), tp.get(m["id"])
+        if not r:
+            continue
+        stop, b, sd = min(w[1], m["closed_t"] or w[1]), r["b"], W.said(m["item"])
+        for i in range(len(b) - 1):
+            t = b[i][0] + 300
+            if t >= stop or any(w[0] - 86400 < d and d + 2 * 86400 <= t for d in sd):
+                break
+            qw, k = W.record(m["item"], t, n)
+            q = 1 - (1 - qw) ** ((w[1] - max(t, w[0])) / (7 * 86400))
+            yield m, w, i, t, b, q, k
+
+
+def bets(W, sel, tp, gap=0.15, side=0, plo=0.0, phi=1.0, extra=0.02, hold=7200, stake=10.0, crumb=5.0, pre=None, n=8):
+    """one $10 bet per market at the first step that fits. Price: the worst of the next `hold` seconds, never better than
+    the price at the signal, + extra + fee. pre=True: only before the week starts; False: only during it."""
+    import bot
+    out, done = [], set()
+    for m, w, i, t, b, q, k in looks(W, sel, tp, n):
+        if m["id"] in done or b[i][5] < crumb or (pre is not None and (t < w[0]) != pre):
+            continue
+        p = b[i][2]
+        if not plo <= p <= phi or ((p - q) if side == 1 else (q - p)) < gap:
+            continue
+        nx = [y for y in b[i + 1:] if y[0] - t <= hold and y[5] >= crumb]
+        if not nx:
+            continue
+        px = max(max(1 - y[3] for y in nx), 1 - p) if side == 1 else max(max(y[4] for y in nx), p)
+        c = min(0.99, px + extra)
+        sh = stake / c
+        fee = bot.taker_fee(sh, c, m.get("fee") or 0)
+        win = (m["final"][0] == 1.0) == (side == 0)
+        done.add(m["id"])
+        sd = W.said(m["item"])
+        out.append({"ev": m["ev_slug"], "t": nx[0][0], "cost": stake + fee, "pay": sh if win else 0.0, "id": m["id"], "px": c, "sig": p,
+                    "fair": q, "item": m["item"], "k": k, "w0": w[0], "w1": w[1],
+                    "sameday": any(w[0] - 86400 < d <= t for d in sd),
+                    "near": sum(y[5] for y in b if t <= y[0] <= t + hold and y[4] <= c)})
+    return out
+
+
+def run(score=True):
+    import collections, os, statistics, time
+    import bot, exam
+    import postwords as pw
+    sel, tp = load()
+    W = Words()
+    L = []
+    P = L.append
+    show, usd = pw.show, pw.usd
+    P("# 'What will Trump say this week' vs what he really said in the weeks before (speeches.py)\n")
+    P(f"Generated {bot.iso()}. {len(sel)} finished markets in {len({m['ev_slug'] for m in sel})} weeks or months "
+      f"(2024 to 9 Nov 2026), {len(tp)} with real trades. Outside number: {W.n} Trump transcripts since July 2024 from "
+      f"Roll Call's Factba.se, split by who is speaking, {len(W.keys)} days with Trump's own words. Paper only.\n")
+    P("## 1. Do the transcripts match the results?\n")
+    c = collections.Counter()
+    for m in sel:
+        w = window(m)
+        c[(m["final"][0] == 1.0, any(w[0] - 86400 < d <= w[1] for d in W.said(m["item"])))] += 1
+    P(f"Yes and the word is in a transcript of that stretch: {c[(True, True)]}. Yes but not found: {c[(True, False)]}. "
+      f"No and not found: {c[(False, False)]}. No but found: {c[(False, True)]}. So the transcripts tell the result right "
+      "about 19 times in 20.\n")
+    P("## 2. The bets\n")
+    P("Record: in how many of the 8 weeks before did Trump say the word (only days already over when the bet is made). "
+      "That gives a chance for the week (or month). $10 a bet, one per market, at a 5-minute step with $5+ traded. Price "
+      "paid: the worst price of the next 2 hours, never better than the price at the signal, + 2c + fee. Betting stops "
+      "once a transcript with the word could be read.\n")
+    P(pw.HEAD)
+    B = lambda **kw: bets(W, sel, tp, **kw)
+    main = B(**RULE)
+    P(show("always Yes, before the week starts", B(gap=-9, side=0, pre=True)))
+    P(show("always No, before the week starts", B(gap=-9, side=1, pre=True)))
+    P(show("**Yes where the record is 15c+ above the price, before the week starts**", main))
+    P(show("... gap 5c+", B(gap=0.05, side=0, pre=True)))
+    P(show("... gap 10c+", B(gap=0.10, side=0, pre=True)))
+    P(show("... gap 25c+", B(gap=0.25, side=0, pre=True)))
+    P(show("... gap 35c+", B(gap=0.35, side=0, pre=True)))
+    P(show("... record over 4 weeks", B(n=4, **RULE)))
+    P(show("... record over 12 weeks", B(n=12, **RULE)))
+    P(show("... without the word 'Transgender'", [x for x in main if x["item"] != "Transgender"]))
+    P(show("... weekly markets", [x for x in main if x["w1"] - x["w0"] < 9 * 86400]))
+    P(show("... monthly markets", [x for x in main if x["w1"] - x["w0"] >= 9 * 86400]))
+    P(show("... markets with a fee (since April 2026)", [x for x in main if x["t"] >= 1774992000]))
+    P(show("... Yes at under 20c", [x for x in main if x["sig"] < 0.2]))
+    P(show("... Yes at 20-60c", [x for x in main if 0.2 <= x["sig"] < 0.6]))
+    P(show("... Yes at 60c+", [x for x in main if x["sig"] >= 0.6]))
+    P(show("... 4c extra instead of 2c", B(extra=0.04, **RULE)))
+    P(show("... 6c extra", B(extra=0.06, **RULE)))
+    P(show("... 10c extra", B(extra=0.10, **RULE)))
+    P(show("... worst price of the next 30 minutes", B(hold=1800, **RULE)))
+    P(show("... worst price of the next 6 hours", B(hold=21600, **RULE)))
+    P(show("... worst price of the next 24 hours", B(hold=86400, **RULE)))
+    inw = B(gap=0.15, side=0, pre=False)
+    P(show("Yes, same gap, during the week, word not said yet that week", [x for x in inw if not x["sameday"]]))
+    P(show("Yes, same gap, during the week, on the day he said it (a speed game, not ours)", [x for x in inw if x["sameday"]]))
+    P(show("No where the price is 15c+ above the record, before the week", B(gap=0.15, side=1, pre=True)))
+    P(show("No where the price is 15c+ above the record, during the week, Yes at 20-60c", B(gap=0.15, side=1, pre=False, plo=0.2, phi=0.6)))
+    P("\nBy quarter (the bold rule):\n\n" + pw.HEAD)
+    q = collections.defaultdict(list)
+    for x in main:
+        g = time.gmtime(x["t"])
+        q[f"{g.tm_year} Q{(g.tm_mon - 1) // 3 + 1}"].append(x)
+    for k in sorted(q):
+        P(show(k, q[k]))
+    P("\nBy how many of the 8 weeks before he said the word:\n\n" + pw.HEAD)
+    for lo, hi in ((0, 2), (3, 4), (5, 6), (7, 8)):
+        P(show(f"{lo}-{hi} of 8", [x for x in main if lo <= x["k"] <= hi]))
+    by = collections.Counter()
+    n_ = collections.Counter()
+    for x in main:
+        by[x["item"]] += x["pay"] - x["cost"]
+        n_[x["item"]] += 1
+    P("\nBiggest wins by word: " + ", ".join(f"{k} {usd(v)} ({n_[k]} bets)" for k, v in by.most_common(6)) + ". Biggest losses: "
+      + ", ".join(f"{k} {usd(v)} ({n_[k]})" for k, v in by.most_common()[-6:]) + ".\n")
+    near = sorted(x["near"] for x in main)
+    P(f"How much money is there: in the 2 hours after a signal, a middle market traded ${statistics.median(near):.0f} at our "
+      f"price or better (a quarter under ${near[len(near) // 4]:.0f}, a quarter over ${near[3 * len(near) // 4]:.0f}). So this "
+      "is a $5-10 a bet game, about 10 bets a month.\n")
+    card = exam.score(main, "Trump weekly say-markets: Yes where the transcript record is 15c+ above the price, before the week",
+                      tries=TRIES, src="speeches.py", status="lead", log=score, quiet=True)
+    P("## 3. The shared exam\n")
+    P(f"Bold rule: **{card['verdict']}**. {usd(card['per100'])} per $100, luck range {usd(card['lo100'])} to {usd(card['hi100'])}, "
+      f"worst case per $100 {usd(card['floor100'])}, {card['bets']} bets in {card['groups']} separate weeks, about {card['more']} "
+      "more bets needed.\n")
+    P("## What it means\n")
+    P("Before a week starts, Polymarket prices a word Trump says almost every week like a coin flip. Buying Yes there paid "
+      "in 5 of 6 quarters, in both halves, with and without fees, and still at 6c worse prices. Buying every Yes blindly "
+      "made $0, so the transcript record is what does the work. Weak spots: found by looking (about 50 versions, no "
+      "untouched test set), 150 bets only, thin markets, one word (Transgender) is 18 of the bets, and the same idea "
+      "during the week was good early and bad late. A live paper track would be the real test.\n")
+    open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backtest", "speeches.md"), "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()

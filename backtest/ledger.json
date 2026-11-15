@@ -1804,6 +1804,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "postwords.py"
+  },
+  {
+   "id": "trump_weekly_say_markets_yes_where_the_transcript_record_is_",
+   "date": "2026-11-15",
+   "what": "Trump weekly say-markets: Yes where the transcript record is 15c+ above the price, before the week",
+   "tries": 50,
+   "bets": 150,
+   "groups": 61,
+   "per100": 24.21,
+   "floor100": -7.7,
+   "verdict": "Promising, needs more bets",
+   "status": "lead",
+   "src": "speeches.py"
   }
  ]
 }
