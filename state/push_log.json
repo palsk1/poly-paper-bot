@@ -13,7 +13,7 @@
   "2026-11-15": {
    "failed": 0,
    "muted": 10,
-   "sent": 5
+   "sent": 6
   }
  },
  "recent": [
@@ -190,6 +190,12 @@
    "title": "[crypto_late] bought 1 (practice money)",
    "track": "crypto_late",
    "ts": "2026-11-15T01:46:34Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-15T03:02:14Z"
   }
  ]
 }

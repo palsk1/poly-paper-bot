@@ -13890,3 +13890,8 @@
 {"fee": 0.0833, "outcome": "No", "price": 0.61, "shares": 5, "title": "Will Bitcoin reach $70,000 in November?", "token": "72569614261458431820700838245136646200119227447115417288433562194070254856300", "track": "wb_tokor", "ts": "2026-11-15T02:55:31Z", "type": "paper_buy"}
 {"minutes_left": 2.52, "price": 0.979, "queue": 52.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV142200-00", "track": "kc_maker", "ts": "2026-11-15T02:57:29Z", "type": "kmaker_order"}
 {"minutes_left": 2.52, "price": 0.98, "queue": 2453.88, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV142200-00", "track": "kc_maker", "ts": "2026-11-15T02:57:32Z", "type": "kmaker_order"}
+{"outcome": "Le Moyne Dolphins", "pnl": 2.2379, "price": 1.0, "reason": "resolved", "title": "Manhattan Jaspers vs. Le Moyne Dolphins", "token": "92055008756523626094504883972121728918198364001881701026636167426970125823404", "track": "sharp_pinnacle", "ts": "2026-11-15T03:01:14Z", "type": "paper_close"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV14DETTB-TBNKUCHEROV86", "track": "kalshi_patient", "ts": "2026-11-15T03:02:14Z", "type": "kpatient_result"}
+{"pnl": -9.4, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV14FLASTL-FLABTKACHUK8", "track": "kalshi_patient", "ts": "2026-11-15T03:02:14Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV14MINBOS-BOSJPETERKA10", "track": "kalshi_patient", "ts": "2026-11-15T03:02:14Z", "type": "kpatient_result"}
+{"pnl": 0.072, "price": 0.96, "shares": 1.8, "side": "no", "ticker": "KXNHLGOAL-26NOV14PHICBJ-PHICYORK8-1", "track": "kalshi_patient", "ts": "2026-11-15T03:02:14Z", "type": "kpatient_result"}
