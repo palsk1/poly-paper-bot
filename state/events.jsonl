@@ -14033,3 +14033,5 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": false, "ticker": "KXJLEAGUECUPSPREAD-26NOV15CERURD-URD3", "track": "kalshi_patient", "ts": "2026-11-15T04:17:49Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNCAAMBGAME-26NOV17FLAND-ND", "track": "kalshi_patient", "ts": "2026-11-15T04:17:49Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV15MIAIND-MIACDOUGLAS7-100", "track": "kalshi_patient", "ts": "2026-11-15T04:17:51Z", "type": "kpatient_fill"}
+{"cost": 4.5315, "title": "Will the price of Ethereum be above $2,000 on November 20?", "token": "93358388356485207631080188523489857753484446993462503786686379396361980779735", "track": "crypto_no", "ts": "2026-11-15T04:37:21Z", "type": "skip_no_cash"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNCAAFTEAMTOTAL-26NOV14TEXLSU-TEX35", "track": "kalshi_patient", "ts": "2026-11-15T04:38:27Z", "type": "kpatient_result"}
