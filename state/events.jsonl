@@ -14536,3 +14536,4 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXLIGAFSPREAD-26NOV15RSOATH-RSO3", "track": "kalshi_patient", "ts": "2026-11-15T09:02:19Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXBTCD-26NOV1505-T64299.99", "track": "kalshi_patient", "ts": "2026-11-15T09:02:19Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXBRENTW-26NOV2017-T100.99", "track": "kalshi_patient", "ts": "2026-11-15T09:02:19Z", "type": "kpatient_order"}
+{"filled": 10.0, "price": 0.91, "side": "yes", "through": true, "ticker": "KXHIGHTSATX-26NOV15-T67", "track": "kalshi_patient", "ts": "2026-11-15T09:05:11Z", "type": "kpatient_fill"}
