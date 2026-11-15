@@ -15265,3 +15265,4 @@
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXUEFANL1HSPREAD-26NOV15LATARM-ARM2", "track": "kalshi_patient", "ts": "2026-11-15T18:02:25Z", "type": "kpatient_result"}
 {"minutes_left": 3.09, "price": 0.957, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV151315-15", "track": "kc_maker", "ts": "2026-11-15T18:11:55Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV151315-15", "track": "kc_maker", "ts": "2026-11-15T18:17:18Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.0574, "price": 0.981, "reason": "take profit (now 98c), book", "title": "Will the highest temperature in Paris be 15\u00b0C on November 16?", "token": "98491460332375613988704814573198585659158745736774297334757993277058290337342", "track": "endgame_sell98", "ts": "2026-11-15T18:20:41Z", "type": "paper_close"}
