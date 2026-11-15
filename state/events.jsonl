@@ -15608,3 +15608,4 @@
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNFLRECYDS-26NOV15MINGB-MINJJEFFERSON18-150", "track": "kalshi_patient", "ts": "2026-11-15T21:32:09Z", "type": "kpatient_result"}
 {"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV15JACTEN-TEN7", "track": "kalshi_patient", "ts": "2026-11-15T21:32:09Z", "type": "kpatient_result"}
 {"pnl": 0.06, "price": 0.94, "shares": 1.0, "side": "no", "ticker": "KXNFLWINMARGIN-26NOV15JACTEN-TEN1TO6", "track": "kalshi_patient", "ts": "2026-11-15T21:32:10Z", "type": "kpatient_result"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in San Francisco be between 56-57\u00b0F on November 16?", "token": "4781497202167918292503897421797137922109608418095696072514766286929775511653", "track": "endgame_sell98", "ts": "2026-11-15T21:37:05Z", "type": "paper_buy"}
