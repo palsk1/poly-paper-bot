@@ -13,7 +13,7 @@
   "2026-11-15": {
    "failed": 0,
    "muted": 5,
-   "sent": 4
+   "sent": 5
   }
  },
  "recent": [
@@ -184,6 +184,12 @@
    "title": "[crypto_late] bought 3 (practice money)",
    "track": "crypto_late",
    "ts": "2026-11-15T01:36:44Z"
+  },
+  {
+   "result": "sent",
+   "title": "[crypto_late] bought 1 (practice money)",
+   "track": "crypto_late",
+   "ts": "2026-11-15T01:46:34Z"
   }
  ]
 }
