@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   60,
-   142
+   63,
+   154
   ],
   "S:andy burnham": [
    4,
@@ -37,8 +37,8 @@
    26
   ],
   "S:mrbeast": [
-   4,
-   13
+   7,
+   25
   ],
   "S:trump": [
    4,
@@ -460,7 +460,19 @@
    1,
    2
   ],
+  "ST:mrbeast|africa": [
+   0,
+   1
+  ],
+  "ST:mrbeast|ai/artificial intelligence": [
+   0,
+   1
+  ],
   "ST:mrbeast|build": [
+   0,
+   1
+  ],
+  "ST:mrbeast|challenge": [
    0,
    1
   ],
@@ -473,6 +485,10 @@
    1
   ],
   "ST:mrbeast|contestant": [
+   1,
+   2
+  ],
+  "ST:mrbeast|dollar#10+": [
    0,
    1
   ],
@@ -482,7 +498,7 @@
   ],
   "ST:mrbeast|feastable/feastables": [
    1,
-   1
+   2
   ],
   "ST:mrbeast|fight": [
    0,
@@ -496,9 +512,21 @@
    0,
    1
   ],
-  "ST:mrbeast|karl": [
+  "ST:mrbeast|huge": [
    0,
    1
+  ],
+  "ST:mrbeast|hundred/million/thousand#10+": [
+   1,
+   1
+  ],
+  "ST:mrbeast|insane": [
+   0,
+   1
+  ],
+  "ST:mrbeast|karl": [
+   0,
+   2
   ],
   "ST:mrbeast|minecraft": [
    1,
@@ -509,6 +537,14 @@
    1
   ],
   "ST:mrbeast|race": [
+   0,
+   1
+  ],
+  "ST:mrbeast|sponsor/sponsored": [
+   1,
+   1
+  ],
+  "ST:mrbeast|subscribe/subscribes": [
    0,
    1
   ],
@@ -568,6 +604,10 @@
    1,
    2
   ],
+  "T:africa": [
+   0,
+   1
+  ],
   "T:ai#25+": [
    1,
    1
@@ -578,7 +618,7 @@
   ],
   "T:ai/artificial intelligence": [
    0,
-   2
+   3
   ],
   "T:alien": [
    0,
@@ -652,6 +692,10 @@
    1,
    1
   ],
+  "T:challenge": [
+   0,
+   1
+  ],
   "T:chameleon": [
    0,
    1
@@ -681,8 +725,8 @@
    2
   ],
   "T:contestant": [
-   0,
-   1
+   1,
+   2
   ],
   "T:crane": [
    1,
@@ -713,6 +757,10 @@
    1
   ],
   "T:dmt": [
+   0,
+   1
+  ],
+  "T:dollar#10+": [
    0,
    1
   ],
@@ -758,7 +806,7 @@
   ],
   "T:feastable/feastables": [
    1,
-   1
+   2
   ],
   "T:fight": [
    0,
@@ -820,8 +868,16 @@
    0,
    1
   ],
+  "T:huge": [
+   0,
+   1
+  ],
   "T:hulk": [
    0,
+   1
+  ],
+  "T:hundred/million/thousand#10+": [
+   1,
    1
   ],
   "T:hundred/million/thousand#30+": [
@@ -842,6 +898,10 @@
   ],
   "T:infrastructure#5+": [
    1,
+   1
+  ],
+  "T:insane": [
+   0,
    1
   ],
   "T:iran": [
@@ -866,7 +926,7 @@
   ],
   "T:karl": [
    0,
-   1
+   2
   ],
   "T:latency": [
    0,
@@ -1032,7 +1092,15 @@
    1,
    1
   ],
+  "T:sponsor/sponsored": [
+   1,
+   1
+  ],
   "T:strange": [
+   0,
+   1
+  ],
+  "T:subscribe/subscribes": [
    0,
    1
   ],
@@ -1083,6 +1151,10 @@
   "W:mrbeast-gaming-mentions": [
    4,
    13
+  ],
+  "W:mrbeast-mentions": [
+   3,
+   12
   ],
   "W:rogan-mentions": [
    7,
@@ -1464,6 +1536,54 @@
    0,
    1
   ],
+  "WT:mrbeast-mentions|africa": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|ai/artificial intelligence": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|challenge": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|contestant": [
+   1,
+   1
+  ],
+  "WT:mrbeast-mentions|dollar#10+": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|feastable/feastables": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|huge": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|hundred/million/thousand#10+": [
+   1,
+   1
+  ],
+  "WT:mrbeast-mentions|insane": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|karl": [
+   0,
+   1
+  ],
+  "WT:mrbeast-mentions|sponsor/sponsored": [
+   1,
+   1
+  ],
+  "WT:mrbeast-mentions|subscribe/subscribes": [
+   0,
+   1
+  ],
   "WT:rogan-mentions|alien": [
    0,
    1
@@ -1755,7 +1875,19 @@
   "6964832": 1794441540,
   "6964833": 1794441540,
   "6964840": 1794441540,
-  "6964841": 1794441540
+  "6964841": 1794441540,
+  "7000388": 1794718740,
+  "7000389": 1794718740,
+  "7000390": 1794718740,
+  "7000391": 1794718740,
+  "7000392": 1794718740,
+  "7000393": 1794718740,
+  "7000394": 1794718740,
+  "7000396": 1794718740,
+  "7000397": 1794718740,
+  "7000398": 1794718740,
+  "7000399": 1794718740,
+  "7000402": 1794718740
  },
- "synced": 1794703386
+ "synced": 1794705389
 }
