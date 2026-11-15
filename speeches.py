@@ -411,5 +411,102 @@ def run(score=True):
     print("\n".join(L))
 
 
+def events():
+    """Scratch-grade second test (15 Nov): the same transcripts on Trump's single-event markets (rallies, interviews,
+    signings). Record = in how many of his last 20 appearances (800+ own words, days before the bet) he said the word.
+    Bets only on days before the event's day. Prints the tables that backtest/speeches_events.md quotes. Slow (~10 min)."""
+    import bisect, collections, datetime, glob, time
+    import bot, exam, mentions
+    import postwords as pw
+    ms, tp = mentions.load()
+
+    ev = collections.defaultdict(list)
+    for m in ms.values():
+        t = m["title"].lower()
+        if "trump" in str(mentions.speaker(m)).lower() and "post" not in t and not re.search(r"this week|in (january|february|march|april|may|june|july|august|september|october|november|december)\b|this month| or |melania|elon|first", t) \
+           and m.get("item") and m.get("final") in ([1.0, 0.0], [0.0, 1.0]) and not re.search(r"\d\+? times|\d\+", m["q"]) and m["id"] in tp:
+            ev[m["ev_slug"]].append(m)
+    print("events", len(ev), "markets", sum(len(v) for v in ev.values()), flush=True)
+    W = Words()
+    # appearances: per record, Trump's own text, by day; keep those with 800+ Trump words
+    T = {}
+    for p in sorted(glob.glob(cache("texts_*.json.gz"))): T.update(rj(p, {}))
+    APP = []
+    for d, v in T.items():
+        x = " ".join(b[2] for b in v if b[0] == "Donald Trump")
+        if len(x.split()) >= 800:
+            y, mo, dd = map(int, W.L[d]["date"].split("-"))
+            APP.append((int(datetime.datetime(y, mo, dd, tzinfo=pw.ET).timestamp()), W.L[d]["record_type"], x.lower().replace("’", "'")))
+    APP.sort(); AT = [a[0] for a in APP]
+    print("appearances", len(APP), collections.Counter(a[1] for a in APP), flush=True)
+    _c = {}
+    def hits(item):
+        if item not in _c:
+            r = pw.rx(item); _c[item] = [bool(r.search(a[2])) for a in APP]
+        return _c[item]
+    def record(item, day0, n=20, typ=None):
+        j = bisect.bisect_left(AT, day0)      # appearances on days before day0
+        h = hits(item); k = tot = 0; i = j - 1
+        while i >= 0 and tot < n:
+            if typ is None or APP[i][1] in typ: tot += 1; k += h[i]
+            i -= 1
+        return (k + 1) / (tot + 2), k, tot
+    def etday(t):
+        d = datetime.datetime.fromtimestamp(t, pw.ET); return int(datetime.datetime(d.year, d.month, d.day, tzinfo=pw.ET).timestamp())
+    def kind(title):
+        t = title.lower()
+        if "interview" in t or "squawk" in t or "podcast" in t: return ("Interview",)
+        if "rally" in t or "speech" in t or "address" in t or "cpac" in t or "convention" in t: return ("Speech",)
+        return None
+    def bets(gap=0.15, side=0, n=20, typed=False, extra=0.02, hold=7200, plo=0, phi=1, crumb=5.0, stake=10.0):
+        out = []
+        for s, v in ev.items():
+            day0 = etday(min(m["closed_t"] or m["end"] for m in v))     # the event's day: bet only on days before it
+            typ = kind(v[0]["title"]) if typed else None
+            for m in v:
+                b = tp[m["id"]]["b"]
+                for i in range(len(b) - 1):
+                    t = b[i][0] + 300
+                    if t >= day0: break
+                    if b[i][5] < crumb: continue
+                    p = b[i][2]
+                    if not plo <= p <= phi: continue
+                    q, k, tot = record(m["item"], etday(t), n, typ)
+                    if tot < 10: break
+                    if ((p - q) if side == 1 else (q - p)) < gap: continue
+                    nx = [y for y in b[i + 1:] if y[0] - t <= hold and y[5] >= crumb and y[0] < day0 + 86400]
+                    if not nx: continue
+                    px = max(max(1 - y[3] for y in nx), 1 - p) if side == 1 else max(max(y[4] for y in nx), p)
+                    c = min(0.99, px + extra); sh = stake / c
+                    fee = bot.taker_fee(sh, c, m.get("fee") or 0)
+                    win = (m["final"][0] == 1.0) == (side == 0)
+                    out.append({"ev": s, "t": nx[0][0], "cost": stake + fee, "pay": sh if win else 0.0, "px": c, "sig": p, "fair": q, "item": m["item"], "k": k, "title": v[0]["title"]})
+                    break
+        return out
+    def show(name, b):
+        b = sorted(b, key=lambda x: x["t"]); h = len(b) // 2; p = pw.per100
+        print(f"{name:44s} bets {len(b):4d} ev {len({x['ev'] for x in b}):3d} won {sum(1 for x in b if x['pay']>0):4d} per100 {p(b):+7.2f} halves {p(b[:h]):+7.2f} {p(b[h:]):+7.2f} avgpx {sum(x['px'] for x in b)/max(1,len(b)):.2f}", flush=True)
+
+    show("always Yes", bets(-9, 0))
+    show("always No", bets(-9, 1))
+    for gap in (0.15, 0.25):
+        show(f"Yes where the record is {gap} above the price", bets(gap, 0))
+    show("Yes, record from the same kind of appearance", bets(0.15, 0, typed=True))
+    show("No where the price is 0.15 above the record", bets(0.15, 1))
+    b = bets(0.15, 1, typed=True)
+    show("No, record from the same kind of appearance", b)
+    for ex in (0.04, 0.06):
+        show(f"... {ex} extra", bets(0.15, 1, typed=True, extra=ex))
+    q = collections.defaultdict(list)
+    for x in b:
+        g = time.gmtime(x["t"])
+        q[f"{g.tm_year}Q{(g.tm_mon - 1) // 3 + 1}"].append(x)
+    for k in sorted(q):
+        show(k, q[k])
+    c = exam.score(b, "Trump event say-markets: No where the price is 15c+ above the transcript record", tries=20, src="speeches.py",
+                   status="dropped", log="log" in sys.argv, quiet=True)
+    print(c["verdict"], c["per100"], c["lo100"], c["hi100"])
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
