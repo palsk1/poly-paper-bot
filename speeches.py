@@ -62,5 +62,25 @@ def peek2():
             print("TRY FAIL", v, str(e)[:100], flush=True)
 
 
+def peek3():
+    u = "https://rollcall.com/factbase/trump/transcript/donald-trump-interview-stephen-a-smith-online-show-november-12-2026/"
+    s = raw(u, 60)
+    i = s.find("Department of Education announced another")
+    j = s.rfind("<script", 0, i)
+    k = s.rfind("<div", 0, i)
+    print("blob starts: script at", j, "div at", k, "text at", i, flush=True)
+    st = max(j, k)
+    print("START", s[st:st + 3000], flush=True)
+    print("NEAR", s[i - 2500:i + 300], flush=True)
+    import collections
+    keys = collections.Counter(re.findall(r'\\?"([a-z_]{3,20})\\?":', s[st:st + 2500000]))
+    print("KEYS", keys.most_common(60), flush=True)
+    try:
+        t = raw("https://rollcall.com/wp-json/factbase/v1/twitter?page=1&format=json")
+        print("TWITTER", t[:3000], flush=True)
+    except Exception as e:
+        print("TWITTER FAIL", str(e)[:100], flush=True)
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
