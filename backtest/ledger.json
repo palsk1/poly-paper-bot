@@ -1817,6 +1817,19 @@
    "verdict": "Promising, needs more bets",
    "status": "lead",
    "src": "speeches.py"
+  },
+  {
+   "id": "trump_event_say_markets_no_where_the_price_is_15c_above_the_",
+   "date": "2026-11-15",
+   "what": "Trump event say-markets: No where the price is 15c+ above the transcript record",
+   "tries": 20,
+   "bets": 2399,
+   "groups": 249,
+   "per100": 5.41,
+   "floor100": -6.97,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "speeches.py"
   }
  ]
 }
