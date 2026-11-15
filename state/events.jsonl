@@ -14395,3 +14395,4 @@
 {"outcome": "Washington State", "pnl": 2.3376, "price": 1.0, "reason": "resolved", "title": "Spread: Washington State (-8.5)", "token": "4203905391455187667180185188381147398361123686708733770392593235127255293220", "track": "w_0x448861", "ts": "2026-11-15T07:20:34Z", "type": "paper_close"}
 {"outcome": "Washington State", "pnl": 2.3376, "price": 1.0, "reason": "resolved", "title": "Spread: Washington State (-8.5)", "token": "4203905391455187667180185188381147398361123686708733770392593235127255293220", "track": "wb_0x448861", "ts": "2026-11-15T07:20:34Z", "type": "paper_close"}
 {"minutes_left": 2.89, "price": 0.98, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV150230-30", "track": "kc_maker", "ts": "2026-11-15T07:27:07Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV150230-30", "track": "kc_maker", "ts": "2026-11-15T07:32:38Z", "type": "kmaker_fill"}
