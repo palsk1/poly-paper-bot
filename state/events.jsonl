@@ -14169,3 +14169,6 @@
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV150015-15", "track": "kc_maker", "ts": "2026-11-15T05:16:36Z", "type": "kmaker_fill"}
 {"fee": 0.0075, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will Ethereum dip to $1,600 on November 15?", "token": "93245124224188551425562760535519901416853443265750935299781722281083135117496", "track": "endgame_sell98", "ts": "2026-11-15T05:26:15Z", "type": "paper_buy"}
 {"minutes_left": 3.45, "price": 0.956, "queue": 218.86, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV150030-30", "track": "kc_maker", "ts": "2026-11-15T05:26:33Z", "type": "kmaker_order"}
+{"fee": 0.008, "outcome": "No", "price": 0.967, "shares": 5, "title": "Will GameStop acquire eBay?", "token": "55646219597856189899881677374172135376492662817148728033424581863530537477107", "track": "boring_no", "ts": "2026-11-15T05:32:23Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.44, "price": 0.956, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV150030-30", "track": "kc_maker", "ts": "2026-11-15T05:32:23Z", "type": "kmaker_fill"}
+{"pnl": 0.4284, "price": 0.91, "shares": 4.76, "side": "no", "ticker": "KXUFCVICROUND-26NOV14BORBEL-BOR1", "track": "kalshi_patient", "ts": "2026-11-15T05:32:24Z", "type": "kpatient_result"}
