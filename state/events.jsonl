@@ -15657,3 +15657,15 @@
 {"minutes_left": 3.48, "price": 0.97, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV151700-00", "track": "kc_maker_safe", "ts": "2026-11-15T21:56:32Z", "type": "kmaker_order"}
 {"minutes_left": 3.48, "price": 0.986, "queue": 476.06, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV151700-00", "track": "kc_maker", "ts": "2026-11-15T21:56:32Z", "type": "kmaker_order"}
 {"minutes_left": 3.48, "price": 0.986, "queue": 476.06, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV151700-00", "track": "kc_maker_safe", "ts": "2026-11-15T21:56:32Z", "type": "kmaker_order"}
+{"outcome": "Draw", "pnl": -1.2969, "price": 0.0, "reason": "resolved", "title": "Will Belgium vs. Italy end in a draw?", "token": "100215206612616573953835190741924127506294010401621150270060577258537592962750", "track": "soccer_draw", "ts": "2026-11-15T22:01:11Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": -1.4504, "price": 0.0, "reason": "resolved", "title": "Will Leixoes SC vs. GD Chaves end in a draw?", "token": "46656541382180822534987714803974360413637770734226948053736396557922693129531", "track": "soccer_draw", "ts": "2026-11-15T22:01:11Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV151700-00", "track": "kc_maker", "ts": "2026-11-15T22:02:42Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV151700-00", "track": "kc_maker", "ts": "2026-11-15T22:02:43Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV151700-00", "track": "kc_maker_safe", "ts": "2026-11-15T22:02:43Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV151700-00", "track": "kc_maker_safe", "ts": "2026-11-15T22:02:43Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV1517-B62375", "track": "kalshi_patient", "ts": "2026-11-15T22:02:45Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXBTCD-26NOV1517-T66999.99", "track": "kalshi_patient", "ts": "2026-11-15T22:02:45Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "yes", "ticker": "KXETHD-26NOV1517-T1779.99", "track": "kalshi_patient", "ts": "2026-11-15T22:02:45Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBASPREAD-26NOV15DALBOS-BOS35", "track": "kalshi_patient", "ts": "2026-11-15T22:02:46Z", "type": "kpatient_fill"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNFLRECYDS-26NOV15MIAIND-MIACDOUGLAS7-100", "track": "kalshi_patient", "ts": "2026-11-15T22:02:46Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV1517-T68.9999", "track": "kalshi_patient", "ts": "2026-11-15T22:02:47Z", "type": "kpatient_result"}
