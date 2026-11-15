@@ -14960,3 +14960,7 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150915-15", "track": "kc_maker_safe_usd", "ts": "2026-11-15T14:18:58Z", "type": "kmaker_fill"}
 {"minutes_left": 3.18, "price": 0.979, "queue": 476.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV150930-30", "track": "kc_maker", "ts": "2026-11-15T14:26:50Z", "type": "kmaker_order"}
 {"minutes_left": 3.18, "price": 0.988, "queue": 260.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV150930-30", "track": "kc_maker", "ts": "2026-11-15T14:26:51Z", "type": "kmaker_order"}
+{"cost": 3.8638, "title": "Will the price of Ethereum be above $1,900 on November 20?", "token": "12137940893305484992840645638215981954825410833582885152750402223967741042519", "track": "crypto_no", "ts": "2026-11-15T14:36:48Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV150930-30", "track": "kc_maker", "ts": "2026-11-15T14:37:00Z", "type": "kmaker_fill"}
+{"pnl": 0.0468, "price": 0.97, "shares": 1.56, "side": "no", "ticker": "KXHIGHDEN-26NOV14-B56.5", "track": "kalshi_patient", "ts": "2026-11-15T14:37:01Z", "type": "kpatient_result"}
+{"pnl": 0.0912, "price": 0.94, "shares": 1.52, "side": "no", "ticker": "KXLOWTDEN-26NOV14-B32.5", "track": "kalshi_patient", "ts": "2026-11-15T14:37:02Z", "type": "kpatient_result"}
