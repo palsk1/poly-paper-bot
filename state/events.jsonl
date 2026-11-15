@@ -14022,3 +14022,7 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFL1HTOTAL-26NOV15SFDAL-43", "track": "kalshi_patient", "ts": "2026-11-15T04:03:14Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXINTLFRIENDLYGAME-26NOV17ARGCRI-CRI", "track": "kalshi_patient", "ts": "2026-11-15T04:03:14Z", "type": "kpatient_order"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV1423-B64650", "track": "kalshi_patient", "ts": "2026-11-15T04:06:26Z", "type": "kpatient_result"}
+{"outcome": "Under", "pnl": -2.5125, "price": 0.0, "reason": "resolved", "title": "Stanford vs. Virginia Tech: O/U 57.5", "token": "92542676321156583795605093669130315049307571923981387745594855475507768381140", "track": "w_0x448861", "ts": "2026-11-15T04:10:34Z", "type": "paper_close"}
+{"outcome": "Under", "pnl": -2.5125, "price": 0.0, "reason": "resolved", "title": "Stanford vs. Virginia Tech: O/U 57.5", "token": "92542676321156583795605093669130315049307571923981387745594855475507768381140", "track": "wb_0x448861", "ts": "2026-11-15T04:10:34Z", "type": "paper_close"}
+{"minutes_left": 3.29, "price": 0.952, "queue": 29.91, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV142315-15", "track": "kc_maker", "ts": "2026-11-15T04:11:43Z", "type": "kmaker_order"}
+{"minutes_left": 3.29, "price": 0.987, "queue": 24.16, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV142315-15", "track": "kc_maker", "ts": "2026-11-15T04:11:44Z", "type": "kmaker_order"}
