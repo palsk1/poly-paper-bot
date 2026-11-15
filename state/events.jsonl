@@ -15669,3 +15669,4 @@
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBASPREAD-26NOV15DALBOS-BOS35", "track": "kalshi_patient", "ts": "2026-11-15T22:02:46Z", "type": "kpatient_fill"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNFLRECYDS-26NOV15MIAIND-MIACDOUGLAS7-100", "track": "kalshi_patient", "ts": "2026-11-15T22:02:46Z", "type": "kpatient_result"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV1517-T68.9999", "track": "kalshi_patient", "ts": "2026-11-15T22:02:47Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.2456, "price": 0.0, "reason": "resolved", "title": "Will Spain vs. England end in a draw?", "token": "83563269993400807947854146707923846720062148791298379634628411040177446139031", "track": "soccer_draw", "ts": "2026-11-15T22:05:29Z", "type": "paper_close"}
