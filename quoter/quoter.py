@@ -6,7 +6,10 @@ sends a quote: there is no code here that signs or sends anything, and it never 
 key/secret/passphrase, which can't move money without a signature). Paper only (CLAUDE.md hard rules 1-2).
 
 Files it writes (one JSON line each, in DATA_DIR, a new file every UTC day):
-  {"k":"req", ...}    a combo request, with the legs, their books and our would-be quotes (one per rule)
+  {"k":"req", ...}    a combo request that really sold, with the legs, their books and our would-be quotes (one per
+                      rule). Priced requests wait in memory for HOLD_S seconds and are written only if a trade for
+                      them arrives: written in full they filled the 400 MB day file by about 02:00 UTC (15 Nov), so
+                      from then on every day's sales went unscored.
   {"k":"trade", ...}  a trade broadcast: the price the winning maker really got
   {"k":"note", ...}   start, catalog refresh, errors, latency
 Every hour the day files are uploaded to the GitHub release `quoter-data` (needs GITHUB_TOKEN with Contents
@@ -52,6 +55,7 @@ BATCH_S = 0.3        # price waiting requests every 0.3 s, in one go
 BOOK_TTL = 3.0       # reuse a leg's book for 3 s (popular legs repeat across many requests)
 MAX_BOOK_CALLS = 4   # at most 4 /books calls (400 tokens) per batch
 MAX_PRICE_LEGS = 6   # requests with more legs are only counted
+HOLD_S = 600         # a priced request waits this long in memory for its trade (trades come 6-50 s after, 15 Nov)
 SILENCE_S = 120      # no message for 2 minutes = the connection is dead, reconnect
 PAGE_PAUSE = 0.5     # seconds between catalog pages (Polymarket said 429 'too many requests' at full speed)
 
@@ -282,6 +286,39 @@ class Pricer:
         self.counts = collections.Counter()
         self.seen_tokens = set()           # tokens whose title etc. are already in today's file
         self.day = None
+        self.held = collections.OrderedDict()     # rfq -> (seconds, log line): priced, waiting for a trade
+        self.traded = collections.OrderedDict()   # rfq -> seconds: trades that came before their request was priced
+
+    @staticmethod
+    def _trim(d):
+        """Drop entries older than HOLD_S (oldest first; values are seconds or (seconds, line))."""
+        old = time.time() - HOLD_S
+        while d:
+            v = next(iter(d.values()))
+            if (v[0] if isinstance(v, tuple) else v) >= old:
+                break
+            d.popitem(last=False)
+
+    def hold(self, line):
+        """Keep a priced request until its trade shows up; only sold requests are written to the day file."""
+        rfq = line.get("rfq")
+        if rfq in self.traded:
+            self.traded.pop(rfq)
+            self.log.put(line)
+            self.counts["written, sold"] += 1
+            return
+        self.held[rfq] = (time.time(), line)
+        self._trim(self.held)
+
+    def sold(self, rfq):
+        """A trade for this request was broadcast: write the request (if we priced it) before the trade line."""
+        v = self.held.pop(rfq, None)
+        if v:
+            self.log.put(v[1])
+            self.counts["written, sold"] += 1
+        else:
+            self.traded[rfq] = time.time()
+            self._trim(self.traded)
 
     def add(self, msg):
         self.counts["heard"] += 1
@@ -350,7 +387,7 @@ class Pricer:
                 dl = msg.get("submission_deadline")
                 self.counts["priced"] += 1
                 self.leg_notes(legs)
-                self.log.put({"k": "req", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
+                self.hold({"k": "req", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
                               "size": (msg.get("requested_size") or {}).get("value_e6"), "deadline": dl,
                               "legs": len(ids), "tokens": [lg["token"] for lg in legs], "mids": p["mids"],
                               "fair": p["fair"], "same_game": p["same_game"], "quotes": q, "seen": seen, "priced": priced,
@@ -412,6 +449,7 @@ async def run():
                         counts["trade"] += 1
                         if counts["trade"] <= 2:
                             print("trade heard:", json.dumps(msg)[:600], flush=True)
+                        pricer.sold(msg.get("rfq_id"))
                         log.put({"k": "trade", "rfq": msg.get("rfq_id"), "cid": msg.get("condition_id"),
                                  "dir": msg.get("direction"), "side": msg.get("side"), "price": msg.get("price_e6"),
                                  "size": msg.get("size_e6"), "at": msg.get("executed_at"), "legs": msg.get("leg_position_ids")})
@@ -538,6 +576,17 @@ def selftest():
     lg.put({"k": "note"})
     assert os.path.exists(lg.path())
     assert "kept local" in upload_all(lg, None)
+    # only requests that really sold reach the day file, whichever comes first (request priced or trade heard)
+    pr = Pricer(cat, lg)
+    base = os.path.getsize(lg.path())
+    pr.hold({"k": "req", "rfq": "r1"})
+    pr.hold({"k": "req", "rfq": "r2"})
+    assert os.path.getsize(lg.path()) == base, "unsold requests must not be written"
+    pr.sold("r1")
+    pr.sold("r3")
+    pr.hold({"k": "req", "rfq": "r3"})
+    got = [json.loads(x).get("rfq") for x in open(lg.path())][1:]
+    assert got == ["r1", "r3"] and "r2" in pr.held and not pr.traded, got
     src = open(__file__).read()
     assert "RFQ_QUOTE" not in src.replace('"RFQ_QUOTE" not in', ""), "listen only: never send quotes"
     print("quoter selftest ok")
