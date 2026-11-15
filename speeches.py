@@ -38,5 +38,29 @@ def peek():
         print("   apis:", apis[:20], flush=True)
 
 
+API = "https://rollcall.com/wp-json/factbase/v1/search?media=&type=&sort=date&location=all&place=all&page={}&format=json"
+
+
+def peek2():
+    import json
+    d = json.loads(raw(API.format(1)))
+    print("meta", d["meta"], flush=True)
+    for x in d["data"][:4]:
+        print("item", json.dumps(x)[:1500], flush=True)
+    u = [x for x in d["data"] if "no-transcript" not in x["factbase_url"]][3]["factbase_url"]
+    s = raw(u)
+    print("PAGE", u, len(s), flush=True)
+    for k in ("President Trump", "Donald Trump", "transcript", "wp-json", "application/json", "document_id"):
+        for g in list(re.finditer(k, s))[:4]:
+            print("  ctx", k, "|", re.sub(r"\s+", " ", s[max(0, g.start() - 300):g.start() + 500]), flush=True)
+    doc = [x for x in d["data"] if x["factbase_url"] == u][0]["document_id"]
+    for v in (f"https://rollcall.com/wp-json/factbase/v1/transcript/{doc}", f"https://rollcall.com/wp-json/factbase/v1/transcript?id={doc}",
+              "https://rollcall.com/wp-json/factbase/v1", f"https://rollcall.com/wp-json/factbase/v1/document/{doc}"):
+        try:
+            print("TRY", v, raw(v)[:1500], flush=True)
+        except Exception as e:
+            print("TRY FAIL", v, str(e)[:100], flush=True)
+
+
 if __name__ == "__main__":
-    {"peek": peek}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
