@@ -12,8 +12,8 @@
   },
   "2026-11-15": {
    "failed": 0,
-   "muted": 96,
-   "sent": 9
+   "muted": 97,
+   "sent": 14
   }
  },
  "recent": [
@@ -214,6 +214,36 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.10)",
    "track": "kalshi_patient",
    "ts": "2026-11-15T18:02:25Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.53)",
+   "track": "kc_maker",
+   "ts": "2026-11-15T18:34:08Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.77)",
+   "track": "kc_maker",
+   "ts": "2026-11-15T18:34:23Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.56)",
+   "track": "kc_maker",
+   "ts": "2026-11-15T18:34:24Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.61)",
+   "track": "kc_maker",
+   "ts": "2026-11-15T18:34:26Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.77)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-15T18:34:27Z"
   }
  ]
 }
