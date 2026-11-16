@@ -401,7 +401,7 @@ def do_daily(first="2025-01-01"):
     os.makedirs(CACHE, exist_ok=True)
     have = rj(DAILY, {}) or {}
     d, end, t0, bad = dt.date.fromisoformat(first), dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1), time.time(), 0
-    while d <= end and time.time() - t0 < 200 * 60 and bad < 25:
+    while d <= end and time.time() - t0 < 200 * 60 and bad < 60:
         k = d.isoformat()
         if k not in have:
             try:
@@ -411,13 +411,18 @@ def do_daily(first="2025-01-01"):
                 p = parse_daily(html.unescape(s))
                 if not tt or tt[0] != want or not any(r for _, r in p["us"]):
                     bad += 1
-                    print("  odd page", k, tt[:1], [(h, len(r)) for h, r in p["us"]][:4], flush=True)
+                    print("  odd page", k, tt[:1], [(h, len(r)) for h, r in p["us"]][:4], len(s),
+                          re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", s[s.find("<title"):]))[:300], flush=True)
+                    time.sleep(120 if bad % 2 else 5)
+                    if bad % 2:
+                        continue                      # one more try for this day after a pause
                 else:
                     have[k] = p
             except Exception as e:
                 bad += 1
                 print("  failed", k, str(e)[:100], flush=True)
-            time.sleep(1.0)
+                time.sleep(60)
+            time.sleep(2.5)
             if len(have) % 40 == 0:
                 wj(DAILY, have)
                 print(f"  {len(have)} days, at {k} ({time.time() - t0:.0f}s)", flush=True)
