@@ -17059,3 +17059,6 @@
 {"minutes_left": 3.04, "price": 0.976, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV160530-30", "track": "kc_maker_safe", "ts": "2026-11-16T10:26:59Z", "type": "kmaker_order"}
 {"minutes_left": 3.04, "price": 0.978, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV160530-30", "track": "kc_maker", "ts": "2026-11-16T10:27:00Z", "type": "kmaker_order"}
 {"minutes_left": 3.04, "price": 0.978, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV160530-30", "track": "kc_maker_safe", "ts": "2026-11-16T10:27:00Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.1117, "price": 0.985, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in Dallas be between 56-57\u00b0F on November 16?", "token": "109211228131634483764847797931065245908227678037801724834633101015475570811629", "track": "endgame_sell98", "ts": "2026-11-16T10:31:11Z", "type": "paper_close"}
+{"filled": 1.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KX30YMORTW-26NOV19-T7.20", "track": "kalshi_patient", "ts": "2026-11-16T10:32:33Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXLOWTTTN-26NOV16-B29.5", "track": "kalshi_patient", "ts": "2026-11-16T10:32:35Z", "type": "kpatient_fill"}
