@@ -144,6 +144,20 @@
       "wins": "The panic was overdone and the price bounces back.",
       "loses": "The news was real. If the price keeps falling, it sells at 45c to stop the bleeding."
     },
+    "trump_week": {
+      "say": "Each week people bet on which words Trump will say. The bot reads everything he really said in the last 8 weeks. If he says a word almost every week but 'Yes' is still cheap, it buys Yes before the week starts.",
+      "example": "'Will Trump say Biden this week?' Yes costs 55c. He said Biden in 8 of the last 8 weeks. The bot buys Yes for 55c. If he says it again, it gets $1.00 back: a 45c win.",
+      "wins": "He says the word that week, as he usually does.",
+      "loses": "For once he doesn't say it. Then the whole bet is lost.",
+      "status": "New since 16 Nov. The history looked good, but it hasn't been tested live yet. Small markets, so only a few bets a month."
+    },
+    "trump_week_k": {
+      "say": "The same Trump word bet, on Kalshi, where more money is on the table. Any time in the week, if he said a word in most of the last 8 weeks and Yes is still cheap, it buys up to $25 of Yes.",
+      "example": "'Will Trump say Venezuela this week?' Someone sells Yes at 30c. He said it in 6 of the last 8 weeks. The bot buys $25 of Yes. If he says it, each 30c becomes $1.00: about $58 won. If not, the $25 is gone.",
+      "wins": "He says the word before the week ends. Wins on cheap words are big.",
+      "loses": "He doesn't say it and the bet is lost. Cheap words lose more often than they win, so expect dry spells.",
+      "status": "New since 16 Nov. The history looked good on two sites, but it hasn't been tested live yet. About 20 bets a month."
+    },
     "kalshi_patient": {
       "say": "On Kalshi, instead of paying the full price for a near-sure thing, it puts in a slightly lower offer and waits an hour, hoping someone in a hurry sells to it.",
       "example": "Someone sells 'Yes' at 96c, and the best offer to buy is 93c. The bot offers 94c and waits. If someone sells to it and the thing happens, it gets $1.00: a 6c win. If nobody sells, nothing happens and nothing is lost.",

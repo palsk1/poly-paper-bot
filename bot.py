@@ -3801,6 +3801,8 @@ def trumpweek_candidates(names):
                 continue
             looked += 1
             if t_now >= w[0]:
+                if VERBOSE:
+                    print(f"   week already started ({iso(dt.datetime.fromtimestamp(w[0], dt.timezone.utc))}): {q_txt[:70]} listed {cents(prices[0])}")
                 continue                                    # the week has started: the history test only bought before
             q, k = W.chance(item, t_now, w[0], w[1])
             p_yes = prices[0]
@@ -3845,6 +3847,9 @@ def ktrump_place(tracks, names, force=False):
             got = [dict(m, _series=series) for m in res.get("markets") or []
                    if str(m.get("event_ticker") or "").startswith(series + "-")]   # not the month / company / nickname series
             rows += got
+            if VERBOSE:
+                print(f"   kalshi list {series}: {len(res.get('markets') or [])} open markets, {len(got)} kept, e.g. "
+                      + str([(m.get('ticker'), m.get('event_ticker'), m.get('status'), m.get('open_time'), m.get('close_time')) for m in (res.get('markets') or [])[:3]]))
             cur = res.get("cursor")
             if not cur or not res.get("markets"):
                 break
@@ -3963,6 +3968,12 @@ def ktrumptest():
         print(n, tracks[n].get("last_check"))
         for o in tracks[n]["orders"].values():
             print(f"WOULD BUY [{n}] {o['shares']} x {cents(o['entry'])} cost ${o['cost']:.2f} - {o['title'][:80]} | {o['what']}")
+    for st_ in ("open", "unopened", "closed"):
+        try:
+            res = kalshi_get("/events", {"series_ticker": "KXTRUMPSAY", "status": st_, "limit": 5})
+            print("kalshi events", st_, [(e.get("event_ticker"), e.get("title"), e.get("strike_date")) for e in res.get("events") or []])
+        except Exception as e:
+            print("kalshi events", st_, "failed", str(e)[:100])
     for n, cands in trumpweek_candidates(fast_tracks("trumpweek")).items():
         print(n, len(cands), "candidates")
         buy_candidates(tracks, n, cands, 99)
