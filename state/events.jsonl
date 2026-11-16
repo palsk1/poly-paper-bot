@@ -17922,3 +17922,6 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV161545-45", "track": "kc_maker_safe", "ts": "2026-11-16T20:46:34Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV161545-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T20:46:34Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV161545-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T20:46:34Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXUEFANLTOTAL-26NOV16LTULIE-6", "track": "kalshi_patient", "ts": "2026-11-16T21:01:05Z", "type": "kpatient_result"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXLEAGUECITYFLOCK-26NOV03", "track": "kalshi_patient", "ts": "2026-11-16T21:01:32Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV18MOREOHIO-MORE", "track": "kalshi_patient", "ts": "2026-11-16T21:01:32Z", "type": "kpatient_order"}
