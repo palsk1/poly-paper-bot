@@ -47,8 +47,8 @@ def do_series():
 def do_list(pick=None):
     os.makedirs(CACHE, exist_ok=True)
     have = rj(MK, None) or {"series": {}, "markets": {}}
-    ser = [s for s in chart_series() if (WORDS.search(f"{s['ticker']} {s.get('title')}") or s.get("frequency") in ("weekly", "daily"))
-           and (not pick or re.search(pick, s["ticker"], re.I))]
+    ser = [s for s in chart_series() if (re.search(pick, s["ticker"], re.I) if pick else
+                                         (s.get("frequency") in ("weekly", "daily", "monthly") and str(s.get("category")) == "Entertainment"))]
     print("series to list:", len(ser), flush=True)
     for s in ser:
         have["series"][s["ticker"]] = {"title": str(s.get("title") or "")[:120], "cat": s.get("category"), "freq": s.get("frequency"),
