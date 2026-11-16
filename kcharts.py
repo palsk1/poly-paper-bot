@@ -810,7 +810,76 @@ def report():
     print("\n".join(L))
 
 
+# ---------------------------------------------------------------- the backward look: start from the winners (Jan, 16 Nov)
+def late_rows(pick="KXNETFLIXRANK(SHOW|MOVIE)$"):
+    """Every hourly quote of the last 100 hours of every US #1 market, with what the daily lists said about the title then:
+    is it today's #1, on which day of the week it first showed up (0 = the Tuesday list), how many days at #1."""
+    ms, tp = load(pick)
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m)
+    L = {"tv": day_lists("tv"), "movie": day_lists("movie")}
+    ts = lambda d: dt.datetime(d.year, d.month, d.day, tzinfo=dt.timezone.utc).timestamp()
+    R = []
+    for e, M in evs.items():
+        kind, mon, T = ("tv" if "SHOW" in e else "movie"), week_of(e), ev_close(M)
+        keys = collections.Counter(tkey(m["w"]) for m in M)
+        days = [mon + dt.timedelta(days=i + 1) for i in range(7)]
+        for m in M:
+            v, k = tp.get(m["t"]), tkey(m["w"])
+            if not v or keys[k] > 1 or m["close"] != T:
+                continue
+            for c in v["c"]:
+                t = c[0]
+                if c[1] is None or c[2] is None or t > T - 3600 or t < T - 100 * 3600:
+                    continue
+                av = [i for i, d in enumerate(days) if ts(d) + KNOWN_H * 3600 <= t and d in L[kind]]
+                if len(av) < 3:
+                    continue
+                on = [i for i in av if k in L[kind][days[i]]]
+                R.append({"ev": e, "kind": kind, "t": t, "left": (T - t) / 3600, "tk": m["t"], "w": m["w"], "yes": m["res"] == "yes",
+                          "bid": c[1], "ask": c[2], "top": L[kind][days[av[-1]]].get(k) == 1, "first": on[0] if on else None})
+    return R
+
+
+def late_bets(R, first_day=2, max_left=24, extra=0.0, max_gap=0.15):
+    """No on a title that holds today's #1 but only showed up on the week's day `first_day`+1 or later; one bet per market."""
+    out, used = [], set()
+    for r in sorted(R, key=lambda r: r["t"]):
+        if r["tk"] in used or r["ask"] - r["bid"] > max_gap or not (r["top"] and r["first"] is not None and r["first"] >= first_day and r["left"] < max_left):
+            continue
+        p = 1 - r["bid"] + extra
+        if not 0.05 <= p <= 0.95:
+            continue
+        used.add(r["tk"])
+        win = not r["yes"]
+        out.append({"cost": p + fee(p), "pay": 1.0 if win else 0.0, "pnl": (1.0 if win else 0.0) - p - fee(p), "p": p, "ev": r["ev"], "t": r["t"],
+                    "tk": r["tk"], "w": r["w"], "kind": r["kind"], "left": r["left"]})
+    return out
+
+
+def winners(score=False):
+    """python3 kcharts.py winners: what did the weekly winners (and the upsets) look like beforehand, and the one lean it found."""
+    import exam
+    R = late_rows()
+    for a in (1, 2, 3, 4):
+        for h in (100, 48, 24):
+            print(line(f"No: today's #1, first listed day {a + 1}+, last {h}h", late_bets(R, a, h)))
+    b = late_bets(R)
+    for ex in (0.02, 0.05):
+        print(line(f"  the day 3+ / last 24h rule at {ex} extra", late_bets(R, extra=ex)))
+    for lo, hi in ((0.05, 0.3), (0.3, 0.6), (0.6, 0.951)):
+        print(line(f"  No bought at {lo:.2f}-{hi:.2f}", [x for x in b if lo <= x["p"] < hi]))
+    c = exam.score(b, "Kalshi Netflix weekly #1: No on a late arrival that holds the daily #1, last day", tries=TRIES + 70,
+                   src="kcharts.py winners, backtest/kcharts.md", status="dropped", log=score, quiet=True)
+    print({k: c[k] for k in ("bets", "events", "per100", "lo100", "hi100", "verdict", "need")})
+    return b, c
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1].startswith("winners"):
+        winners(sys.argv[1].endswith("score"))
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1] == "report":
         report()
         sys.exit(0)

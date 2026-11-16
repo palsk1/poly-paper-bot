@@ -33,6 +33,14 @@ Netflix shows a daily top 10. whats-on-netflix.com keeps every day's US list bac
 
 The same title in the same week on both sites, 507 pairs. Buying the cheap side where the prices are 10c+ apart: -$9.75 per $100 on 70 bets on Kalshi, +$7.01 on 23 bets on Polymarket. Together: Ahead, but could be luck. The gaps are rare and mostly stale last trades.
 
+## Test 4: the backward look (Jan, 16 Nov: "do you check how we would have had to bet to win?")
+
+Started from the weekly winners and the upsets instead of from an idea (`kcharts.py winners`). What stood out: in the last two days, a title that only arrived mid-week and holds the daily #1 over the weekend is priced too high. It has 3-4 days of views against a full week for the older title, and the weekly list counts the whole week.
+
+- The rule it suggests: in the last 24 hours, buy No on a title that is today's #1 but first showed up on the week's third daily list or later. +$15.09 per $100 on 72 bets in 22 months, both halves ahead. Exam: **Ahead, but could be luck** (luck range -$0.58 to +$30.77).
+- Read bet by bet it is thin: 44 of the 72 bets are No at 5-30c (5 wins carry it), 24 are No at 60-95c (23 won, small wins), only 4 sit in the middle. At 2c worse prices it is +$8.62, at 5c worse -$2.09. In 52 of 72 cases fewer than 25 contracts traded our way in the next hour.
+- About 3 bets a month. The exam wants about 650 more bets to call it, which is some 18 years. No track.
+
 ## Traps for next time
 
 - Kalshi sometimes lists a title twice and pulls one copy days early: use the close time most markets of the event share (`kcharts.ev_close`), not the first close.
