@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**153 ideas examined, in about 59,969 versions.** 114 dropped, 39 still being tested or waiting. **Looks real: 3.**
+**156 ideas examined, in about 60,359 versions.** 117 dropped, 39 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 153 ideas that are all worthless, the luckiest one still looks good. With 153 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 156 ideas that are all worthless, the luckiest one still looks good. With 156 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -153,11 +153,14 @@ Why count: if you test 153 ideas that are all worthless, the luckiest one still 
 | 2026-11-15 | Post-word markets: No where Yes 15c+ above the text record (20-60c) | 40 | 41 | +$6.44 | Ahead, but could be luck | dropped | postwords.py |
 | 2026-11-15 | Trump event say-markets: No where the price is 15c+ above the transcript record | 20 | 249 | +$5.41 | Ahead, but could be luck | dropped | speeches.py |
 | 2026-11-15 | Trump weekly say-markets: Yes where the transcript record is 15c+ above the price, before the week | 50 | 61 | +$24.21 | Promising, needs more bets | lead | speeches.py |
+| 2026-11-16 | Kalshi 'at least N presidential actions this week': buy where the 8-round record is 15c+ away from the price | 130 | 30 | +$26.68 | Ahead, but could be luck | dropped | habits.py, backtest/habits.md |
+| 2026-11-16 | Kalshi 'executive orders this week': buy where the 8-round record is 15c+ away from the price | 130 | 25 | +$24.65 | Ahead, but could be luck | dropped | habits.py, backtest/habits.md |
 | 2026-11-16 | Kalshi month-long Trump say-markets: Yes where the transcript record is 15c+ above the offer | 90 | 24 | -$13.31 | Behind, but could be bad luck | dropped | speeches.py |
 | 2026-11-16 | Kalshi Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 167 | -$4.71 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Kalshi Netflix weekly #1: No on a late arrival that holds the daily #1, last day | 400 | 70 | +$15.09 | Ahead, but could be luck | dropped | kcharts.py winners, backtest/kcharts.md |
 | 2026-11-16 | Kalshi Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price | 60 | 15 | +$3.01 | Ahead, but could be luck | dropped | spotw.py, backtest/spotify.md |
 | 2026-11-16 | Kalshi Trump weekly say-markets: Yes where the transcript record is 15c+ above the offer | 75 | 56 | +$33.80 | Promising, needs more bets | lead | speeches.py |
+| 2026-11-16 | Kalshi weekly habit bets (Trump actions, orders, posts, endorsements and 12 more series): buy where the last 8 rounds' record is 15c+ away from the price | 130 | 256 | -$0.31 | Behind, but could be bad luck | dropped | habits.py, backtest/habits.md |
 | 2026-11-16 | Netflix weekly #1: buy on one site where the other site's price is 10c+ away | 330 | 50 | +$5.36 | Ahead, but could be luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 71 | -$29.40 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price | 60 | 10 | -$58.89 | Losing | dropped | spotw.py, backtest/spotify.md |
