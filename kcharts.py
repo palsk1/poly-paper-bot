@@ -401,6 +401,7 @@ def do_daily(first="2025-01-01"):
     os.makedirs(CACHE, exist_ok=True)
     have = rj(DAILY, {}) or {}
     d, end, t0, bad = dt.date.fromisoformat(first), dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1), time.time(), 0
+    miss = 0
     while d <= end and time.time() - t0 < 200 * 60 and bad < 60:
         k = d.isoformat()
         if k not in have:
@@ -409,13 +410,14 @@ def do_daily(first="2025-01-01"):
                 want = f"{d.strftime('%b')} {d.day}"
                 tt = re.findall(r"Most popular by country — ([A-Za-z]+ \d+)", s)
                 p = parse_daily(html.unescape(s))
-                if not tt or tt[0] != want or not any(r for _, r in p["us"]):
+                if not tt and len(s) > 100000:
+                    miss += 1                         # a real page without the country charts: the site has no list for that day
+                    if miss % 20 == 1:
+                        print("  no country charts on", k, len(s), [h for h, _ in p["global"]][:3], flush=True)
+                elif not tt or tt[0] != want or not any(r for _, r in p["us"]):
                     bad += 1
-                    print("  odd page", k, tt[:1], [(h, len(r)) for h, r in p["us"]][:4], len(s),
-                          re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", s[s.find("<title"):]))[:300], flush=True)
-                    time.sleep(120 if bad % 2 else 5)
-                    if bad % 2:
-                        continue                      # one more try for this day after a pause
+                    print("  odd page", k, tt[:1], [(h, len(r)) for h, r in p["us"]][:4], len(s), flush=True)
+                    time.sleep(90)
                 else:
                     have[k] = p
             except Exception as e:
@@ -429,7 +431,9 @@ def do_daily(first="2025-01-01"):
         d += dt.timedelta(days=1)
     wj(DAILY, have)
     ks = sorted(have)
-    print("days", len(ks), ks[:1], ks[-1:], "odd or failed", bad)
+    print("days", len(ks), ks[:1], ks[-1:], "odd or failed", bad, "days without country charts", miss)
+    mon = collections.Counter(k[:7] for k in ks)
+    print("days per month", sorted(mon.items()))
     for k in ks[-1:] + ks[:1]:
         for key in ("us", "global"):
             for h, r in have[k][key]:
