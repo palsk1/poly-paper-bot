@@ -2,6 +2,10 @@
 
   python3 kcharts.py series    # probe kch_series: which chart series Kalshi runs
   python3 kcharts.py list      # probe kch_list: every settled market of those series -> bt_cache/kch/markets.json.gz
+  python3 kcharts.py tapes     # probe kch_tapes: hourly bid/ask + trades of the Netflix / Billboard / YouTube series
+  python3 kcharts.py daily     # probe kch_daily: Netflix's daily US top 10 since Jan 2025 (whats-on-netflix.com)
+  python3 kcharts.py run-<regex> | drun | pmrun | cross    # the tables
+  python3 kcharts.py report    # -> backtest/kcharts.md (result: dropped, both sites price these better than the free charts)
 """
 import collections, datetime as dt, os, re, sys, time
 from concurrent.futures import ThreadPoolExecutor
@@ -532,21 +536,21 @@ def daily_rows(pick="KXNETFLIXRANK(SHOW|MOVIE)$", lag=1, step_h=6):
                     if not c or c[1] is None or c[2] is None or t - c[0] > 3 * 3600:
                         continue
                     rows.append({"tk": m["t"], "ev": e, "t": t, "bid": c[1], "ask": c[2], "yes": m["res"] == "yes", "w": m["w"],
-                                 "f": feat(pts, n, top, k), "n": n, "kind": kind, "pts": pts.get(k, 0), "left": (T - t) / 3600})
+                                 "f": feat(pts, n, top, k), "n": n, "kind": kind, "mon": mon, "pts": pts.get(k, 0), "left": (T - t) / 3600})
             t += step_h * 3600
     return rows
 
 
 def with_chance(rows, min_seen=15):
     """Walk forward: each event's chance per cell comes only from events that closed before it opened (a week earlier)."""
-    evs = sorted({r["ev"] for r in rows}, key=lambda e: week_of(e))
+    mon = {r["ev"]: r["mon"] for r in rows}
+    evs = sorted(mon, key=lambda e: mon[e])
     by = collections.defaultdict(list)
     for r in rows:
         by[r["ev"]].append(r)
     cnt, out, done = collections.defaultdict(lambda: [0, 0]), [], []
     for e in evs:
-        w = week_of(e)
-        while done and week_of(done[0]) < w:           # only weeks that finished before this one started
+        while done and mon[done[0]] < mon[e]:          # only weeks that finished before this one started
             for r in by[done.pop(0)]:
                 c = cnt[r["f"]]
                 c[0] += r["yes"]
@@ -615,7 +619,208 @@ def daily_run(pick="KXNETFLIXRANK(SHOW|MOVIE)$"):
     return rows
 
 
+def pm_daily(lag=1, step_h=6, gap=0.10, show=True):
+    """The same daily top 10 cells against Polymarket's 'top US Netflix show / movie this week' markets, at real trades:
+    a look every 6 hours, the last real trade (12 hours fresh) as the price, the buy at the worst price of the next hour + 2c + fee."""
+    import families as F
+    import stocks
+    ms, tp = F.load("netflix")
+    L = {"tv": day_lists("tv"), "movie": day_lists("movie")}
+    evs = collections.defaultdict(list)
+    for k, m in ms.items():
+        g = re.search(r"what-will-be-the-top-us-netflix-(show|movie)", m["ev_slug"])
+        if g and m.get("end"):
+            m["_kind"] = "tv" if g.group(1) == "show" else "movie"
+            d = dt.datetime.fromtimestamp(m["end"], dt.timezone.utc).date() - dt.timedelta(days=1)   # the list comes out on a Tuesday
+            m["_mon"] = d - dt.timedelta(days=d.weekday() + 7)
+            evs[m["ev"]].append((k, m))
+    rows = []
+    for e, M in evs.items():
+        kind, mon = M[0][1]["_kind"], M[0][1]["_mon"]
+        keys = collections.Counter(tkey(m["item"]) for _, m in M)
+        T = min(m["end"] for _, m in M)
+        t = (min(m["start"] for _, m in M) // 3600 + 2) * 3600
+        while t < T - 3600:
+            pts, n, top = points(L[kind], mon, t, lag)
+            if n:
+                for k, m in M:
+                    b = (tp.get(k) or {}).get("b")
+                    key = tkey(m["item"])
+                    if not b or keys[key] > 1:
+                        continue
+                    pp = stocks._price(b, t, fresh=12 * 3600)
+                    if pp is None:
+                        continue
+                    rows.append({"tk": k, "ev": e, "t": t, "bid": pp, "ask": pp, "yes": m["final"][0] == 1.0, "w": m["item"],
+                                 "f": feat(pts, n, top, key), "n": n, "kind": kind, "mon": mon, "left": (T - t) / 3600})
+            t += step_h * 3600
+    rows = with_chance(rows)
+
+    def bets(gap, side="both", extra=0.02):
+        out, used = [], set()
+        for r in sorted(rows, key=lambda r: r["t"]):
+            yes = r["q"] - r["ask"] >= gap
+            if r["tk"] in used or not (yes or r["bid"] - r["q"] >= gap) or (side != "both" and (side == "yes") != yes):
+                continue
+            x = stocks.buy(ms[r["tk"]], tp[r["tk"]]["b"], r["t"], yes, extra, lo=0.03, hi=0.97, window=3600)
+            if x and abs(x["px"] - (r["ask"] if yes else 1 - r["bid"])) <= 0.15:
+                used.add(r["tk"])
+                x.update(ev=r["ev"], pnl=x["pay"] - x["cost"], p=x["px"], w=r["w"], q=r["q"], kind=r["kind"])
+                out.append(x)
+        return out
+    if show:
+        print(f"Polymarket: rows {len(rows)}, events {len({r['ev'] for r in rows})}")
+        print("miss score: model", round(sum((r["q"] - r["yes"]) ** 2 for r in rows) / max(1, len(rows)), 4),
+              "Polymarket price", round(sum((r["ask"] - r["yes"]) ** 2 for r in rows) / max(1, len(rows)), 4))
+        for g in (0.05, 0.10, 0.15, 0.25):
+            for side in ("yes", "no", "both"):
+                print(line(f"PM gap {g} {side}", bets(g, side)))
+    return bets(gap)
+
+
+def cross(gap=0.10, step_h=3, show=True):
+    """Kalshi against Polymarket on the same question (top US Netflix show / movie of the same week, same title).
+    Every 3 hours: where one site's price is `gap` away from the other's, buy the cheap side there.
+    Kalshi buys at its real asking price + fee, Polymarket buys at the worst price of the next hour + 2c + fee."""
+    import families as F
+    import stocks
+    pms, ptp = F.load("netflix")
+    kms, ktp = load("KXNETFLIXRANK(SHOW|MOVIE)$")
+    pk = {}
+    for k, m in pms.items():
+        g = re.search(r"what-will-be-the-top-us-netflix-(show|movie)", m["ev_slug"])
+        if g and m.get("end") and (ptp.get(k) or {}).get("b"):
+            d = dt.datetime.fromtimestamp(m["end"], dt.timezone.utc).date() - dt.timedelta(days=1)
+            pk[("tv" if g.group(1) == "show" else "movie", d - dt.timedelta(days=d.weekday() + 7), tkey(m["item"]))] = k
+    onk, onp, pairs = [], [], 0
+    for tk, m in kms.items():
+        v = ktp.get(tk)
+        k = pk.get(("tv" if "SHOW" in m["s"] else "movie", week_of(m["ev"]), tkey(m["w"])))
+        if not v or not v["c"] or not k:
+            continue
+        pm, b = pms[k], ptp[k]["b"]
+        if (pm["final"][0] == 1.0) != (m["res"] == "yes"):
+            print("  the two sites disagree on the result:", tk, m["w"], m["res"], pm["q"][:70])
+            continue
+        pairs += 1
+        dk = dp = False
+        for c in v["c"]:
+            t = c[0]
+            if c[1] is None or c[2] is None or t % (step_h * 3600) or t > min(m["close"], pm["end"]) - 3600 or c[2] - c[1] > 0.15:
+                continue
+            pp = stocks._price(b, t, fresh=6 * 3600)
+            if pp is None:
+                continue
+            won = m["res"] == "yes"
+            base = {"ev": m["ev"], "t": t, "tk": tk, "w": m["w"]}
+            if not dk and pp - c[2] >= gap and 0.03 <= c[2] <= 0.97:
+                dk = True
+                onk.append(dict(base, cost=c[2] + fee(c[2]), pay=1.0 if won else 0.0, pnl=(1.0 if won else 0.0) - c[2] - fee(c[2]), p=c[2]))
+            elif not dk and c[1] - pp >= gap and 0.03 <= 1 - c[1] <= 0.97:
+                dk = True
+                p = 1 - c[1]
+                onk.append(dict(base, cost=p + fee(p), pay=0.0 if won else 1.0, pnl=(0.0 if won else 1.0) - p - fee(p), p=p))
+            if not dp and (c[1] - pp >= gap or pp - c[2] >= gap):
+                yes = c[1] - pp >= gap
+                x = stocks.buy(pm, b, t, yes, 0.02, lo=0.03, hi=0.97, window=3600)
+                if x and abs(x["px"] - (pp if yes else 1 - pp)) <= 0.15:
+                    dp = True
+                    x.update(ev=m["ev"], pnl=x["pay"] - x["cost"], p=x["px"], w=m["w"], tk=tk)
+                    onp.append(x)
+    if show:
+        print(f"same question on both sites: {pairs} markets")
+        print(line(f"buy on Kalshi where Polymarket is {gap} away", onk))
+        print(line(f"buy on Polymarket where Kalshi is {gap} away", onp))
+    return onk, onp
+
+
+OUT = os.path.join(ROOT, "backtest", "kcharts.md")
+TRIES = 330                # cuts looked at across both sites (price tables, last winner, daily list gaps, one site against the other)
+
+
+def report():
+    """python3 kcharts.py report -> backtest/kcharts.md + three lines in the ledger"""
+    import exam
+    usd = lambda x: ("+" if x >= 0 else "-") + f"${abs(x):.2f}"
+    rows = with_chance(daily_rows())
+    kb = first_bets(rows, 0.10)
+    pb = pm_daily(show=False)
+    onk, onp = cross(0.10, show=False)
+    src = "kcharts.py, backtest/kcharts.md"
+    c1 = exam.score(kb, "Kalshi Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price", tries=TRIES, src=src, status="dropped", quiet=True)
+    c2 = exam.score(pb, "Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price", tries=TRIES, src=src, status="dropped", quiet=True)
+    c3 = exam.score(onk + onp, "Netflix weekly #1: buy on one site where the other site's price is 10c+ away", tries=TRIES, src=src, status="dropped", quiet=True)
+    km_miss = sum(((r["bid"] + r["ask"]) / 2 - r["yes"]) ** 2 for r in rows) / len(rows)
+    md_miss = sum((r["q"] - r["yes"]) ** 2 for r in rows) / len(rows)
+    ms, tp = load("KXNETFLIX")
+    R = [r for r in looks(ms, tp) if km.ok(r, 0.10)]
+    tab = []
+    for h in (120, 72, 24):
+        H = [r for r in R if r["h"] == h]
+        y, n = km.yes_bets(H), km.no_bets(H)
+        fav = km.yes_bets([r for r in H if r["fav"]])
+        dog = km.yes_bets([r for r in H if not r["fav"]])
+        tab.append(f"| {h // 24} days before the close | {usd(km.per100(y))} ({len(y)}) | {usd(km.per100(n))} ({len(n)}) | {usd(km.per100(fav))} ({len(fav)}) | {usd(km.per100(dog))} ({len(dog)}) |")
+    L = [
+        "# Weekly chart bets (Netflix, Billboard, YouTube) on Kalshi and Polymarket",
+        "",
+        "16 Nov 2026, `kcharts.py`. Jan's ask: something outside Twitter, and check both sites.",
+        "",
+        "**Short answer: nothing to build. Both sites price these bets better than any free chart we can read.**",
+        "",
+        "## What trades",
+        "",
+        "- Kalshi runs about 190 repeating entertainment series. The big live ones are Netflix's weekly #1 show and #1 movie (US and global, plus the #2 spots), Billboard's #1 song and album, YouTube daily views and album sales. Kalshi's Spotify chart bets stopped in July 2026.",
+        "- Polymarket runs the same eight Netflix bets every week. They do trade: about $500,000 to $1 million a month in 2026 (the 13 Nov sweep said \"mostly never trade\" because most single titles get $0; the weeks as a whole get about $21,000 each). Billboard and Spotify weeks are smaller.",
+        "",
+        "## Test 1: prices alone (Kalshi, all Netflix series, real asking prices + fee)",
+        "",
+        "| when | always Yes | always No | Yes on the favourite | Yes on the others |",
+        "|---|---|---|---|---|",
+        *tab,
+        "",
+        "Per $100 staked, number of bets in brackets. Everything sits a few dollars under zero, which is the fee plus the gap between buyers and sellers. Last week's winner, new titles and price bands show nothing either. Polymarket's own price tables (`families.comb`) look the same or worse: Yes on long shots lost $25-75 per $100.",
+        "Billboard, YouTube views and album sales on Kalshi: same picture, and few hours with a tight enough price to bet at all.",
+        "",
+        "## Test 2: Netflix's daily top 10 against the price",
+        "",
+        "Netflix shows a daily top 10. whats-on-netflix.com keeps every day's US list back to 2020 (608 days from Jan 2025 downloaded, a few gaps). The weekly #1 is the title with the most views Monday to Sunday, so the daily lists should tell us who is ahead before the weekly list comes out.",
+        "",
+        "- Even with all seven daily lists in hand, the title with the most days at #1 was the weekly winner in only 58 of 75 weeks for shows and about 50 of 78 for movies. The daily list ranks titles but hides how far apart they are.",
+        f"- Kalshi's favourite one day before the close won about 8 times in 10. Miss score (lower is better): our daily-list chance {md_miss:.3f}, Kalshi's price {km_miss:.3f}. The price is more than twice as sharp.",
+        f"- Betting where the two disagree by 10c or more, on Kalshi at the real asking price: {usd(c1['per100'])} per $100 on {c1['bets']} bets. Exam: {c1['verdict']}.",
+        f"- Same on Polymarket (worst price of the next hour + 2c): {usd(c2['per100'])} per $100 on {c2['bets']} bets. Exam: {c2['verdict']}.",
+        "",
+        "## Test 3: one site against the other",
+        "",
+        f"The same title in the same week on both sites, 507 pairs. Buying the cheap side where the prices are 10c+ apart: {usd(km.per100(onk))} per $100 on {len(onk)} bets on Kalshi, {usd(km.per100(onp))} on {len(onp)} bets on Polymarket. Together: {c3['verdict']}. The gaps are rare and mostly stale last trades.",
+        "",
+        "## Traps for next time",
+        "",
+        "- Kalshi sometimes lists a title twice and pulls one copy days early: use the close time most markets of the event share (`kcharts.ev_close`), not the first close.",
+        "- Kalshi lists each season of a show as its own bet (\"From: Season 1\", \"Season 2\"), the daily list only says \"From\". Those are skipped.",
+        "- An event named 9 Nov is the list published 10 Nov for the week 2-8 Nov.",
+        "- whats-on-netflix.com answers `?dateselect=MM/DD/YYYY`; some days have no country lists. FlixPatrol blocks robots. Netflix's own weekly files (`/tudum/top10/data/all-weeks-countries.tsv`) cut off mid-download now and then, so retry.",
+        "- Too many probe runs at once use up GitHub's hourly allowance for the price store (each run fetches about 600 files), and then a run can't save its download.",
+        "",
+        "Don't redo. A lead here would need real viewing numbers per day, which nobody publishes for free.",
+        "",
+    ]
+    open(OUT, "w").write("\n".join(L))
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "report":
+        report()
+        sys.exit(0)
+    if len(sys.argv) > 1 and sys.argv[1] == "cross":
+        for g in (0.05, 0.10, 0.15):
+            cross(g)
+        sys.exit(0)
+    if len(sys.argv) > 1 and sys.argv[1] == "pmrun":
+        pm_daily()
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1] == "drun":
         daily_run()
         sys.exit(0)
