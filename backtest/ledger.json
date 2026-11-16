@@ -1856,6 +1856,45 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "speeches.py"
+  },
+  {
+   "id": "kalshi_netflix_weekly_1_buy_where_the_daily_top_10_record_is",
+   "date": "2026-11-16",
+   "what": "Kalshi Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price",
+   "tries": 330,
+   "bets": 398,
+   "groups": 167,
+   "per100": -4.71,
+   "floor100": -28.27,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcharts.py, backtest/kcharts.md"
+  },
+  {
+   "id": "polymarket_netflix_weekly_1_buy_where_the_daily_top_10_recor",
+   "date": "2026-11-16",
+   "what": "Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price",
+   "tries": 330,
+   "bets": 121,
+   "groups": 71,
+   "per100": -29.4,
+   "floor100": -100.0,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcharts.py, backtest/kcharts.md"
+  },
+  {
+   "id": "netflix_weekly_1_buy_on_one_site_where_the_other_site_s_pric",
+   "date": "2026-11-16",
+   "what": "Netflix weekly #1: buy on one site where the other site's price is 10c+ away",
+   "tries": 330,
+   "bets": 93,
+   "groups": 50,
+   "per100": 5.36,
+   "floor100": -70.47,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "kcharts.py, backtest/kcharts.md"
   }
  ]
 }
