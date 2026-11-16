@@ -78,7 +78,52 @@ def do_list(pick=None):
         print("EX", s, {k: m[k] for k in ("t", "q", "w", "res", "vol")}, "| RULE", m["rule"][:300], flush=True)
 
 
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+
+
+def raw(url, n=40, extra=None):
+    import urllib.request
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html,application/json,text/tab-separated-values,*/*",
+                                               "Accept-Language": "en-US,en;q=0.9", **(extra or {})})
+    with urllib.request.urlopen(req, timeout=n) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def do_peek():
+    """which free chart sources answer from here"""
+    for u in ("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv",
+              "https://www.netflix.com/tudum/top10/data/all-weeks-global.tsv",
+              "https://flixpatrol.com/top10/netflix/united-states/2026-11-05/",
+              "https://flixpatrol.com/top10/netflix/united-states/",
+              "https://flixpatrol.com/top10/netflix/united-states/2026-45/",
+              "https://www.netflix.com/tudum/top10/united-states/tv?week=2026-11-08",
+              "https://kworb.net/spotify/country/us_daily.html",
+              "https://kworb.net/youtube/",
+              "https://charts.youtube.com/charts/TopArtists/us/daily"):
+        try:
+            s = raw(u, 40)
+        except Exception as e:
+            print("FAIL", u, str(e)[:150], flush=True)
+            continue
+        print("OK", u, len(s), flush=True)
+        if u.endswith(".tsv"):
+            L = s.split("\n")
+            print("  head", L[:3], flush=True)
+            us = [x for x in L if x.startswith("United States")]
+            print("  US rows", len(us), us[:12], flush=True)
+            print("  last", L[-3:], flush=True)
+        else:
+            t = re.sub(r"\s+", " ", re.sub(r"<script.*?</script>|<style.*?</style>", " ", s, flags=re.S))
+            t = re.sub(r"<[^>]+>", "|", t)
+            t = re.sub(r"(\|\s*)+", "| ", t)
+            i = max(0, t.find("TOP 10"))
+            print("  text", t[i:i + 2500], flush=True)
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "peek":
+        do_peek()
+        sys.exit(0)
     a = sys.argv[1] if len(sys.argv) > 1 else "series"
     if a == "series":
         do_series()
