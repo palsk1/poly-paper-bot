@@ -508,5 +508,117 @@ def events():
     print(c["verdict"], c["per100"], c["lo100"], c["hi100"])
 
 
+def kalshi(score=True):
+    """The same rule on Kalshi's weekly "What will Trump say this week" markets (series KXTRUMPSAY, data bt_cache/kmen).
+    Only markets planned to live 20 days or less: tapes hold the last 21 days of a market, so for longer ones the
+    early hours exist only when the market closed early, which gives the result away. -> backtest/speeches_kalshi.md"""
+    import collections, os, statistics, time
+    import bot, exam, kmentions as km
+    import postwords as pw
+    ms, tp = km.load(trades=True)
+    sel = [m for m in ms.values() if m["s"].startswith("KXTRUMPSAY") and m["t"] in tp and m["res"] in ("yes", "no")
+           and (m["exp"] or m["close"]) - m["open"] <= 20 * 86400]
+    W = Words()
+    end = {}
+    for m in sel:
+        end[m["ev"]] = max(end.get(m["ev"], 0), m["close"])
+
+    def bets(gap=0.15, side=0, lo_h=1, hi_h=12, extra=0.01, stake=10.0, n=8, always=False):
+        out = []
+        for m in sel:
+            for c in tp[m["t"]]["c"]:
+                t, bid, ask = c[0], c[1], c[2]
+                if t < m["open"] + lo_h * 3600:
+                    continue
+                if t > m["open"] + hi_h * 3600 or t >= m["close"]:
+                    break
+                if not bid or not ask or ask - bid > 0.15:
+                    continue
+                qw, k = W.record(m["w"], t, n)
+                q = 1 - (1 - qw) ** (max(end[m["ev"]] - t, 3600) / (7 * 86400))
+                px = ask if side == 0 else 1 - bid
+                if not always and ((q - px) if side == 0 else ((1 - q) - px)) < gap:
+                    continue
+                c_ = min(0.99, px + extra)
+                sh = stake / c_
+                win = (m["res"] == "yes") == (side == 0)
+                near = sum(x[2] * x[1] / 1000 for x in tp[m["t"]]["tr"] if t < x[0] <= t + 7200 and x[1] / 1000 <= c_ and x[3] == 1)
+                out.append({"ev": m["ev"], "t": t, "cost": stake + 0.07 * c_ * (1 - c_) * sh, "pay": sh if win else 0.0, "px": c_,
+                            "sig": (bid + ask) / 2, "fair": q, "item": m["w"], "k": k, "id": m["t"], "near": near})
+                break
+        return out
+
+    L = []
+    P = L.append
+    show, usd = pw.show, pw.usd
+    P("# The Trump weekly words rule on Kalshi (speeches.py kalshi)\n")
+    P(f"Generated {bot.iso()}. Kalshi runs the same \"What will Trump say this week\" markets: {len(sel)} finished markets in "
+      f"{len({m['ev'] for m in sel})} weeks, August 2025 to November 2026, with real hourly buy and sell quotes and every trade. "
+      "A middle market trades about $23,000, four times Polymarket's. Paper only.\n")
+    P("The rule is the one found on Polymarket, unchanged: count in how many of the 8 weeks before Trump said the word "
+      "(Roll Call transcripts, only days already over), and buy Yes where that record is 15c+ above the price. Here the price "
+      "is Kalshi's real sell offer at the end of an hour (offers with a gap over 15c to the best bid are skipped) + 1c + "
+      "Kalshi's fee. $10 a bet, one per market. Kalshi opens these markets when the week starts, so there is no \"before "
+      "the week\": the test buys in the first 12 hours, or at the first hour of the week that fits.\n")
+    P(pw.HEAD)
+    first, anyh = bets(), bets(hi_h=24 * 8)
+    P(show("always Yes, first 12 hours", bets(always=True)))
+    P(show("always No, first 12 hours", bets(side=1, always=True)))
+    P(show("**Yes where the record is 15c+ above the offer, first 12 hours**", first))
+    P(show("**... the same, at the first hour of the week that fits**", anyh))
+    P(show("... first 12 hours, gap 5c+", bets(0.05)))
+    P(show("... first 12 hours, gap 25c+", bets(0.25)))
+    P(show("... first 12 hours, 3c extra instead of 1c", bets(extra=0.03)))
+    P(show("... first 12 hours, 5c extra", bets(extra=0.05)))
+    P(show("... first 12 hours, 10c extra", bets(extra=0.10)))
+    P(show("... only hours 12 to 48", bets(lo_h=12, hi_h=48)))
+    P(show("... only hours 48 to 120", bets(lo_h=48, hi_h=120)))
+    P(show("No where the offer is 15c+ above the record, first 12 hours", bets(side=1)))
+    P("\nBy quarter (first hour of the week that fits):\n\n" + pw.HEAD)
+    q = collections.defaultdict(list)
+    for x in anyh:
+        g = time.gmtime(x["t"])
+        q[f"{g.tm_year} Q{(g.tm_mon - 1) // 3 + 1}"].append(x)
+    for k in sorted(q):
+        P(show(k, q[k]))
+    P("\nBy the price paid (first hour that fits):\n\n" + pw.HEAD)
+    for lo, hi in ((0, .2), (.2, .4), (.4, .6), (.6, 1.01)):
+        P(show(f"Yes at {int(lo * 100)}-{min(100, int(hi * 100))}c", [x for x in anyh if lo <= x["sig"] < hi]))
+    P("\n## How much money fits\n")
+    P("A bet only counts here if other people really bought Yes at our price or better in the 2 hours after the signal, "
+      "and only for as many dollars as they bought.\n")
+    P("| at most per bet | bets that found a seller | dollars bet | profit | per $100 | profit a month | losing months |\n|---|---|---|---|---|---|---|")
+    months = max(1.0, (max(x["t"] for x in anyh) - min(x["t"] for x in anyh)) / (30.4 * 86400))
+    for cap in (10, 25, 100):
+        tc = tpf = n = 0
+        mon = collections.Counter()
+        for x in anyh:
+            st = min(cap, x["near"])
+            if st < 1:
+                continue
+            r = (x["pay"] - x["cost"]) / x["cost"]
+            n, tc, tpf = n + 1, tc + st, tpf + st * r
+            mon[time.strftime("%Y-%m", time.gmtime(x["t"]))] += st * r
+        P(f"| ${cap} | {n} of {len(anyh)} | ${tc:,.0f} | {usd(tpf)} | {usd(100 * tpf / max(1, tc))} | {usd(tpf / months)} | "
+          f"{sum(1 for v in mon.values() if v < 0)} of {len(mon)} |")
+    c1 = exam.score(anyh, "Kalshi Trump weekly say-markets: Yes where the transcript record is 15c+ above the offer", tries=75,
+                    src="speeches.py", status="lead", log=score, quiet=True)
+    c2 = exam.score(first, "scratch kalshi first 12h", tries=75, log=False, quiet=True)
+    P("\n## The shared exam\n")
+    P(f"First hour that fits: **{c1['verdict']}**, {usd(c1['per100'])} per $100, luck range {usd(c1['lo100'])} to {usd(c1['hi100'])}, "
+      f"worst case per $100 {usd(c1['floor100'])}, {c1['bets']} bets in {c1['groups']} weeks. First 12 hours only: "
+      f"**{c2['verdict']}**, {usd(c2['per100'])} per $100, luck range {usd(c2['lo100'])} to {usd(c2['hi100'])}.\n")
+    P("## What it means\n")
+    P("The rule was fixed on Polymarket and then run on Kalshi without changes, and it is ahead there too. That is the "
+      "closest thing to a fresh test this idea has had. Kalshi adds about 20 bets a month to Polymarket's 10. Weak spots: "
+      "the cheap offers are small (a third of the signals found no seller at all), a good part of the profit comes from "
+      "long shots under 20c (22 wins in 86 tries, so long dry spells), and the later in the week the weaker it gets. Whether Jan may trade on "
+      "Kalshi from Sweden is his to check. Trap found on the way: Kalshi's monthly markets looked like 29 wins of 29, "
+      "because our saved quotes only cover a market's last 21 days, so a month-long market shows early hours only when "
+      "it closed early, which means the word was said.\n")
+    open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backtest", "speeches_kalshi.md"), "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()

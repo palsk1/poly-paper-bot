@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**145 ideas examined, in about 58,294 versions.** 107 dropped, 38 still being tested or waiting. **Looks real: 3.**
+**146 ideas examined, in about 58,369 versions.** 107 dropped, 39 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 145 ideas that are all worthless, the luckiest one still looks good. With 145 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 146 ideas that are all worthless, the luckiest one still looks good. With 146 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -153,5 +153,6 @@ Why count: if you test 145 ideas that are all worthless, the luckiest one still 
 | 2026-11-15 | Post-word markets: No where Yes 15c+ above the text record (20-60c) | 40 | 41 | +$6.44 | Ahead, but could be luck | dropped | postwords.py |
 | 2026-11-15 | Trump event say-markets: No where the price is 15c+ above the transcript record | 20 | 249 | +$5.41 | Ahead, but could be luck | dropped | speeches.py |
 | 2026-11-15 | Trump weekly say-markets: Yes where the transcript record is 15c+ above the price, before the week | 50 | 61 | +$24.21 | Promising, needs more bets | lead | speeches.py |
+| 2026-11-16 | Kalshi Trump weekly say-markets: Yes where the transcript record is 15c+ above the offer | 75 | 56 | +$33.80 | Promising, needs more bets | lead | speeches.py |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

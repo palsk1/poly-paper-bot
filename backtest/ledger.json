@@ -1830,6 +1830,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "speeches.py"
+  },
+  {
+   "id": "kalshi_trump_weekly_say_markets_yes_where_the_transcript_rec",
+   "date": "2026-11-16",
+   "what": "Kalshi Trump weekly say-markets: Yes where the transcript record is 15c+ above the offer",
+   "tries": 75,
+   "bets": 318,
+   "groups": 56,
+   "per100": 33.8,
+   "floor100": -14.67,
+   "verdict": "Promising, needs more bets",
+   "status": "lead",
+   "src": "speeches.py"
   }
  ]
 }
