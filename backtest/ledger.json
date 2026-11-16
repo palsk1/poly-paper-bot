@@ -1934,6 +1934,45 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "spotw.py, backtest/spotify.md"
+  },
+  {
+   "id": "kalshi_weekly_habit_bets_trump_actions_orders_posts_endorsem",
+   "date": "2026-11-16",
+   "what": "Kalshi weekly habit bets (Trump actions, orders, posts, endorsements and 12 more series): buy where the last 8 rounds' record is 15c+ away from the price",
+   "tries": 130,
+   "bets": 656,
+   "groups": 256,
+   "per100": -0.31,
+   "floor100": -26.27,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "habits.py, backtest/habits.md"
+  },
+  {
+   "id": "kalshi_at_least_n_presidential_actions_this_week_buy_where_t",
+   "date": "2026-11-16",
+   "what": "Kalshi 'at least N presidential actions this week': buy where the 8-round record is 15c+ away from the price",
+   "tries": 130,
+   "bets": 108,
+   "groups": 30,
+   "per100": 26.68,
+   "floor100": -67.34,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "habits.py, backtest/habits.md"
+  },
+  {
+   "id": "kalshi_executive_orders_this_week_buy_where_the_8_round_reco",
+   "date": "2026-11-16",
+   "what": "Kalshi 'executive orders this week': buy where the 8-round record is 15c+ away from the price",
+   "tries": 130,
+   "bets": 45,
+   "groups": 25,
+   "per100": 24.65,
+   "floor100": -64.65,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "habits.py, backtest/habits.md"
   }
  ]
 }
