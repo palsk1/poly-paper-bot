@@ -17095,3 +17095,4 @@
 {"filled": 10.0, "price": 0.92, "side": "yes", "through": true, "ticker": "KXGOLDH-26NOV1606-T3855.99", "track": "kalshi_patient", "ts": "2026-11-16T11:02:56Z", "type": "kpatient_fill"}
 {"fee": 0.0, "outcome": "No", "price": 0.79, "shares": 5, "title": "Houthis enter Aden by December 31, 2026?", "token": "100076927387037531064280053842127485033715896660675587805380551622174710340008", "track": "panic_fade", "ts": "2026-11-16T11:03:36Z", "type": "paper_buy"}
 {"fee": 0.0, "outcome": "No", "price": 0.84, "shares": 5, "title": "US imports Russian diesel by January 31?", "token": "94416040422911689516896638301805687078065738798917502404842473434241014852579", "track": "panic_fade_4c", "ts": "2026-11-16T11:03:40Z", "type": "paper_buy"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXGOLDH-26NOV1606-T3855.99", "track": "kalshi_patient", "ts": "2026-11-16T11:06:38Z", "type": "kpatient_result"}
