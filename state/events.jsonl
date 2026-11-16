@@ -18091,3 +18091,11 @@
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXINTLFRIENDLYTOTAL-26NOV17KSAUZB-6", "track": "kalshi_patient", "ts": "2026-11-16T22:56:43Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXINTLFRIENDLYTOTAL-26NOV17JORAUS-6", "track": "kalshi_patient", "ts": "2026-11-16T22:56:43Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXTITLEDTUESDAY-26NOV17-ASAR", "track": "kalshi_patient", "ts": "2026-11-16T22:56:43Z", "type": "kpatient_order"}
+{"outcome": "Draw", "pnl": -1.2456, "price": 0.0, "reason": "resolved", "title": "Will Guyana vs. Puerto Rico end in a draw?", "token": "41652711022858287463716377608282225049817356376410411920315205182008622989026", "track": "soccer_draw", "ts": "2026-11-16T23:01:14Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:21Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXETH15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:23Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXCONCACAFNLSPREAD-26NOV16GUYPUR-PUR2", "track": "kalshi_patient", "ts": "2026-11-16T23:02:26Z", "type": "kpatient_result"}
+{"fee": 0.0278, "outcome": "No", "price": 0.833, "shares": 5, "title": "Will Trump meet with Kim Jong Un in 2026?", "token": "33948383215136644432533371238863136180727484636430037616426554075016398089174", "track": "panic_fade_10c", "ts": "2026-11-16T23:03:01Z", "type": "paper_buy"}
