@@ -165,6 +165,18 @@
       "source": "endgame",
       "rules": "fade_sure"
     },
+    "trump_week": {
+      "label": "UNTESTED (added 2026-11-16). Trump's words of the week, Polymarket: for 'What will Trump say this week?' markets, counts in how many of the last 8 weeks he really said the word (from free transcripts of everything he says). Before the week starts, where that record is 15c or more above the Yes price, buys Yes and holds to the end of the week. History: +$24.21 per $100 on 150 bets, 'Promising, needs more bets', found by looking (backtest/speeches.md). One bet per word, real order-book fills. $100 paper",
+      "start_cash": 100,
+      "source": "trumpweek",
+      "rules": "trump_week"
+    },
+    "trump_week_k": {
+      "label": "UNTESTED (added 2026-11-16). Trump's words of the week, Kalshi: the same rule on Kalshi's weekly 'What will Trump say this week?' markets, any hour of the week. Where his 8-week record is 15c or more above the real sell offer, buys up to $25 of Yes and holds to the result. History: +$33.80 per $100 on 318 bets, 'Promising, needs more bets'; a lot of it from long shots that mostly lose (backtest/speeches_kalshi.md). One bet per word, real order-book fills. $300 paper, no refills",
+      "start_cash": 300,
+      "source": "ktrump",
+      "rules": "trump_week_k"
+    },
     "econ_fav": {
       "label": "Forecast backs the favorite (added 2026-11-09): Kalshi CPI, jobless-claims, unemployment and jobs-report markets. 20-76 hours before the release, buys the side that costs 80-99c when a free forecast (Cleveland Fed for inflation, last release for the jobs numbers) says it is worth 3c+ more. Holds to the result. Real order-book fills. $50 paper",
       "start_cash": 50,
@@ -1943,6 +1955,36 @@
       "max_open": 40,
       "picks_per_scan": 3,
       "shadow_sell_at": []
+    },
+    "trump_week": {
+      "why": "2026-11-16 (new-strategy thread, Jan picked 'Yes, both sites'). speeches.py (backtest/speeches.md): 1,786 finished weekly / monthly 'What will Trump say' markets against 1,941 transcripts from Roll Call. Before the week starts, Yes where the word's record over the 8 weeks before was 15c+ above the price made +$24.21 per $100 on 150 bets in 61 weeks at the worst price of the next 2 hours + 2c + fee (exam: Promising, needs more bets), both halves ahead, +$14.62 at 6c extra. Always Yes there about $0; No against the record loses. Found by looking, no untouched test set, thin markets. UNTESTED live. Claude's track, rule changes reported.",
+      "min_gap": 0.15,
+      "min_gap_note": "His 8-week record must be 15c or more above the listed Yes price.",
+      "min_model_edge": 0.10,
+      "min_model_edge_note": "After the real asking price and the fee, Yes must still be 10c under the record's chance.",
+      "max_over_listed": 0.06,
+      "max_over_listed_note": "Skip when the real ask is 6c+ above the listed price: the history lead was down to +$6.66 per $100 at 10c extra.",
+      "min_price": 0.02,
+      "max_price": 0.95,
+      "scan_every_minutes": 60,
+      "picks_per_scan": 10,
+      "max_open": 80,
+      "max_per_theme": 999,
+      "take_profit": null,
+      "stop_loss": null
+    },
+    "trump_week_k": {
+      "why": "2026-11-16 (new-strategy thread, Jan picked 'Yes, both sites'). speeches.py kalshi (backtest/speeches_kalshi.md): the Polymarket rule, unchanged, on Kalshi's 1,736 finished weekly KXTRUMPSAY markets: Yes where the 8-week transcript record is 15c+ above the real sell offer (gap between best buy and sell order at most 15c) made +$33.80 per $100 on 318 bets in 56 weeks at the offer + 1c + fee (exam: Promising, needs more bets), ahead every quarter. Counting only dollars others really bought at our price: about $63 profit a month at $25 a bet. Weak: a third of signals found no seller, long shots under 20c carry much of it (22 wins in 86), weaker late in the week. Month-long markets are left out (not in the history test). UNTESTED live. Claude's track, rule changes reported.",
+      "series": ["KXTRUMPSAY"],
+      "max_life_days": 20,
+      "min_hours_old": 1,
+      "max_spread": 0.15,
+      "min_gap": 0.15,
+      "min_gap_note": "His 8-week record must be 15c or more above the price really paid.",
+      "usd_per_bet": 25,
+      "min_usd": 5,
+      "min_usd_note": "Skip when less than $5 is on offer at a price that fits.",
+      "scan_minutes": 55
     },
     "econ_fav": {
       "why": "2026-11-09 econ.py backtest (backtest/econ.md): on 340 Kalshi data releases 2021-2026, buying the 80-99c side when the forecast said it was worth 3c+ more made +$6.73 per $100 24h before (141 bets, 7 lost) and +$7.75 72h before, both halves ahead, still ahead 2c worse; the same band without the forecast lost about $5 per $100. Found after looking at price bands, so the live track is the real test. Claude's track, rule changes reported.",
