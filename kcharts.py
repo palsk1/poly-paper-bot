@@ -147,7 +147,74 @@ def do_peek2():
         print("  text", t[i:i + 1800], flush=True)
 
 
+TAPE_RX = "KXNETFLIX|KXTOPSONG|KXTOPALBUM|KXALBUMDEBUT|KXYTVIEWSW|KXALBUMEQUIV"
+NFX = os.path.join(CACHE, "netflix.json.gz")
+
+
+def do_tapes(pick=None):
+    """probe kch_tapes[-regex]: hourly bid/ask + every trade of the picked series' settled markets -> bt_cache/kch/tapes_<series>.json.gz"""
+    have = (rj(MK, {}) or {}).get("markets") or {}
+    rx = re.compile(pick or TAPE_RX)
+    by = collections.defaultdict(list)
+    for m in have.values():
+        if rx.search(m["s"]) and m["vol"] >= 100:
+            by[m["s"]].append(m)
+    t0 = time.time()
+    for s, ms in sorted(by.items(), key=lambda kv: -sum(m["vol"] for m in kv[1])):
+        path = os.path.join(CACHE, f"tapes_{s}.json.gz")
+        got = rj(path, {}) or {}
+        todo = [m for m in ms if m["t"] not in got]
+        for i in range(0, len(todo), 300):
+            with ThreadPoolExecutor(8) as ex:
+                for tk, d in ex.map(km.tape_one, todo[i:i + 300]):
+                    got[tk] = d
+            wj(path, got)
+        print(f"{s}: {len(got)} of {len(ms)} markets, {sum(len(d['tr']) for d in got.values())} trades, "
+              f"{sum(1 for d in got.values() if not d['c'])} without quotes, {sum(1 for d in got.values() if not d['full'])} cut short "
+              f"({time.time() - t0:.0f}s)", flush=True)
+
+
+def do_netflix():
+    """probe kch_netflix: Netflix's own weekly top 10 lists (US by country file, plus global with hours) -> bt_cache/kch/netflix.json.gz"""
+    out = {"us": [], "global": []}
+    L = raw("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv", 120).split("\n")
+    for x in L[1:]:
+        p = x.rstrip("\r").split("\t")
+        if len(p) >= 8 and p[1] == "US":
+            out["us"].append([p[2], p[3], int(p[4]), p[5], p[6], int(p[7] or 0)])
+    L = raw("https://www.netflix.com/tudum/top10/data/all-weeks-global.tsv", 120).split("\n")
+    for x in L[1:]:
+        p = x.rstrip("\r").split("\t")
+        if len(p) >= 9:
+            out["global"].append([p[0], p[1], int(p[2]), p[3], p[4], int(p[5] or 0), int(p[7] or 0), int(p[8] or 0)])
+    os.makedirs(CACHE, exist_ok=True)
+    wj(NFX, out)
+    print("US rows", len(out["us"]), "global rows", len(out["global"]), "weeks", out["us"][-1][0], "to", out["us"][0][0])
+
+
+def do_peek3():
+    """how does whats-on-netflix load a past day's top 10?"""
+    s = raw("https://www.whats-on-netflix.com/most-popular/", 60, {"Referer": "https://www.google.com/", "Accept-Encoding": "identity"})
+    print("len", len(s))
+    for m in re.finditer(r"<script[^>]*src=[\"']([^\"']+)", s):
+        print("SRC", m.group(1))
+    for kw in ("admin-ajax", "wp-json", "fetch(", "ajaxurl", "top10", "top-10", "date", "country", "nonce", "endpoint", "api"):
+        for m in list(re.finditer(re.escape(kw), s))[:6]:
+            print("KW", kw, "|", re.sub(r"\s+", " ", s[max(0, m.start() - 160):m.start() + 260]))
+    for m in re.finditer(r"<script(?![^>]*src)[^>]*>(.*?)</script>", s, flags=re.S):
+        b = m.group(1)
+        if re.search(r"top|date|fetch|ajax", b, re.I) and len(b) > 200:
+            print("INLINE", len(b), "|", re.sub(r"\s+", " ", b)[:3000])
+
+
 if __name__ == "__main__":
+    A1 = sys.argv[1] if len(sys.argv) > 1 else ""
+    if A1.startswith("tapes"):
+        do_tapes(A1[6:] or None)
+        sys.exit(0)
+    if A1 in ("netflix", "peek3"):
+        {"netflix": do_netflix, "peek3": do_peek3}[A1]()
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1] == "peek2":
         do_peek2()
         sys.exit(0)
