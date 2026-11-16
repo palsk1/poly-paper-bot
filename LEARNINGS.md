@@ -75,17 +75,17 @@ Each one has a pass rule written down before the result. "Locked" means Jan OK'd
 ## Live numbers (updated 2026-11-16)
 
 **46 days left** until the money decision on 1 Jan 2027.
-Ideas tried so far: **147**. Dropped: 108. Still in play: 39. Looking real: **3**.
+Ideas tried so far: **150**. Dropped: 111. Still in play: 39. Looking real: **3**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 923 | 916 / 7 | +$0.22 | Ahead, but could be luck | 1 Dec (15 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 932 | 925 / 7 | +$0.22 | Ahead, but could be luck | 1 Dec (15 days): after 2,500 bets: pass if above +$0.22 per $100 |
 | NO on 'will X say Y' (`mention_no`) | 5 | 3 / 2 | -$17.04 | Too early to tell (5 finished) | 21 Dec (35 days): holdout, scored once |
 | Boring side after a 10c scare (`panic_fade_10c`) | 10 | 6 / 4 | -$9.89 | Behind, but could be bad luck | 21 Dec (35 days): holdout, scored once |
 | NO at 90-97c, 30+ days out (`boring_no`) | 1 | 1 / 0 | +$7.15 | Too early to tell (1 finished) | 21 Dec (35 days): holdout, scored once |
 | NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 8 | 5 / 3 | -$21.56 | Too early to tell (8 finished) | 21 Dec (35 days): holdout, scored once |
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
-| Kalshi patient buyer, nearly-sure side (untested) (`kalshi_patient`) | 221 | 212 / 9 | +$1.95 | Ahead, but could be luck | 1 Jan (46 days): 1,000+ bets, ahead, low end of the luck range above $0 |
+| Kalshi patient buyer, nearly-sure side (untested) (`kalshi_patient`) | 227 | 217 / 10 | +$1.55 | Ahead, but could be luck | 1 Jan (46 days): 1,000+ bets, ahead, low end of the luck range above $0 |
 | NO on post counts the counter says are overpriced (untested) (`postcount_no`) | 6 | 4 / 2 | +$2.98 | Too early to tell (6 finished) | 1 Jan (46 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
 | NO on mention words priced far above the word's own record (untested) (`word_no`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (46 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
 | NO on stock long shots in the afternoon (untested) (`stock_no`) | 16 | 14 / 2 | -$4.34 | Behind, but could be bad luck | 1 Jan (46 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
@@ -93,7 +93,7 @@ Ideas tried so far: **147**. Dropped: 108. Still in play: 39. Looking real: **3*
 | YES on words Trump says most weeks, Polymarket (untested) (`trump_week`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (46 days): first look only; counted together with trump_week_k (proposed, not locked) |
 | Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$4.15 locked in | 28 sets cost $134.42 and pay $140.00 if both sites agree. Nothing to judge before then. | 1 Jan (46 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 923 of 2,500 bets, 7 lost, +$20.09 so far (+$0.22 per $100; the bar is +$0.22). About 137 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
+**kc_maker_safe toward its locked test:** 932 of 2,500 bets, 7 lost, +$20.58 so far (+$0.22 per $100; the bar is +$0.22). About 136 bets a day, so the look is due about 28 Nov. This is only a peek: the number counts once, at 2,500.
 **Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 667 bought, 12 lost, -$58.23 (-$0.88 per $100). Full table: `state/kfast_live/report.md`.
 **Combo house on Jan's AWS server (Stockholm)**, paper, rule `main`: 842 parlays finished, the house won 668, -$0.75 per $100 at risk (Behind, but could be bad luck), 62 still waiting. Only a peek: it counts once, at 1 Jan or 1,000 finished parlays. `state/quoter.json`.
 
@@ -102,7 +102,7 @@ Ideas tried so far: **147**. Dropped: 108. Still in play: 39. Looking real: **3*
 | Week | `kc_maker_safe` | `mention_no` | `panic_fade_10c` | `boring_no` | `crypto_no` | `econ_fav` | `kalshi_patient` | `postcount_no` | `word_no` | `stock_no` | `trump_week_k` | `trump_week` |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2026-W46 | 760 bets, +$0.44 | 5 bets, -$17.04 | 9 bets, -$14.34 | 1 bets, +$7.15 | 6 bets, -$37.80 | 0 bets | 135 bets, +$1.34 | 6 bets, +$2.98 | 0 bets | 16 bets, -$4.34 | - | - |
-| 2026-W47 | 923 bets, +$0.22 | 5 bets, -$17.04 | 10 bets, -$9.89 | 1 bets, +$7.15 | 8 bets, -$21.56 | 0 bets | 221 bets, +$1.95 | 6 bets, +$2.98 | 0 bets | 16 bets, -$4.34 | 0 bets | 0 bets |
+| 2026-W47 | 932 bets, +$0.22 | 5 bets, -$17.04 | 10 bets, -$9.89 | 1 bets, +$7.15 | 8 bets, -$21.56 | 0 bets | 227 bets, +$1.55 | 6 bets, +$2.98 | 0 bets | 16 bets, -$4.34 | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
