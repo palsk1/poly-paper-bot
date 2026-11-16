@@ -18069,3 +18069,6 @@
 {"filled": 10.0, "pnl": 0.46, "price": 0.954, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV161730-30", "track": "kc_maker", "ts": "2026-11-16T22:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV161730-30", "track": "kc_maker_safe", "ts": "2026-11-16T22:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV161730-30", "track": "kc_maker_safe_usd", "ts": "2026-11-16T22:32:41Z", "type": "kmaker_fill"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXUEFANLSCORE-26NOV16GERNED-GER3NED1", "track": "kalshi_patient", "ts": "2026-11-16T22:47:18Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXUEFANLSCORE-26NOV16GRESRB-GRE3SRB1", "track": "kalshi_patient", "ts": "2026-11-16T22:47:19Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXUEFANLTEAMTOTAL-26NOV16SUISCO-SCO3", "track": "kalshi_patient", "ts": "2026-11-16T22:47:19Z", "type": "kpatient_result"}
