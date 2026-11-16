@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   66,
-   171
+   71,
+   181
   ],
   "S:andy burnham": [
    4,
@@ -45,8 +45,8 @@
    17
   ],
   "S:trump": [
-   4,
-   13
+   9,
+   23
   ],
   "ST:andy burnham|billion/million/trillion#5+": [
    1,
@@ -624,9 +624,13 @@
    0,
    1
   ],
-  "ST:trump|bibi": [
+  "ST:trump|ballroom": [
    0,
    1
+  ],
+  "ST:trump|bibi": [
+   0,
+   2
   ],
   "ST:trump|biden (3+ times)": [
    0,
@@ -640,12 +644,24 @@
    0,
    1
   ],
+  "ST:trump|fire and fury": [
+   0,
+   1
+  ],
+  "ST:trump|hakeem/jeffries": [
+   0,
+   1
+  ],
   "ST:trump|hegseth": [
    1,
    1
   ],
   "ST:trump|hormuz/strait": [
    0,
+   1
+  ],
+  "ST:trump|impeach/impeached/impeachment": [
+   1,
    1
   ],
   "ST:trump|iran/iranian (3+ times)": [
@@ -656,20 +672,36 @@
    0,
    1
   ],
+  "ST:trump|not on the ballot": [
+   1,
+   1
+  ],
   "ST:trump|putin": [
    0,
    1
   ],
   "ST:trump|rigged": [
-   0,
-   1
+   1,
+   2
   ],
   "ST:trump|russia/ukraine": [
    1,
    1
   ],
+  "ST:trump|stock market": [
+   1,
+   1
+  ],
   "ST:trump|tariff": [
    0,
+   1
+  ],
+  "ST:trump|thanksgiving": [
+   0,
+   1
+  ],
+  "ST:trump|veto": [
+   1,
    1
   ],
   "T:afford/affordability/affordable": [
@@ -720,13 +752,17 @@
    0,
    1
   ],
+  "T:ballroom": [
+   0,
+   1
+  ],
   "T:bandwidth": [
    1,
    1
   ],
   "T:bibi": [
    0,
-   1
+   2
   ],
   "T:biden (3+ times)": [
    0,
@@ -904,6 +940,10 @@
    1,
    1
   ],
+  "T:fire and fury": [
+   0,
+   1
+  ],
   "T:fiscal#10+": [
    0,
    1
@@ -942,6 +982,10 @@
   ],
   "T:guitar": [
    1,
+   1
+  ],
+  "T:hakeem/jeffries": [
+   0,
    1
   ],
   "T:health": [
@@ -986,6 +1030,10 @@
   ],
   "T:immigration": [
    0,
+   1
+  ],
+  "T:impeach/impeached/impeachment": [
+   1,
    1
   ],
   "T:infrastructure": [
@@ -1066,6 +1114,10 @@
   ],
   "T:nhs": [
    0,
+   1
+  ],
+  "T:not on the ballot": [
+   1,
    1
   ],
   "T:nuclear#20+": [
@@ -1161,8 +1213,8 @@
    1
   ],
   "T:rigged": [
-   0,
-   2
+   1,
+   3
   ],
   "T:right#50+": [
    1,
@@ -1208,6 +1260,10 @@
    1,
    1
   ],
+  "T:stock market": [
+   1,
+   1
+  ],
   "T:strange": [
    0,
    1
@@ -1225,6 +1281,10 @@
    2
   ],
   "T:tesla": [
+   0,
+   1
+  ],
+  "T:thanksgiving": [
    0,
    1
   ],
@@ -1246,6 +1306,10 @@
   ],
   "T:uranium": [
    0,
+   1
+  ],
+  "T:veto": [
+   1,
    1
   ],
   "T:wakanda": [
@@ -1291,6 +1355,10 @@
   "W:starmer-pmqs": [
    4,
    9
+  ],
+  "W:trump-weekly-mentions": [
+   5,
+   10
   ],
   "W:what will trump say veterans day remarks arlington": [
    4,
@@ -1876,6 +1944,46 @@
    0,
    1
   ],
+  "WT:trump-weekly-mentions|ballroom": [
+   0,
+   1
+  ],
+  "WT:trump-weekly-mentions|bibi": [
+   0,
+   1
+  ],
+  "WT:trump-weekly-mentions|fire and fury": [
+   0,
+   1
+  ],
+  "WT:trump-weekly-mentions|hakeem/jeffries": [
+   0,
+   1
+  ],
+  "WT:trump-weekly-mentions|impeach/impeached/impeachment": [
+   1,
+   1
+  ],
+  "WT:trump-weekly-mentions|not on the ballot": [
+   1,
+   1
+  ],
+  "WT:trump-weekly-mentions|rigged": [
+   1,
+   1
+  ],
+  "WT:trump-weekly-mentions|stock market": [
+   1,
+   1
+  ],
+  "WT:trump-weekly-mentions|thanksgiving": [
+   0,
+   1
+  ],
+  "WT:trump-weekly-mentions|veto": [
+   1,
+   1
+  ],
   "WT:what will trump say veterans day remarks arlington|allah": [
    0,
    1
@@ -2076,6 +2184,16 @@
   "6766355": 1794805140,
   "6766356": 1794805140,
   "6766357": 1794805140,
+  "6906888": 1794805140,
+  "6906889": 1794805140,
+  "6906890": 1794805140,
+  "6906891": 1794805140,
+  "6906892": 1794805140,
+  "6906893": 1794805140,
+  "6906894": 1794805140,
+  "6906895": 1794805140,
+  "6906896": 1794805140,
+  "6906897": 1794805140,
   "6964823": 1794441540,
   "6964824": 1794441540,
   "6964825": 1794441540,
@@ -2102,5 +2220,5 @@
   "7000399": 1794718740,
   "7000402": 1794718740
  },
- "synced": 1794811990
+ "synced": 1794814179
 }
