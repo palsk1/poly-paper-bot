@@ -17336,3 +17336,11 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXATPCHALLENGERMATCH-26NOV16TARPOL-POL", "track": "kalshi_patient", "ts": "2026-11-16T14:12:20Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXUST10AD-26NOV16-T5.05", "track": "kalshi_patient", "ts": "2026-11-16T14:12:20Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLEQBTTS-26NOV16LACBAL-Y", "track": "kalshi_patient", "ts": "2026-11-16T14:12:20Z", "type": "kpatient_order"}
+{"cost": 4.437, "title": "Will Bitcoin dip to $58,000 November 16-22?", "token": "43750277226045331089775796935984916112834409176322649514188420538698629739226", "track": "crypto_no", "ts": "2026-11-16T14:24:08Z", "type": "skip_no_cash"}
+{"minutes_left": 4.57, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker", "ts": "2026-11-16T14:25:28Z", "type": "kmaker_order"}
+{"minutes_left": 4.57, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker_safe", "ts": "2026-11-16T14:25:28Z", "type": "kmaker_order"}
+{"minutes_left": 4.57, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker_safe_usd", "ts": "2026-11-16T14:25:28Z", "type": "kmaker_order"}
+{"filled": 1.34, "price": 0.94, "side": "no", "through": true, "ticker": "KXNASDAQ100U-26NOV16H1000-T27919.99", "track": "kalshi_patient", "ts": "2026-11-16T14:25:32Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KXNASDAQ100U-26NOV16H1600-T26849.99", "track": "kalshi_patient", "ts": "2026-11-16T14:25:32Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFL1HFT-26NOV16LACBAL-LACBAL", "track": "kalshi_patient", "ts": "2026-11-16T14:25:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUEFANLTEAMTOTAL-26NOV16SUISCO-SCO3", "track": "kalshi_patient", "ts": "2026-11-16T14:25:36Z", "type": "kpatient_fill"}
