@@ -105,6 +105,41 @@ def peek4():
             print("  pic", json.dumps({k: x.get(k) for k in ("date", "text", "media_text", "image_url", "post_url", "id", "document_id", "platform", "repost_flag", "is_retweet")})[:1500], flush=True)
 
 
+def do_posts(pages=110):
+    """Trump's Truth Social posts from Roll Call's post feed, newest first, with the text read out of pictures
+    (social.media_text) -> bt_cache/sp/social.json.gz. 110 pages of 50 reach back to about December 2025."""
+    import collections, json, time
+    out = rj(cache("social.json.gz"), {}) or {}
+    for page in range(1, pages + 1):
+        d = None
+        for a in range(4):
+            try:
+                d = json.loads(raw(f"https://rollcall.com/wp-json/factbase/v1/twitter?page={page}&format=json&platform=truth+social", 60))
+                break
+            except Exception as e:
+                print("  posts page failed", page, str(e)[:100], flush=True)
+                time.sleep(3 + 3 * a)
+        if not d or not d.get("data"):
+            continue
+        for x in d["data"]:
+            so = x.get("social") or {}
+            out[str(x["id"])] = {"date": x.get("date"), "text": x.get("text") or "", "pic": [t for t in (so.get("media_text") or []) if t],
+                                 "media": so.get("media_count") or 0, "quote": bool(so.get("quote_flag")), "quote_id": so.get("quote_id"),
+                                 "repost": bool(so.get("repost_flag")), "deleted": bool(x.get("deleted_flag")), "words": x.get("word_count")}
+        if page % 20 == 0:
+            print("  page", page, len(out), d["data"][-1].get("date"), flush=True)
+        time.sleep(0.25)
+    wj(cache("social.json.gz"), out)
+    v = list(out.values())
+    print("posts", len(v), "from", min(x["date"] for x in v), "to", max(x["date"] for x in v), flush=True)
+    print("with picture text", sum(1 for x in v if x["pic"]), "with media", sum(1 for x in v if x["media"]), "reposts", sum(1 for x in v if x["repost"]),
+          "quotes", sum(1 for x in v if x["quote"]), "text is only [Video]/[Image]/RT link", sum(1 for x in v if re.fullmatch(r"\[\w+\]|RT: https?://\S+", x["text"].strip())), flush=True)
+    mon = collections.Counter((x["date"][:7], bool(x["pic"])) for x in v if x["media"])
+    print("media posts by month (with picture text / without)", sorted((m, mon[(m, True)], mon[(m, False)]) for m in {k[0] for k in mon}), flush=True)
+    for x in [x for x in v if x["pic"]][:6]:
+        print("  sample", x["date"], repr(x["text"][:120]), "| PIC", repr(" ".join(x["pic"])[:300]), flush=True)
+
+
 def wj(path, obj):
     import gzip, json, os
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -644,4 +679,4 @@ def kalshi(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
