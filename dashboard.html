@@ -127,6 +127,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <b class="neg">Losing</b>: it's losing money, even if we assume it was unlucky.<br>
   <b>Too early to tell</b>: fewer than 10 finished bets. Ignore it for now.</p>
   <p class="note"><b>What "worst case per $100" means:</b> it is <i>not</i> "what if every open bet loses". It looks only at finished bets, adds one made-up bet that lost everything, and asks: how bad could this strategy really be and still give the results we saw? We set that bar high because we run over 100 strategies at once. <b>−$100 is the floor.</b> It usually means "too few bets to say", or bets that swing a lot (cheap long shots), not "this is a disaster". "Best case" is the other end: if even that is below $0, the losses aren't just bad luck.</p>
+  <p class="note"><b>Do the tags change?</b> Yes, they are worked out again every 5 minutes. They just move slowly, on purpose. A strategy that makes 20 cents per $100 needs thousands of bets before luck is ruled out, while one that makes $5 per $100 needs a few hundred. So each strategy now says how many more finished bets it needs (and roughly how many days) before its tag would change, if it keeps going the way it has so far.</p>
   <p class="note">We also run random buyers that pick bets by coin flip. A strategy that can't beat them is just luck.</p>
   <div class="counts" id="luckcounts"></div>
   <div class="card" id="luck"></div>
@@ -172,6 +173,26 @@ const worstLine = t => t.trust.finished === 0 ? `worst case: no finished bets ye
 const FLOOR = x => x != null && x <= -99.99;  // worst case hit the -$100 floor: too few or too swingy bets to say anything
 const worstTxt = x => FLOOR(x) ? `${M(x)} <span class="tag">the floor: too few bets to say</span>` : M(x);
 const vd = t => `<span class="vd ${t.pv[0]}">${esc(t.pv[1])}</span>`;  // plain verdict, computed in bot.plain_verdict
+// Jan, 16 Nov: "do the tags ever change?" They do, but slowly. One line on how far each strategy is from its next tag,
+// if it keeps going exactly as it has so far (to_go from bot.bets_to_go, pace = finished bets a day over the last week).
+const nf = x => Math.round(x).toLocaleString("en-US");
+function goWhen(n, pace) {
+  if (!pace) return " (none finished this week, so no date)";
+  const d = n / pace;
+  return d < 1 ? " (under a day at this week's pace)" : d < 60 ? ` (about ${nf(d)} day${nf(d) === "1" ? "" : "s"} at this week's pace)`
+    : d < 730 ? ` (about ${nf(d / 30)} months at this week's pace)` : " (years at this week's pace)";
+}
+function goLine(t) {
+  const tr = t.trust, k = t.pv[0];
+  if (k === "luck" || t.stopped) return "";
+  if (tr.finished < FEW) { const n = FEW - tr.finished; return `Gets its first real tag after ${n} more finished bet${n === 1 ? "" : "s"}${goWhen(n, t.pace)}.`; }
+  if (tr.to_go == null || tr.to_go === 0) return "";
+  if (tr.to_go < 0) return "Even if it keeps going like this, it can't prove itself: it wins too little per bet for how much it swings.";
+  const n = `${nf(tr.to_go)} more finished bet${tr.to_go === 1 ? "" : "s"}${goWhen(tr.to_go, t.pace)}`;
+  return tr.to_go_to === "Losing" ? `If it keeps losing like this: about ${n} until it's clearly "Losing".`
+    : `If it keeps going like this: about ${n} to reach "${esc(tr.to_go_to)}".`;
+}
+const goDiv = t => { const g = goLine(t); return g ? `<div class="sub" style="margin-top:3px">${g}</div>` : ""; };
 const why = r => String(r || "").replace(/,? \(?(book|estimate)\)?$/, "").replace(/^resolved$/, "market ended")
   .replace(/^take profit \(now (\d+c)\)$/, "sold early for a profit at $1").replace(/^wallet exit$/, "the wallet sold, so we sold")
   .replace(/^all wallets left$/, "all copied wallets sold, so we sold");
@@ -319,7 +340,7 @@ function miniCard(t, rank) {
       <div class="grow"><div class="name">${esc(t.name)}${tags(t)}</div>
         ${t.plain && t.plain.say ? `<div class="oneliner">${esc(t.plain.say)}</div>` : ""}
         <div class="pot">${pot(t)}</div>
-        <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished · ${worstLine(t)}</div><div style="margin-top:4px">${vd(t)}</div></div>
+        <div class="meta">today ${M(t.today)} · ${t.trust.finished} finished · ${worstLine(t)}</div><div style="margin-top:4px">${vd(t)}</div>${goDiv(t)}</div>
       <div>${spark(t)}</div></div></div>`;
 }
 (function top() {
@@ -343,7 +364,7 @@ function luck() {
   $("luckcounts").innerHTML = keys.map(([k, l]) => `<span class="vd ${k}">${l}: ${real.filter(t => t.pv[0] === k).length}</span>`).join("");
   if (!shown.length) { el.innerHTML = "No strategy has 3 finished bets yet."; $("luckmore").style.display = "none"; return; }
   el.innerHTML = shown.map(t => `<div class="vrow${stopCls(t)}" data-n="${esc(t.name)}">
-      <div class="n">${esc(t.name)}<div style="margin-top:3px;font-weight:400">${vd(t)}</div></div>
+      <div class="n">${esc(t.name)}<div style="margin-top:3px;font-weight:400">${vd(t)}</div><div style="font-weight:400">${goDiv(t)}</div></div>
       <div class="m">${t.wins} won, ${t.losses} lost<br>${M(t.pnl)}</div></div>`).join("");
   $("luckmore").textContent = luckAll ? "Show fewer" : `Show all ${rows.length}`;
   $("luckmore").style.display = rows.length > shown.length || luckAll ? "" : "none";
@@ -400,7 +421,7 @@ function detail(n) {
   let h = `<div class="card"><div class="name" style="font-size:17px">${esc(t.name)}${tags(t)}</div>
     ${t.stopped ? `<p class="sub warn"><b>Stopped${stopDay(t)}.</b> It makes no new bets. Bets it already had still finish and count. Its history stays here so you can look back.${t.stopped.why ? ` Why: ${esc(t.stopped.why)}` : ""}</p>` : ""}
     <div class="pot big">${pot(t)}</div>
-    <div style="margin:4px 0">${vd(t)}</div>
+    <div style="margin:4px 0">${vd(t)}</div>${goDiv(t)}
     ${plainCard(t)}
     ${t.plain ? `<details><summary>The exact rule (for the nerds)</summary><p class="sub">${esc(t.label)}</p></details>` : `<p class="sub">${esc(t.label)}</p>`}
     ${t.wnote ? `<p class="sub"><b>What this wallet does</b> (from its whole history): ${esc(t.wnote)}</p>` : ""}

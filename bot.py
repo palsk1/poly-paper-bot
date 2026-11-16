@@ -5505,8 +5505,49 @@ def trust(tr, n_tracks=None, size="rank"):
         r = [p / b for p, b in rows]
         sd_r = math.sqrt(sum((x - avg) ** 2 for x in r) / (n - 1))
         best = round((avg + NormalDist().inv_cdf(0.95) * sd_r / math.sqrt(n)) * 100, 2)
-    return {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
-            "worst_per_100": round(worst * 100, 2), "best_per_100": best, "proven": proven}
+    out = {"finished": n, "profit": round(sum(p for p, _ in rows), 4), "avg_per_100": round(avg * 100, 2),
+           "worst_per_100": round(worst * 100, 2), "best_per_100": best, "proven": proven}
+    out.update(bets_to_go(rows, alpha, rk))
+    return out
+
+
+def bets_to_go(rows, alpha, rk=None, few=10, cap=1_000_000):
+    """Jan, 16 Nov: "do the tags ever change?" They do, but slowly. Display only: if a strategy keeps winning or losing
+    exactly as it has so far (same average, same swings), how many MORE finished bets until its plain verdict flips?
+    Returns {"to_go": n or -1 (never at this pace: the lead is too thin), "to_go_to": the verdict it would reach} or {}."""
+    rk = rk or {}
+    n = len(rows)
+    if n < 2:
+        return {}
+    r = [p / b for p, b in rows]
+    a = sum(r) / n
+    var = sum((x - a) ** 2 for x in r) / (n - 1)
+    k = int(rk.get("phantom_losses", 1))
+    z = NormalDist().inv_cdf(1 - alpha)
+    need = rk.get("min_trades_proven", 30)
+
+    def worst_at(N):  # same math as trust(): N real bets with this average and spread, plus k made-up total losses
+        m = N + k
+        mean = (N * a - k) / m
+        ss = (N - 1) * var + N * (a - mean) ** 2 + k * (1 + mean) ** 2
+        return mean - z * math.sqrt(ss / (m - 1)) / math.sqrt(m)
+
+    if worst_at(n) > 0:
+        return {"to_go": need - n, "to_go_to": "Looks real"} if n < need else {}
+    if a > 0:
+        if worst_at(cap) <= 0:
+            return {"to_go": -1, "to_go_to": "Promising, needs more bets"}
+        lo, hi = n, cap
+        while hi - lo > 1:
+            mid = (lo + hi) // 2
+            lo, hi = (mid, hi) if worst_at(mid) <= 0 else (lo, mid)
+        return {"to_go": max(hi, few) - n, "to_go_to": "Looks real" if hi >= need else "Promising, needs more bets"}
+    if a < 0:
+        best_n = math.ceil((NormalDist().inv_cdf(0.95) * math.sqrt(var) / -a) ** 2) + 1
+        if best_n <= n:
+            return {}  # already "Losing"
+        return {"to_go": max(best_n, few) - n, "to_go_to": "Losing"}
+    return {"to_go": -1, "to_go_to": None}
 
 
 def plain_verdict(t, control=False, few=10):
