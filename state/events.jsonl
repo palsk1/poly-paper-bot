@@ -17818,3 +17818,4 @@
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV161430-30", "track": "kc_maker", "ts": "2026-11-16T19:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV161430-30", "track": "kc_maker_safe", "ts": "2026-11-16T19:32:41Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV161430-30", "track": "kc_maker_safe_usd", "ts": "2026-11-16T19:32:41Z", "type": "kmaker_fill"}
+{"fee": 0.0096, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Amsterdam be 11\u00b0C on November 17?", "token": "86470082233541391712214804426970141493666847483981148787449736911634369384308", "track": "endgame_sell98", "ts": "2026-11-16T19:37:03Z", "type": "paper_buy"}
