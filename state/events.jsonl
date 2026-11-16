@@ -16647,3 +16647,4 @@
 {"filled": 10.0, "pnl": 0.19, "price": 0.981, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV160145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T06:46:50Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.16, "price": 0.984, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV160145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T06:46:50Z", "type": "kmaker_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUEFANLSCORE-26NOV16GRESRB-GRE3SRB1", "track": "kalshi_patient", "ts": "2026-11-16T06:46:56Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.0979, "price": 0.986, "reason": "take profit (now 99c), book", "title": "Will Elon Musk post 140-164 tweets from November 14 to November 16, 2026?", "token": "17583701480255828805763998285955275170286366255757513525033590955182559100175", "track": "endgame_sell98", "ts": "2026-11-16T06:50:51Z", "type": "paper_close"}
