@@ -5,6 +5,7 @@ Reads state/ and config.json only; never writes to state/ (the scoreboard is com
     python3 dashboard.py --offline  # no network: open bets valued at their entry price (for local tests)
 Paper money only, like everything else here.
 """
+import calendar
 import collections
 import datetime as dt
 import json
@@ -219,6 +220,27 @@ COMBO_POT, COMBO_STAKE = 300.0, 5.0    # display only: the locked pass rule (PRO
 KFAST_POT = 100.0                      # like the kc_maker tracks: $100, about $10 an order
 
 
+def pace(times):
+    """Finished bets per day over the last 7 days (or since the first one, if newer). times: epoch seconds."""
+    now = time.time()
+    times = [t for t in times if t]
+    if not times:
+        return None
+    start = max(now - 7 * 86400, min(times))
+    days = max((now - start) / 86400, 1.0)
+    return round(sum(1 for t in times if t >= start) / days, 1)
+
+
+def closed_times(tr):
+    out = []
+    for c in tr.get("closed", []):
+        try:
+            out.append(calendar.timegm(time.strptime(str(c.get("closed_at") or "")[:16], "%Y-%m-%dT%H:%M")))
+        except ValueError:
+            pass
+    return out
+
+
 def iso_s(sec):
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(sec))
 
@@ -242,6 +264,7 @@ def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None,
             "realized": r2(pnl), "open": waiting, "waiting": [], "orders": [], "closed": len(bets), "wins": wins,
             "losses": len(bets) - wins, "cash": r2(pot + pnl - tied), "deposited": r2(pot), "needed": None, "risked": r2(risk),
             "trust": tr, "paper": None, "pv": bot.plain_verdict(tr), "verdict": None, "curve": cv, "bets": [], "n_bets": waiting,
+            "pace": pace([t for t, _, _ in bets]),
             "recent": recent or [], "late": None, "first_end": None, "wnote": None, "wstyle": None, "rs": None,
             "status": None, "mk": None, "extra": extra or [], "notes": notes or [],
             "legend": "Profit from finished bets, added up over time"}
@@ -408,6 +431,7 @@ def build(offline=False):
             "open": s["open"] - len(waiting) - len(orders), "waiting": waiting, "orders": orders, "closed": s["closed"], "wins": s["wins"], "losses": s["losses"],
             "cash": r2(s.get("cash")), "deposited": r2(s.get("deposited")), "needed": r2(s.get("money_needed")),
             "trust": s["trust"], "paper": s.get("trust_paper"), "pv": bot.plain_verdict(s["trust"], n.startswith("control_")), "verdict": (s.get("proof") or {}).get("verdict"),
+            "pace": pace(closed_times(tr)),
             "curve": curve(tr, s["pnl"]), "bets": ob, "n_bets": n_open, "recent": recent_closed(tr),
             "late": late_copy(tr), "first_end": first_end(tr),
             "wnote": notes.get(str(tc.get("address", "")).lower()) if tc.get("source") == "wallet" else None,
