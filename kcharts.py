@@ -246,7 +246,7 @@ def looks(ms, tp, hours=HOURS):
     evs = collections.defaultdict(list)
     for m in ms.values():
         evs[m["ev"]].append(m)
-    first = {e: min(m["close"] for m in L) for e, L in evs.items()}
+    first = {e: ev_close(L) for e, L in evs.items()}
     by_s = collections.defaultdict(list)
     for e, L in evs.items():
         by_s[L[0]["s"]].append(e)
@@ -436,7 +436,185 @@ def do_daily(first="2025-01-01"):
                 print(k, key, h, "|", r[:10])
 
 
+def ev_close(L):
+    """The event's planned close: the close time most of its markets share (a doubled market that Kalshi pulls closes days early)."""
+    return collections.Counter(m["close"] for m in L).most_common(1)[0][0]
+
+
+# ---------------------------------------------------------------- the daily top 10 as outside knowledge
+DAY = 86400
+KNOWN_H = 30               # a list dated D counts as readable from D + 30 hours UTC (the day after, 06:00)
+
+
+def tkey(w):
+    w = re.sub(r"\(.*?\)", "", str(w).lower())
+    w = re.split(r":\s*(season|limited series|s\d+\b|part \d|volume|vol\.|book|chapter \d)", w)[0]
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", w.replace("&", "and"))).strip()
+
+
+def day_lists(kind):
+    """{date: {title key: rank}} of the US daily top 10; kind 'tv' or 'movie'."""
+    out = {}
+    for k, v in (rj(DAILY, {}) or {}).items():
+        for h, rows in v.get("us") or []:
+            if rows and (("TV" in h) == (kind == "tv")):
+                out[dt.date.fromisoformat(k)] = {tkey(t): r for r, t, _ in rows}
+    return out
+
+
+def week_of(ev):
+    """Monday of the viewing week from an event ticker like KXNETFLIXRANKSHOW-26NOV09 (list out the day after that date)."""
+    d = dt.datetime.strptime(ev.rsplit("-", 1)[1], "%y%b%d").date()
+    return d - dt.timedelta(days=7)
+
+
+def points(lists, mon, t, lag):
+    """Points per title from the week's daily lists readable at time t (10 for a day at #1 ... 1 for #10), the count of
+    lists used, and the newest list's #1."""
+    pts, n, top = collections.Counter(), 0, None
+    for i in range(7):
+        d = mon + dt.timedelta(days=i + lag)
+        if dt.datetime(d.year, d.month, d.day, tzinfo=dt.timezone.utc).timestamp() + KNOWN_H * 3600 > t:
+            break
+        L = lists.get(d)
+        if not L:
+            continue
+        n += 1
+        for k, r in L.items():
+            pts[k] += 11 - r
+            if r == 1:
+                top = k
+    return pts, n, top
+
+
+def feat(pts, n, top, k):
+    """The cell a title sits in: lists so far, leader or not, how clear, and who holds today's #1."""
+    order = sorted(pts.values(), reverse=True) + [0, 0]
+    mine = pts.get(k, 0)
+    lead = mine > 0 and mine == order[0]
+    gap = (mine - (order[1] if lead else order[0])) / (10.0 * max(1, n))
+    g = 0 if abs(gap) < 0.1 else 1 if abs(gap) < 0.3 else 2
+    nb = 1 if n <= 2 else 2 if n <= 4 else 3 if n <= 6 else 4
+    return (nb, "lead" if lead else "chase" if mine > 0 else "absent", g, top == k)
+
+
+def daily_rows(pick="KXNETFLIXRANK(SHOW|MOVIE)$", lag=1, step_h=6):
+    """Every `step_h` hours of every US #1 market: the Kalshi bid/ask next to the title's cell from the daily lists."""
+    ms, tp = load(pick)
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m)
+    L = {"tv": day_lists("tv"), "movie": day_lists("movie")}
+    rows = []
+    for e, M in evs.items():
+        kind = "tv" if "SHOW" in e else "movie"
+        mon, T = week_of(e), ev_close(M)
+        keys = collections.Counter(tkey(m["w"]) for m in M)
+        op = min(m["open"] for m in M)
+        t = (op // 3600 + 2) * 3600
+        while t < T - 3600:
+            pts, n, top = points(L[kind], mon, t, lag)
+            if n:
+                for m in M:
+                    k = tkey(m["w"])
+                    v = tp.get(m["t"])
+                    if keys[k] > 1 or not v or not v["c"] or m["close"] != T:
+                        continue
+                    c = None
+                    for x in v["c"]:
+                        if x[0] > t:
+                            break
+                        c = x
+                    if not c or c[1] is None or c[2] is None or t - c[0] > 3 * 3600:
+                        continue
+                    rows.append({"tk": m["t"], "ev": e, "t": t, "bid": c[1], "ask": c[2], "yes": m["res"] == "yes", "w": m["w"],
+                                 "f": feat(pts, n, top, k), "n": n, "kind": kind, "pts": pts.get(k, 0), "left": (T - t) / 3600})
+            t += step_h * 3600
+    return rows
+
+
+def with_chance(rows, min_seen=15):
+    """Walk forward: each event's chance per cell comes only from events that closed before it opened (a week earlier)."""
+    evs = sorted({r["ev"] for r in rows}, key=lambda e: week_of(e))
+    by = collections.defaultdict(list)
+    for r in rows:
+        by[r["ev"]].append(r)
+    cnt, out, done = collections.defaultdict(lambda: [0, 0]), [], []
+    for e in evs:
+        w = week_of(e)
+        while done and week_of(done[0]) < w:           # only weeks that finished before this one started
+            for r in by[done.pop(0)]:
+                c = cnt[r["f"]]
+                c[0] += r["yes"]
+                c[1] += 1
+        for r in by[e]:
+            y, n = cnt[r["f"]]
+            if n >= min_seen:
+                out.append(dict(r, q=(y + 1) / (n + 2), seen=n))
+        done.append(e)
+    return out
+
+
+def first_bets(rows, gap=0.10, extra=0.0, side="both", lo=0.03, hi=0.97, max_gap=0.15):
+    """One bet per market: the first look where the chance is `gap` above the asking price (Yes) or below the bid (No)."""
+    out, used = [], set()
+    for r in sorted(rows, key=lambda r: r["t"]):
+        if r["tk"] in used or r["ask"] - r["bid"] > max_gap or r["bid"] < 0.005:
+            continue
+        b = None
+        if side in ("both", "yes") and lo <= r["ask"] <= hi and r["q"] - r["ask"] >= gap:
+            p = r["ask"] + extra
+            b = {"cost": p + fee(p), "pay": 1.0 if r["yes"] else 0.0, "p": p, "side": "yes"}
+        elif side in ("both", "no") and lo <= 1 - r["bid"] <= hi and r["bid"] - r["q"] >= gap:
+            p = 1 - r["bid"] + extra
+            b = {"cost": p + fee(p), "pay": 0.0 if r["yes"] else 1.0, "p": p, "side": "no"}
+        if b:
+            used.add(r["tk"])
+            b.update(pnl=b["pay"] - b["cost"], ev=r["ev"], t=r["t"], tk=r["tk"], w=r["w"], q=r["q"], f=r["f"], kind=r["kind"], left=r["left"])
+            out.append(b)
+    return out
+
+
+def daily_run(pick="KXNETFLIXRANK(SHOW|MOVIE)$"):
+    for lag in (0, 1):
+        rows = daily_rows(pick, lag)
+        last = {}
+        for r in rows:                                   # does the points leader of the full week win?
+            if r["n"] == 7:
+                last.setdefault(r["ev"], []).append(r)
+        hit = sum(1 for L in last.values() if any(r["yes"] and r["f"][1] == "lead" for r in L))
+        won = sum(1 for L in last.values() if any(r["yes"] for r in L))
+        print(f"lag {lag}: rows {len(rows)}, events {len({r['ev'] for r in rows})}, weeks with all 7 lists {len(last)}, "
+              f"winner listed {won}, winner is the points leader {hit}")
+    rows = with_chance(daily_rows(pick, 1))
+    print("rows with a chance", len(rows), "events", len({r["ev"] for r in rows}))
+    cal = collections.defaultdict(lambda: [0, 0, 0.0, 0.0])
+    for r in rows:
+        c = cal[round(r["q"] * 10) / 10]
+        c[0] += r["yes"]; c[1] += 1; c[2] += (r["bid"] + r["ask"]) / 2; c[3] += r["q"]
+    print("how good is the chance? (chance bucket: rows, won share, model, Kalshi middle price)")
+    for k in sorted(cal):
+        y, n, p, q = cal[k]
+        print(f"  {k:.1f}: {n:5d} won {y / n:.2f} model {q / n:.2f} price {p / n:.2f}")
+    bs = lambda p, key: sum((r[key] if key == "q" else (r["bid"] + r["ask"]) / 2 - r["yes"]) ** 2 for r in rows) / len(rows)
+    print("miss score (lower is better): model", round(sum((r["q"] - r["yes"]) ** 2 for r in rows) / len(rows), 4),
+          "Kalshi price", round(sum(((r["bid"] + r["ask"]) / 2 - r["yes"]) ** 2 for r in rows) / len(rows), 4))
+    for gap in (0.05, 0.10, 0.15, 0.25):
+        for side in ("yes", "no", "both"):
+            print(line(f"gap {gap} {side}", first_bets(rows, gap, side=side)))
+    b = first_bets(rows, 0.10)
+    for nm, f in (("tv", lambda x: x["kind"] == "tv"), ("movie", lambda x: x["kind"] == "movie"),
+                  ("72h+ left", lambda x: x["left"] >= 72), ("24-72h left", lambda x: 24 <= x["left"] < 72), ("under 24h left", lambda x: x["left"] < 24),
+                  ("leader", lambda x: x["f"][1] == "lead"), ("chaser", lambda x: x["f"][1] == "chase"), ("absent", lambda x: x["f"][1] == "absent")):
+        print(line(f"  gap 0.10 both, {nm}", [x for x in b if f(x)]))
+    print(line("gap 0.10 both +2c", first_bets(rows, 0.10, extra=0.02)))
+    return rows
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "drun":
+        daily_run()
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1].startswith("daily"):
         do_daily(sys.argv[1][6:] or "2025-01-01")
         sys.exit(0)
