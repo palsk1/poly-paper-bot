@@ -17,8 +17,8 @@
   },
   "2026-11-16": {
    "failed": 0,
-   "muted": 27,
-   "sent": 3
+   "muted": 45,
+   "sent": 4
   }
  },
  "recent": [
@@ -267,6 +267,12 @@
    "title": "[kc_maker] FLIP: a late favorite lost ($-9.53)",
    "track": "kc_maker",
    "ts": "2026-11-16T02:17:28Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-16T05:12:35Z"
   }
  ]
 }
