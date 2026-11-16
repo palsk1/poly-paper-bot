@@ -16753,3 +16753,19 @@
 {"minutes_left": 3.01, "price": 0.995, "queue": 289.82, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:42:03Z", "type": "kmaker_order"}
 {"minutes_left": 3.01, "price": 0.99, "queue": 41.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:42:03Z", "type": "kmaker_order"}
 {"minutes_left": 3.01, "price": 0.99, "queue": 41.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:42:04Z", "type": "kmaker_order"}
+{"fee": 0.0539, "outcome": "Yes", "price": 0.19, "shares": 5, "title": "Will Bitcoin dip to $60,000 November 16-22?", "token": "30250182261678678596385676548750355222731451945185717270842183055188761939973", "track": "w_tokor", "ts": "2026-11-16T07:45:46Z", "type": "paper_buy"}
+{"fee": 0.0539, "outcome": "Yes", "price": 0.19, "shares": 5, "title": "Will Bitcoin dip to $60,000 November 16-22?", "token": "30250182261678678596385676548750355222731451945185717270842183055188761939973", "track": "wb_tokor", "ts": "2026-11-16T07:45:47Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.86, "price": 0.986, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:21Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:21Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.95, "price": 0.995, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:22Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV160245-45", "track": "kc_maker", "ts": "2026-11-16T07:47:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.86, "price": 0.986, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.95, "price": 0.995, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV160245-45", "track": "kc_maker_safe", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV160245-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160245-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T07:47:24Z", "type": "kmaker_fill"}

@@ -18,7 +18,7 @@
   "2026-11-16": {
    "failed": 0,
    "muted": 62,
-   "sent": 4
+   "sent": 8
   }
  },
  "recent": [
@@ -273,6 +273,30 @@
    "title": "Paper top 10",
    "track": null,
    "ts": "2026-11-16T05:12:35Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.86)",
+   "track": "kc_maker",
+   "ts": "2026-11-16T07:47:20Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.95)",
+   "track": "kc_maker",
+   "ts": "2026-11-16T07:47:23Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.86)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-16T07:47:24Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.95)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-16T07:47:24Z"
   }
  ]
 }
