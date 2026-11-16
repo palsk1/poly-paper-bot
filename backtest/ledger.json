@@ -1908,6 +1908,32 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kcharts.py winners, backtest/kcharts.md"
+  },
+  {
+   "id": "kalshi_spotify_weekly_1_song_us_buy_where_the_daily_play_cou",
+   "date": "2026-11-16",
+   "what": "Kalshi Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price",
+   "tries": 60,
+   "bets": 17,
+   "groups": 15,
+   "per100": 3.01,
+   "floor100": -64.76,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "spotw.py, backtest/spotify.md"
+  },
+  {
+   "id": "polymarket_spotify_weekly_1_song_us_buy_where_the_daily_play",
+   "date": "2026-11-16",
+   "what": "Polymarket Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price",
+   "tries": 60,
+   "bets": 12,
+   "groups": 10,
+   "per100": -58.89,
+   "floor100": -100.0,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "spotw.py, backtest/spotify.md"
   }
  ]
 }

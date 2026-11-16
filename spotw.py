@@ -1,6 +1,10 @@
 """Spotify's weekly #1 song bets (Polymarket now, Kalshi until July 2026) vs the real daily play counts. Paper research.
 
-  python3 spotw.py peek      # probe spw_peek: where the daily play counts per song can be read
+  python3 spotw.py peek | peek2   # probes spw_peek, spw_peek2: where the daily play counts per song can be read
+  python3 spotw.py fetch          # probe spw_fetch: kworb's song pages (last ~31 chart days per song) -> bt_cache/spw/tracks.json.gz
+  python3 spotw.py usdaily        # US daily top 50 with play counts since 2019 -> bt_cache/spw/us.json.gz
+  python3 spotw.py run            # the play-count record against Kalshi's and Polymarket's prices
+  python3 spotw.py report         # shared-exam lines; write-up in backtest/spotify.md
 """
 import collections, datetime as dt, os, re, sys, time
 
@@ -164,6 +168,255 @@ def do_fetch(maxpeak=3):
     print("done", len(T), "of", len(want), "failed", bad, "with days", sum(1 for v in T.values() if v["d"]), flush=True)
 
 
+US_SRC = "https://raw.githubusercontent.com/sdevarajan2006/spotify-chart-markov-chain/main/data/spotify_us_daily_top200_2017_2026.csv.gz"
+
+
+def do_usdaily(first="2019-01-01", top=50):
+    """Spotify's US daily top 50 per day with play counts -> bt_cache/spw/us.json.gz  {day: [[spotify id, title, plays], ...]}
+    Until 17 Sep 2026 from a public GitHub copy of Spotify's own daily charts, the newest month from kworb's song pages (do_fetch)."""
+    import csv, gzip, io, urllib.request
+    os.makedirs(CACHE, exist_ok=True)
+    raw_gz = urllib.request.urlopen(urllib.request.Request(US_SRC, headers={"User-Agent": "Mozilla/5.0"}), timeout=120).read()
+    out = {}
+    for r in csv.DictReader(io.TextIOWrapper(gzip.GzipFile(fileobj=io.BytesIO(raw_gz)), encoding="utf-8")):
+        if r["chart_date"] >= first and int(r["rank"]) <= top:
+            out.setdefault(r["chart_date"], []).append([r["track_uri"].split(":")[-1], r["track_name"], int(r["streams"])])
+    last = max(out)
+    f = os.path.join(CACHE, "tracks.json.gz")
+    add = 0
+    for i, v in (rj(f) if os.path.exists(f) else {}).items():
+        for day, (gp, gs, up, us) in v["d"].items():
+            if day > last and us and up <= top:
+                out.setdefault(day, []).append([i, v["t"], us])
+                add += 1
+    for L in out.values():
+        L.sort(key=lambda x: -x[2])
+    wj(os.path.join(CACHE, "us.json.gz"), out)
+    ds = sorted(out)
+    print("days", len(ds), ds[0], ds[-1], "GitHub copy ends", last, "rows from kworb", add,
+          "days with under 5 songs", [d for d in ds if len(out[d]) < 5][:20], flush=True)
+
+
+EDGES = (-0.30, -0.15, -0.08, -0.04, -0.02, 0.0, 0.02, 0.04, 0.08, 0.15, 0.30)
+
+
+def weeks(lag_h=24):
+    """One row per Spotify week (Friday to Thursday), known days k = 1..6 and song near the top:
+    plays so far + the last known day repeated for the days left, and how far that is from the best other song."""
+    U = rj(os.path.join(CACHE, "us.json.gz"))
+    ds = sorted(U)
+    d = dt.date.fromisoformat(ds[0])
+    d += dt.timedelta(days=(4 - d.weekday()) % 7)
+    out = {}
+    prev_ids = set()
+    while d + dt.timedelta(6) <= dt.date.fromisoformat(ds[-1]):
+        days = [(d + dt.timedelta(i)).isoformat() for i in range(7)]
+        if all(len(U.get(x, [])) >= 20 for x in days):
+            tot, name = collections.Counter(), {}
+            per = []
+            for x in days:
+                c = {i: n for i, t, n in U[x]}
+                name.update({i: t for i, t, n in U[x]})
+                per.append(c)
+                tot.update(c)
+            win = tot.most_common(2)
+            wk = {"d0": d, "win": win[0][0], "margin": (win[0][1] - win[1][1]) / win[0][1], "name": name, "tot": tot, "per": per, "k": {}}
+            for k in range(1, 7):
+                S = collections.Counter()
+                for c in per[:k]:
+                    S.update(c)
+                P = {i: S[i] + (7 - k) * per[k - 1].get(i, 0) for i in S}
+                top = sorted(P, key=lambda i: -P[i])[:8]
+                rows = {}
+                for i in top:
+                    o = max(P[j] for j in top if j != i)
+                    g = (P[i] - o) / max(P[i], o)
+                    new = i not in prev_ids and not per[0].get(i, 0) < 1 and all(i not in c for c in per[:0])
+                    rows[i] = {"g": g, "f": (k, sum(1 for e in EDGES if g >= e), bool(i not in prev_ids)), "yes": i == win[0][0], "rank": top.index(i)}
+                wk["k"][k] = rows
+            out[d] = wk
+            prev_ids = set(tot)
+        else:
+            prev_ids = set()
+        d += dt.timedelta(7)
+    return out
+
+
+def chance(W, d0, f, min_seen=20):
+    """Walk forward: how often a song in this cell won, counting only weeks that ended before week d0 began."""
+    y = n = 0
+    for d, wk in W.items():
+        if d + dt.timedelta(7) > d0:
+            continue
+        r = [x for x in wk["k"][f[0]].values() if x["f"] == f]
+        n += len(r)
+        y += sum(x["yes"] for x in r)
+    return (y + 1) / (n + 2) if n >= min_seen else None
+
+
+def find(wk, title):
+    n = norm(title)
+    hit = [i for i, t in wk["name"].items() if norm(t) == n]
+    return max(hit, key=lambda i: wk["tot"][i]) if hit else None
+
+
+def k_rows(W, lag_h=24):
+    """Kalshi's weekly 'top song USA' markets at the hour each new day's count is surely public (the day's end + lag_h, UTC)."""
+    ms, tp = K.load("KXSPOTIFYW$")
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m)
+    rows, chk = [], [0, 0, 0]
+    for e, L in evs.items():
+        close = K.ev_close(L)
+        d0 = dt.datetime.fromtimestamp(close - 5 * 3600, dt.timezone.utc).date() - dt.timedelta(6)
+        wk = W.get(d0)
+        if not wk:
+            chk[2] += 1
+            continue
+        yes = [m for m in L if m["res"] == "yes"]
+        if yes:
+            chk[0] += 1
+            chk[1] += find(wk, yes[0]["w"]) == wk["win"]
+        for k in range(1, 7):
+            t = int(dt.datetime.combine(d0 + dt.timedelta(k), dt.time(0), dt.timezone.utc).timestamp()) + lag_h * 3600
+            if t >= close - 1800:
+                continue
+            for m in L:
+                v = tp.get(m["t"])
+                i = find(wk, m["w"])
+                if not v or not v["c"] or t < m["open"] + 3600:
+                    continue
+                c = None
+                for x in v["c"]:
+                    if x[0] > t:
+                        break
+                    c = x
+                if not c or c[1] is None or c[2] is None or t - c[0] > 3 * 3600:
+                    continue
+                r = wk["k"][k].get(i) if i else None
+                f = r["f"] if r else (k, 0, False)
+                q = chance(W, d0, f)
+                if q is None:
+                    continue
+                rows.append({"tk": m["t"], "ev": e, "t": t, "bid": c[1], "ask": c[2], "yes": m["res"] == "yes", "w": m["w"], "f": f, "q": q,
+                             "kind": "k", "left": (close - t) / 3600, "k": k, "g": r["g"] if r else -1, "d0": d0})
+    print("Kalshi: events", len(evs), "no play counts for the week", chk[2], "winner = most plays in", chk[1], "of", chk[0], flush=True)
+    return rows
+
+
+def p_rows(W, lag_h=24):
+    """Polymarket's '#1 song on US Spotify this week' markets, same look hours, last real trade (12 hours fresh) as the price."""
+    import families as F
+    import stocks
+    ms, tp = F.load("spotify")
+    evs = collections.defaultdict(list)
+    for k, m in ms.items():
+        q = m.get("q") or ""
+        if re.search(r"#1 (song on US Spotify|US song) this week", q) and m.get("end") and m.get("final"):
+            evs[m["ev"]].append((k, m))
+    rows, chk = [], [0, 0, 0]
+    for e, M in evs.items():
+        end = collections.Counter(m["end"] for _, m in M).most_common(1)[0][0]
+        d0 = None
+        for back in (6, 7, 8, 5):           # find the week whose most-played song is the market's winner
+            c = dt.datetime.fromtimestamp(end - 12 * 3600, dt.timezone.utc).date() - dt.timedelta(back)
+            c -= dt.timedelta((c.weekday() - 4) % 7)
+            if c in W:
+                d0 = c
+                break
+        if d0 is None:
+            chk[2] += 1
+            continue
+        wk = W[d0]
+        yes = [m for _, m in M if m["final"][0] == 1.0]
+        if yes:
+            chk[0] += 1
+            chk[1] += find(wk, re.split(r" - | by ", yes[0]["item"].strip('"'))[0]) == wk["win"]
+        for k in range(1, 7):
+            t = int(dt.datetime.combine(d0 + dt.timedelta(k), dt.time(0), dt.timezone.utc).timestamp()) + lag_h * 3600
+            if t >= end - 1800:
+                continue
+            for key, m in M:
+                b = (tp.get(key) or {}).get("b")
+                if not b or t < m["start"] + 3600:
+                    continue
+                pp = stocks._price(b, t, fresh=12 * 3600)
+                if pp is None:
+                    continue
+                i = find(wk, re.split(r" - | by ", m["item"].strip('"'))[0])
+                r = wk["k"][k].get(i) if i else None
+                f = r["f"] if r else (k, 0, False)
+                q = chance(W, d0, f)
+                if q is None:
+                    continue
+                rows.append({"tk": key, "ev": e, "t": t, "bid": pp, "ask": pp, "yes": m["final"][0] == 1.0, "w": m["item"], "f": f, "q": q,
+                             "kind": "p", "left": (end - t) / 3600, "k": k, "g": r["g"] if r else -1, "d0": d0})
+    print("Polymarket US: events", len(evs), "no play counts for the week", chk[2], "winner = most plays in", chk[1], "of", chk[0], flush=True)
+    return rows, ms, tp
+
+
+def p_bets(rows, ms, tp, gap, side="both", extra=0.02):
+    import stocks
+    out, used = [], set()
+    for r in sorted(rows, key=lambda r: r["t"]):
+        yes = r["q"] - r["ask"] >= gap
+        if r["tk"] in used or not (yes or r["bid"] - r["q"] >= gap) or (side != "both" and (side == "yes") != yes):
+            continue
+        x = stocks.buy(ms[r["tk"]], tp[r["tk"]]["b"], r["t"], yes, extra, lo=0.03, hi=0.97, window=3600)
+        if x and abs(x["px"] - (r["ask"] if yes else 1 - r["bid"])) <= 0.15:
+            used.add(r["tk"])
+            x.update(ev=r["ev"], pnl=x["pay"] - x["cost"], p=x["px"], w=r["w"], q=r["q"], kind="p", k=r["k"], side="yes" if yes else "no")
+            out.append(x)
+    return out
+
+
+def miss(rows):
+    n = max(1, len(rows))
+    return round(sum((r["q"] - r["yes"]) ** 2 for r in rows) / n, 4), round(sum(((r["bid"] + r["ask"]) / 2 - r["yes"]) ** 2 for r in rows) / n, 4)
+
+
+def do_run(lag_h=24):
+    W = weeks()
+    ds = sorted(W)
+    print("weeks", len(W), ds[0], ds[-1], flush=True)
+    for k in range(1, 7):                   # how often the song ahead after k days ends the week on top
+        a = [wk for wk in W.values()]
+        lead = sum(1 for wk in a if any(r["rank"] == 0 and r["yes"] for r in wk["k"][k].values()))
+        print(f"  after {k} days: the song ahead on our count wins the week in {lead} of {len(a)}", flush=True)
+    kr = k_rows(W, lag_h)
+    print("Kalshi rows", len(kr), "events", len({r["ev"] for r in kr}), "miss score model, price", miss(kr), flush=True)
+    for k in range(1, 7):
+        x = [r for r in kr if r["k"] == k]
+        print("   k", k, len(x), miss(x))
+    for g in (0.05, 0.10, 0.15, 0.25):
+        for side in ("yes", "no", "both"):
+            print(K.line(f"Kalshi gap {g} {side}", K.first_bets(kr, g, 0.0, side)), flush=True)
+    pr, ms, tp = p_rows(W, lag_h)
+    print("Polymarket rows", len(pr), "events", len({r["ev"] for r in pr}), "miss score model, price", miss(pr), flush=True)
+    for g in (0.05, 0.10, 0.15, 0.25):
+        for side in ("yes", "no", "both"):
+            print(K.line(f"PM gap {g} {side}", p_bets(pr, ms, tp, g, side)), flush=True)
+
+
+TRIES = 60
+
+
+def do_report():
+    """The two shared-exam lines (both dropped). The write-up is backtest/spotify.md."""
+    import exam
+    W = weeks()
+    kr = k_rows(W)
+    pr, ms, tp = p_rows(W)
+    src = "spotw.py, backtest/spotify.md"
+    kb = K.first_bets(kr, 0.10, 0.0, "both")
+    pb = p_bets(pr, ms, tp, 0.10, "both")
+    for b in kb + pb:
+        b.setdefault("group", b["ev"])
+    print(exam.score(kb, "Kalshi Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price", tries=TRIES, src=src, status="dropped", quiet=True))
+    print(exam.score(pb, "Polymarket Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price", tries=TRIES, src=src, status="dropped", quiet=True))
+
+
 def do_peek2():
     x = raw("https://kworb.net/spotify/track/7scFxt9VhL4FJwuPSfRlfN.html", 50, {"Accept-Encoding": "identity"})
     print(len(x), [(m.start(), x[m.start() - 60:m.start() + 120].replace("\n", " ")) for m in re.finditer(r"(?i)daily", x)][:12], flush=True)
@@ -190,4 +443,4 @@ def do_peek2():
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": do_peek, "peek2": do_peek2, "fetch": do_fetch}[a]()
+    {"peek": do_peek, "peek2": do_peek2, "fetch": do_fetch, "usdaily": do_usdaily, "run": do_run, "report": do_report}[a]()
