@@ -18099,3 +18099,10 @@
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV161800-00", "track": "kc_maker", "ts": "2026-11-16T23:02:23Z", "type": "kmaker_fill"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXCONCACAFNLSPREAD-26NOV16GUYPUR-PUR2", "track": "kalshi_patient", "ts": "2026-11-16T23:02:26Z", "type": "kpatient_result"}
 {"fee": 0.0278, "outcome": "No", "price": 0.833, "shares": 5, "title": "Will Trump meet with Kim Jong Un in 2026?", "token": "33948383215136644432533371238863136180727484636430037616426554075016398089174", "track": "panic_fade_10c", "ts": "2026-11-16T23:03:01Z", "type": "paper_buy"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXBRENTD-26NOV1617-T95.50", "track": "kalshi_patient", "ts": "2026-11-16T23:06:24Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.91, "side": "yes", "through": true, "ticker": "KXCONCACAFNLADVANCE-26NOV16TTOANT-TTO", "track": "kalshi_patient", "ts": "2026-11-16T23:06:24Z", "type": "kpatient_fill"}
+{"filled": 7.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXHIGHTMIN-26NOV17-B55.5", "track": "kalshi_patient", "ts": "2026-11-16T23:06:24Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "yes", "through": true, "ticker": "KXLOWTNYC-26NOV16-B39.5", "track": "kalshi_patient", "ts": "2026-11-16T23:06:24Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLBOTH-26NOV16LACBAL-28", "track": "kalshi_patient", "ts": "2026-11-16T23:06:29Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXNFLWINMARGIN-26NOV16LACBAL-LAC15PLUS", "track": "kalshi_patient", "ts": "2026-11-16T23:06:29Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXUEFANL1HSPREAD-26NOV17DENNOR-NOR2", "track": "kalshi_patient", "ts": "2026-11-16T23:06:29Z", "type": "kpatient_fill"}
