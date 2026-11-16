@@ -207,7 +207,138 @@ def do_peek3():
             print("INLINE", len(b), "|", re.sub(r"\s+", " ", b)[:3000])
 
 
+# ================================================================ analysis
+HOURS = (144, 120, 96, 72, 48, 24, 12, 3)
+BANDS = ((0.03, .10), (.10, .25), (.25, .50), (.50, .75), (.75, .90), (.90, .97))
+fee = km.fee
+
+
+def load(pick=TAPE_RX):
+    """-> markets, tapes of the picked series. Repairs the hourly quotes that come 100 times too small (see kmentions.load)."""
+    import glob
+    rx = re.compile(pick)
+    ms = {t: m for t, m in ((rj(MK, {}) or {}).get("markets") or {}).items() if rx.search(m["s"])}
+    tp = {}
+    for f in sorted(glob.glob(os.path.join(CACHE, "tapes_*.json.gz"))):
+        for tk, v in (rj(f, {}) or {}).items():
+            if tk not in ms:
+                continue
+            vals = [x for c in v["c"] for x in c[1:3] if x is not None]
+            if vals and max(vals) <= 0.0101 and v["tr"] and max(t[1] for t in v["tr"]) > 20:
+                for c in v["c"]:
+                    c[1] = None if c[1] is None else round(c[1] * 100, 4)
+                    c[2] = None if c[2] is None else round(c[2] * 100, 4)
+            v["tr"].sort()
+            tp[tk] = v
+    return ms, tp
+
+
+def looks(ms, tp, hours=HOURS):
+    """One row per market and look time (hours before the event's FIRST close: a market's own close can leak the result).
+    Each row also knows: was this title last time's winner in its series (inc), was it listed last time (old),
+    is it the event's favourite at that hour (fav), and the sum of all asks in its event (book)."""
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m)
+    first = {e: min(m["close"] for m in L) for e, L in evs.items()}
+    by_s = collections.defaultdict(list)
+    for e, L in evs.items():
+        by_s[L[0]["s"]].append(e)
+    prev = {}
+    for s, es in by_s.items():
+        es.sort(key=lambda e: first[e])
+        for a, b in zip(es, es[1:]):
+            prev[b] = a
+    rows = []
+    for e, L in evs.items():
+        p = prev.get(e)
+        pw = {km.norm(m["w"]) for m in evs[p] if m["res"] == "yes"} if p else set()
+        pl = {km.norm(m["w"]) for m in evs[p]} if p else set()
+        for h in hours:
+            t = first[e] - h * 3600
+            got = []
+            for m in L:
+                v = tp.get(m["t"])
+                if not v or not v["c"] or t < m["open"] + 3600:
+                    continue
+                c = None
+                for x in v["c"]:
+                    if x[0] > t:
+                        break
+                    c = x
+                if not c or c[1] is None or c[2] is None or t - c[0] > 3 * 3600:
+                    continue
+                got.append({"tk": m["t"], "s": m["s"], "ev": e, "h": h, "t": t, "bid": c[1], "ask": c[2], "yes": m["res"] == "yes",
+                            "vol": m["vol"], "w": m["w"], "inc": km.norm(m["w"]) in pw, "old": km.norm(m["w"]) in pl, "has_prev": bool(p)})
+            if not got:
+                continue
+            top = max(got, key=lambda r: r["bid"] + r["ask"])
+            book = sum(r["ask"] for r in got)
+            for r in got:
+                r["fav"] = r is top
+                r["book"] = book
+                r["n"] = len(got)
+            rows += got
+    return rows
+
+
+def line(name, b):
+    if not b:
+        return f"{name:54s} none"
+    b = sorted(b, key=lambda x: x["t"])
+    h = len(b) // 2
+    return (f"{name:54s} bets {len(b):5d} ev {len({x['ev'] for x in b}):4d} won {sum(1 for x in b if x['pay'] > 0):5d} "
+            f"per100 {km.per100(b):+7.2f} halves {km.per100(b[:h]):+7.2f} {km.per100(b[h:]):+7.2f} avgpx {sum(x['p'] for x in b) / len(b):.2f}")
+
+
+def run(pick="KXNETFLIX", score=False):
+    ms, tp = load(pick)
+    rows = [r for r in looks(ms, tp) if km.ok(r, 0.10)]
+    print(f"markets {len(ms)}, with tapes {len(tp)}, events {len({m['ev'] for m in ms.values()})}, rows {len(rows)}")
+    cl = collections.Counter()
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m["close"])
+    for L in evs.values():
+        cl[round((max(L) - min(L)) / 3600)] += 1
+    print("hours between first and last close inside an event:", sorted(cl.items())[:12])
+    tries = 0
+    for ser in sorted({r["s"] for r in rows}) + ["ALL"]:
+        R = [r for r in rows if ser == "ALL" or r["s"] == ser]
+        print(f"\n=== {ser}")
+        for h in HOURS:
+            H = [r for r in R if r["h"] == h]
+            print(line(f"always Yes {h}h", km.yes_bets(H)))
+            print(line(f"always No  {h}h", km.no_bets(H)))
+            tries += 2
+        if ser != "ALL":
+            continue
+        for h in (120, 72, 24):
+            H = [r for r in R if r["h"] == h]
+            for lo, hi in BANDS:
+                B = [r for r in H if lo <= (r["bid"] + r["ask"]) / 2 < hi]
+                print(line(f"  {h}h Yes at {lo:.2f}-{hi:.2f}", km.yes_bets(B)))
+                print(line(f"  {h}h No  at {lo:.2f}-{hi:.2f}", km.no_bets(B)))
+                tries += 2
+            for nm, f in (("favourite", lambda r: r["fav"]), ("not favourite", lambda r: not r["fav"]),
+                          ("last winner", lambda r: r["inc"]), ("listed before, not winner", lambda r: r["old"] and not r["inc"]),
+                          ("new title", lambda r: r["has_prev"] and not r["old"]),
+                          ("last winner and favourite", lambda r: r["inc"] and r["fav"]),
+                          ("last winner, not favourite", lambda r: r["inc"] and not r["fav"]),
+                          ("new title and favourite", lambda r: r["has_prev"] and not r["old"] and r["fav"]),
+                          ("asks add up to 1.10+", lambda r: r["book"] >= 1.10), ("asks add up under 1.03", lambda r: r["book"] < 1.03)):
+                B = [r for r in H if f(r)]
+                print(line(f"  {h}h Yes {nm}", km.yes_bets(B)))
+                print(line(f"  {h}h No  {nm}", km.no_bets(B)))
+                tries += 2
+    print("tries", tries)
+    return rows
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1].startswith("run"):
+        run(sys.argv[1][4:] or "KXNETFLIX")
+        sys.exit(0)
     A1 = sys.argv[1] if len(sys.argv) > 1 else ""
     if A1.startswith("tapes"):
         do_tapes(A1[6:] or None)
