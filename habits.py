@@ -134,7 +134,115 @@ def do_tapes(pick=None, min_events=15):
         print(f"{t}: {len(got)} of {len(ms)} markets, {sum(len(x['tr']) for x in got.values())} trades ({time.time() - t0:.0f}s)", flush=True)
 
 
+def load(pick="."):
+    import glob
+    rx = re.compile(pick)
+    ms = {t: m for t, m in ((rj(MK, {}) or {}).get("markets") or {}).items() if rx.search(m["s"])}
+    tp = {}
+    for f in sorted(glob.glob(os.path.join(CACHE, "tapes_*.json.gz"))):
+        for tk, v in (rj(f, {}) or {}).items():
+            if tk not in ms:
+                continue
+            vals = [x for c in v["c"] for x in c[1:3] if x is not None]
+            if vals and max(vals) <= 0.0101 and v["tr"] and max(t[1] for t in v["tr"]) > 20:      # the 100-times-too-small quote trap
+                for c in v["c"]:
+                    c[1] = None if c[1] is None else round(c[1] * 100, 4)
+                    c[2] = None if c[2] is None else round(c[2] * 100, 4)
+            tp[tk] = v
+    return ms, tp
+
+
+def quote(v, t, fresh=4 * 3600):
+    c = None
+    for x in v["c"]:
+        if x[0] > t:
+            break
+        c = x
+    if not c or c[1] is None or c[2] is None or t - c[0] > fresh:
+        return None
+    return c[1], c[2]
+
+
+def rows(ms, tp, back=8, need=4, hours=(2, 12, 24, 48, 72)):
+    """One row per market and look (hours after the market opened, so a market's own early close can't leak the result).
+    q = how often the same answer (same series, same label) came true in the `back` rounds before this one opened."""
+    by = collections.defaultdict(lambda: collections.defaultdict(list))
+    for m in ms.values():
+        by[m["s"]][m["ev"]].append(m)
+    out = []
+    for s, evs in by.items():
+        order = sorted(evs, key=lambda e: min(m["open"] for m in evs[e]))
+        for n, e in enumerate(order):
+            op = min(m["open"] for m in evs[e])
+            past = [p for p in order[:n] if max(m["close"] for m in evs[p]) <= op][-back:]
+            for m in evs[e]:
+                v = tp.get(m["t"])
+                rec = [x["res"] == "yes" for p in past for x in evs[p] if x["w"] == m["w"]]
+                if not v or not v["c"] or len(rec) < need:
+                    continue
+                q = (sum(rec) + 1) / (len(rec) + 2)
+                for h in hours:
+                    t = m["open"] + h * 3600
+                    if t > m["close"] - 6 * 3600:
+                        continue
+                    ba = quote(v, t)
+                    if ba:
+                        out.append({"tk": m["t"], "s": s, "ev": e, "t": t, "h": h, "bid": ba[0], "ask": ba[1], "yes": m["res"] == "yes",
+                                    "w": m["w"], "q": q, "k": sum(rec), "n": len(rec), "life": (m["close"] - m["open"]) / 86400})
+    return out
+
+
+def first_bets(R, gap=0.15, side="both", extra=0.0, lo=0.03, hi=0.97, max_gap=0.15, hmax=999):
+    out, used = [], set()
+    for r in sorted(R, key=lambda r: r["t"]):
+        if r["tk"] in used or r["ask"] - r["bid"] > max_gap or r["bid"] < 0.005 or r["h"] > hmax:
+            continue
+        b = None
+        if side in ("both", "yes") and lo <= r["ask"] <= hi and r["q"] - r["ask"] >= gap:
+            p = r["ask"] + extra
+            b = {"cost": p + km.fee(p), "pay": 1.0 if r["yes"] else 0.0, "p": p, "side": "yes"}
+        elif side in ("both", "no") and lo <= 1 - r["bid"] <= hi and r["bid"] - r["q"] >= gap:
+            p = 1 - r["bid"] + extra
+            b = {"cost": p + km.fee(p), "pay": 0.0 if r["yes"] else 1.0, "p": p, "side": "no"}
+        if b:
+            used.add(r["tk"])
+            b.update(pnl=b["pay"] - b["cost"], ev=r["ev"], group=r["ev"], t=r["t"], tk=r["tk"], w=r["w"], q=r["q"], s=r["s"], h=r["h"])
+            out.append(b)
+    return out
+
+
+def line(name, b):
+    if not b:
+        return f"{name:46s} none"
+    b = sorted(b, key=lambda x: x["t"])
+    h = len(b) // 2
+    f = lambda x: 100 * sum(y["pnl"] for y in x) / max(1e-9, sum(y["cost"] for y in x))
+    return (f"{name:46s} bets {len(b):4d} ev {len({x['ev'] for x in b}):4d} won {sum(1 for x in b if x['pay'] > 0):4d} "
+            f"per100 {f(b):+7.2f} halves {f(b[:h]) if h else 0:+7.2f} {f(b[h:]):+7.2f} avgpx {sum(x['p'] for x in b) / len(b):.2f}")
+
+
+def run(pick="."):
+    ms, tp = load(pick)
+    R = rows(ms, tp)
+    print("markets", len(ms), "with tapes", len(tp), "rows", len(R), "markets with a record", len({r["tk"] for r in R}), flush=True)
+    n = max(1, len(R))
+    print("miss score: record", round(sum((r["q"] - r["yes"]) ** 2 for r in R) / n, 4), "price", round(sum(((r["bid"] + r["ask"]) / 2 - r["yes"]) ** 2 for r in R) / n, 4))
+    for g in (0.10, 0.15, 0.25):
+        for side in ("yes", "no", "both"):
+            print(line(f"gap {g} {side}", first_bets(R, g, side)), flush=True)
+    print("by series, gap 0.15:")
+    for s in sorted({r["s"] for r in R}):
+        Rs = [r for r in R if r["s"] == s]
+        print(line(f"  {s} yes", first_bets(Rs, 0.15, "yes")))
+        print(line(f"  {s} no", first_bets(Rs, 0.15, "no")))
+    print("always, first look (prices alone):")
+    for side in ("yes", "no"):
+        for lo, hi in ((0.03, 0.2), (0.2, 0.5), (0.5, 0.8), (0.8, 0.97)):
+            print(line(f"  always {side} at {lo}-{hi}", first_bets([dict(r, q=1.0 if side == "yes" else 0.0) for r in R], 0.0, side, lo=lo, hi=hi)))
+    return R
+
+
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "scan"
     mode, _, arg = a.partition("-")
-    {"scan": scan, "list": do_list, "tapes": do_tapes}[mode](*([arg] if arg else []))
+    {"scan": scan, "list": do_list, "tapes": do_tapes, "run": run}[mode](*([arg] if arg else []))
