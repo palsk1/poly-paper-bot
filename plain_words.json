@@ -185,6 +185,13 @@
       "loses": "Lots of parlays come true at once, or people only buy from us when our price is too low.",
       "status": "Its pass test is fixed: at 1 Jan or 1,000 finished parlays."
     },
+    "combo_prekick": {
+      "say": "The same pretend parlay 'house' as above, but it only counts parlays sold before any of their games had started. Once a game is on, buyers can watch the score and only buy when they already know more than our price does.",
+      "example": "At 7 pm someone asks for 'Hawks AND Thunder win', both games starting at 1 am: that one counts here. At 2 am, with the Hawks 15 points up, the same request does not.",
+      "wins": "Most parlays still lose, and before kick-off nobody knows more than the prices do.",
+      "loses": "Pre-game buyers turn out to be just as sharp, or it was luck that the first ones looked good.",
+      "status": "Counting from 16 Nov. No pass test fixed yet."
+    },
     "kfast_take45_z4": {
       "say": "Kalshi's 15-minute 'Will Bitcoin be up or down?' bets. 45 seconds before the end, if Bitcoin is far enough from the start price, it buys the winning side right away for about 99c.",
       "group": "kfast"
