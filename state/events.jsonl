@@ -16697,3 +16697,6 @@
 {"minutes_left": 3.42, "price": 0.975, "queue": 2370.44, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV160215-15", "track": "kc_maker", "ts": "2026-11-16T07:11:35Z", "type": "kmaker_order"}
 {"minutes_left": 3.42, "price": 0.975, "queue": 122.72, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV160215-15", "track": "kc_maker", "ts": "2026-11-16T07:11:36Z", "type": "kmaker_order"}
 {"minutes_left": 3.42, "price": 0.982, "queue": 3.74, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160215-15", "track": "kc_maker", "ts": "2026-11-16T07:11:37Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.38, "price": 1.0, "reason": "resolved", "title": "US imports Russian diesel by November 15?", "token": "22628039830780578346368499265973876766546853303978375335844006534289868738365", "track": "wb_anoin123", "ts": "2026-11-16T07:15:38Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV160215-15", "track": "kc_maker", "ts": "2026-11-16T07:16:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV160215-15", "track": "kc_maker", "ts": "2026-11-16T07:16:19Z", "type": "kmaker_fill"}
