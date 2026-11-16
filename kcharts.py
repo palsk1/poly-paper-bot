@@ -120,7 +120,37 @@ def do_peek():
             print("  text", t[i:i + 2500], flush=True)
 
 
+def do_peek2():
+    """a daily Netflix US top 10 the bot can read, today and for past days"""
+    for u in ("https://www.the-numbers.com/netflix-top-10",
+              "https://www.the-numbers.com/netflix-top-10/2026/11/05",
+              "https://www.the-numbers.com/netflix-top-10/tv-shows/2026/11/05",
+              "https://www.whats-on-netflix.com/most-popular/",
+              "https://www.whats-on-netflix.com/most-popular/top-10-tv-shows-on-netflix/",
+              "https://web.archive.org/web/20261105120000/https://flixpatrol.com/top10/netflix/united-states/",
+              "https://archive.org/wayback/available?url=flixpatrol.com/top10/netflix/united-states/2026-11-05/&timestamp=20261106",
+              "https://web.archive.org/cdx/search/cdx?url=flixpatrol.com/top10/netflix/united-states/*&from=20261001&limit=40&output=json&filter=statuscode:200",
+              "https://flixpatrol.com/top10/netflix/united-states/2026-11-05/",
+              "https://www.justwatch.com/us/provider/netflix?sort_by=trending_7_day",
+              "https://top10.netflix.com/united-states/tv",
+              "https://www.netflix.com/tudum/top10/united-states/tv"):
+        try:
+            s = raw(u, 50, {"Referer": "https://www.google.com/", "Accept-Encoding": "identity"})
+        except Exception as e:
+            print("FAIL", u, str(e)[:150], flush=True)
+            continue
+        print("OK", u, len(s), flush=True)
+        t = re.sub(r"\s+", " ", re.sub(r"<script.*?</script>|<style.*?</style>", " ", s, flags=re.S))
+        t = re.sub(r"<[^>]+>", "|", t)
+        t = re.sub(r"(\|\s*)+", "| ", t)
+        i = max(0, min([x for x in (t.find("Rank"), t.find("TOP 10"), t.find("Top 10")) if x >= 0] or [0]))
+        print("  text", t[i:i + 1800], flush=True)
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "peek2":
+        do_peek2()
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1] == "peek":
         do_peek()
         sys.exit(0)
