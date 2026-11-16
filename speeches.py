@@ -82,6 +82,64 @@ def peek3():
         print("TWITTER FAIL", str(e)[:100], flush=True)
 
 
+def peek4():
+    """what Roll Call's post feed holds"""
+    import json
+    for q in ("page=1&format=json", "page=2&format=json", "page=1&format=json&platform=truth+social", "page=1&format=json&sort=date&limit=100",
+              "page=500&format=json", "page=1&format=json&q=tariff"):
+        try:
+            d = json.loads(raw("https://rollcall.com/wp-json/factbase/v1/twitter?" + q, 60))
+        except Exception as e:
+            print("FAIL", q, str(e)[:120], flush=True)
+            continue
+        rows = d.get("data") or []
+        print("Q", q, "meta", d.get("meta"), "rows", len(rows), flush=True)
+        if rows:
+            print("  keys", sorted(rows[0].keys()), flush=True)
+            print("  dates", [(x.get("date"), x.get("platform"), x.get("deleted_flag")) for x in rows[:3]], [(x.get("date")) for x in rows[-2:]], flush=True)
+        for x in rows[:3 if q.startswith("page=1&format=json") and len(q) < 20 else 1]:
+            print("  item", json.dumps(x)[:1800], flush=True)
+        pics = [x for x in rows if x.get("media_text") or x.get("image_text")]
+        print("  with picture text", len(pics), "of", len(rows), flush=True)
+        for x in pics[:2]:
+            print("  pic", json.dumps({k: x.get(k) for k in ("date", "text", "media_text", "image_url", "post_url", "id", "document_id", "platform", "repost_flag", "is_retweet")})[:1500], flush=True)
+
+
+def do_posts(pages=110):
+    """Trump's Truth Social posts from Roll Call's post feed, newest first, with the text read out of pictures
+    (social.media_text) -> bt_cache/sp/social.json.gz. 110 pages of 50 reach back to about December 2025."""
+    import collections, json, time
+    out = rj(cache("social.json.gz"), {}) or {}
+    for page in range(1, pages + 1):
+        d = None
+        for a in range(4):
+            try:
+                d = json.loads(raw(f"https://rollcall.com/wp-json/factbase/v1/twitter?page={page}&format=json&platform=truth+social", 60))
+                break
+            except Exception as e:
+                print("  posts page failed", page, str(e)[:100], flush=True)
+                time.sleep(3 + 3 * a)
+        if not d or not d.get("data"):
+            continue
+        for x in d["data"]:
+            so = x.get("social") or {}
+            out[str(x["id"])] = {"date": x.get("date"), "text": x.get("text") or "", "pic": [t for t in (so.get("media_text") or []) if t],
+                                 "media": so.get("media_count") or 0, "quote": bool(so.get("quote_flag")), "quote_id": so.get("quote_id"),
+                                 "repost": bool(so.get("repost_flag")), "deleted": bool(x.get("deleted_flag")), "words": x.get("word_count")}
+        if page % 20 == 0:
+            print("  page", page, len(out), d["data"][-1].get("date"), flush=True)
+        time.sleep(0.25)
+    wj(cache("social.json.gz"), out)
+    v = list(out.values())
+    print("posts", len(v), "from", min(x["date"] for x in v), "to", max(x["date"] for x in v), flush=True)
+    print("with picture text", sum(1 for x in v if x["pic"]), "with media", sum(1 for x in v if x["media"]), "reposts", sum(1 for x in v if x["repost"]),
+          "quotes", sum(1 for x in v if x["quote"]), "text is only [Video]/[Image]/RT link", sum(1 for x in v if re.fullmatch(r"\[\w+\]|RT: https?://\S+", x["text"].strip())), flush=True)
+    mon = collections.Counter((x["date"][:7], bool(x["pic"])) for x in v if x["media"])
+    print("media posts by month (with picture text / without)", sorted((m, mon[(m, True)], mon[(m, False)]) for m in {k[0] for k in mon}), flush=True)
+    for x in [x for x in v if x["pic"]][:6]:
+        print("  sample", x["date"], repr(x["text"][:120]), "| PIC", repr(" ".join(x["pic"])[:300]), flush=True)
+
+
 def wj(path, obj):
     import gzip, json, os
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -620,5 +678,73 @@ def kalshi(score=True):
     print("\n".join(L))
 
 
+def kmonth(score=True):
+    """The same rule on Kalshi's month-long Trump word markets (KXTRUMPSAYMONTH / COMPANY / NICKNAME / COUNTRY ...).
+    Only looks in the last 20 days before the planned end: the saved quotes cover a market's last 21 days, so earlier
+    hours exist only for markets that closed early (word said). -> backtest/speeches_kmonth.md"""
+    import os
+    import bot, exam, kmentions as km
+    import postwords as pw
+    ms, tp = km.load(trades=True)
+    sel = [m for m in ms.values() if m["s"].startswith("KXTRUMPSAY") and m["s"] != "KXTRUMPSAY" and m["t"] in tp and m["res"] in ("yes", "no")]
+    W = Words()
+    end = {}
+    for m in sel:
+        end[m["ev"]] = max(end.get(m["ev"], 0), m["close"], m["exp"] or 0)
+
+    def bets(gap=0.15, side=0, extra=0.01, stake=10.0, n=8, always=False):
+        out = []
+        for m in sel:
+            E = end[m["ev"]]
+            for c in tp[m["t"]]["c"]:
+                t, bid, ask = c[0], c[1], c[2]
+                if t < E - 20 * 86400 or t < m["open"] + 3600:
+                    continue
+                if t >= m["close"] or E - t < 6 * 3600:
+                    break
+                if not bid or not ask or ask - bid > 0.15:
+                    continue
+                qw, k = W.record(m["w"], t, n)
+                q = 1 - (1 - qw) ** (max(E - t, 3600) / (7 * 86400))
+                px = ask if side == 0 else 1 - bid
+                if not always and ((q - px) if side == 0 else ((1 - q) - px)) < gap:
+                    continue
+                c_ = min(0.99, px + extra)
+                sh = stake / c_
+                out.append({"ev": m["ev"], "t": t, "cost": stake + 0.07 * c_ * (1 - c_) * sh,
+                            "pay": sh if (m["res"] == "yes") == (side == 0) else 0.0, "px": c_, "sig": (bid + ask) / 2, "id": m["t"]})
+                break
+        return out
+
+    L = []
+    P = L.append
+    main = bets()
+    P("# The Trump weekly words rule on Kalshi's month-long markets (speeches.py kmonth)\n")
+    P(f"Generated {bot.iso()}. {len(sel)} finished Kalshi markets that run a month or a quarter (\"What will Trump say in "
+      "November\", company names, nicknames, countries). Same rule as the weekly test: Yes where the 8-week transcript record "
+      "is 15c+ above the real sell offer + 1c + fee, $10 a bet, one per market. Only the last 20 days before the planned end "
+      "are tested, on words not said yet, because our saved quotes don't reach further back without giving the result away. Paper only.\n")
+    P(pw.HEAD)
+    P(pw.show("always Yes", bets(always=True)))
+    P(pw.show("always No", bets(side=1, always=True)))
+    P(pw.show("**Yes where the record is 15c+ above the offer**", main))
+    P(pw.show("... gap 5c+", bets(0.05)))
+    P(pw.show("... gap 25c+", bets(0.25)))
+    P(pw.show("... record over 12 weeks instead of 8", bets(n=12)))
+    P(pw.show("... 3c extra", bets(extra=0.03)))
+    P(pw.show("No where the offer is 15c+ above the record", bets(side=1)))
+    c = exam.score(main, "Kalshi month-long Trump say-markets: Yes where the transcript record is 15c+ above the offer", tries=90,
+                   src="speeches.py", status="dropped", log=score, quiet=True)
+    P(f"\nShared exam: **{c['verdict']}**, {pw.usd(c['per100'])} per $100, luck range {pw.usd(c['lo100'])} to {pw.usd(c['hi100'])}, "
+      f"{c['bets']} bets in {c['groups']} months.\n")
+    P("## What it means\n")
+    P("The rule does not carry over to the month-long markets. Their words are rare ones (company names, nicknames), where "
+      "\"he said it once in 8 weeks\" tells little, and by the last 20 days the easy words are already said and gone. The "
+      "12-week version looks good but is one of several tried, so it is luck until shown otherwise. Dropped: the weekly "
+      "markets stay the only place for this rule, and the live Kalshi track rightly leaves month-long markets out.\n")
+    open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backtest", "speeches_kmonth.md"), "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()

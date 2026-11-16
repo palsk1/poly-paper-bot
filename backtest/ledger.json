@@ -1843,6 +1843,19 @@
    "verdict": "Promising, needs more bets",
    "status": "lead",
    "src": "speeches.py"
+  },
+  {
+   "id": "kalshi_month_long_trump_say_markets_yes_where_the_transcript",
+   "date": "2026-11-16",
+   "what": "Kalshi month-long Trump say-markets: Yes where the transcript record is 15c+ above the offer",
+   "tries": 90,
+   "bets": 104,
+   "groups": 24,
+   "per100": -13.31,
+   "floor100": -100.0,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "speeches.py"
   }
  ]
 }
