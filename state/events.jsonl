@@ -16180,3 +16180,6 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXERCOTWESTW-13NOV26-T25", "track": "kalshi_patient", "ts": "2026-11-16T02:41:45Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXHIGHTATL-26NOV16-B61.5", "track": "kalshi_patient", "ts": "2026-11-16T02:41:45Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXDOGED-26NOV1522-T0.0599999", "track": "kalshi_patient", "ts": "2026-11-16T02:41:45Z", "type": "kpatient_order"}
+{"cost": 4.0081, "title": "Will the price of Bitcoin be between $66,000 and $68,000 on November 19?", "token": "90998905269878476316280224525556757215362974063446600770418977486864580479198", "track": "crypto_no", "ts": "2026-11-16T02:56:16Z", "type": "skip_no_cash"}
+{"minutes_left": 2.37, "price": 0.987, "queue": 99.4, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV152200-00", "track": "kc_maker", "ts": "2026-11-16T02:57:38Z", "type": "kmaker_order"}
+{"filled": 0.64, "price": 0.95, "side": "yes", "through": true, "ticker": "KXNCAAWBGAME-26NOV16NCCUVCU-VCU", "track": "kalshi_patient", "ts": "2026-11-16T02:57:44Z", "type": "kpatient_fill"}
