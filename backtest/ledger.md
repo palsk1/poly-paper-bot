@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**150 ideas examined, in about 59,449 versions.** 111 dropped, 39 still being tested or waiting. **Looks real: 3.**
+**151 ideas examined, in about 59,849 versions.** 112 dropped, 39 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 150 ideas that are all worthless, the luckiest one still looks good. With 150 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 151 ideas that are all worthless, the luckiest one still looks good. With 151 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -155,6 +155,7 @@ Why count: if you test 150 ideas that are all worthless, the luckiest one still 
 | 2026-11-15 | Trump weekly say-markets: Yes where the transcript record is 15c+ above the price, before the week | 50 | 61 | +$24.21 | Promising, needs more bets | lead | speeches.py |
 | 2026-11-16 | Kalshi month-long Trump say-markets: Yes where the transcript record is 15c+ above the offer | 90 | 24 | -$13.31 | Behind, but could be bad luck | dropped | speeches.py |
 | 2026-11-16 | Kalshi Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 167 | -$4.71 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |
+| 2026-11-16 | Kalshi Netflix weekly #1: No on a late arrival that holds the daily #1, last day | 400 | 70 | +$15.09 | Ahead, but could be luck | dropped | kcharts.py winners, backtest/kcharts.md |
 | 2026-11-16 | Kalshi Trump weekly say-markets: Yes where the transcript record is 15c+ above the offer | 75 | 56 | +$33.80 | Promising, needs more bets | lead | speeches.py |
 | 2026-11-16 | Netflix weekly #1: buy on one site where the other site's price is 10c+ away | 330 | 50 | +$5.36 | Ahead, but could be luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 71 | -$29.40 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |

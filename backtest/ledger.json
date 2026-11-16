@@ -1895,6 +1895,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kcharts.py, backtest/kcharts.md"
+  },
+  {
+   "id": "kalshi_netflix_weekly_1_no_on_a_late_arrival_that_holds_the_",
+   "date": "2026-11-16",
+   "what": "Kalshi Netflix weekly #1: No on a late arrival that holds the daily #1, last day",
+   "tries": 400,
+   "bets": 72,
+   "groups": 70,
+   "per100": 15.09,
+   "floor100": -23.55,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "kcharts.py winners, backtest/kcharts.md"
   }
  ]
 }
