@@ -74,6 +74,7 @@ jobs:
           case "${{ inputs.what }}" in pw_*) PYTHONUNBUFFERED=1 python3 postwords.py "$(echo '${{ inputs.what }}' | sed 's/^pw_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kch_*) PYTHONUNBUFFERED=1 python3 kcharts.py "$(echo '${{ inputs.what }}' | sed 's/^kch_//')"; exit $?;; esac
           case "${{ inputs.what }}" in spw_*) PYTHONUNBUFFERED=1 python3 spotw.py "$(echo '${{ inputs.what }}' | sed 's/^spw_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in hab_*) PYTHONUNBUFFERED=1 python3 habits.py "$(echo '${{ inputs.what }}' | sed 's/^hab_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kmn_*) PYTHONUNBUFFERED=1 python3 kmentions.py "$(echo '${{ inputs.what }}' | sed 's/^kmn_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kh_*) PYTHONUNBUFFERED=1 python3 khouse.py "$(echo '${{ inputs.what }}' | sed 's/^kh_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
