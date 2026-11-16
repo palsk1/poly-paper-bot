@@ -55,6 +55,115 @@ def do_peek():
                 print("FAIL", u, str(e)[:120], flush=True)
 
 
+def norm(x):
+    x = (x or "").lower().replace("’", "'")
+    x = re.sub(r"\((feat|with|w/|from)[^)]*\)|\[[^\]]*\]| - (from|feat|with|remaster|single|radio|bonus|spotify)[^|]*$| ft\. .*$| feat\. .*$", "", x)
+    return re.sub(r"[^a-z0-9]+", "", x)
+
+
+def totals(which):
+    """Every song that ever charted on kworb's daily list: [id, artist, title, days, peak]."""
+    x = raw(f"https://kworb.net/spotify/country/{which}_daily_totals.html", 120, {"Accept-Encoding": "identity"})
+    out = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", x, flags=re.S):
+        m = re.search(r'track/([A-Za-z0-9]+)\.html">(.*?)</a>', row)
+        if not m:
+            continue
+        tds = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, flags=re.S)]
+        art = re.search(r'artist/[A-Za-z0-9]+\.html">(.*?)</a>', row)
+        nums = [c for c in tds[1:] if re.fullmatch(r"[\d,]+", c)]
+        import html as H
+        out.append([m.group(1), H.unescape(art.group(1)) if art else "", H.unescape(m.group(2)),
+                    int(nums[0].replace(",", "")) if nums else 0, int(nums[2].replace(",", "")) if len(nums) > 2 else 999])
+    return out
+
+
+def wanted_names():
+    """Song titles named in the bets on both sites (normalised)."""
+    import families as F
+    w = collections.Counter()
+    ms, _ = F.load("spotify")
+    for m in ms.values():
+        it = (m.get("item") or "").strip().strip('"')
+        if "song" not in (m.get("q") or "").lower() or not it:
+            continue
+        t = re.split(r" - | by ", it)[0]
+        w[norm(t)] += 1
+    L = rj(os.path.join(K.CACHE, "markets.json.gz"))["markets"]
+    for m in L.values():
+        if re.match(r"KXSPOTIFY(W|D|GLOBALD|2D|NUM1USA)$|KXSPOTSTREAMSUSA|KXRANKLISTSONGSPOT", m["s"]):
+            w[norm(m.get("w"))] += 1
+    w.pop("", None)
+    return w
+
+
+def parse_track(x, first="2024-09-01"):
+    i = x.find('<div class="daily">')
+    if i < 0:
+        return None
+    t = x[i:]
+    t = t[:t.find("</table>")]
+    rows = re.findall(r"<tr[^>]*>(.*?)</tr>", t, flags=re.S)
+    head = re.findall(r"<th>(.*?)</th>", rows[0])
+    gi = head.index("Global") if "Global" in head else -1
+    ui = head.index("US") if "US" in head else -1
+    d = {}
+    for r in rows[1:]:
+        c = [re.sub(r"<[^>]+>", "", y).strip() for y in re.findall(r"<td[^>]*>(.*?)</td>", r, flags=re.S)]
+        if not c or not re.fullmatch(r"\d{4}/\d\d/\d\d", c[0]):
+            continue
+        day = c[0].replace("/", "-")
+        if day < first:
+            continue
+        v = []
+        for j in (gi, ui):
+            m = re.match(r"(\d+)\s*\(\s*([\d,]+)", c[j]) if 0 <= j < len(c) else None
+            v += [int(m.group(1)), int(m.group(2).replace(",", ""))] if m else [0, 0]
+        if v[1] or v[3]:
+            d[day] = v
+    return d
+
+
+def do_fetch(maxpeak=3):
+    os.makedirs(CACHE, exist_ok=True)
+    f = os.path.join(CACHE, "tracks.json.gz")
+    T = rj(f) if os.path.exists(f) else {}
+    names = wanted_names()
+    tot = {"us": totals("us"), "global": totals("global")}
+    print("names in bets", len(names), "totals", {k: len(v) for k, v in tot.items()}, tot["us"][:3], flush=True)
+    want, hit = {}, set()
+    for which, rows in tot.items():
+        for i, a, t, days, pk in rows:
+            n = norm(t)
+            if (n in names and pk <= 50) or pk <= maxpeak:
+                want[i] = [a, t]
+                if n in names:
+                    hit.add(n)
+    miss = [n for n in names if n not in hit]
+    print("want", len(want), "have", len(T), "names without a song", len(miss), sorted(miss, key=lambda n: -names[n])[:60], flush=True)
+    t0, n, bad = time.time(), 0, 0
+    for i, (a, t) in want.items():
+        if i in T or time.time() - t0 > 3.2 * 3600:
+            continue
+        try:
+            d = parse_track(raw(f"https://kworb.net/spotify/track/{i}.html", 60, {"Accept-Encoding": "identity"}))
+        except Exception as e:
+            bad += 1
+            print("FAIL", i, t, str(e)[:80], flush=True)
+            if bad > 40:
+                break
+            time.sleep(10)
+            continue
+        T[i] = {"a": a, "t": t, "d": d or {}}
+        n += 1
+        if n % 100 == 0:
+            print(n, "fetched", a, "-", t, len(d or {}), flush=True)
+            wj(f, T)
+        time.sleep(0.7)
+    wj(f, T)
+    print("done", len(T), "of", len(want), "failed", bad, "with days", sum(1 for v in T.values() if v["d"]), flush=True)
+
+
 def do_peek2():
     x = raw("https://kworb.net/spotify/track/7scFxt9VhL4FJwuPSfRlfN.html", 50, {"Accept-Encoding": "identity"})
     print(len(x), [(m.start(), x[m.start() - 60:m.start() + 120].replace("\n", " ")) for m in re.finditer(r"(?i)daily", x)][:12], flush=True)
@@ -81,4 +190,4 @@ def do_peek2():
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": do_peek, "peek2": do_peek2}[a]()
+    {"peek": do_peek, "peek2": do_peek2, "fetch": do_fetch}[a]()
