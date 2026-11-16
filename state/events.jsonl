@@ -17306,3 +17306,8 @@
 {"fee": 0.0609, "outcome": "No", "price": 0.58, "shares": 5, "title": "Will Zelenskyy post 60-79 posts from November 13 to November 20, 2026?", "token": "99293853022728674216925176711086389902506199028934242579932661256193388146466", "track": "postcount_no", "ts": "2026-11-16T13:47:33Z", "type": "paper_buy"}
 {"minutes_left": 3.69, "price": 0.99, "queue": 342.26, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV160900-00", "track": "kc_maker", "ts": "2026-11-16T13:56:19Z", "type": "kmaker_order"}
 {"minutes_left": 3.69, "price": 0.99, "queue": 1.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160900-00", "track": "kc_maker", "ts": "2026-11-16T13:56:20Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.995, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV160900-00", "track": "kc_maker", "ts": "2026-11-16T13:57:59Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV160900-00", "track": "kc_maker", "ts": "2026-11-16T13:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.993, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV160900-00", "track": "kc_maker", "ts": "2026-11-16T13:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.998, "queue": 5447.58, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160900-00", "track": "kc_maker_safe", "ts": "2026-11-16T13:58:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.998, "queue": 5447.58, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-16T13:58:03Z", "type": "kmaker_order"}
