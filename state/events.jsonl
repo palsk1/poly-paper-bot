@@ -16882,3 +16882,8 @@
 {"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV160345-45", "track": "kc_maker_safe", "ts": "2026-11-16T08:46:54Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV160345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T08:46:54Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-16T08:46:54Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.0957, "price": 0.983, "reason": "take profit (now 99c), book", "title": "Will Ethereum reach $1,950 on November 16?", "token": "17712512881653858414596663496895700694384946617696598962145518274631973512367", "track": "endgame_sell98", "ts": "2026-11-16T08:55:50Z", "type": "paper_close"}
+{"minutes_left": 1.72, "price": 0.995, "queue": 14368.12, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV160400-00", "track": "kc_maker", "ts": "2026-11-16T08:58:18Z", "type": "kmaker_order"}
+{"minutes_left": 1.72, "price": 0.998, "queue": 1131.38, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV160400-00", "track": "kc_maker", "ts": "2026-11-16T08:58:18Z", "type": "kmaker_order"}
+{"minutes_left": 1.72, "price": 0.991, "queue": 62.19, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV160400-00", "track": "kc_maker", "ts": "2026-11-16T08:58:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.72, "price": 0.997, "queue": 166.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160400-00", "track": "kc_maker", "ts": "2026-11-16T08:58:20Z", "type": "kmaker_order"}
