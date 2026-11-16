@@ -16115,3 +16115,5 @@
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV152115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-16T02:17:29Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV152115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-16T02:17:29Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV152115-15", "track": "kc_maker_safe_usd", "ts": "2026-11-16T02:17:29Z", "type": "kmaker_fill"}
+{"fee": 0.0806, "outcome": "No", "price": 0.36, "shares": 5, "title": "Will Bitcoin dip to $62,500 in November?", "token": "25700238965519496471741442754344430421267932313947782198464214318394366351188", "track": "w_tokor", "ts": "2026-11-16T02:20:38Z", "type": "paper_buy"}
+{"fee": 0.0806, "outcome": "No", "price": 0.36, "shares": 5, "title": "Will Bitcoin dip to $62,500 in November?", "token": "25700238965519496471741442754344430421267932313947782198464214318394366351188", "track": "wb_tokor", "ts": "2026-11-16T02:20:39Z", "type": "paper_buy"}
