@@ -503,7 +503,7 @@ def q_match(lines, rule, result=leg_result, stake=25.0):
             pending += 1
             continue
         bets.append({"ev": r.get("cid") or r["rfq"], "t": (r.get("seen") or 0) / 1000, "cost": stake, "pay": pay,
-                     "price": price, "q": q})
+                     "price": price, "q": q, "toks": toks})
     return reqs, trades, won, pending, bets
 
 
@@ -561,6 +561,32 @@ def qtest():
     assert [r["rfq"] for r in won] == ["a", "c", "d"] and pending == 1, (won, pending)
     assert abs(bets[0]["pay"] - (25 + 0.30 * 25 / 0.70)) < 1e-9 and bets[1]["pay"] == 0.0, bets
     print("quoter scoring test ok")
+
+
+# Side scorecard (Jan picked it 16 Nov, after a look at 842 settled parlays: sold before any game had started
+# +$9.57 per $100 on 132, sold with a game already on -$2.68 on 710). That split was found by looking, so only
+# parlays sold from PRE_FROM on count. Same rule `main`, same logs, nothing changes on the server.
+PRE_FROM = 1794821400        # 2026-11-16 09:30 UTC
+
+
+def _start_ts(s):
+    """gameStartTime as the quoter logs it ('2026-11-12 19:45:00+00') -> seconds, or None."""
+    import datetime as dt
+    if not s:
+        return None
+    s = str(s).replace(" ", "T")
+    if s.endswith("+00"):
+        s += ":00"
+    try:
+        return dt.datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+
+def pre_kickoff(toks, seen, names):
+    """True when every leg has a known game start and none had started when the request came in."""
+    st = [_start_ts((names.get(t) or {}).get("start")) for t in toks]
+    return bool(st) and all(x is not None and x > seen for x in st)
 
 
 def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
@@ -630,9 +656,18 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
            "rule": "2-4 legs, no two legs from the same game, our price = the legs multiplied, +5%, $25 at risk a bet",
            "pass_rule": "Pass (fixed 11 Nov): above +$1.00 per $100 and both halves ahead, at 1 Jan or 1,000 finished bets",
            "bets": recent, "leg_results": cache}
+    pb = [b_ for b_ in bets if b_["t"] >= PRE_FROM and pre_kickoff(b_["toks"], b_["t"], names)]
+    pw = [r for r in won if (r.get("seen") or 0) / 1000 >= PRE_FROM
+          and pre_kickoff(r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []], (r.get("seen") or 0) / 1000, names)]
+    pc = exam.score(pb, "Paper combo quoter, before kick-off only (main)", tries=1, log=False, quiet=True) if pb else {}
+    out["pre"] = {"from": PRE_FROM, "would_win": len(pw), "settled": len(pb), "waiting": len(pw) - len(pb),
+                  "won_by_house": sum(1 for b_ in pb if b_["pay"] > 0),
+                  "pnl": round(sum(b_["pay"] - b_["cost"] for b_ in pb), 2), "per100": pc.get("per100"),
+                  "all": [[round(b_["t"]), round(b_["cost"], 2), round(b_["pay"], 2)] for b_ in sorted(pb, key=lambda b_: b_["t"])]}
     os.makedirs(os.path.dirname(path), exist_ok=True)
     json.dump(out, open(path, "w"), separators=(",", ":"))
-    print({k: v for k, v in out.items() if k not in ("leg_results", "bets")}, "lookups", lookups[0], "listed", len(recent))
+    print({k: v for k, v in out.items() if k not in ("leg_results", "bets", "all", "pre")},
+          {k: v for k, v in out["pre"].items() if k != "all"}, "lookups", lookups[0], "listed", len(recent))
 
 
 def usd(x):

@@ -283,6 +283,24 @@ def combo_row(q):
     return row
 
 
+def combo_pre_row(q):
+    """Jan, 16 Nov: the same combo house, counting only parlays sold before any of their games had started, and only
+    from 16 Nov 09:30 UTC on (the split was found by looking at the first 842, so those don't count)."""
+    p = (q or {}).get("pre")
+    if not p:
+        return None
+    k = COMBO_STAKE / 25.0
+    bets = [(t, c * k, (pay - c) * k) for t, c, pay in p.get("all") or []]
+    tied = COMBO_STAKE * (p.get("waiting") or 0)
+    return ext_row("combo_prekick", "Combo house, before kick-off only (practice, same server, same prices): counts only the parlays "
+                   "the combo house would have sold before any of their games had started. Counting from 16 Nov.",
+                   bets, COMBO_POT, tied=tied, waiting=p.get("waiting") or 0,
+                   extra=[[f"{p.get('would_win', 0):,}", "we'd have been cheapest"]],
+                   notes=["Why: on the first 842 parlays, the ones sold before kick-off made about $9.60 per $100 and the ones sold "
+                          "during a game lost about $2.70. We found that by looking back, so it could be luck. Only parlays from 16 Nov on count here.",
+                          "Same $300 pot and $5 a parlay as the main combo house card."])
+
+
 def kfast_rows():
     try:
         import kfastlive as kf
@@ -402,7 +420,7 @@ def build(offline=False):
             quoter = {k: v for k, v in json.load(fh).items() if k != "leg_results"}
     except (OSError, ValueError):
         quoter = None
-    ext = [r for r in [combo_row(quoter)] + kfast_rows() if r]
+    ext = [r for r in [combo_row(quoter), combo_pre_row(quoter)] + kfast_rows() if r]
     order = bot.ranked(stats)
     rows += ext
     plain_words(rows)
