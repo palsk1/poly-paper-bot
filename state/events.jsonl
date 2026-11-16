@@ -17134,3 +17134,5 @@
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXBTC-26NOV1617-B63875", "track": "kalshi_patient", "ts": "2026-11-16T11:17:58Z", "type": "kpatient_order"}
 {"fee": 0.0211, "outcome": "Yes", "price": 0.12, "shares": 5, "title": "Howard Lutnick out as Secretary of Commerce by November 30?", "token": "55235279430915273248763470307823387319666487317461011884964953460438671432619", "track": "w_sbel", "ts": "2026-11-16T11:20:41Z", "type": "paper_buy"}
 {"fee": 0.0211, "outcome": "Yes", "price": 0.12, "shares": 5, "title": "Howard Lutnick out as Secretary of Commerce by November 30?", "token": "55235279430915273248763470307823387319666487317461011884964953460438671432619", "track": "wb_sbel", "ts": "2026-11-16T11:20:41Z", "type": "paper_buy"}
+{"minutes_left": 2.01, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV160630-30", "track": "kc_maker", "ts": "2026-11-16T11:28:01Z", "type": "kmaker_order"}
+{"minutes_left": 2.01, "price": 0.986, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV160630-30", "track": "kc_maker", "ts": "2026-11-16T11:28:02Z", "type": "kmaker_order"}
