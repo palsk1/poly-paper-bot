@@ -17713,3 +17713,4 @@
 {"minutes_left": 1.29, "price": 0.993, "queue": 400.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV161315-15", "track": "kc_maker", "ts": "2026-11-16T18:13:44Z", "type": "kmaker_order"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXINTLFRIENDLYGAME-26NOV16TAHCOK-TIE", "track": "kalshi_patient", "ts": "2026-11-16T18:13:47Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXNCAAMBGAME-26NOV17BALLFSU-BALL", "track": "kalshi_patient", "ts": "2026-11-16T18:13:49Z", "type": "kpatient_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV161315-15", "track": "kc_maker", "ts": "2026-11-16T18:16:45Z", "type": "kmaker_fill"}
