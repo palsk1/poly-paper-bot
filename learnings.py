@@ -43,6 +43,10 @@ CANDIDATES = [
      "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
     ("stock_no", "NO on stock long shots in the afternoon (untested)", DECISION_DAY,
      "150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
+    ("trump_week_k", "YES on words Trump says most weeks, Kalshi (untested)", DECISION_DAY,
+     "first look only; verdict at 100 bets with trump_week: ahead, low end of the luck range above -$5 per $100 (proposed, not locked)"),
+    ("trump_week", "YES on words Trump says most weeks, Polymarket (untested)", DECISION_DAY,
+     "first look only; counted together with trump_week_k (proposed, not locked)"),
     ("arb", "Same question on Kalshi and Polymarket", DECISION_DAY, "pays out on 1 Jan"),
 ]
 KC_TARGET, KC_BAR, KC_START = 2500, 0.22, "2026-11-09T19:00"

@@ -145,6 +145,23 @@ the next 2 hours. The rule was picked after looking at about 150 cuts. Only live
 - **If it buys fewer than 150:** not proven. That alone says the asks are too far from the last price to use it.
 - **Anything else:** not proven, keep it on paper.
 
+## 5h. Proposed live test: trump_week + trump_week_k (written 2026-11-16, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`speeches.py`, `backtest/speeches.md`, `backtest/speeches_kalshi.md`). The history
+says +$24.21 per $100 on 150 Polymarket bets and +$33.80 per $100 on 318 Kalshi bets, both "Promising, needs more
+bets". The rule was found on Polymarket by looking at about 50 versions and then run unchanged on Kalshi. Only live
+bets at real offers can settle it.
+
+- **What counts:** every finished bet of `trump_week` and `trump_week_k` from their first run, counted together,
+  rules as in config (a rule change restarts the count). Bets in the same week count once.
+- **When:** once, when 100 bets have finished (about 30 a month, so around late February 2027). On 1 Jan 2027 there
+  is a first look, which only says "on track" or "off track".
+- **Pass:** 100 or more finished bets, ahead, and the low end of the luck range above -$5 per $100 (the same bar
+  as the holdout tests in section 5).
+- **Side check:** the Kalshi track's own "what $10 / $25 / $50 / $100 would have bought" numbers say how much money
+  really fits.
+- **Anything else:** not proven, keep it on paper.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.

@@ -240,7 +240,7 @@ def load_tracks():
         if tc["source"] == "kmaker":
             for k, v in (("orders", {}), ("unfilled", 0), ("unfilled_log", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
-        if tc["source"] == "econ":
+        if tc["source"] in ("econ", "ktrump"):
             for k, v in (("orders", {}), ("done", []), ("last_check", {})):
                 tracks[name].setdefault(k, v)
         if tc["source"] == "kpatient":
@@ -735,7 +735,7 @@ COPY_SOURCES = ("leader", "wallet", "consensus")
 def manage_exits(tracks, lab=True):
     """Take-profit / stop-loss / settlement for the rule-based tracks (not the copy tracks).
     lab=False skips the ~20 lab rule tracks (they are checked every lab_exit_minutes, not every 5 minutes)."""
-    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "kpatient")
+    todo = [n for n in tracks if CFG["tracks"][n]["source"] not in COPY_SOURCES + ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "ktrump", "kpatient")
             and (lab or not is_lab(n))]
     prefetch_markets(p.get("slug") for n in todo for p in tracks[n]["positions"].values())
     for name in todo:
@@ -3584,14 +3584,19 @@ def econ_names():
     return [n for n, tc in CFG["tracks"].items() if tc["source"] == "econ"]
 
 
-def econ_settle(tracks, names):
+def econ_settle(tracks, names, early_minutes=None, what="forecast-backed favorite"):
+    """early_minutes: also look at a bet every so many minutes before its listed close (Kalshi's word markets
+    close the moment the word is said, long before the listed close)."""
     for n in names:
         tr = tracks[n]
         for tk in list(tr["orders"]):
             o = tr["orders"][tk]
             close = parse_iso(o["close"])
             if now() < close + dt.timedelta(seconds=60):
-                continue
+                last = parse_iso(o.get("checked") or o["placed"])
+                if early_minutes is None or now() - last < dt.timedelta(minutes=early_minutes):
+                    continue
+                o["checked"] = iso()
             m = kalshi_market(tk)
             res = str((m or {}).get("result") or "").lower()
             if res not in ("yes", "no"):
@@ -3609,8 +3614,8 @@ def econ_settle(tracks, names):
                                  "closed_at": iso(), "opened": o["placed"], "rs_pnl": rs})
             log_event({"type": "econ_settle", "track": n, "ticker": tk, "side": o["side"], "pnl": round(pnl, 4)})
             print(f"{n}: {tk} {o['side'].upper()} result {res}, P&L {pnl:+.2f}")
-            if pnl < 0 and push_allowed(n):
-                push(f"[{n}] FLIP: a forecast-backed favorite lost (${pnl:+.2f})",
+            if pnl < 0 and what and push_allowed(n):
+                push(f"[{n}] FLIP: a {what} lost (${pnl:+.2f})",
                      f"{o['title']}\nBought {o['side'].upper()} at {cents(o['entry'])}, forecast said {o['chance'] * 100:.0f} in 100.",
                      tags="rotating_light", track=n)
 
@@ -3724,12 +3729,256 @@ def econ_summary(name, tr):
              "skipped_no_cash": tr["skipped_no_cash"]}
     lc = tr.get("last_check", {})
     row = (f"| {name} | {tr['realized']:+.2f} | {len(tr.get('orders', {}))} | {len(closed)} ({wins}/{len(closed) - wins}) "
-           f"| ${tr['cash']:.2f} | last look {str(lc.get('ts', '-'))[:16]}: {lc.get('markets_in_window', 0)} markets near a release |")
+           f"| ${tr['cash']:.2f} | last look {str(lc.get('ts', '-'))[:16]}: {lc.get('markets_in_window', 0)} markets {'open this week' if CFG['tracks'][name]['source'] == 'ktrump' else 'near a release'} |")
     lines = [f"\n## {name}\n{CFG['tracks'][name].get('label', '')}\n"]
     for o in tr.get("orders", {}).values():
         lines.append(f"- waiting: {o['title']} {o['side'].upper()} {o['shares']} at {cents(o['entry'])}, forecast says "
-                     f"{o['chance'] * 100:.0f} in 100, release {str(o['close'])[:16]}")
+                     f"{o['chance'] * 100:.0f} in 100, {'ends' if CFG['tracks'][name]['source'] == 'ktrump' else 'release'} {str(o['close'])[:16]}")
     return row, stats, lines
+
+
+# ================================================================ Trump weekly words (added 2026-11-16, Jan: "Yes, both sites")
+#
+# "What will Trump say this week?" markets vs his real speeches (speeches.py, backtest/speeches.md and
+# backtest/speeches_kalshi.md). The record: in how many of the 8 weeks before now did he say the word, read from Roll
+# Call's free transcripts (trumpweek.py keeps the last ~10 weeks in state/trumpweek/). Buy YES where that record is
+# 15c+ above the price. Two paper tracks:
+#   trump_week   : Polymarket, only before the week starts (that is what the history test bought), via run_fast.
+#   trump_week_k : Kalshi's weekly KXTRUMPSAY markets, any hour of the week, at the real sell offers.
+# History: Polymarket +$24.21 per $100 on 150 bets, Kalshi +$33.80 on 318 bets, both "Promising, needs more bets".
+
+_trump_words = {}
+
+
+def trump_words():
+    """Trump's words of the last weeks, refreshed from Roll Call once a run. None when the record can't be trusted
+    (Roll Call unreachable, or the newest transcript is days old): then nobody bets this round."""
+    if "W" not in _trump_words:
+        import trumpweek
+        ok, new = trumpweek.sync()
+        W = trumpweek.Words()
+        good = ok and W.fresh(int(now().timestamp()))
+        print(f"trumpweek: Roll Call {'read' if ok else 'FAILED'}, {new} new transcripts, {W.n} days with his words"
+              + ("" if good else " -> record not fresh enough, no bets this round"))
+        _trump_words["W"] = W if good else None
+    return _trump_words["W"]
+
+
+TRUMP_WEEK_RX = re.compile(r"this week|in (january|february|march|april|may|june|july|august|september|october|november|december)\b|this month")
+
+
+def trumpweek_candidates(names):
+    """Polymarket's weekly / monthly "What will Trump say ..." markets, BEFORE their week starts: YES where the word's
+    8-week record is `min_gap`+ above the listed price. buy_candidates then needs `min_model_edge` left at the real ask."""
+    import mentions
+    import speeches
+    rs = {n: rules_for(n) for n in names}
+    out = {n: [] for n in names}
+    W = trump_words()
+    if W is None:
+        return out
+    t_now = int(now().timestamp())
+    try:
+        live = _mention_pages({"closed": "false"}, 40)
+    except Exception as e:
+        print(f"trumpweek: open events failed: {str(e)[:120]}")
+        return out
+    weeks = looked = 0
+    for e in live:
+        title = str(e.get("title") or "").lower()
+        if "post" in title or not TRUMP_WEEK_RX.search(title):
+            continue
+        if "trump" not in str(mentions.speaker({"title": e.get("title")})).lower():
+            continue
+        weeks += 1
+        for m in event_markets(e):
+            prices = binary(m)
+            if not prices or [str(o).lower() for o in jlist(m.get("outcomes"))][:1] != ["yes"]:
+                continue
+            item, q_txt = m.get("groupItemTitle"), str(m.get("question") or "")
+            w = speeches.window({"desc": str(m.get("description") or "")[:600]})
+            if not item or not w or re.search(r"\d\+? times|\d\+", q_txt):
+                continue
+            looked += 1
+            if t_now >= w[0]:
+                if VERBOSE:
+                    print(f"   week already started ({iso(dt.datetime.fromtimestamp(w[0], dt.timezone.utc))}): {q_txt[:70]} listed {cents(prices[0])}")
+                continue                                    # the week has started: the history test only bought before
+            q, k = W.chance(item, t_now, w[0], w[1])
+            p_yes = prices[0]
+            for n, r in rs.items():
+                if VERBOSE and q - p_yes >= r["min_gap"] / 2:
+                    print(f"   near: listed Yes {cents(p_yes)} vs record {q * 100:.0f}/100 (said in {k} of 8 weeks) {q_txt}")
+                if q - p_yes < r["min_gap"] or not (r["min_price"] <= p_yes <= r["max_price"]):
+                    continue
+                c = candidate(m, 0, max((w[1] - t_now) / 86400, 0.01), fnum(pick(m, "liquidityNum", "liquidity")),
+                              {"model_p": round(q, 4), "model_edge": round(q - p_yes, 4),
+                               "signal": f"Yes listed {cents(p_yes)}; he said it in {k} of the last 8 weeks, so about {q * 100:.0f} in 100"})
+                c["event_key"] = str(m.get("slug") or c["token"])     # one bet per word, several words of one week allowed
+                c["theme"] = "trump week word"
+                out[n].append(c)
+    for n in out:
+        out[n].sort(key=lambda c: -c["model_edge"])
+    print(f"trumpweek: {weeks} weekly/monthly Trump events, {looked} word markets, "
+          + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
+    return out
+
+
+def ktrump_names():
+    return [n for n, tc in CFG["tracks"].items() if tc["source"] == "ktrump"]
+
+
+def ktrump_place(tracks, names, force=False):
+    t_now = now()
+    due = [n for n in names if force or not tracks[n].get("last_scan")
+           or t_now - parse_iso(tracks[n]["last_scan"]) >= dt.timedelta(minutes=rules_for(n).get("scan_minutes", 55))]
+    if not due:
+        return
+    ts = int(t_now.timestamp())
+    rows = []
+    for series in sorted({s for n in due for s in rules_for(n).get("series", [])}):
+        cur = None
+        for _ in range(5):
+            try:
+                res = kalshi_get("/markets", {"series_ticker": series, "status": "open", "limit": 200, **({"cursor": cur} if cur else {})})
+            except Exception as e:
+                print(f"ktrump: {series} list failed: {e}")
+                break
+            got = [dict(m, _series=series) for m in res.get("markets") or []
+                   if str(m.get("event_ticker") or "").startswith(series + "-")]   # not the month / company / nickname series
+            rows += got
+            if VERBOSE:
+                print(f"   kalshi list {series}: {len(res.get('markets') or [])} open markets, {len(got)} kept, e.g. "
+                      + str([(m.get('ticker'), m.get('event_ticker'), m.get('status'), m.get('open_time'), m.get('close_time')) for m in (res.get('markets') or [])[:3]]))
+            cur = res.get("cursor")
+            if not cur or not res.get("markets"):
+                break
+    end = {}
+    for m in rows:
+        c = parse_iso(m.get("close_time"))
+        if c:
+            end[m["event_ticker"]] = max(end.get(m["event_ticker"], 0), int(c.timestamp()))
+    for n in due:
+        tracks[n]["last_scan"] = iso()
+        tracks[n]["last_check"] = {"ts": iso(), "markets_in_window": len(rows)}
+    if not rows:
+        return
+    W = trump_words()
+    if W is None:
+        for n in due:
+            tracks[n]["last_check"]["note"] = "Trump's transcripts could not be read, no bets this round"
+        return
+    signals = bought = 0
+    for m in rows:
+        tk, word = m.get("ticker"), str(m.get("yes_sub_title") or m.get("subtitle") or "")[:80]
+        o_t, c_t = parse_iso(m.get("open_time")), parse_iso(m.get("close_time"))
+        x_t = parse_iso(m.get("expected_expiration_time")) or c_t
+        bid, ask = kpx(m, "yes_bid"), kpx(m, "yes_ask")
+        if not tk or not word or not o_t or not c_t or not bid or not ask or ts >= int(c_t.timestamp()):
+            continue
+        ev_end = end[m["event_ticker"]]
+        q, k = W.chance(word, ts, ts, ev_end)
+        bk = None
+        for n in due:
+            r, tr = rules_for(n), tracks[n]
+            if m["_series"] not in r.get("series", []) or tk in tr["orders"] or tk in tr.get("done", []):
+                continue
+            if (x_t - o_t).total_seconds() > r.get("max_life_days", 20) * 86400:
+                continue                                    # month-long markets were not in the history test
+            if (t_now - o_t).total_seconds() < r.get("min_hours_old", 1) * 3600 or ask - bid > r.get("max_spread", 0.15):
+                continue
+            if VERBOSE and q - ask >= r.get("min_gap", 0.15) / 2:
+                print(f"   near: {word}: offer {cents(ask)} vs record {q * 100:.0f}/100 (said in {k} of 8 weeks) {tk}")
+            if q - ask < r.get("min_gap", 0.15):
+                continue
+            signals += 1
+            if bk is None:
+                bk = kalshi_asks(tk) or ((), ())
+            asks = bk[0]
+            if not asks:
+                continue
+            usd_bet = r.get("usd_per_bet", 25)
+            shares = max(1, int(usd_bet / max(asks[0][0], 0.01)))
+            have = int(sum(sz for p_, sz in asks if p_ <= q - r.get("min_gap", 0.15) + 1e-9))   # contracts on offer that still fit the rule
+            shares = min(shares, have)
+            if shares < 1 or shares * asks[0][0] < r.get("min_usd", 5):
+                continue                                    # too little on offer at a price that fits
+            px = walk(asks, shares)
+            if px is None or q - px < r.get("min_gap", 0.15):
+                continue
+            fee = kalshi_fee(shares, px)
+            cost = shares * px + fee
+            maybe_refill(tr, n, cost)
+            if cost > tr["cash"] + EPS:
+                tr["skipped_no_cash"] += 1
+                continue
+            rs = {}
+            for usd_ in rs_sizes():
+                want = max(1, int(usd_ / max(asks[0][0], 0.01)))
+                p2 = walk(asks, want)
+                if p2 is None:   # not all fits: take what the book has
+                    got = sum(sz for _, sz in asks)
+                    p2 = walk(asks, got) if got >= 1 else None
+                    want = got
+                if p2 is not None:
+                    c2 = want * p2 + kalshi_fee(want, p2)
+                    rs[str(usd_)] = [round(c2, 4), round(want, 4), round(min(1.0, want * p2 / usd_), 4)]
+            title = f"{m.get('title')} ({word})"
+            tr["cash"] = round(tr["cash"] - cost, 6)
+            tr["min_cash"] = round(min(tr["min_cash"], tr["cash"]), 6)
+            tr["orders"][tk] = {"ticker": tk, "series": m["_series"], "title": title, "outcome": "yes", "side": "yes",
+                                "shares": shares, "entry": round(px, 6), "price": round(px, 6), "entry_fee": round(fee, 6),
+                                "cost": round(cost, 6), "placed": iso(),
+                                "close": dt.datetime.fromtimestamp(ev_end, dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                                "hours_left": round((ev_end - ts) / 3600, 1), "chance": round(q, 4), "weeks_said": k,
+                                "bid": round(bid, 4), "ask": round(ask, 4), "price_source": "book", "rs": rs,
+                                "what": f"bought YES on Kalshi: he said it in {k} of the last 8 weeks"}
+            tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
+            bought += 1
+            log_event({"type": "ktrump_buy", "track": n, "ticker": tk, "word": word, "price": round(px, 4),
+                       "shares": shares, "chance": round(q, 4), "weeks_said": k})
+            print(f"{n}: bought YES {shares} x {px * 100:.1f}c (+fee {fee:.2f}) on {tk} ({word}): said in {k} of 8 weeks, "
+                  f"about {q * 100:.0f} in 100, {(ev_end - ts) / 3600:.0f}h left")
+            if push_allowed(n):
+                push(f"[{n}] BUY YES at {cents(cost / shares)}", f"{title}\nHe said it in {k} of the last 8 weeks, so about "
+                     f"{q * 100:.0f} in 100. Result within {(ev_end - ts) / 86400:.0f} days.", track=n)
+    for n in due:
+        tracks[n]["last_check"].update({"signals": signals, "bought": bought})
+    print(f"ktrump: {len(rows)} open weekly word markets, {signals} with the record 15c+ above the offer, bought {bought}")
+
+
+def ktrump_cycle(tracks):
+    names = ktrump_names()
+    if not names:
+        return
+    econ_settle(tracks, names, early_minutes=55, what=None)   # long shots lose often: no push per lost bet
+    ktrump_place(tracks, names)
+
+
+def ktrumptest():
+    """Dry run of both Trump weekly words tracks on live data (probe, saves nothing but state/trumpweek)."""
+    global save, log_event, VERBOSE
+    save = lambda name, obj: print(f"(not saving {name})")  # noqa: E731
+    log_event = lambda ev: print("EVENT", json.dumps(ev, sort_keys=True)[:300])  # noqa: E731
+    VERBOSE = True
+    tracks = load_tracks()
+    names = ktrump_names()
+    ktrump_place(tracks, names, force=True)
+    for n in names:
+        print(n, tracks[n].get("last_check"))
+        for o in tracks[n]["orders"].values():
+            print(f"WOULD BUY [{n}] {o['shares']} x {cents(o['entry'])} cost ${o['cost']:.2f} - {o['title'][:80]} | {o['what']}")
+    for st_ in ("open", "unopened", "closed"):
+        try:
+            res = kalshi_get("/events", {"series_ticker": "KXTRUMPSAY", "status": st_, "limit": 5})
+            print("kalshi events", st_, [(e.get("event_ticker"), e.get("title"), e.get("strike_date")) for e in res.get("events") or []])
+        except Exception as e:
+            print("kalshi events", st_, "failed", str(e)[:100])
+    for n, cands in trumpweek_candidates(fast_tracks("trumpweek")).items():
+        print(n, len(cands), "candidates")
+        buy_candidates(tracks, n, cands, 99)
+        for p in tracks[n]["positions"].values():
+            print(f"WOULD BUY [{n}] {p['outcome']} @ {cents(p['entry'])} (record {p.get('model_p')}) - {p['title'][:70]} | {p.get('signal')}")
 
 
 # ================================================================ fast markets: weather and daily crypto (added 2026-11-08)
@@ -3753,7 +4002,7 @@ CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSD
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
-FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno", "stocklong")
+FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno", "stocklong", "trumpweek")
 VERBOSE = False  # fasttest prints near misses
 
 
@@ -3858,7 +4107,8 @@ def run_fast(tracks, force=False):
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
                      ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
                      ("draws", draw_candidates), ("postcount", postcount_candidates),
-                     ("wordno", wordno_candidates), ("stocklong", stocklong_candidates)):
+                     ("wordno", wordno_candidates), ("stocklong", stocklong_candidates),
+                     ("trumpweek", trumpweek_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
         if not names:
             continue
@@ -5422,7 +5672,7 @@ def _track_open_cost(tr, src):
         return sum(a["cost"] for a in tr.get("arbs", {}).values())
     if src in ("fullset", "ladder"):
         return sum(x["cost"] for x in tr.get("sets", {}).values())
-    if src in ("kmaker", "econ", "kpatient"):
+    if src in ("kmaker", "econ", "ktrump", "kpatient"):
         return sum(o["cost"] for o in tr.get("orders", {}).values())
     return open_cost(tr)
 
@@ -5611,7 +5861,7 @@ def watch():
         st = load("scan_state.json", {})
         st["last_lab_exits"] = iso()
         save("scan_state.json", st)
-    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle, kpatient_cycle):
+    for step in (arb_settle, arb_check, fullset_settle, ladder_settle, ladder_check, run_endgame, run_fast, maker_cycle, kmaker_cycle, econ_cycle, ktrump_cycle, kpatient_cycle):
         try:
             step(tracks)
         except Exception as e:
@@ -5727,9 +5977,9 @@ def write_summary(tracks):
     lab_rows = []
     for name, tr in tracks.items():
         src = CFG["tracks"].get(name, {}).get("source")
-        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "kpatient"):
+        if src in ("arb", "fullset", "ladder", "maker", "kmaker", "econ", "ktrump", "kpatient"):
             row, stats[name], lines = {"arb": arb_summary, "fullset": fullset_summary, "ladder": ladder_summary,
-                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary,
+                                       "maker": maker_summary, "kmaker": kmaker_summary, "econ": econ_summary, "ktrump": econ_summary,
                                        "kpatient": kpatient_summary}[src](name, tr)
             md.append(row)
             detail += lines
@@ -6246,4 +6496,4 @@ if __name__ == "__main__":
     {"watch": watch, "daily": daily, "summary": lambda: write_summary(load_tracks()),
      "selftest": selftest, "arbtest": arbtest, "dryrun": dryrun, "discover": discover, "copytest": copytest,
      "depthtest": depthtest, "fasttest": fasttest, "makertest": makertest,
-     "kmakertest": kmakertest, "econtest": econtest, "kpatienttest": kpatienttest}[cmd]()
+     "kmakertest": kmakertest, "econtest": econtest, "kpatienttest": kpatienttest, "ktrumptest": ktrumptest}[cmd]()
