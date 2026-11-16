@@ -82,6 +82,29 @@ def peek3():
         print("TWITTER FAIL", str(e)[:100], flush=True)
 
 
+def peek4():
+    """what Roll Call's post feed holds"""
+    import json
+    for q in ("page=1&format=json", "page=2&format=json", "page=1&format=json&platform=truth+social", "page=1&format=json&sort=date&limit=100",
+              "page=500&format=json", "page=1&format=json&q=tariff"):
+        try:
+            d = json.loads(raw("https://rollcall.com/wp-json/factbase/v1/twitter?" + q, 60))
+        except Exception as e:
+            print("FAIL", q, str(e)[:120], flush=True)
+            continue
+        rows = d.get("data") or []
+        print("Q", q, "meta", d.get("meta"), "rows", len(rows), flush=True)
+        if rows:
+            print("  keys", sorted(rows[0].keys()), flush=True)
+            print("  dates", [(x.get("date"), x.get("platform"), x.get("deleted_flag")) for x in rows[:3]], [(x.get("date")) for x in rows[-2:]], flush=True)
+        for x in rows[:3 if q.startswith("page=1&format=json") and len(q) < 20 else 1]:
+            print("  item", json.dumps(x)[:1800], flush=True)
+        pics = [x for x in rows if x.get("media_text") or x.get("image_text")]
+        print("  with picture text", len(pics), "of", len(rows), flush=True)
+        for x in pics[:2]:
+            print("  pic", json.dumps({k: x.get(k) for k in ("date", "text", "media_text", "image_url", "post_url", "id", "document_id", "platform", "repost_flag", "is_retweet")})[:1500], flush=True)
+
+
 def wj(path, obj):
     import gzip, json, os
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -621,4 +644,4 @@ def kalshi(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
