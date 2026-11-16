@@ -85,8 +85,14 @@ def raw(url, n=40, extra=None):
     import urllib.request
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html,application/json,text/tab-separated-values,*/*",
                                                "Accept-Language": "en-US,en;q=0.9", **(extra or {})})
-    with urllib.request.urlopen(req, timeout=n) as r:
-        return r.read().decode("utf-8", "replace")
+    for i in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=n) as r:
+                return r.read().decode("utf-8", "replace")
+        except Exception as e:
+            if i == 3 or "HTTP Error 4" in str(e):
+                raise
+            time.sleep(3 + 3 * i)
 
 
 def do_peek():
@@ -335,7 +341,44 @@ def run(pick="KXNETFLIX", score=False):
     return rows
 
 
+WON = "https://www.whats-on-netflix.com/most-popular/"
+
+
+def do_peek4():
+    """the date form of whats-on-netflix's daily top 10, and the US block"""
+    import urllib.parse, urllib.request
+    H = {"Referer": WON, "Accept-Encoding": "identity"}
+    s = raw(WON, 60, H)
+    i = s.find('id="datepicker"')
+    a = s.rfind("<form", 0, i)
+    print("FORM", re.sub(r"\s+", " ", s[a if a >= 0 else max(0, i - 800):i + 900]))
+    j = s.find('id="won-mp-country-US"')
+    print("US BLOCK", re.sub(r"\s+", " ", s[j - 300:j + 5000]))
+    names = re.findall(r'<input[^>]*name="([^"]+)"', s[a if a >= 0 else 0:i + 900])
+    print("input names", names)
+
+    def title(x):
+        return re.findall(r"won-mp-chart-title\">([^<]+)", x)[:3]
+    print("today:", title(s))
+    for nm in set(names + ["date", "d", "won_mp_date", "chart_date"]):
+        for val in ("11/05/2026", "2026-11-05"):
+            u = WON + "?" + urllib.parse.urlencode({nm: val})
+            try:
+                print("GET", nm, val, title(raw(u, 40, H)), flush=True)
+            except Exception as e:
+                print("GET", nm, val, "FAIL", str(e)[:80], flush=True)
+            try:
+                req = urllib.request.Request(WON, data=urllib.parse.urlencode({nm: val}).encode(), headers={"User-Agent": UA, **H})
+                with urllib.request.urlopen(req, timeout=40) as r:
+                    print("POST", nm, val, title(r.read().decode("utf-8", "replace")), flush=True)
+            except Exception as e:
+                print("POST", nm, val, "FAIL", str(e)[:80], flush=True)
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "peek4":
+        do_peek4()
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1].startswith("run"):
         run(sys.argv[1][4:] or "KXNETFLIX")
         sys.exit(0)
