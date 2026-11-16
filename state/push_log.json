@@ -17,8 +17,8 @@
   },
   "2026-11-16": {
    "failed": 0,
-   "muted": 144,
-   "sent": 11
+   "muted": 146,
+   "sent": 13
   }
  },
  "recent": [
@@ -315,6 +315,18 @@
    "title": "[crypto_late] bought 1 (practice money)",
    "track": "crypto_late",
    "ts": "2026-11-16T15:16:51Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 92c (+$0.17)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-16T18:59:17Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 2 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-16T19:03:00Z"
   }
  ]
 }
