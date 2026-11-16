@@ -17345,3 +17345,6 @@
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFL1HFT-26NOV16LACBAL-LACBAL", "track": "kalshi_patient", "ts": "2026-11-16T14:25:34Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUEFANLTEAMTOTAL-26NOV16SUISCO-SCO3", "track": "kalshi_patient", "ts": "2026-11-16T14:25:36Z", "type": "kpatient_fill"}
 {"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "Will the highest temperature in Atlanta be between 58-59\u00b0F on November 17?", "token": "108782573556091014263080236794490430139152327719109359808892730875730301147851", "track": "endgame_sell98", "ts": "2026-11-16T14:26:54Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker", "ts": "2026-11-16T14:32:05Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker_safe", "ts": "2026-11-16T14:32:05Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV160930-30", "track": "kc_maker_safe_usd", "ts": "2026-11-16T14:32:05Z", "type": "kmaker_fill"}
