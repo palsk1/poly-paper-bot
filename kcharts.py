@@ -375,7 +375,66 @@ def do_peek4():
                 print("POST", nm, val, "FAIL", str(e)[:80], flush=True)
 
 
+DAILY = os.path.join(CACHE, "daily.json.gz")
+
+
+def parse_daily(s):
+    """-> {"us": [[heading, [[rank, title, tv|movie], ...]], ...], "global": [...]} from one whats-on-netflix day page."""
+    out = {}
+    a, b = s.find("Global charts"), s.find("Most popular by country")
+    u = s.find('id="won-mp-country-US"')
+    v = s.find('id="won-mp-country-', u + 30) if u >= 0 else -1
+    for key, x in (("global", s[a:b] if 0 <= a < b else ""), ("us", s[u:v if v > u else u + 60000] if u >= 0 else "")):
+        secs = []
+        for part in re.split(r'<h4 class="won-mp-chart-title"[^>]*>', x)[1:]:
+            head = re.sub(r"<[^>]+>", "", part.split("</h4>")[0]).strip()
+            rows = [[int(r), t, k] for r, t, k in re.findall(
+                r'won-mp-rank-col">(\d+)</td>.*?data-won-mp-trend-title="([^"]*)"[^>]*?data-won-mp-trend-type="([^"]*)"', part, flags=re.S)]
+            secs.append([head, rows])
+        out[key] = secs
+    return out
+
+
+def do_daily(first="2025-01-01"):
+    """probe kch_daily: Netflix's daily top 10 (US + global) for every day since `first`, from whats-on-netflix -> bt_cache/kch/daily.json.gz"""
+    import html
+    os.makedirs(CACHE, exist_ok=True)
+    have = rj(DAILY, {}) or {}
+    d, end, t0, bad = dt.date.fromisoformat(first), dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1), time.time(), 0
+    while d <= end and time.time() - t0 < 200 * 60 and bad < 25:
+        k = d.isoformat()
+        if k not in have:
+            try:
+                s = raw(f"{WON}?dateselect={d.month:02d}/{d.day:02d}/{d.year}", 60, {"Referer": WON, "Accept-Encoding": "identity"})
+                want = f"{d.strftime('%b')} {d.day}"
+                tt = re.findall(r"Most popular by country — ([A-Za-z]+ \d+)", s)
+                p = parse_daily(html.unescape(s))
+                if not tt or tt[0] != want or not any(r for _, r in p["us"]):
+                    bad += 1
+                    print("  odd page", k, tt[:1], [(h, len(r)) for h, r in p["us"]][:4], flush=True)
+                else:
+                    have[k] = p
+            except Exception as e:
+                bad += 1
+                print("  failed", k, str(e)[:100], flush=True)
+            time.sleep(1.0)
+            if len(have) % 40 == 0:
+                wj(DAILY, have)
+                print(f"  {len(have)} days, at {k} ({time.time() - t0:.0f}s)", flush=True)
+        d += dt.timedelta(days=1)
+    wj(DAILY, have)
+    ks = sorted(have)
+    print("days", len(ks), ks[:1], ks[-1:], "odd or failed", bad)
+    for k in ks[-1:] + ks[:1]:
+        for key in ("us", "global"):
+            for h, r in have[k][key]:
+                print(k, key, h, "|", r[:10])
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1].startswith("daily"):
+        do_daily(sys.argv[1][6:] or "2025-01-01")
+        sys.exit(0)
     if len(sys.argv) > 1 and sys.argv[1] == "peek4":
         do_peek4()
         sys.exit(0)
