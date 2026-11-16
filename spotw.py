@@ -55,6 +55,30 @@ def do_peek():
                 print("FAIL", u, str(e)[:120], flush=True)
 
 
+def do_peek2():
+    x = raw("https://kworb.net/spotify/track/7scFxt9VhL4FJwuPSfRlfN.html", 50, {"Accept-Encoding": "identity"})
+    print(len(x), [(m.start(), x[m.start() - 60:m.start() + 120].replace("\n", " ")) for m in re.finditer(r"(?i)daily", x)][:12], flush=True)
+    print("tables", [m.start() for m in re.finditer("<table", x)], re.findall(r'<div class="[^"]+"', x)[:40], flush=True)
+    for m in list(re.finditer("<table", x))[1:3]:
+        print("  T", re.sub(r"\s+", " ", x[m.start():m.start() + 1500]), flush=True)
+    print("tail", text(x[-6000:], 3000, ("zzz",)), flush=True)
+    for u in ("https://web.archive.org/cdx/search/cdx?url=kworb.net/spotify/country/us_daily.html&from=20241001&output=json&filter=statuscode:200&collapse=timestamp:8&fl=timestamp",
+              "https://web.archive.org/cdx/search/cdx?url=kworb.net/spotify/country/global_daily.html&from=20241001&output=json&filter=statuscode:200&collapse=timestamp:8&fl=timestamp",
+              "https://web.archive.org/cdx/search/cdx?url=kworb.net/spotify/country/us_weekly.html&from=20241001&output=json&filter=statuscode:200&collapse=timestamp:8&fl=timestamp",
+              "https://charts-spotify-com-service.spotify.com/public/v0/charts/regional-us-daily/2026-06-15",
+              "https://charts-spotify-com-service.spotify.com/public/v0/charts/regional-us-daily/latest",
+              "https://charts-spotify-com-service.spotify.com/auth/v0/charts/regional-us-daily/2026-06-15"):
+        for k in range(3):
+            try:
+                y = raw(u, 90, {"Accept-Encoding": "identity"})
+                n = y.count("\n")
+                print("OK", u[:110], len(y), n, y[:300].replace("\n", " "), "...", y[-200:].replace("\n", " "), flush=True)
+                break
+            except Exception as e:
+                print("FAIL", u[:110], str(e)[:120], flush=True)
+                time.sleep(20)
+
+
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": do_peek}[a]()
+    {"peek": do_peek, "peek2": do_peek2}[a]()
