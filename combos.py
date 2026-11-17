@@ -744,22 +744,26 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
         if x.get("k") == "legs":
             for tok, info in (x.get("legs") or {}).items():
                 names[tok] = info
-    recent = []
-    for r in sorted(won, key=lambda r: r.get("seen") or 0, reverse=True):
-        toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
-        rs = [cache.get(t) for t in toks]
-        q = r["quotes"]["main"]
-        price = float(trades[r["rfq"]]["price"]) / 1e6
-        if 0 in rs:
-            end, gain = "kept", round(25 * q / (1 - q), 2)
-        elif rs and all(v == 1 for v in rs):
-            end, gain = "paid", -25.0
-        else:
-            end, gain = "waiting", None
-        recent.append({"t": (r.get("seen") or 0) / 1000, "q": round(q, 4), "price": round(price, 4), "end": end, "gain": gain,
-                       "legs": [{"title": (names.get(t) or {}).get("title") or "unknown market",
-                                 "out": (names.get(t) or {}).get("out") or "", "res": v} for t, v in zip(toks, rs)]})
-    recent = [x for x in recent if x["end"] != "waiting"][:30] + [x for x in recent if x["end"] == "waiting"][:30]
+    def listing(rs_):
+        """The newest 30 finished and 30 waiting parlays from these sales, with their legs, for the dashboard lists."""
+        out_ = []
+        for r in sorted(rs_, key=lambda r: r.get("seen") or 0, reverse=True):
+            toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
+            rs = [cache.get(t) for t in toks]
+            q = r["quotes"]["main"]
+            price = float(trades[r["rfq"]]["price"]) / 1e6
+            if 0 in rs:
+                end, gain = "kept", round(25 * q / (1 - q), 2)
+            elif rs and all(v == 1 for v in rs):
+                end, gain = "paid", -25.0
+            else:
+                end, gain = "waiting", None
+            out_.append({"t": (r.get("seen") or 0) / 1000, "q": round(q, 4), "price": round(price, 4), "end": end, "gain": gain,
+                         "legs": [{"title": (names.get(t) or {}).get("title") or "unknown market",
+                                   "out": (names.get(t) or {}).get("out") or "", "res": v} for t, v in zip(toks, rs)]})
+        return [x for x in out_ if x["end"] != "waiting"][:30] + [x for x in out_ if x["end"] == "waiting"][:30]
+
+    recent = listing(won)
     heard = sum(int((x.get("pricer") or {}).get("heard", 0)) for x in lines if x.get("k") == "note" and x.get("what") == "counts")
     last = max((x.get("t") or 0) for x in lines)
     c = exam.score(bets, "Paper combo quoter, live (main)", tries=1, prereg=True, log=False, quiet=True) if bets else {}
@@ -784,11 +788,14 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
     out["pre"] = {"from": PRE_FROM, "would_win": len(pw), "settled": len(pb), "waiting": len(pw) - len(pb),
                   "won_by_house": sum(1 for b_ in pb if b_["pay"] > 0),
                   "pnl": round(sum(b_["pay"] - b_["cost"] for b_ in pb), 2), "per100": pc.get("per100"),
-                  "all": [[round(b_["t"]), round(b_["cost"], 2), round(b_["pay"], 2)] for b_ in sorted(pb, key=lambda b_: b_["t"])]}
+                  "all": [[round(b_["t"]), round(b_["cost"], 2), round(b_["pay"], 2)] for b_ in sorted(pb, key=lambda b_: b_["t"])],
+                  "bets": listing(pw)}
     taken, skipped, open_n = pot_sim(won, trades, cache, names)
+    by_sale = {(r.get("seen") or 0) / 1000: r for r in won}
+    pot_list = listing([by_sale[t_] for t_, _, _ in taken if t_ in by_sale])
     out["pot100"] = {"pot": 100.0, "stake": 5.0, "game_hours": GAME_HOURS, "taken": len(taken), "skipped": skipped,
                      "open": open_n, "pnl": round(sum(p for _, _, p in taken), 2),
-                     "all": [[round(t), c, round(p, 2)] for t, c, p in taken]}
+                     "all": [[round(t), c, round(p, 2)] for t, c, p in taken], "bets": pot_list}
     os.makedirs(os.path.dirname(path), exist_ok=True)
     json.dump(out, open(path, "w"), separators=(",", ":"))
     print({k: v for k, v in out.items() if k not in ("leg_results", "bets", "all", "pre")},

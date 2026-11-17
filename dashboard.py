@@ -270,21 +270,30 @@ def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None,
             "legend": "Profit from finished bets, added up over time"}
 
 
+def combo_list(listed, k, stake=None):
+    """Finished parlays (for the 'latest bets' list) and waiting ones, from a combo scorecard's "bets" listing.
+    k scales the server's $25 a parlay to the card's bet size. The time shown is when the parlay was sold."""
+    stake = stake or COMBO_STAKE
+    cents = lambda v: f"{round(v * 100)}c"
+    recent, wait = [], []
+    for b in listed or []:
+        legs = " + ".join(f"{lg['title']}{' ' + lg['out'] if lg.get('out') else ''}" for lg in b.get("legs") or [])
+        if b["end"] == "waiting":
+            wait.append(legs)
+        else:
+            recent.append({"t": legs, "o": "A leg lost, we keep the buyer's money" if b["end"] == "kept" else f"Every leg won, we pay out ${stake:.0f}",
+                           "e": None, "x": None, "pnl": r2(b["gain"] * k),
+                           "why": f"buyer paid a pro {cents(b['price'])} per $1, we'd have asked {cents(b['q'])}, sold",
+                           "at": iso_s(b["t"])[:16]})
+    return recent, wait
+
+
 def combo_row(q):
     if not q or "all" not in q:
         return None
     k = COMBO_STAKE / 25.0      # the server's notes count $25 at risk a parlay; the card shows a pot Jan could really fund
     bets = [(t, c * k, (pay - c) * k) for t, c, pay in q["all"]]
-    cents = lambda v: f"{round(v * 100)}c"
-    recent, wait = [], []
-    for b in q.get("bets") or []:
-        legs = " + ".join(f"{lg['title']}{' ' + lg['out'] if lg.get('out') else ''}" for lg in b.get("legs") or [])
-        if b["end"] == "waiting":
-            wait.append(legs)
-        else:
-            recent.append({"t": legs, "o": "A leg lost, we keep the buyer's money" if b["end"] == "kept" else f"Every leg won, we pay out ${COMBO_STAKE:.0f}",
-                           "e": None, "x": None, "pnl": r2(b["gain"] * k), "why": f"buyer paid a pro {cents(b['price'])} per $1, we'd have asked {cents(b['q'])}",
-                           "at": iso_s(b["t"])[:16]})
+    recent, wait = combo_list(q.get("bets"), k)
     last = iso_s(q["last_seen"]) if q.get("last_seen") else None
     tied = COMBO_STAKE * (q.get("waiting") or 0)
     extra = [[f"{q['heard']:,}", "price requests heard"], [f"{q['trades']:,}", "parlays really sold"],
@@ -316,7 +325,8 @@ def combo_pot_row(q):
         return None
     bets = [(t, c, pnl) for t, c, pnl in p.get("all") or []]
     tied = p.get("stake", 5.0) * (p.get("open") or 0)
-    return ext_row("combo_pot100", "Combo house with a real $100 pot (practice, same server, same prices): the same parlays as the main "
+    recent, wait = combo_list(p.get("bets"), p.get("stake", 5.0) / 25.0, p.get("stake", 5.0))
+    row = ext_row("combo_pot100", "Combo house with a real $100 pot (practice, same server, same prices): the same parlays as the main "
                    "combo house card, but it starts with $100 and only sells a parlay when it has $5 free. Money in a parlay "
                    "is stuck until the games end, so on busy nights it has to skip parlays.",
                    bets, p.get("pot", 100.0), tied=tied, waiting=p.get("open") or 0,
@@ -325,7 +335,10 @@ def combo_pot_row(q):
                           f"The server doesn't note when a parlay finished, so we count its $5 as stuck until about {p.get('game_hours', 3):.0f} hours "
                           "after its game started (the first losing game, or the last game if all won). That's a guess, and real games can run longer.",
                           "Until 17 Nov the server only saw 01:00-03:20 each night, when about 150 parlays come in at once. A $100 pot fills up "
-                          "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."])
+                          "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."],
+                  recent=recent[:12])
+    row["open_list"] = wait[:30]
+    return row
 
 
 def combo_pre_row(q):
@@ -337,13 +350,17 @@ def combo_pre_row(q):
     k = COMBO_STAKE / 25.0
     bets = [(t, c * k, (pay - c) * k) for t, c, pay in p.get("all") or []]
     tied = COMBO_STAKE * (p.get("waiting") or 0)
-    return ext_row("combo_prekick", "Combo house, before kick-off only (practice, same server, same prices): counts only the parlays "
+    recent, wait = combo_list(p.get("bets"), k)
+    row = ext_row("combo_prekick", "Combo house, before kick-off only (practice, same server, same prices): counts only the parlays "
                    "the combo house would have sold before any of their games had started. Counting from 16 Nov.",
                    bets, COMBO_POT, tied=tied, waiting=p.get("waiting") or 0,
                    extra=[[f"{p.get('would_win', 0):,}", "we'd have been cheapest"]],
                    notes=["Why: on the first 842 parlays, the ones sold before kick-off made about $9.60 per $100 and the ones sold "
                           "during a game lost about $2.70. We found that by looking back, so it could be luck. Only parlays from 16 Nov on count here.",
-                          "Same $300 pot and $5 a parlay as the main combo house card."])
+                          "Same $300 pot and $5 a parlay as the main combo house card."],
+                  recent=recent[:12])
+    row["open_list"] = wait[:30]
+    return row
 
 
 def kfast_rows():
