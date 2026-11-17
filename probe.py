@@ -910,7 +910,7 @@ def audit_full(since="2026-11-09"):
         tapes = dict(ex.map(tape, list(need)))
     print(f"   tapes read for {len(tapes)} markets")
 
-    per = defaultdict(lambda: [0, 0, 0, 0])   # buys, covered, real trade at/below +1c within 60 min, within 10 min at/below our price
+    per = defaultdict(lambda: [0] * 8)   # buys, covered, real trade at/below +1c within 60 min, within 10 min at/below our price
     gaps = []
     for n, src, tok, p in buys:
         s = per[n]
@@ -929,16 +929,25 @@ def audit_full(since="2026-11-09"):
         s[2] += ok60
         s[3] += any(px <= p["entry"] + 1e-9 for px in close)
         if not ok60:
-            gaps.append((min(near) - p["entry"] if near else None, n, p))
-    print("== A) per track: buys | tape reaches back far enough | real trade at/below our price +1c within 60 min | at/below our price within 10 min")
-    tot = [0, 0, 0, 0]
+            if near:
+                s[4] += 1   # people traded near our time, but only dearer than our price +1c
+                gaps.append((min(near) - p["entry"], n, p))
+            else:
+                s[5] += 1   # nobody traded within 60 min: quiet market; look at the first trade after us instead
+                after = sorted((t, px) for px, t in mine if t > t0)
+                if after:
+                    s[6] += after[0][1] <= p["entry"] + 0.01
+                    s[7] += 1
+    print("== A) per track: buys | checkable | real trade at/below our price +1c within 60 min | at/below within 10 min | "
+          "trades within 60 min but ALL dearer | no trade within 60 min (quiet) | of those, next trade later at/below +1c | of those, any later trade")
+    tot = [0] * 8
     for n, s in sorted(per.items(), key=lambda kv: -kv[1][0]):
         tot = [a + b for a, b in zip(tot, s)]
-        flag = "  <-- check" if s[1] >= 5 and s[2] < 0.6 * s[1] else ""
-        print(f"  {n:26} {C.get(n, {}).get('source', ''):10} {s[0]:5} {s[1]:5} {s[2]:5} {s[3]:5}{flag}")
-    print(f"  -> ALL: {tot[0]} buys, {tot[1]} checkable, {tot[2]} had a real trade at/below our price +1c within 60 min, {tot[3]} at/below our price within 10 min")
-    print("== A2) checkable buys with NO real trade at/below +1c within 60 min (biggest gap first, 40 shown)")
-    gaps.sort(key=lambda g: -(g[0] if g[0] is not None else 9))
+        flag = "  <-- dearer" if s[4] >= 3 and s[4] >= 0.2 * max(s[1], 1) else ""
+        print(f"  {n:26} {C.get(n, {}).get('source', ''):10} " + " ".join(f"{x:5}" for x in s) + flag)
+    print(f"  -> ALL: " + " ".join(str(x) for x in tot))
+    print("== A2) buys where people traded within 60 min but only dearer than our price +1c (biggest gap first, 40 shown)")
+    gaps.sort(key=lambda g: -g[0])
     for g, n, p in gaps[:40]:
         print(f"  {n:24} entry {p['entry']:.3f} cheapest real trade near it {'none' if g is None else round(p['entry'] + g, 3)} at {p['opened'][5:16]} {p.get('price_source')} | {p.get('title', '')[:55]} [{p.get('outcome')}]")
 
