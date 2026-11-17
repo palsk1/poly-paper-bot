@@ -18501,3 +18501,6 @@
 {"fee": 0.018, "outcome": "No", "price": 0.9, "shares": 5, "title": "Will Andy Burnham say \"NHS\" during the next PMQ?", "token": "115484818495433216711392241352500382422362914107355412448640525365013692437263", "track": "mention_no", "ts": "2026-11-17T03:49:45Z", "type": "paper_buy"}
 {"cost": 3.7673, "title": "Will the price of Ethereum be above $1,900 on November 21?", "token": "60193092578907405921073991972780895370125506897640282141929277410195237240074", "track": "crypto_no", "ts": "2026-11-17T03:51:52Z", "type": "skip_no_cash"}
 {"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXTHCLEGALSALE3MG-FED-26NOV16", "track": "kalshi_patient", "ts": "2026-11-17T03:52:04Z", "type": "kpatient_fill"}
+{"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
+{"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
+{"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe_usd", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
