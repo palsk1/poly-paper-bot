@@ -19963,3 +19963,9 @@
 {"fee": 0.0043, "outcome": "No", "price": 0.978, "shares": 5, "title": "S&P 500 (SPY) closes above $740 on November 17?", "token": "108762990306655610676065150165523252865464256821827411927747492728565833683609", "track": "endgame_sell98", "ts": "2026-11-17T18:37:09Z", "type": "paper_buy"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV1713-B63650", "track": "kalshi_patient", "ts": "2026-11-17T18:37:13Z", "type": "kpatient_result"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXTRUMPAPPROVE-26NOV17-U38.3", "track": "kalshi_patient", "ts": "2026-11-17T18:37:13Z", "type": "kpatient_result"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 11596.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV171345-45", "track": "kc_maker", "ts": "2026-11-17T18:42:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 11596.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV171345-45", "track": "kc_maker_safe", "ts": "2026-11-17T18:42:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 11596.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV171345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T18:42:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 699.03, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV171345-45", "track": "kc_maker", "ts": "2026-11-17T18:42:31Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 699.03, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV171345-45", "track": "kc_maker_safe", "ts": "2026-11-17T18:42:31Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.998, "queue": 699.03, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV171345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T18:42:31Z", "type": "kmaker_order"}
