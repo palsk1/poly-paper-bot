@@ -18512,3 +18512,8 @@
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXCONCACAFNLGAME-26NOV16CANGTM-GTM", "track": "kalshi_patient", "ts": "2026-11-17T04:02:06Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV16MTLNYR-MTLJSLAFKOVSK20", "track": "kalshi_patient", "ts": "2026-11-17T04:02:06Z", "type": "kpatient_result"}
 {"minutes_left": 2.74, "price": 0.988, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV162315-15", "track": "kc_maker", "ts": "2026-11-17T04:12:17Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.12, "price": 0.988, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV162315-15", "track": "kc_maker", "ts": "2026-11-17T04:16:27Z", "type": "kmaker_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLEQBTTS-26NOV16LACBAL-Y", "track": "kalshi_patient", "ts": "2026-11-17T04:16:28Z", "type": "kpatient_result"}
+{"pnl": 0.39, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV16LACBAL-BALRBATEMAN7", "track": "kalshi_patient", "ts": "2026-11-17T04:16:28Z", "type": "kpatient_result"}
+{"pnl": 0.07, "price": 0.93, "shares": 1.0, "side": "no", "ticker": "KXNFLRACE-26NOV16LACBAL-14-NONE", "track": "kalshi_patient", "ts": "2026-11-17T04:16:28Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNFLTEAMFIRSTTD-26NOV16LACBAL-BAL-MANDREWS89", "track": "kalshi_patient", "ts": "2026-11-17T04:16:28Z", "type": "kpatient_result"}
