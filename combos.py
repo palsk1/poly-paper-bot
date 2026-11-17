@@ -589,6 +589,53 @@ def pre_kickoff(toks, seen, names):
     return bool(st) and all(x is not None and x > seen for x in st)
 
 
+GAME_HOURS = 3.0             # a game's result is taken as known this long after its start (our guess, see pot_sim)
+
+
+def pot_sim(won, trades, results, names, pot=100.0, stake=5.0, now=None):
+    """Jan, 17 Nov: "I wouldn't have started with more than 100 dollars". Replays the main rule's would-be sales in
+    the order they came, with a real pot: each parlay ties up `stake` from its sale until it settles, and a sale is
+    skipped when free cash is under `stake`. The logs don't say when a parlay settled, so it is taken as GAME_HOURS
+    after the start of the first losing leg (we keep the money as soon as one leg loses) or of the last leg (all won).
+    Unsettled parlays stay tied up. Returns taken bets [(sale s, cost, pnl)] oldest first, skipped count, open count."""
+    now = now or time.time()
+    events = []                      # (sale s, free s or None, pnl or None)
+    for r in sorted(won, key=lambda r: r.get("seen") or 0):
+        toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
+        q = r["quotes"]["main"]
+        rs = [results.get(t) for t in toks]
+        st = [_start_ts((names.get(t) or {}).get("start")) for t in toks]
+        sale = (r.get("seen") or 0) / 1000
+        if 0 in rs:
+            lost = [s for s, v in zip(st, rs) if v == 0 and s]
+            free = (min(lost) if lost else sale) + GAME_HOURS * 3600
+            pnl = stake * q / (1 - q)
+        elif rs and all(v == 1 for v in rs):
+            free = (max([s for s in st if s] or [sale])) + GAME_HOURS * 3600
+            pnl = -stake
+        else:
+            free, pnl = None, None
+        events.append((sale, None if free is None else max(free, sale), pnl))
+    held, taken, skipped, cash = [], [], 0, pot      # held: (free s, pnl)
+    for sale, free, pnl in events:
+        keep = []
+        for f, p in held:
+            if f is not None and f <= sale:
+                cash += stake + p
+            else:
+                keep.append((f, p))
+        held = keep
+        if cash < stake - 1e-9:
+            skipped += 1
+            continue
+        cash -= stake
+        held.append((free, pnl))
+        if pnl is not None:
+            taken.append((sale, stake, pnl))
+    open_n = sum(1 for f, p in held if p is None or f > now)
+    return taken, skipped, open_n
+
+
 def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
     """Small scoreboard of the paper combo quoter for the dashboard (run by watch, at most every 25 min)."""
     import exam
@@ -664,10 +711,15 @@ def qstate(path="state/quoter.json", min_age=1500, max_lookups=300):
                   "won_by_house": sum(1 for b_ in pb if b_["pay"] > 0),
                   "pnl": round(sum(b_["pay"] - b_["cost"] for b_ in pb), 2), "per100": pc.get("per100"),
                   "all": [[round(b_["t"]), round(b_["cost"], 2), round(b_["pay"], 2)] for b_ in sorted(pb, key=lambda b_: b_["t"])]}
+    taken, skipped, open_n = pot_sim(won, trades, cache, names)
+    out["pot100"] = {"pot": 100.0, "stake": 5.0, "game_hours": GAME_HOURS, "taken": len(taken), "skipped": skipped,
+                     "open": open_n, "pnl": round(sum(p for _, _, p in taken), 2),
+                     "all": [[round(t), c, round(p, 2)] for t, c, p in taken]}
     os.makedirs(os.path.dirname(path), exist_ok=True)
     json.dump(out, open(path, "w"), separators=(",", ":"))
     print({k: v for k, v in out.items() if k not in ("leg_results", "bets", "all", "pre")},
-          {k: v for k, v in out["pre"].items() if k != "all"}, "lookups", lookups[0], "listed", len(recent))
+          {k: v for k, v in out["pre"].items() if k != "all"},
+          {k: v for k, v in out["pot100"].items() if k != "all"}, "lookups", lookups[0], "listed", len(recent))
 
 
 def usd(x):

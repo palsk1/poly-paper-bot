@@ -185,6 +185,13 @@
       "loses": "Lots of parlays come true at once, or people only buy from us when our price is too low.",
       "status": "Its pass test is fixed: at 1 Jan or 1,000 finished parlays."
     },
+    "combo_pot100": {
+      "say": "The same pretend parlay 'house' as the main card, but with a real wallet: it starts with $100 and risks $5 a parlay. Each $5 is stuck until the games end, so when $100 is already in play it has to say no.",
+      "example": "At 01:00 twenty parlays come in. That's $100 in play, so the 21st has to be skipped. When a game ends a few hours later, that $5 (plus what we won) is free again.",
+      "wins": "Most parlays lose, and the extra we charge adds up a few dollars at a time.",
+      "loses": "Lots of parlays come true at once, or the parlays it can afford happen to be the bad ones.",
+      "status": "Counts from 11 Nov. Shows what a real $100 start would have done; no pass test of its own."
+    },
     "combo_prekick": {
       "say": "The same pretend parlay 'house' as above, but it only counts parlays sold before any of their games had started. Once a game is on, buyers can watch the score and only buy when they already know more than our price does.",
       "example": "At 7 pm someone asks for 'Hawks AND Thunder win', both games starting at 1 am: that one counts here. At 2 am, with the Hawks 15 points up, the same request does not.",
