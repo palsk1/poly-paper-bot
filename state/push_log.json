@@ -19,6 +19,11 @@
    "failed": 0,
    "muted": 165,
    "sent": 14
+  },
+  "2026-11-17": {
+   "failed": 0,
+   "muted": 0,
+   "sent": 1
   }
  },
  "recent": [
@@ -333,6 +338,12 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-7.68)",
    "track": "kalshi_patient",
    "ts": "2026-11-16T22:02:42Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.60)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-17T00:11:37Z"
   }
  ]
 }
