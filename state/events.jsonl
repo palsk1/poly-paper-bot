@@ -19894,3 +19894,4 @@
 {"minutes_left": 3.62, "price": 0.969, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV171300-00", "track": "kc_maker", "ts": "2026-11-17T17:56:23Z", "type": "kmaker_order"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXBTC-26NOV1713-B63650", "track": "kalshi_patient", "ts": "2026-11-17T18:02:35Z", "type": "kpatient_fill"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXINTLFRIENDLYSPREAD-26NOV17QATKOR-QAT2", "track": "kalshi_patient", "ts": "2026-11-17T18:02:35Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.0915, "price": 0.0, "reason": "resolved", "title": "Will United Arab Emirates vs. Syria end in a draw?", "token": "113873555287506114372622331130071839227329826933858625602124868053537636506563", "track": "soccer_draw", "ts": "2026-11-17T18:05:42Z", "type": "paper_close"}
