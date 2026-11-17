@@ -25,3 +25,8 @@ Each buy was compared with Polymarket's real trade list for that market (`/v2/tr
 - The light check (`state/integrity.json`) flags one thing: `kc_maker_safe_usd` has 532 finished trades and not one loss (Kalshi; not covered by this check).
 
 Rerun: probe `audit_full` (or `audit_full_<YYYY-MM-DD>` for another start date). It takes about 3 minutes.
+
+## kc_maker_safe_usd: 534 wins, 0 losses (checked the same day, Jan: "do it")
+- Fills are real-tape fills (`bot.kmaker_fill`: only contracts really sold at our price after the queue ahead of us, or below it). 528 of its 534 fills are the exact same bets at the same price as its twin `kc_maker_safe`, whose fills were checked against the tape before (`backtest/kreplay.md`).
+- Why no losses: the twin lost 4 times since the twin was added (12 Nov 16:42 UTC), and 5 times counting the morning of 12 Nov. All 5 were Yes bets that the price-gap check (Binance moved onto Kalshi's price) filtered out. That's exactly what it was built for (`backtest/kcloss.md`). The 4 later losses came after the rule was written, so this is a small but fair sign it works.
+- Since launch: `_usd` +$31.61 on $5,290 of bids (+$0.60 per $100); twin +$23.76. One loss costs about $10, so the lead is a few losses wide. Too early to tell; the fills aren't fake.
