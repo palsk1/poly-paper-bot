@@ -18382,3 +18382,6 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV162145-45", "track": "kc_maker_safe", "ts": "2026-11-17T02:48:12Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV162145-45", "track": "kc_maker_safe", "ts": "2026-11-17T02:48:12Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV162145-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T02:48:12Z", "type": "kmaker_fill"}
+{"filled": 0.23, "price": 0.96, "side": "no", "through": false, "ticker": "KXLOWTSFO-26NOV16-B48.5", "track": "kalshi_patient", "ts": "2026-11-17T02:52:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "yes", "through": true, "ticker": "KXNCAAFTOTAL-26NOV21UCLAMICH-22", "track": "kalshi_patient", "ts": "2026-11-17T02:52:19Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUEFANLSCORE-26NOV17WALPOR-WAL1POR3", "track": "kalshi_patient", "ts": "2026-11-17T02:52:21Z", "type": "kpatient_fill"}
