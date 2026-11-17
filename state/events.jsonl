@@ -20403,3 +20403,7 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXCONCACAFNLSPREAD-26NOV17SLVSMA-SMA2", "track": "kalshi_patient", "ts": "2026-11-17T23:13:17Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV19INDHOU-HOUTDELL1-2", "track": "kalshi_patient", "ts": "2026-11-17T23:13:17Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXBEAVEROPEN-27-22NOV26", "track": "kalshi_patient", "ts": "2026-11-17T23:13:17Z", "type": "kpatient_order"}
+{"fee": 0.0085, "outcome": "No", "price": 0.975, "shares": 5, "title": "Will the price of Bitcoin be between $68,000 and $70,000 on November 18?", "token": "23817077820763155409983511230195288761727562904167427187654380403875746445868", "track": "endgame_sell98", "ts": "2026-11-17T23:17:08Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171815-15", "track": "kc_maker", "ts": "2026-11-17T23:17:12Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171815-15", "track": "kc_maker_safe", "ts": "2026-11-17T23:17:12Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171815-15", "track": "kc_maker_safe_usd", "ts": "2026-11-17T23:17:12Z", "type": "kmaker_fill"}
