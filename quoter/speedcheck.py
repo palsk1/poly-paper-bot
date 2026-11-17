@@ -11,8 +11,9 @@ server's clock in milliseconds ("r"):
   {"k":"bn", "r", "e", "p"}            Binance BTCUSDT trade price (e = Binance's own time), when it moves $0.50+
   {"k":"cb", "r", "e", "p"}            Coinbase BTC-USD price, same rule
   {"k":"cl", "r", "e", "p"}            Chainlink BTC/USD via Polymarket's live feed (what the windows settle on), if it works
-  {"k":"bk", "r", "w", "o", "bb","bs","ba","as"}   top of the book of one side (o = "Up"/"Down") of window w (start time)
-                                       when it changes: best bid, its size, best ask, its size
+  {"k":"bk", "r", "w", "o", "bb","bs","ba","as"}   top of the Up book of window w (start time) when a best price
+                                       moves or its size changes a lot: best bid, its size, best ask, its size.
+                                       Down's is the mirror: Down ask = 1 - Up bid
   {"k":"tr", "r", "w", "o", "p", "s", "sd"}         a trade on that window (price, shares, side as Polymarket says)
   {"k":"win", "w", "up", "down", "cid"}             token ids of a window
   {"k":"res", "w", "up_won"}                        a finished window's result (from Gamma)
@@ -209,12 +210,17 @@ class Books:
         lv = self.lv.get(t)
         if not lv or t not in self.tok:
             return
+        w, o = self.tok[t]
+        if o != "Up":          # Down's book is Up's mirrored (Down ask = 1 - Up bid): one side is enough
+            return
         bb = max(lv["b"]) if lv["b"] else None
         ba = min(lv["a"]) if lv["a"] else None
         top = (bb, lv["b"].get(bb), ba, lv["a"].get(ba))
-        if top != self.top.get(t):
+        old = self.top.get(t)
+        # write when a best price moves, or its size changes by 20+ in 100 (size crumbs alone ~200 lines a second)
+        if old is None or old[0] != bb or old[2] != ba or any(
+                (a or 0) and abs((b or 0) - a) > 0.2 * a for a, b in ((old[1], top[1]), (old[3], top[3]))):
             self.top[t] = top
-            w, o = self.tok[t]
             self.log.put({"k": "bk", "r": r, "w": w, "o": o, "bb": top[0], "bs": top[1], "ba": top[2], "as": top[3]})
 
     def handle(self, raw, r=None):
@@ -390,25 +396,29 @@ def norm_cdf(z):
     return 0.5 * (1 + math.erf(z / math.sqrt(2)))
 
 
-def score(paths, src="bn", jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), say=print):
+def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), say=print):
     """For every Bitcoin jump (the fair price of a side rises `jump`+ within 2 s, as heard by this server), how much
     of Polymarket's sell offers on that side were still at a price below the new fair price minus the fee, `react` ms
     after we heard it? And what would buying them have paid at the window's result?"""
     import bisect
     import collections
     import statistics
-    px, books, res, pings = [], collections.defaultdict(list), {}, collections.defaultdict(list)
+    px, books, res, pings = collections.defaultdict(list), collections.defaultdict(list), {}, collections.defaultdict(list)
     for o in read_lines(paths):
         k = o.get("k")
-        if k == src:
-            px.append((o["r"], o["p"]))
-        elif k == "bk":
-            books[(o["w"], o["o"])].append((o["r"], o.get("ba"), o.get("as") or 0))
+        if k in ("bn", "cb", "cl"):
+            px[k].append((o["r"], o["p"]))
+        elif k == "bk" and o.get("o") == "Up":
+            books[(o["w"], "Up")].append((o["r"], o.get("ba"), o.get("as") or 0))
+            bb = o.get("bb")
+            books[(o["w"], "Down")].append((o["r"], round(1 - bb, 4) if bb is not None else None, o.get("bs") or 0))
         elif k == "res":
             res[o["w"]] = o["up_won"]
         elif k == "ping":
             pings[o["what"]].append(o["ms"])
-    px.sort()
+    say("Bitcoin prices heard:", {k: len(v) for k, v in px.items()})
+    src = src or max(("bn", "cb", "cl"), key=lambda k: (len(px[k]) > 1000, k == "bn", len(px[k])))
+    px = sorted(px[src])
     if len(px) < 100:
         say("not enough Bitcoin prices yet")
         return None
@@ -427,7 +437,7 @@ def score(paths, src="bn", jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
     wins = sorted({w for (w, _) in books})
     for w in wins:
         s0 = price_at(w * 1000)
-        if not s0 or w not in res:
+        if not s0:
             continue
         hist = [price_at((w - k) * 1000) for k in range(0, 901, 5)]
         rets = [math.log(hist[i] / hist[i + 1]) for i in range(len(hist) - 1) if hist[i] and hist[i + 1]]
@@ -456,7 +466,7 @@ def score(paths, src="bn", jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
             last_r = r
             side = "Up" if f_now > f_then else "Down"
             fair = f_now if side == "Up" else 1 - f_now
-            won = res[w] == (side == "Up")
+            won = None if w not in res else res[w] == (side == "Up")
             bk = books.get((w, side)) or []
             bt = [b[0] for b in bk]
             row = {"w": w, "r": r, "side": side, "fair": fair, "won": won, "at": {}}
@@ -480,10 +490,12 @@ def score(paths, src="bn", jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
     for d in react:
         rows = [x for x in out if d in x["at"] and x["at"][d]["edge"] > 0.01]
         c = sum(x["at"][d]["ask"] * x["at"][d]["size"] for x in rows)
-        p = sum(x["at"][d]["size"] * x["won"] for x in rows)
-        fee = sum(0.07 * x["at"][d]["ask"] * (1 - x["at"][d]["ask"]) * x["at"][d]["size"] for x in rows)
+        known = [x for x in rows if x["won"] is not None]
+        ck = sum(x["at"][d]["ask"] * x["at"][d]["size"] for x in known)
+        p = sum(x["at"][d]["size"] * x["won"] for x in known)
+        fee = sum(0.07 * x["at"][d]["ask"] * (1 - x["at"][d]["ask"]) * x["at"][d]["size"] for x in known)
         say(f"  {d:>5} ms after we heard it: {len(rows)} jumps still had an old-price sell offer 1c+ under fair after fees "
-            f"(${c:,.0f} on offer); buying all of it: {'n/a' if not c else f'{100 * (p - c - fee) / c:+.2f} per $100'}")
+            f"(${c:,.0f} on offer); buying all of it: {'no results yet' if not ck else f'{100 * (p - ck - fee) / ck:+.2f} per $100'}")
     la = sorted(x["lasted"] for x in out if x.get("lasted") is not None)
     if la:
         say(f"  old-price offers (1c+ under fair) still up when we heard the jump: {len(la)}; they lasted a median "
@@ -509,6 +521,13 @@ def selftest():
     rows = [json.loads(x) for x in open(lg.path())]
     asks = [x["ba"] for x in rows if x["k"] == "bk"]
     assert asks == [0.52, 0.51, 0.52], asks
+    b.add_window(1000, "U", "D")
+    b.handle(json.dumps([{"event_type": "book", "asset_id": "D", "bids": [{"price": "0.48", "size": "20"}],
+                          "asks": [{"price": "0.52", "size": "10"}]}]), r=5)
+    b.handle(json.dumps({"event_type": "price_change", "price_changes": [
+        {"asset_id": "U", "price": "0.52", "size": "21", "side": "SELL"}]}), r=6)   # 20 -> 21 shares: a crumb
+    lg.flush()
+    assert sum(1 for x in map(json.loads, open(lg.path())) if x["k"] == "bk") == 3, "Down and crumbs aren't written"
     assert rows[-1]["k"] == "tr" and rows[-1]["p"] == 0.52
     mv = Mover(lg, "bn")
     for p in (100.0, 100.2, 100.6, 100.7):
@@ -538,6 +557,7 @@ def selftest():
         fh.write(json.dumps({"k": "res", "w": w, "up_won": True}) + "\n")
     out = score([f], say=lambda *a: None)
     hit = [x for x in out if x["side"] == "Up"]
+    assert out is not None
     assert hit and hit[0]["lasted"] == 300 and hit[0]["at"][0]["edge"] > 0.1 and hit[0]["at"][500]["ask"] == 0.90, hit
     src = open(__file__).read()
     for bad in ("post_order", "create_order", "private_key", "POLY_API_SECRET"):
