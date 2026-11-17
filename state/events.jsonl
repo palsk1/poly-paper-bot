@@ -19373,3 +19373,8 @@
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV170745-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T12:46:29Z", "type": "kmaker_fill"}
 {"minutes_left": 3.55, "price": 0.991, "queue": 604.09, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV170800-00", "track": "kc_maker", "ts": "2026-11-17T12:56:27Z", "type": "kmaker_order"}
 {"minutes_left": 3.55, "price": 0.979, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV170800-00", "track": "kc_maker", "ts": "2026-11-17T12:56:28Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV170800-00", "track": "kc_maker", "ts": "2026-11-17T13:02:20Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.79, "price": 0.979, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV170800-00", "track": "kc_maker", "ts": "2026-11-17T13:02:21Z", "type": "kmaker_fill"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "yes", "ticker": "KXINTLFRIENDLYGAME-26NOV17SINBRA-BRA", "track": "kalshi_patient", "ts": "2026-11-17T13:02:22Z", "type": "kpatient_result"}
+{"fee": 0.0263, "outcome": "No", "price": 0.844, "shares": 5, "title": "Will Trump meet with Kim Jong Un in 2026?", "token": "33948383215136644432533371238863136180727484636430037616426554075016398089174", "track": "panic_fade", "ts": "2026-11-17T13:03:01Z", "type": "paper_buy"}
+{"fee": 0.0196, "outcome": "No", "price": 0.89, "shares": 5, "title": "Will Delcy Rodr\u00edguez be the leader of Venezuela end of 2026?", "token": "6638895201070039547671726076818069674458322142629985177641367819559425166288", "track": "panic_fade_4c", "ts": "2026-11-17T13:03:01Z", "type": "paper_buy"}
