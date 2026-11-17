@@ -18385,3 +18385,7 @@
 {"filled": 0.23, "price": 0.96, "side": "no", "through": false, "ticker": "KXLOWTSFO-26NOV16-B48.5", "track": "kalshi_patient", "ts": "2026-11-17T02:52:18Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "yes", "through": true, "ticker": "KXNCAAFTOTAL-26NOV21UCLAMICH-22", "track": "kalshi_patient", "ts": "2026-11-17T02:52:19Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUEFANLSCORE-26NOV17WALPOR-WAL1POR3", "track": "kalshi_patient", "ts": "2026-11-17T02:52:21Z", "type": "kpatient_fill"}
+{"fee": 0.0068, "outcome": "Yes", "price": 0.972, "shares": 5, "title": "Will the lowest temperature in Hong Kong be 24\u00b0C on November 17?", "token": "109940194607359134401692661505154758290470816394269510015771766262662615220478", "track": "endgame_sell98", "ts": "2026-11-17T03:02:41Z", "type": "paper_buy"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNBA1Q-26NOV16MEMWAS-TIE", "track": "kalshi_patient", "ts": "2026-11-17T03:03:04Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNBA3D-26NOV16CHICLE-CHIJGIDDEY3", "track": "kalshi_patient", "ts": "2026-11-17T03:03:04Z", "type": "kpatient_result"}
+{"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV16CHICLE-CHI12", "track": "kalshi_patient", "ts": "2026-11-17T03:03:04Z", "type": "kpatient_result"}
