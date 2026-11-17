@@ -19233,3 +19233,4 @@
 {"filled": 6.34, "pnl": 0.0127, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV170615-15", "track": "kc_maker", "ts": "2026-11-17T11:16:31Z", "type": "kmaker_fill"}
 {"filled": 6.34, "pnl": 0.0127, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV170615-15", "track": "kc_maker_safe", "ts": "2026-11-17T11:16:31Z", "type": "kmaker_fill"}
 {"filled": 6.34, "pnl": 0.0127, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV170615-15", "track": "kc_maker_safe_usd", "ts": "2026-11-17T11:16:31Z", "type": "kmaker_fill"}
+{"fee": 0.0102, "outcome": "Yes", "price": 0.97, "shares": 5, "title": "Will the price of Solana be between $70 and $80 on November 17?", "token": "52937511374395410453638894929021216309704729024319369183293971564595728212312", "track": "endgame_sell98", "ts": "2026-11-17T11:21:16Z", "type": "paper_buy"}
