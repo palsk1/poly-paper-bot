@@ -289,11 +289,13 @@ def combo_row(q):
     tied = COMBO_STAKE * (q.get("waiting") or 0)
     extra = [[f"{q['heard']:,}", "price requests heard"], [f"{q['trades']:,}", "parlays really sold"],
              [f"{q['would_win']:,}", "we'd have been cheapest"]]
-    notes = [f"It starts with ${COMBO_POT:.0f} and risks ${COMBO_STAKE:.0f} on every parlay it would have sold. Per $100 the result is the same at any bet size.",
+    notes = [f"It starts with ${COMBO_POT:.0f} and risks ${COMBO_STAKE:.0f} on every parlay it would have sold, as if there were always money for the next one. "
+             "So it can go below $0 in free cash: a real pot this size would have run out and skipped parlays, and the "
+             "result would differ (the \"$100 pot\" card shows that). Per $100 at risk, the profit is the same at any bet size.",
              q.get("pass_rule", "") + ".",
              "Why the line jumps once a night: until 15 Nov the server's daily notebook filled up by about 03:00 Stockholm time, "
              "so it only wrote down parlays sold between 01:00 and 03:00. The rest of each day was missed, and the line sat flat. "
-             "Fixed on 15 Nov (it now only writes down requests that really sold); the fix starts once you restart the server.",
+             "Fixed on 15 Nov (it now only writes down requests that really sold), live since you restarted the server on 16 Nov.",
              {"last_seen": last}]
     if tied > COMBO_POT:
         notes.insert(1, f"Right now {q.get('waiting')} parlays are waiting, which needs ${tied:,.0f}. That is more than the ${COMBO_POT:.0f} pot, "
