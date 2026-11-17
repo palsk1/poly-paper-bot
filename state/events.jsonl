@@ -18337,3 +18337,4 @@
 {"pnl": 0.032, "price": 0.95, "shares": 0.64, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV16NCCUVCU-VCU", "track": "kalshi_patient", "ts": "2026-11-17T02:02:12Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:02:12Z", "type": "kpatient_fill"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:06:51Z", "type": "kpatient_result"}
+{"fee": 0.0084, "outcome": "No", "price": 0.965, "shares": 5, "title": "Will the highest temperature in Tel Aviv be 23\u00b0C on November 17?", "token": "95712915154631933187545732912010223966373082789888730906946361708105933034584", "track": "endgame_sell98", "ts": "2026-11-17T02:22:08Z", "type": "paper_buy"}
