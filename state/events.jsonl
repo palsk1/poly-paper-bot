@@ -19303,3 +19303,4 @@
 {"minutes_left": 3.27, "price": 0.997, "queue": 1159.19, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV170715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-17T12:11:49Z", "type": "kmaker_order"}
 {"filled": 5.05, "pnl": 0.0202, "price": 0.996, "side": "no", "through": false, "ticker": "KXBNB15M-26NOV170715-15", "track": "kc_maker", "ts": "2026-11-17T12:16:48Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV170715-15", "track": "kc_maker", "ts": "2026-11-17T12:16:49Z", "type": "kmaker_fill"}
+{"outcome": "Yes", "pnl": 0.4117, "price": 0.932, "reason": "take profit (now 93c), book", "title": "Next Astra Model (6.1+) released by November 30, 2026?", "token": "105770865688595995273432663312261008455386364011387197129263314786801133868503", "track": "panic_fade", "ts": "2026-11-17T12:20:37Z", "type": "paper_close"}
