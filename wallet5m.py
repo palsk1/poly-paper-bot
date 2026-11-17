@@ -99,12 +99,25 @@ def fetch(addr=ADDR, pages=400):
 
     # 2) results of every window the wallet touched (Gamma, 20 slugs a call)
     slugs = sorted({t.get("slug") for t in trades if t.get("slug")} | {p.get("slug") for p in pos.values() if p.get("slug")})
+    results_and_tapes(slugs)
+    spot(trades)
+    print(f"fetch took {time.time() - t0:.0f}s")
+
+
+def fetch2(days=36):
+    """Results + newest window tapes without re-reading the wallet: every BTC/ETH 5-minute window of the last N days."""
+    now = int(time.time()) // 300 * 300 - 300
+    slugs = [f"{c}-updown-5m-{t}" for c in ("btc",) for t in range(now - int(days) * 86400, now, 300)]
+    results_and_tapes(slugs, wallet_only=False)
+
+
+def results_and_tapes(slugs, wallet_only=True):
     print("windows touched:", len(slugs), collections.Counter(s.split("-updown-")[0] + "-" + s.split("-")[2] for s in slugs if "-updown-" in s))
     res = rj("results.json.gz", {}) or {}
 
     def batch(chunk):
         try:
-            return bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {"slug": chunk, "limit": 100}), "markets", "data")
+            return bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {"slug": chunk, "closed": "true", "limit": 100}), "markets", "data")
         except Exception as e:
             print("  gamma failed", e)
             return []
@@ -125,8 +138,8 @@ def fetch(addr=ADDR, pages=400):
     print("results:", len(res), "sample", one)
 
     # 3) full trade list of the newest windows the wallet traded (who traded with it, its share of the window)
-    newest = [s for s in sorted({t.get("slug") for t in trades if str(t.get("slug", "")).startswith("btc-updown-5m-")},
-                                key=lambda s: -int(s.rsplit("-", 1)[1]))][:400]
+    newest = sorted([s for s in res if s.startswith("btc-updown-5m-") and (res[s].get("prices") or [0])[0] in (0.0, 1.0)],
+                    key=lambda s: -int(s.rsplit("-", 1)[1]))[:400]
     tapes = rj("tapes.json.gz", {}) or {}
 
     def tape(slug):
@@ -154,11 +167,15 @@ def fetch(addr=ADDR, pages=400):
             if v:
                 tapes[slug] = v
     wj("tapes.json.gz", tapes)
+    if not tapes:
+        return
     lens = sorted(len(v["rows"]) for v in tapes.values())
     print(f"tapes: {len(tapes)}, trades per window median {lens[len(lens) // 2] if lens else 0}, max {lens[-1] if lens else 0}, "
           f"incomplete {sum(1 for v in tapes.values() if not v.get('ok'))}")
 
-    # 4) Binance 1-second BTC for every day with trades
+
+
+def spot(trades):
     import kfast
     days = sorted({dt.datetime.utcfromtimestamp(bot.fnum(t.get("timestamp"))).strftime("%Y-%m-%d") for t in trades})
     ok = [d for d in days if kfast.fetch_spot_day("BTCUSDT", d)]
@@ -181,13 +198,15 @@ def fetch(addr=ADDR, pages=400):
                 last[int(k[0]) // 1000] = float(k[4])
             cur = int(ks[-1][0]) + 1000
     wj("spot_api.json.gz", {str(k): v for k, v in last.items()})
-    print(f"spot from API: {len(last)} seconds; fetch took {time.time() - t0:.0f}s")
+    print(f"spot from API: {len(last)} seconds")
 
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "fetch"
     if cmd == "fetch":
         fetch(*sys.argv[2:])
+    elif cmd == "fetch2":
+        fetch2(*sys.argv[2:])
     elif cmd == "run":
         import wallet5m_run
         wallet5m_run.main()
