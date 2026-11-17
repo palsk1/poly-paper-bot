@@ -20343,3 +20343,5 @@
 {"outcome": "No", "pnl": 0.1065, "price": 0.984, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in Los Angeles be between 70-71\u00b0F on November 17?", "token": "63761341686420656177244795175874572732328679311205395330178586260064606061021", "track": "endgame_sell98", "ts": "2026-11-17T22:31:05Z", "type": "paper_close"}
 {"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV171730-30", "track": "kc_maker", "ts": "2026-11-17T22:31:56Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV171730-30", "track": "kc_maker_safe", "ts": "2026-11-17T22:31:56Z", "type": "kmaker_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXBRENTD-26NOV1717-T93.50", "track": "kalshi_patient", "ts": "2026-11-17T22:37:15Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXTEMPMIAH-26NOV1717-T76.99", "track": "kalshi_patient", "ts": "2026-11-17T22:37:16Z", "type": "kpatient_result"}
