@@ -18921,3 +18921,11 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXYTVIEWSW-ARI26NOV15-15.0M", "track": "kalshi_patient", "ts": "2026-11-17T07:33:12Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXNCAAMBGAME-26NOV20BLOOMUMES-UMES", "track": "kalshi_patient", "ts": "2026-11-17T07:33:12Z", "type": "kpatient_order"}
 {"fee": 0.043, "outcome": "No", "price": 0.779, "shares": 5, "title": "Will White House post 160-179 posts from November 13 to November 20, 2026?", "token": "86294052704300209759115696402167146956289308867359779498245512686433294702623", "track": "postcount_no", "ts": "2026-11-17T07:37:34Z", "type": "paper_buy"}
+{"minutes_left": 2.72, "price": 0.982, "queue": 1316.38, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV170245-45", "track": "kc_maker", "ts": "2026-11-17T07:42:17Z", "type": "kmaker_order"}
+{"minutes_left": 2.72, "price": 0.963, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV170245-45", "track": "kc_maker", "ts": "2026-11-17T07:42:18Z", "type": "kmaker_order"}
+{"minutes_left": 2.72, "price": 0.994, "queue": 217.94, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV170245-45", "track": "kc_maker", "ts": "2026-11-17T07:42:18Z", "type": "kmaker_order"}
+{"minutes_left": 2.72, "price": 0.998, "queue": 1055.24, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV170245-45", "track": "kc_maker", "ts": "2026-11-17T07:42:19Z", "type": "kmaker_order"}
+{"minutes_left": 2.72, "price": 0.998, "queue": 1055.24, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV170245-45", "track": "kc_maker_safe", "ts": "2026-11-17T07:42:19Z", "type": "kmaker_order"}
+{"minutes_left": 2.72, "price": 0.998, "queue": 1055.24, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV170245-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T07:42:19Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXINTLFRIENDLYGAME-26NOV17UAESYR-SYR", "track": "kalshi_patient", "ts": "2026-11-17T07:42:21Z", "type": "kpatient_fill"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "yes", "ticker": "KXTEMPLAXHS-26NOV1702-T63.99", "track": "kalshi_patient", "ts": "2026-11-17T07:42:22Z", "type": "kpatient_result"}
