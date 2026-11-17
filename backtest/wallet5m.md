@@ -49,3 +49,21 @@ queue race with pro bots, needs an always-on server, and Polymarket's trade list
 a paper version can't be scored honestly (same wall as `pm15`, and our 5 Polymarket maker tracks lost $416). Most
 of the profit is the rebate, which a small newcomer wouldn't earn at that size. Don't redo unless Polymarket
 publishes order-book history or Jan wants a real-money queue test.
+
+## Running his system ourselves on a fast server? (17 Nov, Jan: "we would use his system ourselves", AWS is fine)
+`python3 wallet5m.py speed` -> `backtest/wallet5m_speed.txt`.
+- **His edge is speed.** Around each fill, Bitcoin (Binance, by the second) jumps toward the side he buys 2-5 s before the
+  fill's timestamp, for his grabbed offers and his waiting orders alike. So he trades in the first seconds after Bitcoin
+  moves, before Polymarket's prices catch up. (The timestamp is when the trade lands on the blockchain, about 3 s after
+  the match.)
+- His waiting-order money comes from that too. Fills right after a move his way: +$21 per $100 ($19,144). Fills with
+  no move: +$0.63 per $100. Fills just after a move against him (picked off): -$13,425. Without being among the fastest,
+  the plain waiting part is about +$0.63 per $100, before the rebates a newcomer wouldn't get.
+- **Pulling orders when Bitcoin drops doesn't help.** Pulling when our side's fair price falls 2, 3 or 5c, 1-3 s
+  before the match: +$1.23 to +$1.63 per $100 on what is kept, against +$1.47 for doing nothing (9 versions tried).
+  The orders it would have pulled were profitable too.
+- So copying "his system" means a race in the 1-3 seconds after each Bitcoin move against him and other pro bots.
+  It's the same kind of race as Jan's old Binance-to-Polymarket bot. Jan's server is in Stockholm (free plan locks
+  the region): about 30 ms to Polymarket in London, but Binance's engine sits in Tokyo, so prices reach Stockholm
+  later than they reach bots placed near Binance. Verdict unchanged: no track. Only a real-money test could show our
+  place in that race, and these numbers say to expect a loss.

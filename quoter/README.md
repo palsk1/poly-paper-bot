@@ -59,3 +59,18 @@ Stopping for good: `sudo systemctl disable --now quoter`, then delete the server
 - `setup.sh` - installs everything and the always-on service
 - Logs: `~/quoter-data/quoter-YYYYMMDD.jsonl`, uploaded hourly to the release `quoter-data`
 - Scoring: probe `cmb_qscore` (or `python3 combos.py qscore`), offline check `python3 combos.py qtest`
+
+## Speed check (17 Nov 2026, listen only)
+
+Jan: "just to learn, we aren't committing any money yet." A second service, `speedcheck`, runs next to the quoter.
+It reads only public feeds: Bitcoin's price from Binance and Coinbase, Chainlink's Bitcoin price through Polymarket's
+live feed (what the windows settle on), and the live sell and buy offers of Polymarket's "Bitcoin Up or Down"
+5-minute windows. It needs no login and has no code that can place an order. Question: after Bitcoin jumps, how long
+do old-price sell offers stay up, counted from when this server hears the jump? Background: `backtest/wallet5m.md`.
+
+Install (Jan, 2 minutes, once): open the server with "Connect using SSH" and paste
+`cd ~/poly-paper-bot && git pull && bash quoter/speed_setup.sh`.
+Watch: `journalctl -u speedcheck -f`. Stop for good: `sudo systemctl disable --now speedcheck`.
+Logs: `~/speed-data/speed-YYYYMMDD.jsonl` (7 days kept), uploaded hourly to the release `speed-data` with the same
+GITHUB_TOKEN as the quoter. Score: `gh release download speed-data -p '*.gz'` then
+`python3 quoter/speedcheck.py score speed-*.jsonl.gz`. Offline check: `python3 quoter/speedcheck.py selftest`.
