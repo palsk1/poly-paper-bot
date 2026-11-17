@@ -19883,3 +19883,4 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXHIGHTHOU-26NOV17-B66.5", "track": "kalshi_patient", "ts": "2026-11-17T17:32:18Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "yes", "through": false, "ticker": "KXNCAAFGAME-26NOV21WAKEGT-WAKE", "track": "kalshi_patient", "ts": "2026-11-17T17:32:18Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV19INDHOU-HOU31", "track": "kalshi_patient", "ts": "2026-11-17T17:32:21Z", "type": "kpatient_fill"}
+{"minutes_left": 2.99, "price": 0.983, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV171245-45", "track": "kc_maker", "ts": "2026-11-17T17:42:01Z", "type": "kmaker_order"}
