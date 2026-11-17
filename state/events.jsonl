@@ -18590,3 +18590,9 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXLOWTAUS-26NOV16-B48.5", "track": "kalshi_patient", "ts": "2026-11-17T04:46:28Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KXLOWTNOLA-26NOV16-B52.5", "track": "kalshi_patient", "ts": "2026-11-17T04:46:29Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLOWTSAN-26NOV16-B58.5", "track": "kalshi_patient", "ts": "2026-11-17T04:46:29Z", "type": "kpatient_fill"}
+{"cost": 3.7673, "title": "Will the price of Ethereum be above $1,900 on November 21?", "token": "60193092578907405921073991972780895370125506897640282141929277410195237240074", "track": "crypto_no", "ts": "2026-11-17T04:55:24Z", "type": "skip_no_cash"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNFL1HFT-26NOV16LACBAL-LACBAL", "track": "kalshi_patient", "ts": "2026-11-17T04:55:33Z", "type": "kpatient_result"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLBOTH-26NOV16LACBAL-28", "track": "kalshi_patient", "ts": "2026-11-17T04:55:33Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNFLTD-26NOV16LACBAL-BALJCUEVAS85-1", "track": "kalshi_patient", "ts": "2026-11-17T04:55:33Z", "type": "kpatient_result"}
+{"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLTOTAL-26NOV16LACBAL-60", "track": "kalshi_patient", "ts": "2026-11-17T04:55:33Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLWINMARGIN-26NOV16LACBAL-LAC15PLUS", "track": "kalshi_patient", "ts": "2026-11-17T04:55:33Z", "type": "kpatient_result"}
