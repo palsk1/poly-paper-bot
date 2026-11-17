@@ -1,0 +1,20 @@
+## Is it speed?
+waiting orders (100,875 fills): average Bitcoin move toward the side bought, 1/100 of a basis point, by second around the fill time:
+  -12:-1.1 -11:-1.1 -10:-0.7 -9:-0.5 -8:+0.4 -7:+2.4 -6:+5.7 -5:+10.3 -4:+14.9 -3:+13.6 -2:+6.4 -1:+3.0 0:+2.3 1:+0.9 2:+1.7 3:+0.7
+grabbed sell offers (89,078 fills): average Bitcoin move toward the side bought, 1/100 of a basis point, by second around the fill time:
+  -12:-1.6 -11:-1.6 -10:-2.3 -9:-2.8 -8:-2.5 -7:-2.8 -6:-3.2 -5:-1.8 -4:+7.1 -3:+20.8 -2:+12.7 -1:+4.5 0:+3.2 1:+2.2 2:+1.5 3:+1.1
+waiting-order fills by the move of their side's fair price in the 2 s before the fill time:
+  against 10c+: 1,487 fills, $9,184, -44.79 per $100 ($-4,113)
+  against 5-10c: 3,509 fills, $19,666, -26.40 per $100 ($-5,191)
+  against 2-5c: 6,650 fills, $35,560, -11.59 per $100 ($-4,121)
+  flat: 73,251 fills, $407,861, +0.63 per $100 ($+2,585)
+  toward 2c+: 15,978 fills, $91,173, +21.00 per $100 ($+19,144)
+pull when our side drops 2c+, 1 s before the match (match = fill time - 3 s): keep 66,831 of 100,875 fills, +1.61 per $100 ($+6,734)
+pull when our side drops 3c+, 1 s before the match (match = fill time - 3 s): keep 70,224 of 100,875 fills, +1.61 per $100 ($+7,008)
+pull when our side drops 5c+, 1 s before the match (match = fill time - 3 s): keep 75,669 of 100,875 fills, +1.42 per $100 ($+6,501)
+pull when our side drops 2c+, 2 s before the match (match = fill time - 3 s): keep 66,781 of 100,875 fills, +1.46 per $100 ($+6,060)
+pull when our side drops 3c+, 2 s before the match (match = fill time - 3 s): keep 70,158 of 100,875 fills, +1.49 per $100 ($+6,418)
+pull when our side drops 5c+, 2 s before the match (match = fill time - 3 s): keep 76,003 of 100,875 fills, +1.23 per $100 ($+5,641)
+pull when our side drops 2c+, 3 s before the match (match = fill time - 3 s): keep 67,462 of 100,875 fills, +1.63 per $100 ($+6,749)
+pull when our side drops 3c+, 3 s before the match (match = fill time - 3 s): keep 70,882 of 100,875 fills, +1.57 per $100 ($+6,744)
+pull when our side drops 5c+, 3 s before the match (match = fill time - 3 s): keep 76,750 of 100,875 fills, +1.29 per $100 ($+5,913)

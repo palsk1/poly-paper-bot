@@ -517,6 +517,84 @@ def copytest(say=print):
         say(f"copy {d}s late at the next real sell offer + fee: ${c:,.0f}, {100 * (p - c) / c:+.2f} per $100; fills with no offer left: {miss}")
 
 
+def speed(say=print, lag=3):
+    """Is the wallet's edge speed? (17 Nov, Jan: "we would use his system ourselves" on a fast AWS server.)
+    1) average Binance move toward the side bought, second by second around each fill (where the move peaks = how
+       long after the match the fill's timestamp is, and whether the wallet trades right after Bitcoin jumps);
+    2) its waiting-order fills split by the Bitcoin move just before them;
+    3) a bot that pulls its waiting orders when its side's fair price drops 2/3/5c, 1-3 s before the match."""
+    import math
+    import statistics
+    ws = windows()
+    ws = [x for x in ws if x["st"] >= ws[0]["st"] + 3600]
+    sp = spot_series()
+    prof = {True: collections.defaultdict(float), False: collections.defaultdict(float)}
+    n = {True: 0, False: 0}
+    rows = []
+    for x in ws:
+        st = x["st"]
+        s0 = sp.get(st)
+        past = [sp.get(st - k) for k in range(0, 901)]
+        rets = [math.log(past[i] / past[i + 1]) for i in range(900) if past[i] and past[i + 1]]
+        sig = statistics.pstdev(rets) if len(rets) >= 600 else 0
+
+        def fu(t):
+            t = max(st, t)
+            s = sp.get(t) or sp.get(t - 1)
+            left = st + 300 - t
+            if not s or not s0 or left <= 0 or sig <= 0:
+                return None
+            return norm_cdf(math.log(s / s0) / (sig * math.sqrt(left)))
+        for f in x["fills"]:
+            t = int(st + f["t"])
+            sgn = 1 if f["up"] else -1
+            vals = {}
+            for j in range(-30, 11):
+                a, b = sp.get(t + j), sp.get(t + j - 1)
+                if not a or not b:
+                    vals = None
+                    break
+                vals[j] = sgn * math.log(a / b) * 1e4
+            if vals:
+                n[f["mk"]] += 1
+                for j, v in vals.items():
+                    prof[f["mk"]][j] += v
+            if not f["mk"]:
+                continue
+            m = t - lag
+            a = {k: fu(m - k) for k in (0, 1, 2, 3, 13)}
+            b2 = fu(t - 2)
+            if any(v is None for v in a.values()) or b2 is None or fu(t) is None:
+                continue
+            rows.append({"c": f["sz"] * f["px"], "p": f["sz"] * (f["up"] == x["upwon"]),
+                         "a": {k: sgn * v for k, v in a.items()}, "d2": sgn * (b2 - fu(t))})
+    say("## Is it speed?")
+    for mk in (True, False):
+        if n[mk]:
+            say(f"{'waiting orders' if mk else 'grabbed sell offers'} ({n[mk]:,} fills): average Bitcoin move toward the side bought, "
+                f"1/100 of a basis point, by second around the fill time:")
+            say("  " + " ".join(f"{j}:{100 * prof[mk][j] / n[mk]:+.1f}" for j in range(-12, 4)))
+    g = collections.defaultdict(lambda: [0, 0.0, 0.0])
+    for r in rows:
+        v = r["d2"]
+        k = "against 10c+" if v >= .10 else "against 5-10c" if v >= .05 else "against 2-5c" if v >= .02 else "flat" if v > -.02 else "toward 2c+"
+        g[k][0] += 1
+        g[k][1] += r["c"]
+        g[k][2] += r["p"]
+    say("waiting-order fills by the move of their side's fair price in the 2 s before the fill time:")
+    for k in ("against 10c+", "against 5-10c", "against 2-5c", "flat", "toward 2c+"):
+        c, p = g[k][1], g[k][2]
+        if c:
+            say(f"  {k}: {g[k][0]:,} fills, ${c:,.0f}, {100 * (p - c) / c:+.2f} per $100 (${p - c:+,.0f})")
+    for d in (1, 2, 3):
+        for mm in (0.02, 0.03, 0.05):
+            keep = [r for r in rows if r["a"][13] - r["a"][d] < mm]
+            c = sum(r["c"] for r in keep)
+            p = sum(r["p"] for r in keep)
+            say(f"pull when our side drops {int(mm * 100)}c+, {d} s before the match (match = fill time - {lag} s): keep "
+                f"{len(keep):,} of {len(rows):,} fills, {100 * (p - c) / c:+.2f} per $100 (${p - c:+,.0f})")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "fetch"
     if cmd == "fetch":
@@ -525,3 +603,8 @@ if __name__ == "__main__":
         fetch2(*sys.argv[2:])
     elif cmd == "run":
         run()
+    elif cmd == "speed":
+        lines = []
+        speed(lambda *a: (print(*a), lines.append(" ".join(str(x) for x in a))))
+        with open(os.path.join(bot.ROOT, "backtest", "wallet5m_speed.txt"), "w") as fh:
+            fh.write("\n".join(lines) + "\n")
