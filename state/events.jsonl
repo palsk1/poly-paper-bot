@@ -19526,3 +19526,10 @@
 {"minutes_left": 3.18, "price": 0.991, "queue": 968.75, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV170945-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T14:41:49Z", "type": "kmaker_order"}
 {"minutes_left": 3.18, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV170945-45", "track": "kc_maker", "ts": "2026-11-17T14:41:50Z", "type": "kmaker_order"}
 {"minutes_left": 3.18, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV170945-45", "track": "kc_maker_safe", "ts": "2026-11-17T14:41:51Z", "type": "kmaker_order"}
+{"fee": 0.0077, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Meta (META) close above $640 on November 17?", "token": "61079024112263959088127318848000287455997187744192073433140904252525552482118", "track": "endgame_sell98", "ts": "2026-11-17T14:46:30Z", "type": "paper_buy"}
+{"fee": 0.0058, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Amazon (AMZN) close above $265 on November 17?", "token": "43607594231162268010417741406963472945325415293966742585943941467926525420050", "track": "endgame_sell98", "ts": "2026-11-17T14:46:30Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV170945-45", "track": "kc_maker", "ts": "2026-11-17T14:46:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV170945-45", "track": "kc_maker", "ts": "2026-11-17T14:46:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV170945-45", "track": "kc_maker_safe", "ts": "2026-11-17T14:46:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV170945-45", "track": "kc_maker_safe", "ts": "2026-11-17T14:46:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV170945-45", "track": "kc_maker_safe_usd", "ts": "2026-11-17T14:46:37Z", "type": "kmaker_fill"}
