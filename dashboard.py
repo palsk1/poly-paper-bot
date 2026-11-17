@@ -306,6 +306,26 @@ def combo_row(q):
     return row
 
 
+def combo_pot_row(q):
+    """Jan, 17 Nov: "I wouldn't have started with more than 100 dollars". The same parlays as the main card, replayed
+    with a real $100 pot: $5 a parlay, tied up until it settles, and a parlay is skipped when there's no free $5."""
+    p = (q or {}).get("pot100")
+    if not p:
+        return None
+    bets = [(t, c, pnl) for t, c, pnl in p.get("all") or []]
+    tied = p.get("stake", 5.0) * (p.get("open") or 0)
+    return ext_row("combo_pot100", "Combo house with a real $100 pot (practice, same server, same prices): the same parlays as the main "
+                   "combo house card, but it starts with $100 and only sells a parlay when it has $5 free. Money in a parlay "
+                   "is stuck until the games end, so on busy nights it has to skip parlays.",
+                   bets, p.get("pot", 100.0), tied=tied, waiting=p.get("open") or 0,
+                   extra=[[f"{p.get('taken', 0):,}", "parlays it could afford"], [f"{p.get('skipped', 0):,}", "skipped, no free $5"]],
+                   notes=["This is what a real $100 start would have looked like. It counts from the first day, 11 Nov.",
+                          f"The server doesn't note when a parlay finished, so we count its $5 as stuck until about {p.get('game_hours', 3):.0f} hours "
+                          "after its game started (the first losing game, or the last game if all won). That's a guess, and real games can run longer.",
+                          "Until 17 Nov the server only saw 01:00-03:20 each night, when about 150 parlays come in at once. A $100 pot fills up "
+                          "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."])
+
+
 def combo_pre_row(q):
     """Jan, 16 Nov: the same combo house, counting only parlays sold before any of their games had started, and only
     from 16 Nov 09:30 UTC on (the split was found by looking at the first 842, so those don't count)."""
@@ -444,7 +464,7 @@ def build(offline=False):
             quoter = {k: v for k, v in json.load(fh).items() if k != "leg_results"}
     except (OSError, ValueError):
         quoter = None
-    ext = [r for r in [combo_row(quoter), combo_pre_row(quoter)] + kfast_rows() if r]
+    ext = [r for r in [combo_row(quoter), combo_pot_row(quoter), combo_pre_row(quoter)] + kfast_rows() if r]
     order = bot.ranked(stats)
     rows += ext
     plain_words(rows)
