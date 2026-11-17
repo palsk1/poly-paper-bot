@@ -20366,3 +20366,5 @@
 {"pnl": 0.72, "price": 0.91, "shares": 8.0, "side": "no", "ticker": "KXUEFANLFTTS-26NOV17IRLKOS-NONE", "track": "kalshi_patient", "ts": "2026-11-17T22:53:38Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXUEFANLSCORE-26NOV17POLSWE-POL0SWE0", "track": "kalshi_patient", "ts": "2026-11-17T22:53:38Z", "type": "kpatient_result"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXUEFANLSCORE-26NOV17WALPOR-WAL1POR3", "track": "kalshi_patient", "ts": "2026-11-17T22:53:38Z", "type": "kpatient_result"}
+{"minutes_left": 2.83, "price": 0.954, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV171800-00", "track": "kc_maker", "ts": "2026-11-17T22:57:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.83, "price": 0.954, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV171800-00", "track": "kc_maker_safe", "ts": "2026-11-17T22:57:12Z", "type": "kmaker_order"}
