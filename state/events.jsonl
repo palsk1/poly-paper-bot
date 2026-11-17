@@ -18504,3 +18504,10 @@
 {"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
 {"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
 {"minutes_left": 5.06, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe_usd", "ts": "2026-11-17T03:54:58Z", "type": "kmaker_order"}
+{"outcome": "No", "pnl": 0.137, "price": 0.998, "reason": "take profit (now 100c), book", "title": "Will the highest temperature in Hong Kong be 26\u00b0C on November 17?", "token": "84299477214667014115286601048580549582392230686533188429831281327540047855170", "track": "endgame_sell98", "ts": "2026-11-17T04:01:16Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker", "ts": "2026-11-17T04:02:05Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe", "ts": "2026-11-17T04:02:05Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV162300-00", "track": "kc_maker_safe_usd", "ts": "2026-11-17T04:02:05Z", "type": "kmaker_fill"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXCONCACAFNL1H-26NOV16CANGTM-GTM", "track": "kalshi_patient", "ts": "2026-11-17T04:02:06Z", "type": "kpatient_result"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXCONCACAFNLGAME-26NOV16CANGTM-GTM", "track": "kalshi_patient", "ts": "2026-11-17T04:02:06Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV16MTLNYR-MTLJSLAFKOVSK20", "track": "kalshi_patient", "ts": "2026-11-17T04:02:06Z", "type": "kpatient_result"}
