@@ -87,6 +87,11 @@ change restarts the count.
 - **Fail:** anything else. Then combos stay a paper idea.
 - A pass still leaves the real-money checks: a 0.4 s real quoter, the 15% "too many rejects" rule, Polymarket's
   terms for Sweden, and Jan's key on his own server.
+- **Result (read 2026-11-17 morning review, `state/quoter.json`): PASS.** The 1,000th settled bet came in on 17 Nov
+  (sold 01:18 UTC). First 1,000 by sale time: +$390.96 on $25,000 at risk = **+$1.56 per $100**, halves +$1.38 / +$1.75,
+  both ahead. All 1,134 settled at the time of reading: +$4.50 per $100 (halves +$2.11 / +$6.90). Caveats: until the 15 Nov
+  fix reaches the server, nearly all bets are a night-only slice (sold ~00:00-05:00 UTC, mostly US evening sports), and one
+  night (16-17 Nov, +$1,491 on 252 bets) moved the total from -$0.81 to +$4.50 per $100. The real-money checks above remain.
 
 ## 5d. Pre-registered live test: kalshi_patient (fixed 2026-11-12, Jan's OK)
 

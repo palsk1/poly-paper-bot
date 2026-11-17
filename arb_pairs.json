@@ -304,6 +304,38 @@
    "poly_outcome_for_kalshi_yes": "Yes",
    "note": "Same AOC 2028 run announcement by the person/official campaign, before Jul 1 2027 = by Jun 30 11:59 PM ET on both; paperwork/exploratory/non-genuine statements don't count on either; same pattern as the approved AOC Apr and Ossoff Jun pairs.",
    "approved": "2026-11-16"
+  },
+  {
+   "id": "KXTIME-26-JEN|will-jensen-huang-be-time-person-of-the-year-2026",
+   "kalshi": "KXTIME-26-JEN",
+   "poly_slug": "will-jensen-huang-be-time-person-of-the-year-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Same person/year, same TIME template as the approved KXTIME-26 pairs (multiple winners and cover-pictured group members count on both); both end Dec 31 11:59 PM ET.",
+   "approved": "2026-11-17"
+  },
+  {
+   "id": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026",
+   "kalshi": "KXTRUMPKIMMEET-29JAN01-27JAN01",
+   "poly_slug": "will-trump-meet-with-kim-jong-un-in-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Trump and Kim physically together and interacting, Jan 1 (Kalshi: after issuance, no earlier meeting happened) to Dec 31 2026 11:59 PM ET; calls/letters don't count on either. Risk: 'interaction' judged differently for a brief encounter.",
+   "approved": "2026-11-17"
+  },
+  {
+   "id": "KXSP500ADDQ-26DEC31-LNG|will-cheniere-energy-lng-be-added-to-the-sp-500-by-december-31-2026",
+   "kalshi": "KXSP500ADDQ-26DEC31-LNG",
+   "poly_slug": "will-cheniere-energy-lng-be-added-to-the-sp-500-by-december-31-2026",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both resolve Yes on S&P's announcement that Cheniere (LNG) joins the S&P 500 by Dec 31 2026 ET; Kalshi's window starts Oct 1 but no earlier announcement exists (Poly would have resolved).",
+   "approved": "2026-11-17"
+  },
+  {
+   "id": "KXCOMMISHFDA-26AUG20-DEC01|will-heidi-overton-be-confirmed-as-fda-commissioner-by-november-30",
+   "kalshi": "KXCOMMISHFDA-26AUG20-DEC01",
+   "poly_slug": "will-heidi-overton-be-confirmed-as-fda-commissioner-by-november-30",
+   "poly_outcome_for_kalshi_yes": "Yes",
+   "note": "Both need Senate confirmation of Overton as FDA Commissioner by Nov 30 2026 11:59 PM ET; withdrawal = No on both; recess appointment doesn't count.",
+   "approved": "2026-11-17"
   }
  ],
  "rejected": [
@@ -2401,6 +2433,236 @@
    "id": "KXCPICOREYOY-26NOV-T2.6|will-november-2026-core-cpi-yoy-be-2pt6",
    "reason": "Kalshi is above 2.6%; Polymarket is exactly 2.6%.",
    "date": "2026-11-16"
+  },
+  {
+   "id": "KXGAMEAWARDS-BNAR-BLO|will-the-blood-of-dawnwalker-win-best-game-direction-at-the-2026-game-awards-1785857784744",
+   "reason": "Different awards: Kalshi Best Narrative, Polymarket Best Game Direction.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXFEDDECISION-26DEC-H26|will-the-fed-increase-interest-rates-by-25-bps-after-the-december-2026-meeting-20260729232808636",
+   "reason": "Different outcome: Kalshi hike above 25bps, Polymarket a 25bps hike.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXALBUMRELEASE-26-PLA|will-playboi-carti-release-an-album-in-2026",
+   "reason": "Different album definitions (Kalshi counts new singles/EPs, Polymarket needs 50% new tracks) and time zones (ET vs LA time).",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXALBUMRELEASE-26-JAY|will-jay-z-release-an-album-in-2026",
+   "reason": "Different album definitions (Kalshi counts new singles/EPs, Polymarket needs 50% new tracks) and time zones (ET vs LA time).",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGAMEAWARDS-BNAR-007|will-007-first-light-win-best-narrative-at-the-2026-game-awards-1785857783126",
+   "reason": "Polymarket has tie (alphabetical) and no-winner-by-Dec-31 ('Other') clauses; Kalshi has neither.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXSTARSHIPSPACE-26B-5|will-5-6-spacex-starship-launches-successfully-reach-space-in-2026",
+   "reason": "Different outcome: Kalshi above 5 launches, Polymarket exactly 5-6.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXU3-26NOV-T3.9|will-the-november-2026-unemployment-rate-be-3pt9",
+   "reason": "Kalshi is above 3.9%; Polymarket is exactly 3.9%.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXUEFANLGROUPWIN-26A4-POR|will-portugal-win-2026-27-nations-league-group-a4",
+   "reason": "Polymarket goes to 'Other' if postponed past Dec 1 or no winner; Kalshi has no such clause.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXUSACOMPANYSTAKE-27JAN01-BA|will-the-us-federal-government-take-a-stake-in-the-boeing-company",
+   "reason": "Kalshi counts any part of the federal government and pre-existing stakes and mere announcements; Polymarket excludes pensions/index funds and needs a completed or binding deal.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXPOPEVISIT-27JAN01-POR|will-trump-meet-with-pope-leo-xiv-in-2026",
+   "reason": "Different events: Pope visiting Portugal vs Trump meeting the Pope.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXUSACOMPANYSTAKE-27JAN01-LMT|will-the-us-federal-government-take-a-stake-in-lockheed-martin-corporation",
+   "reason": "Kalshi counts any part of the federal government and pre-existing stakes and mere announcements; Polymarket excludes pensions/index funds and needs a completed or binding deal.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXTRDBAN-25DEC31-27|us-congress-stock-trading-ban-before-2027",
+   "reason": "Kalshi explicitly counts bans that allow blind trusts/ETFs and refers to full-rule examples; Polymarket is any bill 'banning trading', could be judged differently.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXSERIEA-27-COM|will-nico-paz-como-record-the-most-assists-in-the-2026-27-serie-a-season",
+   "reason": "Different events: Como winning Serie A vs Nico Paz most assists.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXBILLBOARDRUNNERUPSONG-26NOV28-BOS|will-choosin-texas-ella-langley-be-the-billboard-hot-100-2-song-for-the-week-of-november-28-2026",
+   "reason": "Different events: an artist at #2 vs a specific song at #2.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXAIPARETO-26DEC31-ALI|will-alibaba-have-the-1-ai-model-at-the-end-of-december-2026",
+   "reason": "Different events: Pareto-efficient model vs #1 AI model.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXWHVISIT-27-CSHE|claudia-sheinbaum-out-as-president-of-mexico-by-december-31",
+   "reason": "Different events: White House visit vs leaving office.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXPREMIERLEAGUE-27-MCI|will-hull-city-finish-in-the-top-2-of-the-2026-27-english-premier-league-season",
+   "reason": "Different events: Man City winning vs Hull City top 2.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGAMEAWARDSBGD-2026-PRA|will-pragmata-win-game-of-the-year-at-the-2026-game-awards-20260804145651077",
+   "reason": "Different awards: Best Game Direction vs Game of the Year.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXSP500WHEN-8000-27JAN01|spx-close-above-8000-dec-2026-362-989-862",
+   "reason": "Different events: Kalshi above $8,000 any time before 2027 vs Polymarket a December close above $8,000.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGTAONLINE-GTA6ONLINE-27|gta-vi-online-released-by-december-31-2026",
+   "reason": "Kalshi counts any general-public access (paid early access could count); Polymarket excludes early access and needs official Rockstar/Take-Two info.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGPT-ASTRA61-26DEC31|next-astra-model-6pt1-released-by-december-31-2026",
+   "reason": "Different deadlines: Kalshi before Dec 31 (closes Dec 30 ET), Polymarket by Dec 31; model-name rules also differ.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXWHVISIT-27-GNEW|will-gavin-newsom-be-arrested-before-2027-676",
+   "reason": "Different events: White House visit vs arrest.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXHOUSEDEMLEADRUN-26-27JAN01-PAGU|will-pete-aguilar-be-the-first-house-majority-leader-after-the-2026-midterms",
+   "reason": "Different events: announcing a run for Democratic leader vs becoming Majority Leader.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXAMEND25-29-27JAN01|trump-removed-via-25th-amendment-before-2027",
+   "reason": "Different events: Kalshi is the Section 4 declaration being sent, Polymarket needs actual removal.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGOOGLESEARCH-TVS27-STR|will-stranger-things-be-the-1-searched-tv-show-on-google-this-year-20260730185304519",
+   "reason": "Kalshi resolves No if the list isn't out in 2026; Polymarket waits to Mar 31 2027 then 'Other', and has an alphabetical tie rule.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXCBDECISIONEU-26DEC17-H25|will-the-ecb-announce-a-25-bps-increase-at-the-december-2026-meeting",
+   "reason": "Kalshi uses the ECB's 'primary' rate in a 1-25bps bucket; Polymarket uses the deposit rate with rounding (26-37bps would split).",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXROGANGUEST-27JAN01-BO|will-barack-obama-be-arrested-before-2027-939",
+   "reason": "Different events: Joe Rogan appearance vs arrest.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXCONGRESSTESTIFY-27JAN-GMAX|will-trump-pardon-ghislaine-maxwell-before-2027",
+   "reason": "Different events: testifying to Congress vs a pardon.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXNCAAFQF-27-OSU|will-ohio-stpt-make-college-football-playoff-semifinals-20260803204732767",
+   "reason": "Different rounds: quarterfinals vs semifinals.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGDP-27JAN28-T4.0|will-us-gdp-growth-in-q4-2026-be-greater-than-4pt0pct",
+   "reason": "Tie handling unclear: Polymarket's 'exactly between brackets resolves higher' clause could make exactly 4.0 a Yes; Kalshi needs more than 4.0.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXFETTERMANSWITCH-27MAY-JAN01|fetterman-leaves-the-democrats-by-december-31-2026",
+   "reason": "Kalshi also counts no longer caucusing with Democrats; Polymarket needs leaving the party.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXFRANCEEMERGENCY-27-27JAN01|france-declares-state-of-emergency-by-december-31-2026",
+   "reason": "Kalshi counts the decree when adopted and only 4 news sources; Polymarket when it enters into effect per the Journal Officiel.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXWAYMOCITY-26DEC-BALT|untitled-market-1-20260626201135715",
+   "reason": "Kalshi needs paid service with no waitlist and closes Dec 31 15:00 UTC; Polymarket ignores membership limits and runs to 11:59 PM ET.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXLASTEXAM-26DEC31-T75|will-the-highest-score-achieved-by-an-anthropic-claude-model-on-humanitys-last-exam-in-2026-be-75-or-higher-20260723190836290",
+   "reason": "Different events: any LLM vs only an Anthropic Claude model.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXCBDECISIONRUSSIA-26DEC18-C25|will-the-bank-of-russia-announce-a-25-bps-decrease-at-the-december-2026-meeting",
+   "reason": "Kalshi 1-25bps bucket vs Polymarket's rounding (a 26-37bps cut would split).",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXCBDECISIONNZ-26DEC08-H25|reserve-bank-of-new-zealand-increases-interest-rates-by-25-bps-at-the-december-2026-meeting-20260908230600005",
+   "reason": "Kalshi 1-25bps bucket vs Polymarket's rounding (a 26-37bps hike would split).",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXUSIRANMEETING-27-26DEC01|next-us-iran-senior-diplomatic-meeting-by-november-30-2026",
+   "reason": "Polymarket counts indirect meetings; Kalshi needs a deliberately convened meeting and only certain news sources.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXENGAGEMENTISHOWSPEED-26|will-trump-meet-with-ishowspeed-in-2026",
+   "reason": "Different events: getting engaged vs meeting Trump.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXNBADRAFTPICK-27-1-TSTO|2027-nba-draft-1st-overall-pick-tyran-stokes",
+   "reason": "Polymarket resolves No if the pick isn't known by Jul 8 11:59 PM ET (e.g. a postponed draft); Kalshi has no such clause.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXFEDDECISION-27MAR-H26|will-the-fed-decrease-interest-rates-by-25-bps-after-the-march-2027-meeting",
+   "reason": "Different outcomes: hike above 25bps vs a 25bps cut.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXAISPIKE-27-1650|will-any-ai-model-reach-a-chatbot-arena-score-of-at-least-1650-by-december-31-661-819-419",
+   "reason": "Kalshi says 'LMSYS leaderboard' with no style-control setting; Polymarket fixes Text Arena with style control off.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXAISPIKE-27-1600|will-any-ai-model-reach-a-chatbot-arena-score-of-at-least-1600-by-december-31-569-131-613",
+   "reason": "Kalshi says 'LMSYS leaderboard' with no style-control setting; Polymarket fixes Text Arena with style control off.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXGOOGLESEARCH-TVS27-PIT|will-the-pitt-be-the-1-searched-tv-show-on-google-this-year-20260730185304506",
+   "reason": "Kalshi resolves No if the list isn't out in 2026; Polymarket waits to Mar 31 2027 then 'Other', and has an alphabetical tie rule.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15-BIG|will-jay-z-appear-at-the-2027-big-game-halftime-show",
+   "reason": "Different events: first song performed vs appearing at all.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXTRUMPPARDON-27JAN01-NMAD|will-trump-meet-with-nicols-maduro-in-2026",
+   "reason": "Different events: a pardon vs meeting Trump.",
+   "date": "2026-11-17"
+  },
+  {
+   "id": "KXNBAMVPDPOY-27-VWEMBANYAMA1|will-victor-wembanyama-win-the-2026-27-nba-mvp",
+   "reason": "Different events: MVP and DPOY together vs MVP only.",
+   "date": "2026-11-17"
   }
  ],
  "rejected_events": [
