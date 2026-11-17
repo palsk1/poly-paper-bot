@@ -19636,3 +19636,6 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"fee": 0.0154, "outcome": "No", "price": 0.916, "shares": 5, "title": "Will Jensen Huang rejoin NVIDIA by December 31, 2026?", "token": "99515425688162145433015537697061766068227910832727697250207811996495663573106", "track": "w_groth", "ts": "2026-11-17T15:35:41Z", "type": "paper_buy"}
+{"fee": 0.0154, "outcome": "No", "price": 0.916, "shares": 5, "title": "Will Jensen Huang rejoin NVIDIA by December 31, 2026?", "token": "99515425688162145433015537697061766068227910832727697250207811996495663573106", "track": "wb_groth", "ts": "2026-11-17T15:35:42Z", "type": "paper_buy"}
+{"filled": 9.4, "price": 0.93, "side": "yes", "through": true, "ticker": "KXNBAGAME-26NOV21BOSSAC-BOS", "track": "kalshi_patient", "ts": "2026-11-17T15:37:08Z", "type": "kpatient_fill"}
