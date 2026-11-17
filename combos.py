@@ -474,6 +474,64 @@ def leg_result(tok):
     return r
 
 
+# Bug fix (Jan, 17 Nov: "fix it for both strats"). The quoter calls two legs the same game only when Polymarket files
+# them under one event id. Some games are filed twice: "Guatemala vs. Canada: O/U 2.5" and "Will Canada win on
+# 2026-11-13?" have different event ids but are one match, and such pairs got through rule `main` (two of them lost
+# $50 on 13 Nov). From SAME_FIX_FROM on, two legs also count as one game when their team names overlap and their
+# start times are within 4 hours. Earlier sales are scored as before, so the 5c pass result stays as it was.
+SAME_FIX_FROM = 1794904200   # 2026-11-17 08:30 UTC
+def _teams(title):
+    """Whole team or player names in a leg title, lower case. 'Guatemala vs. Canada: O/U 2.5' -> {guatemala, canada},
+    'Will Canada win on 2026-11-13?' -> {canada}, 'Spread: Heat (-7.5)' -> {heat}, 'Croatia leading at halftime?'
+    -> {croatia}, 'Counter-Strike: 33 vs BBL (BO3) - PGL Cluj' -> {33, bbl}. Titles without a name ('Games Total:
+    O/U 2.5') give an empty set, so they never match anything."""
+    import re
+    t = (title or "").strip()
+
+    def clean(x):
+        x = re.sub(r"\(.*?\)|\?", " ", x)
+        x = re.sub(r"\s+-\s+.*$", "", x.strip())          # ' - BLAST Rivals', ' - Map 1 Winner'
+        x = re.sub(r"\s+[-+]?\d+(\.\d+)?$", "", x.strip())  # '(-7.5)' leftovers, 'Montenegro 2'
+        return re.sub(r"\s+", " ", x).strip().lower()
+
+    m = re.match(r"Will (.+?) win\b", t, re.I)
+    if m:
+        return {clean(m.group(1))} - {""}
+    m = re.match(r"Will (.+?) end in a draw", t, re.I)
+    if m:
+        t = m.group(1)
+    m = re.match(r"(.+?) leading at halftime", t, re.I)
+    if m:
+        return {clean(m.group(1))} - {""}
+    m = re.match(r"Spread:\s*(.+)", t, re.I)
+    if m:
+        return {clean(m.group(1))} - {""}
+    m = re.match(r"Exact Score:\s*(.+?)\s+\d+\s*-\s*\d+\s+(.+)", t, re.I)
+    if m:
+        return {clean(m.group(1)), clean(m.group(2))} - {""}
+    for seg in t.split(":"):
+        if re.search(r"\svs\.?\s", seg, re.I):
+            return {clean(x) for x in re.split(r"\svs\.?\s", seg, flags=re.I)} - {""}
+    return set()
+
+
+def same_game_names(toks, names):
+    """True when two legs look like one game although Polymarket filed them under different event ids."""
+    info = [names.get(t) or {} for t in toks]
+    for i in range(len(info)):
+        for j in range(i + 1, len(info)):
+            a, b = info[i], info[j]
+            if a.get("event") and a.get("event") == b.get("event"):
+                return True
+            ta, tb = _teams(a.get("title")), _teams(b.get("title"))
+            if not (ta & tb) or (len(ta) == 2 and len(tb) == 2 and ta != tb):
+                continue                       # no shared name, or one team in two different match-ups
+            sa, sb = _start_ts(a.get("start")), _start_ts(b.get("start"))
+            if sa is None or sb is None or abs(sa - sb) <= 4 * 3600:
+                return True
+    return False
+
+
 def q_match(lines, rule, result=leg_result, stake=25.0):
     """Pair each request we priced with the trade that really happened. We 'win' a request when our would-be quote
     is below the price the winning pro got (the buyer takes the cheapest quote). The house's bet: $stake of our
@@ -483,6 +541,10 @@ def q_match(lines, rule, result=leg_result, stake=25.0):
         if x.get("k") == "trade" and x.get("rfq"):
             trades[x["rfq"]] = x
     reqs = [x for x in lines if x.get("k") == "req"]
+    names = {}
+    for x in lines:
+        if x.get("k") == "legs":
+            names.update(x.get("legs") or {})
     won, pending, bets = [], 0, []
     for r in reqs:
         q = (r.get("quotes") or {}).get(rule)
@@ -492,8 +554,10 @@ def q_match(lines, rule, result=leg_result, stake=25.0):
         price = float(tr["price"]) / 1e6 if tr.get("price") is not None else None
         if price is None or not q < price:
             continue
-        won.append(r)
         toks = r.get("tokens") or [lg["token"] for lg in r.get("leg_info") or []]
+        if rule != "all5" and (r.get("seen") or 0) / 1000 >= SAME_FIX_FROM and same_game_names(toks, names):
+            continue
+        won.append(r)
         res = [result(t) for t in toks]
         if 0 in res:
             pay = stake + q * stake / (1 - q)     # parlay failed: we keep our stake and the buyer's money
@@ -560,6 +624,16 @@ def qtest():
     # d: ours, its one leg won -> we pay
     assert [r["rfq"] for r in won] == ["a", "c", "d"] and pending == 1, (won, pending)
     assert abs(bets[0]["pay"] - (25 + 0.30 * 25 / 0.70)) < 1e-9 and bets[1]["pay"] == 0.0, bets
+    nm = {"g1": {"title": "Guatemala vs. Canada: O/U 2.5", "event": "e1", "start": "2026-11-14 01:00:00+00"},
+          "g2": {"title": "Will Canada win on 2026-11-13?", "event": "e2", "start": "2026-11-14 01:00:00+00"},
+          "n1": {"title": "Hawks vs. Bulls", "event": "e3", "start": "2026-11-14 00:30:00+00"},
+          "n2": {"title": "Spread: Knicks (-7.5)", "event": "e4", "start": "2026-11-14 00:30:00+00"},
+          "t1": {"title": "BNP Paribas Nordic Open: Taylor Fritz vs Cameron Norrie", "event": "e5", "start": "2026-11-11 12:00:00+00"},
+          "t2": {"title": "BNP Paribas Nordic Open: Casper Ruud vs Holger Rune", "event": "e6", "start": "2026-11-11 15:00:00+00"},
+          "s1": {"title": "Will Colombia vs. Chile end in a draw?", "event": "e7", "start": "2026-11-14 01:00:00+00"},
+          "s2": {"title": "Colombia vs. Chile: 1st Half O/U 0.5", "event": "e8", "start": "2026-11-14 01:00:00+00"}}
+    assert same_game_names(["g1", "g2"], nm) and same_game_names(["s1", "s2"], nm)
+    assert not same_game_names(["n1", "n2"], nm) and not same_game_names(["t1", "t2"], nm) and not same_game_names(["g1", "n1"], nm)
     print("quoter scoring test ok")
 
 
