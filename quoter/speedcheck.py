@@ -485,8 +485,9 @@ def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
                     k += 1
                 row["lasted"] = (bk[k + 1][0] - r) if k + 1 < len(bk) else None
             out.append(row)
-    days = max(1, (pt[-1] - pt[0]) / 86_400_000)
-    say(f"{len(out)} Bitcoin jumps of {int(jump * 100)}c+ in a side's fair price over {days:.1f} days ({src} prices)")
+    hours = (pt[-1] - pt[0]) / 3_600_000
+    say(f"{len(out)} Bitcoin jumps of {int(jump * 100)}c+ in a side's fair price over {hours:.1f} hours ({src} prices; "
+        f"a window needs 15 minutes of prices before it starts)")
     for d in react:
         rows = [x for x in out if d in x["at"] and x["at"][d]["edge"] > 0.01]
         c = sum(x["at"][d]["ask"] * x["at"][d]["size"] for x in rows)
