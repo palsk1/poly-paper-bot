@@ -1973,6 +1973,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "habits.py, backtest/habits.md"
+  },
+  {
+   "id": "goodfallen_5_min_btc_wallet_reddit_its_own_results_with_poly",
+   "date": "2026-11-17",
+   "what": "GoodFallen 5-min BTC wallet (Reddit), its own results with Polymarket rebates",
+   "tries": 2,
+   "bets": 4856,
+   "groups": 19,
+   "per100": 1.41,
+   "floor100": -17.78,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "wallet5m.py run"
   }
  ]
 }

@@ -1,0 +1,88 @@
+## Windows: 4856 BTC 5-minute windows, 30 Oct to 17 Nov 07:45 UTC
+bought $1,539,751, got back $1,572,985, before fees $33,234 = $2.16 per $100
+fees paid $29,139; after fees $4,095 = $0.27 per $100
+  waiting orders (maker): 100,875 fills, $563,443 bought, before fees $+8,303 ($+1.47 per $100), fees $5, after $+8,298 ($+1.47 per $100)
+  took sell offers (taker): 89,078 fills, $976,309 bought, before fees $+24,930 ($+2.55 per $100), fees $29,134, after $-4,204 ($-0.43 per $100)
+positions matched to trades: 18103 tokens; their fees $75,116 on $77,637 bought = $96.75 per $100
+tokens where the position holds more shares than the trade list: 16656 of 18103; shares in positions 7,126,201 vs trade list 5,104,881
+tokens with zero fee: 0 of 18103
+rebates/rewards in activity: {'MAKER_REBATE': 3251.15, 'TAKER_REBATE': 14344.64}
+by day (windows, bought, profit before fees):
+  10-30: 176 windows, $79,088 bought, $+3,902
+  10-31: 276 windows, $67,315 bought, $+1,253
+  11-01: 152 windows, $26,841 bought, $+282
+  11-02: 287 windows, $127,463 bought, $+3,900
+  11-03: 278 windows, $140,988 bought, $+2,987
+  11-04: 252 windows, $133,881 bought, $-962
+  11-05: 272 windows, $141,272 bought, $+1,855
+  11-06: 286 windows, $90,025 bought, $+2,244
+  11-07: 280 windows, $38,995 bought, $+1,696
+  11-08: 257 windows, $38,258 bought, $+1,515
+  11-09: 275 windows, $70,801 bought, $+567
+  11-10: 283 windows, $63,342 bought, $+1,811
+  11-11: 281 windows, $61,024 bought, $+2,802
+  11-12: 285 windows, $70,224 bought, $+6,103
+  11-13: 265 windows, $71,583 bought, $+1,484
+  11-14: 284 windows, $80,503 bought, $+1,242
+  11-15: 286 windows, $77,269 bought, $-958
+  11-16: 287 windows, $123,927 bought, $+737
+  11-17: 94 windows, $36,953 bought, $+777
+windows with buys on both sides: 4703 of 4856
+matched pairs (1 Up + 1 Down, pays $1 whatever happens): 1,325,319 pairs = 83 in 100 shares
+Up avg + Down avg in two-sided windows: median 0.981, p10 0.832, p90 1.100; under $1.00 in 2728 of 4703
+profit before fees from matched pairs $35,960; from the leftover one-sided shares $-2,727 on $250,393 (lean on the winning side in 2157 of 4804 windows)
+fills by time into the window (30 s steps): {'0s': (20918, 174254), '30s': (20522, 157082), '60s': (21186, 158565), '90s': (19471, 144614), '120s': (21256, 155301), '150s': (19548, 149401), '180s': (21389, 172888), '210s': (21765, 193556), '240s': (18686, 184401), '270s': (5212, 49690)}
+Binance seconds loaded: 3,052,626
+fills priced against Binance: 189,953 ($1,539,751); average fair minus price paid +1.47c a share
+  by price paid: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    0-9c: 3553, $4,838, +16.35, +12.59, +14.78c
+    10-19c: 21205, $46,555, +11.07, +7.65, +11.98c
+    20-29c: 23640, $91,086, +4.81, +1.55, +9.09c
+    30-39c: 28807, $159,006, +3.43, +0.47, +6.12c
+    40-49c: 35011, $264,228, +4.00, +1.37, +2.71c
+    50-59c: 23117, $233,553, +1.43, -0.77, -0.17c
+    60-69c: 18214, $216,851, -0.68, -2.27, -4.26c
+    70-79c: 17539, $236,647, +0.06, -1.00, -7.63c
+    80-89c: 15210, $223,262, +1.68, +1.03, -10.68c
+    90-99c: 3657, $63,727, +1.78, +1.47, -13.52c
+  by fair minus paid: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    -5..0c: 24021, $188,994, +1.66, -0.15, -2.47c
+    0..5c: 25208, $197,349, +0.88, -0.96, +2.47c
+    10c+: 53793, $372,739, +11.08, +8.72, +24.22c
+    5..10c: 21856, $173,592, +4.40, +2.53, +7.44c
+    <-5c: 65075, $607,078, -3.39, -5.05, -18.70c
+  by seconds left: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    0m left: 23046, $225,889, +2.41, +0.48, +2.45c
+    1m left: 43261, $369,010, +2.23, +0.29, +1.10c
+    2m left: 40879, $305,003, +1.06, -0.73, +0.92c
+    3m left: 40619, $303,411, +1.25, -0.50, +0.81c
+    4m left: 42148, $336,439, +3.73, +1.68, +2.33c
+  leading side vs trailing side: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    leader: 87194, $935,769, +5.00, +3.48, +9.86c
+    trailer: 102759, $603,983, -2.25, -4.71, -6.50c
+  maker vs taker: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    maker: 100875, $563,443, +1.47, +1.47, +1.34c
+    taker: 89078, $976,309, +2.55, -0.43, +1.54c
+  taker fills by fair minus paid: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    -5..0c: 10730, $117,105, +2.82, -0.11, -2.46c
+    0..5c: 11314, $120,246, +1.08, -1.93, +2.48c
+    10c+: 26302, $243,499, +10.23, +6.63, +24.74c
+    5..10c: 10026, $106,717, +4.55, +1.51, +7.45c
+    <-5c: 30706, $388,741, -2.43, -5.02, -19.33c
+    maker: 100875, $563,443, +1.47, +1.47, +1.34c
+  maker fills by fair minus paid: (fills, $ bought, profit per $100 before fees, after fees, avg fair-paid in c)
+    -5..0c: 13291, $71,889, -0.22, -0.22, -2.48c
+    0..5c: 13894, $77,103, +0.57, +0.57, +2.44c
+    10c+: 27491, $129,239, +12.67, +12.67, +23.25c
+    5..10c: 11830, $66,875, +4.17, +4.16, +7.44c
+    <-5c: 34369, $218,337, -5.10, -5.10, -17.58c
+    taker: 89078, $976,309, +2.55, -0.43, +1.54c
+tapes: 400 windows; wallet's share of window dollars median 1 in 100
+wallet fills by (rows in the same transaction, wallets in it): {(1, 1): 7724}
+## Copy test on the 400 newest windows
+the wallet itself there: $165,899 bought with fees, -0.61 per $100 (before rebates)
+copy 1s late at the next real sell offer + fee: $166,243, -0.87 per $100; fills with no offer left: 3
+copy 3s late at the next real sell offer + fee: $166,384, -0.99 per $100; fills with no offer left: 5
+copy 10s late at the next real sell offer + fee: $163,889, -1.08 per $100; fills with no offer left: 127
+copy 30s late at the next real sell offer + fee: $143,650, -0.44 per $100; fills with no offer left: 1454
+copy 60s late at the next real sell offer + fee: $115,124, -0.65 per $100; fills with no offer left: 4125
