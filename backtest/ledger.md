@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**156 ideas examined, in about 60,359 versions.** 117 dropped, 39 still being tested or waiting. **Looks real: 3.**
+**157 ideas examined, in about 60,361 versions.** 118 dropped, 39 still being tested or waiting. **Looks real: 3.**
 
-Why count: if you test 156 ideas that are all worthless, the luckiest one still looks good. With 156 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 157 ideas that are all worthless, the luckiest one still looks good. With 157 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -164,5 +164,6 @@ Why count: if you test 156 ideas that are all worthless, the luckiest one still 
 | 2026-11-16 | Netflix weekly #1: buy on one site where the other site's price is 10c+ away | 330 | 50 | +$5.36 | Ahead, but could be luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 71 | -$29.40 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price | 60 | 10 | -$58.89 | Losing | dropped | spotw.py, backtest/spotify.md |
+| 2026-11-17 | GoodFallen 5-min BTC wallet (Reddit), its own results with Polymarket rebates | 2 | 19 | +$1.41 | Ahead, but could be luck | dropped | wallet5m.py run |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
