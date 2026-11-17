@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   71,
-   181
+   75,
+   190
   ],
   "S:andy burnham": [
    4,
@@ -27,6 +27,10 @@
   "S:coreweave": [
    8,
    16
+  ],
+  "S:disney": [
+   4,
+   9
   ],
   "S:joe rogan experience": [
    7,
@@ -345,6 +349,42 @@
    1
   ],
   "ST:coreweave|trump": [
+   0,
+   1
+  ],
+  "ST:disney|adobe": [
+   0,
+   1
+  ],
+  "ST:disney|ai/artificial intelligence#10+": [
+   1,
+   1
+  ],
+  "ST:disney|avengers/doomsday": [
+   1,
+   1
+  ],
+  "ST:disney|iger": [
+   0,
+   1
+  ],
+  "ST:disney|kimmel": [
+   0,
+   1
+  ],
+  "ST:disney|layoff/restructuring": [
+   0,
+   1
+  ],
+  "ST:disney|nfl": [
+   1,
+   1
+  ],
+  "ST:disney|star wars": [
+   1,
+   1
+  ],
+  "ST:disney|trump": [
    0,
    1
   ],
@@ -704,6 +744,10 @@
    1,
    1
   ],
+  "T:adobe": [
+   0,
+   1
+  ],
   "T:afford/affordability/affordable": [
    1,
    2
@@ -723,6 +767,10 @@
   "T:ai/artificial intelligence": [
    0,
    4
+  ],
+  "T:ai/artificial intelligence#10+": [
+   1,
+   1
   ],
   "T:alien": [
    0,
@@ -746,6 +794,10 @@
   ],
   "T:avenger": [
    0,
+   1
+  ],
+  "T:avengers/doomsday": [
+   1,
    1
   ],
   "T:backlog": [
@@ -1028,6 +1080,10 @@
    0,
    1
   ],
+  "T:iger": [
+   0,
+   1
+  ],
   "T:immigration": [
    0,
    1
@@ -1080,7 +1136,15 @@
    0,
    2
   ],
+  "T:kimmel": [
+   0,
+   1
+  ],
   "T:latency": [
+   0,
+   1
+  ],
+  "T:layoff/restructuring": [
    0,
    1
   ],
@@ -1110,6 +1174,10 @@
   ],
   "T:mutant": [
    0,
+   1
+  ],
+  "T:nfl": [
+   1,
    1
   ],
   "T:nhs": [
@@ -1260,6 +1328,10 @@
    1,
    1
   ],
+  "T:star wars": [
+   1,
+   1
+  ],
   "T:stock market": [
    1,
    1
@@ -1294,7 +1366,7 @@
   ],
   "T:trump": [
    1,
-   4
+   5
   ],
   "T:tsmc": [
    0,
@@ -1325,8 +1397,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   31,
-   48
+   35,
+   57
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1364,6 +1436,10 @@
    4,
    13
   ],
+  "WT:earnings-call-mentions|adobe": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|ai#25+": [
    1,
    1
@@ -1372,11 +1448,19 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|ai/artificial intelligence#10+": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|arr": [
    1,
    1
   ],
   "WT:earnings-call-mentions|auction": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|avengers/doomsday": [
    1,
    1
   ],
@@ -1452,6 +1536,10 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|iger": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|infrastructure": [
    1,
    1
@@ -1464,7 +1552,15 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|kimmel": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|latency": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|layoff/restructuring": [
    0,
    1
   ],
@@ -1478,6 +1574,10 @@
   ],
   "WT:earnings-call-mentions|meraki": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|nfl": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|nuclear#20+": [
@@ -1536,13 +1636,17 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|star wars": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|tariff": [
    0,
    1
   ],
   "WT:earnings-call-mentions|trump": [
    1,
-   2
+   3
   ],
   "WT:earnings-call-mentions|tsmc": [
    0,
@@ -2218,7 +2322,16 @@
   "7000397": 1794718740,
   "7000398": 1794718740,
   "7000399": 1794718740,
-  "7000402": 1794718740
+  "7000402": 1794718740,
+  "7003587": 1794977940,
+  "7003588": 1794977940,
+  "7003589": 1794977940,
+  "7003590": 1794977940,
+  "7003591": 1794977940,
+  "7003592": 1794977940,
+  "7003593": 1794977940,
+  "7003594": 1794977940,
+  "7003595": 1794977940
  },
- "synced": 1794931672
+ "synced": 1794933769
 }
