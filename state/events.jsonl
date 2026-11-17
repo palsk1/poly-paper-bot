@@ -18338,3 +18338,8 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:02:12Z", "type": "kpatient_fill"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:06:51Z", "type": "kpatient_result"}
 {"fee": 0.0084, "outcome": "No", "price": 0.965, "shares": 5, "title": "Will the highest temperature in Tel Aviv be 23\u00b0C on November 17?", "token": "95712915154631933187545732912010223966373082789888730906946361708105933034584", "track": "endgame_sell98", "ts": "2026-11-17T02:22:08Z", "type": "paper_buy"}
+{"minutes_left": 3.36, "price": 0.974, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV162130-30", "track": "kc_maker", "ts": "2026-11-17T02:26:38Z", "type": "kmaker_order"}
+{"minutes_left": 3.36, "price": 0.974, "queue": 2705.62, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV162130-30", "track": "kc_maker", "ts": "2026-11-17T02:26:39Z", "type": "kmaker_order"}
+{"minutes_left": 3.36, "price": 0.997, "queue": 123.51, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV162130-30", "track": "kc_maker", "ts": "2026-11-17T02:26:40Z", "type": "kmaker_order"}
+{"minutes_left": 3.36, "price": 0.997, "queue": 123.51, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV162130-30", "track": "kc_maker_safe", "ts": "2026-11-17T02:26:41Z", "type": "kmaker_order"}
+{"minutes_left": 3.36, "price": 0.997, "queue": 123.51, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV162130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T02:26:41Z", "type": "kmaker_order"}
