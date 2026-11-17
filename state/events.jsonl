@@ -20237,3 +20237,8 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNBAREBPROT-26NOV17DETSAS-DETPREED7-4", "track": "kalshi_patient", "ts": "2026-11-17T21:12:12Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXBUNDESLIGAGAME-26NOV20BMUKOE-TIE", "track": "kalshi_patient", "ts": "2026-11-17T21:12:12Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXHIGHDEN-26NOV18-T61", "track": "kalshi_patient", "ts": "2026-11-17T21:12:12Z", "type": "kpatient_order"}
+{"filled": 0.03, "pnl": 0.0009, "price": 0.971, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV171615-15", "track": "kc_maker", "ts": "2026-11-17T21:16:40Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171615-15", "track": "kc_maker", "ts": "2026-11-17T21:16:40Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV171615-15", "track": "kc_maker", "ts": "2026-11-17T21:16:40Z", "type": "kmaker_fill"}
+{"filled": 0.03, "pnl": 0.0009, "price": 0.971, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV171615-15", "track": "kc_maker_safe", "ts": "2026-11-17T21:16:41Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171615-15", "track": "kc_maker_safe", "ts": "2026-11-17T21:16:41Z", "type": "kmaker_fill"}
