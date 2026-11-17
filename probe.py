@@ -890,21 +890,20 @@ def audit_full(since="2026-11-09"):
             need[cid] = t0 if need[cid] is None else min(need[cid], t0)
 
     def tape(cid):
-        rows, seen = [], set()
-        for off in range(0, 5000, 500):
+        rows, cur = [], None
+        for _ in range(12):   # up to 6,000 trades back, cursor pages (offset gives HTTP 400)
+            p = {"condition_id": cid, "limit": 500}
+            if cur:
+                p["cursor"] = cur
             try:
-                pg = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"condition_id": cid, "limit": 500, "offset": off}), "data", "trades")
+                res = bot.http_json(f"{bot.DATA}/v2/trades", p)
             except Exception as e:
-                print("  tape failed", cid[:10], off, e)
+                print("  tape failed", cid[:10], len(rows), e)
                 break
-            new = [x for x in pg if (x.get("transactionHash"), x.get("asset"), x.get("timestamp"), x.get("size")) not in seen]
-            if not new:
-                break
-            for x in new:
-                seen.add((x.get("transactionHash"), x.get("asset"), x.get("timestamp"), x.get("size")))
-            rows += new
+            rows += bot.envelope_rows(res, "data", "trades")
+            cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
             old = min((ts_of(x) for x in rows if ts_of(x)), default=None)
-            if len(pg) < 500 or (old and old <= need[cid]):
+            if not cur or (old and old <= need[cid]):
                 break
         return cid, rows
     with ThreadPoolExecutor(6) as ex:
