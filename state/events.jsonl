@@ -20109,3 +20109,5 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXSILVERW-26NOV2017-T43.99", "track": "kalshi_patient", "ts": "2026-11-17T20:13:02Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLOT-26NOV22TBDET-Y", "track": "kalshi_patient", "ts": "2026-11-17T20:13:02Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV17CGYSJ-SJMMARCHMENT27", "track": "kalshi_patient", "ts": "2026-11-17T20:13:02Z", "type": "kpatient_order"}
+{"fee": 0.0096, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Paris be 16\u00b0C on November 18?", "token": "42040198586463843665386425851985599157960221910211651475556757758848625823246", "track": "endgame_sell98", "ts": "2026-11-17T20:17:29Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV171515-15", "track": "kc_maker", "ts": "2026-11-17T20:17:34Z", "type": "kmaker_fill"}
