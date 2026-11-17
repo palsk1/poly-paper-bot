@@ -19290,3 +19290,4 @@
 {"minutes_left": 2.93, "price": 0.98, "queue": 50.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV170700-00", "track": "kc_maker_safe", "ts": "2026-11-17T11:57:05Z", "type": "kmaker_order"}
 {"minutes_left": 2.93, "price": 0.98, "queue": 50.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV170700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-17T11:57:05Z", "type": "kmaker_order"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXLOWTNYC-26NOV16-B39.5", "track": "kalshi_patient", "ts": "2026-11-17T12:02:29Z", "type": "kpatient_result"}
+{"outcome": "Yes", "pnl": 0.1285, "price": 0.983, "reason": "take profit (now 99c), book", "title": "Will the price of Bitcoin be above $62,000 on November 17?", "token": "15099908897477097873204859585055094878158269031537412044623980523533488110922", "track": "endgame_sell98", "ts": "2026-11-17T12:05:52Z", "type": "paper_close"}
