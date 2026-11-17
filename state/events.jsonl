@@ -19720,3 +19720,6 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXNCAAFGAME-26NOV21WAKEGT-WAKE", "track": "kalshi_patient", "ts": "2026-11-17T16:23:13Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXNCAAMBTOTAL-26NOV17MONMWAKE-123", "track": "kalshi_patient", "ts": "2026-11-17T16:23:13Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXBTC-26NOV1712-B63650", "track": "kalshi_patient", "ts": "2026-11-17T16:23:13Z", "type": "kpatient_order"}
+{"fee": 0.0082, "outcome": "No", "price": 0.957, "shares": 5, "title": "Will Jensen Huang rejoin NVIDIA by November 30, 2026?", "token": "78050707233661870173074202833865854714024023780994250642218115804678415254675", "track": "w_jjo", "ts": "2026-11-17T16:25:30Z", "type": "paper_buy"}
+{"fee": 0.0082, "outcome": "No", "price": 0.957, "shares": 5, "title": "Will Jensen Huang rejoin NVIDIA by November 30, 2026?", "token": "78050707233661870173074202833865854714024023780994250642218115804678415254675", "track": "wb_jjo", "ts": "2026-11-17T16:25:30Z", "type": "paper_buy"}
+{"minutes_left": 3.54, "price": 0.962, "queue": 2124.03, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV171130-30", "track": "kc_maker", "ts": "2026-11-17T16:26:27Z", "type": "kmaker_order"}
