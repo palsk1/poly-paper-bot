@@ -18336,3 +18336,4 @@
 {"filled": 10.0, "pnl": 0.45, "price": 0.955, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV162100-00", "track": "kc_maker", "ts": "2026-11-17T02:02:11Z", "type": "kmaker_fill"}
 {"pnl": 0.032, "price": 0.95, "shares": 0.64, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV16NCCUVCU-VCU", "track": "kalshi_patient", "ts": "2026-11-17T02:02:12Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:02:12Z", "type": "kpatient_fill"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXSOLD-26NOV1621-T71.9999", "track": "kalshi_patient", "ts": "2026-11-17T02:06:51Z", "type": "kpatient_result"}
