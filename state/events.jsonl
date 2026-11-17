@@ -19627,3 +19627,12 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV21NCSTFSU-NCST15", "track": "kalshi_patient", "ts": "2026-11-17T15:26:54Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXAPCALLAKSEN-26NOV04-NOV201200A", "track": "kalshi_patient", "ts": "2026-11-17T15:26:54Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXBRASILEIROTOTAL-26NOV18CFCSAN-6", "track": "kalshi_patient", "ts": "2026-11-17T15:26:54Z", "type": "kpatient_order"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171030-30", "track": "kc_maker", "ts": "2026-11-17T15:32:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171030-30", "track": "kc_maker", "ts": "2026-11-17T15:32:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV171030-30", "track": "kc_maker", "ts": "2026-11-17T15:32:21Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171030-30", "track": "kc_maker_safe", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171030-30", "track": "kc_maker_safe", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV171030-30", "track": "kc_maker_safe", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV171030-30", "track": "kc_maker_safe_usd", "ts": "2026-11-17T15:32:23Z", "type": "kmaker_fill"}
