@@ -852,8 +852,133 @@ def audit():
               f"Poly depth at <= {a['p_price']}: {pd:.0f}; opened {[x['opened'][5:16] for x in ls]}")
 
 
+def audit_full(since="2026-11-09"):
+    """audit_full: the 9 Nov audit again, but on EVERY Polymarket paper buy since `since` (not a sample).
+    A) for each buy: did a real trade happen at or below our price (+1c) within 60 min? (tape paged back until it covers the buy)
+    C) every 'resolved' close since `since` vs the market's final price today.
+    D) open positions whose market closed but never settled. Read-only, saves nothing."""
+    import bot, datetime as dt
+    from collections import defaultdict
+    from concurrent.futures import ThreadPoolExecutor
+    T = bot.load_tracks()
+    C = bot.CFG["tracks"]
+    t_since = bot.parse_iso(since + "T00:00:00Z")
+
+    def ts_of(x):
+        try:
+            t = float(x.get("timestamp"))
+            return dt.datetime.fromtimestamp(t / 1000 if t > 1e11 else t, dt.timezone.utc)
+        except (TypeError, ValueError):
+            return None
+
+    buys = []
+    for n, tr in T.items():
+        src = C.get(n, {}).get("source")
+        if src in ("kmaker", "kpatient", "ktrump", "econ", "arb", "maker"):   # Kalshi tracks / maker: fills come from the tape by design
+            continue
+        for tok, p in list(tr.get("positions", {}).items()) + [(c.get("token"), c) for c in tr.get("closed", [])]:
+            if tok and p.get("slug") and p.get("opened") and bot.parse_iso(p["opened"]) >= t_since:
+                buys.append((n, src, str(tok), p))
+    print(f"== {len(buys)} Polymarket paper buys since {since} on {len({b[0] for b in buys})} tracks")
+    bot.prefetch_markets({b[3]["slug"] for b in buys})
+    need = defaultdict(lambda: None)   # cid -> earliest buy time we must cover
+    for n, src, tok, p in buys:
+        cid = (bot.market_by_slug(p["slug"]) or {}).get("conditionId")
+        p["_cid"] = cid
+        if cid:
+            t0 = bot.parse_iso(p["opened"]) - dt.timedelta(hours=1)
+            need[cid] = t0 if need[cid] is None else min(need[cid], t0)
+
+    def tape(cid):
+        rows, seen = [], set()
+        for off in range(0, 5000, 500):
+            try:
+                pg = bot.envelope_rows(bot.http_json(f"{bot.DATA}/v2/trades", {"condition_id": cid, "limit": 500, "offset": off}), "data", "trades")
+            except Exception as e:
+                print("  tape failed", cid[:10], off, e)
+                break
+            new = [x for x in pg if (x.get("transactionHash"), x.get("asset"), x.get("timestamp"), x.get("size")) not in seen]
+            if not new:
+                break
+            for x in new:
+                seen.add((x.get("transactionHash"), x.get("asset"), x.get("timestamp"), x.get("size")))
+            rows += new
+            old = min((ts_of(x) for x in rows if ts_of(x)), default=None)
+            if len(pg) < 500 or (old and old <= need[cid]):
+                break
+        return cid, rows
+    with ThreadPoolExecutor(6) as ex:
+        tapes = dict(ex.map(tape, list(need)))
+    print(f"   tapes read for {len(tapes)} markets")
+
+    per = defaultdict(lambda: [0, 0, 0, 0])   # buys, covered, real trade at/below +1c within 60 min, within 10 min at/below our price
+    gaps = []
+    for n, src, tok, p in buys:
+        s = per[n]
+        s[0] += 1
+        tp = tapes.get(p.get("_cid")) or []
+        t0 = bot.parse_iso(p["opened"])
+        oldest = min((ts_of(x) for x in tp if ts_of(x)), default=None)
+        if not (oldest and oldest <= t0):
+            continue
+        s[1] += 1
+        mine = [(float(x.get("price", 0)), ts_of(x)) for x in tp
+                if str(bot.pick(x, "asset", "token_id", "asset_id", default="")) == tok and ts_of(x)]
+        near = [px for px, t in mine if abs((t - t0).total_seconds()) <= 3600]
+        close = [px for px, t in mine if abs((t - t0).total_seconds()) <= 600]
+        ok60 = any(px <= p["entry"] + 0.01 for px in near)
+        s[2] += ok60
+        s[3] += any(px <= p["entry"] + 1e-9 for px in close)
+        if not ok60:
+            gaps.append((min(near) - p["entry"] if near else None, n, p))
+    print("== A) per track: buys | tape reaches back far enough | real trade at/below our price +1c within 60 min | at/below our price within 10 min")
+    tot = [0, 0, 0, 0]
+    for n, s in sorted(per.items(), key=lambda kv: -kv[1][0]):
+        tot = [a + b for a, b in zip(tot, s)]
+        flag = "  <-- check" if s[1] >= 5 and s[2] < 0.6 * s[1] else ""
+        print(f"  {n:26} {C.get(n, {}).get('source', ''):10} {s[0]:5} {s[1]:5} {s[2]:5} {s[3]:5}{flag}")
+    print(f"  -> ALL: {tot[0]} buys, {tot[1]} checkable, {tot[2]} had a real trade at/below our price +1c within 60 min, {tot[3]} at/below our price within 10 min")
+    print("== A2) checkable buys with NO real trade at/below +1c within 60 min (biggest gap first, 40 shown)")
+    gaps.sort(key=lambda g: -(g[0] if g[0] is not None else 9))
+    for g, n, p in gaps[:40]:
+        print(f"  {n:24} entry {p['entry']:.3f} cheapest real trade near it {'none' if g is None else round(p['entry'] + g, 3)} at {p['opened'][5:16]} {p.get('price_source')} | {p.get('title', '')[:55]} [{p.get('outcome')}]")
+
+    print("== C) every resolved close since then vs today's final price")
+    res = [(n, c) for n, tr in T.items() for c in tr.get("closed", []) if c.get("reason") == "resolved" and c.get("token")
+           and c.get("closed_at") and bot.parse_iso(c["closed_at"]) >= t_since and C.get(n, {}).get("source") not in ("kmaker", "kpatient", "ktrump", "econ", "arb")]
+    bot.prefetch_markets({c.get("slug") for n, c in res})
+    bad = 0
+    for n, c in res:
+        m = bot.market_by_slug(c.get("slug"))
+        now_p = bot.resolved_payout(m, c["token"])
+        if now_p is None or abs(now_p - c["exit"]) > 1e-6:
+            bad += 1
+            print(f"  MISMATCH {n:22} paid {c['exit']} now {now_p} uma {m and m.get('umaResolutionStatus')} | {c.get('title', '')[:55]}")
+    print(f"  -> {bad} of {len(res)} payouts differ from today's final price")
+
+    print("== D) open positions stuck after their market closed")
+    stuck = 0
+    for n, tr in T.items():
+        if C.get(n, {}).get("source") in ("kmaker", "kpatient", "ktrump", "econ", "arb"):
+            continue
+        for tok, p in tr.get("positions", {}).items():
+            m = bot.market_by_slug(p.get("slug"))
+            if m and m.get("closed") and bot.resolved_payout(m, tok) is None:
+                stuck += 1
+                print(f"  STUCK {n} {p.get('title', '')[:60]} prices {m.get('outcomePrices')} uma {m.get('umaResolutionStatus')}")
+    print(f"  -> {stuck} stuck (only positions whose market was looked up above)")
+    print("== cash check: integrity.json")
+    try:
+        print(open("state/integrity.json").read()[:3000])
+    except Exception as e:
+        print("  ", e)
+
+
 if __name__ == "__main__" and sys.argv[1:] and sys.argv[1] == "audit":
     audit()
+
+if __name__ == "__main__" and sys.argv[1:] and sys.argv[1].startswith("audit_full"):
+    audit_full(*(sys.argv[1].split("_")[2:3] or []))
 
 
 def watchtest():
