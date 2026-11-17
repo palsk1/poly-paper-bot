@@ -22,8 +22,8 @@
   },
   "2026-11-17": {
    "failed": 0,
-   "muted": 94,
-   "sent": 9
+   "muted": 95,
+   "sent": 10
   }
  },
  "recent": [
@@ -392,6 +392,12 @@
    "title": "[panic_fade_4c] sold Yes at 92c (+$0.26)",
    "track": "panic_fade_4c",
    "ts": "2026-11-17T16:40:56Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.56)",
+   "track": "kc_maker",
+   "ts": "2026-11-17T17:03:01Z"
   }
  ]
 }
