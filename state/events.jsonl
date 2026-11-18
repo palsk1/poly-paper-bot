@@ -20597,3 +20597,8 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXDEEPSHARE-26NOV23-31.4", "track": "kalshi_patient", "ts": "2026-11-18T02:06:55Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXNFLTEAMTOTAL-26NOV22TENDAL-DAL11", "track": "kalshi_patient", "ts": "2026-11-18T02:06:55Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXETH-26NOV2017-B1680", "track": "kalshi_patient", "ts": "2026-11-18T02:06:55Z", "type": "kpatient_order"}
+{"cost": 4.3896, "title": "Will the price of Bitcoin be between $60,000 and $62,000 on November 23?", "token": "113549307629633849293053954605159446189238322433731741649152044752329423209483", "track": "crypto_no", "ts": "2026-11-18T02:16:53Z", "type": "skip_no_cash"}
+{"cost": 3.8553, "title": "Will Elon Musk post 340-359 tweets from November 13 to November 20, 2026?", "token": "105600283936267767164407525525989681327461251884569776342075038322647200928483", "track": "postcount_no", "ts": "2026-11-18T02:17:13Z", "type": "skip_no_cash"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNBA1HTOTAL-26NOV17CHALAL-128", "track": "kalshi_patient", "ts": "2026-11-18T02:17:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNBASPREAD-26NOV17CHALAL-CHA12", "track": "kalshi_patient", "ts": "2026-11-18T02:17:20Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV17DALVGK-DALJROBERTSON21", "track": "kalshi_patient", "ts": "2026-11-18T02:17:21Z", "type": "kpatient_fill"}
