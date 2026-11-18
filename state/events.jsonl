@@ -20682,3 +20682,24 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV23CINWAS-CIN28", "track": "kalshi_patient", "ts": "2026-11-18T03:02:29Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXART-MODTETE17NOV26-24000000", "track": "kalshi_patient", "ts": "2026-11-18T03:02:29Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXGOOGSHARE-26NOV23-15.5", "track": "kalshi_patient", "ts": "2026-11-18T03:02:29Z", "type": "kpatient_order"}
+{"outcome": "Draw", "pnl": 3.3965, "price": 1.0, "reason": "resolved", "title": "Will Chile vs. Colombia end in a draw?", "token": "76100366816138523284770095510916114451081233851892544276594253719346782966159", "track": "soccer_draw", "ts": "2026-11-18T03:10:49Z", "type": "paper_close"}
+{"minutes_left": 2.95, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 2214.85, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 2214.85, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 2214.85, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV172215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T03:12:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.996, "queue": 2541.1, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.996, "queue": 2541.1, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.996, "queue": 2541.1, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV172215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 2755.89, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 2755.89, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 2755.89, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV172215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 849.96, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 849.96, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 849.96, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T03:12:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 2903.22, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV172215-15", "track": "kc_maker", "ts": "2026-11-18T03:12:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 2903.22, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV172215-15", "track": "kc_maker_safe", "ts": "2026-11-18T03:12:08Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.998, "queue": 2903.22, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV172215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T03:12:08Z", "type": "kmaker_order"}
+{"fee": 0.0, "outcome": "No", "price": 0.88, "shares": 5, "title": "US strike on Colombia by December 31?", "token": "105908573240663389268879331099901068872848375329297966573120454297394481597082", "track": "panic_fade_4c", "ts": "2026-11-18T03:12:55Z", "type": "paper_buy"}

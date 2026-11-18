@@ -28,7 +28,7 @@
   "2026-11-18": {
    "failed": 0,
    "muted": 6,
-   "sent": 2
+   "sent": 3
   }
  },
  "recent": [
@@ -463,6 +463,12 @@
    "title": "[panic_fade_4c] bought 1 (practice money)",
    "track": "panic_fade_4c",
    "ts": "2026-11-18T01:13:01Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 1 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-18T03:12:55Z"
   }
  ]
 }
