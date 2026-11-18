@@ -1,4 +1,4 @@
-# Paper bot summary - 2026-11-18T04:26:59Z
+# Paper bot summary - 2026-11-18T05:08:31Z
 
 Following **sabsabinxz** (`0xd3ecb2aee0d65622da559ff356b00e8c2e626603`). Paper money only.
 
@@ -7,19 +7,19 @@ Main tracks below; all 137 strategies (incl. the lab) are ranked at the end.
 | Track | P&L | Open | Closed (W/L) | Cash | Notes |
 |---|---|---|---|---|---|
 | arb | +0.00 | 28 | 0 (0/0) | $165.58 | locked $134.42 (+$5.58 expected); gaps found 47; mismatches 0 |
-| boring_no | -6.23 | 100 | 2 (2/0) | $28.20 | skipped (no cash) 0 |
-| claude | +1.68 | 10 | 4 (4/0) | $5.68 | refills 0; skipped (no cash) 0 |
-| crypto_no | -5.40 | 9 | 12 (8/4) | $3.52 | skipped (no cash) 104 |
-| econ_fav | +0.00 | 0 | 0 (0/0) | $50.00 | last look 2026-11-18T04:01: 11 markets near a release |
-| endgame | -2.09 | 14 | 15 (15/0) | $33.81 | skipped (no cash) 0 |
+| boring_no | -6.24 | 100 | 2 (2/0) | $28.20 | skipped (no cash) 0 |
+| claude | +1.71 | 10 | 4 (4/0) | $5.68 | refills 0; skipped (no cash) 0 |
+| crypto_no | -5.36 | 9 | 12 (8/4) | $3.52 | skipped (no cash) 104 |
+| econ_fav | +0.00 | 0 | 0 (0/0) | $50.00 | last look 2026-11-18T04:57: 11 markets near a release |
+| endgame | -1.97 | 14 | 15 (15/0) | $33.81 | skipped (no cash) 0 |
 | every_horse | +0.00 | 3 | 0 (0/0) | $85.54 | locked $14.46 (+$0.54 expected); cheap sets found 3; short payouts 0 |
 | fade_sure | +7.22 | 0 | 76 (7/69) | $32.22 | skipped (no cash) 0 |
-| favorites | -0.66 | 4 | 0 (0/0) | $1.56 | skipped (no cash) 1 |
-| kalshi_patient | +14.33 | 84 bought, 8 waiting | 349 (331/18) | $198.43 | 433 of 2668 hourly orders got sold to |
-| kc_maker | +58.10 | 2 | 2153 (2127/26) | $138.60 | 2153 of 2579 orders filled; refills 0 |
+| favorites | -0.77 | 4 | 0 (0/0) | $1.56 | skipped (no cash) 1 |
+| kalshi_patient | +16.13 | 80 bought, 33 waiting | 353 (335/18) | $2.63 | 433 of 2668 hourly orders got sold to |
+| kc_maker | +59.13 | 0 | 2157 (2131/26) | $159.13 | 2157 of 2584 orders filled; refills 0 |
 | kc_maker_early | -70.36 | 0 | 355 (329/26) | $129.64 | 355 of 378 orders filled; refills 1 |
-| kc_maker_safe | +39.97 | 2 | 1124 (1117/7) | $120.47 | 1124 of 1417 orders filled; refills 0 |
-| kc_maker_safe_usd | +33.20 | 1 | 575 (575/0) | $123.30 | 575 of 733 orders filled; refills 0 |
+| kc_maker_safe | +40.07 | 0 | 1125 (1118/7) | $140.07 | 1125 of 1419 orders filled; refills 0 |
+| kc_maker_safe_usd | +33.30 | 0 | 576 (576/0) | $133.30 | 576 of 734 orders filled; refills 0 |
 | ladder | +0.00 | 0 | 0 (0/0) | $100.00 | locked $0.00 (+$0.00 at least); watching 6458 pairs; cheap pairs found 0; short payouts 0 |
 | maker | -124.56 | 0 | 13 (4/9) | $75.44 | rewards +$1.94 (capped), trading -126.50 locked +0.00 open; fills 58, sold early 0 |
 | maker_flat | -105.55 | 0 | 49 (5/44) | $94.45 | rewards +$1.53 (capped), trading -107.08 locked +0.00 open; fills 48, sold early 44 |
@@ -27,130 +27,130 @@ Main tracks below; all 137 strategies (incl. the lab) are ranked at the end.
 | maker_tp | -18.53 | 0 | 17 (11/6) | $181.47 | rewards +$1.68 (capped), trading -20.21 locked +0.00 open; fills 58, sold early 3 |
 | maker_tpsl | -104.35 | 0 | 25 (8/17) | $95.65 | rewards +$1.46 (capped), trading -105.80 locked +0.00 open; fills 50, sold early 17 |
 | mention_no | -9.50 | 5 | 7 (3/4) | $25.10 | skipped (no cash) 0 |
-| mirror | -0.47 | 6 | 0 (0/0) | $0.82 | skipped (no cash) 4 |
-| mirror_unlimited | +0.12 | 9 | 1 (1/0) | unlimited | money needed so far $36.90; most tied up at once $36.90 |
-| panic_fade | +0.42 | 8 | 19 (16/3) | $18.50 | refills 0; skipped (no cash) 0 |
-| postcount_no | -5.87 | 26 | 9 (6/3) | $2.01 | skipped (no cash) 8 |
-| quiet_no | -3.20 | 3 | 2 (1/1) | $37.30 | skipped (no cash) 0 |
-| screener | +2.05 | 4 | 1 (1/0) | $3.01 | skipped (no cash) 14 |
+| mirror | -0.48 | 6 | 0 (0/0) | $0.82 | skipped (no cash) 4 |
+| mirror_unlimited | +0.06 | 9 | 1 (1/0) | unlimited | money needed so far $36.90; most tied up at once $36.90 |
+| panic_fade | +0.45 | 8 | 19 (16/3) | $18.50 | refills 0; skipped (no cash) 0 |
+| postcount_no | -5.56 | 26 | 9 (6/3) | $2.01 | skipped (no cash) 8 |
+| quiet_no | -3.00 | 3 | 2 (1/1) | $37.30 | skipped (no cash) 0 |
+| screener | +2.05 | 4 | 1 (1/0) | $3.01 | skipped (no cash) 15 |
 | sharp_pinnacle | +21.01 | 0 | 19 (14/5) | $121.01 | skipped (no cash) 0 |
-| soccer_draw | +23.97 | 15 | 137 (43/94) | $56.12 | skipped (no cash) 0 |
+| soccer_draw | +24.07 | 15 | 137 (43/94) | $56.12 | skipped (no cash) 0 |
 | stock_no | -2.30 | 0 | 29 (26/3) | $97.70 | skipped (no cash) 0 |
 | trump_week | +0.00 | 0 | 0 (0/0) | $100.00 | skipped (no cash) 0 |
-| trump_week_k | +0.00 | 0 | 0 (0/0) | $300.00 | last look 2026-11-18T03:32: 0 markets open this week |
+| trump_week_k | +0.00 | 0 | 0 (0/0) | $300.00 | last look 2026-11-18T04:29: 0 markets open this week |
 | word_no | -0.22 | 4 | 0 (0/0) | $90.48 | skipped (no cash) 0 |
 
-**His book right now:** 61 open positions worth $103,242. Holding all of them at the 5-share minimum would cost $226.32. Biggest single position = 21% of his book.
+**His book right now:** 61 open positions worth $117,446. Holding all of them at the 5-share minimum would cost $226.50. Biggest single position = 19% of his book.
 
 
 **Lab** (added 2026-11-08: 40 copied wallets, crowd, sabsabinxz and rule variants; frozen until 2027-01-01 so the test stays clean):
 
 | Track | P&L | Open | Closed (W/L) | Cash | Notes |
 |---|---|---|---|---|---|
-| consensus_2 | +9.84 | 60 | 2 (1/1) | unlimited | money needed so far $179.62; most tied up at once $180.87 |
-| consensus_3 | +9.78 | 60 | 2 (1/1) | unlimited | money needed so far $181.04; most tied up at once $181.21 |
-| control_longshot | +8.38 | 21 | 6 (2/4) | $500.31 | skipped (no cash) 0 |
-| control_random | -14.50 | 14 | 4 (0/4) | $454.42 | skipped (no cash) 0 |
+| consensus_2 | +9.90 | 60 | 2 (1/1) | unlimited | money needed so far $179.62; most tied up at once $180.87 |
+| consensus_3 | +9.79 | 60 | 2 (1/1) | unlimited | money needed so far $181.04; most tied up at once $181.21 |
+| control_longshot | +8.13 | 24 | 6 (2/4) | $499.34 | skipped (no cash) 0 |
+| control_random | -14.67 | 16 | 4 (0/4) | $451.74 | skipped (no cash) 0 |
 | crypto_late | +5.17 | 0 | 39 (38/1) | $505.17 | skipped (no cash) 0 |
-| endgame_97 | -34.44 | 15 | 134 (126/8) | $393.91 | skipped (no cash) 0 |
+| endgame_97 | -34.55 | 15 | 134 (126/8) | $393.91 | skipped (no cash) 0 |
 | endgame_ending_soon | -54.09 | 2 | 136 (121/15) | $436.31 | skipped (no cash) 0 |
-| endgame_sell98 | -54.28 | 26 | 525 (481/44) | $322.22 | skipped (no cash) 0 |
+| endgame_sell98 | -54.24 | 29 | 525 (481/44) | $307.84 | skipped (no cash) 0 |
 | endgame_strict | +0.33 | 0 | 6 (6/0) | $500.33 | skipped (no cash) 0 |
-| fade_rally | -0.77 | 5 | 11 (8/3) | $485.04 | skipped (no cash) 0 |
-| fav_bigvol_85_95 | -0.61 | 18 | 0 (0/0) | $417.28 | skipped (no cash) 0 |
-| fav_cut_losses | +0.27 | 17 | 1 (0/1) | $421.83 | skipped (no cash) 0 |
-| fav_fee_free | +0.75 | 16 | 1 (1/0) | $425.43 | skipped (no cash) 0 |
-| fav_mid_80_90 | -2.89 | 17 | 1 (0/1) | $421.38 | skipped (no cash) 0 |
-| fav_short_90_95 | +2.82 | 16 | 8 (8/0) | $426.34 | skipped (no cash) 0 |
-| fav_short_95_98 | -3.74 | 13 | 13 (12/1) | $432.60 | skipped (no cash) 0 |
-| momentum_week | +2.20 | 8 | 10 (8/2) | $470.79 | skipped (no cash) 0 |
-| no_only_90_97 | -0.78 | 26 | 1 (1/0) | $377.74 | skipped (no cash) 0 |
-| panic_fade_10c | -1.59 | 10 | 11 (7/4) | $458.11 | skipped (no cash) 0 |
-| panic_fade_4c | +2.48 | 20 | 26 (24/2) | $418.68 | skipped (no cash) 0 |
+| fade_rally | -0.92 | 7 | 11 (8/3) | $479.19 | skipped (no cash) 0 |
+| fav_bigvol_85_95 | -0.71 | 20 | 0 (0/0) | $407.87 | skipped (no cash) 0 |
+| fav_cut_losses | +0.09 | 19 | 1 (0/1) | $412.76 | skipped (no cash) 0 |
+| fav_fee_free | +0.69 | 17 | 1 (1/0) | $420.86 | skipped (no cash) 0 |
+| fav_mid_80_90 | -3.09 | 19 | 1 (0/1) | $413.03 | skipped (no cash) 0 |
+| fav_short_90_95 | +2.75 | 19 | 8 (8/0) | $412.39 | skipped (no cash) 0 |
+| fav_short_95_98 | -4.19 | 16 | 13 (12/1) | $417.84 | skipped (no cash) 0 |
+| momentum_week | +2.09 | 10 | 10 (8/2) | $463.93 | skipped (no cash) 0 |
+| no_only_90_97 | -1.01 | 29 | 1 (1/0) | $363.71 | skipped (no cash) 0 |
+| panic_fade_10c | -1.56 | 10 | 11 (7/4) | $458.11 | skipped (no cash) 0 |
+| panic_fade_4c | +2.51 | 20 | 26 (24/2) | $418.68 | skipped (no cash) 0 |
 | sab_big | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $0.00; most tied up at once $0.00 |
 | sab_hold | +2.78 | 5 | 1 (1/0) | unlimited | money needed so far $23.40; most tied up at once $23.40 |
-| w_0x448861 | +20.44 | 3 | 24 (17/7) | unlimited | money needed so far $12.76; most tied up at once $21.74 |
-| w_aghy | -3.39 | 1 | 1 (0/1) | unlimited | money needed so far $3.58; most tied up at once $3.58 |
-| w_albert_1953 | -3.06 | 22 | 0 (0/0) | unlimited | money needed so far $72.20; most tied up at once $72.20 |
-| w_anoin123 | +5.56 | 53 | 12 (6/6) | unlimited | money needed so far $152.29; most tied up at once $154.93 |
+| w_0x448861 | +20.45 | 3 | 24 (17/7) | unlimited | money needed so far $12.76; most tied up at once $21.74 |
+| w_aghy | -3.40 | 1 | 1 (0/1) | unlimited | money needed so far $3.58; most tied up at once $3.58 |
+| w_albert_1953 | -3.17 | 22 | 0 (0/0) | unlimited | money needed so far $72.20; most tied up at once $72.20 |
+| w_anoin123 | +6.03 | 53 | 12 (6/6) | unlimited | money needed so far $152.29; most tied up at once $154.93 |
 | w_balerinacapuchina | +1.55 | 2 | 2 (1/1) | unlimited | money needed so far $6.82; most tied up at once $8.41 |
-| w_bertapotamous | +2.87 | 2 | 3 (2/1) | unlimited | money needed so far $7.93; most tied up at once $8.28 |
-| w_betwick | +1.76 | 9 | 3 (2/1) | unlimited | money needed so far $23.98; most tied up at once $26.23 |
-| w_bigggggggg | -8.10 | 13 | 57 (17/40) | unlimited | money needed so far $83.66; most tied up at once $79.32 |
+| w_bertapotamous | +2.89 | 2 | 3 (2/1) | unlimited | money needed so far $7.93; most tied up at once $8.28 |
+| w_betwick | +1.78 | 9 | 3 (2/1) | unlimited | money needed so far $23.98; most tied up at once $26.23 |
+| w_bigggggggg | -8.10 | 12 | 58 (17/41) | unlimited | money needed so far $83.66; most tied up at once $79.32 |
 | w_blondbeast | -0.98 | 2 | 10 (5/5) | unlimited | money needed so far $11.68; most tied up at once $12.12 |
-| w_cigarettes | -30.52 | 56 | 50 (27/23) | unlimited | money needed so far $179.56; most tied up at once $171.48 |
+| w_cigarettes | -31.01 | 48 | 58 (30/28) | unlimited | money needed so far $179.56; most tied up at once $171.48 |
 | w_debased | -0.64 | 11 | 9 (5/4) | unlimited | money needed so far $34.60; most tied up at once $34.25 |
-| w_dominus | -1.50 | 2 | 5 (1/4) | unlimited | money needed so far $8.90; most tied up at once $8.75 |
+| w_dominus | -1.45 | 2 | 5 (1/4) | unlimited | money needed so far $8.90; most tied up at once $8.75 |
 | w_dromedaryy | +3.44 | 7 | 5 (3/2) | unlimited | money needed so far $4.92; most tied up at once $8.80 |
-| w_dropper | +3.05 | 4 | 6 (4/2) | unlimited | money needed so far $14.20; most tied up at once $17.14 |
-| w_ecash | -0.71 | 11 | 0 (0/0) | unlimited | money needed so far $43.27; most tied up at once $43.27 |
-| w_eightpenguins | +4.83 | 7 | 6 (5/1) | unlimited | money needed so far $19.84; most tied up at once $20.00 |
+| w_dropper | +3.04 | 4 | 6 (4/2) | unlimited | money needed so far $14.20; most tied up at once $17.14 |
+| w_ecash | -0.75 | 11 | 0 (0/0) | unlimited | money needed so far $43.27; most tied up at once $43.27 |
+| w_eightpenguins | +4.80 | 7 | 6 (5/1) | unlimited | money needed so far $19.84; most tied up at once $20.00 |
 | w_flawfence | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $0.00; most tied up at once $0.00 |
-| w_groth | +0.60 | 18 | 6 (5/1) | unlimited | money needed so far $36.41; most tied up at once $38.55 |
+| w_groth | +0.66 | 18 | 6 (5/1) | unlimited | money needed so far $36.41; most tied up at once $38.55 |
 | w_hauchn | +0.31 | 0 | 1 (1/0) | unlimited | money needed so far $1.44; most tied up at once $1.44 |
 | w_hell0pia | -1.32 | 0 | 4 (1/3) | unlimited | money needed so far $3.05; most tied up at once $4.39 |
-| w_hellyeahtrader | -48.70 | 13 | 41 (20/21) | unlimited | money needed so far $93.71; most tied up at once $51.85 |
-| w_jjo | +1.80 | 10 | 16 (10/6) | unlimited | money needed so far $45.72; most tied up at once $42.23 |
+| w_hellyeahtrader | -48.73 | 13 | 41 (20/21) | unlimited | money needed so far $93.71; most tied up at once $51.85 |
+| w_jjo | +1.81 | 10 | 16 (10/6) | unlimited | money needed so far $45.72; most tied up at once $42.23 |
 | w_jsram | -1.76 | 0 | 1 (0/1) | unlimited | money needed so far $1.76; most tied up at once $1.76 |
 | w_lava_lava | +0.65 | 3 | 1 (1/0) | unlimited | money needed so far $2.11; most tied up at once $2.47 |
 | w_lpgb | +0.07 | 0 | 2 (1/1) | unlimited | money needed so far $6.59; most tied up at once $6.59 |
-| w_monopoly_money | -2.27 | 4 | 1 (0/1) | unlimited | money needed so far $20.40; most tied up at once $16.95 |
+| w_monopoly_money | -2.25 | 4 | 1 (0/1) | unlimited | money needed so far $20.40; most tied up at once $16.95 |
 | w_new_jeans | +0.21 | 1 | 0 (0/0) | unlimited | money needed so far $3.89; most tied up at once $3.89 |
-| w_pako | -0.33 | 3 | 3 (1/2) | unlimited | money needed so far $10.02; most tied up at once $9.73 |
-| w_rabbitfoot1 | -5.82 | 2 | 8 (3/5) | unlimited | money needed so far $20.66; most tied up at once $17.87 |
+| w_pako | -0.32 | 3 | 3 (1/2) | unlimited | money needed so far $10.02; most tied up at once $9.73 |
+| w_rabbitfoot1 | -5.97 | 2 | 8 (3/5) | unlimited | money needed so far $20.66; most tied up at once $17.87 |
 | w_railcool | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $0.00; most tied up at once $0.00 |
 | w_rememberamalek | -3.88 | 2 | 13 (4/9) | unlimited | money needed so far $11.38; most tied up at once $11.58 |
-| w_sbel | -19.59 | 34 | 62 (31/31) | unlimited | money needed so far $142.27; most tied up at once $118.25 |
+| w_sbel | -20.76 | 34 | 62 (31/31) | unlimited | money needed so far $142.27; most tied up at once $118.25 |
 | w_the_joker | +1.11 | 4 | 1 (1/0) | unlimited | money needed so far $15.56; most tied up at once $16.92 |
 | w_thereturnofdarthmaul | -0.50 | 4 | 0 (0/0) | unlimited | money needed so far $14.31; most tied up at once $14.31 |
-| w_tokor | -49.63 | 28 | 73 (33/40) | unlimited | money needed so far $116.62; most tied up at once $108.65 |
+| w_tokor | -49.89 | 28 | 73 (33/40) | unlimited | money needed so far $116.62; most tied up at once $108.65 |
 | w_tunatyler | +4.29 | 7 | 2 (2/0) | unlimited | money needed so far $21.10; most tied up at once $21.10 |
-| w_underperformingforal | -0.19 | 4 | 15 (5/10) | unlimited | money needed so far $25.48; most tied up at once $25.73 |
-| w_vilgefortz | +0.08 | 2 | 0 (0/0) | unlimited | money needed so far $9.60; most tied up at once $9.60 |
+| w_underperformingforal | -0.21 | 4 | 15 (5/10) | unlimited | money needed so far $25.48; most tied up at once $25.73 |
+| w_vilgefortz | +0.10 | 2 | 0 (0/0) | unlimited | money needed so far $9.60; most tied up at once $9.60 |
 | w_wan123 | -2.77 | 4 | 4 (1/3) | unlimited | money needed so far $17.29; most tied up at once $13.37 |
 | w_youngalphagoat | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $0.00; most tied up at once $0.00 |
-| wb_0x448861 | +21.84 | 4 | 24 (17/7) | unlimited | money needed so far $15.56; most tied up at once $24.54 |
+| wb_0x448861 | +21.85 | 4 | 24 (17/7) | unlimited | money needed so far $15.56; most tied up at once $24.54 |
 | wb_aghy | +0.50 | 6 | 1 (0/1) | unlimited | money needed so far $15.69; most tied up at once $15.69 |
-| wb_albert_1953 | +2.21 | 33 | 2 (1/1) | unlimited | money needed so far $110.00; most tied up at once $111.25 |
-| wb_anoin123 | +7.95 | 72 | 12 (6/6) | unlimited | money needed so far $225.04; most tied up at once $225.52 |
+| wb_albert_1953 | +2.17 | 33 | 2 (1/1) | unlimited | money needed so far $110.00; most tied up at once $111.25 |
+| wb_anoin123 | +8.29 | 72 | 12 (6/6) | unlimited | money needed so far $225.04; most tied up at once $225.52 |
 | wb_balerinacapuchina | +1.48 | 9 | 3 (2/1) | unlimited | money needed so far $39.24; most tied up at once $39.24 |
-| wb_bertapotamous | +3.71 | 13 | 7 (3/4) | unlimited | money needed so far $53.85; most tied up at once $53.73 |
-| wb_betwick | +2.59 | 22 | 4 (2/2) | unlimited | money needed so far $50.82; most tied up at once $52.84 |
-| wb_bigggggggg | -14.34 | 15 | 64 (19/45) | unlimited | money needed so far $91.05; most tied up at once $80.81 |
-| wb_blondbeast | -0.91 | 16 | 15 (7/8) | unlimited | money needed so far $78.78; most tied up at once $78.78 |
-| wb_cigarettes | -34.47 | 62 | 59 (31/28) | unlimited | money needed so far $204.15; most tied up at once $189.16 |
-| wb_debased | +0.02 | 22 | 12 (8/4) | unlimited | money needed so far $60.34; most tied up at once $62.41 |
-| wb_dominus | -3.04 | 4 | 9 (3/6) | unlimited | money needed so far $20.71; most tied up at once $20.71 |
-| wb_dromedaryy | +0.35 | 20 | 5 (3/2) | unlimited | money needed so far $18.80; most tied up at once $22.69 |
-| wb_dropper | +6.19 | 8 | 7 (4/3) | unlimited | money needed so far $24.85; most tied up at once $26.02 |
-| wb_ecash | -2.22 | 30 | 6 (3/3) | unlimited | money needed so far $122.02; most tied up at once $119.33 |
-| wb_eightpenguins | +1.99 | 19 | 6 (5/1) | unlimited | money needed so far $36.44; most tied up at once $36.61 |
-| wb_flawfence | -1.48 | 13 | 0 (0/0) | unlimited | money needed so far $32.99; most tied up at once $32.99 |
-| wb_groth | +2.36 | 33 | 15 (9/6) | unlimited | money needed so far $85.76; most tied up at once $90.64 |
-| wb_hauchn | +0.64 | 8 | 6 (4/2) | unlimited | money needed so far $35.43; most tied up at once $35.43 |
-| wb_hell0pia | +3.08 | 2 | 9 (5/4) | unlimited | money needed so far $27.71; most tied up at once $27.71 |
-| wb_hellyeahtrader | -59.27 | 13 | 60 (32/28) | unlimited | money needed so far $106.82; most tied up at once $106.82 |
-| wb_jjo | -0.27 | 20 | 20 (11/9) | unlimited | money needed so far $90.64; most tied up at once $87.10 |
+| wb_bertapotamous | +3.73 | 13 | 7 (3/4) | unlimited | money needed so far $53.85; most tied up at once $53.73 |
+| wb_betwick | +2.62 | 22 | 4 (2/2) | unlimited | money needed so far $50.82; most tied up at once $52.84 |
+| wb_bigggggggg | -14.34 | 14 | 65 (19/46) | unlimited | money needed so far $91.05; most tied up at once $80.81 |
+| wb_blondbeast | -0.87 | 16 | 15 (7/8) | unlimited | money needed so far $78.78; most tied up at once $78.78 |
+| wb_cigarettes | -35.16 | 54 | 67 (34/33) | unlimited | money needed so far $204.15; most tied up at once $189.16 |
+| wb_debased | -0.01 | 22 | 12 (8/4) | unlimited | money needed so far $60.34; most tied up at once $62.41 |
+| wb_dominus | -2.99 | 4 | 9 (3/6) | unlimited | money needed so far $20.71; most tied up at once $20.71 |
+| wb_dromedaryy | +0.36 | 20 | 5 (3/2) | unlimited | money needed so far $18.80; most tied up at once $22.69 |
+| wb_dropper | +6.20 | 8 | 7 (4/3) | unlimited | money needed so far $24.85; most tied up at once $26.02 |
+| wb_ecash | -2.26 | 30 | 6 (3/3) | unlimited | money needed so far $122.02; most tied up at once $119.33 |
+| wb_eightpenguins | +1.95 | 19 | 6 (5/1) | unlimited | money needed so far $36.44; most tied up at once $36.61 |
+| wb_flawfence | -1.54 | 13 | 0 (0/0) | unlimited | money needed so far $32.99; most tied up at once $32.99 |
+| wb_groth | +2.52 | 33 | 15 (9/6) | unlimited | money needed so far $85.76; most tied up at once $90.64 |
+| wb_hauchn | +1.38 | 8 | 6 (4/2) | unlimited | money needed so far $35.43; most tied up at once $35.43 |
+| wb_hell0pia | +3.09 | 2 | 9 (5/4) | unlimited | money needed so far $27.71; most tied up at once $27.71 |
+| wb_hellyeahtrader | -59.30 | 13 | 60 (32/28) | unlimited | money needed so far $106.82; most tied up at once $106.82 |
+| wb_jjo | -0.19 | 20 | 20 (11/9) | unlimited | money needed so far $90.64; most tied up at once $87.10 |
 | wb_jsram | -1.94 | 5 | 1 (0/1) | unlimited | money needed so far $9.86; most tied up at once $9.86 |
 | wb_lava_lava | +0.10 | 8 | 1 (1/0) | unlimited | money needed so far $17.24; most tied up at once $17.60 |
 | wb_lpgb | -2.83 | 2 | 5 (0/5) | unlimited | money needed so far $8.72; most tied up at once $8.72 |
-| wb_monopoly_money | +5.32 | 28 | 2 (1/1) | unlimited | money needed so far $101.94; most tied up at once $98.50 |
-| wb_new_jeans | +1.36 | 7 | 2 (1/1) | unlimited | money needed so far $19.76; most tied up at once $19.76 |
-| wb_pako | -3.70 | 10 | 3 (1/2) | unlimited | money needed so far $26.08; most tied up at once $25.80 |
-| wb_rabbitfoot1 | -7.81 | 2 | 9 (3/6) | unlimited | money needed so far $22.64; most tied up at once $17.87 |
+| wb_monopoly_money | +5.39 | 28 | 2 (1/1) | unlimited | money needed so far $101.94; most tied up at once $98.50 |
+| wb_new_jeans | +1.41 | 7 | 2 (1/1) | unlimited | money needed so far $19.76; most tied up at once $19.76 |
+| wb_pako | -3.74 | 10 | 3 (1/2) | unlimited | money needed so far $26.08; most tied up at once $25.80 |
+| wb_rabbitfoot1 | -7.96 | 2 | 9 (3/6) | unlimited | money needed so far $22.64; most tied up at once $17.87 |
 | wb_railcool | +0.00 | 0 | 0 (0/0) | unlimited | money needed so far $0.00; most tied up at once $0.00 |
 | wb_rememberamalek | -2.77 | 14 | 25 (5/20) | unlimited | money needed so far $78.30; most tied up at once $78.30 |
-| wb_sbel | -28.03 | 34 | 68 (32/36) | unlimited | money needed so far $150.71; most tied up at once $118.25 |
-| wb_the_joker | -7.96 | 18 | 3 (1/2) | unlimited | money needed so far $70.94; most tied up at once $66.06 |
-| wb_thereturnofdarthmaul | +0.92 | 21 | 0 (0/0) | unlimited | money needed so far $81.77; most tied up at once $81.77 |
-| wb_tokor | -57.22 | 40 | 82 (35/47) | unlimited | money needed so far $170.79; most tied up at once $163.49 |
-| wb_tunatyler | +4.21 | 10 | 2 (2/0) | unlimited | money needed so far $23.63; most tied up at once $23.63 |
-| wb_underperformingforal | -0.23 | 4 | 14 (5/9) | unlimited | money needed so far $25.52; most tied up at once $25.73 |
-| wb_vilgefortz | -0.22 | 5 | 2 (1/1) | unlimited | money needed so far $20.72; most tied up at once $20.72 |
-| wb_wan123 | -0.96 | 18 | 4 (1/3) | unlimited | money needed so far $56.03; most tied up at once $52.11 |
-| wb_youngalphagoat | -22.90 | 19 | 7 (0/7) | unlimited | money needed so far $82.67; most tied up at once $82.67 |
+| wb_sbel | -29.20 | 34 | 68 (32/36) | unlimited | money needed so far $150.71; most tied up at once $118.25 |
+| wb_the_joker | -8.10 | 18 | 3 (1/2) | unlimited | money needed so far $70.94; most tied up at once $66.06 |
+| wb_thereturnofdarthmaul | +0.91 | 21 | 0 (0/0) | unlimited | money needed so far $81.77; most tied up at once $81.77 |
+| wb_tokor | -57.41 | 40 | 82 (35/47) | unlimited | money needed so far $170.79; most tied up at once $163.49 |
+| wb_tunatyler | +4.20 | 10 | 2 (2/0) | unlimited | money needed so far $23.63; most tied up at once $23.63 |
+| wb_underperformingforal | -0.25 | 4 | 14 (5/9) | unlimited | money needed so far $25.52; most tied up at once $25.73 |
+| wb_vilgefortz | -0.21 | 5 | 2 (1/1) | unlimited | money needed so far $20.72; most tied up at once $20.72 |
+| wb_wan123 | -0.94 | 18 | 4 (1/3) | unlimited | money needed so far $56.03; most tied up at once $52.11 |
+| wb_youngalphagoat | -23.25 | 19 | 7 (0/7) | unlimited | money needed so far $82.67; most tied up at once $82.67 |
 | wx_forecast | -47.59 | 0 | 177 (75/102) | $452.41 | skipped (no cash) 0 |
-| yes_fav_85_95 | +1.84 | 14 | 3 (3/0) | $437.40 | skipped (no cash) 0 |
+| yes_fav_85_95 | +1.06 | 16 | 3 (3/0) | $428.43 | skipped (no cash) 0 |
 
 ## arb
 Arbitrage: Kalshi vs Polymarket, reviewed twin markets only, both legs bought, held to the end. $300 paper
@@ -191,21 +191,21 @@ Approved twin pairs: 42, rejected: 465, new candidates waiting for review: 50.
 | Will Satoshi move any Bitcoin in 2026? | NO 94c | Yes 3c | $4.87 | $5.00 | 2027-01-01 |
 
 Last check of approved pairs (best net edge per share after fees):
-- KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249: +0.0c (2026-11-18T04:20 UTC)
-- KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027: +3.3c (2026-11-18T04:20 UTC)
-- KXAOCRUN-28-27JAN01|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027: +0.2c (2026-11-18T04:20 UTC)
-- KXAOCRUN-28-27JUL01|will-aoc-announce-a-presidential-run-by-june-30-2027: -7.8c (2026-11-18T04:20 UTC)
-- KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027: -2.6c (2026-11-18T04:20 UTC)
-- KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027: -1.8c (2026-11-18T04:20 UTC)
-- KXCOMMISHFDA-26AUG20-DEC01|will-heidi-overton-be-confirmed-as-fda-commissioner-by-november-30: -1.0c (2026-11-18T04:20 UTC)
-- KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088: -0.5c (2026-11-18T04:20 UTC)
-- KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027: +0.6c (2026-11-18T04:20 UTC)
-- KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027: -4.0c (2026-11-18T04:20 UTC)
-- KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027: -2.7c (2026-11-18T04:20 UTC)
-- KXKELLYRUN-28-27JAN01|will-mark-kelly-announce-a-presidential-run-before-2027: -0.5c (2026-11-18T04:20 UTC)
-- KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027: -1.5c (2026-11-18T04:20 UTC)
-- KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027: -2.8c (2026-11-18T04:20 UTC)
-- KXOSSOFFRUN-28-27JUL01|will-jon-ossoff-announce-a-presidential-run-by-june-30-2027: -5.3c (2026-11-18T04:20 UTC)
+- KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249: -0.1c (2026-11-18T05:07 UTC)
+- KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027: +3.3c (2026-11-18T05:07 UTC)
+- KXAOCRUN-28-27JAN01|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027: +0.2c (2026-11-18T05:07 UTC)
+- KXAOCRUN-28-27JUL01|will-aoc-announce-a-presidential-run-by-june-30-2027: -7.7c (2026-11-18T05:07 UTC)
+- KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027: -3.4c (2026-11-18T05:07 UTC)
+- KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027: -1.8c (2026-11-18T05:07 UTC)
+- KXCOMMISHFDA-26AUG20-DEC01|will-heidi-overton-be-confirmed-as-fda-commissioner-by-november-30: -1.0c (2026-11-18T05:07 UTC)
+- KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088: -0.5c (2026-11-18T05:07 UTC)
+- KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027: +0.6c (2026-11-18T05:07 UTC)
+- KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027: -4.0c (2026-11-18T05:07 UTC)
+- KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027: -2.7c (2026-11-18T05:07 UTC)
+- KXKELLYRUN-28-27JAN01|will-mark-kelly-announce-a-presidential-run-before-2027: -0.5c (2026-11-18T05:07 UTC)
+- KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027: -0.7c (2026-11-18T05:07 UTC)
+- KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027: -2.8c (2026-11-18T05:07 UTC)
+- KXOSSOFFRUN-28-27JUL01|will-jon-ossoff-announce-a-presidential-run-by-june-30-2027: -5.3c (2026-11-18T05:07 UTC)
 
 ## boring_no
 Boring No, far out: in everyday 'will this happen' markets (no crypto, weather, elections and so on) with more than 30 days left, buys NO at 90-97c. In the history 100 of 101 such bets won (backtest/winners.md), found by looking, so this is a live test. One bet per event, real order-book fills. $500 paper, because each bet is stuck for a month or more
@@ -246,7 +246,7 @@ Boring No, far out: in everyday 'will this happen' markets (no crypto, weather, 
 | Will Texas Tech win the 2027 NCAA Men's Basketball National Championsh | No | 96c | 94c | -0.10 | 2027-04-20 |
 | Will Russia capture Mykolaivka by December 31, 2026? | No | 97c | 96c | -0.03 | 2027-01-01 |
 | Bab el-Mandeb Strait effectively closed by December 31? | No | 93c | 93c | -0.00 | 2027-01-01 |
-| Will Trump meet with Kim Jong Un in 2026? | No | 94c | 83c | -0.57 | 2027-01-02 |
+| Will Trump meet with Kim Jong Un in 2026? | No | 94c | 84c | -0.55 | 2027-01-02 |
 | Will Japan win Group F at the 2027 AFC Asian Cup? | No | 94c | 95c | +0.05 | 2027-02-06 |
 | Will a new country join the Abraham Accords before 2027? | No | 92c | 93c | +0.02 | 2027-01-01 |
 | Ilhan Omar denaturalization case filed by March 31, 2027? | No | 91c | 92c | +0.03 | 2027-04-01 |
@@ -255,20 +255,20 @@ Boring No, far out: in everyday 'will this happen' markets (no crypto, weather, 
 | Dutch House of Representatives dissolved in 2026? | No | 93c | 97c | +0.18 | 2027-01-01 |
 | Will Anthropic's valuation hit (HIGH) $3.0T by December 31? | No | 96c | 93c | -0.16 | 2027-01-05 |
 | Will the Minnesota Vikings win the 2027 NFL league championship? | No | 95c | 92c | -0.17 | 2027-04-01 |
-| Will Gavin Newsom announce a Presidential run by December 31, 2026? | No | 91c | 92c | +0.03 | 2027-01-01 |
-| Will Como win the 2026-27 Serie A Championship? | No | 94c | 94c | -0.02 | 2027-05-30 |
+| Will Gavin Newsom announce a Presidential run by December 31, 2026? | No | 91c | 92c | +0.04 | 2027-01-01 |
+| Will Como win the 2026-27 Serie A Championship? | No | 94c | 94c | -0.01 | 2027-05-30 |
 | Will Falcons Win the PGL Major Singapore 2026? | No | 91c | 92c | +0.03 | 2026-12-15 |
 | NYSE marketwide circuit breaker before 2027? | No | 96c | 94c | -0.08 | 2027-01-01 |
 | Will ZywOo reach 36 HLTV MVP awards by December 31, 2026? | No | 94c | 96c | +0.10 | 2027-01-01 |
 | Will Donald Trump be TIME Person of the Year 2026? | No | 94c | 94c | -0.01 | 2026-12-31 |
 | Strait of Hormuz traffic returns to normal by December 31? | No | 92c | 95c | +0.15 | 2027-01-01 |
-| Pete Hegseth impeached by December 31, 2026? | No | 97c | 98c | +0.03 | 2027-01-01 |
+| Pete Hegseth impeached by December 31, 2026? | No | 97c | 98c | +0.04 | 2027-01-01 |
 | Manchester City punishment announced by December 18? | No | 96c | 98c | +0.10 | 2026-12-19 |
 | UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31? | No | 95c | 95c | +0.00 | 2027-01-01 |
 | Will Crude Oil reach a new all-time high by December 31? | No | 96c | 96c | +0.01 | 2027-01-01 |
 | Will GameStop acquire eBay? | No | 97c | 97c | +0.02 | 2027-01-01 |
-| Trump meets with Kim Jong Un by December 31, 2026? | No | 94c | 83c | -0.56 | 2027-01-01 |
-| Will Hy4 debut at a score of at least 1500 by June 30, 2027? | No | 95c | 95c | -0.02 | 2027-07-01 |
+| Trump meets with Kim Jong Un by December 31, 2026? | No | 94c | 82c | -0.61 | 2027-01-01 |
+| Will Hy4 debut at a score of at least 1500 by June 30, 2027? | No | 95c | 94c | -0.04 | 2027-07-01 |
 | Iran Nuke before 2027? | No | 97c | 98c | +0.04 | 2027-01-01 |
 | Iran leadership change by December 31? | No | 94c | 91c | -0.15 | 2027-01-01 |
 | Shapiro's Democratic nomination odds hit 10% by December 31? | No | 93c | 92c | -0.06 | 2027-01-01 |
@@ -300,18 +300,18 @@ Boring No, far out: in everyday 'will this happen' markets (no crypto, weather, 
 | Will Jensen Huang join a new company by December 31, 2026? | No | 91c | 93c | +0.08 | 2027-01-01 |
 | Kharg Island no longer under Iranian control by December 31? | No | 97c | 96c | -0.01 | 2027-01-01 |
 | Will Bangladesh recognize Israel by December 31? | No | 95c | 97c | +0.10 | 2027-01-01 |
-| Will exactly 7 tropical cyclones make landfall in China during 2026? | No | 95c | 86c | -0.45 | 2027-07-01 |
+| Will exactly 7 tropical cyclones make landfall in China during 2026? | No | 95c | 86c | -0.44 | 2027-07-01 |
 | Strait of Hormuz traffic returns to normal by January 31, 2027? | No | 92c | 91c | -0.07 | 2027-02-01 |
 | Will 7 or more Jensen Huang affairs be reported by December 31? | No | 93c | 95c | +0.10 | 2027-01-01 |
 | Will Boston Celtics win the 2027 NBA Finals? | No | 93c | 90c | -0.16 | 2027-07-01 |
 | Kash Patel out by December 31? | No | 91c | 87c | -0.22 | 2027-01-01 |
 | Will Phantom Blade Zero win Game of the Year at the 2026 Game Awards? | No | 96c | 95c | -0.06 | 2027-01-01 |
 | Will Viking Therapeutics be acquired before 2027? | No | 92c | 91c | -0.06 | 2027-01-01 |
-| Will the next governing coalition of Sweden include M + KD + L + SD? | No | 96c | 86c | -0.47 | 2027-08-01 |
+| Will the next governing coalition of Sweden include M + KD + L + SD? | No | 96c | 86c | -0.48 | 2027-08-01 |
 | Will any Uranium Enrichment % Cap (1+ Year) be in a US-Iran deal in 20 | No | 93c | 92c | -0.05 | 2027-01-01 |
 | Will Trump and Putin not meet? | No | 96c | 99c | +0.15 | 2027-01-01 |
 | Will Josh Kerr win the 2026 BBC Sports Personality of the Year award? | No | 98c | 95c | -0.14 | 2027-01-01 |
-| Will Brendan Allen fight Caio Borralho next? | No | 90c | 91c | -0.01 | 2027-10-13 |
+| Will Brendan Allen fight Caio Borralho next? | No | 90c | 91c | +0.00 | 2027-10-13 |
 
 ## claude
 Claude: my own rules, $50 paper, refilled with $50 if it busts
@@ -324,8 +324,8 @@ Claude: my own rules, $50 paper, refilled with $50 if it busts
 | Pedro Sánchez out as PM of Spain by December 31, 2026? | No | 86c | 88c | +0.10 | 2027-01-01 |
 | China x Philippines military clash before 2027? | No | 89c | 89c | +0.00 | 2027-01-01 |
 | US strike on Cuba by December 31? | No | 89c | 90c | +0.05 | 2027-01-01 |
-| US imports Russian diesel by November 30? | No | 89c | 90c | +0.07 | 2026-12-01 |
-| Russia x Ukraine ceasefire by December 31, 2026? | No | 90c | 93c | +0.14 | 2026-12-31 |
+| US imports Russian diesel by November 30? | No | 89c | 91c | +0.09 | 2026-12-01 |
+| Russia x Ukraine ceasefire by December 31, 2026? | No | 90c | 93c | +0.15 | 2026-12-31 |
 | Mojtaba Khamenei seen in public by December 31? | No | 88c | 94c | +0.30 | 2027-01-01 |
 | Will another country leave OPEC in 2026? | No | 94c | 95c | +0.05 | 2026-12-31 |
 
@@ -336,12 +336,12 @@ Crypto won't get there: in 'will Bitcoin reach / dip to / be above $X' markets w
 |---|---|---|---|---|---|
 | Will the price of Ethereum be above $1,900 on November 20? | No | 77c | 85c | +0.34 | 2026-11-20 |
 | Will XRP dip to $0.80 November 16-22? | No | 91c | 92c | +0.02 | 2026-11-23 |
-| Will the price of Bitcoin be above $70,000 on November 20? | No | 85c | 97c | +0.54 | 2026-11-20 |
-| Will Ethereum dip to $1,600 November 16-22? | No | 88c | 87c | -0.09 | 2026-11-23 |
+| Will the price of Bitcoin be above $70,000 on November 20? | No | 85c | 97c | +0.55 | 2026-11-20 |
+| Will Ethereum dip to $1,600 November 16-22? | No | 88c | 88c | -0.04 | 2026-11-23 |
 | Will Bitcoin dip to $58,000 November 16-22? | No | 90c | 92c | +0.07 | 2026-11-23 |
-| Will the price of Bitcoin be above $68,000 on November 18? | No | 74c | 98c | +1.13 | 2026-11-18 |
+| Will the price of Bitcoin be above $68,000 on November 18? | No | 74c | 98c | +1.14 | 2026-11-18 |
 | Will the price of Bitcoin be between $66,000 and $68,000 on November 2 | No | 85c | 81c | -0.24 | 2026-11-21 |
-| Will the price of Bitcoin be less than $60,000 on November 20? | No | 77c | 93c | +0.74 | 2026-11-20 |
+| Will the price of Bitcoin be less than $60,000 on November 20? | No | 77c | 92c | +0.72 | 2026-11-20 |
 | Will the price of Bitcoin be above $68,000 on November 19? | No | 72c | 97c | +1.17 | 2026-11-19 |
 
 ## econ_fav
@@ -359,14 +359,14 @@ By signal: past_deadline 10 finished / 0 flipped, proposed 5 finished / 0 flippe
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will the Democratic Party candidate win the 2026 NY-04 House election  | Yes | 97c | 34c | -3.16 | 2026-11-04 |
-| Will Chris Van Hollen be the next Senate Majority Leader? | No | 98c | 92c | -0.35 | 2026-11-04 |
+| Will the Democratic Party candidate win the 2026 NY-04 House election  | Yes | 97c | 35c | -3.11 | 2026-11-04 |
+| Will Chris Van Hollen be the next Senate Majority Leader? | No | 98c | 92c | -0.34 | 2026-11-04 |
 | Will Avigdor Lieberman be the next Prime Minister of Israel? | No | 96c | 96c | +0.02 | 2026-10-28 |
-| Will the Democratic Party candidate win the 2026 New Jersey Senate ele | Yes | 97c | 93c | -0.21 | 2026-11-04 |
-| Will the Democratic Party candidate win the 2026 VA-10 House election  | No | 97c | 99c | +0.07 | 2026-11-04 |
+| Will the Democratic Party candidate win the 2026 New Jersey Senate ele | Yes | 97c | 93c | -0.20 | 2026-11-04 |
+| Will the Democratic Party candidate win the 2026 VA-10 House election  | No | 97c | 99c | +0.10 | 2026-11-04 |
 | Will the Democratic Party win the popular vote in the 2026 U.S. House  | No | 97c | 99c | +0.10 | 2026-11-04 |
 | Will the Republican Party candidate win the 2026 WI-07 House election  | No | 99c | 97c | -0.10 | 2026-11-04 |
-| Eritrea invades Ethiopia by October 31? | No | 98c | 94c | -0.17 | 2026-11-01 |
+| Eritrea invades Ethiopia by October 31? | No | 98c | 94c | -0.16 | 2026-11-01 |
 | Will the Republican Party candidate win the 2026 IA-04 House election  | No | 98c | 100c | +0.09 | 2026-11-04 |
 | Will the Democratic Party candidate win the 2026 TX-22 House election? | No | 98c | 86c | -0.59 | 2026-11-04 |
 | Will Hakeem Jeffries be the first Speaker of the House after the 2026  | Yes | 97c | 99c | +0.09 | 2026-11-04 |
@@ -402,20 +402,20 @@ Favorites only: his entries at 80c or more ($20 paper)
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.26 | 2028-04-01 |
-| Trump meets with Kim Jong Un by December 31, 2026? | No | 92c | 83c | -0.46 | 2027-01-01 |
-| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 95c | -0.12 | 2026-11-30 |
+| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.25 | 2028-04-01 |
+| Trump meets with Kim Jong Un by December 31, 2026? | No | 92c | 82c | -0.51 | 2027-01-01 |
+| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 93c | -0.19 | 2026-11-30 |
 | Will Nvidia’s market capitalization be between $5.00T and $5.50T at th | No | 88c | 92c | +0.18 | 2026-12-31 |
 
 ## kalshi_patient
 UNTESTED, added 2026-11-12. Kalshi patient buyer on the nearly-sure side: once an hour, where the likely side's best buy order is at 90-97c with a 2c+ gap to the asking price, it leaves a $10 buy order 1c above the best one for about an hour. Sports only before the game, no 15-minute crypto. Counts only contracts really sold to it on Kalshi's trade list. One bet per market, held to the result. History: +$0.61 per $100 on 1,275 bets over three samples (+$1.42 on the two it was found in, -$1.99 on a fresh third), could be luck (backtest/khouse.md). $1,000 paper, no refills
 
-Finished bets: 349, put in $2918.75, P&L $+14.33 (+0.49 per $100).
+Finished bets: 353, put in $2956.95, P&L $+16.13 (+0.55 per $100).
 Worst loss $-9.60; average win $+0.52.
 
-By kind: other 152 bets $-17.43; sports 197 bets $+31.76
+By kind: other 153 bets $-17.13; sports 200 bets $+33.26
 
-Last look 2026-11-18T04:01 UTC: 59424 open markets, 248 fit the rule, 8 orders placed. Skipped: {'already bet or waiting': 94, 'gap too small': 643, 'no two-sided price': 22093, 'outside 90-97c': 32394, 'skipped kind': 27, 'sports, game on or about to start': 173, 'too far off': 242, 'too little traded': 3500}
+Last look 2026-11-18T04:57 UTC: 59574 open markets, 269 fit the rule, 25 orders placed. Skipped: {'already bet or waiting': 77, 'gap too small': 670, 'no two-sided price': 22317, 'outside 90-97c': 32319, 'skipped kind': 27, 'sports, game on or about to start': 140, 'too far off': 245, 'too little traded': 3493}
 
 ## kc_maker
 Kalshi late favorite (Reddit bot): in the last ~5 minutes of Kalshi's 15-minute BTC/ETH/SOL/XRP/DOGE/HYPE/BNB up-or-down windows, rests a buy order one tick in front of the best bid on the side that's winning (95c+), held to the result. Maker, no fee. Fills from the real trade tape after the close, behind anyone already waiting at that price. $10 an order, $100 paper
@@ -424,7 +424,7 @@ Picked-off check: filled orders won 99 in 100, unfilled ones would have won 100 
 
 Worst loss $-9.95; average win $+0.15.
 
-Last look per coin: BNB yes 74.0/75.0c 3.1m skip; BTC yes 99.0/99.1c 3.1m bid; DOGE yes 72.0/73.0c 3.1m skip; ETH yes 94.6/95.1c 3.1m skip; HYPE yes 85.0/86.0c 3.1m skip; SOL yes 95.9/96.2c 3.1m bid; XRP yes 63.0/65.0c 3.1m skip
+Last look per coin: BNB yes 74.0/75.0c 2.6m skip; BTC no 59.0/60.0c 2.6m skip; DOGE yes 65.0/66.0c 2.6m skip; ETH yes 94.2/95.4c 2.6m skip; HYPE no 63.0/65.0c 2.6m skip; SOL yes 83.0/84.0c 2.6m skip; XRP yes 95.7/96.1c 2.6m bid
 
 ## kc_maker_early
 STOPPED 12 Nov (Jan: dump it). Kalshi favorite, earlier: one tick in front of the best bid on the winning side (90c+) with 6.5-11.5 minutes left instead of the last 5 (backtest: 7-10 minutes left did better than the last 1-3). $100 paper
@@ -442,14 +442,14 @@ Picked-off check: filled orders won 99 in 100, unfilled ones would have won 100 
 
 Worst loss $-9.95; average win $+0.10.
 
-Last look per coin: BNB yes 74.0/75.0c 3.1m skip; BTC yes 99.0/99.1c 3.1m bid; DOGE yes 72.0/73.0c 3.1m skip; ETH yes 94.6/95.1c 3.1m skip; HYPE yes 85.0/86.0c 3.1m skip; SOL yes 95.9/96.2c 3.1m bid; XRP yes 63.0/65.0c 3.1m skip
+Last look per coin: BNB yes 74.0/75.0c 2.6m skip; BTC no 59.0/60.0c 2.6m skip; DOGE yes 65.0/66.0c 2.6m skip; ETH yes 94.2/95.4c 2.6m skip; HYPE no 63.0/65.0c 2.6m skip; SOL yes 83.0/84.0c 2.6m skip; XRP yes 95.7/96.1c 2.6m skip
 
 ## kc_maker_safe_usd
 Twin of kc_maker_safe with a price-gap check (12 Nov, Jan said yes): same rule, but the 2-typical-moves check must also pass after moving Binance onto Kalshi's price (Binance quotes in USDT and runs about 0.09% higher). History: half the losses, same +$0.57 per $100, about 25 in 100 fewer bets (backtest/kcloss.md). $100 paper
 
 Picked-off check: filled orders won 100 in 100, unfilled ones would have won 100 in 100. If filled orders win clearly less often, the fills are being picked off.
 
-Last look per coin: BNB yes 74.0/75.0c 3.1m skip; BTC yes 99.0/99.1c 3.1m bid; DOGE yes 72.0/73.0c 3.1m skip; ETH yes 94.6/95.1c 3.1m skip; HYPE yes 85.0/86.0c 3.1m skip; SOL yes 95.9/96.2c 3.1m skip; XRP yes 63.0/65.0c 3.1m skip
+Last look per coin: BNB yes 74.0/75.0c 2.6m skip; BTC no 59.0/60.0c 2.6m skip; DOGE yes 65.0/66.0c 2.6m skip; ETH yes 94.2/95.4c 2.6m skip; HYPE no 63.0/65.0c 2.6m skip; SOL yes 83.0/84.0c 2.6m skip; XRP yes 95.7/96.1c 2.6m skip
 
 ## ladder
 Ladder pairs inside Polymarket: two markets of one event where the stricter one can only say YES if the looser one does (higher strike, earlier deadline). Buys NO on the stricter + YES on the looser when both cost under $1 after fees: pays at least $1, or $2 if only the looser one comes true. Same site and rules, so no cross-site mismatch. $100 paper
@@ -509,11 +509,11 @@ Mirror: copies every position he opens and closes ($20 paper)
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will Strait of Hormuz traffic not return to normal in 2027? | Yes | 41c | 69c | +1.34 | 2028-01-01 |
+| Will Strait of Hormuz traffic not return to normal in 2027? | Yes | 41c | 70c | +1.39 | 2028-01-01 |
 | Will at least 10 ships transit the Strait of Hormuz on any day by Nove | Yes | 54c | 10c | -2.20 | 2026-12-01 |
-| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.26 | 2028-04-01 |
+| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.25 | 2028-04-01 |
 | Will Jon Ossoff win the 2028 Democratic presidential nomination? | Yes | 27c | 26c | -0.08 | 2028-11-08 |
-| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 95c | -0.12 | 2026-11-30 |
+| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 93c | -0.19 | 2026-11-30 |
 | Will Apple be the largest company in the world by market cap on Decemb | Yes | 71c | 88c | +0.84 | 2027-01-01 |
 
 ## mirror_unlimited
@@ -521,12 +521,12 @@ Mirror, no cash limit: does he have an edge, and how much money would copying hi
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will Strait of Hormuz traffic not return to normal in 2027? | Yes | 41c | 69c | +1.34 | 2028-01-01 |
+| Will Strait of Hormuz traffic not return to normal in 2027? | Yes | 41c | 70c | +1.39 | 2028-01-01 |
 | Will at least 10 ships transit the Strait of Hormuz on any day by Nove | Yes | 54c | 10c | -2.20 | 2026-12-01 |
-| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.26 | 2028-04-01 |
-| Trump meets with Kim Jong Un by December 31, 2026? | No | 92c | 83c | -0.46 | 2027-01-01 |
+| Will Pedro Sánchez be the next Prime Minister of Spain? | No | 91c | 86c | -0.25 | 2028-04-01 |
+| Trump meets with Kim Jong Un by December 31, 2026? | No | 92c | 82c | -0.51 | 2027-01-01 |
 | Will Jon Ossoff win the 2028 Democratic presidential nomination? | Yes | 27c | 26c | -0.08 | 2028-11-08 |
-| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 95c | -0.12 | 2026-11-30 |
+| Will PSOE win the most seats in Catalonia in the 2026 Spanish general  | Yes | 97c | 93c | -0.19 | 2026-11-30 |
 | Will Nvidia’s market capitalization be between $5.00T and $5.50T at th | No | 88c | 92c | +0.18 | 2026-12-31 |
 | Will Apple be the largest company in the world by market cap on Decemb | Yes | 71c | 88c | +0.84 | 2027-01-01 |
 | Will Jensen Huang rejoin NVIDIA by December 31, 2026? | No | 77c | 91c | +0.68 | 2027-01-01 |
@@ -540,7 +540,7 @@ Panic fade (wildcard): buys the boring side right after a news scare knocks it d
 | Tesla and SpaceX merger officially announced by December 31? | No | 71c | 76c | +0.21 | 2027-01-01 |
 | Will the 10-year Treasury yield hit 5.4% before 2027? | No | 78c | 83c | +0.21 | 2027-01-01 |
 | Will Spider-Man: Brand New Day be the top grossing movie of 2026? | Yes | 89c | 91c | +0.08 | 2027-01-08 |
-| Will Trump meet with Kim Jong Un in 2026? | No | 84c | 83c | -0.08 | 2027-01-02 |
+| Will Trump meet with Kim Jong Un in 2026? | No | 84c | 84c | -0.06 | 2027-01-02 |
 | Will Anthropic's valuation hit (HIGH) $1.5T by December 31? | Yes | 74c | 77c | +0.08 | 2027-01-05 |
 | Will Benjamin Netanyahu be the next leader out before 2027? | No | 80c | 63c | -0.85 | 2027-01-01 |
 | Will Minnesota Vikings win the 2027 NFL NFC Championship? | No | 82c | 88c | +0.28 | 2027-01-25 |
@@ -553,28 +553,28 @@ UNTESTED (added 2026-11-12). Post counts, buy NO: in 'how many posts will Elon M
 | Will Donald Trump post 100-119 Truth Social posts from November 20 to  | No | 84c | 85c | +0.02 | 2026-11-27 |
 | Will Donald Trump post 80-99 Truth Social posts from November 17 to No | No | 84c | 81c | -0.18 | 2026-11-24 |
 | Will Zelenskyy post 80-99 posts from November 13 to November 20, 2026? | No | 67c | 70c | +0.09 | 2026-11-20 |
-| Will Elon Musk post 90-114 tweets from November 16 to November 18, 202 | No | 71c | 38c | -1.70 | 2026-11-18 |
-| Will White House post 180-199 posts from November 17 to November 24, 2 | No | 75c | 81c | +0.25 | 2026-11-24 |
+| Will Elon Musk post 90-114 tweets from November 16 to November 18, 202 | No | 71c | 34c | -1.90 | 2026-11-18 |
+| Will White House post 180-199 posts from November 17 to November 24, 2 | No | 75c | 82c | +0.30 | 2026-11-24 |
 | Will Donald Trump post 60-79 Truth Social posts from November 17 to No | No | 83c | 73c | -0.54 | 2026-11-24 |
 | Will Donald Trump post 40-59 Truth Social posts from November 17 to No | No | 84c | 85c | +0.02 | 2026-11-24 |
-| Will Zelenskyy post 80-99 posts from November 17 to November 24, 2026? | No | 67c | 60c | -0.41 | 2026-11-24 |
-| Will White House post 160-179 posts from November 17 to November 24, 2 | No | 86c | 90c | +0.17 | 2026-11-24 |
+| Will Zelenskyy post 80-99 posts from November 17 to November 24, 2026? | No | 67c | 59c | -0.46 | 2026-11-24 |
+| Will White House post 160-179 posts from November 17 to November 24, 2 | No | 86c | 91c | +0.22 | 2026-11-24 |
 | Will Zelenskyy post 100-119 posts from November 17 to November 24, 202 | No | 79c | 78c | -0.09 | 2026-11-24 |
-| Will Donald Trump post 100-119 Truth Social posts from November 13 to  | No | 84c | 90c | +0.27 | 2026-11-20 |
-| Will White House post 180-199 posts from November 13 to November 20, 2 | No | 60c | 68c | +0.32 | 2026-11-20 |
-| Will CZ post 20-39 posts from November 17 to November 24, 2026? | No | 48c | 44c | -0.26 | 2026-11-24 |
+| Will Donald Trump post 100-119 Truth Social posts from November 13 to  | No | 84c | 92c | +0.37 | 2026-11-20 |
+| Will White House post 180-199 posts from November 13 to November 20, 2 | No | 60c | 72c | +0.50 | 2026-11-20 |
+| Will CZ post 20-39 posts from November 17 to November 24, 2026? | No | 48c | 42c | -0.36 | 2026-11-24 |
 | Will Donald Trump post 100-119 Truth Social posts from November 17 to  | No | 83c | 88c | +0.21 | 2026-11-24 |
 | Will Donald Trump post 60-79 Truth Social posts from November 20 to No | No | 85c | 82c | -0.18 | 2026-11-27 |
-| Will Donald Trump post 60-79 Truth Social posts from November 13 to No | No | 83c | 54c | -1.49 | 2026-11-20 |
+| Will Donald Trump post 60-79 Truth Social posts from November 13 to No | No | 83c | 55c | -1.47 | 2026-11-20 |
 | Will Zelenskyy post 100-119 posts from November 13 to November 20, 202 | No | 80c | 95c | +0.71 | 2026-11-20 |
-| Will CZ post 20-39 posts from November 13 to November 20, 2026? | No | 25c | 15c | -0.55 | 2026-11-20 |
+| Will CZ post 20-39 posts from November 13 to November 20, 2026? | No | 25c | 17c | -0.45 | 2026-11-20 |
 | Will Ted Cruz post 40-59 posts from November 13 to November 20, 2026? | No | 83c | 33c | -2.54 | 2026-11-20 |
-| Will NYC Mayor post 0-19 posts from November 13 to November 20, 2026? | No | 87c | 94c | +0.36 | 2026-11-20 |
-| Will White House post 160-179 posts from November 13 to November 20, 2 | No | 78c | 95c | +0.79 | 2026-11-20 |
+| Will NYC Mayor post 0-19 posts from November 13 to November 20, 2026? | No | 87c | 94c | +0.35 | 2026-11-20 |
+| Will White House post 160-179 posts from November 13 to November 20, 2 | No | 78c | 96c | +0.86 | 2026-11-20 |
 | Will Donald Trump post 80-99 Truth Social posts from November 20 to No | No | 83c | 81c | -0.14 | 2026-11-27 |
 | Will Elon Musk post 360-379 tweets from November 13 to November 20, 20 | No | 78c | 77c | -0.06 | 2026-11-20 |
-| Will Donald Trump post 80-99 Truth Social posts from November 13 to No | No | 83c | 76c | -0.39 | 2026-11-20 |
-| Will Elon Musk post 115-139 tweets from November 16 to November 18, 20 | No | 74c | 66c | -0.45 | 2026-11-18 |
+| Will Donald Trump post 80-99 Truth Social posts from November 13 to No | No | 83c | 77c | -0.34 | 2026-11-20 |
+| Will Elon Musk post 115-139 tweets from November 16 to November 18, 20 | No | 74c | 67c | -0.40 | 2026-11-18 |
 | Will Zelenskyy post 60-79 posts from November 13 to November 20, 2026? | No | 58c | 43c | -0.81 | 2026-11-20 |
 
 ## quiet_no
@@ -582,9 +582,9 @@ Quiet week, buy NO: markets ending in 1-3 days whose price barely moved all week
 
 | Market | Side | Entry | Now | P&L | Ends |
 |---|---|---|---|---|---|
-| Will Elon Musk post 90-114 tweets from November 16 to November 18, 202 | No | 76c | 38c | -1.95 | 2026-11-18 |
-| S&P 500 (SPY) closes above $745 on November 18? | No | 76c | 83c | +0.31 | 2026-11-18 |
-| Will Meta (META) close above $630 on November 18? | No | 68c | 69c | +0.01 | 2026-11-18 |
+| Will Elon Musk post 90-114 tweets from November 16 to November 18, 202 | No | 76c | 34c | -2.15 | 2026-11-18 |
+| S&P 500 (SPY) closes above $745 on November 18? | No | 76c | 87c | +0.51 | 2026-11-18 |
+| Will Meta (META) close above $630 on November 18? | No | 68c | 73c | +0.21 | 2026-11-18 |
 
 ## screener
 Screener: his style by rule, without him ($20 paper)
@@ -614,10 +614,10 @@ Soccer draws: buys YES on 'will this game end in a draw' about 24h before kickof
 | Will CD Badajoz vs. CD Tenerife end in a draw? | Draw | 27c | 26c | -0.10 | 2026-11-18 |
 | Will CD Alcoyano vs. RCD Mallorca end in a draw? | Draw | 25c | 23c | -0.15 | 2026-11-18 |
 | Will Clube do Remo vs. Associação Chapecoense de Futebol end in a draw | Draw | 22c | 21c | -0.09 | 2026-11-18 |
-| Will Utebo FC vs. CE Sabadell FC end in a draw? | Draw | 26c | 23c | -0.20 | 2026-11-18 |
+| Will Utebo FC vs. CE Sabadell FC end in a draw? | Draw | 26c | 24c | -0.15 | 2026-11-18 |
 | Will BK Häcken FF vs. Manchester City WFC end in a draw? | Draw | 17c | 14c | -0.19 | 2026-11-18 |
 | Will Chelsea FC vs. Paris Saint-Germain FC end in a draw? | Draw | 17c | 15c | -0.14 | 2026-11-18 |
-| Will Juventus FC vs. Oud-Heverlee Leuven Women end in a draw? | Draw | 16c | 15c | -0.08 | 2026-11-18 |
+| Will Juventus FC vs. Oud-Heverlee Leuven Women end in a draw? | Draw | 16c | 16c | -0.03 | 2026-11-18 |
 | Will Reus FC Reddis vs. Barakaldo CF end in a draw? | Draw | 31c | 29c | -0.15 | 2026-11-18 |
 | Will Cruzeiro EC vs. SE Palmeiras end in a draw? | Draw | 28c | 27c | -0.10 | 2026-11-18 |
 | Will CD Minera vs. FC Cartagena end in a draw? | Draw | 34c | 31c | -0.21 | 2026-11-18 |
@@ -654,103 +654,103 @@ Since 2026-11-08 the ranking uses **real-size** numbers: what each trade would h
 
 | # | Strategy | Finished | Profit at $25 a trade (done) | Avg per $100 | Paper avg per $100 | Worst per $100 | P&L incl. open (paper) | Today | Open |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | kc_maker_safe_usd | 575 | $+83.46 | $+0.58 | $+0.58 | $-0.15 | $+33.20 | $+0.66 | 1 |
-| 2 | kc_maker | 2153 | $+137.90 | $+0.28 | $+0.28 | $-0.54 | $+58.10 | $+9.55 | 2 |
-| 3 | kc_maker_safe | 1124 | $+99.66 | $+0.36 | $+0.36 | $-0.54 | $+39.97 | $+1.79 | 2 |
-| 4 | kalshi_patient | 349 | $+30.93 | $+0.74 | $+0.74 | $-3.66 | $+14.33 | $+6.57 | 92 |
-| 5 | endgame_sell98 | 525 | $-303.20 | $-2.58 | $-2.04 | $-5.56 | $-54.28 | $+0.72 | 26 |
+| 1 | kc_maker_safe_usd | 576 | $+83.71 | $+0.59 | $+0.59 | $-0.15 | $+33.30 | $+0.76 | 0 |
+| 2 | kc_maker | 2157 | $+140.44 | $+0.29 | $+0.29 | $-0.54 | $+59.13 | $+10.58 | 0 |
+| 3 | kc_maker_safe | 1125 | $+99.92 | $+0.36 | $+0.36 | $-0.54 | $+40.07 | $+1.89 | 0 |
+| 4 | kalshi_patient | 353 | $+35.66 | $+0.79 | $+0.79 | $-3.57 | $+16.13 | $+8.37 | 113 |
+| 5 | endgame_sell98 | 525 | $-303.20 | $-2.58 | $-2.04 | $-5.56 | $-54.24 | $+0.75 | 29 |
 | 6 | kc_maker_early | 355 | $-180.97 | $-1.97 | $-1.97 | $-7.00 | $-70.36 | $+0.00 | 0 |
 | 7 | crypto_late | 39 | $+24.96 | $+2.72 | $+2.84 | $-11.62 | $+5.17 | $+0.00 | 0 |
-| 8 | endgame_97 | 134 | $-89.81 | $-4.85 | $-4.84 | $-12.50 | $-34.44 | $-0.09 | 15 |
+| 8 | endgame_97 | 134 | $-89.81 | $-4.85 | $-4.84 | $-12.50 | $-34.55 | $-0.20 | 15 |
 | 9 | endgame_ending_soon | 136 | $-211.94 | $-8.36 | $-8.29 | $-18.07 | $-54.09 | $+0.00 | 2 |
-| 10 | panic_fade_4c | 26 | $+6.96 | $+1.08 | $+1.32 | $-18.69 | $+2.48 | $+0.02 | 20 |
-| 11 | w_bigggggggg | 57 | $-114.39 | $-7.98 | $-7.47 | $-19.23 | $-8.10 | $+0.53 | 13 |
-| 12 | maker_flat | 49 | $-105.55 | $-11.59 | $-11.59 | $-21.08 | $-105.55 | $+0.00 | 0 |
-| 13 | wb_bigggggggg | 64 | $-159.55 | $-9.89 | $-9.37 | $-22.53 | $-14.34 | $+0.53 | 15 |
-| 14 | endgame | 15 | $+3.02 | $+2.63 | $+2.63 | $-24.21 | $-2.09 | $+1.90 | 14 |
+| 10 | panic_fade_4c | 26 | $+6.96 | $+1.08 | $+1.32 | $-18.69 | $+2.51 | $+0.05 | 20 |
+| 11 | maker_flat | 49 | $-105.55 | $-11.59 | $-11.59 | $-21.08 | $-105.55 | $+0.00 | 0 |
+| 12 | w_bigggggggg | 58 | $-116.54 | $-9.57 | $-9.07 | $-21.78 | $-8.10 | $+0.53 | 12 |
+| 13 | endgame | 15 | $+3.02 | $+2.63 | $+2.63 | $-24.21 | $-1.97 | $+2.02 | 14 |
+| 14 | wb_bigggggggg | 65 | $-161.70 | $-11.27 | $-10.76 | $-24.50 | $-14.34 | $+0.53 | 14 |
 | 15 | maker_tp | 17 | $-18.53 | $-1.59 | $-1.59 | $-25.74 | $-18.53 | $+0.00 | 0 |
-| 16 | panic_fade | 19 | $+5.17 | $+0.95 | $+1.05 | $-27.57 | $+0.42 | $+0.04 | 8 |
+| 16 | panic_fade | 19 | $+5.17 | $+0.95 | $+1.05 | $-27.57 | $+0.45 | $+0.07 | 8 |
 | 17 | stock_no | 29 | $-16.72 | $-2.12 | $-2.01 | $-27.58 | $-2.30 | $+0.00 | 0 |
-| 18 | wb_jjo | 20 | $+21.54 | $+4.31 | $+4.34 | $-27.67 | $-0.27 | $-0.01 | 20 |
-| 19 | w_jjo | 16 | $+29.57 | $+7.34 | $+7.38 | $-29.55 | $+1.79 | $-0.19 | 10 |
-| 20 | wb_groth | 15 | $+48.70 | $+12.83 | $+12.88 | $-32.76 | $+2.36 | $-1.11 | 33 |
-| 21 | wb_0x448861 | 24 | $+227.19 | $+36.92 | $+36.92 | $-33.64 | $+21.84 | $-0.35 | 4 |
-| 22 | w_0x448861 | 24 | $+227.19 | $+36.92 | $+36.92 | $-33.64 | $+20.44 | $-0.35 | 3 |
+| 18 | wb_jjo | 20 | $+21.54 | $+4.31 | $+4.34 | $-27.67 | $-0.19 | $+0.07 | 20 |
+| 19 | w_jjo | 16 | $+29.57 | $+7.34 | $+7.38 | $-29.55 | $+1.80 | $-0.18 | 10 |
+| 20 | wb_groth | 15 | $+48.70 | $+12.83 | $+12.88 | $-32.76 | $+2.52 | $-0.95 | 33 |
+| 21 | wb_0x448861 | 24 | $+227.19 | $+36.92 | $+36.92 | $-33.64 | $+21.85 | $-0.34 | 4 |
+| 22 | w_0x448861 | 24 | $+227.19 | $+36.92 | $+36.92 | $-33.64 | $+20.45 | $-0.34 | 3 |
 | 23 | maker_tpsl | 25 | $-104.35 | $-14.66 | $-14.66 | $-33.93 | $-104.35 | $+0.00 | 0 |
-| 24 | soccer_draw | 137 | $+318.25 | $+10.41 | $+12.26 | $-35.61 | $+23.97 | $+2.29 | 15 |
-| 25 | momentum_week | 10 | $+12.27 | $+4.87 | $+5.50 | $-37.30 | $+2.20 | $-0.14 | 8 |
+| 24 | soccer_draw | 137 | $+318.25 | $+10.41 | $+12.26 | $-35.61 | $+24.07 | $+2.40 | 15 |
+| 25 | momentum_week | 10 | $+12.27 | $+4.87 | $+5.50 | $-37.30 | $+2.09 | $-0.25 | 10 |
 | 26 | wx_forecast | 177 | $-655.05 | $-16.54 | $-16.16 | $-40.71 | $-47.59 | $+0.00 | 0 |
-| 27 | w_underperformingforal | 15 | $-20.89 | $-5.37 | $-5.01 | $-41.26 | $-0.19 | $+0.13 | 4 |
-| 28 | fav_short_90_95 | 8 | $+9.40 | $+4.69 | $+4.68 | $-43.98 | $+2.82 | $+0.35 | 16 |
-| 29 | wb_underperformingforal | 14 | $-21.75 | $-6.00 | $-5.56 | $-44.07 | $-0.23 | $+0.13 | 4 |
-| 30 | fav_short_95_98 | 13 | $-18.96 | $-5.82 | $-5.82 | $-44.07 | $-3.74 | $+0.34 | 13 |
+| 27 | w_underperformingforal | 15 | $-20.89 | $-5.37 | $-5.01 | $-41.26 | $-0.21 | $+0.12 | 4 |
+| 28 | fav_short_90_95 | 8 | $+9.40 | $+4.69 | $+4.68 | $-43.98 | $+2.75 | $+0.28 | 19 |
+| 29 | wb_underperformingforal | 14 | $-21.75 | $-6.00 | $-5.56 | $-44.07 | $-0.25 | $+0.12 | 4 |
+| 30 | fav_short_95_98 | 13 | $-18.96 | $-5.82 | $-5.82 | $-44.07 | $-4.19 | $-0.10 | 16 |
 | 31 | maker_short | 13 | $-68.21 | $-10.46 | $-10.46 | $-44.18 | $-68.21 | $+0.00 | 0 |
-| 32 | fade_rally | 11 | $-6.73 | $-2.40 | $-1.56 | $-45.03 | $-0.77 | $+0.05 | 5 |
+| 32 | fade_rally | 11 | $-6.73 | $-2.40 | $-1.56 | $-45.03 | $-0.92 | $-0.11 | 7 |
 | 33 | sharp_pinnacle | 19 | $+285.77 | $+59.30 | $+59.46 | $-46.24 | $+21.01 | $-1.94 | 0 |
-| 34 | w_anoin123 | 12 | $+23.55 | $+4.13 | $+4.16 | $-46.90 | $+5.56 | $-1.97 | 53 |
-| 35 | wb_anoin123 | 12 | $+2.31 | $+0.76 | $+0.79 | $-46.91 | $+7.95 | $-2.35 | 72 |
-| 36 | wb_tokor | 82 | $-481.18 | $-22.91 | $-22.20 | $-49.02 | $-57.22 | $+2.19 | 40 |
-| 37 | wb_debased | 12 | $-9.63 | $-3.32 | $-3.07 | $-50.85 | $+0.02 | $+0.80 | 22 |
-| 38 | w_sbel | 62 | $-232.33 | $-16.26 | $-15.81 | $-54.45 | $-19.59 | $+2.69 | 34 |
-| 39 | panic_fade_10c | 11 | $-24.22 | $-8.57 | $-8.28 | $-55.76 | $-1.59 | $+0.16 | 10 |
-| 40 | wb_sbel | 68 | $-365.57 | $-22.05 | $-21.65 | $-57.81 | $-28.03 | $+2.69 | 34 |
+| 34 | w_anoin123 | 12 | $+23.55 | $+4.13 | $+4.16 | $-46.90 | $+6.03 | $-1.50 | 53 |
+| 35 | wb_anoin123 | 12 | $+2.31 | $+0.76 | $+0.79 | $-46.91 | $+8.29 | $-2.01 | 72 |
+| 36 | wb_tokor | 82 | $-481.18 | $-22.91 | $-22.20 | $-49.02 | $-57.41 | $+2.00 | 40 |
+| 37 | wb_debased | 12 | $-9.63 | $-3.32 | $-3.07 | $-50.85 | $-0.01 | $+0.77 | 22 |
+| 38 | w_sbel | 62 | $-232.33 | $-16.26 | $-15.81 | $-54.45 | $-20.76 | $+1.52 | 34 |
+| 39 | panic_fade_10c | 11 | $-24.22 | $-8.57 | $-8.28 | $-55.76 | $-1.56 | $+0.18 | 10 |
+| 40 | wb_sbel | 68 | $-365.57 | $-22.05 | $-21.65 | $-57.81 | $-29.20 | $+1.52 | 34 |
 | 41 | wb_rememberamalek | 25 | $-105.02 | $-16.31 | $-16.22 | $-58.94 | $-2.77 | $+0.15 | 14 |
 | 42 | endgame_strict | 6 | $+1.57 | $+1.11 | $+1.11 | $-59.31 | $+0.33 | $+0.00 | 0 |
-| 43 | wb_cigarettes | 59 | $-163.08 | $-11.13 | $-9.98 | $-61.29 | $-34.47 | $-2.32 | 62 |
+| 43 | wb_cigarettes | 67 | $-262.54 | $-15.58 | $-14.58 | $-61.02 | $-35.16 | $-3.01 | 54 |
 | 44 | maker | 13 | $-124.56 | $-18.90 | $-18.90 | $-62.07 | $-124.56 | $+0.00 | 0 |
-| 45 | wb_hellyeahtrader | 60 | $-524.98 | $-32.60 | $-32.41 | $-63.60 | $-59.27 | $-2.84 | 13 |
-| 46 | w_cigarettes | 50 | $-102.09 | $-5.63 | $-4.77 | $-64.81 | $-30.52 | $-2.67 | 56 |
+| 45 | wb_hellyeahtrader | 60 | $-524.98 | $-32.60 | $-32.41 | $-63.60 | $-59.30 | $-2.87 | 13 |
+| 46 | w_cigarettes | 58 | $-201.56 | $-11.54 | $-10.79 | $-64.08 | $-31.01 | $-3.16 | 48 |
 | 47 | w_debased | 9 | $-29.33 | $-13.05 | $-12.71 | $-67.06 | $-0.64 | $+0.81 | 11 |
-| 48 | w_tokor | 73 | $-394.53 | $-0.10 | $+0.76 | $-74.32 | $-49.63 | $+1.73 | 28 |
-| 49 | w_hellyeahtrader | 41 | $-355.15 | $-34.61 | $-34.38 | $-75.49 | $-48.70 | $-2.84 | 13 |
-| 50 | wb_dominus | 9 | $-49.85 | $-21.55 | $-21.47 | $-75.94 | $-3.04 | $-0.30 | 4 |
-| 51 | wb_hell0pia | 9 | $-7.38 | $-2.93 | $-2.03 | $-78.25 | $+3.08 | $+0.02 | 2 |
-| 52 | crypto_no | 12 | $-58.53 | $-19.22 | $-18.97 | $-79.82 | $-5.40 | $+0.84 | 9 |
+| 48 | w_tokor | 73 | $-394.53 | $-0.10 | $+0.76 | $-74.32 | $-49.89 | $+1.48 | 28 |
+| 49 | w_hellyeahtrader | 41 | $-355.15 | $-34.61 | $-34.38 | $-75.49 | $-48.73 | $-2.87 | 13 |
+| 50 | wb_dominus | 9 | $-49.85 | $-21.55 | $-21.47 | $-75.94 | $-2.99 | $-0.25 | 4 |
+| 51 | wb_hell0pia | 9 | $-7.38 | $-2.93 | $-2.03 | $-78.25 | $+3.09 | $+0.04 | 2 |
+| 52 | crypto_no | 12 | $-58.53 | $-19.22 | $-18.97 | $-79.82 | $-5.36 | $+0.88 | 9 |
 | 53 | wb_lpgb | 5 | $-31.56 | $-24.40 | $-24.36 | $-79.85 | $-2.83 | $+0.45 | 2 |
-| 54 | w_dominus | 5 | $-7.83 | $-6.49 | $-6.49 | $-81.26 | $-1.50 | $-0.30 | 2 |
-| 55 | wb_bertapotamous | 7 | $-3.14 | $-1.77 | $-1.71 | $-82.36 | $+3.71 | $-0.05 | 13 |
-| 56 | claude | 4 | $+0.62 | $+3.35 | $+3.35 | $-83.17 | $+1.68 | $-0.28 | 10 |
-| 57 | wb_hauchn | 6 | $+3.31 | $+5.41 | $+12.64 | $-83.59 | $+0.64 | $+0.20 | 8 |
-| 58 | wb_ecash | 6 | $-28.16 | $-18.62 | $-18.42 | $-85.90 | $-2.22 | $+0.97 | 30 |
-| 59 | w_groth | 6 | $+17.45 | $+11.52 | $+11.52 | $-88.45 | $+0.60 | $+0.12 | 18 |
-| 60 | w_eightpenguins | 6 | $+46.75 | $+30.61 | $+31.16 | $-88.60 | $+4.83 | $-0.09 | 7 |
-| 61 | wb_eightpenguins | 6 | $+46.75 | $+30.61 | $+31.16 | $-88.60 | $+1.99 | $-0.08 | 19 |
-| 62 | postcount_no | 9 | $-25.23 | $-5.06 | $-4.48 | $-92.33 | $-5.87 | $+1.33 | 26 |
-| 63 | wb_youngalphagoat | 7 | $-85.12 | $-47.42 | $-45.67 | $-98.26 | $-22.90 | $-0.26 | 19 |
-| 64 | wb_blondbeast | 15 | $-47.67 | $-12.52 | $-12.30 | $-98.35 | $-0.91 | $+0.07 | 16 |
-| 65 | consensus_2 | 2 | $+1.36 | $-1.07 | $-1.07 | $-100.00 | $+9.84 | $+0.79 | 60 |
-| 66 | consensus_3 | 2 | $-22.94 | $-45.91 | $-45.33 | $-100.00 | $+9.78 | $+0.13 | 60 |
-| 67 | control_longshot | 6 | $+577.56 | $+356.44 | $+356.44 | $-100.00 | $+8.38 | $-0.03 | 21 |
+| 54 | w_dominus | 5 | $-7.83 | $-6.49 | $-6.49 | $-81.26 | $-1.45 | $-0.25 | 2 |
+| 55 | wb_bertapotamous | 7 | $-3.14 | $-1.77 | $-1.71 | $-82.36 | $+3.73 | $-0.03 | 13 |
+| 56 | claude | 4 | $+0.62 | $+3.35 | $+3.35 | $-83.17 | $+1.71 | $-0.25 | 10 |
+| 57 | wb_hauchn | 6 | $+3.31 | $+5.41 | $+12.64 | $-83.59 | $+1.38 | $+0.94 | 8 |
+| 58 | wb_ecash | 6 | $-28.16 | $-18.62 | $-18.42 | $-85.90 | $-2.26 | $+0.94 | 30 |
+| 59 | w_groth | 6 | $+17.45 | $+11.52 | $+11.52 | $-88.45 | $+0.66 | $+0.18 | 18 |
+| 60 | w_eightpenguins | 6 | $+46.75 | $+30.61 | $+31.16 | $-88.60 | $+4.80 | $-0.12 | 7 |
+| 61 | wb_eightpenguins | 6 | $+46.75 | $+30.61 | $+31.16 | $-88.60 | $+1.95 | $-0.12 | 19 |
+| 62 | postcount_no | 9 | $-25.23 | $-5.06 | $-4.48 | $-92.33 | $-5.55 | $+1.64 | 26 |
+| 63 | wb_youngalphagoat | 7 | $-85.12 | $-47.42 | $-45.67 | $-98.26 | $-23.25 | $-0.61 | 19 |
+| 64 | wb_blondbeast | 15 | $-47.67 | $-12.52 | $-12.30 | $-98.35 | $-0.87 | $+0.11 | 16 |
+| 65 | consensus_2 | 2 | $+1.36 | $-1.07 | $-1.07 | $-100.00 | $+9.89 | $+0.84 | 60 |
+| 66 | consensus_3 | 2 | $-22.94 | $-45.91 | $-45.33 | $-100.00 | $+9.79 | $+0.14 | 60 |
+| 67 | control_longshot | 6 | $+577.56 | $+356.44 | $+356.44 | $-100.00 | $+8.13 | $-0.28 | 24 |
 | 68 | fade_sure | 76 | $-464.57 | $+8.88 | $+18.58 | $-100.00 | $+7.22 | $+0.00 | 0 |
-| 69 | wb_dropper | 7 | $+12.70 | $+7.03 | $+7.03 | $-100.00 | $+6.19 | $+0.17 | 8 |
-| 70 | wb_monopoly_money | 2 | $-24.20 | $-47.75 | $-47.75 | $-100.00 | $+5.32 | $+0.65 | 28 |
+| 69 | wb_dropper | 7 | $+12.70 | $+7.03 | $+7.03 | $-100.00 | $+6.20 | $+0.18 | 8 |
+| 70 | wb_monopoly_money | 2 | $-24.20 | $-47.75 | $-47.75 | $-100.00 | $+5.39 | $+0.71 | 28 |
 | 71 | w_tunatyler | 2 | $+14.94 | $+29.56 | $+30.20 | $-100.00 | $+4.29 | $-0.10 | 7 |
-| 72 | wb_tunatyler | 2 | $+14.94 | $+29.56 | $+30.20 | $-100.00 | $+4.21 | $-0.14 | 10 |
+| 72 | wb_tunatyler | 2 | $+14.94 | $+29.56 | $+30.20 | $-100.00 | $+4.20 | $-0.14 | 10 |
 | 73 | w_dromedaryy | 5 | $+80.97 | $+62.51 | $+62.51 | $-100.00 | $+3.44 | $-0.04 | 7 |
-| 74 | w_dropper | 6 | $+31.56 | $+20.51 | $+20.51 | $-100.00 | $+3.05 | $+0.13 | 4 |
-| 75 | w_bertapotamous | 3 | $+14.12 | $+18.94 | $+19.08 | $-100.00 | $+2.87 | $+0.07 | 2 |
-| 76 | sab_hold | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+2.78 | $+0.26 | 5 |
-| 77 | wb_betwick | 4 | $+1.73 | $+1.12 | $+1.26 | $-100.00 | $+2.59 | $+0.23 | 22 |
-| 78 | wb_albert_1953 | 2 | $-2.96 | $-4.76 | $-4.67 | $-100.00 | $+2.21 | $-0.17 | 33 |
+| 74 | w_dropper | 6 | $+31.56 | $+20.51 | $+20.51 | $-100.00 | $+3.04 | $+0.12 | 4 |
+| 75 | w_bertapotamous | 3 | $+14.12 | $+18.94 | $+19.08 | $-100.00 | $+2.89 | $+0.09 | 2 |
+| 76 | sab_hold | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+2.78 | $+0.27 | 5 |
+| 77 | wb_betwick | 4 | $+1.73 | $+1.12 | $+1.26 | $-100.00 | $+2.62 | $+0.27 | 22 |
+| 78 | wb_albert_1953 | 2 | $-2.96 | $-4.76 | $-4.67 | $-100.00 | $+2.17 | $-0.20 | 33 |
 | 79 | screener | 1 | $+0.91 | $+22.29 | $+22.29 | $-100.00 | $+2.05 | $+0.00 | 4 |
-| 80 | yes_fav_85_95 | 3 | $+7.36 | $+9.78 | $+9.78 | $-100.00 | $+1.84 | $+0.36 | 14 |
-| 81 | w_betwick | 3 | $+26.73 | $+34.83 | $+35.01 | $-100.00 | $+1.76 | $-0.01 | 9 |
-| 82 | w_balerinacapuchina | 2 | $+26.66 | $+51.99 | $+51.99 | $-100.00 | $+1.55 | $+0.00 | 2 |
-| 83 | wb_balerinacapuchina | 3 | $+27.40 | $+35.64 | $+35.64 | $-100.00 | $+1.48 | $-0.15 | 9 |
-| 84 | wb_new_jeans | 2 | $-4.01 | $-20.36 | $-18.92 | $-100.00 | $+1.36 | $-0.05 | 7 |
-| 85 | w_the_joker | 1 | $+9.44 | $+37.35 | $+37.35 | $-100.00 | $+1.11 | $+0.04 | 4 |
-| 86 | wb_thereturnofdarthmaul | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.92 | $+0.20 | 21 |
-| 87 | fav_fee_free | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+0.76 | $-0.10 | 16 |
+| 80 | w_betwick | 3 | $+26.73 | $+34.83 | $+35.01 | $-100.00 | $+1.78 | $+0.01 | 9 |
+| 81 | w_balerinacapuchina | 2 | $+26.66 | $+51.99 | $+51.99 | $-100.00 | $+1.55 | $+0.00 | 2 |
+| 82 | wb_balerinacapuchina | 3 | $+27.40 | $+35.64 | $+35.64 | $-100.00 | $+1.49 | $-0.15 | 9 |
+| 83 | wb_new_jeans | 2 | $-4.01 | $-20.36 | $-18.92 | $-100.00 | $+1.41 | $+0.00 | 7 |
+| 84 | w_the_joker | 1 | $+9.44 | $+37.35 | $+37.35 | $-100.00 | $+1.11 | $+0.04 | 4 |
+| 85 | yes_fav_85_95 | 3 | $+7.36 | $+9.78 | $+9.78 | $-100.00 | $+1.06 | $-0.42 | 16 |
+| 86 | wb_thereturnofdarthmaul | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.91 | $+0.20 | 21 |
+| 87 | fav_fee_free | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+0.69 | $-0.16 | 17 |
 | 88 | w_lava_lava | 1 | $+17.62 | $+68.05 | $+68.05 | $-100.00 | $+0.65 | $+0.00 | 3 |
-| 89 | wb_aghy | 1 | $-25.40 | $-100.00 | $-100.00 | $-100.00 | $+0.50 | $-0.05 | 6 |
-| 90 | wb_dromedaryy | 5 | $+80.97 | $+62.51 | $+62.51 | $-100.00 | $+0.35 | $+0.33 | 20 |
+| 89 | wb_aghy | 1 | $-25.40 | $-100.00 | $-100.00 | $-100.00 | $+0.50 | $-0.04 | 6 |
+| 90 | wb_dromedaryy | 5 | $+80.97 | $+62.51 | $+62.51 | $-100.00 | $+0.36 | $+0.33 | 20 |
 | 91 | w_hauchn | 1 | $+0.31 | $+21.52 | $+21.52 | $-100.00 | $+0.31 | $+0.00 | 0 |
-| 92 | fav_cut_losses | 1 | $-5.59 | $-22.23 | $-21.47 | $-100.00 | $+0.27 | $+0.14 | 17 |
-| 93 | w_new_jeans | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.21 | $+0.00 | 1 |
-| 94 | mirror_unlimited | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+0.12 | $+0.31 | 9 |
-| 95 | wb_lava_lava | 1 | $+17.62 | $+68.05 | $+68.05 | $-100.00 | $+0.10 | $-0.06 | 8 |
-| 96 | w_vilgefortz | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.08 | $-0.02 | 2 |
-| 97 | w_lpgb | 2 | $+0.79 | $+1.60 | $+2.13 | $-100.00 | $+0.07 | $+0.00 | 0 |
+| 92 | w_new_jeans | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.21 | $+0.00 | 1 |
+| 93 | wb_lava_lava | 1 | $+17.62 | $+68.05 | $+68.05 | $-100.00 | $+0.10 | $-0.06 | 8 |
+| 94 | w_vilgefortz | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.10 | $-0.01 | 2 |
+| 95 | fav_cut_losses | 1 | $-5.59 | $-22.23 | $-21.47 | $-100.00 | $+0.09 | $-0.05 | 19 |
+| 96 | w_lpgb | 2 | $+0.79 | $+1.60 | $+2.13 | $-100.00 | $+0.07 | $+0.00 | 0 |
+| 97 | mirror_unlimited | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $+0.06 | $+0.26 | 9 |
 | 98 | arb | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 28 |
 | 99 | econ_fav | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 0 |
 | 100 | every_horse | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 3 |
@@ -762,35 +762,35 @@ Since 2026-11-08 the ranking uses **real-size** numbers: what each trade would h
 | 106 | w_railcool | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 0 |
 | 107 | w_youngalphagoat | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 0 |
 | 108 | wb_railcool | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $+0.00 | $+0.00 | 0 |
-| 109 | wb_vilgefortz | 2 | $-4.39 | $-8.49 | $-8.49 | $-100.00 | $-0.22 | $-0.02 | 5 |
+| 109 | wb_vilgefortz | 2 | $-4.39 | $-8.49 | $-8.49 | $-100.00 | $-0.21 | $-0.01 | 5 |
 | 110 | word_no | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.22 | $+0.05 | 4 |
-| 111 | w_pako | 3 | $+10.64 | $+13.42 | $+13.49 | $-100.00 | $-0.33 | $-0.03 | 3 |
-| 112 | mirror | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.47 | $+0.35 | 6 |
-| 113 | w_thereturnofdarthmaul | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.50 | $-0.13 | 4 |
-| 114 | fav_bigvol_85_95 | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.61 | $+0.19 | 18 |
-| 115 | favorites | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.66 | $+0.01 | 4 |
-| 116 | w_ecash | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.71 | $+0.75 | 11 |
-| 117 | no_only_90_97 | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $-0.78 | $+0.21 | 26 |
-| 118 | wb_wan123 | 4 | $-48.02 | $-47.64 | $-47.64 | $-100.00 | $-0.96 | $+0.29 | 18 |
-| 119 | w_blondbeast | 10 | $-1.96 | $-0.86 | $-0.67 | $-100.00 | $-0.98 | $+0.05 | 2 |
+| 111 | w_pako | 3 | $+10.64 | $+13.42 | $+13.49 | $-100.00 | $-0.32 | $-0.02 | 3 |
+| 112 | mirror | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.48 | $+0.34 | 6 |
+| 113 | w_thereturnofdarthmaul | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.50 | $-0.14 | 4 |
+| 114 | fav_bigvol_85_95 | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.71 | $+0.09 | 20 |
+| 115 | w_ecash | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.75 | $+0.71 | 11 |
+| 116 | favorites | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-0.77 | $-0.10 | 4 |
+| 117 | wb_wan123 | 4 | $-48.02 | $-47.64 | $-47.64 | $-100.00 | $-0.94 | $+0.30 | 18 |
+| 118 | w_blondbeast | 10 | $-1.96 | $-0.86 | $-0.67 | $-100.00 | $-0.98 | $+0.05 | 2 |
+| 119 | no_only_90_97 | 1 | $+1.04 | $+4.17 | $+4.17 | $-100.00 | $-1.01 | $-0.02 | 29 |
 | 120 | w_hell0pia | 4 | $-16.96 | $-16.57 | $-14.99 | $-100.00 | $-1.32 | $+0.00 | 0 |
-| 121 | wb_flawfence | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-1.48 | $+0.20 | 13 |
+| 121 | wb_flawfence | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-1.54 | $+0.14 | 13 |
 | 122 | w_jsram | 1 | $-25.82 | $-100.00 | $-100.00 | $-100.00 | $-1.76 | $+0.00 | 0 |
-| 123 | wb_jsram | 1 | $-25.82 | $-100.00 | $-100.00 | $-100.00 | $-1.94 | $-0.03 | 5 |
-| 124 | w_monopoly_money | 1 | $-25.32 | $-100.00 | $-100.00 | $-100.00 | $-2.27 | $+0.52 | 4 |
+| 123 | wb_jsram | 1 | $-25.82 | $-100.00 | $-100.00 | $-100.00 | $-1.94 | $-0.04 | 5 |
+| 124 | w_monopoly_money | 1 | $-25.32 | $-100.00 | $-100.00 | $-100.00 | $-2.25 | $+0.54 | 4 |
 | 125 | w_wan123 | 4 | $-48.02 | $-47.64 | $-47.64 | $-100.00 | $-2.77 | $+0.04 | 4 |
-| 126 | fav_mid_80_90 | 1 | $-25.21 | $-100.00 | $-100.00 | $-100.00 | $-2.89 | $-0.01 | 17 |
-| 127 | w_albert_1953 | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-3.06 | $-0.21 | 22 |
-| 128 | quiet_no | 2 | $-13.08 | $-26.00 | $-26.00 | $-100.00 | $-3.20 | $+0.15 | 3 |
-| 129 | w_aghy | 1 | $-25.40 | $-100.00 | $-100.00 | $-100.00 | $-3.39 | $-0.01 | 1 |
-| 130 | wb_pako | 3 | $+10.64 | $+13.42 | $+13.49 | $-100.00 | $-3.70 | $+0.00 | 10 |
+| 126 | quiet_no | 2 | $-13.08 | $-26.00 | $-26.00 | $-100.00 | $-3.00 | $+0.35 | 3 |
+| 127 | fav_mid_80_90 | 1 | $-25.21 | $-100.00 | $-100.00 | $-100.00 | $-3.09 | $-0.21 | 19 |
+| 128 | w_albert_1953 | 0 | $+0.00 | $+0.00 | $+0.00 | $-100.00 | $-3.17 | $-0.32 | 22 |
+| 129 | w_aghy | 1 | $-25.40 | $-100.00 | $-100.00 | $-100.00 | $-3.40 | $-0.02 | 1 |
+| 130 | wb_pako | 3 | $+10.64 | $+13.42 | $+13.49 | $-100.00 | $-3.74 | $-0.04 | 10 |
 | 131 | w_rememberamalek | 13 | $-95.60 | $-28.53 | $-27.74 | $-100.00 | $-3.88 | $+0.05 | 2 |
-| 132 | w_rabbitfoot1 | 8 | $-48.67 | $-21.59 | $-21.40 | $-100.00 | $-5.82 | $-0.00 | 2 |
-| 133 | boring_no | 2 | $+3.50 | $+6.98 | $+6.99 | $-100.00 | $-6.23 | $-0.33 | 100 |
-| 134 | wb_rabbitfoot1 | 9 | $-74.13 | $-30.30 | $-30.14 | $-100.00 | $-7.81 | $-0.00 | 2 |
-| 135 | wb_the_joker | 3 | $-34.03 | $-44.88 | $-44.88 | $-100.00 | $-7.96 | $+0.67 | 18 |
+| 132 | w_rabbitfoot1 | 8 | $-48.67 | $-21.59 | $-21.40 | $-100.00 | $-5.97 | $-0.15 | 2 |
+| 133 | boring_no | 2 | $+3.50 | $+6.98 | $+6.99 | $-100.00 | $-6.24 | $-0.34 | 100 |
+| 134 | wb_rabbitfoot1 | 9 | $-74.13 | $-30.30 | $-30.14 | $-100.00 | $-7.96 | $-0.15 | 2 |
+| 135 | wb_the_joker | 3 | $-34.03 | $-44.88 | $-44.88 | $-100.00 | $-8.10 | $+0.53 | 18 |
 | 136 | mention_no | 7 | $-68.52 | $-40.74 | $-40.74 | $-100.00 | $-9.50 | $-3.45 | 5 |
-| 137 | control_random | 4 | $-104.15 | $-100.00 | $-100.00 | $-100.00 | $-14.50 | $+1.09 | 14 |
+| 137 | control_random | 4 | $-104.15 | $-100.00 | $-100.00 | $-100.00 | $-14.67 | $+0.92 | 16 |
 
 ## Real money check
 
@@ -798,7 +798,7 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 
 | Strategy | Finished (with data) | Paper | $10 | $25 | $50 | $100 | Of a $100 order, fits on avg | Fully filled at $25 |
 |---|---|---|---|---|---|---|---|---|
-| endgame_sell98 | 520 | $-1.68 | $-1.83 | $-2.28 | $-2.78 | $-3.64 | $98 | 535 of 545 |
+| endgame_sell98 | 520 | $-1.68 | $-1.83 | $-2.28 | $-2.78 | $-3.64 | $98 | 538 of 548 |
 | wx_forecast | 177 | $-11.26 | $-16.14 | $-16.29 | $-15.50 | $-13.84 | $77 | 143 of 177 |
 | soccer_draw | 137 | $+13.77 | $+11.97 | $+9.53 | $+9.30 | $+10.92 | $75 | 131 of 152 |
 | endgame_ending_soon | 124 | $-5.97 | $-6.27 | $-6.55 | $-6.87 | $-7.20 | $90 | 116 of 126 |
@@ -807,12 +807,12 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | fade_sure | 76 | $+26.01 | $-14.33 | $-45.53 | $-53.66 | $-54.83 | $16 | 19 of 76 |
 | w_tokor | 72 | $-23.60 | $-21.32 | $-21.65 | $-22.05 | $-22.23 | $100 | 100 of 100 |
 | wb_sbel | 68 | $-14.22 | $-21.14 | $-21.74 | $-22.06 | $-21.42 | $88 | 96 of 102 |
-| wb_bigggggggg | 64 | $-5.38 | $-9.85 | $-9.99 | $-9.94 | $-9.95 | $95 | 76 of 79 |
+| wb_cigarettes | 67 | $-12.89 | $-15.35 | $-15.57 | $-14.71 | $-14.66 | $94 | 115 of 121 |
+| wb_bigggggggg | 65 | $-5.53 | $-10.15 | $-10.11 | $-10.00 | $-9.98 | $95 | 76 of 79 |
 | w_sbel | 61 | $-11.09 | $-15.57 | $-15.60 | $-15.95 | $-16.09 | $88 | 89 of 95 |
 | wb_hellyeahtrader | 60 | $-24.71 | $-37.43 | $-36.38 | $-34.21 | $-29.07 | $80 | 65 of 73 |
-| wb_cigarettes | 59 | $-9.10 | $-10.82 | $-11.00 | $-9.89 | $-9.67 | $94 | 115 of 121 |
-| w_bigggggggg | 57 | $-3.09 | $-7.98 | $-8.06 | $-7.98 | $-7.95 | $96 | 67 of 70 |
-| w_cigarettes | 42 | $-10.24 | $-10.12 | $-10.03 | $-8.05 | $-7.78 | $93 | 91 of 96 |
+| w_bigggggggg | 58 | $-3.26 | $-8.33 | $-8.20 | $-8.05 | $-7.99 | $96 | 67 of 70 |
+| w_cigarettes | 50 | $-15.34 | $-16.30 | $-16.33 | $-14.89 | $-14.92 | $93 | 91 of 96 |
 | crypto_late | 39 | $+2.80 | $+2.81 | $+2.59 | $+2.31 | $+1.93 | $91 | 37 of 39 |
 | w_hellyeahtrader | 37 | $-29.93 | $-41.50 | $-40.50 | $-39.29 | $-35.30 | $75 | 43 of 50 |
 | stock_no | 29 | $-1.74 | $-2.23 | $-2.36 | $-2.49 | $-3.00 | $94 | 28 of 29 |
@@ -827,14 +827,14 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | wb_blondbeast | 15 | $-12.79 | $-12.36 | $-12.52 | $-11.32 | $-8.87 | $97 | 31 of 31 |
 | wb_groth | 15 | $+10.12 | $+12.95 | $+12.92 | $+12.84 | $+12.80 | $100 | 48 of 48 |
 | wb_underperformingforal | 14 | $+0.13 | $-5.90 | $-6.12 | $-6.38 | $-6.72 | $101 | 18 of 18 |
-| fav_short_95_98 | 13 | $-5.83 | $-5.83 | $-5.83 | $-5.83 | $-5.83 | $98 | 26 of 26 |
+| fav_short_95_98 | 13 | $-5.83 | $-5.83 | $-5.83 | $-5.83 | $-5.83 | $98 | 29 of 29 |
 | w_rememberamalek | 13 | $-15.20 | $-28.56 | $-28.61 | $-28.63 | $-28.63 | $99 | 15 of 15 |
 | crypto_no | 12 | $-18.51 | $-19.09 | $-19.25 | $-19.35 | $-19.59 | $98 | 20 of 21 |
 | wb_anoin123 | 12 | $+1.11 | $+0.80 | $+0.76 | $+0.70 | $+0.67 | $99 | 83 of 84 |
 | wb_debased | 12 | $+7.43 | $-2.97 | $-3.18 | $-3.47 | $-3.87 | $101 | 34 of 34 |
-| fade_rally | 11 | $-1.44 | $-1.83 | $-2.42 | $-2.94 | $-3.48 | $101 | 16 of 16 |
+| fade_rally | 11 | $-1.44 | $-1.83 | $-2.42 | $-2.94 | $-3.48 | $101 | 18 of 18 |
 | panic_fade_10c | 11 | $-7.05 | $-8.61 | $-8.74 | $-8.96 | $-9.10 | $96 | 21 of 21 |
-| momentum_week | 10 | $+5.28 | $+5.25 | $+4.88 | $+4.51 | $+4.20 | $100 | 18 of 18 |
+| momentum_week | 10 | $+5.28 | $+5.25 | $+4.88 | $+4.51 | $+4.20 | $101 | 20 of 20 |
 | w_anoin123 | 10 | $+10.21 | $+9.77 | $+9.73 | $+9.65 | $+9.61 | $99 | 62 of 63 |
 | w_blondbeast | 10 | $-4.34 | $-0.67 | $-0.77 | $-0.89 | $-1.07 | $102 | 12 of 12 |
 | postcount_no | 9 | $+2.38 | $-5.15 | $-11.76 | $-10.80 | $-10.83 | $82 | 32 of 35 |
@@ -842,14 +842,14 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | wb_dominus | 9 | $-6.83 | $-23.29 | $-24.02 | $-25.73 | $-26.88 | $88 | 12 of 13 |
 | wb_hell0pia | 9 | $+7.88 | $-2.58 | $-3.22 | $-4.35 | $-5.26 | $95 | 11 of 11 |
 | wb_rabbitfoot1 | 9 | $-33.76 | $-30.23 | $-33.74 | $-36.73 | $-38.31 | $94 | 10 of 11 |
-| fav_short_90_95 | 8 | $+4.68 | $+4.68 | $+4.69 | $+4.68 | $+4.68 | $100 | 24 of 24 |
+| fav_short_90_95 | 8 | $+4.68 | $+4.68 | $+4.69 | $+4.68 | $+4.68 | $100 | 27 of 27 |
 | panic_fade | 8 | $+2.35 | $+2.79 | $+2.66 | $+2.54 | $+2.17 | $97 | 14 of 14 |
 | w_rabbitfoot1 | 8 | $-27.39 | $-21.53 | $-25.06 | $-28.09 | $-29.71 | $94 | 9 of 10 |
 | mention_no | 7 | $-25.89 | $-41.08 | $-39.52 | $-43.85 | $-56.22 | $69 | 11 of 12 |
 | wb_bertapotamous | 7 | $+24.20 | $-1.75 | $-1.76 | $-1.85 | $-2.06 | $98 | 20 of 20 |
 | wb_dropper | 7 | $+6.02 | $+7.11 | $+7.11 | $+7.11 | $+7.11 | $101 | 15 of 15 |
 | wb_youngalphagoat | 7 | $-36.89 | $-46.78 | $-47.67 | $-49.85 | $-55.11 | $98 | 26 of 26 |
-| control_longshot | 6 | $+357.92 | $+363.32 | $+380.65 | $+413.37 | $+431.49 | $101 | 26 of 27 |
+| control_longshot | 6 | $+357.92 | $+363.32 | $+380.65 | $+413.37 | $+431.49 | $101 | 29 of 30 |
 | endgame_strict | 6 | $+1.11 | $+1.16 | $+1.20 | $+1.21 | $+1.13 | $75 | 5 of 6 |
 | w_dropper | 6 | $+17.26 | $+20.60 | $+20.60 | $+20.60 | $+20.60 | $102 | 10 of 10 |
 | w_eightpenguins | 6 | $+28.45 | $+30.88 | $+30.59 | $+30.41 | $+30.30 | $100 | 13 of 13 |
@@ -861,7 +861,7 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | w_dromedaryy | 5 | $+82.09 | $+63.14 | $+63.14 | $+63.14 | $+63.14 | $102 | 12 of 12 |
 | wb_dromedaryy | 5 | $+82.09 | $+63.14 | $+63.14 | $+63.14 | $+63.14 | $99 | 25 of 25 |
 | wb_lpgb | 5 | $-24.12 | $-24.42 | $-24.45 | $-24.49 | $-24.75 | $100 | 7 of 7 |
-| control_random | 4 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $98 | 17 of 18 |
+| control_random | 4 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $98 | 19 of 20 |
 | endgame | 4 | $+1.37 | $+1.38 | $+1.38 | $+1.36 | $+1.27 | $87 | 4 of 4 |
 | w_hell0pia | 4 | $-16.03 | $-15.24 | $-16.57 | $-18.72 | $-20.64 | $102 | 4 of 4 |
 | w_wan123 | 4 | $-39.39 | $-47.44 | $-47.45 | $-47.45 | $-47.45 | $101 | 8 of 8 |
@@ -873,7 +873,7 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | wb_balerinacapuchina | 3 | $+18.98 | $+36.12 | $+36.12 | $+36.12 | $+36.12 | $101 | 12 of 12 |
 | wb_pako | 3 | $-3.17 | $+13.98 | $+13.90 | $+12.98 | $+11.98 | $103 | 13 of 13 |
 | wb_the_joker | 3 | $-46.45 | $-44.83 | $-44.83 | $-45.00 | $-45.25 | $97 | 20 of 21 |
-| yes_fav_85_95 | 3 | $+9.75 | $+9.78 | $+9.78 | $+9.78 | $+9.59 | $100 | 17 of 17 |
+| yes_fav_85_95 | 3 | $+9.75 | $+9.78 | $+9.78 | $+9.78 | $+9.59 | $100 | 19 of 19 |
 | boring_no | 2 | $+6.99 | $+6.99 | $+6.98 | $+6.95 | $+6.86 | $99 | 102 of 102 |
 | consensus_3 | 2 | $+3.07 | $-45.78 | $-45.77 | $-45.77 | $-45.77 | $101 | 10 of 10 |
 | quiet_no | 2 | $-23.96 | $-25.67 | $-25.67 | $-25.66 | $-25.66 | $85 | 4 of 5 |
@@ -885,11 +885,11 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | wb_new_jeans | 2 | $-5.99 | $-20.37 | $-11.13 | $-5.73 | $-2.30 | $92 | 8 of 9 |
 | wb_tunatyler | 2 | $+27.95 | $+30.25 | $+29.63 | $+29.42 | $+29.31 | $102 | 12 of 12 |
 | wb_vilgefortz | 2 | $-2.27 | $-8.61 | $-8.61 | $-8.61 | $-8.61 | $102 | 7 of 7 |
-| fav_cut_losses | 1 | $-21.47 | $-21.70 | $-22.23 | $-22.41 | $-22.50 | $100 | 18 of 18 |
-| fav_fee_free | 1 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $100 | 17 of 17 |
-| fav_mid_80_90 | 1 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $100 | 18 of 18 |
+| fav_cut_losses | 1 | $-21.47 | $-21.70 | $-22.23 | $-22.41 | $-22.50 | $100 | 20 of 20 |
+| fav_fee_free | 1 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $95 | 17 of 18 |
+| fav_mid_80_90 | 1 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $101 | 20 of 20 |
 | mirror_unlimited | 1 | $+4.17 | $+4.16 | $+4.17 | $+4.14 | $+4.10 | $84 | 6 of 6 |
-| no_only_90_97 | 1 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $100 | 27 of 27 |
+| no_only_90_97 | 1 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $+4.17 | $97 | 29 of 30 |
 | sab_hold | 1 | $+4.17 | $+4.16 | $+4.17 | $+4.14 | $+4.10 | $84 | 6 of 6 |
 | w_aghy | 1 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $-100.00 | $103 | 2 of 2 |
 | w_hauchn | 1 | $+21.52 | $+21.52 | $+21.52 | $+21.52 | $+21.52 | $1 | 0 of 1 |
@@ -904,7 +904,7 @@ Every paper trade (5 shares) is also priced at bigger stakes on the same live or
 | claude | 0 | - | - | - | - | - | $100 | 2 of 2 |
 | consensus_2 | 0 | - | - | - | - | - | $103 | 2 of 2 |
 | every_horse | 0 | - | - | - | - | - | $76 | 2 of 3 |
-| fav_bigvol_85_95 | 0 | - | - | - | - | - | $100 | 18 of 18 |
+| fav_bigvol_85_95 | 0 | - | - | - | - | - | $100 | 20 of 20 |
 | favorites | 0 | - | - | - | - | - | $86 | 2 of 2 |
 | mirror | 0 | - | - | - | - | - | $64 | 2 of 2 |
 | screener | 0 | - | - | - | - | - | $100 | 1 of 1 |
@@ -923,7 +923,7 @@ Each buy is priced again on a fresh book about half a minute later, as if our or
 
 | Strategy | Buys checked | Got pricier | Gone (book empty) | Extra cost per $100 | Delay |
 |---|---|---|---|---|---|
-| endgame_sell98 | 532 | 79 | 0 | $+0.03 | 59s |
+| endgame_sell98 | 535 | 79 | 0 | $+0.03 | 59s |
 | wx_forecast | 159 | 6 | 0 | $+0.29 | 38s |
 | soccer_draw | 152 | 0 | 0 | $-0.02 | 51s |
 | endgame_97 | 118 | 8 | 0 | $-0.02 | 50s |
@@ -945,34 +945,34 @@ Each buy is priced again on a fresh book about half a minute later, as if our or
 | panic_fade_4c | 45 | 1 | 0 | $-0.11 | 74s |
 | crypto_late | 39 | 15 | 0 | $+0.06 | 41s |
 | postcount_no | 35 | 1 | 0 | $-0.04 | 35s |
+| control_longshot | 30 | 3 | 0 | $-4.15 | 363s |
+| no_only_90_97 | 30 | 3 | 0 | $-0.01 | 364s |
+| fav_short_95_98 | 29 | 4 | 0 | $+0.07 | 370s |
 | stock_no | 29 | 10 | 0 | $+0.38 | 33s |
-| control_longshot | 27 | 2 | 0 | $-4.08 | 374s |
-| no_only_90_97 | 27 | 2 | 0 | $-0.02 | 374s |
+| fav_short_90_95 | 27 | 2 | 0 | $-0.08 | 385s |
 | w_0x448861 | 27 | 2 | 0 | $-0.32 | 184s |
 | wb_0x448861 | 27 | 2 | 0 | $-0.32 | 184s |
-| fav_short_95_98 | 26 | 3 | 0 | $+0.05 | 382s |
 | w_jjo | 26 | 6 | 0 | $-0.15 | 94s |
 | wb_jjo | 26 | 6 | 0 | $-0.15 | 94s |
-| fav_short_90_95 | 24 | 2 | 0 | $-0.09 | 400s |
 | w_groth | 24 | 0 | 0 | $-0.68 | 106s |
 | wb_groth | 24 | 0 | 0 | $-0.68 | 105s |
 | w_albert_1953 | 22 | 1 | 0 | $-0.04 | 123s |
 | wb_albert_1953 | 22 | 1 | 0 | $-0.04 | 123s |
 | crypto_no | 21 | 2 | 0 | $+0.59 | 52s |
+| control_random | 20 | 3 | 0 | $-0.00 | 363s |
+| fav_bigvol_85_95 | 20 | 0 | 0 | $+0.00 | 364s |
+| fav_cut_losses | 20 | 0 | 0 | $+0.00 | 363s |
+| fav_mid_80_90 | 20 | 2 | 0 | $+0.02 | 364s |
+| momentum_week | 20 | 2 | 0 | $-0.26 | 363s |
 | panic_fade_10c | 20 | 1 | 0 | $-0.14 | 72s |
 | sharp_pinnacle | 19 | 3 | 0 | $+0.63 | 62s |
-| control_random | 18 | 3 | 0 | $-0.00 | 374s |
-| fav_bigvol_85_95 | 18 | 0 | 0 | $+0.00 | 375s |
-| fav_cut_losses | 18 | 0 | 0 | $+0.00 | 374s |
-| fav_mid_80_90 | 18 | 2 | 0 | $+0.02 | 375s |
-| momentum_week | 18 | 2 | 0 | $-0.28 | 374s |
+| yes_fav_85_95 | 19 | 1 | 0 | $-0.09 | 372s |
+| fade_rally | 18 | 1 | 0 | $+0.09 | 374s |
+| fav_fee_free | 18 | 0 | 0 | $-0.03 | 461s |
 | w_debased | 18 | 1 | 0 | $-0.34 | 143s |
 | wb_debased | 18 | 1 | 0 | $-0.34 | 143s |
-| fav_fee_free | 17 | 0 | 0 | $-0.03 | 473s |
 | w_underperformingforal | 17 | 0 | 0 | $-0.43 | 120s |
 | wb_underperformingforal | 17 | 0 | 0 | $-0.41 | 120s |
-| yes_fav_85_95 | 17 | 1 | 0 | $-0.03 | 384s |
-| fade_rally | 16 | 1 | 0 | $+0.10 | 388s |
 | w_rememberamalek | 15 | 6 | 0 | $+7.62 | 117s |
 | wb_rememberamalek | 15 | 6 | 0 | $+7.62 | 116s |
 | panic_fade | 14 | 1 | 0 | $-0.00 | 71s |
@@ -1038,14 +1038,14 @@ Each buy is priced again on a fresh book about half a minute later, as if our or
 
 ## Data check
 
-Sanity checks on the bot's own numbers after every run: money adds up, every fill was a real order-book fill, no track holds both sides of a market, nothing stuck unpaid, and no suspiciously perfect records. Last check 2026-11-18T04:26:58Z.
+Sanity checks on the bot's own numbers after every run: money adds up, every fill was a real order-book fill, no track holds both sides of a market, nothing stuck unpaid, and no suspiciously perfect records. Last check 2026-11-18T05:08:31Z.
 
-- **kc_maker_safe_usd** (too_good): 575 finished trades and not one loss: check the fills before trusting it
+- **kc_maker_safe_usd** (too_good): 576 finished trades and not one loss: check the fills before trusting it
 
 ## Phone alerts
 
 What the bot sent to Jan's phone (ntfy). Muted = a trade by a strategy outside the top 10.
-- 2026-11-18: 3 sent, 0 failed, 10 muted
+- 2026-11-18: 3 sent, 0 failed, 25 muted
 - 2026-11-17: 18 sent, 0 failed, 145 muted
 - 2026-11-16: 14 sent, 0 failed, 165 muted
 - Last sent: 2026-11-18T03:12:55Z "[panic_fade_4c] bought 1 (practice money)"
@@ -1073,54 +1073,6 @@ Of those, 21 markets have paid out since: selling early cost him $3,854.66 vs ho
 
 ## Last 24 hours
 
-- 04:31 UTC paper_close endgame_sell98 No Will Bitcoin reach $66,000 on November 16? @ 0.977 pnl +0.08 (take profit (now 100c), book)
-- 04:45 UTC paper_close w_0x448861 Ravens Spread: Ravens (-2.5) @ 0.0 pnl -3.23 (resolved)
-- 04:45 UTC paper_close w_rabbitfoot1 Chargers Chargers vs. Ravens @ 1.0 pnl +3.27 (resolved)
-- 04:45 UTC paper_close wb_0x448861 Ravens Spread: Ravens (-2.5) @ 0.0 pnl -3.23 (resolved)
-- 04:45 UTC paper_close wb_rabbitfoot1 Chargers Chargers vs. Ravens @ 1.0 pnl +3.27 (resolved)
-- 04:55 UTC skip_no_cash crypto_no Will the price of Ethereum be above $1,900 on November 21?
-- 05:01 UTC paper_close endgame_sell98 No Will XRP dip to $0.90 on November 16? @ 0.999 pnl +0.18 (take profit (now 100c), book)
-- 05:02 UTC paper_close w_cigarettes Veerawit Kamput M15 Hua Hin: Denis Vishenchuk Vishenko vs Veerawit Kamput @ 1.0 pnl +1.01 (resolved)
-- 05:02 UTC paper_close w_cigarettes Mikal Statham M15 Hua Hin: Mikal Statham vs Penn Charusorn @ 1.0 pnl +0.53 (resolved)
-- 05:02 UTC paper_close w_cigarettes Katie Swan W75 Sydney: Xinxin Yao vs Katie Swan @ 1.0 pnl +0.34 (resolved)
-- 05:02 UTC paper_close w_cigarettes Masamichi Imamura Kobe: Masamichi Imamura vs Yusuke Takahashi @ 1.0 pnl +1.25 (resolved)
-- 05:02 UTC paper_close w_cigarettes No Will Roy Lichtenstein's “Reflections on ‘Painter and Model’” sell for  @ 1.0 pnl +0.38 (resolved)
-- 05:02 UTC paper_close wb_cigarettes Veerawit Kamput M15 Hua Hin: Denis Vishenchuk Vishenko vs Veerawit Kamput @ 1.0 pnl +1.01 (resolved)
-- 05:02 UTC paper_close wb_cigarettes Mikal Statham M15 Hua Hin: Mikal Statham vs Penn Charusorn @ 1.0 pnl +0.53 (resolved)
-- 05:02 UTC paper_close wb_cigarettes Katie Swan W75 Sydney: Xinxin Yao vs Katie Swan @ 1.0 pnl +0.34 (resolved)
-- 05:02 UTC paper_close wb_cigarettes Masamichi Imamura Kobe: Masamichi Imamura vs Yusuke Takahashi @ 1.0 pnl +1.25 (resolved)
-- 05:02 UTC paper_buy w_sbel No Will Elon Musk post 65-89 tweets from November 16 to November 18, 2026 @ 0.63
-- 05:02 UTC paper_close wb_ecash No Will an AI lab announce another Millennium Prize solution by December  @ 0.86 pnl -0.19 (wallet exit (book))
-- 05:02 UTC paper_buy wb_sbel No Will Elon Musk post 65-89 tweets from November 16 to November 18, 2026 @ 0.63
-- 05:02 UTC skip_no_cash screener Will the Fed increase interest rates by 50+ bps after the December 202
-- 05:02 UTC paper_buy fav_short_90_95 No US announces end of Iranian blockade by November 30, 2026? @ 0.946
-- 05:02 UTC paper_buy fav_short_90_95 No Will Bitcoin reach $77,500 in November? @ 0.941
-- 05:02 UTC paper_buy fav_short_90_95 No Will Ethereum reach $2,300 in November? @ 0.94
-- 05:02 UTC paper_buy fav_short_95_98 No Will the price of Bitcoin be between $58,000 and $60,000 on November 2 @ 0.96
-- 05:02 UTC paper_buy fav_short_95_98 No Will the price of Ethereum be above $2,100 on November 23? @ 0.978
-- 05:02 UTC paper_buy fav_short_95_98 No Will the price of XRP be above $1.10 on November 19? @ 0.988
-- 05:02 UTC paper_buy fav_mid_80_90 No Will Jensen Huang rejoin NVIDIA by December 31, 2026? @ 0.893
-- 05:02 UTC paper_buy fav_mid_80_90 No Jensen Huang divorce by December 31, 2026? @ 0.9
-- 05:02 UTC paper_buy fav_bigvol_85_95 No Will Jensen Huang rejoin NVIDIA by December 31, 2026? @ 0.893
-- 05:02 UTC paper_buy fav_bigvol_85_95 No Will Avengers: Doomsday be the top grossing movie of 2026? @ 0.906
-- 05:02 UTC paper_buy no_only_90_97 No US announces end of Iranian blockade by November 30, 2026? @ 0.946
-- 05:02 UTC paper_buy no_only_90_97 No Howard Lutnick out as Secretary of Commerce by November 30? @ 0.95
-- 05:02 UTC paper_buy no_only_90_97 No Iran full airspace closure by November 30, 2026? @ 0.93
-- 05:02 UTC paper_buy yes_fav_85_95 Yes US x Yemen ceasefire continues through November 30? @ 0.95
-- 05:02 UTC paper_buy yes_fav_85_95 Yes Will Elon Musk post 1000+ tweets in November 2026? @ 0.86
-- 05:02 UTC paper_buy fav_fee_free No US announces end of Iranian blockade by November 30, 2026? @ 0.946
-- 05:02 UTC paper_buy fav_fee_free Yes US x Yemen ceasefire continues through November 30? @ 0.95
-- 05:02 UTC paper_buy fav_cut_losses No Will Jensen Huang rejoin NVIDIA by December 31, 2026? @ 0.893
-- 05:02 UTC paper_buy fav_cut_losses No Will Avengers: Doomsday be the top grossing movie of 2026? @ 0.906
-- 05:02 UTC paper_buy control_random No Will Ethereum dip to $1,600 in November? @ 0.734
-- 05:02 UTC paper_buy control_random No Will Lee Shu-chuan win the next New Taipei Mayor election? @ 0.6
-- 05:02 UTC paper_buy control_longshot No US x Yemen ceasefire continues through November 30? @ 0.07
-- 05:02 UTC paper_buy control_longshot Yes Will Jensen Huang rejoin NVIDIA by November 30, 2026? @ 0.05
-- 05:02 UTC paper_buy control_longshot Yes Pete Hegseth out as Secretary of Defense by November 30? @ 0.045
-- 05:02 UTC paper_buy momentum_week No Next White House Press Secretary announced by November 30, 2026? @ 0.82
-- 05:02 UTC paper_buy momentum_week Yes US x Iran Effective Ceasefire by November 30? @ 0.77
-- 05:02 UTC paper_buy fade_rally No Will Russia capture Rai-Oleksandrivka by December 31? @ 0.53
-- 05:02 UTC paper_buy fade_rally Yes Will the Bank of Canada make no change to the target for the overnight @ 0.57
 - 05:11 UTC paper_buy endgame_sell98 No Will Ethereum dip to $1,700 on November 17? @ 0.97
 - 05:11 UTC paper_buy endgame_sell98 No Will Bitcoin dip to $61,000 on November 17? @ 0.971
 - 05:20 UTC paper_close w_tokor No Will Bitcoin reach $67,000 on November 16? @ 1.0 pnl +0.71 (resolved)
@@ -1599,12 +1551,61 @@ Of those, 21 markets have paid out since: selling early cost him $3,854.66 vs ho
 - 04:20 UTC paper_buy wb_hellyeahtrader No Will the lowest temperature in London be 7°C on November 19? @ 0.69
 - 04:20 UTC paper_buy wb_hellyeahtrader No Will the highest temperature in San Francisco be between 54-55°F on No @ 0.93
 - 04:26 UTC skip_no_cash crypto_no Will the price of Bitcoin be between $60,000 and $62,000 on November 2
+- 04:29 UTC paper_buy endgame_sell98 Yes Will the highest temperature in Hong Kong be 27°C on November 18? @ 0.96
+- 04:51 UTC paper_buy endgame_sell98 Yes Will the highest temperature in Seoul (Incheon) be 9°C on November 18? @ 0.96
+- 05:02 UTC paper_close w_bigggggggg No Will Matan Kahana be the next Speaker of the Knesset? @ 0.0 pnl -0.36 (resolved)
+- 05:02 UTC paper_close w_cigarettes Philip Sekulic Sydney: Jason Kubler vs Philip Sekulic @ 1.0 pnl +2.49 (resolved)
+- 05:02 UTC paper_close w_cigarettes Sanhui Shin M15 Hua Hin: Max Benaim vs Sanhui Shin @ 1.0 pnl +0.43 (resolved)
+- 05:02 UTC paper_close w_cigarettes Juncheng Shang Sydney: Moerani Bouzige vs Juncheng Shang @ 0.0 pnl -4.84 (resolved)
+- 05:02 UTC paper_close w_cigarettes Alexis Galarneau Drummondville: Hynek Barton vs Alexis Galarneau @ 0.0 pnl -2.91 (resolved)
+- 05:02 UTC paper_close w_cigarettes Carol Young Suh Lee W75 Sydney: Carol Young Suh Lee vs Varvara Panshina @ 0.0 pnl -1.53 (resolved)
+- 05:02 UTC paper_close w_cigarettes Dane Sweeny Sydney: Dane Sweeny vs Christian Langmo @ 0.0 pnl -2.96 (resolved)
+- 05:02 UTC paper_close w_cigarettes Manish Sureshkumar M25 Bhubaneswar: Manish Sureshkumar vs Adrian Arcon @ 1.0 pnl +0.19 (resolved)
+- 05:02 UTC paper_close w_cigarettes Yes Will Elon Musk post 100-119 tweets from November 10 to November 17, 20 @ 0.0 pnl -0.24 (resolved)
+- 05:02 UTC paper_close wb_bigggggggg No Will Matan Kahana be the next Speaker of the Knesset? @ 0.0 pnl -0.36 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Philip Sekulic Sydney: Jason Kubler vs Philip Sekulic @ 1.0 pnl +2.49 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Sanhui Shin M15 Hua Hin: Max Benaim vs Sanhui Shin @ 1.0 pnl +0.43 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Juncheng Shang Sydney: Moerani Bouzige vs Juncheng Shang @ 0.0 pnl -4.84 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Alexis Galarneau Drummondville: Hynek Barton vs Alexis Galarneau @ 0.0 pnl -2.91 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Carol Young Suh Lee W75 Sydney: Carol Young Suh Lee vs Varvara Panshina @ 0.0 pnl -1.53 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Dane Sweeny Sydney: Dane Sweeny vs Christian Langmo @ 0.0 pnl -2.96 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Manish Sureshkumar M25 Bhubaneswar: Manish Sureshkumar vs Adrian Arcon @ 1.0 pnl +0.19 (resolved)
+- 05:02 UTC paper_close wb_cigarettes Yes Will Elon Musk post 100-119 tweets from November 10 to November 17, 20 @ 0.0 pnl -0.24 (resolved)
+- 05:03 UTC skip_no_cash screener Will Jensen Huang rejoin NVIDIA by December 31, 2026?
+- 05:03 UTC paper_buy fav_short_90_95 No Howard Lutnick out as Secretary of Commerce by November 30? @ 0.94
+- 05:03 UTC paper_buy fav_short_90_95 No Iran full airspace closure by November 30, 2026? @ 0.91
+- 05:03 UTC paper_buy fav_short_90_95 No Israeli airspace closed by November 30, 2026? @ 0.938
+- 05:03 UTC paper_buy fav_short_95_98 No Will the price of Bitcoin be above $70,000 on November 20? @ 0.979
+- 05:03 UTC paper_buy fav_short_95_98 No Will the price of Bitcoin be above $72,000 on November 24? @ 0.984
+- 05:03 UTC paper_buy fav_short_95_98 No Will the price of Ethereum be above $2,100 on November 24? @ 0.984
+- 05:03 UTC paper_buy fav_mid_80_90 No Pete Hegseth out as Secretary of Defense by December 31? @ 0.85
+- 05:03 UTC paper_buy fav_mid_80_90 No Will Bitcoin dip to $50,000 by December 31, 2026? @ 0.804
+- 05:04 UTC paper_buy fav_bigvol_85_95 No Will Anthropic's valuation hit (HIGH) $3.0T by December 31? @ 0.94
+- 05:04 UTC paper_buy fav_bigvol_85_95 No Will Ethereum dip to $1,000 by December 31, 2026? @ 0.937
+- 05:04 UTC paper_buy no_only_90_97 No Will WTI Crude Oil (WTI) hit (HIGH) $105 in November? @ 0.957
+- 05:04 UTC paper_buy no_only_90_97 No Houthis enter Aden by November 30, 2026? @ 0.934
+- 05:04 UTC paper_buy no_only_90_97 No Will Trump meet with Kim Jong Un by November 30, 2026? @ 0.914
+- 05:04 UTC paper_buy yes_fav_85_95 Yes Will the price of XRP be above $0.90 on November 22? @ 0.9
+- 05:04 UTC paper_buy yes_fav_85_95 Yes Will the price of XRP be above $0.90 on November 23? @ 0.88
+- 05:04 UTC paper_buy fav_fee_free No Will Trump meet with Kim Jong Un by November 30, 2026? @ 0.914
+- 05:04 UTC paper_buy fav_cut_losses No Will Huang Shih-chieh win the next Taoyuan Mayor election? @ 0.918
+- 05:04 UTC paper_buy fav_cut_losses No Will Bitcoin dip to $55,000 in November? @ 0.887
+- 05:04 UTC paper_buy control_random Yes Will PSOE win the most seats in the 2026 Spanish general election? @ 0.25
+- 05:04 UTC paper_buy control_random No Israel x Iran ceasefire continues through December 15? @ 0.28
+- 05:04 UTC paper_buy control_longshot No Will Google have the best AI model at the end of November 2026? @ 0.1
+- 05:04 UTC paper_buy control_longshot Yes Will Bitcoin reach $77,500 in November? @ 0.051
+- 05:04 UTC paper_buy control_longshot Yes Will Ethereum reach $2,400 in November? @ 0.035
+- 05:04 UTC paper_buy momentum_week Yes Will Clavicular wear a Yarmulke in 2026? @ 0.58
+- 05:04 UTC paper_buy momentum_week No Next US-Iran senior diplomatic meeting by December 31, 2026? @ 0.78
+- 05:04 UTC paper_buy fade_rally No Will Clavicular wear a Yarmulke in 2026? @ 0.43
+- 05:04 UTC paper_buy fade_rally No Will Anthropic's valuation hit (HIGH) $2.0T by December 31? @ 0.72
+- 05:07 UTC paper_buy endgame_sell98 No Will Bitcoin dip to $61,000 on November 18? @ 0.95
 
 ## Fast Kalshi paper bot (last 45 seconds)
 
-Live paper test, `kfastlive.py`. 3892 coin-windows from 2026-11-10T10:30 to 2026-11-18T03:15 UTC (556 closes watched). Paper only, nothing is really bought.
+Live paper test, `kfastlive.py`. 3927 coin-windows from 2026-11-10T10:30 to 2026-11-18T04:30 UTC (561 closes watched). Paper only, nothing is really bought.
 
-Binance guessed Kalshi's result wrong on **63 of 3892** windows. Reading the Kalshi book takes about 145 ms (slowest 1 in 10: 242 ms).
+Binance guessed Kalshi's result wrong on **63 of 3927** windows. Reading the Kalshi book takes about 145 ms (slowest 1 in 10: 241 ms).
 
 P&L is after Kalshi's fee. "Full" = how often the whole order got filled. The proof line uses the repo's rule: one loss costs about a dollar a contract, so losses have to be rarer than what one bet earns, with 90% confidence.
 
@@ -1612,23 +1613,23 @@ P&L is after Kalshi's fee. "Full" = how often the whole order got filled. The pr
 
 | Test | Chances | Bought | Full | Lost | Avg price | P&L | P&L per $100 | Proof |
 |---|---|---|---|---|---|---|---|---|
-| Buy now, 45 s left, Binance very sure (z 4+) (main) | 2801 | 235 | 228 | 2 | 99.64c | $-14.18 | $-0.62 | needs ~1852 more bets with no loss |
-| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 2313 | 46 | 45 | 0 | 99.81c | $+0.41 | $+0.09 | needs ~2462 more bets with no loss |
-| Wait at 99.5c, 45 s left (z 4+) (main) | 2801 | 119 | 115 | 3 | 99.18c | $-20.81 | $-1.80 | needs ~728 more bets with no loss |
-| Wait at 99.8c, 45 s left (z 2+) (main) | 3347 | 801 | 794 | 13 | 98.91c | $-51.53 | $-0.65 | needs ~1121 more bets with no loss |
-| Buy now, 60 s left (z 4+) | 2316 | 311 | 302 | 3 | 99.65c | $-22.93 | $-0.76 | needs ~2544 more bets with no loss |
-| Buy now, 30 s left (z 4+) | 3296 | 181 | 178 | 0 | 99.61c | $+4.96 | $+0.28 | needs ~646 more bets with no loss |
-| Control: buy the favourite at 45 s, no Binance | 1284 | 1276 | 1269 | 90 | 92.81c | $-42.93 | $-0.36 | needs ~250 more bets with no loss |
+| Buy now, 45 s left, Binance very sure (z 4+) (main) | 2827 | 237 | 230 | 2 | 99.64c | $-14.17 | $-0.62 | needs ~1865 more bets with no loss |
+| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 2333 | 46 | 45 | 0 | 99.81c | $+0.41 | $+0.09 | needs ~2462 more bets with no loss |
+| Wait at 99.5c, 45 s left (z 4+) (main) | 2827 | 120 | 116 | 3 | 99.18c | $-20.76 | $-1.78 | needs ~730 more bets with no loss |
+| Wait at 99.8c, 45 s left (z 2+) (main) | 3378 | 809 | 802 | 13 | 98.91c | $-51.02 | $-0.64 | needs ~1120 more bets with no loss |
+| Buy now, 60 s left (z 4+) | 2332 | 314 | 305 | 3 | 99.66c | $-22.93 | $-0.75 | needs ~2569 more bets with no loss |
+| Buy now, 30 s left (z 4+) | 3326 | 183 | 180 | 0 | 99.62c | $+4.97 | $+0.28 | needs ~651 more bets with no loss |
+| Control: buy the favourite at 45 s, no Binance | 1296 | 1287 | 1280 | 91 | 92.83c | $-47.24 | $-0.40 | needs ~257 more bets with no loss |
 
 ### Orders of 100 contracts
 
 | Test | Chances | Bought | Full | Lost | Avg price | P&L | P&L per $100 | Proof |
 |---|---|---|---|---|---|---|---|---|
-| Buy now, 45 s left, Binance very sure (z 4+) (main) | 2801 | 235 | 224 | 2 | 99.64c | $-125.19 | $-0.56 | needs ~1369 more bets with no loss |
-| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 2313 | 46 | 42 | 0 | 99.82c | $+7.12 | $+0.17 | needs ~1345 more bets with no loss |
-| Wait at 99.5c, 45 s left (z 4+) (main) | 2801 | 119 | 108 | 3 | 99.17c | $-210.28 | $-1.90 | needs ~710 more bets with no loss |
-| Wait at 99.8c, 45 s left (z 2+) (main) | 3347 | 801 | 779 | 13 | 98.94c | $-520.66 | $-0.67 | needs ~1110 more bets with no loss |
-| Buy now, 60 s left (z 4+) | 2316 | 311 | 294 | 3 | 99.66c | $-207.64 | $-0.70 | needs ~1843 more bets with no loss |
-| Buy now, 30 s left (z 4+) | 3296 | 181 | 173 | 0 | 99.63c | $+60.15 | $+0.34 | needs ~494 more bets with no loss |
-| Control: buy the favourite at 45 s, no Binance | 1284 | 1276 | 1260 | 90 | 92.94c | $-540.29 | $-0.46 | needs ~265 more bets with no loss |
+| Buy now, 45 s left, Binance very sure (z 4+) (main) | 2827 | 237 | 226 | 2 | 99.64c | $-124.92 | $-0.55 | needs ~1375 more bets with no loss |
+| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 2333 | 46 | 42 | 0 | 99.82c | $+7.12 | $+0.17 | needs ~1345 more bets with no loss |
+| Wait at 99.5c, 45 s left (z 4+) (main) | 2827 | 120 | 109 | 3 | 99.17c | $-209.78 | $-1.88 | needs ~712 more bets with no loss |
+| Wait at 99.8c, 45 s left (z 2+) (main) | 3378 | 809 | 786 | 13 | 98.95c | $-515.71 | $-0.66 | needs ~1107 more bets with no loss |
+| Buy now, 60 s left (z 4+) | 2332 | 314 | 297 | 3 | 99.66c | $-207.37 | $-0.69 | needs ~1855 more bets with no loss |
+| Buy now, 30 s left (z 4+) | 3326 | 183 | 175 | 0 | 99.63c | $+60.42 | $+0.34 | needs ~496 more bets with no loss |
+| Control: buy the favourite at 45 s, no Binance | 1296 | 1287 | 1271 | 91 | 92.96c | $-586.35 | $-0.49 | needs ~273 more bets with no loss |
 

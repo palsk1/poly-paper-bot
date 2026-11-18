@@ -27,8 +27,8 @@
   },
   "2026-11-18": {
    "failed": 0,
-   "muted": 12,
-   "sent": 3
+   "muted": 25,
+   "sent": 4
   }
  },
  "recent": [
@@ -469,6 +469,12 @@
    "title": "[panic_fade_4c] bought 1 (practice money)",
    "track": "panic_fade_4c",
    "ts": "2026-11-18T03:12:55Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-18T05:08:32Z"
   }
  ]
 }
