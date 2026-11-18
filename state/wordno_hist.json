@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   83,
-   209
+   89,
+   217
   ],
   "S:andy burnham": [
    8,
@@ -51,6 +51,10 @@
   "S:nyt front page headlines": [
    3,
    17
+  ],
+  "S:target": [
+   6,
+   8
   ],
   "S:trump": [
    9,
@@ -704,6 +708,38 @@
    0,
    1
   ],
+  "ST:target|affordability/affordable": [
+   1,
+   1
+  ],
+  "ST:target|chatgpt/openai": [
+   1,
+   1
+  ],
+  "ST:target|guest#70+": [
+   1,
+   1
+  ],
+  "ST:target|inflation": [
+   0,
+   1
+  ],
+  "ST:target|pokemon": [
+   1,
+   1
+  ],
+  "ST:target|snap": [
+   0,
+   1
+  ],
+  "ST:target|tariff": [
+   1,
+   1
+  ],
+  "ST:target|toy#5+": [
+   1,
+   1
+  ],
   "ST:trump|allah": [
    0,
    1
@@ -799,6 +835,10 @@
   "T:afford/affordability/affordable": [
    1,
    2
+  ],
+  "T:affordability/affordable": [
+   1,
+   1
   ],
   "T:africa": [
    0,
@@ -934,6 +974,10 @@
   ],
   "T:chandler": [
    0,
+   1
+  ],
+  "T:chatgpt/openai": [
+   1,
    1
   ],
   "T:chimp/monkey": [
@@ -1092,6 +1136,10 @@
    1,
    1
   ],
+  "T:guest#70+": [
+   1,
+   1
+  ],
   "T:guitar": [
    1,
    1
@@ -1150,6 +1198,10 @@
   ],
   "T:impeach/impeached/impeachment": [
    1,
+   1
+  ],
+  "T:inflation": [
+   0,
    1
   ],
   "T:infrastructure": [
@@ -1288,6 +1340,10 @@
    0,
    1
   ],
+  "T:pokemon": [
+   1,
+   1
+  ],
   "T:power#5+": [
    1,
    1
@@ -1380,6 +1436,10 @@
    1,
    1
   ],
+  "T:snap": [
+   0,
+   1
+  ],
   "T:son": [
    0,
    1
@@ -1425,8 +1485,8 @@
    1
   ],
   "T:tariff": [
-   0,
-   2
+   1,
+   3
   ],
   "T:tesla": [
    0,
@@ -1442,6 +1502,10 @@
   ],
   "T:tony": [
    0,
+   1
+  ],
+  "T:toy#5+": [
+   1,
    1
   ],
   "T:trump": [
@@ -1477,8 +1541,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   39,
-   67
+   45,
+   75
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1522,6 +1586,10 @@
   ],
   "WT:earnings-call-mentions|affair/spy": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|affordability/affordable": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|ai#25+": [
@@ -1573,6 +1641,10 @@
    1
   ],
   "WT:earnings-call-mentions|capital": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|chatgpt/openai": [
    1,
    1
   ],
@@ -1628,11 +1700,19 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|guest#70+": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|hyperscaler": [
    0,
    1
   ],
   "WT:earnings-call-mentions|iger": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|inflation": [
    0,
    1
   ],
@@ -1696,6 +1776,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|pokemon": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|power#5+": [
    1,
    1
@@ -1736,6 +1820,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|snap": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|splunk": [
    1,
    1
@@ -1753,11 +1841,15 @@
    1
   ],
   "WT:earnings-call-mentions|tariff": [
-   0,
-   1
+   1,
+   2
   ],
   "WT:earnings-call-mentions|token#25+": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|toy#5+": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|trump": [
@@ -2466,7 +2558,15 @@
   "7003592": 1794977940,
   "7003593": 1794977940,
   "7003594": 1794977940,
-  "7003595": 1794977940
+  "7003595": 1794977940,
+  "7003602": 1795064340,
+  "7003603": 1795064340,
+  "7003604": 1795064340,
+  "7003605": 1795064340,
+  "7003606": 1795064340,
+  "7003607": 1795064340,
+  "7003608": 1795064340,
+  "7003609": 1795064340
  },
- "synced": 1795034990
+ "synced": 1795036922
 }
