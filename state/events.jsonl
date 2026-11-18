@@ -21599,3 +21599,14 @@
 {"minutes_left": 3.83, "price": 0.979, "queue": 339.45, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV181000-00", "track": "kc_maker_safe_usd", "ts": "2026-11-18T14:56:12Z", "type": "kmaker_order"}
 {"minutes_left": 3.83, "price": 0.975, "queue": 199.25, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV181000-00", "track": "kc_maker", "ts": "2026-11-18T14:56:12Z", "type": "kmaker_order"}
 {"minutes_left": 3.83, "price": 0.975, "queue": 199.25, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV181000-00", "track": "kc_maker_safe", "ts": "2026-11-18T14:56:13Z", "type": "kmaker_order"}
+{"fee": 0.0, "outcome": "Yes", "price": 0.038, "shares": 5, "title": "FAA outage attributed to Iran?", "token": "80637963033881768723232298051235638845798658963469463316555792985893775816043", "track": "w_debased", "ts": "2026-11-18T15:01:19Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "Yes", "price": 0.038, "shares": 5, "title": "FAA outage attributed to Iran?", "token": "80637963033881768723232298051235638845798658963469463316555792985893775816043", "track": "wb_debased", "ts": "2026-11-18T15:01:20Z", "type": "paper_buy"}
+{"annual": 0.272, "edge": 0.0339, "pair": "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027", "title": "Will Ron DeSantis announce a presidential run before 2027?", "track": "arb", "ts": "2026-11-18T15:01:51Z", "type": "arb_opportunity"}
+{"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV181000-00", "track": "kc_maker", "ts": "2026-11-18T15:03:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV181000-00", "track": "kc_maker", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV181000-00", "track": "kc_maker", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV181000-00", "track": "kc_maker_safe", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV181000-00", "track": "kc_maker_safe", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV181000-00", "track": "kc_maker_safe", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV181000-00", "track": "kc_maker_safe_usd", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXINXU-26NOV18H1000-T7439.9999", "track": "kalshi_patient", "ts": "2026-11-18T15:03:21Z", "type": "kpatient_result"}
