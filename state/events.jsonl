@@ -21380,3 +21380,4 @@
 {"filled": 10.0, "pnl": -9.74, "price": 0.974, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV180700-00", "track": "kc_maker_safe", "ts": "2026-11-18T12:02:54Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV180700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-18T12:02:55Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV180700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-18T12:02:55Z", "type": "kmaker_fill"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in Singapore be 32\u00b0C on November 19?", "token": "40000090270093141074129031223295548554218672785499158432721207177345111460187", "track": "endgame_sell98", "ts": "2026-11-18T12:07:06Z", "type": "paper_buy"}
