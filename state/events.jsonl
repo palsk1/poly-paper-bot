@@ -21907,3 +21907,4 @@
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
+{"fee": 0.0079, "outcome": "No", "price": 0.977, "shares": 5, "title": "Will the price of Ethereum be between $1,900 and $2,000 on November 19?", "token": "47854034413027867104466558766511427493434870701457026514528744760516924802174", "track": "endgame_sell98", "ts": "2026-11-18T17:36:43Z", "type": "paper_buy"}
