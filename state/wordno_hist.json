@@ -1,12 +1,12 @@
 {
  "delta": {
   "G": [
-   79,
-   200
+   83,
+   209
   ],
   "S:andy burnham": [
-   4,
-   9
+   8,
+   18
   ],
   "S:applied materials": [
    8,
@@ -58,39 +58,39 @@
   ],
   "ST:andy burnham|billion/million/trillion#5+": [
    1,
-   1
+   2
   ],
   "ST:andy burnham|defence": [
    1,
-   1
+   2
   ],
   "ST:andy burnham|immigration": [
-   0,
-   1
+   1,
+   2
   ],
   "ST:andy burnham|mr speaker#30+": [
-   0,
-   1
+   1,
+   2
   ],
   "ST:andy burnham|nhs": [
    0,
-   1
+   2
   ],
   "ST:andy burnham|reform": [
-   1,
-   1
+   2,
+   2
   ],
   "ST:andy burnham|scotland": [
    1,
-   1
+   2
   ],
   "ST:andy burnham|trump": [
    0,
-   1
+   2
   ],
   "ST:andy burnham|wales": [
-   0,
-   1
+   1,
+   2
   ],
   "ST:applied materials|ai#7+": [
    1,
@@ -882,7 +882,7 @@
   ],
   "T:billion/million/trillion#5+": [
    1,
-   1
+   2
   ],
   "T:billionaire": [
    0,
@@ -978,7 +978,7 @@
   ],
   "T:defence": [
    1,
-   1
+   2
   ],
   "T:deposition": [
    1,
@@ -1145,8 +1145,8 @@
    1
   ],
   "T:immigration": [
-   0,
-   1
+   1,
+   2
   ],
   "T:impeach/impeached/impeachment": [
    1,
@@ -1229,8 +1229,8 @@
    1
   ],
   "T:mr speaker#30+": [
-   0,
-   1
+   1,
+   2
   ],
   "T:multiverse/universe": [
    0,
@@ -1246,7 +1246,7 @@
   ],
   "T:nhs": [
    0,
-   1
+   2
   ],
   "T:not on the ballot": [
    1,
@@ -1333,8 +1333,8 @@
    1
   ],
   "T:reform": [
-   1,
-   1
+   2,
+   2
   ],
   "T:revenue#20+": [
    1,
@@ -1370,7 +1370,7 @@
   ],
   "T:scotland": [
    1,
-   1
+   2
   ],
   "T:security#15+": [
    1,
@@ -1446,7 +1446,7 @@
   ],
   "T:trump": [
    1,
-   5
+   6
   ],
   "T:tsmc": [
    0,
@@ -1469,8 +1469,8 @@
    1
   ],
   "T:wales": [
-   0,
-   1
+   1,
+   2
   ],
   "T:war": [
    0,
@@ -1505,8 +1505,8 @@
    15
   ],
   "W:starmer-pmqs": [
-   4,
-   9
+   8,
+   18
   ],
   "W:trump-weekly-mentions": [
    5,
@@ -2130,39 +2130,39 @@
   ],
   "WT:starmer-pmqs|billion/million/trillion#5+": [
    1,
-   1
+   2
   ],
   "WT:starmer-pmqs|defence": [
    1,
-   1
+   2
   ],
   "WT:starmer-pmqs|immigration": [
-   0,
-   1
+   1,
+   2
   ],
   "WT:starmer-pmqs|mr speaker#30+": [
-   0,
-   1
+   1,
+   2
   ],
   "WT:starmer-pmqs|nhs": [
    0,
-   1
+   2
   ],
   "WT:starmer-pmqs|reform": [
-   1,
-   1
+   2,
+   2
   ],
   "WT:starmer-pmqs|scotland": [
    1,
-   1
+   2
   ],
   "WT:starmer-pmqs|trump": [
    0,
-   1
+   2
   ],
   "WT:starmer-pmqs|wales": [
-   0,
-   1
+   1,
+   2
   ],
   "WT:trump-weekly-mentions|ballroom": [
    0,
@@ -2427,6 +2427,15 @@
   "6964833": 1794441540,
   "6964840": 1794441540,
   "6964841": 1794441540,
+  "6990335": 1795064340,
+  "6990336": 1795064340,
+  "6990337": 1795064340,
+  "6990338": 1795064340,
+  "6990339": 1795064340,
+  "6990340": 1795064340,
+  "6990341": 1795064340,
+  "6990342": 1795064340,
+  "6990343": 1795064340,
   "7000388": 1794718740,
   "7000389": 1794718740,
   "7000390": 1794718740,
@@ -2459,5 +2468,5 @@
   "7003594": 1794977940,
   "7003595": 1794977940
  },
- "synced": 1795013545
+ "synced": 1795015314
 }
