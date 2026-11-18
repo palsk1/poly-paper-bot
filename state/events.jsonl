@@ -20740,3 +20740,8 @@
 {"minutes_left": 2.87, "price": 0.987, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172245-45", "track": "kc_maker", "ts": "2026-11-18T03:42:10Z", "type": "kmaker_order"}
 {"minutes_left": 2.87, "price": 0.987, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172245-45", "track": "kc_maker_safe", "ts": "2026-11-18T03:42:11Z", "type": "kmaker_order"}
 {"minutes_left": 2.87, "price": 0.972, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV172245-45", "track": "kc_maker", "ts": "2026-11-18T03:42:11Z", "type": "kmaker_order"}
+{"fee": 0.0515, "outcome": "Denis Yevseyev", "price": 0.71, "shares": 5, "title": "M15 Hua Hin: Denis Yevseyev vs Mikal Statham", "token": "19527199515457460002939919725090975249646644809285430663112451998167103077879", "track": "w_cigarettes", "ts": "2026-11-18T03:45:40Z", "type": "paper_buy"}
+{"fee": 0.0515, "outcome": "Denis Yevseyev", "price": 0.71, "shares": 5, "title": "M15 Hua Hin: Denis Yevseyev vs Mikal Statham", "token": "19527199515457460002939919725090975249646644809285430663112451998167103077879", "track": "wb_cigarettes", "ts": "2026-11-18T03:45:40Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV172245-45", "track": "kc_maker", "ts": "2026-11-18T03:46:33Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV172245-45", "track": "kc_maker", "ts": "2026-11-18T03:46:33Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV172245-45", "track": "kc_maker_safe", "ts": "2026-11-18T03:46:33Z", "type": "kmaker_fill"}
