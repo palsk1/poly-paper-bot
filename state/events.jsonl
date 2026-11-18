@@ -21549,3 +21549,9 @@
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXBTC-26NOV1809-B63750", "track": "kalshi_patient", "ts": "2026-11-18T14:02:45Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXTEMPNYCHS-26NOV1809-T44.99", "track": "kalshi_patient", "ts": "2026-11-18T14:02:46Z", "type": "kpatient_fill"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV1809-B63750", "track": "kalshi_patient", "ts": "2026-11-18T14:06:43Z", "type": "kpatient_result"}
+{"fee": 0.0059, "outcome": "No", "price": 0.976, "shares": 5, "title": "Will the highest temperature in Shanghai be 11\u00b0C on November 19?", "token": "17954684434682643703890082873914645714009443993705628544339965626281860134563", "track": "endgame_sell98", "ts": "2026-11-18T14:11:51Z", "type": "paper_buy"}
+{"cost": 4.2336, "title": "Will Donald Trump post 40-59 Truth Social posts from November 20 to November 27, 2026?", "token": "63621062193296577701837237783342821183818337267701233281750299769810961015425", "track": "postcount_no", "ts": "2026-11-18T14:12:14Z", "type": "skip_no_cash"}
+{"minutes_left": 2.71, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV180915-15", "track": "kc_maker", "ts": "2026-11-18T14:12:18Z", "type": "kmaker_order"}
+{"minutes_left": 2.71, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV180915-15", "track": "kc_maker_safe", "ts": "2026-11-18T14:12:18Z", "type": "kmaker_order"}
+{"minutes_left": 2.71, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV180915-15", "track": "kc_maker_safe_usd", "ts": "2026-11-18T14:12:18Z", "type": "kmaker_order"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXLOWTPHX-26NOV17-B55.5", "track": "kalshi_patient", "ts": "2026-11-18T14:12:20Z", "type": "kpatient_result"}
