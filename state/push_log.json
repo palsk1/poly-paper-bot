@@ -28,7 +28,7 @@
   "2026-11-18": {
    "failed": 0,
    "muted": 115,
-   "sent": 17
+   "sent": 18
   }
  },
  "recent": [
@@ -553,6 +553,12 @@
    "title": "[panic_fade] bought 1 (practice money)",
    "track": "panic_fade",
    "ts": "2026-11-18T23:12:11Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
+   "track": null,
+   "ts": "2026-11-18T23:45:47Z"
   }
  ]
 }
