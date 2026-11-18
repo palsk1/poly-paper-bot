@@ -20968,3 +20968,6 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXITFMATCH-26NOV18RAHMAG-RAH", "track": "kalshi_patient", "ts": "2026-11-18T06:57:49Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXBLOCK75VISA-26NOV24", "track": "kalshi_patient", "ts": "2026-11-18T06:57:49Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNETFLIXTOPVIEWSTV-26NOV23-6", "track": "kalshi_patient", "ts": "2026-11-18T06:57:49Z", "type": "kpatient_order"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV180200-00", "track": "kc_maker", "ts": "2026-11-18T07:01:57Z", "type": "kmaker_fill"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNBA1HTOTAL-26NOV17CHALAL-128", "track": "kalshi_patient", "ts": "2026-11-18T07:01:58Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNBA3PT-26NOV17DETSAS-DETDJENKINS24-5", "track": "kalshi_patient", "ts": "2026-11-18T07:01:59Z", "type": "kpatient_result"}
