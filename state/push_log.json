@@ -27,8 +27,8 @@
   },
   "2026-11-18": {
    "failed": 0,
-   "muted": 43,
-   "sent": 7
+   "muted": 44,
+   "sent": 9
   }
  },
  "recent": [
@@ -493,6 +493,18 @@
    "title": "[panic_fade] sold No at 84c (+$0.22)",
    "track": "panic_fade",
    "ts": "2026-11-18T11:45:49Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.74)",
+   "track": "kc_maker",
+   "ts": "2026-11-18T12:02:54Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.74)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-18T12:02:55Z"
   }
  ]
 }
