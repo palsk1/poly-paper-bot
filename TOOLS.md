@@ -92,6 +92,7 @@ and you read the result in the run log. All of it is paper only.
 |---|---|---|
 | `probe.py` | Raw API shapes: `all, kalshi, poly, endgame, events, activity, sells, exits, lab, fast*` | probe `<input>` |
 | `probe.py audit` | Checks past paper trades against Polymarket (prices, copy timing, payouts, stuck bets, marks) (PR #22) | probe `audit` |
+| `probe.py audit_full` | Same check on EVERY Polymarket paper buy since a date (default 9 Nov): real trade at our price within an hour, quiet markets, dearer-only buys, all payouts, stuck bets (17 Nov, `backtest/audit_1117.md`) | probe `audit_full` / `audit_full_<YYYY-MM-DD>` |
 | `probe.py rewardcheck` / `rewardpay` | Maker reward pools, and what real reward wallets actually get paid | probe `rewardcheck`, `rewardpay` |
 | `probe.py egcheck`, `marks_<track>` | Endgame fill check; open bets marked at bid vs ask | probe `egcheck`, `marks_<track>` |
 | `walletcheck.py` | Full profile of one Polymarket wallet (what, at what price, how long, where the profit comes from) | probe `wallet_<0xaddress>` |
