@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   75,
-   190
+   79,
+   200
   ],
   "S:andy burnham": [
    4,
@@ -43,6 +43,10 @@
   "S:mrbeast": [
    7,
    25
+  ],
+  "S:nvidia": [
+   4,
+   10
   ],
   "S:nyt front page headlines": [
    3,
@@ -592,6 +596,46 @@
    0,
    1
   ],
+  "ST:nvidia|affair/spy": [
+   0,
+   1
+  ],
+  "ST:nvidia|ai/artificial intelligence#40+": [
+   0,
+   1
+  ],
+  "ST:nvidia|apple/tim cook": [
+   0,
+   1
+  ],
+  "ST:nvidia|board#3+": [
+   1,
+   1
+  ],
+  "ST:nvidia|investigation": [
+   1,
+   1
+  ],
+  "ST:nvidia|openai": [
+   1,
+   1
+  ],
+  "ST:nvidia|si/super intelligence": [
+   1,
+   1
+  ],
+  "ST:nvidia|succession/successor": [
+   0,
+   1
+  ],
+  "ST:nvidia|taiwan": [
+   0,
+   1
+  ],
+  "ST:nvidia|token#25+": [
+   0,
+   1
+  ],
   "ST:nyt front page headlines|ai/artificial intelligence": [
    0,
    1
@@ -748,6 +792,10 @@
    0,
    1
   ],
+  "T:affair/spy": [
+   0,
+   1
+  ],
   "T:afford/affordability/affordable": [
    1,
    2
@@ -772,6 +820,10 @@
    1,
    1
   ],
+  "T:ai/artificial intelligence#40+": [
+   0,
+   1
+  ],
   "T:alien": [
    0,
    1
@@ -782,6 +834,10 @@
   ],
   "T:anthropic/claude": [
    1,
+   1
+  ],
+  "T:apple/tim cook": [
+   0,
    1
   ],
   "T:arr": [
@@ -838,6 +894,10 @@
   ],
   "T:blockade": [
    0,
+   1
+  ],
+  "T:board#3+": [
+   1,
    1
   ],
   "T:brother": [
@@ -1104,6 +1164,10 @@
    0,
    1
   ],
+  "T:investigation": [
+   1,
+   1
+  ],
   "T:iran": [
    0,
    1
@@ -1201,8 +1265,8 @@
    1
   ],
   "T:openai": [
-   0,
-   1
+   1,
+   2
   ],
   "T:parker/peter": [
    0,
@@ -1312,6 +1376,10 @@
    1,
    1
   ],
+  "T:si/super intelligence": [
+   1,
+   1
+  ],
   "T:son": [
    0,
    1
@@ -1344,6 +1412,14 @@
    0,
    1
   ],
+  "T:succession/successor": [
+   0,
+   1
+  ],
+  "T:taiwan": [
+   0,
+   1
+  ],
   "T:talarico": [
    0,
    1
@@ -1357,6 +1433,10 @@
    1
   ],
   "T:thanksgiving": [
+   0,
+   1
+  ],
+  "T:token#25+": [
    0,
    1
   ],
@@ -1397,8 +1477,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   35,
-   57
+   39,
+   67
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1440,6 +1520,10 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|affair/spy": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|ai#25+": [
    1,
    1
@@ -1450,6 +1534,14 @@
   ],
   "WT:earnings-call-mentions|ai/artificial intelligence#10+": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|ai/artificial intelligence#40+": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|apple/tim cook": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|arr": [
@@ -1469,6 +1561,10 @@
    1
   ],
   "WT:earnings-call-mentions|bandwidth": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|board#3+": [
    1,
    1
   ],
@@ -1548,6 +1644,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|investigation": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|iran": [
    0,
    1
@@ -1585,8 +1685,8 @@
    1
   ],
   "WT:earnings-call-mentions|openai": [
-   0,
-   1
+   1,
+   2
   ],
   "WT:earnings-call-mentions|pipeline": [
    1,
@@ -1632,6 +1732,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|si/super intelligence": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|splunk": [
    1,
    1
@@ -1640,7 +1744,19 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|succession/successor": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|taiwan": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|tariff": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|token#25+": [
    0,
    1
   ],
@@ -2323,6 +2439,16 @@
   "7000398": 1794718740,
   "7000399": 1794718740,
   "7000402": 1794718740,
+  "7003383": 1794977940,
+  "7003385": 1794977940,
+  "7003387": 1794977940,
+  "7003389": 1794977940,
+  "7003392": 1794977940,
+  "7003394": 1794977940,
+  "7003395": 1794977940,
+  "7003397": 1794977940,
+  "7003399": 1794977940,
+  "7003401": 1794977940,
   "7003587": 1794977940,
   "7003588": 1794977940,
   "7003589": 1794977940,
@@ -2333,5 +2459,5 @@
   "7003594": 1794977940,
   "7003595": 1794977940
  },
- "synced": 1794973941
+ "synced": 1794976013
 }
