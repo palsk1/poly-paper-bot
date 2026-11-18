@@ -28,7 +28,7 @@
   "2026-11-18": {
    "failed": 0,
    "muted": 34,
-   "sent": 4
+   "sent": 5
   }
  },
  "recent": [
@@ -475,6 +475,12 @@
    "title": "Paper top 10",
    "track": null,
    "ts": "2026-11-18T05:08:32Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 84c (+$0.19)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-18T08:50:52Z"
   }
  ]
 }
