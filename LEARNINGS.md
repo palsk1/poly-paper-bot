@@ -147,6 +147,7 @@ A strategy gets real money only if **every** answer is yes:
 - **Copying wallets doesn't work for us.** The price moves within 5 minutes of a smart bet. We arrive later and get
   nothing. "Winning wallets" are mostly luck: 32 of every 1,000 look good, and luck alone gives 28.
 - **"Sure" bets hide a big loss.** At 99c, one loss eats about 100 wins. You need hundreds of bets to know.
+- **Speed check, first day (18 Nov, `backtest/speedcheck.md`):** on Jan's Stockholm box, buying Polymarket's 5-minute Bitcoin side within 0.1 s of hearing a Binance jump made +$5.31 per $100 after fees (range +2.3 to +8.3, 239 windows, asks 40-95c picked after looking). It fades to $0 by 1 s. First real speed lead; needs a week of unseen days. Paper fills, and real racing firms aren't counted.
 - **Deep data check, 17 Nov (`backtest/audit_1117.md`):** every Polymarket paper buy since 9 Nov (3,028) vs the real trade list. 2,212 had a real trade at our price or cheaper within the hour, 562 were in quiet markets (the next real trade came at our price in 466 of 534), and only 25 buys saw nothing but dearer trades nearby. 1,337 of 1,337 payouts match. Weakest proof: `boring_no` and `soccer_draw`, which mostly buy in quiet markets.
 - **Check the data for holes.** Our first data dropped losing choices in weather events, which made one idea look
   like +$121 per $100. On full data it lost $18.67.

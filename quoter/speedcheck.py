@@ -504,6 +504,35 @@ def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
     return out
 
 
+def edge(paths, srcs=("bn", "cb"), band=(0.40, 0.95), cap=25.0, delays=(0, 100, 200, 500, 1000), say=print):
+    """After each jump: buy the jumped-toward side at the best ask seen `d` ms after we heard it, up to $cap, ask in
+    `band`, taker fee included, held to the window's result. Luck range by resampling whole windows (jumps inside one
+    window move together). First run 18 Nov (20 h): Binance at 100 ms +$5.31 per $100, range +2.3..+8.3,
+    falling to about $0 at 1 s. The 40-95c band was picked after looking."""
+    import collections
+    import random
+    for src in srcs:
+        out = score(paths, src=src, say=lambda *a, **k: None) or []
+        for d in delays:
+            rows = [x for x in out if x["won"] is not None and d in x["at"] and band[0] <= x["at"][d]["ask"] < band[1]]
+            byw = collections.defaultdict(lambda: [0.0, 0.0])
+            for x in rows:
+                a = x["at"][d]["ask"]
+                f = 0.07 * a * (1 - a)
+                sh = min(x["at"][d]["size"], cap / a)
+                byw[x["w"]][0] += sh * (x["won"] - a - f)
+                byw[x["w"]][1] += sh * (a + f)
+            ws = list(byw.values())
+            if not ws:
+                continue
+            p, s = sum(v[0] for v in ws), sum(v[1] for v in ws)
+            rnd = random.Random(2)
+            bs = sorted(100 * sum(v[0] for v in smp) / max(1e-9, sum(v[1] for v in smp))
+                        for smp in ([ws[rnd.randrange(len(ws))] for _ in ws] for _ in range(500)))
+            say(f"{src} {d:5} ms, asks {band[0]:.2f}-{band[1]:.2f}: {len(rows)} jumps in {len(ws)} windows, ${s:,.0f} bought, "
+                f"P&L ${p:,.0f} = {100 * p / s:+.2f} per $100, luck range {bs[25]:+.1f} to {bs[475]:+.1f}")
+
+
 def selftest():
     import tempfile
     d = tempfile.mkdtemp()
@@ -572,6 +601,8 @@ if __name__ == "__main__":
         asyncio.run(run())
     elif cmd == "score":
         score(sys.argv[2:])
+    elif cmd == "edge":
+        edge(sys.argv[2:])
     elif cmd == "upload":
         print(upload_all(Log(os.environ.get("SPEED_DIR", "~/speed-data")), os.environ.get("GITHUB_TOKEN")))
     else:
