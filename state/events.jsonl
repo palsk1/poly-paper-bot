@@ -21284,3 +21284,4 @@
 {"fee": 0.0598, "outcome": "Yes", "price": 0.397, "shares": 5, "title": "Will Oxford's 2026 Word of the Year contain \"slop\"?", "token": "36667725626789754959726179494851295067820236261596268000016295070360054929826", "track": "w_dominus", "ts": "2026-11-18T10:40:36Z", "type": "paper_buy"}
 {"fee": 0.0598, "outcome": "Yes", "price": 0.397, "shares": 5, "title": "Will Oxford's 2026 Word of the Year contain \"slop\"?", "token": "36667725626789754959726179494851295067820236261596268000016295070360054929826", "track": "wb_dominus", "ts": "2026-11-18T10:40:36Z", "type": "paper_buy"}
 {"minutes_left": 3.15, "price": 0.966, "queue": 768.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV180545-45", "track": "kc_maker", "ts": "2026-11-18T10:41:51Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "no", "through": true, "ticker": "KXETH15M-26NOV180545-45", "track": "kc_maker", "ts": "2026-11-18T10:46:36Z", "type": "kmaker_fill"}
