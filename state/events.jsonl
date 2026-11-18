@@ -20786,3 +20786,4 @@
 {"minutes_left": 3.08, "price": 0.99, "queue": 10944.8, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV172330-30", "track": "kc_maker_safe_usd", "ts": "2026-11-18T04:26:56Z", "type": "kmaker_order"}
 {"minutes_left": 3.08, "price": 0.96, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172330-30", "track": "kc_maker", "ts": "2026-11-18T04:26:56Z", "type": "kmaker_order"}
 {"minutes_left": 3.08, "price": 0.96, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV172330-30", "track": "kc_maker_safe", "ts": "2026-11-18T04:26:57Z", "type": "kmaker_order"}
+{"fee": 0.0096, "outcome": "Yes", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Hong Kong be 27\u00b0C on November 18?", "token": "89978331179015588727199566032652627492749331314994133348390284076682106829082", "track": "endgame_sell98", "ts": "2026-11-18T04:29:30Z", "type": "paper_buy"}
