@@ -20798,3 +20798,4 @@
 {"minutes_left": 2.99, "price": 0.995, "queue": 295.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV172345-45", "track": "kc_maker", "ts": "2026-11-18T04:42:02Z", "type": "kmaker_order"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXTEMPNYCHS-26NOV1723-T43.99", "track": "kalshi_patient", "ts": "2026-11-18T04:42:03Z", "type": "kpatient_result"}
 {"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV172345-45", "track": "kc_maker", "ts": "2026-11-18T04:46:33Z", "type": "kmaker_fill"}
+{"fee": 0.0096, "outcome": "Yes", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Seoul (Incheon) be 9\u00b0C on November 18?", "token": "44067719358022389002926831257022984215891624753502438268396214882613546182868", "track": "endgame_sell98", "ts": "2026-11-18T04:51:53Z", "type": "paper_buy"}
