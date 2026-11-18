@@ -22113,3 +22113,4 @@
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV181500-00", "track": "kc_maker", "ts": "2026-11-18T20:02:25Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV181500-00", "track": "kc_maker", "ts": "2026-11-18T20:02:25Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.45, "price": 0.955, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV181500-00", "track": "kc_maker", "ts": "2026-11-18T20:02:26Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.45, "price": 0.62, "reason": "take profit (now 64c), book", "title": "Will Russia capture Rai-Oleksandrivka by December 31?", "token": "91805555763953899602577183419292334276803127978967835598646072257189336694932", "track": "fade_rally", "ts": "2026-11-18T20:05:38Z", "type": "paper_close"}
