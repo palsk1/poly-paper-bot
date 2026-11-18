@@ -21546,3 +21546,5 @@
 {"outcome": "Yes", "pnl": 0.6, "price": 1.0, "reason": "resolved", "title": "Trump meets with Putin by December 31?", "token": "55438884553479289150292990840792024710917825886712830718218802108974282474850", "track": "wb_blondbeast", "ts": "2026-11-18T13:50:38Z", "type": "paper_close"}
 {"outcome": "No", "pnl": -0.3113, "price": 0.0, "reason": "resolved", "title": "Trump meets with Putin by November 30?", "token": "8572063124329378913229294539278235059366476371001961936913994232936831405891", "track": "control_longshot", "ts": "2026-11-18T13:50:46Z", "type": "paper_close"}
 {"minutes_left": 3.01, "price": 0.957, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV180900-00", "track": "kc_maker", "ts": "2026-11-18T13:56:59Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXBTC-26NOV1809-B63750", "track": "kalshi_patient", "ts": "2026-11-18T14:02:45Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXTEMPNYCHS-26NOV1809-T44.99", "track": "kalshi_patient", "ts": "2026-11-18T14:02:46Z", "type": "kpatient_fill"}
