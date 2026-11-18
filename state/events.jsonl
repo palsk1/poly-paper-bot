@@ -21903,3 +21903,7 @@
 {"minutes_left": 2.52, "price": 0.997, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker", "ts": "2026-11-18T17:27:29Z", "type": "kmaker_order"}
 {"minutes_left": 2.52, "price": 0.997, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe", "ts": "2026-11-18T17:27:30Z", "type": "kmaker_order"}
 {"minutes_left": 2.52, "price": 0.997, "queue": 1.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-18T17:27:30Z", "type": "kmaker_order"}
+{"fee": 0.0096, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Helsinki be 4\u00b0C on November 19?", "token": "110535285564824252595842774850778413401956601168115432206740020332305613433337", "track": "endgame_sell98", "ts": "2026-11-18T17:32:32Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV181230-30", "track": "kc_maker_safe_usd", "ts": "2026-11-18T17:32:36Z", "type": "kmaker_fill"}
