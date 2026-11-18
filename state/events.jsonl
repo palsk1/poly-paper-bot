@@ -21610,3 +21610,5 @@
 {"filled": 10.0, "pnl": 0.25, "price": 0.975, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV181000-00", "track": "kc_maker_safe", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV181000-00", "track": "kc_maker_safe_usd", "ts": "2026-11-18T15:03:19Z", "type": "kmaker_fill"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXINXU-26NOV18H1000-T7439.9999", "track": "kalshi_patient", "ts": "2026-11-18T15:03:21Z", "type": "kpatient_result"}
+{"fee": 0.0796, "outcome": "Yes", "price": 0.65, "shares": 5, "title": "Will Bitcoin dip to $60,000 by December 31, 2026?", "token": "104279604547231872129402198190232956636095665469278761891693384128061158683041", "track": "w_tokor", "ts": "2026-11-18T15:10:40Z", "type": "paper_buy"}
+{"fee": 0.0796, "outcome": "Yes", "price": 0.65, "shares": 5, "title": "Will Bitcoin dip to $60,000 by December 31, 2026?", "token": "104279604547231872129402198190232956636095665469278761891693384128061158683041", "track": "wb_tokor", "ts": "2026-11-18T15:10:40Z", "type": "paper_buy"}
