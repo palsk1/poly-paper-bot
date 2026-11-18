@@ -20797,3 +20797,4 @@
 {"minutes_left": 2.99, "price": 0.958, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV172345-45", "track": "kc_maker", "ts": "2026-11-18T04:42:01Z", "type": "kmaker_order"}
 {"minutes_left": 2.99, "price": 0.995, "queue": 295.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV172345-45", "track": "kc_maker", "ts": "2026-11-18T04:42:02Z", "type": "kmaker_order"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXTEMPNYCHS-26NOV1723-T43.99", "track": "kalshi_patient", "ts": "2026-11-18T04:42:03Z", "type": "kpatient_result"}
+{"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV172345-45", "track": "kc_maker", "ts": "2026-11-18T04:46:33Z", "type": "kmaker_fill"}
