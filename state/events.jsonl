@@ -21202,3 +21202,6 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV180445-45", "track": "kc_maker", "ts": "2026-11-18T09:46:27Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV180445-45", "track": "kc_maker_safe", "ts": "2026-11-18T09:46:27Z", "type": "kmaker_fill"}
 {"outcome": "No", "pnl": 0.2, "price": 0.92, "reason": "take profit (now 92c), book", "title": "US strike on Cuba by December 31?", "token": "55782999195478978645683058282751482473275270795090145277907596121415418369349", "track": "panic_fade_4c", "ts": "2026-11-18T09:50:41Z", "type": "paper_close"}
+{"minutes_left": 3.86, "price": 0.961, "queue": 5263.18, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV180500-00", "track": "kc_maker", "ts": "2026-11-18T09:56:08Z", "type": "kmaker_order"}
+{"minutes_left": 3.86, "price": 0.961, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV180500-00", "track": "kc_maker", "ts": "2026-11-18T09:56:09Z", "type": "kmaker_order"}
+{"minutes_left": 3.86, "price": 0.961, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV180500-00", "track": "kc_maker_safe", "ts": "2026-11-18T09:56:10Z", "type": "kmaker_order"}
