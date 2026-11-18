@@ -20764,3 +20764,11 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXTRUMPACT-26NOV15-T9", "track": "kalshi_patient", "ts": "2026-11-18T04:02:16Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXNFL1HTEAMTOTAL-26NOV22MINSF-MIN3", "track": "kalshi_patient", "ts": "2026-11-18T04:02:16Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXLOWTNYC-26NOV18-T39", "track": "kalshi_patient", "ts": "2026-11-18T04:02:16Z", "type": "kpatient_order"}
+{"fee": 0.0, "outcome": "No", "price": 0.933, "shares": 5, "title": "Houthis enter Aden by November 30, 2026?", "token": "18814363525068766565892079477321754695089877816700999236934401327706274083882", "track": "w_anoin123", "ts": "2026-11-18T04:10:34Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "No", "price": 0.933, "shares": 5, "title": "Houthis enter Aden by November 30, 2026?", "token": "18814363525068766565892079477321754695089877816700999236934401327706274083882", "track": "wb_anoin123", "ts": "2026-11-18T04:10:34Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXBTCD-26NOV1817-T67249.99", "track": "kalshi_patient", "ts": "2026-11-18T04:11:16Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": false, "ticker": "KXETHD-26NOV1817-T1919.99", "track": "kalshi_patient", "ts": "2026-11-18T04:11:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXLOWTDEN-26NOV18-T37", "track": "kalshi_patient", "ts": "2026-11-18T04:11:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXLOWTMIA-26NOV17-B71.5", "track": "kalshi_patient", "ts": "2026-11-18T04:11:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXNCAAFGAME-26NOV21TNTCMSST-TNTC", "track": "kalshi_patient", "ts": "2026-11-18T04:11:18Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV22ARIKC-ARI3", "track": "kalshi_patient", "ts": "2026-11-18T04:11:21Z", "type": "kpatient_fill"}
