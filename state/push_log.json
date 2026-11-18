@@ -28,7 +28,7 @@
   "2026-11-18": {
    "failed": 0,
    "muted": 36,
-   "sent": 5
+   "sent": 6
   }
  },
  "recent": [
@@ -481,6 +481,12 @@
    "title": "[panic_fade_4c] sold No at 84c (+$0.19)",
    "track": "panic_fade_4c",
    "ts": "2026-11-18T08:50:52Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 92c (+$0.20)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-18T09:50:41Z"
   }
  ]
 }
