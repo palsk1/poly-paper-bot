@@ -58,6 +58,7 @@ SERIES = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "
 BINANCE = "https://data-api.binance.vision/api/v3/klines"
 LOOKBACK_MIN = 11          # candles kept per window: the last 11 minutes
 WORKERS = int(os.environ.get("KC_WORKERS", "8"))
+_SAVE = [None]   # set by fetch(): writes the candle files mid-download
 LEVELS = (0.90, 0.93, 0.95, 0.97, 0.98, 0.99)
 MINUTES = (1, 2, 3, 5, 7, 10)
 JOIN_MIN = (0.90, 0.95, 0.97, 0.99)
@@ -281,6 +282,8 @@ def fetch_candles(ms, store):
                 store[m["t"]] = cs
                 if i % 500 == 0:
                     print(f"   single {i}/{len(todo)} ({time.time() - t_start:.0f}s)")
+                if i and i % 4000 == 0 and _SAVE[0]:
+                    _SAVE[0]()   # a long download keeps what it has if the run is cut off
 
 
 def fetch_spot(symbol, t0, t1, have):
@@ -338,11 +341,16 @@ def fetch(days=60):
     merged = {}
     for s in SERIES:
         merged.update(stores[s])
+    def save(quiet=True):
+        for s, ms in all_ms.items():
+            keep = {m["t"]: merged[m["t"]] for m in ms if m["t"] in merged}
+            wjson(os.path.join(CACHE, f"candles_{s}.json.gz"), keep)
+            if not quiet:
+                print(f"{s}: {sum(1 for v in keep.values() if v)} of {len(ms)} windows with candles")
+    _SAVE[0] = save
     fetch_candles([m for ms in all_ms.values() for m in ms], merged)
-    for s, ms in all_ms.items():
-        keep = {m["t"]: merged[m["t"]] for m in ms if m["t"] in merged}
-        wjson(os.path.join(CACHE, f"candles_{s}.json.gz"), keep)
-        print(f"{s}: {sum(1 for v in keep.values() if v)} of {len(ms)} windows with candles")
+    _SAVE[0] = None
+    save(quiet=False)
 
 
 # ================================================================ replay
