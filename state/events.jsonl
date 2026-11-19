@@ -23173,3 +23173,4 @@
 {"fee": 0.0296, "outcome": "No", "price": 0.819, "shares": 5, "title": "Will Anthropic's market cap be between $1.5T and $1.75T at market close on IPO day?", "token": "92065010279459266908754598391881813012406279161964171131738038649749443819630", "track": "wb_ecash", "ts": "2026-11-19T10:10:38Z", "type": "paper_buy"}
 {"minutes_left": 3.1, "price": 0.956, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV190515-15", "track": "kc_maker", "ts": "2026-11-19T10:11:54Z", "type": "kmaker_order"}
 {"minutes_left": 3.1, "price": 0.992, "queue": 1393.12, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV190515-15", "track": "kc_maker", "ts": "2026-11-19T10:11:56Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.44, "price": 0.956, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV190515-15", "track": "kc_maker", "ts": "2026-11-19T10:17:09Z", "type": "kmaker_fill"}
