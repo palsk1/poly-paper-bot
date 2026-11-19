@@ -22811,3 +22811,14 @@
 {"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV182330-30", "track": "kc_maker_safe", "ts": "2026-11-19T04:33:05Z", "type": "kmaker_fill"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBRASILEIROSPREAD-26NOV18GPABAH-GPA3", "track": "kalshi_patient", "ts": "2026-11-19T04:33:06Z", "type": "kpatient_result"}
 {"outcome": "Draw", "pnl": 3.6007, "price": 1.0, "reason": "resolved", "title": "Will Gr\u00eamio FBPA vs. EC Bahia end in a draw?", "token": "114461087172026530012851317520305455420968354304304592390199595891189782563972", "track": "soccer_draw", "ts": "2026-11-19T04:35:37Z", "type": "paper_close"}
+{"minutes_left": 2.65, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV182345-45", "track": "kc_maker", "ts": "2026-11-19T04:42:21Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:42:21Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV182345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-19T04:42:21Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.981, "queue": 51032.41, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV182345-45", "track": "kc_maker", "ts": "2026-11-19T04:42:22Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.981, "queue": 51032.41, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:42:22Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.981, "queue": 51032.41, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV182345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-19T04:42:22Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.977, "queue": 47.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV182345-45", "track": "kc_maker", "ts": "2026-11-19T04:42:23Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.977, "queue": 47.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:42:23Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.984, "queue": 583.06, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV182345-45", "track": "kc_maker", "ts": "2026-11-19T04:42:24Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.984, "queue": 583.06, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:42:24Z", "type": "kmaker_order"}
+{"minutes_left": 2.65, "price": 0.963, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV182345-45", "track": "kc_maker", "ts": "2026-11-19T04:42:25Z", "type": "kmaker_order"}
