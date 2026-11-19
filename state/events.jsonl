@@ -22955,3 +22955,4 @@
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV21DUKEWSU-WSU", "track": "kalshi_patient", "ts": "2026-11-19T05:47:29Z", "type": "kpatient_order"}
 {"fee": 0.0525, "outcome": "Yes", "price": 0.7, "shares": 5, "title": "Will Manchester City FC win on 2026-11-21?", "token": "91244844708314141778503024351521599410324872024661518916790642578241916728493", "track": "w_sbel", "ts": "2026-11-19T05:50:39Z", "type": "paper_buy"}
 {"fee": 0.0525, "outcome": "Yes", "price": 0.7, "shares": 5, "title": "Will Manchester City FC win on 2026-11-21?", "token": "91244844708314141778503024351521599410324872024661518916790642578241916728493", "track": "wb_sbel", "ts": "2026-11-19T05:50:40Z", "type": "paper_buy"}
+{"minutes_left": 3.81, "price": 0.955, "queue": 414.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190100-00", "track": "kc_maker", "ts": "2026-11-19T05:56:12Z", "type": "kmaker_order"}
