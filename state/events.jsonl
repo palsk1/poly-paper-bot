@@ -23236,3 +23236,10 @@
 {"minutes_left": 3.05, "price": 0.997, "queue": 1170.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190645-45", "track": "kc_maker", "ts": "2026-11-19T11:42:00Z", "type": "kmaker_order"}
 {"minutes_left": 3.05, "price": 0.997, "queue": 1170.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190645-45", "track": "kc_maker_safe", "ts": "2026-11-19T11:42:00Z", "type": "kmaker_order"}
 {"minutes_left": 3.05, "price": 0.997, "queue": 1170.15, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190645-45", "track": "kc_maker_safe_usd", "ts": "2026-11-19T11:42:00Z", "type": "kmaker_order"}
+{"outcome": "Yes", "pnl": 1.3294, "price": 1.0, "reason": "resolved", "title": "Will Bitcoin reach $64,000 November 16-22?", "token": "112710038342513118156563392688413392831022083949541825631251589763858419955992", "track": "w_tokor", "ts": "2026-11-19T11:45:44Z", "type": "paper_close"}
+{"outcome": "Yes", "pnl": 1.3294, "price": 1.0, "reason": "resolved", "title": "Will Bitcoin reach $64,000 November 16-22?", "token": "112710038342513118156563392688413392831022083949541825631251589763858419955992", "track": "wb_tokor", "ts": "2026-11-19T11:45:44Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV190645-45", "track": "kc_maker", "ts": "2026-11-19T11:46:56Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV190645-45", "track": "kc_maker", "ts": "2026-11-19T11:46:56Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV190645-45", "track": "kc_maker_safe", "ts": "2026-11-19T11:46:57Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV190645-45", "track": "kc_maker_safe", "ts": "2026-11-19T11:46:57Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV190645-45", "track": "kc_maker_safe_usd", "ts": "2026-11-19T11:46:57Z", "type": "kmaker_fill"}
