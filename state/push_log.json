@@ -33,7 +33,7 @@
   "2026-11-19": {
    "failed": 0,
    "muted": 10,
-   "sent": 2
+   "sent": 3
   }
  },
  "recent": [
@@ -576,6 +576,12 @@
    "title": "[kc_maker] FLIP: a late favorite lost ($-9.84)",
    "track": "kc_maker",
    "ts": "2026-11-19T02:17:05Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold No at 95c (+$0.48)",
+   "track": "panic_fade",
+   "ts": "2026-11-19T03:45:43Z"
   }
  ]
 }
