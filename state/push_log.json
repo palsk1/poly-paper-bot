@@ -32,8 +32,8 @@
   },
   "2026-11-19": {
    "failed": 0,
-   "muted": 110,
-   "sent": 15
+   "muted": 111,
+   "sent": 18
   }
  },
  "recent": [
@@ -654,6 +654,24 @@
    "title": "[panic_fade_4c] sold No at 88c (+$0.30)",
    "track": "panic_fade_4c",
    "ts": "2026-11-19T18:18:06Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
+   "track": null,
+   "ts": "2026-11-19T21:25:47Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
+   "track": null,
+   "ts": "2026-11-19T21:25:48Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 94c (+$0.45)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-19T21:25:49Z"
   }
  ]
 }
