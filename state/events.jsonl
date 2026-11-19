@@ -23639,3 +23639,6 @@
 {"fee": 0.0118, "outcome": "No", "price": 0.965, "shares": 5, "title": "Will Bitcoin dip to $59,000 on November 19?", "token": "11520369708282055369779021100231650996570642124037406387596195895052393301329", "track": "endgame_sell98", "ts": "2026-11-19T15:57:04Z", "type": "paper_buy"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXBTC-26NOV1911-B63250", "track": "kalshi_patient", "ts": "2026-11-19T16:00:31Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXDOGED-26NOV1911-T0.0599999", "track": "kalshi_patient", "ts": "2026-11-19T16:00:32Z", "type": "kpatient_fill"}
+{"annual": 0.164, "edge": 0.0204, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-19T16:01:50Z", "type": "arb_opportunity"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV1911-B63250", "track": "kalshi_patient", "ts": "2026-11-19T16:02:56Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXDOGED-26NOV1911-T0.0599999", "track": "kalshi_patient", "ts": "2026-11-19T16:02:56Z", "type": "kpatient_result"}
