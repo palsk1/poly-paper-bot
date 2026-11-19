@@ -23857,3 +23857,4 @@
 {"fee": 0.0072, "outcome": "Yes", "price": 0.979, "shares": 5, "title": "Will the price of XRP be above $0.90 on November 20?", "token": "71680483863898748126799136021359477312736179314920691976540022166810610458964", "track": "endgame_sell98", "ts": "2026-11-19T17:42:43Z", "type": "paper_buy"}
 {"cost": 4.3783, "title": "Will Elon Musk post 115-139 tweets from November 21 to November 23, 2026?", "token": "31564743353713183435091374995602894007478686470910632910736866860163094627686", "track": "postcount_no", "ts": "2026-11-19T17:43:44Z", "type": "skip_no_cash"}
 {"minutes_left": 1.19, "price": 0.985, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV191245-45", "track": "kc_maker", "ts": "2026-11-19T17:43:50Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV191245-45", "track": "kc_maker", "ts": "2026-11-19T17:47:37Z", "type": "kmaker_fill"}
