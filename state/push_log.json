@@ -32,8 +32,8 @@
   },
   "2026-11-19": {
    "failed": 0,
-   "muted": 69,
-   "sent": 10
+   "muted": 70,
+   "sent": 11
   }
  },
  "recent": [
@@ -624,6 +624,12 @@
    "title": "[arb] locked in 4.3c a share",
    "track": null,
    "ts": "2026-11-19T14:21:22Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold Yes at 84c (+$0.29)",
+   "track": "panic_fade",
+   "ts": "2026-11-19T15:25:40Z"
   }
  ]
 }
