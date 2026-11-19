@@ -24074,3 +24074,10 @@
 {"minutes_left": 2.71, "price": 0.994, "queue": 878.04, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV191500-00", "track": "kc_maker", "ts": "2026-11-19T19:57:18Z", "type": "kmaker_order"}
 {"minutes_left": 2.71, "price": 0.994, "queue": 878.04, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV191500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-19T19:57:19Z", "type": "kmaker_order"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "yes", "ticker": "KXART-VANCHAT18NOV26-100000000", "track": "kalshi_patient", "ts": "2026-11-19T19:57:20Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": 3.6519, "price": 1.0, "reason": "resolved", "title": "Will Al Ahli Doha SC vs. Al-Shamal end in a draw?", "token": "72628592163813573438212211086623325602850697789777394306367149893490281623176", "track": "soccer_draw", "ts": "2026-11-19T20:01:12Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV191500-00", "track": "kc_maker", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV191500-00", "track": "kc_maker", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV191500-00", "track": "kc_maker_safe", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV191500-00", "track": "kc_maker_safe_usd", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV191500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV191500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-19T20:02:18Z", "type": "kmaker_fill"}
