@@ -188,7 +188,6 @@ A strategy gets real money only if **every** answer is yes:
   and which markets are "busy" depends on the result, so half-saved trade lists flatter whoever was right.
 - **More ideas tried means a higher bar.** With 49 ideas, the luckiest one is bound to look good. The exam raises the
   bar for every new try.
-
 - **Kalshi's API docs, read end to end (19 Nov, `kdocs.py`, `backtest/kalshi_docs.md`, Jan: "did you read Kalshi's documentation?"):** about 290 pages plus the changelog. One real find: `GET /live_data/events/{event}` gives Kalshi's own settle number (the CF Benchmarks 60-second average) every second for the hour before each 15-minute crypto close, **free, no login, 120+ days back**; its last point matched the result in 600 of 600 recent windows. With 45 s left it named the winner in 287 of 300 Bitcoin windows, Binance's average in 243 (Binance runs about 0.10% high). Those are all windows, coin flips included, so the gain on the bets our Kalshi crypto tracks really make is still unknown: next dig if Jan says go. Also: no maker fee or fee change on the 15-minute crypto series; the real order tools (post-only, auto-cancel groups, queue position) and the raw index feed all need an API key; every Kalshi websocket needs a key.
 
 ## The 12 stopped tracks (12 Nov): what they taught us
