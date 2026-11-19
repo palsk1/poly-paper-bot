@@ -32,8 +32,8 @@
   },
   "2026-11-19": {
    "failed": 0,
-   "muted": 10,
-   "sent": 3
+   "muted": 14,
+   "sent": 4
   }
  },
  "recent": [
@@ -582,6 +582,12 @@
    "title": "[panic_fade] sold No at 95c (+$0.48)",
    "track": "panic_fade",
    "ts": "2026-11-19T03:45:43Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 94c (+$0.26)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-19T03:59:03Z"
   }
  ]
 }
