@@ -23991,3 +23991,4 @@
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV1914-T73.7499", "track": "kalshi_patient", "ts": "2026-11-19T19:08:05Z", "type": "kpatient_result"}
 {"minutes_left": 3.2, "price": 0.961, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV191415-15", "track": "kc_maker", "ts": "2026-11-19T19:11:48Z", "type": "kmaker_order"}
 {"minutes_left": 3.2, "price": 0.981, "queue": 7706.08, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV191415-15", "track": "kc_maker", "ts": "2026-11-19T19:11:49Z", "type": "kmaker_order"}
+{"cost": 4.3421, "title": "Will the price of Bitcoin be above $66,000 on November 24?", "token": "97341116867302144298880072870052219474376312646922883164269486134073279025004", "track": "crypto_no", "ts": "2026-11-19T19:24:00Z", "type": "skip_no_cash"}
