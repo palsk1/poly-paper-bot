@@ -2995,6 +2995,46 @@ def kmaker_z(series, strike, minutes_left, side, open_ts=None):
     return z if side == "yes" else -z
 
 
+_kmaker_kidx = {}
+
+
+def kmaker_kz(event_ticker, strike, minutes_left, side):
+    """kc_maker_safe's check on Kalshi's OWN settle number instead of Binance (kc_maker_safe_kprice, 19 Nov, Jan:
+    "make a paper twin no matter the result"). GET /live_data/events/{event} (public, no key) gives the CF
+    Benchmarks 60-second average Kalshi settles on, one value a second for the last hour. Same formula as
+    kmaker_z: last hour's 1-minute moves, scaled to the minutes left, times sqrt(1.5) because a 60-second average
+    moves only about 2/3 as much per minute as the raw price. Rule fixed before the re-test (kdocs.zk_minute)."""
+    if not event_ticker or not strike:
+        return None
+    if event_ticker not in _kmaker_kidx:
+        try:
+            res = kalshi_get(f"/live_data/events/{urllib.parse.quote(event_ticker)}")
+            ts = (((res or {}).get("live_data") or {}).get("details") or {}).get("timeseries") or []
+            kv = {int(fnum(p.get("t"))) // 1000: fnum(p.get("v"), None) for p in ts if p.get("v") is not None}
+            _kmaker_kidx[event_ticker] = kv or None
+        except Exception as e:
+            print(f"kalshi live_data failed for {event_ticker}: {e}")
+            _kmaker_kidx[event_ticker] = None
+    kv = _kmaker_kidx[event_ticker]
+    if not kv:
+        return None
+    last = max(kv)
+    px = kv[last]
+    t0 = last - last % 60
+    rets = []
+    for i in range(60):
+        a, b = kv.get(t0 - 60 * (i + 1)), kv.get(t0 - 60 * i)
+        if a and b:
+            rets.append(math.log(b / a))
+    if len(rets) < 30 or not px:
+        return None
+    sd = math.sqrt(sum(r * r for r in rets) / len(rets)) * math.sqrt(1.5) * px * math.sqrt(max(minutes_left, 0.5))
+    if sd <= 0:
+        return None
+    z = (px - strike) / sd
+    return z if side == "yes" else -z
+
+
 def kmaker_tick(p):
     return 0.001 if p >= 0.9 - 1e-9 or p < 0.1 else 0.01
 
@@ -3073,6 +3113,14 @@ def kmaker_place(tracks, names):
                                                                    "bid": bid, "ask": ask, "placed": False,
                                                                    "z": round(z, 2), "z_usd": None if zu is None else round(zu, 2)}
                         continue
+                zk = None
+                if r.get("min_kalshi_z") is not None:   # the check on Kalshi's own number (kc_maker_safe_kprice)
+                    zk = kmaker_kz(m.get("event_ticker"), fnum(m.get("floor_strike"), None), left, side)
+                    if zk is None or zk < r["min_kalshi_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z_kalshi": None if zk is None else round(zk, 2)}
+                        continue
                 queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
                 shares = max(1, int(r.get("usd_per_order", 10) / price))
                 cost = round(shares * price, 6)
@@ -3087,7 +3135,8 @@ def kmaker_place(tracks, names):
                                     "minutes_left": round(left, 2), "bid": bid, "ask": ask,
                                     "strike": fnum(m.get("floor_strike"), None),
                                     "spot_z": None if z is None else round(z, 2),
-                                    **({"spot_z_usd": round(zu, 2)} if zu is not None else {})}
+                                    **({"spot_z_usd": round(zu, 2)} if zu is not None else {}),
+                                    **({"kalshi_z": round(zk, 2)} if zk is not None else {})}
                 tr["peak_open_cost"] = round(max(tr["peak_open_cost"], sum(o["cost"] for o in tr["orders"].values())), 6)
                 tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
                                                            "bid": bid, "ask": ask, "placed": True}
