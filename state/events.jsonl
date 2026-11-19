@@ -24135,3 +24135,4 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV191600-00", "track": "kc_maker_safe_usd", "ts": "2026-11-19T21:02:24Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV191600-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-19T21:02:24Z", "type": "kmaker_fill"}
 {"pnl": 0.099, "price": 0.94, "shares": 1.65, "side": "yes", "ticker": "KXITFWMATCH-26NOV19TRAPER-PER", "track": "kalshi_patient", "ts": "2026-11-19T21:02:25Z", "type": "kpatient_result"}
+{"fee": 0.0041, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will S&P 500 (SPY) hit (HIGH) $750 Week of November 16 2026?", "token": "94297805347248619545388038145158283046033755300396289782755649862667512824741", "track": "endgame_sell98", "ts": "2026-11-19T21:06:24Z", "type": "paper_buy"}
