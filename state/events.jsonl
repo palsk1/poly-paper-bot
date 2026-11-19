@@ -22624,3 +22624,4 @@
 {"outcome": "76ers", "pnl": 3.0411, "price": 1.0, "reason": "resolved", "title": "76ers vs. Magic", "token": "74610201205616130361971237545795332634073251191281049889230912962274177097582", "track": "sharp_pinnacle", "ts": "2026-11-19T02:55:43Z", "type": "paper_close"}
 {"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV18MILMIA-MIL10", "track": "kalshi_patient", "ts": "2026-11-19T03:02:25Z", "type": "kpatient_result"}
 {"pnl": 0.0075, "price": 0.95, "shares": 0.15, "side": "no", "ticker": "KXNCAAWBGAME-26NOV18CCARIND-CCAR", "track": "kalshi_patient", "ts": "2026-11-19T03:02:25Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV19INDHOU-INDAGOULD6-80", "track": "kalshi_patient", "ts": "2026-11-19T03:06:22Z", "type": "kpatient_fill"}
