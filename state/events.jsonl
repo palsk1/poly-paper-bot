@@ -22785,3 +22785,17 @@
 {"minutes_left": 3.36, "price": 0.955, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:11:41Z", "type": "kmaker_order"}
 {"minutes_left": 3.36, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:11:42Z", "type": "kmaker_order"}
 {"minutes_left": 3.36, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:11:42Z", "type": "kmaker_order"}
+{"outcome": "Yes", "pnl": 0.1346, "price": 0.978, "reason": "wallet exit (book)", "title": "Will the price of Bitcoin be above $58,000 on November 20?", "token": "100988832313917793924531670747964571498221785586144778608192340204227884687124", "track": "w_tokor", "ts": "2026-11-19T04:15:38Z", "type": "paper_close"}
+{"outcome": "Yes", "pnl": 0.1346, "price": 0.978, "reason": "wallet exit (book)", "title": "Will the price of Bitcoin be above $58,000 on November 20?", "token": "100988832313917793924531670747964571498221785586144778608192340204227884687124", "track": "wb_tokor", "ts": "2026-11-19T04:15:38Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:16:48Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:16:50Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.45, "price": 0.955, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV182315-15", "track": "kc_maker", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.45, "price": 0.955, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV182315-15", "track": "kc_maker_safe", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV182315-15", "track": "kc_maker_safe_usd", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV182315-15", "track": "kc_maker_safe_usd", "ts": "2026-11-19T04:16:51Z", "type": "kmaker_fill"}
