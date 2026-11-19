@@ -1645,7 +1645,7 @@ def buy_candidates(tracks, name, cands, limit):
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
                 "price_source": how}
-        for k in ("target", "tier", "model_p", "signal"):
+        for k in ("target", "tier", "model_p", "signal", "pin"):
             if c.get(k):
                 meta[k] = c[k]
         if r.get("tp_rel"):
@@ -4305,11 +4305,45 @@ def draw_candidates(names):
                                "league": str(g["event"].get("slug") or "").split("-")[0]})
                 c["outcome"] = "Draw"
                 c["theme"] = "soccer"
+                c["_game"] = g
                 out[n].append(c)
+    draw_pinnacle(out)
     for n in out:
         out[n].sort(key=lambda c: -c["liquidity"])
     print(f"draws: {len(games)} games, {seen} draw markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
+
+
+def draw_pinnacle(out):
+    """Records only (2026-11-19, Jan said yes; backtest/crosscheck_1119.md): put Pinnacle's fair draw price on every
+    soccer_draw candidate as c["pin"] = {"fair": both de-vig estimates, "league", "limit"} so that by 21 Dec we can see
+    whether "the draw is cheaper on Polymarket than on Pinnacle" picks out the winners. Never changes which bets are
+    made: a Pinnacle failure or a game with no Pinnacle match just leaves "pin" out."""
+    cands = [c for cs in out.values() for c in cs]
+    for c in cands:
+        c.setdefault("pin", None)
+    if not cands:
+        return
+    try:
+        import sharp
+        board = sharp.pinnacle_board([29])
+        cache = {}
+        for c in cands:
+            g = c.get("_game")
+            key = id(g)
+            if key not in cache:
+                b, _ = sharp.match_game(g, board)
+                cache[key] = None if not b or "draw" not in b["prob"] else {
+                    "fair": [round(x, 4) for x in b["prob"]["draw"]], "league": b["league"],
+                    "limit": round(b["limit"]), "pin_start": iso(b["start"])}
+            c["pin"] = cache[key]
+        print(f"draws: Pinnacle draw price found for {sum(1 for c in cands if c['pin'])} of {len(cands)} candidates")
+    except Exception as e:
+        print(f"draws: Pinnacle draw price failed (records only, bets unchanged): {e}")
+    for c in cands:
+        c.pop("_game", None)
+        if not c.get("pin"):
+            c.pop("pin", None)
 
 
 def postcount_candidates(names):

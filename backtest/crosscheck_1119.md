@@ -86,3 +86,7 @@ frozen), but it backs up the "no crypto for slow bots" lesson.
   quiet for more than 20 seconds, so no holes in its data.
 - Fast Kalshi days: too few flips (2 in 1,532 bets at z 4+) to say anything about time of day.
 - No time-of-day or weekday pattern holds across tracks once copies are counted once.
+
+## Follow-up (19 Nov, Jan: "Yes sure")
+
+Every new `soccer_draw` bet now carries `pin` = Pinnacle's fair draw price (both ways of taking the margin off), league and betting limit (`bot.draw_pinnacle`). Records only: which bets are made is unchanged, and a Pinnacle failure just leaves `pin` out. Look on 21 Dec: do the bets where Polymarket's draw was cheaper than Pinnacle's win more than the rest?
