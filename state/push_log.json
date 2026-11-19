@@ -32,8 +32,8 @@
   },
   "2026-11-19": {
    "failed": 0,
-   "muted": 16,
-   "sent": 4
+   "muted": 33,
+   "sent": 6
   }
  },
  "recent": [
@@ -588,6 +588,18 @@
    "title": "[panic_fade_4c] sold No at 94c (+$0.26)",
    "track": "panic_fade_4c",
    "ts": "2026-11-19T03:59:03Z"
+  },
+  {
+   "result": "sent",
+   "title": "[fav_short_90_95] bought 3 (practice money)",
+   "track": "fav_short_90_95",
+   "ts": "2026-11-19T05:07:34Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-19T05:11:30Z"
   }
  ]
 }
