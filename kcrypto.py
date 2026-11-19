@@ -1200,12 +1200,95 @@ def selftest():
     print("kcrypto selftest ok")
 
 
+def fillaudit(arg=None):
+    """Are the kmaker paper fills real? (Jan, 19 Nov: "does kc maker actually check if there were sellers at that
+    point?"). Re-reads Kalshi's real trade list for a random sample of a kmaker track's finished bets (default
+    kc_maker_safe_usd, 80 bets, every lost bet too) and walks our paper bid again, independently of bot.kmaker_fill:
+    when it filled, how many contracts sellers really sold at our price (after the queue that was there first) and below
+    it, the lowest price, and three stricter fill rules: (a) only sales BELOW our price count, (b) the sales that fill
+    us must come 10+ s before the close, (c) twice our size must be sold at or below our price after the queue.
+    Prints one FA line per bet and a summary (FA_SUM). Reads only. Probe kc_fillaudit or kc_fillaudit_<track>."""
+    import random
+    track = arg or "kc_maker_safe_usd"
+    with open(os.path.join(bot.ROOT, "state", "tracks.json")) as fh:
+        closed = [c for c in ((json.load(fh).get(track) or {}).get("closed") or []) if c.get("reason") == "resolved"]
+    rng = random.Random(1119)
+    lost = [c for c in closed if c["exit"] < 0.5]
+    pick = lost + rng.sample([c for c in closed if c["exit"] >= 0.5], min(80, len(closed) - len(lost)))
+    agg = defaultdict(int)
+    raw_shown = 0
+    for c in pick:
+        t_pl, t_cl = bot.parse_iso(c["placed"]).timestamp(), bot.parse_iso(c["close"]).timestamp()
+        try:
+            trades, complete = bot.kalshi_trades(c["ticker"], t_pl - 120, t_cl + 120)
+        except Exception as e:
+            print("FA", json.dumps({"ticker": c["ticker"], "err": str(e)}))
+            agg["err"] += 1
+            continue
+        rows = []
+        for t in trades:
+            yp = bot.fnum(t.get("yes_price_dollars"), None)
+            if yp is None:
+                yp = bot.fnum(t.get("yes_price"), 0) / 100
+            px = yp if c["side"] == "yes" else round(1 - yp, 6)
+            rows.append((bot.parse_iso(t.get("created_time")).timestamp(), round(px, 4),
+                         bot.fnum(t.get("count_fp") or t.get("count"), 0), str(t.get("taker_side"))))
+        rows.sort()
+        if raw_shown < 2:
+            raw_shown += 1
+            print("FA_RAW", c["ticker"], c["side"], c["entry"], json.dumps(trades[:6])[:1500])
+        need, q, price = float(c["shares"]), float(c.get("queue") or 0), c["entry"]
+        at_after_q = below = late_ok = 0.0
+        fill_t, low, sold_any = None, None, 0.0
+        after_close = 0
+        for ts, px, n, side_ in rows:
+            if ts <= t_pl:
+                continue
+            if ts > t_cl:
+                after_close += 1
+                continue
+            if side_ == c["side"]:
+                continue   # a buyer of our side: not a seller to our bid
+            sold_any += n
+            low = px if low is None else min(low, px)
+            take = 0.0
+            if abs(px - price) < 1e-6:
+                take = max(0.0, n - q)
+                q = max(0.0, q - n)
+                at_after_q += take
+            elif px < price:
+                take = n
+                below += n
+            if take and t_cl - ts >= 10:
+                late_ok += take
+            if fill_t is None and at_after_q + below >= need - 1e-9:
+                fill_t = ts
+        mine = min(need, at_after_q + below)
+        out = {"ticker": c["ticker"], "side": c["side"], "price": price, "won": c["exit"] >= 0.5, "paper_filled": c["shares"],
+               "queue": c.get("queue"), "front": c.get("front"), "left_min": c.get("minutes_left"),
+               "recheck_filled": round(mine, 2), "sold_at_after_queue": round(at_after_q), "sold_below": round(below),
+               "low": low, "fill_s_before_close": None if fill_t is None else round(t_cl - fill_t, 1),
+               "sells_after_bid": round(sold_any), "trades_after_close": after_close, "complete": complete}
+        print("FA", json.dumps(out))
+        agg["n"] += 1
+        agg["lost"] += not out["won"]
+        agg["match"] += abs(mine - min(need, c["shares"])) < 1e-6 or mine >= c["shares"] - 1e-6
+        agg["strict_below"] += below >= need - 1e-9
+        agg["strict_10s"] += late_ok >= need - 1e-9
+        agg["strict_2x"] += at_after_q + below >= 2 * need - 1e-9
+        agg["via_below"] += below > 0
+        agg["fill_last10s"] += fill_t is not None and t_cl - fill_t < 10
+        agg["fill_last30s"] += fill_t is not None and t_cl - fill_t < 30
+        agg["incomplete"] += not complete
+    print("FA_SUM", track, json.dumps(dict(agg)))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if "_" in cmd:   # probe form: kc_fetch_30, kc_pmfetch_2
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "fillaudit": lambda: fillaudit(arg), "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
      "pmfetch": lambda: pm_fetch(arg or 30), "pmrun": lambda: pm_run(log=arg == "log"),
      "pmall": lambda: (fetch(60), pm_fetch(arg or 30), pm_run()),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
