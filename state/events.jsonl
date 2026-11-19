@@ -24233,3 +24233,5 @@
 {"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV191715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-19T22:17:07Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV191715-15", "track": "kc_maker_safe_usd", "ts": "2026-11-19T22:17:07Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV191715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-19T22:17:07Z", "type": "kmaker_fill"}
+{"fee": 0.0, "outcome": "No", "price": 0.8946, "shares": 5, "title": "Israeli airspace closed by November 30, 2026?", "token": "42234331617021352957533367746676448160436161779679178875568441203107991456731", "track": "w_anoin123", "ts": "2026-11-19T22:20:39Z", "type": "paper_buy"}
+{"fee": 0.0, "outcome": "No", "price": 0.8946, "shares": 5, "title": "Israeli airspace closed by November 30, 2026?", "token": "42234331617021352957533367746676448160436161779679178875568441203107991456731", "track": "wb_anoin123", "ts": "2026-11-19T22:20:39Z", "type": "paper_buy"}
