@@ -24191,3 +24191,5 @@
 {"filled": 10.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXSERIEATOTAL-26NOV22SASGEN-6", "track": "kalshi_patient", "ts": "2026-11-19T21:49:52Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXUFCVICROUND-26NOV21PROSTI-PRO3", "track": "kalshi_patient", "ts": "2026-11-19T21:49:52Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXXRPD-26NOV1917-T0.9799", "track": "kalshi_patient", "ts": "2026-11-19T21:49:53Z", "type": "kpatient_fill"}
+{"outcome": "Yes", "pnl": 1.3106, "price": 1.0, "reason": "resolved", "title": "Walmart (WMT) Q3 US eCommerce sales growth 21% to 25%?", "token": "1198369059272337837983197710023977775503199909109881099743328779305488526293", "track": "wb_youngalphagoat", "ts": "2026-11-19T21:51:37Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": -1.1943, "price": 0.0, "reason": "resolved", "title": "Will Paris FC vs. HB K\u00f8ge end in a draw?", "token": "79610880393132901696807941273174773047237929464309286596221988419705027874144", "track": "soccer_draw", "ts": "2026-11-19T21:51:38Z", "type": "paper_close"}
