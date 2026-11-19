@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   95,
-   237
+   99,
+   246
   ],
   "S:andy burnham": [
    8,
@@ -63,6 +63,10 @@
   "S:trump": [
    12,
    35
+  ],
+  "S:walmart": [
+   4,
+   9
   ],
   "ST:andy burnham|billion/million/trillion#5+": [
    1,
@@ -908,6 +912,42 @@
    0,
    1
   ],
+  "ST:walmart|amazon": [
+   0,
+   1
+  ],
+  "ST:walmart|competition/competitor": [
+   1,
+   1
+  ],
+  "ST:walmart|doordash/instacart": [
+   0,
+   1
+  ],
+  "ST:walmart|drone": [
+   0,
+   1
+  ],
+  "ST:walmart|pharmacy": [
+   1,
+   1
+  ],
+  "ST:walmart|rollback": [
+   1,
+   1
+  ],
+  "ST:walmart|snap": [
+   0,
+   1
+  ],
+  "ST:walmart|tariff": [
+   1,
+   1
+  ],
+  "ST:walmart|zipline": [
+   0,
+   1
+  ],
   "T:adobe": [
    0,
    1
@@ -961,6 +1001,10 @@
    1
   ],
   "T:allah": [
+   0,
+   1
+  ],
+  "T:amazon": [
    0,
    1
   ],
@@ -1100,6 +1144,10 @@
    2,
    2
   ],
+  "T:competition/competitor": [
+   1,
+   1
+  ],
   "T:contestant": [
    1,
    2
@@ -1156,11 +1204,19 @@
    0,
    1
   ],
+  "T:doordash/instacart": [
+   0,
+   1
+  ],
   "T:dram#10+": [
    1,
    1
   ],
   "T:dream": [
+   0,
+   1
+  ],
+  "T:drone": [
    0,
    1
   ],
@@ -1460,6 +1516,10 @@
    0,
    1
   ],
+  "T:pharmacy": [
+   1,
+   1
+  ],
   "T:pipeline": [
    1,
    1
@@ -1544,6 +1604,10 @@
    1,
    1
   ],
+  "T:rollback": [
+   1,
+   1
+  ],
   "T:router": [
    0,
    1
@@ -1578,7 +1642,7 @@
   ],
   "T:snap": [
    0,
-   1
+   2
   ],
   "T:son": [
    0,
@@ -1625,8 +1689,8 @@
    1
   ],
   "T:tariff": [
-   1,
-   3
+   2,
+   4
   ],
   "T:tesla": [
    0,
@@ -1688,9 +1752,13 @@
    0,
    1
   ],
+  "T:zipline": [
+   0,
+   1
+  ],
   "W:earnings-call-mentions": [
-   48,
-   83
+   52,
+   92
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1764,6 +1832,10 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|amazon": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|apple/tim cook": [
    0,
    1
@@ -1812,6 +1884,10 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|competition/competitor": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|crane": [
    1,
    1
@@ -1844,8 +1920,16 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|doordash/instacart": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|dram#10+": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|drone": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|ebitda": [
@@ -1944,6 +2028,10 @@
    1,
    2
   ],
+  "WT:earnings-call-mentions|pharmacy": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|pipeline": [
    1,
    1
@@ -1988,6 +2076,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|rollback": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|router": [
    0,
    1
@@ -2002,7 +2094,7 @@
   ],
   "WT:earnings-call-mentions|snap": [
    0,
-   1
+   2
   ],
   "WT:earnings-call-mentions|splunk": [
    1,
@@ -2021,8 +2113,8 @@
    1
   ],
   "WT:earnings-call-mentions|tariff": [
-   1,
-   2
+   2,
+   3
   ],
   "WT:earnings-call-mentions|token#25+": [
    0,
@@ -2041,6 +2133,10 @@
    1
   ],
   "WT:earnings-call-mentions|uranium": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|zipline": [
    0,
    1
   ],
@@ -2803,6 +2899,15 @@
   "7003828": 1795064340,
   "7003829": 1795064340,
   "7003830": 1795064340,
+  "7003837": 1795150740,
+  "7003838": 1795150740,
+  "7003839": 1795150740,
+  "7003840": 1795150740,
+  "7003841": 1795150740,
+  "7003842": 1795150740,
+  "7003843": 1795150740,
+  "7003844": 1795150740,
+  "7003845": 1795150740,
   "7106880": 1795132740,
   "7106881": 1795132740,
   "7106882": 1795132740,
@@ -2816,5 +2921,5 @@
   "7106890": 1795132740,
   "7106891": 1795132740
  },
- "synced": 1795104022
+ "synced": 1795106019
 }
