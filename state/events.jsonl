@@ -24115,3 +24115,5 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV20UCFVAN-UCF", "track": "kalshi_patient", "ts": "2026-11-19T20:41:32Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNBAREB-26NOV19LACSAS-LACDJONES5-8", "track": "kalshi_patient", "ts": "2026-11-19T20:41:32Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXNCAAFTOTAL-26NOV21CHARTLSA-33", "track": "kalshi_patient", "ts": "2026-11-19T20:41:32Z", "type": "kpatient_order"}
+{"outcome": "No", "pnl": -2.8862, "price": 0.0, "reason": "resolved", "title": "Will Bitcoin dip to $62,000 November 16-22?", "token": "5729568652644465719115156880219930392738959353971883361277579248660895142419", "track": "w_tokor", "ts": "2026-11-19T20:43:55Z", "type": "paper_close"}
+{"outcome": "No", "pnl": -2.8862, "price": 0.0, "reason": "resolved", "title": "Will Bitcoin dip to $62,000 November 16-22?", "token": "5729568652644465719115156880219930392738959353971883361277579248660895142419", "track": "wb_tokor", "ts": "2026-11-19T20:43:55Z", "type": "paper_close"}
