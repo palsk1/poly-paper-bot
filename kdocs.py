@@ -6,6 +6,8 @@ price feed, every websocket). This script only tries the ones that need no login
 
     python3 kdocs.py check   # probe kd_check: live price chart behind a 15-minute crypto event, fee changes,
                              # exchange schedule, many order books in one call, weather index, endpoint costs
+    python3 kdocs.py depth   # probe kd_depth: how many days back that per-second chart goes
+    python3 kdocs.py agree   # probe kd_agree: recent windows, Kalshi's own number vs Binance at 45 s / 3 min left
 
 No key, no orders, read-only.
 """
@@ -142,6 +144,92 @@ def check():
     show("incentive programs, active, first page", lambda: get("/incentive_programs", {"status": "active", "limit": 5}))
 
 
+MON = "JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC".split()
+
+
+def ev_ticker(series, close_utc):
+    """Kalshi 15-minute event tickers name the close in New York time, e.g. KXBTC15M-26NOV190145."""
+    et = close_utc - dt.timedelta(hours=5 if close_utc.month in (11, 12, 1, 2) or (close_utc.month == 3 and close_utc.day < 9) else 4)
+    return f"{series}-{et:%y}{MON[et.month - 1]}{et:%d%H%M}"
+
+
+def series_of(ev):
+    r = get(f"/live_data/events/{ev}")
+    return ((r.get("live_data") or {}).get("details") or {}).get("timeseries") or []
+
+
+def depth():
+    """How far back does the per-second chart go? Try one window a day back to 120 days."""
+    now = dt.datetime.now(UTC).replace(minute=0, second=0, microsecond=0)
+    for days in (1, 3, 7, 14, 21, 30, 45, 60, 90, 120):
+        c = now - dt.timedelta(days=days)
+        ev = ev_ticker("KXBTC15M", c)
+        try:
+            ts = series_of(ev)
+            print(f"{days:4d} days back {ev}: {len(ts)} points"
+                  + (f", {dt.datetime.fromtimestamp(ts[0]['t'] / 1000, UTC):%m-%d %H:%M:%S} to "
+                     f"{dt.datetime.fromtimestamp(ts[-1]['t'] / 1000, UTC):%m-%d %H:%M:%S}" if ts else ""))
+        except Exception as e:
+            print(f"{days:4d} days back {ev}: FAILED {e}")
+
+
+def agree(n=300):
+    """Recent settled windows: does Kalshi's own per-second number tell the result, and how often does Binance
+    (what kc_maker_safe and the fast Kalshi tests look at) point the other way, at 45 s and 3 minutes before the close?"""
+    syms = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT"}
+    for series, sym in syms.items():
+        ms, cur = [], None
+        while len(ms) < n:
+            p = {"series_ticker": series, "status": "settled", "limit": 200}
+            if cur:
+                p["cursor"] = cur
+            r = get("/markets", p)
+            ms += r.get("markets") or []
+            cur = r.get("cursor")
+            if not cur:
+                break
+        ms = ms[:n]
+        tally = {"n": 0, "end_ok": 0, "k45": 0, "b45": 0, "k180": 0, "b180": 0, "b45_wrong_k_right": 0,
+                 "k45_wrong_b_right": 0, "gap": []}
+        for m in ms:
+            try:
+                close = dt.datetime.fromisoformat(m["close_time"].replace("Z", "+00:00"))
+                t = int(close.timestamp() * 1000)
+                fs = float(m.get("floor_strike"))
+                res = m.get("result")
+                ts = series_of(m["event_ticker"])
+                if not ts or res not in ("yes", "no"):
+                    continue
+                kv = {p["t"] // 1000: p["v"] for p in ts}
+                kl = bot.http_json("https://data-api.binance.vision/api/v3/klines",
+                                   {"symbol": sym, "interval": "1s", "startTime": t - 240000, "endTime": t})
+                bv = {int(c[0]) // 1000: float(c[4]) for c in kl}
+            except Exception as e:
+                print("skip", m.get("ticker"), e)
+                continue
+            T = t // 1000
+            win = res == "yes"
+            tally["n"] += 1
+            tally["end_ok"] += ((kv.get(T, kv[max(kv)]) >= fs) == win)
+            for lead, key in ((45, "45"), (180, "180")):
+                k = kv.get(T - lead)
+                # Binance: the 60 s average as of that second (the bot's habit), not the raw price
+                b = [bv[s] for s in range(T - lead - 59, T - lead + 1) if s in bv]
+                if k is None or not b:
+                    continue
+                kr = (k >= fs) == win
+                br = (sum(b) / len(b) >= fs) == win
+                tally["k" + key] += kr
+                tally["b" + key] += br
+                if key == "45":
+                    tally["b45_wrong_k_right"] += (kr and not br)
+                    tally["k45_wrong_b_right"] += (br and not kr)
+                    tally["gap"].append((sum(b) / len(b) - k) / k * 10000)
+        g = sorted(tally.pop("gap"))
+        print(series, json.dumps(tally), f"Binance minus Kalshi at 45 s, in 1/100 of a percent: median "
+              f"{g[len(g) // 2]:.1f}" if g else "")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
-    {"check": check}[cmd]()
+    {"check": check, "depth": depth, "agree": agree}[cmd]()
