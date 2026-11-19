@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   89,
-   217
+   92,
+   225
   ],
   "S:andy burnham": [
    8,
@@ -51,6 +51,10 @@
   "S:nyt front page headlines": [
    3,
    17
+  ],
+  "S:palo alto networks": [
+   3,
+   8
   ],
   "S:target": [
    6,
@@ -708,6 +712,38 @@
    0,
    1
   ],
+  "ST:palo alto networks|agent/agentic#15+": [
+   1,
+   1
+  ],
+  "ST:palo alto networks|china": [
+   0,
+   1
+  ],
+  "ST:palo alto networks|crowdstrike": [
+   0,
+   1
+  ],
+  "ST:palo alto networks|defense": [
+   1,
+   1
+  ],
+  "ST:palo alto networks|frontier": [
+   1,
+   1
+  ],
+  "ST:palo alto networks|israel": [
+   0,
+   1
+  ],
+  "ST:palo alto networks|quantum": [
+   0,
+   1
+  ],
+  "ST:palo alto networks|ransomware": [
+   0,
+   1
+  ],
   "ST:target|affordability/affordable": [
    1,
    1
@@ -842,6 +878,10 @@
   ],
   "T:africa": [
    0,
+   1
+  ],
+  "T:agent/agentic#15+": [
+   1,
    1
   ],
   "T:ai#25+": [
@@ -984,6 +1024,10 @@
    0,
    1
   ],
+  "T:china": [
+   0,
+   1
+  ],
   "T:china/chinese": [
    1,
    1
@@ -1008,6 +1052,10 @@
    1,
    1
   ],
+  "T:crowdstrike": [
+   0,
+   1
+  ],
   "T:customer#25+": [
    1,
    1
@@ -1023,6 +1071,10 @@
   "T:defence": [
    1,
    2
+  ],
+  "T:defense": [
+   1,
+   1
   ],
   "T:deposition": [
    1,
@@ -1109,6 +1161,10 @@
    1
   ],
   "T:forecast": [
+   1,
+   1
+  ],
+  "T:frontier": [
    1,
    1
   ],
@@ -1238,7 +1294,7 @@
   ],
   "T:israel": [
    0,
-   1
+   2
   ],
   "T:israel/israeli": [
    1,
@@ -1374,7 +1430,7 @@
   ],
   "T:quantum": [
    1,
-   1
+   2
   ],
   "T:quarter#10+": [
    1,
@@ -1385,6 +1441,10 @@
    1
   ],
   "T:race": [
+   0,
+   1
+  ],
+  "T:ransomware": [
    0,
    1
   ],
@@ -1541,8 +1601,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   45,
-   75
+   48,
+   83
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1589,6 +1649,10 @@
    1
   ],
   "WT:earnings-call-mentions|affordability/affordable": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|agent/agentic#15+": [
    1,
    1
   ],
@@ -1648,12 +1712,20 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|china": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|churn": [
    0,
    1
   ],
   "WT:earnings-call-mentions|crane": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|crowdstrike": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|customer#25+": [
@@ -1666,6 +1738,10 @@
   ],
   "WT:earnings-call-mentions|debt": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|defense": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|deposition": [
@@ -1693,6 +1769,10 @@
    1
   ],
   "WT:earnings-call-mentions|forecast": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|frontier": [
    1,
    1
   ],
@@ -1729,6 +1809,10 @@
    1
   ],
   "WT:earnings-call-mentions|iran": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|israel": [
    0,
    1
   ],
@@ -1794,10 +1878,14 @@
   ],
   "WT:earnings-call-mentions|quantum": [
    1,
-   1
+   2
   ],
   "WT:earnings-call-mentions|quarter#10+": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|ransomware": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|revenue#20+": [
@@ -2566,7 +2654,15 @@
   "7003606": 1795064340,
   "7003607": 1795064340,
   "7003608": 1795064340,
-  "7003609": 1795064340
+  "7003609": 1795064340,
+  "7003823": 1795064340,
+  "7003824": 1795064340,
+  "7003825": 1795064340,
+  "7003826": 1795064340,
+  "7003827": 1795064340,
+  "7003828": 1795064340,
+  "7003829": 1795064340,
+  "7003830": 1795064340
  },
- "synced": 1795047592
+ "synced": 1795049516
 }
