@@ -22999,3 +22999,20 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXWTIH-26NOV1902-T82.69", "track": "kalshi_patient", "ts": "2026-11-19T06:47:57Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNCAAFTEAMTOTAL-26NOV21SDSUBSU-BSU61", "track": "kalshi_patient", "ts": "2026-11-19T06:47:57Z", "type": "kpatient_order"}
 {"cost": 4.1853, "title": "Will Donald Trump post 40-59 Truth Social posts from November 20 to November 27, 2026?", "token": "63621062193296577701837237783342821183818337267701233281750299769810961015425", "track": "postcount_no", "ts": "2026-11-19T06:52:09Z", "type": "skip_no_cash"}
+{"minutes_left": 2.95, "price": 0.964, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV190200-00", "track": "kc_maker", "ts": "2026-11-19T06:57:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.964, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV190200-00", "track": "kc_maker_safe", "ts": "2026-11-19T06:57:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 8190.67, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV190200-00", "track": "kc_maker", "ts": "2026-11-19T06:57:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 8190.67, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV190200-00", "track": "kc_maker_safe", "ts": "2026-11-19T06:57:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.994, "queue": 8190.67, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV190200-00", "track": "kc_maker_safe_usd", "ts": "2026-11-19T06:57:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.982, "queue": 345.63, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV190200-00", "track": "kc_maker", "ts": "2026-11-19T06:57:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.982, "queue": 345.63, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV190200-00", "track": "kc_maker_safe", "ts": "2026-11-19T06:57:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 100.65, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV190200-00", "track": "kc_maker", "ts": "2026-11-19T06:57:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 100.65, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV190200-00", "track": "kc_maker_safe", "ts": "2026-11-19T06:57:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.993, "queue": 100.65, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV190200-00", "track": "kc_maker_safe_usd", "ts": "2026-11-19T06:57:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.979, "queue": 15.84, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190200-00", "track": "kc_maker", "ts": "2026-11-19T06:57:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.95, "price": 0.979, "queue": 15.84, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190200-00", "track": "kc_maker_safe", "ts": "2026-11-19T06:57:06Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXBOXING-26NOV20FUNDORZAPOTO-ZAPOTO", "track": "kalshi_patient", "ts": "2026-11-19T06:57:07Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXHIGHTLV-26NOV19-B59.5", "track": "kalshi_patient", "ts": "2026-11-19T06:57:07Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "yes", "through": false, "ticker": "KXITFWMATCH-26NOV19THALAT-THA", "track": "kalshi_patient", "ts": "2026-11-19T06:57:07Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNCAAMBGAME-26NOV20BLOOMUMES-BLOOM", "track": "kalshi_patient", "ts": "2026-11-19T06:57:07Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXSUPERLIGGAME-26NOV21GALSAM-SAM", "track": "kalshi_patient", "ts": "2026-11-19T06:57:11Z", "type": "kpatient_fill"}
