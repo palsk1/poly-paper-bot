@@ -23628,3 +23628,9 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNBA1HSPREAD-26NOV19NYKMIN-NYK16", "track": "kalshi_patient", "ts": "2026-11-19T15:38:15Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXLOWTLV-26NOV19-B45.5", "track": "kalshi_patient", "ts": "2026-11-19T15:38:15Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXSERIEATOTAL-26NOV22JUVVEN-6", "track": "kalshi_patient", "ts": "2026-11-19T15:38:15Z", "type": "kpatient_order"}
+{"fee": 0.0134, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the price of Solana be above $75 on November 19?", "token": "86701699441136425221550371460998545135929097651755110321941003131462098841003", "track": "endgame_sell98", "ts": "2026-11-19T15:41:51Z", "type": "paper_buy"}
+{"fee": 0.0077, "outcome": "No", "price": 0.96, "shares": 5, "title": "S&P 500 (SPY) closes above $740 on November 19?", "token": "59564851313489908564485205607613566604212838745945247472794775563519743950661", "track": "endgame_sell98", "ts": "2026-11-19T15:41:51Z", "type": "paper_buy"}
+{"cost": 4.2946, "title": "Will the price of Bitcoin be above $66,000 on November 24?", "token": "97341116867302144298880072870052219474376312646922883164269486134073279025004", "track": "crypto_no", "ts": "2026-11-19T15:51:20Z", "type": "skip_no_cash"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXLOWTNYC-26NOV18-T46", "track": "kalshi_patient", "ts": "2026-11-19T15:51:39Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLTEAMFIRSTTD-26NOV19INDHOU-HOU-HOUDST", "track": "kalshi_patient", "ts": "2026-11-19T15:51:40Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "yes", "through": true, "ticker": "KXSILVERD-26NOV1917-T44.25", "track": "kalshi_patient", "ts": "2026-11-19T15:51:40Z", "type": "kpatient_fill"}
