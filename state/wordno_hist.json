@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   92,
-   225
+   95,
+   237
   ],
   "S:andy burnham": [
    8,
@@ -61,8 +61,8 @@
    8
   ],
   "S:trump": [
-   9,
-   23
+   12,
+   35
   ],
   "ST:andy burnham|billion/million/trillion#5+": [
    1,
@@ -776,6 +776,10 @@
    1,
    1
   ],
+  "ST:trump|alaska": [
+   0,
+   1
+  ],
   "ST:trump|allah": [
    0,
    1
@@ -794,6 +798,14 @@
   ],
   "ST:trump|china/chinese": [
    1,
+   1
+  ],
+  "ST:trump|china/russia (15+ times)": [
+   0,
+   1
+  ],
+  "ST:trump|diesel": [
+   0,
    1
   ],
   "ST:trump|election": [
@@ -820,6 +832,10 @@
    1,
    1
   ],
+  "ST:trump|iran": [
+   1,
+   1
+  ],
   "ST:trump|iran/iranian (3+ times)": [
    1,
    1
@@ -828,7 +844,23 @@
    0,
    1
   ],
+  "ST:trump|japan": [
+   0,
+   1
+  ],
+  "ST:trump|nato": [
+   0,
+   1
+  ],
+  "ST:trump|nobel": [
+   0,
+   1
+  ],
   "ST:trump|not on the ballot": [
+   1,
+   1
+  ],
+  "ST:trump|nuclear/nuke": [
    1,
    1
   ],
@@ -844,8 +876,16 @@
    1,
    1
   ],
+  "ST:trump|si/superintelligence": [
+   0,
+   1
+  ],
   "ST:trump|stock market": [
    1,
+   1
+  ],
+  "ST:trump|taiwan": [
+   0,
    1
   ],
   "ST:trump|tariff": [
@@ -856,8 +896,16 @@
    0,
    1
   ],
+  "ST:trump|ukraine": [
+   1,
+   1
+  ],
   "ST:trump|veto": [
    1,
+   1
+  ],
+  "ST:trump|zelensky": [
+   0,
    1
   ],
   "T:adobe": [
@@ -901,6 +949,10 @@
    1
   ],
   "T:ai/artificial intelligence#40+": [
+   0,
+   1
+  ],
+  "T:alaska": [
    0,
    1
   ],
@@ -1032,6 +1084,10 @@
    1,
    1
   ],
+  "T:china/russia (15+ times)": [
+   0,
+   1
+  ],
   "T:churn": [
    0,
    1
@@ -1078,6 +1134,10 @@
   ],
   "T:deposition": [
    1,
+   1
+  ],
+  "T:diesel": [
+   0,
    1
   ],
   "T:dividend": [
@@ -1277,8 +1337,8 @@
    1
   ],
   "T:iran": [
-   0,
-   1
+   1,
+   2
   ],
   "T:iran/iranian": [
    1,
@@ -1298,6 +1358,10 @@
   ],
   "T:israel/israeli": [
    1,
+   1
+  ],
+  "T:japan": [
+   0,
    1
   ],
   "T:kang": [
@@ -1348,6 +1412,10 @@
    0,
    1
   ],
+  "T:nato": [
+   0,
+   1
+  ],
   "T:nfl": [
    1,
    1
@@ -1356,11 +1424,19 @@
    0,
    2
   ],
+  "T:nobel": [
+   0,
+   1
+  ],
   "T:not on the ballot": [
    1,
    1
   ],
   "T:nuclear#20+": [
+   1,
+   1
+  ],
+  "T:nuclear/nuke": [
    1,
    1
   ],
@@ -1496,6 +1572,10 @@
    1,
    1
   ],
+  "T:si/superintelligence": [
+   0,
+   1
+  ],
   "T:snap": [
    0,
    1
@@ -1538,7 +1618,7 @@
   ],
   "T:taiwan": [
    0,
-   1
+   2
   ],
   "T:talarico": [
    0,
@@ -1576,6 +1656,10 @@
    0,
    1
   ],
+  "T:ukraine": [
+   1,
+   1
+  ],
   "T:united nations": [
    0,
    1
@@ -1597,6 +1681,10 @@
    2
   ],
   "T:war": [
+   0,
+   1
+  ],
+  "T:zelensky": [
    0,
    1
   ],
@@ -1635,6 +1723,10 @@
   "W:trump-weekly-mentions": [
    5,
    10
+  ],
+  "W:what will trump say trilateral meeting with xi and putin": [
+   3,
+   12
   ],
   "W:what will trump say veterans day remarks arlington": [
    4,
@@ -2384,6 +2476,54 @@
    1,
    1
   ],
+  "WT:what will trump say trilateral meeting with xi and putin|alaska": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|china/russia (15+ times)": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|diesel": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|iran": [
+   1,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|japan": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|nato": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|nobel": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|nuclear/nuke": [
+   1,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|si/superintelligence": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|taiwan": [
+   0,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|ukraine": [
+   1,
+   1
+  ],
+  "WT:what will trump say trilateral meeting with xi and putin|zelensky": [
+   0,
+   1
+  ],
   "WT:what will trump say veterans day remarks arlington|allah": [
    0,
    1
@@ -2662,7 +2802,19 @@
   "7003827": 1795064340,
   "7003828": 1795064340,
   "7003829": 1795064340,
-  "7003830": 1795064340
+  "7003830": 1795064340,
+  "7106880": 1795132740,
+  "7106881": 1795132740,
+  "7106882": 1795132740,
+  "7106883": 1795132740,
+  "7106884": 1795132740,
+  "7106885": 1795132740,
+  "7106886": 1795132740,
+  "7106887": 1795132740,
+  "7106888": 1795132740,
+  "7106889": 1795132740,
+  "7106890": 1795132740,
+  "7106891": 1795132740
  },
- "synced": 1795090830
+ "synced": 1795092721
 }
