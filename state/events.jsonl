@@ -23113,3 +23113,4 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNCAAFGAME-26NOV21AAMUMVSU-MVSU", "track": "kalshi_patient", "ts": "2026-11-19T08:43:34Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXPARKCOPEN-27-22NOV26", "track": "kalshi_patient", "ts": "2026-11-19T08:43:34Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXF1BIGGESTMOVER-LASV26-RUS", "track": "kalshi_patient", "ts": "2026-11-19T08:43:34Z", "type": "kpatient_order"}
+{"outcome": "Yes", "pnl": 0.332, "price": 0.772, "reason": "take profit (now 78c), book", "title": "Will Anthropic's valuation hit (HIGH) $1.5T by December 31?", "token": "35463080027643710943404451740372279284756519666289737675927914180433392453861", "track": "panic_fade_10c", "ts": "2026-11-19T08:50:44Z", "type": "paper_close"}
