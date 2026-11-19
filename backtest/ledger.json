@@ -1986,6 +1986,32 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "wallet5m.py run"
+  },
+  {
+   "id": "kc_maker_safe_check_on_binance_re_test_3_min",
+   "date": "2026-11-19",
+   "what": "kc_maker_safe check on Binance (re-test, 3 min)",
+   "tries": 6,
+   "bets": 16120,
+   "groups": 16120,
+   "per100": 0.47,
+   "floor100": 0.24,
+   "verdict": "Looks real",
+   "status": "open",
+   "src": "kdocs.py run"
+  },
+  {
+   "id": "kc_maker_safe_check_on_kalshi_s_own_number_twin_rule_3_min",
+   "date": "2026-11-19",
+   "what": "kc_maker_safe check on Kalshi's own number (twin rule, 3 min)",
+   "tries": 6,
+   "bets": 16189,
+   "groups": 16189,
+   "per100": 0.4,
+   "floor100": 0.19,
+   "verdict": "Looks real",
+   "status": "open",
+   "src": "kdocs.py run"
   }
  ]
 }

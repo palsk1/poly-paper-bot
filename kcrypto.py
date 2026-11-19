@@ -367,7 +367,23 @@ def load_windows(series=None):
             if not rows:
                 continue
             out.append({**m, "c": {r[0]: r[1:] for r in rows if r and r[0]}, "spot": spot})
+            fix_cents(out[-1]["c"])
     return sorted(out, key=lambda w: w["close"])
+
+
+def fix_cents(c):
+    """Trap (found 19 Nov): candles read through /historical/markets/.../candlesticks carry dollars under the old
+    cents names, so candle_row divides them by 100 again and the whole window comes out 100 times too small
+    (a 99.3c bid shows as 0.00993). Real prices are whole tenths of a cent; a window whose prices all sit at or
+    under 1c and are not whole tenths of a cent is scaled back up. Returns True if it changed the window."""
+    vals = [x for r in c.values() for x in r[:4] if x is not None]
+    if not vals or max(vals) > 0.0101:
+        return False
+    if all(abs(x * 1000 - round(x * 1000)) < 1e-6 for x in vals):
+        return False
+    for t, r in c.items():
+        c[t] = [None if x is None else round(x * 100, 6) for x in r[:4]] + list(r[4:])
+    return True
 
 
 def side_view(row, side):
