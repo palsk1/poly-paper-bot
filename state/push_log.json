@@ -33,7 +33,7 @@
   "2026-11-19": {
    "failed": 0,
    "muted": 54,
-   "sent": 7
+   "sent": 8
   }
  },
  "recent": [
@@ -606,6 +606,12 @@
    "title": "[panic_fade_4c] sold Yes at 86c (+$0.66)",
    "track": "panic_fade_4c",
    "ts": "2026-11-19T11:25:39Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 1 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-19T13:02:54Z"
   }
  ]
 }
