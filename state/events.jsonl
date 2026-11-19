@@ -22625,3 +22625,10 @@
 {"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV18MILMIA-MIL10", "track": "kalshi_patient", "ts": "2026-11-19T03:02:25Z", "type": "kpatient_result"}
 {"pnl": 0.0075, "price": 0.95, "shares": 0.15, "side": "no", "ticker": "KXNCAAWBGAME-26NOV18CCARIND-CCAR", "track": "kalshi_patient", "ts": "2026-11-19T03:02:25Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV19INDHOU-INDAGOULD6-80", "track": "kalshi_patient", "ts": "2026-11-19T03:06:22Z", "type": "kpatient_fill"}
+{"outcome": "Draw", "pnl": -1.1429, "price": 0.0, "reason": "resolved", "title": "Will Clube do Remo vs. Associa\u00e7\u00e3o Chapecoense de Futebol end in a draw?", "token": "35890445665362933868646354758832826164263356183178453985037141544788665767041", "track": "soccer_draw", "ts": "2026-11-19T03:10:44Z", "type": "paper_close"}
+{"minutes_left": 2.94, "price": 0.994, "queue": 198.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV182215-15", "track": "kc_maker", "ts": "2026-11-19T03:12:03Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.98, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV182215-15", "track": "kc_maker", "ts": "2026-11-19T03:12:04Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.998, "queue": 0.2, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV182215-15", "track": "kc_maker", "ts": "2026-11-19T03:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.998, "queue": 0.2, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV182215-15", "track": "kc_maker_safe", "ts": "2026-11-19T03:12:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.998, "queue": 0.2, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV182215-15", "track": "kc_maker_safe_usd", "ts": "2026-11-19T03:12:06Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.991, "queue": 17.34, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV182215-15", "track": "kc_maker", "ts": "2026-11-19T03:12:06Z", "type": "kmaker_order"}
