@@ -178,6 +178,13 @@
       "say": "Same as kc_maker_safe, with one fix: Binance prices run a hair higher than Kalshi's, so it corrects for that before deciding Bitcoin is 'well clear'.",
       "group": "kcmaker"
     },
+    "kc_maker_safe_kprice": {
+      "say": "Same as kc_maker_safe, but it checks 'is the coin well clear of the start price?' on Kalshi's own price, the exact number that decides the bet, instead of on Binance.",
+      "example": "Bitcoin started the 15 minutes at $63,400. With 3 minutes left Kalshi's own price says $63,480, far enough above. We offer 96c for Yes. Bitcoin stays above: the $0.96 pays $1.00.",
+      "wins": "The coin stays on the winning side to the end, like almost always when it is that far clear.",
+      "loses": "The coin swings back across the start price in the last minutes. One loss eats about 25 wins.",
+      "group": "kcmaker"
+    },
     "combo_house": {
       "say": "Pretends to be the 'house' for parlays (bets that combine 2-4 games, where every game must win). When someone asks for a price, we write down what we'd offer. We keep their money if any game loses, and pay out if they all win. Runs on your AWS server, no real money.",
       "example": "Someone wants to bet that Arsenal AND the Lakers both win. Each is about a coin flip, so a fair price is about 25c for every $1 they could win. We'd ask 26c (the extra 1c is our profit). If a pro asked more, we count it as our sale. Either team loses: we keep the 26c. Both win: we pay $1.",

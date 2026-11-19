@@ -78,6 +78,7 @@ jobs:
           case "${{ inputs.what }}" in w5m_*) PYTHONUNBUFFERED=1 python3 wallet5m.py $(echo '${{ inputs.what }}' | sed 's/^w5m_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in hab_*) PYTHONUNBUFFERED=1 python3 habits.py "$(echo '${{ inputs.what }}' | sed 's/^hab_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kmn_*) PYTHONUNBUFFERED=1 python3 kmentions.py "$(echo '${{ inputs.what }}' | sed 's/^kmn_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in kd_*) PYTHONUNBUFFERED=1 python3 kdocs.py "$(echo '${{ inputs.what }}' | sed 's/^kd_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kh_*) PYTHONUNBUFFERED=1 python3 khouse.py "$(echo '${{ inputs.what }}' | sed 's/^kh_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
