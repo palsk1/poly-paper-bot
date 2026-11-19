@@ -24398,3 +24398,4 @@
 {"kind": "sports", "price": 0.9117, "shares": 10, "side": "no", "ticker": "KXNBAESCALATOR3PT-26NOV19PORMIL-PORDLILLARD0", "track": "kalshi_patient", "ts": "2026-11-19T23:29:11Z", "type": "kpatient_order"}
 {"outcome": "No", "pnl": 1.9202, "price": 1.0, "reason": "resolved", "title": "Will White House post 180-199 posts from November 13 to November 20, 2026?", "token": "48047397298456006069466360626653516004207743536252068336378870990968734456397", "track": "postcount_no", "ts": "2026-11-19T23:30:58Z", "type": "paper_close"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV191830-30", "track": "kc_maker", "ts": "2026-11-19T23:32:13Z", "type": "kmaker_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXWTI-26NOV1914-T85.49", "track": "kalshi_patient", "ts": "2026-11-19T23:37:29Z", "type": "kpatient_result"}
