@@ -22830,3 +22830,11 @@
 {"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:46:30Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.16, "price": 0.984, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV182345-45", "track": "kc_maker_safe", "ts": "2026-11-19T04:46:30Z", "type": "kmaker_fill"}
 {"filled": 5.3, "pnl": 0.0742, "price": 0.986, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV182345-45", "track": "kc_maker_safe_usd", "ts": "2026-11-19T04:46:30Z", "type": "kmaker_fill"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXBUNDESLIGATOTAL-26NOV21BMGBVB-1", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXART-CHR24B19NOV26-6000000", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV20BAYUSC-USC", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV22MINSF-SFKBLACK26-70", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXBOXING-26NOV20PRICEKOTASK-PRICE", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22JACNYG-NYGMNABERS1-2", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXXRPD-26NOV2017-T0.8999", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXNCAAMBGAME-26NOV20CAMPKSU-KSU", "track": "kalshi_patient", "ts": "2026-11-19T04:52:51Z", "type": "kpatient_order"}
