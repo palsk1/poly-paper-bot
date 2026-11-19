@@ -687,5 +687,25 @@
   "title": "Will Nvidia (NVDA) beat quarterly earnings?",
   "token": "91356921435862041931625399382575609211778425465834891334254823856069369462115",
   "ts": "2026-11-17T23:25:20Z"
+ },
+ {
+  "days_left": 42.2,
+  "early": false,
+  "end": "2027-01-01",
+  "event_slug": "ipos-before-2027",
+  "exit_price": 1.0,
+  "first_seen": null,
+  "his_avg": 0.9092,
+  "kind": "redeemed",
+  "left_on_table_per_share": 0.0,
+  "outcome": "Yes",
+  "price_source": "settled price",
+  "profit_per_share": 0.0908,
+  "profit_usd": 272.44,
+  "shares": 3000.43,
+  "slug": "anthropic-ipo-before-2027",
+  "title": "Anthropic IPO before 2027?",
+  "token": "31650083965282390269113502048883725495895331661148956202621012482964650485070",
+  "ts": "2026-11-19T18:55:22Z"
  }
 ]

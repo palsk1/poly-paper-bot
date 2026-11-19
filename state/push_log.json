@@ -32,8 +32,8 @@
   },
   "2026-11-19": {
    "failed": 0,
-   "muted": 48,
-   "sent": 7
+   "muted": 106,
+   "sent": 15
   }
  },
  "recent": [
@@ -606,6 +606,54 @@
    "title": "[panic_fade_4c] sold Yes at 86c (+$0.66)",
    "track": "panic_fade_4c",
    "ts": "2026-11-19T11:25:39Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 1 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-19T13:02:54Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.70)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-19T13:31:04Z"
+  },
+  {
+   "result": "sent",
+   "title": "[arb] locked in 4.3c a share",
+   "track": null,
+   "ts": "2026-11-19T14:21:22Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold Yes at 84c (+$0.29)",
+   "track": "panic_fade",
+   "ts": "2026-11-19T15:25:40Z"
+  },
+  {
+   "result": "sent",
+   "title": "[stock_no] bought 5 (practice money)",
+   "track": "stock_no",
+   "ts": "2026-11-19T16:33:43Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold Yes at 95c (+$0.97)",
+   "track": "panic_fade",
+   "ts": "2026-11-19T17:08:00Z"
+  },
+  {
+   "result": "sent",
+   "title": "[stock_no] bought 1 (practice money)",
+   "track": "stock_no",
+   "ts": "2026-11-19T17:10:27Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 88c (+$0.30)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-19T18:18:06Z"
   }
  ]
 }
