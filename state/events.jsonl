@@ -23934,3 +23934,5 @@
 {"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXBOXING-26NOV20PRICEKOTASK-PRICE", "track": "kalshi_patient", "ts": "2026-11-19T18:42:41Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBA3PT-26NOV19PORMIL-MILMTURNER3-5", "track": "kalshi_patient", "ts": "2026-11-19T18:42:42Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXODIMATCH-26NOV200100UAEPAK-UAE", "track": "kalshi_patient", "ts": "2026-11-19T18:42:44Z", "type": "kpatient_fill"}
+{"fee": 0.0058, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Microsoft (MSFT) close above $510 on November 19?", "token": "78038266363190505158051498370668741920615938028778767302444776350016798828552", "track": "endgame_sell98", "ts": "2026-11-19T18:47:00Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV191345-45", "track": "kc_maker", "ts": "2026-11-19T18:47:27Z", "type": "kmaker_fill"}
