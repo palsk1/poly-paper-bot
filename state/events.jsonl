@@ -22956,3 +22956,7 @@
 {"fee": 0.0525, "outcome": "Yes", "price": 0.7, "shares": 5, "title": "Will Manchester City FC win on 2026-11-21?", "token": "91244844708314141778503024351521599410324872024661518916790642578241916728493", "track": "w_sbel", "ts": "2026-11-19T05:50:39Z", "type": "paper_buy"}
 {"fee": 0.0525, "outcome": "Yes", "price": 0.7, "shares": 5, "title": "Will Manchester City FC win on 2026-11-21?", "token": "91244844708314141778503024351521599410324872024661518916790642578241916728493", "track": "wb_sbel", "ts": "2026-11-19T05:50:40Z", "type": "paper_buy"}
 {"minutes_left": 3.81, "price": 0.955, "queue": 414.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV190100-00", "track": "kc_maker", "ts": "2026-11-19T05:56:12Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.45, "price": 0.955, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV190100-00", "track": "kc_maker", "ts": "2026-11-19T06:02:32Z", "type": "kmaker_fill"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNBA1H-26NOV18PHXSAC-TIE", "track": "kalshi_patient", "ts": "2026-11-19T06:02:34Z", "type": "kpatient_result"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXNBA3PTPROT-26NOV18BOSDEN-DENCBRAUN0-5", "track": "kalshi_patient", "ts": "2026-11-19T06:02:34Z", "type": "kpatient_result"}
+{"pnl": 0.88, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV18UTALAL-LAL29", "track": "kalshi_patient", "ts": "2026-11-19T06:02:35Z", "type": "kpatient_result"}
