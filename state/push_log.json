@@ -38,7 +38,7 @@
   "2026-11-20": {
    "failed": 0,
    "muted": 109,
-   "sent": 33
+   "sent": 34
   }
  },
  "recent": [
@@ -911,6 +911,12 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
    "track": null,
    "ts": "2026-11-20T19:25:59Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold No at 84c (+$0.19)",
+   "track": "panic_fade",
+   "ts": "2026-11-20T19:50:44Z"
   }
  ]
 }
