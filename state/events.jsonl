@@ -26037,3 +26037,9 @@
 {"minutes_left": 1.97, "price": 0.967, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV201400-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T18:58:03Z", "type": "kmaker_order"}
 {"minutes_left": 1.97, "price": 0.965, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV201400-00", "track": "kc_maker", "ts": "2026-11-20T18:58:03Z", "type": "kmaker_order"}
 {"minutes_left": 1.97, "price": 0.965, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV201400-00", "track": "kc_maker_safe", "ts": "2026-11-20T18:58:04Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV201400-00", "track": "kc_maker", "ts": "2026-11-20T19:03:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV201400-00", "track": "kc_maker", "ts": "2026-11-20T19:03:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV201400-00", "track": "kc_maker_safe", "ts": "2026-11-20T19:03:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV201400-00", "track": "kc_maker_safe", "ts": "2026-11-20T19:03:47Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV201400-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T19:03:47Z", "type": "kmaker_fill"}
+{"fee": 0.032, "outcome": "No", "price": 0.8, "shares": 5, "title": "Will Howard Lutnick leave the Trump administration before 2027?", "token": "51287778995372424090648096237688042365718866474364897035552338496646717014280", "track": "panic_fade_4c", "ts": "2026-11-20T19:04:25Z", "type": "paper_buy"}
