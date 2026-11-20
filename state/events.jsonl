@@ -25104,3 +25104,4 @@
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV19DALVGK-DALWJOHNSTON53", "track": "kalshi_patient", "ts": "2026-11-20T06:36:43Z", "type": "kpatient_result"}
 {"minutes_left": 2.44, "price": 0.968, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV200145-45", "track": "kc_maker", "ts": "2026-11-20T06:42:34Z", "type": "kmaker_order"}
 {"minutes_left": 2.44, "price": 0.99, "queue": 28.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV200145-45", "track": "kc_maker", "ts": "2026-11-20T06:42:35Z", "type": "kmaker_order"}
+{"filled": 1.03, "pnl": 0.033, "price": 0.968, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV200145-45", "track": "kc_maker", "ts": "2026-11-20T06:48:05Z", "type": "kmaker_fill"}
