@@ -24544,3 +24544,12 @@
 {"annual": 0.208, "edge": 0.0256, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-20T01:38:13Z", "type": "arb_opportunity"}
 {"minutes_left": 5.14, "price": 0.96, "queue": 1203.74, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:39:52Z", "type": "kmaker_order"}
 {"minutes_left": 5.14, "price": 0.992, "queue": 173.66, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:39:54Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.993, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:41:41Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.996, "queue": 1695.57, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV192045-45", "track": "kc_maker_safe", "ts": "2026-11-20T01:41:43Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.996, "queue": 1695.57, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV192045-45", "track": "kc_maker_safe_usd", "ts": "2026-11-20T01:41:43Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.996, "queue": 1695.57, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV192045-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T01:41:43Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.972, "queue": 0.65, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:41:44Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.965, "queue": 194.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:41:44Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV192045-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T01:41:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.974, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:41:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.3, "price": 0.977, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV192045-45", "track": "kc_maker", "ts": "2026-11-20T01:41:47Z", "type": "kmaker_order"}
