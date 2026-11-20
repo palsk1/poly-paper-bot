@@ -58,6 +58,7 @@ SERIES = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "
 BINANCE = "https://data-api.binance.vision/api/v3/klines"
 LOOKBACK_MIN = 11          # candles kept per window: the last 11 minutes
 WORKERS = int(os.environ.get("KC_WORKERS", "8"))
+_SAVE = [None]   # set by fetch(): writes the candle files mid-download
 LEVELS = (0.90, 0.93, 0.95, 0.97, 0.98, 0.99)
 MINUTES = (1, 2, 3, 5, 7, 10)
 JOIN_MIN = (0.90, 0.95, 0.97, 0.99)
@@ -281,6 +282,8 @@ def fetch_candles(ms, store):
                 store[m["t"]] = cs
                 if i % 500 == 0:
                     print(f"   single {i}/{len(todo)} ({time.time() - t_start:.0f}s)")
+                if i and i % 4000 == 0 and _SAVE[0]:
+                    _SAVE[0]()   # a long download keeps what it has if the run is cut off
 
 
 def fetch_spot(symbol, t0, t1, have):
@@ -338,11 +341,16 @@ def fetch(days=60):
     merged = {}
     for s in SERIES:
         merged.update(stores[s])
+    def save(quiet=True):
+        for s, ms in all_ms.items():
+            keep = {m["t"]: merged[m["t"]] for m in ms if m["t"] in merged}
+            wjson(os.path.join(CACHE, f"candles_{s}.json.gz"), keep)
+            if not quiet:
+                print(f"{s}: {sum(1 for v in keep.values() if v)} of {len(ms)} windows with candles")
+    _SAVE[0] = save
     fetch_candles([m for ms in all_ms.values() for m in ms], merged)
-    for s, ms in all_ms.items():
-        keep = {m["t"]: merged[m["t"]] for m in ms if m["t"] in merged}
-        wjson(os.path.join(CACHE, f"candles_{s}.json.gz"), keep)
-        print(f"{s}: {sum(1 for v in keep.values() if v)} of {len(ms)} windows with candles")
+    _SAVE[0] = None
+    save(quiet=False)
 
 
 # ================================================================ replay
@@ -359,7 +367,23 @@ def load_windows(series=None):
             if not rows:
                 continue
             out.append({**m, "c": {r[0]: r[1:] for r in rows if r and r[0]}, "spot": spot})
+            fix_cents(out[-1]["c"])
     return sorted(out, key=lambda w: w["close"])
+
+
+def fix_cents(c):
+    """Trap (found 19 Nov): candles read through /historical/markets/.../candlesticks carry dollars under the old
+    cents names, so candle_row divides them by 100 again and the whole window comes out 100 times too small
+    (a 99.3c bid shows as 0.00993). Real prices are whole tenths of a cent; a window whose prices all sit at or
+    under 1c and are not whole tenths of a cent is scaled back up. Returns True if it changed the window."""
+    vals = [x for r in c.values() for x in r[:4] if x is not None]
+    if not vals or max(vals) > 0.0101:
+        return False
+    if all(abs(x * 1000 - round(x * 1000)) < 1e-6 for x in vals):
+        return False
+    for t, r in c.items():
+        c[t] = [None if x is None else round(x * 100, 6) for x in r[:4]] + list(r[4:])
+    return True
 
 
 def side_view(row, side):
