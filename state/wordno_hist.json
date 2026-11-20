@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   99,
-   246
+   108,
+   258
   ],
   "S:andy burnham": [
    8,
@@ -61,8 +61,8 @@
    8
   ],
   "S:trump": [
-   12,
-   35
+   21,
+   47
   ],
   "S:walmart": [
    4,
@@ -792,12 +792,20 @@
    0,
    1
   ],
+  "ST:trump|bean/soybean": [
+   0,
+   1
+  ],
   "ST:trump|bibi": [
    0,
    2
   ],
   "ST:trump|biden (3+ times)": [
    0,
+   1
+  ],
+  "ST:trump|biden/obama": [
+   1,
    1
   ],
   "ST:trump|china/chinese": [
@@ -808,6 +816,10 @@
    0,
    1
   ],
+  "ST:trump|deficit": [
+   1,
+   1
+  ],
   "ST:trump|diesel": [
    0,
    1
@@ -816,8 +828,16 @@
    0,
    1
   ],
+  "ST:trump|fake news": [
+   0,
+   1
+  ],
   "ST:trump|fire and fury": [
    0,
+   1
+  ],
+  "ST:trump|friend": [
+   1,
    1
   ],
   "ST:trump|hakeem/jeffries": [
@@ -840,6 +860,10 @@
    1,
    1
   ],
+  "ST:trump|iran (5+ times)": [
+   1,
+   1
+  ],
   "ST:trump|iran/iranian (3+ times)": [
    1,
    1
@@ -850,6 +874,10 @@
   ],
   "ST:trump|japan": [
    0,
+   1
+  ],
+  "ST:trump|korea": [
+   1,
    1
   ],
   "ST:trump|nato": [
@@ -865,11 +893,15 @@
    1
   ],
   "ST:trump|nuclear/nuke": [
-   1,
-   1
+   2,
+   2
   ],
   "ST:trump|putin": [
    0,
+   1
+  ],
+  "ST:trump|putin/xi (3+ times)": [
+   1,
    1
   ],
   "ST:trump|rigged": [
@@ -896,16 +928,24 @@
    0,
    1
   ],
+  "ST:trump|tariff (5+ times)": [
+   1,
+   1
+  ],
   "ST:trump|thanksgiving": [
    0,
    1
   ],
   "ST:trump|ukraine": [
-   1,
-   1
+   2,
+   2
   ],
   "ST:trump|veto": [
    1,
+   1
+  ],
+  "ST:trump|world war": [
+   0,
    1
   ],
   "ST:trump|zelensky": [
@@ -1044,12 +1084,20 @@
    1,
    1
   ],
+  "T:bean/soybean": [
+   0,
+   1
+  ],
   "T:bibi": [
    0,
    2
   ],
   "T:biden (3+ times)": [
    0,
+   1
+  ],
+  "T:biden/obama": [
+   1,
    1
   ],
   "T:bill gates": [
@@ -1180,6 +1228,10 @@
    1,
    1
   ],
+  "T:deficit": [
+   1,
+   1
+  ],
   "T:deposition": [
    1,
    1
@@ -1240,6 +1292,10 @@
    1,
    1
   ],
+  "T:fake news": [
+   0,
+   1
+  ],
   "T:fall/plummet": [
    0,
    1
@@ -1277,6 +1333,10 @@
    1
   ],
   "T:forecast": [
+   1,
+   1
+  ],
+  "T:friend": [
    1,
    1
   ],
@@ -1396,6 +1456,10 @@
    1,
    2
   ],
+  "T:iran (5+ times)": [
+   1,
+   1
+  ],
   "T:iran/iranian": [
    1,
    1
@@ -1430,6 +1494,10 @@
   ],
   "T:kimmel": [
    0,
+   1
+  ],
+  "T:korea": [
+   1,
    1
   ],
   "T:latency": [
@@ -1493,8 +1561,8 @@
    1
   ],
   "T:nuclear/nuke": [
-   1,
-   1
+   2,
+   2
   ],
   "T:nypd": [
    0,
@@ -1559,6 +1627,10 @@
   "T:putin": [
    0,
    2
+  ],
+  "T:putin/xi (3+ times)": [
+   1,
+   1
   ],
   "T:pvd": [
    1,
@@ -1692,6 +1764,10 @@
    2,
    4
   ],
+  "T:tariff (5+ times)": [
+   1,
+   1
+  ],
   "T:tesla": [
    0,
    1
@@ -1721,8 +1797,8 @@
    1
   ],
   "T:ukraine": [
-   1,
-   1
+   2,
+   2
   ],
   "T:united nations": [
    0,
@@ -1745,6 +1821,10 @@
    2
   ],
   "T:war": [
+   0,
+   1
+  ],
+  "T:world war": [
    0,
    1
   ],
@@ -1791,6 +1871,10 @@
   "W:trump-weekly-mentions": [
    5,
    10
+  ],
+  "W:what will trump say news conference": [
+   9,
+   12
   ],
   "W:what will trump say trilateral meeting with xi and putin": [
    3,
@@ -2572,6 +2656,54 @@
    1,
    1
   ],
+  "WT:what will trump say news conference|bean/soybean": [
+   0,
+   1
+  ],
+  "WT:what will trump say news conference|biden/obama": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|deficit": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|fake news": [
+   0,
+   1
+  ],
+  "WT:what will trump say news conference|friend": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|iran (5+ times)": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|korea": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|nuclear/nuke": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|putin/xi (3+ times)": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|tariff (5+ times)": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|ukraine": [
+   1,
+   1
+  ],
+  "WT:what will trump say news conference|world war": [
+   0,
+   1
+  ],
   "WT:what will trump say trilateral meeting with xi and putin|alaska": [
    0,
    1
@@ -2919,7 +3051,19 @@
   "7106888": 1795132740,
   "7106889": 1795132740,
   "7106890": 1795132740,
-  "7106891": 1795132740
+  "7106891": 1795132740,
+  "7177979": 1795219140,
+  "7177980": 1795219140,
+  "7177981": 1795219140,
+  "7177982": 1795219140,
+  "7177983": 1795219140,
+  "7177984": 1795219140,
+  "7177985": 1795219140,
+  "7177986": 1795219140,
+  "7177987": 1795219140,
+  "7177988": 1795219140,
+  "7177989": 1795219140,
+  "7177990": 1795219140
  },
- "synced": 1795207137
+ "synced": 1795209074
 }
