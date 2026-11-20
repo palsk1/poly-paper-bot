@@ -25929,3 +25929,20 @@
 {"fee": 0.0082, "outcome": "No", "price": 0.976, "shares": 5, "title": "Will the price of Solana be above $75 on November 21?", "token": "28198411333825096318027521281887790877198940088793745011125548801790665923849", "track": "endgame_sell98", "ts": "2026-11-20T17:39:23Z", "type": "paper_buy"}
 {"minutes_left": 4.93, "price": 0.955, "queue": 9594.37, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV201245-45", "track": "kc_maker", "ts": "2026-11-20T17:40:05Z", "type": "kmaker_order"}
 {"minutes_left": 4.93, "price": 0.955, "queue": 9594.37, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV201245-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T17:40:05Z", "type": "kmaker_order"}
+{"fee": 0.0049, "outcome": "No", "price": 0.975, "shares": 5, "title": "S&P 500 (SPY) closes above $715 on November 20?", "token": "15659868730651780547788186835275238276214350913217996703929433893164809329528", "track": "endgame_sell98", "ts": "2026-11-20T17:44:22Z", "type": "paper_buy"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBRASILEIROBTOTAL-26NOV22GOIVIN-5", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBOXING-26NOV20FLORESVALADE-VALADE", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNBAAST-26NOV20INDCLE-INDIZUBAC40-6", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXTRUTHSOCIALD-26NOV20-B34", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV22BALCAR-BALBALDST", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXRAINTHANKSGIVING-26NOV26-SAT", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV22JACNYG-NYG15", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNBA1HSPREAD-26NOV20SACLAL-LAL23", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLSFTY-26NOV22TENDAL-Y", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXNFLTEAMTOTAL-26NOV22NYJLAC-LAC4", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNCAAWBGAME-26NOV20UNOORU-UNO", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22PITPHI-PITARODGERS8-1", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22ARIKC-ARICBECK19-1", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22MIABUF-BUFDMOORE2-2", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLTDPROT-26NOV22ARIKC-KCRRICE4-2", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXINXU-26NOV20H1300-T6989.9999", "track": "kalshi_patient", "ts": "2026-11-20T17:44:57Z", "type": "kpatient_order"}
