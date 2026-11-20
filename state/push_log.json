@@ -38,7 +38,7 @@
   "2026-11-20": {
    "failed": 0,
    "muted": 81,
-   "sent": 20
+   "sent": 21
   }
  },
  "recent": [
@@ -833,6 +833,12 @@
    "title": "[panic_fade_4c] sold No at 20c (-$3.36)",
    "track": "panic_fade_4c",
    "ts": "2026-11-20T15:16:02Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-20T15:53:24Z"
   }
  ]
 }
