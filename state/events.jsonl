@@ -25536,3 +25536,13 @@
 {"minutes_left": 2.57, "price": 0.996, "queue": 790.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker", "ts": "2026-11-20T12:27:31Z", "type": "kmaker_order"}
 {"minutes_left": 2.57, "price": 0.996, "queue": 790.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker_safe", "ts": "2026-11-20T12:27:32Z", "type": "kmaker_order"}
 {"minutes_left": 2.57, "price": 0.996, "queue": 790.0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker_safe_usd", "ts": "2026-11-20T12:27:32Z", "type": "kmaker_order"}
+{"outcome": "Draw", "pnl": -1.3993, "price": 0.0, "reason": "resolved", "title": "Will Garuda Yaksa vs. Madura United end in a draw?", "token": "95945838689173042171983326572762250491059641839015708698812959474670924434521", "track": "soccer_draw", "ts": "2026-11-20T12:31:06Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV200730-30", "track": "kc_maker", "ts": "2026-11-20T12:32:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV200730-30", "track": "kc_maker", "ts": "2026-11-20T12:32:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV200730-30", "track": "kc_maker_safe", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV200730-30", "track": "kc_maker_safe", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker_safe", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV200730-30", "track": "kc_maker_safe_usd", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV200730-30", "track": "kc_maker_safe_usd", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV200730-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T12:32:54Z", "type": "kmaker_fill"}
