@@ -24470,3 +24470,6 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV23UTMVT-VT", "track": "kalshi_patient", "ts": "2026-11-20T00:25:13Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXUFCMOV-26NOV21NURLOR-NURDEC", "track": "kalshi_patient", "ts": "2026-11-20T00:25:13Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXUFCMOV-26NOV21STEVAL-STEKOTKODQ", "track": "kalshi_patient", "ts": "2026-11-20T00:25:13Z", "type": "kpatient_order"}
+{"annual": 0.216, "edge": 0.0266, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-20T00:26:03Z", "type": "arb_opportunity"}
+{"minutes_left": 2.92, "price": 0.956, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV191930-30", "track": "kc_maker", "ts": "2026-11-20T00:27:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.92, "price": 0.964, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV191930-30", "track": "kc_maker", "ts": "2026-11-20T00:27:06Z", "type": "kmaker_order"}
