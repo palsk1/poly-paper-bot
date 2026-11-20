@@ -26307,3 +26307,4 @@
 {"filled": 9.4, "price": 0.91, "side": "no", "through": true, "ticker": "KXBOXING-26NOV20FLORESVALADE-VALADE", "track": "kalshi_patient", "ts": "2026-11-20T21:46:41Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXTACAPORTSPREAD-26NOV21AVSTON-AVS2", "track": "kalshi_patient", "ts": "2026-11-20T21:46:42Z", "type": "kpatient_fill"}
 {"fee": 0.0104, "outcome": "No", "price": 0.9693, "shares": 5, "title": "Will the price of Ethereum be between $1,400 and $1,500 on November 21?", "token": "10846360515341808425894770898057712999403535207310741686478900469094851812212", "track": "endgame_sell98", "ts": "2026-11-20T21:50:53Z", "type": "paper_buy"}
+{"minutes_left": 1.93, "price": 0.952, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV201700-00", "track": "kc_maker", "ts": "2026-11-20T21:58:05Z", "type": "kmaker_order"}
