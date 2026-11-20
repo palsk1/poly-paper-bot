@@ -727,5 +727,25 @@
   "title": "Will Ethereum dip to $1,500 by December 31, 2026?",
   "token": "38508858428676968447825900892305750232615791339175195608011299023691549494960",
   "ts": "2026-11-20T19:25:34Z"
+ },
+ {
+  "days_left": 10.1,
+  "early": true,
+  "end": "2026-12-01",
+  "event_slug": "what-price-will-wti-hit-in-november-2026",
+  "exit_price": 0.0329,
+  "first_seen": null,
+  "his_avg": 0.9099,
+  "kind": "sold",
+  "left_on_table_per_share": 0.9671,
+  "outcome": "Yes",
+  "price_source": "his trades",
+  "profit_per_share": -0.877,
+  "profit_usd": -363.32,
+  "shares": 414.26,
+  "slug": "will-wti-reach-105-in-november-2026",
+  "title": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in November?",
+  "token": "4598154058081600141940343986128371425552111800231706218701820270779979460",
+  "ts": "2026-11-20T22:01:01Z"
  }
 ]
