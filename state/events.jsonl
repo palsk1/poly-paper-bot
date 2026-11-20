@@ -25561,3 +25561,9 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV22TENDAL-TEN7", "track": "kalshi_patient", "ts": "2026-11-20T12:55:23Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXINX-26NOV20H1600-B7237", "track": "kalshi_patient", "ts": "2026-11-20T12:55:23Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNCAAF1H-26NOV21UGASCAR-TIE", "track": "kalshi_patient", "ts": "2026-11-20T12:55:23Z", "type": "kpatient_order"}
+{"annual": 0.163, "edge": 0.02, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-20T12:57:55Z", "type": "arb_opportunity"}
+{"minutes_left": 0.95, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV200800-00", "track": "kc_maker", "ts": "2026-11-20T12:59:03Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV200800-00", "track": "kc_maker_safe", "ts": "2026-11-20T12:59:03Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.998, "queue": 374.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV200800-00", "track": "kc_maker", "ts": "2026-11-20T12:59:04Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV200800-00", "track": "kc_maker", "ts": "2026-11-20T12:59:05Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNFLFIRSTTD-26NOV22TENDAL-TENTENDST", "track": "kalshi_patient", "ts": "2026-11-20T12:59:06Z", "type": "kpatient_fill"}
