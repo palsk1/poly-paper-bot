@@ -37,8 +37,8 @@
   },
   "2026-11-20": {
    "failed": 0,
-   "muted": 88,
-   "sent": 22
+   "muted": 89,
+   "sent": 25
   }
  },
  "recent": [
@@ -845,6 +845,24 @@
    "title": "[momentum_week] sold Yes at 78c (+$0.38)",
    "track": "momentum_week",
    "ts": "2026-11-20T15:55:48Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 3 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-20T17:02:58Z"
+  },
+  {
+   "result": "sent",
+   "title": "[stock_no] bought 2 (practice money)",
+   "track": "stock_no",
+   "ts": "2026-11-20T17:03:26Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 1 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-20T17:04:22Z"
   }
  ]
 }
