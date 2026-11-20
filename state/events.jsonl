@@ -25069,3 +25069,9 @@
 {"annual": 0.282, "edge": 0.0339, "pair": "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027", "title": "Will Ron DeSantis announce a presidential run before 2027?", "track": "arb", "ts": "2026-11-20T06:22:09Z", "type": "arb_opportunity"}
 {"annual": 0.209, "edge": 0.0256, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-20T06:22:23Z", "type": "arb_opportunity"}
 {"minutes_left": 5.33, "price": 0.967, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV200130-30", "track": "kc_maker", "ts": "2026-11-20T06:24:43Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.992, "queue": 51.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV200130-30", "track": "kc_maker", "ts": "2026-11-20T06:26:34Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.992, "queue": 51.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV200130-30", "track": "kc_maker_safe", "ts": "2026-11-20T06:26:35Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.992, "queue": 51.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV200130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-20T06:26:35Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.997, "queue": 2918.41, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV200130-30", "track": "kc_maker_safe", "ts": "2026-11-20T06:26:36Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.997, "queue": 2918.41, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV200130-30", "track": "kc_maker_safe_usd", "ts": "2026-11-20T06:26:36Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.997, "queue": 2918.41, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV200130-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T06:26:36Z", "type": "kmaker_order"}
