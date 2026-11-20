@@ -24481,3 +24481,8 @@
 {"minutes_left": 3.2, "price": 0.961, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:41:48Z", "type": "kmaker_order"}
 {"minutes_left": 3.2, "price": 0.987, "queue": 141.25, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:41:49Z", "type": "kmaker_order"}
 {"minutes_left": 3.2, "price": 0.961, "queue": 209.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:41:50Z", "type": "kmaker_order"}
+{"outcome": "Draw", "pnl": 3.9085, "price": 1.0, "reason": "resolved", "title": "Will CA Progreso vs. Montevideo City Torque end in a draw?", "token": "98977486646643579342864426546280586444338329847460911631625428216946779425089", "track": "soccer_draw", "ts": "2026-11-20T00:45:46Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": -9.51, "price": 0.951, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:46:57Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:46:57Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:46:57Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.39, "price": 0.961, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV191945-45", "track": "kc_maker", "ts": "2026-11-20T00:46:58Z", "type": "kmaker_fill"}
