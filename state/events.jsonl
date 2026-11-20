@@ -24509,3 +24509,6 @@
 {"filled": 10.0, "pnl": 0.32, "price": 0.968, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV192000-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T01:03:17Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV192000-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T01:03:17Z", "type": "kmaker_fill"}
 {"fee": 0.0095, "outcome": "No", "price": 0.972, "shares": 5, "title": "Will Solana dip to $70 on November 19?", "token": "40935356277881848047464677289215300386300896450763246701431955716834217368162", "track": "endgame_sell98", "ts": "2026-11-20T01:06:39Z", "type": "paper_buy"}
+{"minutes_left": 0.93, "price": 0.997, "queue": 0.04, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV192015-15", "track": "kc_maker", "ts": "2026-11-20T01:14:06Z", "type": "kmaker_order"}
+{"minutes_left": 0.93, "price": 0.997, "queue": 0.04, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV192015-15", "track": "kc_maker_safe", "ts": "2026-11-20T01:14:06Z", "type": "kmaker_order"}
+{"minutes_left": 0.93, "price": 0.997, "queue": 0.04, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV192015-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T01:14:07Z", "type": "kmaker_order"}
