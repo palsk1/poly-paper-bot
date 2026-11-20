@@ -26461,3 +26461,9 @@
 {"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV201845-45", "track": "kc_maker", "ts": "2026-11-20T23:54:01Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV201845-45", "track": "kc_maker_safe", "ts": "2026-11-20T23:54:01Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV201845-45", "track": "kc_maker_safe", "ts": "2026-11-20T23:54:01Z", "type": "kmaker_fill"}
+{"fee": 0.0301, "outcome": "No", "price": 0.86, "shares": 5, "title": "Will Ted Cruz post 20-39 posts from November 17 to November 24, 2026?", "token": "99736903135291527169630743344227356580332971257967546346583623846274194883542", "track": "postcount_no", "ts": "2026-11-20T23:58:52Z", "type": "paper_buy"}
+{"minutes_left": 1.09, "price": 0.998, "queue": 3457.62, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV201900-00", "track": "kc_maker", "ts": "2026-11-20T23:58:54Z", "type": "kmaker_order"}
+{"minutes_left": 1.09, "price": 0.998, "queue": 3457.62, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV201900-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-20T23:58:55Z", "type": "kmaker_order"}
+{"minutes_left": 1.09, "price": 0.961, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV201900-00", "track": "kc_maker", "ts": "2026-11-20T23:58:55Z", "type": "kmaker_order"}
+{"minutes_left": 1.09, "price": 0.955, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV201900-00", "track": "kc_maker", "ts": "2026-11-20T23:58:56Z", "type": "kmaker_order"}
+{"minutes_left": 1.09, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV201900-00", "track": "kc_maker", "ts": "2026-11-20T23:58:56Z", "type": "kmaker_order"}
