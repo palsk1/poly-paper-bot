@@ -26080,3 +26080,17 @@
 {"outcome": "FC Boto\u015fani: Yes", "pnl": -2.7123, "price": 0.0, "reason": "resolved", "title": "Will FC Boto\u015fani win on 2026-11-20?", "token": "23760199363050620193371067106235841716215640656213825747576213377900800039652", "track": "sharp_pinnacle", "ts": "2026-11-20T19:31:44Z", "type": "paper_close"}
 {"outcome": "Draw", "pnl": -0.9885, "price": 0.0, "reason": "resolved", "title": "Will Shabab Al Ahli Dubai vs. Ajman Club end in a draw?", "token": "13436239573076582524552831773844173263853016635653990260659172279443830201223", "track": "soccer_draw", "ts": "2026-11-20T19:31:44Z", "type": "paper_close"}
 {"outcome": "Draw", "pnl": 3.7031, "price": 1.0, "reason": "resolved", "title": "Will FC Boto\u015fani vs. FC Voluntari end in a draw?", "token": "20163859656213439350247288168144978587058387552870914266395349055140583730702", "track": "soccer_draw", "ts": "2026-11-20T19:31:44Z", "type": "paper_close"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNHSALES-26NOV25-T740000", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXTRUTHSOCIALD-26NOV20-B34", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV20CHSOFUR-FUR", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNCAAMBSPREAD-26NOV20MANMIA-MIA62", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXLOWTSAN-26NOV20-B52.5", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXETH-26NOV2017-B1520", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXBOXING-26NOV20ANDERSBUCIUC-ANDERS", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXEURUSDAW-26NOV20-1.1010", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXYTVIEWSW-BAD26NOV22-34.0M", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLSFTY-26NOV22PITPHI-Y", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV22NYJLAC-NYJ14", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXUECLTOTAL-26NOV26EGRLIN-6", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22TBDET-TBEEGBUKA2-2", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXBULLETBRAWL-26NOV21-JXIO", "track": "kalshi_patient", "ts": "2026-11-20T19:39:50Z", "type": "kpatient_order"}
