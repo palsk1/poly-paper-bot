@@ -37,8 +37,8 @@
   },
   "2026-11-20": {
    "failed": 0,
-   "muted": 20,
-   "sent": 7
+   "muted": 32,
+   "sent": 10
   }
  },
  "recent": [
@@ -755,6 +755,24 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
    "track": "kalshi_patient",
    "ts": "2026-11-20T04:17:46Z"
+  },
+  {
+   "result": "sent",
+   "title": "[fav_short_90_95] bought 3 (practice money)",
+   "track": "fav_short_90_95",
+   "ts": "2026-11-20T05:11:36Z"
+  },
+  {
+   "result": "sent",
+   "title": "[momentum_week] bought 2 (practice money)",
+   "track": "momentum_week",
+   "ts": "2026-11-20T05:11:39Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-20T05:14:21Z"
   }
  ]
 }
