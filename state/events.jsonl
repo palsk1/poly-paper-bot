@@ -26131,3 +26131,5 @@
 {"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV201500-00", "track": "kc_maker", "ts": "2026-11-20T20:05:43Z", "type": "kmaker_fill"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNCAAMB1H-26NOV20GBFSU-GB", "track": "kalshi_patient", "ts": "2026-11-20T20:05:45Z", "type": "kpatient_result"}
 {"pnl": 0.78, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNCAAMBGAME-26NOV20BLOOMUMES-BLOOM", "track": "kalshi_patient", "ts": "2026-11-20T20:05:45Z", "type": "kpatient_result"}
+{"fee": 0.0625, "outcome": "Lille OSC", "price": 0.51, "shares": 5, "title": "Spread: FC Bayern M\u00fcnchen (-1.5)", "token": "64796385550714827929137940178599549892016842000378306324232448223331046955650", "track": "w_rabbitfoot1", "ts": "2026-11-20T20:15:46Z", "type": "paper_buy"}
+{"fee": 0.0625, "outcome": "Lille OSC", "price": 0.51, "shares": 5, "title": "Spread: FC Bayern M\u00fcnchen (-1.5)", "token": "64796385550714827929137940178599549892016842000378306324232448223331046955650", "track": "wb_rabbitfoot1", "ts": "2026-11-20T20:15:46Z", "type": "paper_buy"}
