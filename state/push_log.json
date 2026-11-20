@@ -37,8 +37,8 @@
   },
   "2026-11-20": {
    "failed": 0,
-   "muted": 42,
-   "sent": 10
+   "muted": 43,
+   "sent": 11
   }
  },
  "recent": [
@@ -773,6 +773,12 @@
    "title": "Paper top 10",
    "track": null,
    "ts": "2026-11-20T05:14:21Z"
+  },
+  {
+   "result": "sent",
+   "title": "[momentum_week] sold Yes at 93c (+$0.35)",
+   "track": "momentum_week",
+   "ts": "2026-11-20T08:21:00Z"
   }
  ]
 }
