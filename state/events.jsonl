@@ -24817,3 +24817,5 @@
 {"pnl": 0.68, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV19INDHOU-HOU31", "track": "kalshi_patient", "ts": "2026-11-20T04:17:46Z", "type": "kpatient_result"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLTEAMFIRSTTD-26NOV19INDHOU-HOU-HOUDST", "track": "kalshi_patient", "ts": "2026-11-20T04:17:46Z", "type": "kpatient_result"}
 {"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLTOTAL-26NOV19INDHOU-66", "track": "kalshi_patient", "ts": "2026-11-20T04:17:46Z", "type": "kpatient_result"}
+{"fee": 0.0576, "outcome": "Yes", "price": 0.36, "shares": 5, "title": "Will the lowest temperature in Paris be 6\u00b0C on November 21?", "token": "10784369450978127637074165563449042113246821766351073923817940727507904676483", "track": "w_sbel", "ts": "2026-11-20T04:20:39Z", "type": "paper_buy"}
+{"fee": 0.0576, "outcome": "Yes", "price": 0.36, "shares": 5, "title": "Will the lowest temperature in Paris be 6\u00b0C on November 21?", "token": "10784369450978127637074165563449042113246821766351073923817940727507904676483", "track": "wb_sbel", "ts": "2026-11-20T04:20:39Z", "type": "paper_buy"}
