@@ -38,7 +38,7 @@
   "2026-11-20": {
    "failed": 0,
    "muted": 58,
-   "sent": 11
+   "sent": 12
   }
  },
  "recent": [
@@ -779,6 +779,12 @@
    "title": "[momentum_week] sold Yes at 93c (+$0.35)",
    "track": "momentum_week",
    "ts": "2026-11-20T08:21:00Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 86c (+$0.23)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-20T11:40:59Z"
   }
  ]
 }
