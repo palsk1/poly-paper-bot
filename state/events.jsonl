@@ -26315,3 +26315,5 @@
 {"pnl": 0.0468, "price": 0.94, "shares": 0.78, "side": "no", "ticker": "KXEERSTEDIVGAME-26NOV20HERPSV-PSV", "track": "kalshi_patient", "ts": "2026-11-20T22:03:53Z", "type": "kpatient_result"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXETHD-26NOV2017-T1979.99", "track": "kalshi_patient", "ts": "2026-11-20T22:03:53Z", "type": "kpatient_result"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV2017-T59.9999", "track": "kalshi_patient", "ts": "2026-11-20T22:03:53Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.5015, "price": 0.0, "reason": "resolved", "title": "Will ES Troyes AC vs. Le Havre AC end in a draw?", "token": "43864819456698543001050245699974118746184824393747401594304158406454917892446", "track": "soccer_draw", "ts": "2026-11-20T22:05:39Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": -1.04, "price": 0.0, "reason": "resolved", "title": "Will Molde FK vs. FK Bod\u00f8/Glimt end in a draw?", "token": "44331705589341849642331003167207535549479793633032297304223745803792585408473", "track": "soccer_draw", "ts": "2026-11-20T22:05:39Z", "type": "paper_close"}
