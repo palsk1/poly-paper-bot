@@ -37,8 +37,8 @@
   },
   "2026-11-20": {
    "failed": 0,
-   "muted": 101,
-   "sent": 30
+   "muted": 104,
+   "sent": 31
   }
  },
  "recent": [
@@ -893,6 +893,12 @@
    "title": "[soccer_draw] bought 2 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-20T18:14:06Z"
+  },
+  {
+   "result": "sent",
+   "title": "[momentum_week] sold No at 38c (-$0.90)",
+   "track": "momentum_week",
+   "ts": "2026-11-20T18:17:04Z"
   }
  ]
 }
