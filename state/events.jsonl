@@ -26567,3 +26567,11 @@
 {"filled": 10.0, "price": 0.9664, "side": "no", "through": true, "ticker": "KXNBAESCALATORPTS-26NOV20SACLAL-LALWKESSLER14", "track": "kalshi_patient", "ts": "2026-11-21T01:43:34Z", "type": "kpatient_fill"}
 {"filled": 5.16, "price": 0.95, "side": "no", "through": true, "ticker": "KXNBASPREAD-26NOV20SACLAL-SAC8", "track": "kalshi_patient", "ts": "2026-11-21T01:43:35Z", "type": "kpatient_fill"}
 {"minutes_left": 4.8, "price": 0.957, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:55:12Z", "type": "kmaker_order"}
+{"annual": 0.2, "edge": 0.0238, "pair": "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027", "title": "Will Andy Beshear announce a Presidential run before 2027?", "track": "arb", "ts": "2026-11-21T01:56:10Z", "type": "arb_opportunity"}
+{"annual": 0.189, "edge": 0.0228, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-21T01:56:25Z", "type": "arb_opportunity"}
+{"minutes_left": 1.04, "price": 0.996, "queue": 621.11, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:58:58Z", "type": "kmaker_order"}
+{"minutes_left": 1.04, "price": 0.996, "queue": 621.11, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T01:58:59Z", "type": "kmaker_order"}
+{"minutes_left": 1.04, "price": 0.996, "queue": 1359.71, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:59:00Z", "type": "kmaker_order"}
+{"minutes_left": 1.04, "price": 0.996, "queue": 1359.71, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T01:59:00Z", "type": "kmaker_order"}
+{"minutes_left": 1.04, "price": 0.989, "queue": 325.38, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:59:01Z", "type": "kmaker_order"}
+{"minutes_left": 1.04, "price": 0.989, "queue": 325.38, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T01:59:01Z", "type": "kmaker_order"}
