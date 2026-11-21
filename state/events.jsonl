@@ -27362,3 +27362,6 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV210545-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T10:47:53Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV210545-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T10:47:53Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV210545-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T10:47:53Z", "type": "kmaker_fill"}
+{"annual": 0.242, "edge": 0.0288, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-21T10:55:57Z", "type": "arb_opportunity"}
+{"minutes_left": 1.81, "price": 0.969, "queue": 1309.0, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV210600-00", "track": "kc_maker", "ts": "2026-11-21T10:58:11Z", "type": "kmaker_order"}
+{"minutes_left": 1.81, "price": 0.969, "queue": 1309.0, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV210600-00", "track": "kc_maker_safe", "ts": "2026-11-21T10:58:12Z", "type": "kmaker_order"}
