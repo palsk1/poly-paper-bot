@@ -28147,3 +28147,9 @@
 {"fee": 0.04, "outcome": "Draw", "price": 0.2, "shares": 5, "title": "Will Nashville SC vs. FC Cincinnati end in a draw?", "token": "85622415738173741329199382426818127695683988000964015259905012663655663998877", "track": "soccer_draw", "ts": "2026-11-21T21:36:54Z", "type": "paper_buy"}
 {"pnl": 0.29, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXNCAAFGAME-26NOV21TNTCMSST-TNTC", "track": "kalshi_patient", "ts": "2026-11-21T21:36:58Z", "type": "kpatient_result"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV21EDMCAR-EDMLDRAISAITL29", "track": "kalshi_patient", "ts": "2026-11-21T21:36:58Z", "type": "kpatient_result"}
+{"minutes_left": 3.58, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211645-45", "track": "kc_maker", "ts": "2026-11-21T21:41:25Z", "type": "kmaker_order"}
+{"minutes_left": 3.58, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211645-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T21:41:26Z", "type": "kmaker_order"}
+{"minutes_left": 3.58, "price": 0.988, "queue": 5.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV211645-45", "track": "kc_maker", "ts": "2026-11-21T21:41:28Z", "type": "kmaker_order"}
+{"minutes_left": 3.58, "price": 0.988, "queue": 5.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV211645-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T21:41:28Z", "type": "kmaker_order"}
+{"minutes_left": 3.58, "price": 0.97, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV211645-45", "track": "kc_maker", "ts": "2026-11-21T21:41:29Z", "type": "kmaker_order"}
+{"minutes_left": 3.58, "price": 0.972, "queue": 252.69, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV211645-45", "track": "kc_maker", "ts": "2026-11-21T21:41:30Z", "type": "kmaker_order"}
