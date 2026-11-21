@@ -26895,3 +26895,4 @@
 {"outcome": "No", "pnl": 0.3272, "price": 1.0, "reason": "resolved", "title": "Will Bitcoin reach $63,000 on November 20?", "token": "91829536739300497328342532406391707388712482627397109107361653889606531154398", "track": "wb_tokor", "ts": "2026-11-21T05:12:32Z", "type": "paper_close"}
 {"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV210015-15", "track": "kc_maker", "ts": "2026-11-21T05:18:50Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.48, "price": 0.952, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV210015-15", "track": "kc_maker", "ts": "2026-11-21T05:18:51Z", "type": "kmaker_fill"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXBOXING-26NOV20JONESPETTUS-PETTUS", "track": "kalshi_patient", "ts": "2026-11-21T05:22:32Z", "type": "kpatient_result"}
