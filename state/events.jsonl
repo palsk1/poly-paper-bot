@@ -28079,3 +28079,5 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV211530-30", "track": "kc_maker_safe_usd", "ts": "2026-11-21T20:32:10Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV211530-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T20:32:10Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV211530-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T20:32:10Z", "type": "kmaker_fill"}
+{"fee": 0.0, "outcome": "No", "price": 0.93, "shares": 5, "title": "Will the U.S. invade Iran before 2027?", "token": "1910830010387565971650098373488592514702818137344973088263643820608151819241", "track": "w_anoin123", "ts": "2026-11-21T20:32:35Z", "type": "paper_buy"}
+{"pnl": 0.68, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV21COLOCIN-COLO18", "track": "kalshi_patient", "ts": "2026-11-21T20:34:29Z", "type": "kpatient_result"}
