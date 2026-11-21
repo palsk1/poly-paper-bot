@@ -28130,3 +28130,5 @@
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNCAAF1HSPREAD-26NOV21TNTCMSST-TNTC3", "track": "kalshi_patient", "ts": "2026-11-21T21:03:25Z", "type": "kpatient_result"}
 {"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNCAAFGAME-26NOV21MOREBUT-MORE", "track": "kalshi_patient", "ts": "2026-11-21T21:03:25Z", "type": "kpatient_result"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXUFCVICROUND-26NOV21CANALI-CAN3", "track": "kalshi_patient", "ts": "2026-11-21T21:03:25Z", "type": "kpatient_result"}
+{"fee": 0.0018, "outcome": "No", "price": 0.963, "shares": 5, "title": "Will the price of Ethereum be between $1,500 and $1,600 on November 22?", "token": "74178735755468426313751381801798162014610573088662968905795401971001685824353", "track": "endgame_sell98", "ts": "2026-11-21T21:08:41Z", "type": "paper_buy"}
+{"filled": 0.3, "price": 0.91, "side": "yes", "through": true, "ticker": "KXNETFLIXRANKMOVIEGLOBAL2-26NOV23-HEA", "track": "kalshi_patient", "ts": "2026-11-21T21:09:14Z", "type": "kpatient_fill"}
