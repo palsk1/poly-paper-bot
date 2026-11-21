@@ -43,7 +43,7 @@
   "2026-11-21": {
    "failed": 0,
    "muted": 84,
-   "sent": 14
+   "sent": 16
   }
  },
  "recent": [
@@ -1042,6 +1042,18 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.85)",
    "track": null,
    "ts": "2026-11-21T18:11:38Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.91)",
+   "track": "kc_maker",
+   "ts": "2026-11-21T18:17:58Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.91)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-21T18:17:58Z"
   }
  ]
 }
