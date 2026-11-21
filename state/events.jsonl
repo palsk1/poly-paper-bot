@@ -26956,3 +26956,5 @@
 {"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV210045-45", "track": "kc_maker", "ts": "2026-11-21T05:47:46Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.31, "price": 0.969, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV210045-45", "track": "kc_maker", "ts": "2026-11-21T05:47:46Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV210045-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T05:47:46Z", "type": "kmaker_fill"}
+{"fee": 0.0, "outcome": "No", "price": 0.7, "shares": 5, "title": "US announces end of Iranian blockade by February 28, 2027?", "token": "23679931838135181597598621834749834990212683329151974797013774813516558128306", "track": "w_anoin123", "ts": "2026-11-21T05:50:42Z", "type": "paper_buy"}
+{"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Ethereum reach $1,750 on November 21?", "token": "77191497010838527262911834289248819048792411963321886883883173851549423533304", "track": "endgame_sell98", "ts": "2026-11-21T05:52:39Z", "type": "paper_buy"}
