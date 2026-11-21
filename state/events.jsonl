@@ -26610,3 +26610,5 @@
 {"filled": 10.0, "pnl": 0.06, "price": 0.994, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV202130-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T02:35:09Z", "type": "kmaker_fill"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNBA1HSPREAD-26NOV20SACLAL-SAC10", "track": "kalshi_patient", "ts": "2026-11-21T02:38:58Z", "type": "kpatient_fill"}
 {"filled": 0.48, "price": 0.93, "side": "no", "through": true, "ticker": "KXNETFLIXRANKMOVIE-26NOV23-STE", "track": "kalshi_patient", "ts": "2026-11-21T02:38:59Z", "type": "kpatient_fill"}
+{"outcome": "Hornets", "pnl": -2.5625, "price": 0.0, "reason": "resolved", "title": "Spread: Hawks (-7.5)", "token": "11376846649846397637629515718287737992489767404893188768280033139373736291692", "track": "w_the_joker", "ts": "2026-11-21T02:41:15Z", "type": "paper_close"}
+{"outcome": "Hornets", "pnl": -2.5625, "price": 0.0, "reason": "resolved", "title": "Spread: Hawks (-7.5)", "token": "11376846649846397637629515718287737992489767404893188768280033139373736291692", "track": "wb_the_joker", "ts": "2026-11-21T02:41:15Z", "type": "paper_close"}
