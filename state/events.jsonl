@@ -26959,3 +26959,7 @@
 {"fee": 0.0, "outcome": "No", "price": 0.7, "shares": 5, "title": "US announces end of Iranian blockade by February 28, 2027?", "token": "23679931838135181597598621834749834990212683329151974797013774813516558128306", "track": "w_anoin123", "ts": "2026-11-21T05:50:42Z", "type": "paper_buy"}
 {"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Ethereum reach $1,750 on November 21?", "token": "77191497010838527262911834289248819048792411963321886883883173851549423533304", "track": "endgame_sell98", "ts": "2026-11-21T05:52:39Z", "type": "paper_buy"}
 {"minutes_left": 2.22, "price": 0.977, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV210100-00", "track": "kc_maker", "ts": "2026-11-21T05:57:47Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.23, "price": 0.977, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV210100-00", "track": "kc_maker", "ts": "2026-11-21T06:03:28Z", "type": "kmaker_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXLIGAMXSCORE-26NOV20JUAATL-JUA2ATL0", "track": "kalshi_patient", "ts": "2026-11-21T06:03:29Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNBA1HSPREAD-26NOV20SACLAL-SAC10", "track": "kalshi_patient", "ts": "2026-11-21T06:03:29Z", "type": "kpatient_result"}
+{"pnl": 0.248, "price": 0.95, "shares": 5.16, "side": "no", "ticker": "KXNBASPREAD-26NOV20SACLAL-SAC8", "track": "kalshi_patient", "ts": "2026-11-21T06:03:29Z", "type": "kpatient_result"}
