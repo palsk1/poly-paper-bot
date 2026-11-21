@@ -27570,3 +27570,19 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXSCOTTISHPREMTOTAL-26NOV21DUNHOM-6", "track": "kalshi_patient", "ts": "2026-11-21T13:20:09Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXSTEAMTOPSELLER-26NOV24-ROB", "track": "kalshi_patient", "ts": "2026-11-21T13:20:09Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXBTCD-26NOV2117-T52249.99", "track": "kalshi_patient", "ts": "2026-11-21T13:20:09Z", "type": "kpatient_order"}
+{"fee": 0.0011, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will the price of Bitcoin be above $62,000 on November 21?", "token": "75811961176968360131761809329660211185361624603189235631750163549392773857223", "track": "endgame_sell98", "ts": "2026-11-21T13:28:14Z", "type": "paper_buy"}
+{"fee": 0.0013, "outcome": "No", "price": 0.973, "shares": 5, "title": "Will the highest temperature in Los Angeles be between 64-65\u00b0F on November 22?", "token": "17368984583689463875865737518074701497380139365232458556467471756311620941310", "track": "endgame_sell98", "ts": "2026-11-21T13:28:14Z", "type": "paper_buy"}
+{"minutes_left": 1.7, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV210830-30", "track": "kc_maker", "ts": "2026-11-21T13:28:17Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV210830-30", "track": "kc_maker_safe", "ts": "2026-11-21T13:28:18Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV210830-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T13:28:18Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.981, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV210830-30", "track": "kc_maker", "ts": "2026-11-21T13:28:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.981, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV210830-30", "track": "kc_maker_safe", "ts": "2026-11-21T13:28:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.981, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV210830-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T13:28:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.963, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV210830-30", "track": "kc_maker", "ts": "2026-11-21T13:28:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV210830-30", "track": "kc_maker", "ts": "2026-11-21T13:28:20Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV210830-30", "track": "kc_maker_safe", "ts": "2026-11-21T13:28:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.977, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV210830-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T13:28:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.998, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV210830-30", "track": "kc_maker", "ts": "2026-11-21T13:28:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.998, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV210830-30", "track": "kc_maker_safe", "ts": "2026-11-21T13:28:22Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.998, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV210830-30", "track": "kc_maker_safe_usd", "ts": "2026-11-21T13:28:22Z", "type": "kmaker_order"}
+{"minutes_left": 1.7, "price": 0.998, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV210830-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T13:28:22Z", "type": "kmaker_order"}
