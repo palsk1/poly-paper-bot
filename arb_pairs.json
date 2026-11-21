@@ -3434,6 +3434,256 @@
    "id": "KXMUSKPUTIN-26DEC-26DEC|will-vladimir-putin-be-the-1-searched-person-on-google-this-year-20260717214426265",
    "reason": "Different events: Musk-Putin meeting vs Google #1 searched person.",
    "date": "2026-11-20"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL2-26NOV23-BLA|will-black-doves-season-2-be-the-top-global-netflix-show-this-week-20261124",
+   "reason": "Different outcome: Kalshi #2 global show, Polymarket #1 global show.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTRUMPMEETM-26DEC01-VZEL|will-trump-meet-with-volodymyr-zelenskyy-by-november-30-2026",
+   "reason": "Kalshi counts phone calls; Polymarket needs an in-person meeting.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXGAMEAWARDS-BAD-GTA|will-grand-theft-auto-vi-win-best-narrative-at-the-2026-game-awards-1785857783138",
+   "reason": "Different awards: Best Audio Design vs Best Narrative.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXALBUMRELEASE-26-MARI|will-drake-release-a-new-album-by-december-31",
+   "reason": "Different artists: The Marías vs Drake.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWGLOBAL2-26NOV23-THE|will-the-body-season-1-be-the-2-global-netflix-show-this-week-20261124",
+   "reason": "Kalshi doesn't say English or non-English list; Polymarket uses the English list, breaks ties alphabetically and has an 'Other' delay rule (same as earlier Netflix rejects).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXRT-DUNE-80|will-dune-part-three-score-at-least-80-on-the-rotten-tomatoes-popcornmeter-20261221",
+   "reason": "Different scores: Tomatometer (critics, above 80) vs Popcornmeter (audience, at least 80).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNETFLIXRANKMOVIEGLOBAL2-26NOV23-HEA|will-heartland-be-the-top-global-netflix-movie-this-week-20261124",
+   "reason": "Different outcome: Kalshi #2 global movie, Polymarket #1 global movie.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXCBDSA-27JAN28-C25|will-the-south-african-reserve-bank-decrease-the-repo-rate-by-25-bps-at-the-january-2027-meeting",
+   "reason": "Kalshi bucket is 1-25bps with its own cancel rule; Polymarket rounds odd-size moves (same as earlier central-bank rejects).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTRUMPHUANGBACK-27JAN01-26DEC01|will-trump-call-for-jensen-huangs-return-as-nvidia-ceo-by-november-30-2026",
+   "reason": "Kalshi needs an explicit call for reinstatement; Polymarket 'calls for return' is looser wording; different statement tests.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXRECNCH-27-JAN01|will-the-senate-pass-a-reconciliation-bill-by-december-31-20260626182136411",
+   "reason": "Different chambers: House vs Senate.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSOCCERTROPHIES-27RMA-2|will-real-madrid-finish-in-the-top-2-of-the-2026-27-laliga-season",
+   "reason": "Different outcome: 2+ trophies vs top-2 La Liga finish.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXMEDIAGUESTTBPN-27-MAR|will-mark-zuckerberg-be-richest-person-on-december-31-366",
+   "reason": "Different events: TBPN guest vs richest person.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXROLLINGSTONECOVER-27-TIM|will-timothee-chalamet-be-the-1-searched-person-on-google-in-the-us-this-year-20260730192940411",
+   "reason": "Different events: Rolling Stone cover vs #1 Google search.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXGOOGLESEARCH-ATH27-LAM|will-lamine-yamal-be-the-1-searched-person-on-google-this-year-20260717214426257",
+   "reason": "Different lists: Global Athletes list vs Global People list.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXGOOGLESEARCH-GAM26DEC-GTA6|will-grand-theft-auto-vi-win-game-of-the-year-at-the-2026-game-awards-20260804145651075",
+   "reason": "Different events: Google search games list vs Game of the Year award.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXCPI-26NOV-T-0.3|will-november-2026-cpi-mom-be-0pt3",
+   "reason": "Different outcome: CPI above -0.3% vs CPI exactly 0.3%.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXALBUMRELEASE-26-TIM|will-justin-bieber-release-an-album-in-2026",
+   "reason": "Different artists: Justin Timberlake vs Justin Bieber.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXFEDDECISION-27JAN-C25|will-the-fed-decrease-interest-rates-by-25-bps-after-the-january-2027-meeting-20260729233815504",
+   "reason": "Polymarket rounds odd-size moves up to 25bps; Kalshi's rounding/cancel rules differ (same as rejected Fed pairs).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSPACEXCOUNT-26B-180|will-spacex-have-between-180-199-launches-in-2026",
+   "reason": "Different outcome: above 180 vs 180-199 bracket.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXCBDECISIONMEXICO-26DEC17-C25|bank-of-mexico-decreases-interest-rates-by-25-bps-after-december-2026-meeting",
+   "reason": "Polymarket rounds odd-size moves; Kalshi's cancel/bucket rules differ (same as earlier central-bank rejects).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXMULLINANNOUNCEOUT-26NOV-27JAN01|will-markwayne-mullin-leave-the-trump-administration-before-2027-20260715195455798",
+   "reason": "Different outcome: out as DHS Secretary vs leaving the administration entirely (a move to another post differs).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTRUMPSTATES-27JAN01-VT|will-donald-trump-visit-russia-in-2026",
+   "reason": "Different places: Vermont vs Russia.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXMEDIAGUESTTBPN-27-DAR|will-dario-amodei-be-time-person-of-the-year-2026",
+   "reason": "Different events: TBPN guest vs TIME Person of the Year.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNEWROLEX-27JAN-ELON|musk-out-as-tesla-ceo-before-2027",
+   "reason": "Different events: next CEO of X vs Musk out as Tesla CEO.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTOPARTISTTHIRD-26-TAY|will-taylor-swift-be-the-top-artist-in-the-us-for-2026-20260714171850368",
+   "reason": "Different outcome: #3 global artist vs top US artist.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSOCCERTROPHIES-27RMA-1|will-real-madrid-win-the-2026-27-laliga-championship-20260701200737386",
+   "reason": "Different outcome: any trophy vs winning La Liga.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXLLM1-26DEC31-A|claude-6-released-by-december-31-2026",
+   "reason": "Different events: top-ranked AI vs Claude 6 release.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXWHVISIT-27-MCAR|will-mark-carney-be-time-person-of-the-year-2026",
+   "reason": "Different events: White House visit vs TIME Person of the Year.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXISMPMI-26NOV-55|will-ism-manufacturing-pmi-be-between-55pt0-and-55pt9-in-november",
+   "reason": "Different outcome: at least 55 vs 55.0-55.9 bracket.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXMOBILEGAMEAD-27JAN01-SCA|will-scarlett-johansson-be-the-1-searched-person-on-google-in-the-us-this-year-20260730192940415",
+   "reason": "Different events: mobile game ad vs #1 Google search.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTOP3WEALTH-26DEC31-SERG|will-sergey-brin-be-richest-person-on-december-31",
+   "reason": "Different outcome: top 3 wealthiest vs #1 richest.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTBCOUNT-27JAN01-A10000|will-there-be-at-least-10000-measles-cases-in-the-us-in-2026-418-668-617-245-787-217",
+   "reason": "Different diseases: tuberculosis vs measles.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXGDP-27JAN28-T2.0|will-us-gdp-growth-in-q4-2026-be-between-1pt5pct-and-2pt0pct",
+   "reason": "Different outcome: above 2.0% vs 1.5-2.0% bracket.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXMEDIAGUESTERICADAMS-27-ERI|will-connor-wood-win-dancing-with-the-stars-season-35",
+   "reason": "Different events: Eric Adams on DWTS vs Connor Wood winning.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXROGANGUEST-27JAN01-HUN|will-hunter-biden-announce-a-presidential-run-before-2027",
+   "reason": "Different events: Rogan guest vs presidential run.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSECSTATEVISIT-27-UKR|will-donald-trump-visit-ukraine-by-december-31-2026-20260729210126060",
+   "reason": "Different people: Secretary of State vs Trump.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNHLATLANTIC-27-FLA|will-the-florida-panthers-record-110-points",
+   "reason": "Different outcome: division title vs 110+ points.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15-RUN|will-run-this-town-be-played-first-at-the-2027-big-game-halftime-show",
+   "reason": "Kalshi: first song by Jay-Z; Polymarket: first song by any performer.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXCONGRESSTESTIFY-27JAN-HLUT|will-howard-lutnick-leave-the-trump-administration-before-2027",
+   "reason": "Different events: testifying vs leaving the administration.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXTOPARTIST-26B-BAD|will-bad-bunny-be-the-2-searched-person-on-google-this-year-20260914",
+   "reason": "Different events: top Spotify artist vs #2 Google search.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNOTE10Y-26DEC31-T5.14|will-the-5-year-treasury-yield-hit-5pt15-before-2027",
+   "reason": "Different bonds and tests: 10Y on Dec 31 vs 5Y hitting any day.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KX30YRDIRHM-27JAN01H-T5.69|will-the-10-year-treasury-yield-hit-5pt7-before-2027-988-682",
+   "reason": "Different bonds: 30Y vs 10Y.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXDJTATTACKVANCE-26NOV-27JAN01|will-trump-endorse-jd-vance-for-president-before-2027",
+   "reason": "Different events: criticize vs endorse.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSECSTATEVISIT-27-MEX|will-donald-trump-visit-mexico-in-2026",
+   "reason": "Different people: Secretary of State vs Trump.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXNHLATLANTIC-27-BOS|will-the-boston-bruins-record-90-points",
+   "reason": "Different outcome: division title vs 90+ points.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXUSMCA-26-27|will-trump-resign-before-2027",
+   "reason": "Different events: USMCA withdrawal vs Trump resigning.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXSTEFONDIGGSCARDIB-26|will-stefon-diggs-be-the-1-searched-person-on-google-in-the-us-this-year-20260730192940418",
+   "reason": "Different events: engagement vs #1 Google search.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXUKBYELECTIONCOUNT-27JAN01-AL8|will-there-be-exactly-8-uk-parliamentary-by-elections-in-2026-20260708164636516",
+   "reason": "Different outcome: at least 8 vs exactly 8.",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXGTAPCRELEASE-GTA6PC-27APR|rockstar-releases-pc-version-of-gta-vi-by-march-31-2027",
+   "reason": "Kalshi counts any public release (early access could count); Polymarket excludes beta/early access (same as earlier GTA PC reject).",
+   "date": "2026-11-21"
+  },
+  {
+   "id": "KXLEADERNFLSACKS-27-MGARRETT95|will-myles-garrett-win-the-2026-nfl-defensive-player-of-the-year-award-for-the-2026-27-nfl-season-20260716005216694",
+   "reason": "Different events: sacks leader vs Defensive Player of the Year.",
+   "date": "2026-11-21"
   }
  ],
  "rejected_events": [
@@ -3616,6 +3866,11 @@
    "event": "KXGAMEAWARDS-BNAR",
    "reason": "Polymarket breaks ties alphabetically and has a no-winner-by-Dec-31 rule; Kalshi has neither (same as the BMUL Marathon rejection).",
    "date": "2026-11-19"
+  },
+  {
+   "event": "KXNETFLIXRANKSHOWGLOBAL2-26NOV23",
+   "reason": "Kalshi doesn't say English or non-English list; Polymarket uses the English list, alphabetical ties and an 'Other' delay rule.",
+   "date": "2026-11-21"
   }
  ]
 }
