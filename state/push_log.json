@@ -43,7 +43,7 @@
   "2026-11-21": {
    "failed": 0,
    "muted": 105,
-   "sent": 20
+   "sent": 21
   }
  },
  "recent": [
@@ -1078,6 +1078,12 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.50)",
    "track": "kalshi_patient",
    "ts": "2026-11-21T22:04:08Z"
+  },
+  {
+   "result": "sent",
+   "title": "[arb] locked in 2.2c a share",
+   "track": null,
+   "ts": "2026-11-21T22:26:02Z"
   }
  ]
 }
