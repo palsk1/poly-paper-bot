@@ -26811,3 +26811,8 @@
 {"fee": 0.0245, "outcome": "No", "price": 0.89, "shares": 5, "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?", "token": "93760685468635401361534327069612392687592099015054697879830406096648033545295", "track": "wb_cigarettes", "ts": "2026-11-21T04:31:36Z", "type": "paper_buy"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXALBUMEQUIV-HUN26NOV19-40K", "track": "kalshi_patient", "ts": "2026-11-21T04:33:54Z", "type": "kpatient_fill"}
 {"pnl": 0.78, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXNCAAFGAME-26NOV20UTEPAFA-AFA", "track": "kalshi_patient", "ts": "2026-11-21T04:38:57Z", "type": "kpatient_result"}
+{"minutes_left": 2.51, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV202345-45", "track": "kc_maker", "ts": "2026-11-21T04:42:30Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.966, "queue": 9.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV202345-45", "track": "kc_maker", "ts": "2026-11-21T04:42:31Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.996, "queue": 220.51, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker", "ts": "2026-11-21T04:42:32Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.996, "queue": 220.51, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker_safe", "ts": "2026-11-21T04:42:33Z", "type": "kmaker_order"}
+{"minutes_left": 2.51, "price": 0.996, "queue": 220.51, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T04:42:33Z", "type": "kmaker_order"}
