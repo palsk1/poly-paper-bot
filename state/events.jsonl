@@ -26950,3 +26950,4 @@
 {"minutes_left": 5.48, "price": 0.972, "queue": 1.01, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV210045-45", "track": "kc_maker", "ts": "2026-11-21T05:39:34Z", "type": "kmaker_order"}
 {"minutes_left": 5.48, "price": 0.969, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV210045-45", "track": "kc_maker", "ts": "2026-11-21T05:39:35Z", "type": "kmaker_order"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXLOWTSFO-26NOV20-B45.5", "track": "kalshi_patient", "ts": "2026-11-21T05:39:36Z", "type": "kpatient_fill"}
+{"fee": 0.0014, "outcome": "No", "price": 0.971, "shares": 5, "title": "Will xQc finish GTA VI by November 21?", "token": "16299572225420946783829044033881501151433602064891424399335518065066447185050", "track": "endgame_sell98", "ts": "2026-11-21T05:44:02Z", "type": "paper_buy"}
