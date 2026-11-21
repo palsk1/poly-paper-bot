@@ -26575,3 +26575,13 @@
 {"minutes_left": 1.04, "price": 0.996, "queue": 1359.71, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T01:59:00Z", "type": "kmaker_order"}
 {"minutes_left": 1.04, "price": 0.989, "queue": 325.38, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:59:01Z", "type": "kmaker_order"}
 {"minutes_left": 1.04, "price": 0.989, "queue": 325.38, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T01:59:01Z", "type": "kmaker_order"}
+{"cost": 3.9086, "title": "Will the price of Ethereum be above $1,700 on November 24?", "token": "110031975333767452520184281757632705371393755085190997334242141061021975893623", "track": "crypto_no", "ts": "2026-11-21T02:11:11Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T02:11:33Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T02:11:34Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T02:11:34Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T02:11:34Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV202100-00", "track": "kc_maker_safe", "ts": "2026-11-21T02:11:34Z", "type": "kmaker_fill"}
+{"minutes_left": 3.42, "price": 0.951, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV202115-15", "track": "kc_maker", "ts": "2026-11-21T02:11:35Z", "type": "kmaker_order"}
+{"minutes_left": 3.42, "price": 0.951, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV202115-15", "track": "kc_maker_safe", "ts": "2026-11-21T02:11:36Z", "type": "kmaker_order"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXBOXING-26NOV20ANDERSBUCIUC-ANDERS", "track": "kalshi_patient", "ts": "2026-11-21T02:11:37Z", "type": "kpatient_result"}
+{"pnl": 0.0372, "price": 0.96, "shares": 0.93, "side": "no", "ticker": "KXNCAAWBGAME-26NOV20MRSHUK-MRSH", "track": "kalshi_patient", "ts": "2026-11-21T02:11:39Z", "type": "kpatient_result"}
