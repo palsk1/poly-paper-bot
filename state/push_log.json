@@ -42,8 +42,8 @@
   },
   "2026-11-21": {
    "failed": 0,
-   "muted": 24,
-   "sent": 3
+   "muted": 38,
+   "sent": 5
   }
  },
  "recent": [
@@ -976,6 +976,18 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.88)",
    "track": null,
    "ts": "2026-11-21T03:50:59Z"
+  },
+  {
+   "result": "sent",
+   "title": "[momentum_week] bought 2 (practice money)",
+   "track": "momentum_week",
+   "ts": "2026-11-21T05:05:27Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-21T05:08:22Z"
   }
  ]
 }
