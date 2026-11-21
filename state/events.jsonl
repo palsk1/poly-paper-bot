@@ -26821,3 +26821,4 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker", "ts": "2026-11-21T04:48:04Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker_safe", "ts": "2026-11-21T04:48:04Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV202345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T04:48:04Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.2146, "price": 0.997, "reason": "take profit (now 99c), book", "title": "Will Bitcoin dip to $55,000 on November 20?", "token": "16962482486564461890666502874902429177850606373997152960620803113402543302544", "track": "endgame_sell98", "ts": "2026-11-21T04:50:51Z", "type": "paper_close"}
