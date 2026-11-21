@@ -26566,3 +26566,4 @@
 {"filled": 10.0, "price": 0.95, "side": "yes", "through": true, "ticker": "KXHIGHLAX-26NOV20-B64.5", "track": "kalshi_patient", "ts": "2026-11-21T01:43:34Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.9664, "side": "no", "through": true, "ticker": "KXNBAESCALATORPTS-26NOV20SACLAL-LALWKESSLER14", "track": "kalshi_patient", "ts": "2026-11-21T01:43:34Z", "type": "kpatient_fill"}
 {"filled": 5.16, "price": 0.95, "side": "no", "through": true, "ticker": "KXNBASPREAD-26NOV20SACLAL-SAC8", "track": "kalshi_patient", "ts": "2026-11-21T01:43:35Z", "type": "kpatient_fill"}
+{"minutes_left": 4.8, "price": 0.957, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV202100-00", "track": "kc_maker", "ts": "2026-11-21T01:55:12Z", "type": "kmaker_order"}
