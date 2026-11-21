@@ -28187,3 +28187,14 @@
 {"filled": 8.02, "price": 0.91, "side": "yes", "through": true, "ticker": "KXF1TOP10-LASV26-VER", "track": "kalshi_patient", "ts": "2026-11-21T22:07:41Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXLIGAMXSPREAD-26NOV21SLALEO-LEO3", "track": "kalshi_patient", "ts": "2026-11-21T22:07:43Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV22TBDET-TB15", "track": "kalshi_patient", "ts": "2026-11-21T22:07:45Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.1408, "price": 0.981, "reason": "wallet exit (book)", "title": "Will the Birch and Swinnerton-Dyer Conjecture be the next Millennium Prize Problem solved by AI?", "token": "97593588413398689590542097559674748361990718484828170466163887204165983538310", "track": "wb_groth", "ts": "2026-11-21T22:10:41Z", "type": "paper_close"}
+{"minutes_left": 2.19, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211715-15", "track": "kc_maker", "ts": "2026-11-21T22:12:48Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T22:12:49Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.995, "queue": 1061.72, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV211715-15", "track": "kc_maker", "ts": "2026-11-21T22:12:49Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.995, "queue": 1061.72, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV211715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T22:12:50Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.995, "queue": 2.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV211715-15", "track": "kc_maker", "ts": "2026-11-21T22:12:50Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.995, "queue": 2.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV211715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T22:12:51Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.997, "queue": 1.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV211715-15", "track": "kc_maker", "ts": "2026-11-21T22:12:51Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.997, "queue": 1.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV211715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T22:12:52Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV211715-15", "track": "kc_maker", "ts": "2026-11-21T22:12:52Z", "type": "kmaker_order"}
+{"minutes_left": 2.19, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV211715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T22:12:53Z", "type": "kmaker_order"}
