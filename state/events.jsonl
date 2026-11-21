@@ -26753,3 +26753,7 @@
 {"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the price of Solana be between $70 and $80 on November 21?", "token": "87904507291999404192882502783533741966253592050990511105482476671071079573367", "track": "endgame_sell98", "ts": "2026-11-21T03:58:18Z", "type": "paper_buy"}
 {"minutes_left": 1.2, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV202300-00", "track": "kc_maker", "ts": "2026-11-21T03:58:48Z", "type": "kmaker_order"}
 {"minutes_left": 1.2, "price": 0.991, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV202300-00", "track": "kc_maker", "ts": "2026-11-21T03:58:49Z", "type": "kmaker_order"}
+{"fee": 0.0022, "outcome": "No", "price": 0.9536, "shares": 5, "title": "Will Bitcoin dip to $55,000 on November 20?", "token": "16962482486564461890666502874902429177850606373997152960620803113402543302544", "track": "endgame_sell98", "ts": "2026-11-21T04:04:29Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV202300-00", "track": "kc_maker", "ts": "2026-11-21T04:04:32Z", "type": "kmaker_fill"}
+{"pnl": 0.78, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNCAAMBGAME-26NOV20UCFVAN-UCF", "track": "kalshi_patient", "ts": "2026-11-21T04:04:34Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNCAAWBGAME-26NOV20UNOORU-UNO", "track": "kalshi_patient", "ts": "2026-11-21T04:04:34Z", "type": "kpatient_result"}
