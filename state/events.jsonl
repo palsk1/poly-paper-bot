@@ -27933,3 +27933,6 @@
 {"fee": 0.0553, "outcome": "SE Palmeiras: No", "price": 0.67, "shares": 5, "title": "Will SE Palmeiras win on 2026-11-21?", "token": "36229961725048180860729054478302571871832029583990294642463389975320609273765", "track": "sharp_pinnacle", "ts": "2026-11-21T18:45:12Z", "type": "paper_buy"}
 {"fee": 0.0086, "outcome": "No", "price": 0.78, "shares": 5, "title": "Will Elon Musk post 90-114 tweets from November 21 to November 23, 2026?", "token": "23012849830581046966836681022864054323527203531667845982654740695543926235893", "track": "postcount_no", "ts": "2026-11-21T18:45:31Z", "type": "paper_buy"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXUFCVICROUND-26NOV21MATABD-MAT3", "track": "kalshi_patient", "ts": "2026-11-21T18:45:38Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXEPL1HSPREAD-26NOV21AVLSUN-SUN2", "track": "kalshi_patient", "ts": "2026-11-21T19:00:39Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXEPLSPREAD-26NOV21BOUNFO-NFO2", "track": "kalshi_patient", "ts": "2026-11-21T19:00:39Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXTACAPORTSPREAD-26NOV21AVSTON-AVS2", "track": "kalshi_patient", "ts": "2026-11-21T19:00:39Z", "type": "kpatient_result"}
