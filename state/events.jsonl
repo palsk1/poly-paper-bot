@@ -26807,3 +26807,6 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXTRUMPNOMNUM-26NOV15-T10", "track": "kalshi_patient", "ts": "2026-11-21T04:31:04Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV22LVDEN-DENCSUTTON14", "track": "kalshi_patient", "ts": "2026-11-21T04:31:04Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLREC-26NOV22JACNYG-NYGTJOHNSON84-4", "track": "kalshi_patient", "ts": "2026-11-21T04:31:04Z", "type": "kpatient_order"}
+{"fee": 0.0245, "outcome": "No", "price": 0.89, "shares": 5, "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?", "token": "93760685468635401361534327069612392687592099015054697879830406096648033545295", "track": "w_cigarettes", "ts": "2026-11-21T04:31:35Z", "type": "paper_buy"}
+{"fee": 0.0245, "outcome": "No", "price": 0.89, "shares": 5, "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?", "token": "93760685468635401361534327069612392687592099015054697879830406096648033545295", "track": "wb_cigarettes", "ts": "2026-11-21T04:31:36Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXALBUMEQUIV-HUN26NOV19-40K", "track": "kalshi_patient", "ts": "2026-11-21T04:33:54Z", "type": "kpatient_fill"}
