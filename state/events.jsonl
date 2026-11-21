@@ -28182,3 +28182,8 @@
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXETHD-26NOV2117-T1739.99", "track": "kalshi_patient", "ts": "2026-11-21T22:04:08Z", "type": "kpatient_result"}
 {"pnl": -9.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNCAAMB1H-26NOV21LAFSYR-LAF", "track": "kalshi_patient", "ts": "2026-11-21T22:04:08Z", "type": "kpatient_result"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV2117-T64.9999", "track": "kalshi_patient", "ts": "2026-11-21T22:04:08Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.3993, "price": 0.0, "reason": "resolved", "title": "Will RC Strasbourg Alsace vs. Stade Brestois 29 end in a draw?", "token": "1191928365458165551476974579941953522392736898942054027807175773555385696907", "track": "soccer_draw", "ts": "2026-11-21T22:05:37Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": 4.0115, "price": 1.0, "reason": "resolved", "title": "Will AS Monaco FC vs. AJ Auxerre end in a draw?", "token": "82369023669397099780552864564464456342919914877597723577747367192628225657853", "track": "soccer_draw", "ts": "2026-11-21T22:05:37Z", "type": "paper_close"}
+{"filled": 8.02, "price": 0.91, "side": "yes", "through": true, "ticker": "KXF1TOP10-LASV26-VER", "track": "kalshi_patient", "ts": "2026-11-21T22:07:41Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXLIGAMXSPREAD-26NOV21SLALEO-LEO3", "track": "kalshi_patient", "ts": "2026-11-21T22:07:43Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV22TBDET-TB15", "track": "kalshi_patient", "ts": "2026-11-21T22:07:45Z", "type": "kpatient_fill"}
