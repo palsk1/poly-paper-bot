@@ -27480,3 +27480,4 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV210745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T12:48:06Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.2, "price": 0.98, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV210745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T12:48:06Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.47, "price": 0.953, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV210745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T12:48:06Z", "type": "kmaker_fill"}
+{"fee": 0.0, "outcome": "No", "price": 0.878, "shares": 5, "title": "Miguel D\u00edaz-Canel out as leader of Cuba by December 31?", "token": "72095897215599895681149701722606364539867186803340437295210002622844727571825", "track": "panic_fade_4c", "ts": "2026-11-21T12:55:11Z", "type": "paper_buy"}
