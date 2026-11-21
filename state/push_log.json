@@ -42,8 +42,8 @@
   },
   "2026-11-21": {
    "failed": 0,
-   "muted": 14,
-   "sent": 1
+   "muted": 15,
+   "sent": 2
   }
  },
  "recent": [
@@ -964,6 +964,12 @@
    "title": "[panic_fade] bought 1 (practice money)",
    "track": "panic_fade",
    "ts": "2026-11-21T02:58:22Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-21T03:21:32Z"
   }
  ]
 }
