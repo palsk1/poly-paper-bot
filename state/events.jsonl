@@ -28046,3 +28046,10 @@
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLWINMARGIN-26NOV22NOCHI-NO1TO6", "track": "kalshi_patient", "ts": "2026-11-21T20:04:13Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNETFLIXRANKMOVIEGLOBAL2-26NOV23-HEA", "track": "kalshi_patient", "ts": "2026-11-21T20:04:13Z", "type": "kpatient_order"}
 {"annual": 0.341, "edge": 0.0398, "pair": "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026", "title": "Will Trump meet with Kim Jong Un in 2026?", "track": "arb", "ts": "2026-11-21T20:06:23Z", "type": "arb_opportunity"}
+{"outcome": "No", "pnl": 0.1281, "price": 0.999, "reason": "take profit (now 100c), book", "title": "Will the highest temperature in Los Angeles be between 64-65\u00b0F on November 21?", "token": "59354356367084800323461842420191228831478700386975654498158092909812237303992", "track": "endgame_sell98", "ts": "2026-11-21T20:10:55Z", "type": "paper_close"}
+{"minutes_left": 0.89, "price": 0.998, "queue": 1679.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211515-15", "track": "kc_maker", "ts": "2026-11-21T20:14:07Z", "type": "kmaker_order"}
+{"minutes_left": 0.89, "price": 0.998, "queue": 1679.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV211515-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-21T20:14:08Z", "type": "kmaker_order"}
+{"minutes_left": 0.89, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV211515-15", "track": "kc_maker", "ts": "2026-11-21T20:14:08Z", "type": "kmaker_order"}
+{"minutes_left": 0.89, "price": 0.959, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV211515-15", "track": "kc_maker", "ts": "2026-11-21T20:14:10Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXATPCHALLENGERMATCH-26NOV21MATTOB-TOB", "track": "kalshi_patient", "ts": "2026-11-21T20:14:12Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXF1FASTLAP-LASV26-HAD", "track": "kalshi_patient", "ts": "2026-11-21T20:14:13Z", "type": "kpatient_fill"}
