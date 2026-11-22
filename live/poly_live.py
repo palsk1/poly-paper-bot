@@ -235,12 +235,19 @@ def settle(book):
         if not m:
             continue
         prices = [bot.fnum(x, None) for x in bot.jlist(m.get("outcomePrices"))]
-        if not m.get("closed") or len(prices) != 2 or None in prices or max(prices) < 0.99:
+        if not m.get("closed") or len(prices) != 2 or None in prices:
             continue
-        pay = 1.0 if prices[0] >= 0.99 else 0.0
+        if max(prices) >= 0.99:
+            pay = 1.0 if prices[0] >= 0.99 else 0.0
+        elif m.get("umaResolutionStatus") == "resolved" or m.get("resolutionStatus") == "resolved":
+            # A split result: a 50-50, or Polymarket's coming "fair value" payout for a canceled, abandoned or
+            # very late game (banner seen 22 Nov 2026). Each Yes share pays its final price; claimed like a win.
+            pay = round(prices[0], 4)
+        else:
+            continue                       # closed, but the result isn't final yet
         spent = o.get("spent", o["shares"] * o["ask"])
         pnl = o["shares"] * pay - spent - o.get("fee_est", 0)
-        extra = {"result": "draw" if pay else "no draw", "how": "real" if o.get("order_id") else "dry run"}
+        extra = {"result": "draw" if pay >= 0.99 else ("no draw" if pay <= 0 else f"split, paid {pay:.2f} a share"), "how": "real" if o.get("order_id") else "dry run"}
         book.settle(slug, pnl, filled=o["shares"], **extra)   # a lost draw is normal (about 2 in 3): no push
     book.save()
     if C.is_live() and os.environ.get("POLY_RELAYER_KEY"):

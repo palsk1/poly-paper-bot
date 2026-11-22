@@ -238,6 +238,15 @@ def test_poly():
           "Polymarket settles won draws, then claims every claimable win (old ones too), once each, and skips lost bets worth $0")
     del os.environ["POLY_RELAYER_KEY"]
     check(key in b3.state["done"], "a settled market is never bought again")
+    # Polymarket's coming "fair value" payout (canceled / abandoned / very late games): a split final price
+    b4 = C.Book("poly4")
+    b4.state["open"] = {"a-draw": {"shares": 10, "ask": 0.30, "spent": 3.0}, "b-draw": {"shares": 10, "ask": 0.30, "spent": 3.0}}
+    bot.http_json = lambda url, params=None, retries=3: (
+        [{"closed": True, "outcomePrices": '["0.31", "0.69"]', "umaResolutionStatus": "resolved"}]
+        if params.get("slug") == "a-draw" else [{"closed": True, "outcomePrices": '["0.31", "0.69"]'}])
+    P.settle(b4)
+    check("a-draw" not in b4.state["open"] and abs(b4.state["realized"] - 0.10) < 1e-6 and "b-draw" in b4.state["open"],
+          "a split ('fair value') result pays its final price; a closed game without a final result waits")
     os.environ.pop("LIVE")
 
 
