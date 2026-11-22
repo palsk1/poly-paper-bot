@@ -28917,3 +28917,6 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNCAAWVMATCH-26NOV221300NCSTLOU-NCST", "track": "kalshi_patient", "ts": "2026-11-22T05:40:13Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXUECLTOTAL-26NOV26CSKTRA-6", "track": "kalshi_patient", "ts": "2026-11-22T05:40:13Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV23CINWAS-WASAEKELER30", "track": "kalshi_patient", "ts": "2026-11-22T05:40:13Z", "type": "kpatient_order"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV22LVDEN-DENPBRYANT13-80", "track": "kalshi_patient", "ts": "2026-11-22T05:52:10Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": false, "ticker": "KXNFLRECYDSPROT-26NOV22TBDET-TBKGAINWELL1-40", "track": "kalshi_patient", "ts": "2026-11-22T05:52:10Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": false, "ticker": "KXSLGREECETOTAL-26NOV22LEVATR-5", "track": "kalshi_patient", "ts": "2026-11-22T05:52:13Z", "type": "kpatient_fill"}
