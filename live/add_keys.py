@@ -59,13 +59,18 @@ def main():
         new["KALSHI_KEY_FILE"] = KFILE
         print(f"  saved to {KFILE}")
 
-    print("\nPOLYMARKET (polymarket.com > Settings > Export private key)")
+    print("\nPOLYMARKET private key. Where it is depends on how you log in to Polymarket:")
+    print("  Google or email login: open reveal.magic.link/polymarket, sign in, show the key (one long row, no dashes).")
+    print("  Wallet app (MetaMask, Rabby): export the key from that app.")
     pk = getpass.getpass("  Polymarket private key (hidden while you type/paste, starts with 0x): ").strip()
     if pk:
         new["POLY_PRIVATE_KEY"] = pk if pk.startswith("0x") else "0x" + pk
     w = input("  Your Polymarket address (Profile page, the 0x... under your name): ").strip()
     if w:
         new["POLY_WALLET"] = w
+    elif pk and not any(ln.startswith("POLY_WALLET=") for ln in read_env()):
+        print("  !! No address saved. Without it the bot opens a new empty wallet instead of your account.")
+        print("     Run this again later and answer this one question (Enter on the others).")
 
     print("  Claiming wins by itself: polymarket.com > Settings > API keys > create a Relayer key.")
     rk = getpass.getpass("  Relayer key (hidden, Enter to skip): ").strip()

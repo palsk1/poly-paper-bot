@@ -46,7 +46,9 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
-   - **Polymarket:** polymarket.com > Settings > Export private key. And your address (Profile, the 0x... under your name).
+   - **Polymarket:** the private key: with a Google or email login, open `reveal.magic.link/polymarket` (Polymarket's own
+     help page points there), sign in and show the key; with a wallet app, export it from the app. And your address
+     (profile picture, the 0x... with a copy button). The bot needs both: without the address it opens a new empty wallet.
      Also Settings > API keys > create a **Relayer key** (and note the address shown next to it): with it the bot
      claims every win by itself, so the cash is free for the next bets. Without it you press Claim in the app.
 5. Put them on the server: `~/lenv/bin/python ~/poly-paper-bot/live/add_keys.py` (it asks one at a time; the

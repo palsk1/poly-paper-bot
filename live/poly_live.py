@@ -69,6 +69,17 @@ def client():
     return _client
 
 
+# Permissions Polymarket's kit lists as "standard" that this bot never needs: the perps deposit contract and the
+# auto-claim operator (the bot claims wins itself). From polymarket/environments.py, 22 Nov. Fewer permissions = safer.
+EXTRAS = {"0xdca4af75705dbb50f62437045aff9921947917d2", "0xa1200000d0002264c9a1698e001292d00e1b00af"}
+
+
+def items(pages):
+    """Polymarket's kit hands lists back page by page: walking the list itself gives pages, not rows.
+    (Bug fix 22 Nov: the claim sweep walked pages, so it would have claimed nothing.)"""
+    return list(pages.iter_items()) if hasattr(pages, "iter_items") else list(pages)
+
+
 def claim_all(book):
     """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
     "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
@@ -76,7 +87,7 @@ def claim_all(book):
     and retries ones that failed. Needs POLY_RELAYER_KEY (Polymarket Settings > API keys > Relayer key)."""
     cl = client()
     try:
-        rows = list(cl.list_positions(status="REDEEMABLE"))
+        rows = items(cl.list_positions(status="REDEEMABLE"))
     except Exception as e:
         book.log("claim_list_failed", err=f"{type(e).__name__}: {e}"[:200])
         return
@@ -257,17 +268,31 @@ def check():
     C.load_env()
     cl = client()
     print(f"OK: logged in. Wallet {cl.wallet} ({cl.wallet_type}). Cash ${cash():.2f}.")
+    if not os.environ.get("POLY_WALLET"):
+        print("WARNING: no Polymarket address saved (POLY_WALLET), so this is a new empty wallet, not your account.\n"
+              "  Fix: run add_keys.py again, Enter on everything except 'Your Polymarket address'.")
     try:
         print("Closed-only mode (account limited to selling):", cl.get_closed_only_mode())
     except Exception as e:
         print(f"closed-only check failed: {e}")
     try:
-        print("Trading approvals:", cl.get_trading_approvals_state())
+        st = cl.get_trading_approvals_state()
+        miss = getattr(st, "missing", None)
+        rows = list(getattr(miss, "erc20", []) or []) + list(getattr(miss, "erc1155", []) or [])
+        need = [r for r in rows if str(getattr(r, "spender", None) or getattr(r, "operator", "")).lower() not in EXTRAS]
+        if not need:
+            print("Trading permissions: all set for buying and claiming."
+                  + (f" ({len(rows)} extra ones are off: Polymarket's perps and auto-claim add-ons, which this "
+                     "bot does not use. Leave them off.)" if rows else ""))
+        else:
+            print(f"Trading permissions: {len(need)} missing. This wallet has not yet allowed Polymarket's exchange "
+                  "to use its cash, so buys would be refused.\n  Fix (free, moves no money): "
+                  "~/lenv/bin/python ~/poly-paper-bot/live/poly_live.py approve")
     except Exception as e:
         print(f"approvals check failed: {e}")
     if os.environ.get("POLY_RELAYER_KEY"):
         try:
-            n = len(list(cl.list_positions(status="REDEEMABLE")))
+            n = len(items(cl.list_positions(status="REDEEMABLE")))
             print(f"Claiming: set up (relayer key). {n} won bet(s) waiting to be claimed now; the bot claims them.")
         except Exception as e:
             print(f"Claiming: relayer key set, but listing claimable bets failed: {e}")
@@ -295,6 +320,18 @@ def status():
         print(f"  {d}: {v['bets']} bets, ${v['spent']:.2f} put in, P&L ${v['pnl']:+.2f}")
 
 
+def approve():
+    """One time, Jan runs it himself: let Polymarket's exchange use this wallet's cash for trades (the same
+    permissions the website sets on a first trade). Free (gasless), moves no money."""
+    C.load_env()
+    cl = client()
+    print(f"Wallet {cl.wallet} ({cl.wallet_type}). Asking for the standard trading permissions...")
+    cl.setup_trading_approvals()
+    st = cl.get_trading_approvals_state()
+    print("Trading permissions: all set." if getattr(st, "is_fully_approved", False)
+          else "Still missing some. Run the check again in a minute; if it stays, tell Claude.")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
-    {"run": run, "check": check, "status": status}.get(cmd, status)()
+    {"run": run, "check": check, "status": status, "approve": approve}.get(cmd, status)()
