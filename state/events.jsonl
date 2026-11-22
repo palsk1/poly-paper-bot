@@ -30144,3 +30144,4 @@
 {"filled": 2.0, "price": 0.95, "side": "yes", "through": false, "ticker": "KXHIGHTDC-26NOV22-B64.5", "track": "kalshi_patient", "ts": "2026-11-22T20:32:21Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXHIGHTSEA-26NOV22-T47", "track": "kalshi_patient", "ts": "2026-11-22T20:32:21Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXLOWTSATX-26NOV22-T52", "track": "kalshi_patient", "ts": "2026-11-22T20:32:21Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.068, "price": 0.987, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in New York City be between 64-65\u00b0F on November 22?", "token": "107470719415587704963524136747955449613345606138775926140407543074766165438114", "track": "endgame_sell98", "ts": "2026-11-22T20:35:47Z", "type": "paper_close"}
