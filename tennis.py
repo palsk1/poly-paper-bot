@@ -1006,6 +1006,251 @@ def fetch(days=45):
             wj(tp, old)
             print(f"  {sr} minutes file {i + 1}/{n_sh}: {sum(1 for v in old.values() if v)}/{len(old)} with prices ({(time.time() - T0) / 60:.0f} min)", flush=True)
 
+
+# ================================================================ history test: after a set, market price vs the model
+import math
+import unicodedata
+
+WOMEN = ("KXWTAMATCH", "KXWTACHALLENGERMATCH", "KXITFWMATCH")
+BASE = {"m": 0.63, "w": 0.56}          # usual share of points won on serve (men / women)
+
+
+def toks(name):
+    s = unicodedata.normalize("NFKD", str(name or "")).encode("ascii", "ignore").decode().lower()
+    return {t for t in re.split(r"[^a-z]+", s) if len(t) >= 3}
+
+
+def kfee(price, n):
+    return math.ceil(0.07 * n * price * (1 - price) * 100 - 1e-9) / 100
+
+
+def load_365():
+    out = []
+    if not os.path.isdir(S365_DIR):
+        return out
+    for f in sorted(os.listdir(S365_DIR)):
+        for g in rj(os.path.join(S365_DIR, f), []) or []:
+            d = bot.parse_iso(g.get("start"))
+            if not d or not g.get("sets") or "/" in str(g.get("h")) or "/" in str(g.get("a")):
+                continue
+            g["t0"] = d.timestamp()
+            g["ht"], g["at"] = toks(g["h"]), toks(g["a"])
+            out.append(g)
+    return out
+
+
+def load_kalshi():
+    """-> [{series, ev, tk (the YES player's market), name, other, res (1 if the YES player won), close, vol, rules, mins}]"""
+    out = []
+    for sr in K_SERIES:
+        ms = rj(os.path.join(KT_DIR, f"markets_{sr}.json.gz"), []) or []
+        mins = {}
+        i = 0
+        while True:
+            d = rj(os.path.join(KT_DIR, f"min_{sr}_{i:03d}.json.gz"))
+            if d is None:
+                break
+            mins.update(d)
+            i += 1
+        evs = collections.defaultdict(list)
+        for m in ms:
+            evs[m["ev"]].append(m)
+        for ev, mm in evs.items():
+            mm.sort(key=lambda m: m["t"])
+            m = mm[0]
+            if len(mm) != 2 or not mins.get(m["t"]):
+                continue
+            out.append({"series": sr, "ev": ev, "tk": m["t"], "name": m["name"], "other": mm[1]["name"], "res": 1 if m["res"] == "yes" else 0,
+                        "close": bot.parse_iso(m["close"]).timestamp(), "vol": m["vol"] + mm[1]["vol"], "rules": m.get("rules") or "", "mins": mins[m["t"]]})
+    return out
+
+
+def join(ks, gs):
+    """Match each Kalshi match to its 365scores game (same two surnames, start within 8 hours before the close)."""
+    by_tok = collections.defaultdict(list)
+    for g in gs:
+        for t in g["ht"] | g["at"]:
+            by_tok[t].append(g)
+    n = 0
+    for k in ks:
+        a, b = toks(k["name"]), toks(k["other"])
+        best = None
+        for g in {id(g): g for t in a for g in by_tok.get(t, [])}.values():
+            if not (k["close"] - 9 * 3600 <= g["t0"] <= k["close"]):
+                continue
+            if a & g["ht"] and b & g["at"]:
+                side = "h"
+            elif a & g["at"] and b & g["ht"]:
+                side = "a"
+            else:
+                continue
+            sc = len(a & (g["ht"] if side == "h" else g["at"])) + len(b & (g["at"] if side == "h" else g["ht"]))
+            if best is None or sc > best[0]:
+                best = (sc, g, side)
+        if best:
+            k["g"], k["side"] = best[1], best[2]
+            n += 1
+    return n
+
+
+def quote_at(mins, t, max_gap=180, max_spread=8):
+    """Last minute bar ending at or before t: (bid, ask) in dollars, or None when stale / wide / one-sided."""
+    lo, hi, i = 0, len(mins) - 1, -1
+    while lo <= hi:
+        md = (lo + hi) // 2
+        if mins[md][0] <= t:
+            i, lo = md, md + 1
+        else:
+            hi = md - 1
+    if i < 0:
+        return None
+    te, bid, ask = mins[i][0], mins[i][1], mins[i][2]
+    if bid is None or ask is None or t - te > max_gap or not 0 < bid < ask < 100 or ask - bid > max_spread:
+        return None
+    return bid / 100, ask / 100
+
+
+def set_rows(ks, lags=(1, 3, 10)):
+    """One row per finished set that did not end the match: the model's chance and Kalshi's bid / ask a little later."""
+    rows, skipped = [], collections.Counter()
+    for k in ks:
+        g = k.get("g")
+        if not g:
+            skipped["no 365 match"] += 1
+            continue
+        sets = g["sets"]
+        if any(x[2] is None for x in sets) or len(sets) < 2:
+            skipped["no set minutes / one set"] += 1
+            continue
+        sex = "w" if k["series"] in WOMEN else "m"
+        best = 5 if sex == "m" and re.search(r"US Open|Wimbledon|Australian Open|French Open|Roland Garros", k["rules"]) and "Qualif" not in k["rules"] else 3
+        q0 = quote_at(k["mins"], g["t0"] - 60, max_gap=1800)
+        if not q0:
+            skipped["no price before the start"] += 1
+            continue
+        p0 = (q0[0] + q0[1]) / 2
+        if not 0.03 < p0 < 0.97:
+            skipped["pre-match price at the edge"] += 1
+            continue
+        pa, pb = fit_gap(p0, BASE[sex], best)
+        sa = sb = 0
+        el = 0
+        need = best // 2 + 1
+        for i, (h, a, mm) in enumerate(sets):
+            mine, theirs = (h, a) if k["side"] == "h" else (a, h)
+            el += mm
+            if mine == theirs:
+                skipped["set not finished (retired)"] += 1
+                break
+            won = mine > theirs
+            sa, sb = sa + won, sb + (not won)
+            if sa >= need or sb >= need or i == len(sets) - 1:
+                break
+            est = g["t0"] + el * 60
+            # the real end of the set: the minute near our guess where the price moved most the right way
+            te, mv = None, 0
+            for j, bar in enumerate(k["mins"]):
+                if est - 300 <= bar[0] <= est + 300 and j > 0 and bar[1] and bar[2] and k["mins"][j - 1][1] and k["mins"][j - 1][2]:
+                    d = (bar[1] + bar[2] - k["mins"][j - 1][1] - k["mins"][j - 1][2]) / 2 * (1 if won else -1)
+                    if d > mv:
+                        te, mv = bar[0], d
+            row = {"ev": k["ev"], "series": k["series"], "sex": sex, "best": best, "p0": p0, "set": i + 1, "won": int(won), "sa": sa, "sb": sb, "games": (mine, theirs),
+                   "est": est, "te": te, "jump": mv, "res": k["res"], "vol": k["vol"], "model": p_match(pa, pb, sa, sb, best=best), "q": {}}
+            for lag in lags:
+                row["q"][lag] = quote_at(k["mins"], (te or est) + lag * 60)
+            rows.append(row)
+    return rows, skipped
+
+
+def kbet(row, lag, yes, stake=25.0):
+    """Buy the YES player (yes=True) or the other one at Kalshi's real ask + the taker fee; hold to the end."""
+    q = row["q"].get(lag)
+    if not q:
+        return None
+    px = q[1] if yes else 1 - q[0]
+    n = int(stake / px)
+    if n < 1:
+        return None
+    win = row["res"] == (1 if yes else 0)
+    return {"ev": row["ev"], "t": (row["te"] or row["est"]) + lag * 60, "cost": n * px + kfee(px, n), "pay": n * 1.0 if win else 0.0, "px": px}
+
+
+def per100(bets):
+    c = sum(b["cost"] for b in bets)
+    return (sum(b["pay"] for b in bets) - c) / c * 100 if c else 0.0
+
+
+def sets_report(lag=3):
+    import exam
+    gs, ks = load_365(), load_kalshi()
+    n = join(ks, gs)
+    print(f"{len(ks)} Kalshi matches with minute prices, {len(gs)} finished 365scores singles matches, {n} matched")
+    rows, skipped = set_rows(ks)
+    print(f"{len(rows)} finished sets (match still going) in {len({r['ev'] for r in rows})} matches; left out: {dict(skipped)}")
+    off = sorted((r["te"] - r["est"]) / 60 for r in rows if r["te"])
+    if off:
+        print(f"clock check: the price jump comes {off[len(off) // 2]:+.0f} min from 365scores' set end (middle case), 10th-90th {off[len(off) // 10]:+.0f} .. {off[len(off) * 9 // 10]:+.0f}; "
+              f"jump found for {len(off)} of {len(rows)} sets")
+    rows = [r for r in rows if r["te"] and r["q"].get(lag)]
+    print(f"{len(rows)} sets with a clear price jump and a two-sided Kalshi quote {lag} min later\n")
+
+    def line(name, rs):
+        if not rs:
+            return
+        nn = len(rs)
+        mid = sum((r["q"][lag][0] + r["q"][lag][1]) / 2 for r in rs) / nn
+        mod = sum(r["model"] for r in rs) / nn
+        act = sum(r["res"] for r in rs) / nn
+        se = (act * (1 - act) / max(1, len({r["ev"] for r in rs}))) ** 0.5
+        print(f"  {name:<46} n={nn:<5} before {sum(r['p0'] for r in rs) / nn * 100:5.1f}c  model {mod * 100:5.1f}c  Kalshi {mid * 100:5.1f}c  really won {act * 100:5.1f} in 100 (+-{se * 164:.1f})")
+    print("How the YES player did, by what just happened (price in cents = chance in 100):")
+    s1 = [r for r in rows if r["set"] == 1 and r["best"] == 3]
+    for nm, f in (("favourite (60c+) LOST set 1", lambda r: r["p0"] >= .6 and not r["won"]), ("favourite (60c+) WON set 1", lambda r: r["p0"] >= .6 and r["won"]),
+                  ("even match (40-60c) lost set 1", lambda r: .4 <= r["p0"] < .6 and not r["won"]), ("even match (40-60c) won set 1", lambda r: .4 <= r["p0"] < .6 and r["won"]),
+                  ("underdog (under 40c) LOST set 1", lambda r: r["p0"] < .4 and not r["won"]), ("underdog (under 40c) WON set 1", lambda r: r["p0"] < .4 and r["won"]),
+                  ("lost set 1 badly (0-6, 1-6, 2-6)", lambda r: not r["won"] and r["games"][0] <= 2), ("lost set 1 narrowly (5-7, 6-7)", lambda r: not r["won"] and r["games"][0] >= 5),
+                  ("won set 1 easily (6-0, 6-1, 6-2)", lambda r: r["won"] and r["games"][1] <= 2), ("won set 1 narrowly (7-5, 7-6)", lambda r: r["won"] and r["games"][1] >= 5)):
+        line(nm, [r for r in s1 if f(r)])
+    s2 = [r for r in rows if r["set"] == 2 and r["best"] == 3]
+    line("one set all: just won set 2", [r for r in s2 if r["won"]])
+    line("one set all: just lost set 2", [r for r in s2 if not r["won"]])
+
+    # does the gap between model and Kalshi say anything about who wins?
+    xs = [(r["model"] - (r["q"][lag][0] + r["q"][lag][1]) / 2, r["res"] - (r["q"][lag][0] + r["q"][lag][1]) / 2) for r in rows]
+    sxx = sum(x * x for x, _ in xs)
+    if sxx:
+        slope = sum(x * y for x, y in xs) / sxx
+        print(f"\nWhen the model and Kalshi disagree, who is right? Slope {slope:+.2f} (0 = Kalshi is right, the model adds nothing; 1 = the model is right). "
+              f"Typical disagreement {sum(abs(x) for x, _ in xs) / len(xs) * 100:.1f}c.")
+
+    print("\nBets at Kalshi's real ask + fee, $25 each, held to the end:")
+    cards = []
+
+    def run(name, pick, tries, log=False):
+        bets = [b for b in (pick(r) for r in rows) if b]
+        if not bets:
+            print(f"  {name}: no bets")
+            return
+        h = sorted(bets, key=lambda b: b["t"])
+        h1, h2 = h[:len(h) // 2], h[len(h) // 2:]
+        print(f"  {name}: {len(bets)} bets, {per100(bets):+.2f} per $100 (first half {per100(h1):+.2f}, second half {per100(h2):+.2f}), won {sum(1 for b in bets if b['pay'] > 0)}")
+        cards.append((name, bets, tries))
+    mid = lambda r: (r["q"][lag][0] + r["q"][lag][1]) / 2
+    run("always the player who just LOST the set", lambda r: kbet(r, lag, not r["won"]), 1)
+    run("always the player who just WON the set", lambda r: kbet(r, lag, bool(r["won"])), 1)
+    for x in (0.03, 0.05, 0.08):
+        run(f"model says cheap by {x * 100:.0f}c+ at the ask", lambda r: kbet(r, lag, True) if r["model"] - r["q"][lag][1] >= x else kbet(r, lag, False) if r["q"][lag][0] - r["model"] >= x else None, 3)
+        run(f"  the opposite side (model says dear by {x * 100:.0f}c+)", lambda r: kbet(r, lag, False) if r["model"] - mid(r) >= x else kbet(r, lag, True) if mid(r) - r["model"] >= x else None, 3)
+    run("favourite (60c+ before) who lost set 1", lambda r: kbet(r, lag, True) if r["set"] == 1 and r["p0"] >= .6 and not r["won"] else kbet(r, lag, False) if r["set"] == 1 and r["p0"] <= .4 and r["won"] else None, 1)
+    run("underdog who won set 1", lambda r: kbet(r, lag, True) if r["set"] == 1 and r["p0"] <= .4 and r["won"] else kbet(r, lag, False) if r["set"] == 1 and r["p0"] >= .6 and not r["won"] else None, 1)
+    run("lost set 1 narrowly (5-7, 6-7)", lambda r: kbet(r, lag, not r["won"]) if r["set"] == 1 and min(r["games"]) >= 5 else None, 4)
+    run("won set 1 narrowly", lambda r: kbet(r, lag, bool(r["won"])) if r["set"] == 1 and min(r["games"]) >= 5 else None, 4)
+    run("lost set 1 badly (2 games or fewer)", lambda r: kbet(r, lag, not r["won"]) if r["set"] == 1 and min(r["games"]) <= 2 else None, 4)
+    run("won set 1 easily", lambda r: kbet(r, lag, bool(r["won"])) if r["set"] == 1 and min(r["games"]) <= 2 else None, 4)
+    for sex, nm in (("m", "men"), ("w", "women")):
+        run(f"{nm}: player who just lost the set", lambda r: kbet(r, lag, not r["won"]) if r["sex"] == sex else None, 2)
+    return rows, cards
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scout"
     if cmd == "scout":
@@ -1021,6 +1266,8 @@ if __name__ == "__main__":
         live_report(sorted(glob.glob(os.path.join(LIVE_DIR, "*.jsonl.gz"))))
     elif cmd == "fetch":
         fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45)
+    elif cmd == "sets":
+        sets_report(int(sys.argv[2]) if len(sys.argv) > 2 else 3)
     elif cmd == "selftest":
         model_selftest()
     else:
