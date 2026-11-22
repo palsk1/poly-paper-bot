@@ -274,6 +274,72 @@ def report(addr):
     sz = sorted(usd(a) for a in act if a.get("type") == "TRADE" and str(a.get("side")).upper() == "BUY")
     if sz:
         print(f"  buy size: median {money(sz[len(sz)//2])}, p90 {money(sz[int(.9*len(sz))])}, max {money(sz[-1])}")
+    # ---- 5b) when and where the loss happened
+    first = {}
+    for a in act:
+        cid = pick(a, "condition_id")
+        t = fnum(a.get("timestamp"))
+        if cid and a.get("type") == "TRADE":
+            first[cid] = min(first.get(cid, t), t)
+    coh = collections.defaultdict(lambda: [0, 0.0, 0.0])
+    for r in rows:
+        k = day(first.get(r["cid"]))[:7]
+        coh[k][0] += 1
+        coh[k][1] += r["bought"]
+        coh[k][2] += r["flow"]
+    print("\n== 5b) P&L BY THE MONTH A MARKET WAS FIRST BOUGHT (markets, $ bought, P&L incl. open worth now)")
+    for k in sorted(coh):
+        print(f"  {k}: {coh[k][0]} markets, bought {money(coh[k][1])}, P&L {money(coh[k][2])}")
+    iran = [r for r in rows if "iran" in (r["event"] + r["title"]).lower() and ("strike" in (r["event"] + r["title"]).lower())]
+    print(f"  'strikes Iran' markets: {len(iran)}, bought {money(sum(r['bought'] for r in iran))}, P&L {money(sum(r['flow'] for r in iran))}")
+    rest = [r for r in rows if r not in iran]
+    print(f"  everything else: {len(rest)} markets, bought {money(sum(r['bought'] for r in rest))}, P&L {money(sum(r['flow'] for r in rest))}")
+    print("  everything else, by month first bought:", {k: money(v) for k, v in sorted(
+        collections.Counter({day(first.get(r['cid']))[:7]: 0 for r in rest}).items())} if False else "")
+    ce = collections.defaultdict(float)
+    for r in rest:
+        ce[day(first.get(r["cid"]))[:7]] += r["flow"]
+    print("  everything else by month first bought:", {k: money(v) for k, v in sorted(ce.items())})
+    # ---- 5c) both sides: pairs bought then merged into $1
+    keys = collections.Counter()
+    for a in act[:2000]:
+        if a.get("type") == "TRADE":
+            keys.update(a.keys())
+    print("\n== 5c) TRADE row fields:", dict(keys))
+    for fld in ("maker", "is_maker", "liquidity", "role", "trader_side", "fee", "fee_usdc"):
+        vals = collections.Counter(str(a.get(fld)) for a in act if a.get("type") == "TRADE" and fld in a)
+        if vals:
+            print(f"  field {fld}:", dict(vals.most_common(6)))
+    sh = collections.defaultdict(lambda: collections.defaultdict(lambda: [0.0, 0.0]))
+    for a in act:
+        if a.get("type") == "TRADE" and str(a.get("side")).upper() == "BUY":
+            x = sh[pick(a, "condition_id")][str(pick(a, "outcome_index", "outcome"))]
+            x[0] += fnum(a.get("size"))
+            x[1] += usd(a)
+    mg = collections.defaultdict(float)
+    for a in act:
+        if a.get("type") == "MERGE":
+            mg[pick(a, "condition_id")] += fnum(a.get("size"))
+    pc, n, msh = [], 0, 0.0
+    for cid, o in sh.items():
+        if len(o) == 2 and mg.get(cid):
+            (s1, c1), (s2, c2) = o.values()
+            if s1 and s2:
+                pc.append((c1 / s1 + c2 / s2, mg[cid]))
+                n += 1
+                msh += mg[cid]
+    if pc:
+        w = sum(p * m for p, m in pc) / sum(m for _, m in pc)
+        print(f"  markets with both sides bought AND merged: {n}, merged {msh:,.0f} pairs; average Yes price + No price paid = {w*100:.1f}c a pair (weighted by pairs merged)")
+        under = sum(m for p, m in pc if p < 1)
+        print(f"  pairs merged where the two average prices add to under $1: {under:,.0f} of {msh:,.0f}")
+    hr = collections.Counter()
+    for a in act:
+        if a.get("type") == "TRADE":
+            hr[dt.datetime.fromtimestamp(fnum(a.get("timestamp")), dt.timezone.utc).hour] += 1
+    print("  trades by hour UTC:", dict(sorted(hr.items())))
+    dd = collections.Counter(day(fnum(a.get("timestamp"))) for a in act if a.get("type") == "TRADE")
+    print(f"  days with trades: {len(dd)}; median trades a day {sorted(dd.values())[len(dd)//2] if dd else 0}")
     print("\n== 6) last 30 activity rows")
     for a in sorted(act, key=lambda a: fnum(a.get("timestamp")))[-30:]:
         t = fnum(a.get("timestamp"))
