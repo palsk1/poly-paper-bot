@@ -213,8 +213,43 @@ def test_poly():
     os.environ.pop("LIVE")
 
 
+def test_phone():
+    import json as J
+    os.environ["NTFY_CONTROL"] = "bots-test"
+    inbox, sent = [], []
+    C.ntfy_get = lambda url: "\n".join(J.dumps(m) for m in inbox)
+    C.ntfy_post = lambda topic, title, body: sent.append((topic, title, body))
+    book = C.Book("kalshi-phone")
+    status = lambda: "3 bids"
+
+    def say(text, title=None):
+        inbox.clear()
+        inbox.append({"event": "message", "id": f"m{len(sent)}", "message": text, **({"title": title} if title else {})})
+        C._ctrl["t"] = 0
+        C.control("kalshi", book, status)
+    say("stop poly")
+    check(C.stop_reason("kalshi", book) is None, "phone 'stop poly' leaves the Kalshi bot running")
+    say("Stop")
+    check("phone" in (C.stop_reason("kalshi", book) or "") and sent[-1][1] == "Kalshi bot",
+          "phone 'stop' stops the bot and it answers in the channel")
+    say("start", title="Kalshi bot")
+    check(C.stop_reason("kalshi", book) is not None, "the bots' own messages are never read as commands")
+    say("status")
+    check("3 bids" in sent[-1][2] and "Paused" in sent[-1][2], "phone 'status' answers with numbers and why it's paused")
+    say("start kalshi")
+    check(C.stop_reason("kalshi", book) is None, "phone 'start' turns it back on")
+    with open(os.path.join(TMP, "STOP-kalshi"), "w") as f:
+        f.write("total loss cap")
+    say("start")
+    check(C.stop_reason("kalshi", book) is not None and "still paused" in sent[-1][2],
+          "phone 'start' can't undo a loss-cap stop")
+    os.remove(os.path.join(TMP, "STOP-kalshi"))
+    del os.environ["NTFY_CONTROL"]
+
+
 if __name__ == "__main__":
     test_sign()
+    test_phone()
     test_kalshi()
     test_poly()
     for w in OK:

@@ -134,6 +134,8 @@ def remote_switch(bot):
 
 def stop_reason(bot, book):
     """None when the bot may place a NEW order, else a plain reason. Open bets always settle either way."""
+    if os.path.exists(os.path.join(DIR, f"STOP-ntfy-{bot}")):
+        return "stopped from the phone (ntfy). Type start to turn it back on"
     for fn in ("STOP", f"STOP-{bot}"):
         p = os.path.join(DIR, fn)
         if os.path.exists(p):
@@ -155,17 +157,87 @@ def stop_reason(bot, book):
     return None
 
 
+def ntfy_post(topic, title, body):
+    req = urllib.request.Request(f"https://ntfy.sh/{topic}", data=body.encode(), method="POST",
+                                 headers={"Title": title.encode("ascii", "ignore").decode(), "Tags": "moneybag",
+                                          "User-Agent": UA})
+    urllib.request.urlopen(req, timeout=10).read()
+
+
+def ntfy_get(url):
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return r.read().decode()
+
+
 def push(title, body):
-    """Optional phone push: NTFY_TOPIC in ~/.live.env (same topic as the paper bot, never in the repo)."""
-    topic = os.environ.get("NTFY_TOPIC")
+    """Phone alert: to Jan's private bot channel NTFY_CONTROL (or NTFY_TOPIC) in ~/.live.env, never in the repo."""
+    topic = os.environ.get("NTFY_CONTROL") or os.environ.get("NTFY_TOPIC")
     if not topic:
         return
     try:
-        req = urllib.request.Request(f"https://ntfy.sh/{topic}", data=body.encode(), method="POST",
-                                     headers={"Title": title.encode("ascii", "ignore").decode(), "Tags": "moneybag"})
-        urllib.request.urlopen(req, timeout=10).read()
+        ntfy_post(topic, title, body)
     except Exception as e:
         print(f"push failed: {e}", flush=True)
+
+
+# ---------------------------------------------------------------- phone control (Jan, 22 Nov: "make it easy")
+CTRL_EVERY = 20
+NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
+ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
+           "all": "all", "both": "all", "bots": "all"}
+_ctrl = {"t": 0}
+
+
+def control(bot, book, status_fn):
+    """Read Jan's commands from his private ntfy channel NTFY_CONTROL (typed in the ntfy app):
+    stop | stop kalshi | stop poly | start | start kalshi | start poly | status.
+    'stop' writes ~/live-data/STOP-ntfy-<bot>; 'start' removes only that file, never a cap's STOP file.
+    The bots answer in the same channel with a title; messages with a title are never read as commands."""
+    topic = os.environ.get("NTFY_CONTROL")
+    if not topic or time.time() - _ctrl["t"] < CTRL_EVERY:
+        return
+    _ctrl["t"] = time.time()
+    since = book.state.get("ctrl_since") or "1m"
+    try:
+        raw = ntfy_get(f"https://ntfy.sh/{topic}/json?poll=1&since={since}")
+    except Exception as e:
+        print(f"ntfy control read failed: {e}", flush=True)
+        return
+    name = NAMES[bot]
+    for ln in raw.splitlines():
+        try:
+            m = json.loads(ln)
+        except ValueError:
+            continue
+        if m.get("event") != "message":
+            continue
+        book.state["ctrl_since"] = m.get("id") or since
+        if m.get("title"):
+            continue                       # the bots' own answers and alerts
+        words = str(m.get("message") or "").strip().lower().split()
+        if not words:
+            continue
+        cmd, target = words[0], ALIASES.get(words[1], words[1]) if len(words) > 1 else "all"
+        if target not in ("all", bot):
+            continue
+        flag = os.path.join(DIR, f"STOP-ntfy-{bot}")
+        if cmd in ("stop", "off", "pause"):
+            with open(flag, "w") as f:
+                f.write(f"stopped from the phone at {iso()}\n")
+            book.log("phone_stop")
+            push(name, "Stopped. No new bets. Bets already made still finish. Type start to turn it back on.")
+        elif cmd in ("start", "on", "resume"):
+            if os.path.exists(flag):
+                os.remove(flag)
+            book.log("phone_start")
+            why = stop_reason(bot, book)
+            push(name, "Running again." if not why else f"Phone stop removed, but still paused: {why}")
+        elif cmd in ("status", "how", "?"):
+            why = stop_reason(bot, book)
+            push(name, status_fn() + ("\nRunning." if not why else f"\nPaused: {why}") +
+                 ("" if is_live() else "\n(Pretend mode: no real money yet.)"))
+    book.save()
 
 
 # ---------------------------------------------------------------- hourly upload to the GitHub release `live-data`

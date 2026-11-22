@@ -17,7 +17,12 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 - **Spend caps** (in `~/.live.env`, Jan's file): money per bet, money out at once, bets out at once, new money per
   day, loss per day (stops new bets until the next UTC day), total loss ($20 each: writes a STOP file, so it stays
   stopped until Jan deletes the file).
-- **Three off switches:**
+- **Off switches. The easy one is the phone:** in the ntfy app, subscribe to your private channel (its name is
+  printed by `add_keys.py`, saved as `NTFY_CONTROL` in `~/.live.env`) and type:
+  `stop` (both bots), `stop kalshi`, `stop poly`, `start` (or `start kalshi` / `start poly`), or `status`.
+  The bots read it every ~20 seconds and answer in the same channel. Alerts (a lost Kalshi bid, a cap reached) land
+  there too. `start` only undoes a phone stop, never a loss-cap stop. Anyone who knows the channel name can stop
+  the bots (not move money), so keep the name to yourself. The other switches:
   1. On the server: `touch ~/live-data/STOP` (both) or `touch ~/live-data/STOP-kalshi` / `STOP-poly`. Delete the file to start again.
   2. From the phone: edit `live/switch.json` in the repo on GitHub, change `"on"` to `"off"`. Takes up to ~5 minutes.
      This file can only stop a bot. It can't start one or raise a limit.
@@ -37,7 +42,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (24 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
