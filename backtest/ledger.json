@@ -2710,6 +2710,19 @@
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
    "src": "tennis.py lead"
+  },
+  {
+   "id": "polymarket_tennis_after_set_1_buy_its_winner_at_50_80c_no_pe",
+   "date": "2026-11-22",
+   "what": "Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock)",
+   "tries": 112,
+   "bets": 76,
+   "groups": 74,
+   "per100": -12.25,
+   "floor100": -40.43,
+   "verdict": "Behind, but could be bad luck",
+   "status": "candidate",
+   "src": "tennis.py pm"
   }
  ]
 }

@@ -1482,35 +1482,33 @@ def pm_fetch(days=120):
     epath = os.path.join(PM_DIR, "events.json.gz")
     evs = {e["cid"]: e for e in rj(epath, []) or []}
     n_seen = 0
-    for off in range(0, 60000, 50):
-        try:
-            page = bot.http_json(f"{G}/events", {"tag_id": 864, "closed": "true", "limit": 50, "offset": off, "order": "endDate", "ascending": "false",
-                                                    "end_date_min": time.strftime("%Y-%m-%dT00:00:00Z", time.gmtime(cut))})
-        except Exception as e:
-            print(f"  gamma page {off}: {str(e)[:90]}", flush=True)
-            time.sleep(2)
-            continue
-        page = page if isinstance(page, list) else []
-        if not page:
-            break
-        oldest = None
-        for ev in page:
-            n_seen += 1
-            d = bot.parse_iso(ev.get("endDate"))
-            if d:
-                oldest = d.timestamp() if oldest is None else min(oldest, d.timestamp())
-            for m in ev.get("markets") or []:
-                if m.get("sportsMarketType") != "moneyline" or not m.get("closed"):
-                    continue
-                tk, outs, pr = jl(m.get("clobTokenIds")), jl(m.get("outcomes")), jl(m.get("outcomePrices"))
-                vol = bot.fnum(m.get("volumeNum") or m.get("volume"), 0)
-                if not tk or not outs or len(outs) != 2 or not pr or vol < 20000:
-                    continue
-                st = bot.parse_iso(m.get("gameStartTime") or ev.get("startTime") or "")
-                evs[m["conditionId"]] = {"cid": m["conditionId"], "slug": ev.get("slug"), "title": ev.get("title"), "outs": outs, "pr": [bot.fnum(x, 0) for x in pr],
-                                         "start": st.timestamp() if st else None, "end": d.timestamp() if d else None, "vol": vol, "fee": m.get("feeSchedule"), "score": ev.get("score")}
-        if off % 1000 == 0:
-            print(f"  gamma offset {off}: oldest end on this page {time.strftime('%Y-%m-%d', time.gmtime(oldest or 0))}, {len(evs)} kept", flush=True)
+    # Gamma stops paging near offset 2,000, so ask in 4-day windows of the end date (a match's end date is a week after it)
+    for w0 in range(int(cut), int(time.time()) + 9 * DAY, 4 * DAY):
+        for off in range(0, 2000, 50):
+            try:
+                page = bot.http_json(f"{G}/events", {"tag_id": 864, "closed": "true", "limit": 50, "offset": off, "order": "endDate", "ascending": "false",
+                                                    "end_date_min": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(w0)),
+                                                    "end_date_max": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(w0 + 4 * DAY))})
+            except Exception as e:
+                print(f"  gamma window {time.strftime('%m-%d', time.gmtime(w0))} page {off}: {str(e)[:90]}", flush=True)
+                break
+            page = page if isinstance(page, list) else []
+            if not page:
+                break
+            for ev in page:
+                n_seen += 1
+                d = bot.parse_iso(ev.get("endDate"))
+                for m in ev.get("markets") or []:
+                    if m.get("sportsMarketType") != "moneyline" or not m.get("closed"):
+                        continue
+                    tk, outs, pr = jl(m.get("clobTokenIds")), jl(m.get("outcomes")), jl(m.get("outcomePrices"))
+                    vol = bot.fnum(m.get("volumeNum") or m.get("volume"), 0)
+                    if not tk or not outs or len(outs) != 2 or not pr or vol < 20000:
+                        continue
+                    st = bot.parse_iso(m.get("gameStartTime") or ev.get("startTime") or "")
+                    evs[m["conditionId"]] = {"cid": m["conditionId"], "slug": ev.get("slug"), "title": ev.get("title"), "outs": outs, "pr": [bot.fnum(x, 0) for x in pr],
+                                             "start": st.timestamp() if st else None, "end": d.timestamp() if d else None, "vol": vol, "fee": m.get("feeSchedule"), "score": ev.get("score")}
+        print(f"  window from {time.strftime('%Y-%m-%d', time.gmtime(w0))}: {n_seen} events read so far, {len(evs)} kept", flush=True)
     wj(epath, list(evs.values()))
     print(f"polymarket: {n_seen} closed tennis events read, {len(evs)} match-winner markets with $20,000+ traded ({time.time() - T0:.0f} s)", flush=True)
     todo = sorted(evs.values(), key=lambda e: e["cid"])
