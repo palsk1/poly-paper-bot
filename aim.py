@@ -63,6 +63,74 @@ def kscan():
             print("EX", t, {k: m[k] for k in ("t", "q", "w", "res", "vol")}, "| RULE", m["rule"][:300], flush=True)
 
 
+ARENA_K = "^(KXLLM1|KXTOPMODEL|KXTOPAI|KXTECHRANKLISTAICODE|KXCHINAAI|KXMATHAI|KXARENASCORE|KXCODEAI)$"
+K_LIFE = 50 * 86400
+
+
+def klist(pick=ARENA_K):
+    """probe aim_klist: every settled market of Kalshi's leaderboard series -> bt_cache/aim/kmarkets.json.gz"""
+    os.makedirs(CACHE, exist_ok=True)
+    have = rj(MK, None) or {"series": {}, "markets": {}}
+    ser = [x for x in (yesno.kget("/series", {}).get("series") or []) if x.get("ticker") and re.search(pick, x["ticker"])]
+    for x in ser:
+        have["series"][x["ticker"]] = {"title": str(x.get("title") or "")[:120], "freq": x.get("frequency"),
+                                       "fee": [x.get("fee_type"), x.get("fee_multiplier")],
+                                       "src": [y.get("url") for y in (x.get("settlement_sources") or []) if isinstance(y, dict)][:3]}
+    for x in ser:
+        t, ok, n = km.series_markets(x["ticker"])
+        have["markets"].update(ok)
+        print(t, len(ok), "settled markets", have["series"][t], flush=True)
+        evs = collections.defaultdict(list)
+        for m in ok.values():
+            evs[m["ev"]].append(m)
+        for ev, v in sorted(evs.items(), key=lambda kv: kv[1][0]["close"])[-4:]:
+            print("   ", ev, d10(v[0]["open"]), d10(v[0]["close"]), [(m["w"], m["res"], int(m["vol"])) for m in sorted(v, key=lambda m: -m["vol"])[:6]], flush=True)
+        if ok:
+            print("    RULE", max(ok.values(), key=lambda m: m["vol"])["rule"], flush=True)
+    wj(MK, have)
+
+
+def ktape_one(m):
+    a, b = max(m["open"], m["close"] - K_LIFE), m["close"]
+    cs = []
+    for path in (f"/series/{m['s']}/markets/{m['t']}/candlesticks", f"/historical/markets/{m['t']}/candlesticks"):
+        try:
+            r = yesno.kget(path, {"start_ts": a - 3600, "end_ts": b, "period_interval": 60})
+        except Exception:
+            continue
+        got = r.get("candlesticks") if isinstance(r, dict) else None
+        if got:
+            for c in got:
+                t, bid, ask = yesno.k_candle(c)
+                cs.append([t, bid, ask, bot.fnum(c.get("volume_fp") or c.get("volume"), 0)])
+            break
+    tr, done, path = khouse.trades_span(m["t"], a, b, 6)
+    tr.sort()
+    return m["t"], {"c": cs, "tr": tr, "full": done, "p": path}
+
+
+def ktapes(pick=ARENA_K):
+    """probe aim_ktapes: hourly bid/ask + trades of each market's whole life (at most 50 days) -> bt_cache/aim/ktapes_<series>.json.gz"""
+    have = (rj(MK, {}) or {}).get("markets") or {}
+    by = collections.defaultdict(list)
+    for m in have.values():
+        if re.search(pick, m["s"]) and m["vol"] >= 20:
+            by[m["s"]].append(m)
+    t0 = time.time()
+    for t, ms in sorted(by.items()):
+        path = os.path.join(CACHE, f"ktapes_{t}.json.gz")
+        got = rj(path, {}) or {}
+        todo = [m for m in ms if m["t"] not in got]
+        for i in range(0, len(todo), 200):
+            with ThreadPoolExecutor(6) as ex:
+                for tk, dd in ex.map(ktape_one, todo[i:i + 200]):
+                    got[tk] = dd
+            wj(path, got)
+        nc = sum(len(x["c"]) for x in got.values())
+        print(f"{t}: {len(got)} of {len(ms)} markets, {nc} hourly quotes, {sum(len(x['tr']) for x in got.values())} trades, "
+              f"not complete {sum(1 for x in got.values() if not x['full'])} ({time.time() - t0:.0f}s)", flush=True)
+
+
 HF = "https://huggingface.co/api/datasets/lmarena-ai/leaderboard-dataset/parquet"
 LB_SUBSETS = ("text", "text_style_control", "webdev", "vision", "text_to_image", "search")
 LB_TOP = 30
@@ -118,5 +186,12 @@ if __name__ == "__main__":
         kscan()
     elif cmd == "lb":
         lb_fetch()
+    elif cmd == "klist":
+        klist(arg or ARENA_K)
+    elif cmd == "ktapes":
+        ktapes(arg or ARENA_K)
+    elif cmd == "kall":
+        klist()
+        ktapes()
     else:
         print(__doc__)
