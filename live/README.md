@@ -45,7 +45,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK (30 checks)` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (31 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
@@ -69,7 +69,7 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 ## Files
 
 - `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
-- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), hourly upload to the release `live-data`
+- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
 - `setup.sh`, `update.sh`, `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
 - `selftest.py`: offline test with fake answers, must print ALL OK

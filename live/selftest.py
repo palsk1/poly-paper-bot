@@ -104,8 +104,10 @@ def test_kalshi():
         sent.append((method, path, body))
         if path == "/portfolio/balance":
             return 200, {"balance": 3000, "balance_dollars": "30.00"}
+        if method == "POST" and path == "/portfolio/orders":      # the old address: switched off by Kalshi
+            return 410, {"error": {"code": "deprecated_v1_order_endpoint"}}
         if method == "POST":
-            return 201, {"order": {"order_id": "abc", "status": "resting"}}
+            return 201, {"order_id": "abc", "fill_count": "0.00", "remaining_count": "4.00", "ts_ms": 1}
         if path == "/portfolio/orders/abc":
             return 200, {"order": {"fill_count_fp": "4.00", "maker_fill_cost_dollars": "3.884",
                                    "taker_fill_cost_dollars": "0", "maker_fees_dollars": "0", "taker_fees_dollars": "0"}}
@@ -117,9 +119,14 @@ def test_kalshi():
     kalshi_fakes(close)
     K.place(book)
     post = [b for m, p, b in sent if m == "POST"]
-    check(len(post) == 1 and post[0]["post_only"] and post[0]["yes_price_dollars"] == "0.9710"
-          and post[0]["count"] == 4 and post[0]["expiration_ts"] == int(close.timestamp())
-          and post[0]["cancel_order_on_pause"], "Kalshi live bid is post-only, dies at the close, cancels on pause")
+    check(len(post) == 1 and [p for m, p, b in sent if m == "POST"] == ["/portfolio/events/orders"]
+          and post[0]["post_only"] and post[0]["side"] == "bid" and post[0]["price"] == "0.9710"
+          and post[0]["count"] == "4.00" and post[0]["expiration_time"] == int(close.timestamp())
+          and post[0]["time_in_force"] == "good_till_canceled" and post[0]["cancel_order_on_pause"]
+          and "abc" == book.state["open"]["KXBTC15M-T1"]["order_id"],
+          "Kalshi live bid uses the new order form: post-only, dies at the close, cancels on pause")
+    nb = K.order_body("T", "no", 0.994, 4, close)
+    check(nb["side"] == "ask" and nb["price"] == "0.0060", "a No bid at 99.4c goes in as 'sell Yes at 0.6c' (same thing)")
     at(46, 30)
     bot._kalshi_cache.clear()
     bot.http_json = (lambda f: lambda url, params=None, retries=3: (

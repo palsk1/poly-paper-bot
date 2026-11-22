@@ -139,7 +139,10 @@ def settle(book):
                 continue
             od = r.get("order") or {}
             filled = bot.fnum(od.get("fill_count_fp"), 0)
-            cost = bot.fnum(od.get("maker_fill_cost_dollars"), 0) + bot.fnum(od.get("taker_fill_cost_dollars"), 0)
+            # Our bid only ever waits (post-only), so every filled contract cost exactly our price. Kalshi's own
+            # cost number is kept beside it as a cross-check (its meaning for the No side is not spelled out).
+            cost = filled * o["price"]
+            api_cost = bot.fnum(od.get("maker_fill_cost_dollars"), 0) + bot.fnum(od.get("taker_fill_cost_dollars"), 0)
             fees = bot.fnum(od.get("maker_fees_dollars"), 0) + bot.fnum(od.get("taker_fees_dollars"), 0)
             how = "real"
         else:                     # dry run: the paper fill rule on the real trade tape
@@ -151,16 +154,31 @@ def settle(book):
             filled, _ = bot.kmaker_fill({**o, "placed": o["placed"]}, trades)
             cost, fees, how = filled * o["price"], 0.0, "paper fill (dry run)"
         pnl = filled * pay - cost - fees
-        book.settle(tk, pnl, result=res, filled=filled, fill_cost=round(cost, 4), fees=round(fees, 4), how=how)
+        extra = {"kalshi_cost": round(api_cost, 4), "kalshi_side": od.get("outcome_side")} if o.get("order_id") else {}
+        book.settle(tk, pnl, result=res, filled=filled, fill_cost=round(cost, 4), fees=round(fees, 4), how=how, **extra)
         if pnl < 0:
             C.push("Kalshi bot: a bid lost", f"{tk} {o['side'].upper()} at {o['price'] * 100:.1f}c, "
                                              f"{filled:.0f} filled, ${pnl:+.2f}. Total so far ${book.state['realized']:+.2f}.")
 
 
+ORDERS = "/portfolio/events/orders"     # Kalshi's new order address; the old /portfolio/orders answers 410 since Nov 2026
+
+
+def order_body(tk, side, price, shares, close):
+    """A resting bid in Kalshi's new order form (22 Nov: the old form was switched off, every bid was refused).
+    The new form speaks only about the YES side: 'bid' buys Yes at the price; 'ask' sells Yes at the price, which is
+    the same as buying No at 1 minus that price. So our No bid at 99.4c goes in as 'ask' at 0.6c."""
+    yes_px = price if side == "yes" else 1 - price
+    return {"ticker": tk, "side": "bid" if side == "yes" else "ask", "count": f"{shares:.2f}",
+            "price": f"{yes_px:.4f}", "time_in_force": "good_till_canceled",
+            "expiration_time": int(close.timestamp()), "post_only": True, "cancel_order_on_pause": True,
+            "self_trade_prevention_type": "taker_at_cross", "client_order_id": str(uuid.uuid4())}
+
+
 def cancel_all(book, why):
     for tk, o in book.state["open"].items():
         if o.get("order_id") and not o.get("cancelled") and C.utcnow() < bot.parse_iso(o["close"]):
-            st, r = kreq("DELETE", f"/portfolio/orders/{o['order_id']}")
+            st, r = kreq("DELETE", f"{ORDERS}/{o['order_id']}", params={"market_ticker": tk})
             o["cancelled"] = True
             book.log("cancelled", ticker=tk, status=st, why=why[:120])
     book.save()
@@ -226,20 +244,17 @@ def place(book):
                 if cash < cost:
                     book.log("skip_no_cash", ticker=tk, balance=round(cash, 2), cost=cost)
                     continue
-                body = {"ticker": tk, "side": side, "action": "buy", "count": shares,
-                        f"{side}_price_dollars": f"{price:.4f}", "post_only": True,
-                        "expiration_ts": int(close.timestamp()), "cancel_order_on_pause": True,
-                        "client_order_id": str(uuid.uuid4())}
+                body = order_body(tk, side, price, shares, close)
                 tries[tk] = tries.get(tk, 0) + 1
                 book.save()               # count the try first, so a crash right after can't send a second bid
-                st, res = kreq("POST", "/portfolio/orders", body)
-                od = (res.get("order") if isinstance(res, dict) else None) or {}
+                st, res = kreq("POST", ORDERS, body)
+                od = res if isinstance(res, dict) else {}
                 if st not in (200, 201) or not od.get("order_id"):
                     book.log("order_refused", ticker=tk, status=st, err=str(res)[:300], price=price, side=side)
                     book.save()
                     continue
                 rec["order_id"] = od["order_id"]
-                rec["status"] = od.get("status")
+                rec["status"] = "accepted"
                 cash -= cost
             book.state["open"][tk] = rec
             book.state["bets"] += 1
@@ -275,7 +290,7 @@ def run():
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
         C.beat(book, time.time() - t0)
-        if time.time() - last_up > 3600:
+        if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
                 print(C.upload("kalshi"), flush=True)

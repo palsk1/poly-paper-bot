@@ -211,6 +211,7 @@ def push(title, body):
 
 # ---------------------------------------------------------------- phone control (Jan, 22 Nov: "make it easy")
 CTRL_EVERY = 20
+UPLOAD_S = 900      # copy the notebook to GitHub every 15 minutes (was hourly: too slow to watch the first real bets)
 NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
            "all": "all", "both": "all", "bots": "all"}

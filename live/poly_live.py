@@ -160,7 +160,9 @@ def place(book):
             continue
         if not (r["min_price"] <= px <= r["max_price"] + 0.01):
             continue
-        cap_px = round(c["price"] + r["max_over_listed"], 4)
+        # Polymarket takes price limits in whole cents only (22 Nov: half-cent limits were refused), so the limit is
+        # listed + 3c rounded DOWN to a cent: never looser than the paper rule.
+        cap_px = math.floor((c["price"] + r["max_over_listed"]) * 100 + 1e-9) / 100
         if px > cap_px + 1e-9:
             continue            # thin book: the real ask is 3c+ above the listed price (same skip as paper)
         fee = bot.taker_fee(shares, px, c["fee_rate"])
@@ -194,6 +196,9 @@ def place(book):
                                                   max_price=Decimal(str(cap_px)), order_type="FOK")
             except Exception as e:
                 book.log("order_failed", slug=slug, err=f"{type(e).__name__}: {e}"[:300])
+                if type(e).__name__ == "UserInputError":     # stopped on our side, nothing was sent: may try again
+                    book.state["done"].remove(slug)
+                    book.save()
                 continue
             if not getattr(res, "ok", False):
                 book.log("order_refused", slug=slug, code=getattr(res, "code", "?"), err=getattr(res, "message", "")[:200])
@@ -241,6 +246,13 @@ def settle(book):
 def run():
     C.load_env()
     book = C.Book("poly")
+    if not book.state.get("fix_1122"):
+        # One time: on 22 Nov nine draws were refused for a half-cent price limit and marked "tried once".
+        # Nothing was sent for them, so they get their try back. (No market had finished yet, so the list
+        # held only those nine.)
+        book.state["done"] = [s for s in book.state["done"] if s in book.state["open"]]
+        book.state["fix_1122"] = True
+        book.save()
     book.log("start", rule=TRACK, max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
              mode="LIVE (real money)" if C.is_live() else "dry run")
     if C.is_live():
@@ -265,7 +277,7 @@ def run():
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
         C.beat(book, time.time() - t0)
-        if time.time() - last_up > 3600:
+        if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
                 print(C.upload("poly"), flush=True)
