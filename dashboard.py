@@ -415,6 +415,112 @@ def kfast_rows():
     return out
 
 
+# ---------------------------------------------------------------- the two REAL-MONEY bots (live/, Jan's server)
+LIVE_BOTS = [
+    {"bot": "kalshi", "label": "Kalshi: crypto 15-minute bids", "twin": "kc_maker_safe_usd",
+     "say": "Waits with a small buy offer on the side that's almost sure to win in Kalshi's 15-minute crypto bets, "
+            "in the last few minutes. Wins a few cents a time; one loss costs the whole bet."},
+    {"bot": "poly", "label": "Polymarket: soccer draws", "twin": "soccer_draw",
+     "say": "Buys \"the game ends in a draw\" a day before kick-off when it looks cheap. Loses most bets, "
+            "but each win pays 3-6 times the cost. Bets on every second signal of the paper twin."},
+]
+LIVE_URL = "https://github.com/palsk1/poly-paper-bot/releases/download/live-data/"
+
+
+def live_files(bot):
+    """(state dict, log rows) for one real bot, from the public release live-data (the bots upload hourly), or from
+    the folder in LIVE_LOCAL (tests). Returns (None, []) when nothing is there yet."""
+    import gzip
+    import urllib.request
+    local = os.environ.get("LIVE_LOCAL")
+
+    def read(name):
+        if local:
+            p = os.path.join(local, name)
+            return open(p, "rb").read() if os.path.exists(p) else None
+        try:
+            req = urllib.request.Request(LIVE_URL + name + ".gz", headers={"User-Agent": "poly-paper-bot dashboard"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return gzip.decompress(r.read())
+        except Exception as e:
+            print(f"dashboard: live file {name} not read ({e})")
+            return None
+    raw = read(f"{bot}-state.json")
+    state = json.loads(raw) if raw else None
+    rows = []
+    for back in range(3):   # this month's log and the two before (a new month starts a new file)
+        t = time.gmtime(time.time() - back * 28 * 86400)
+        raw = read(f"{bot}-{t.tm_year}{t.tm_mon:02d}.jsonl")
+        if raw:
+            rows = [json.loads(x) for x in raw.decode().splitlines() if x.strip()] + rows
+    rows.sort(key=lambda r: r.get("t") or "")
+    return state, rows
+
+
+def mask(x):
+    """Never show a wallet address on the public page (Jan, 22 Nov): only its last 4 characters."""
+    s = str(x or "")
+    return "..." + s[-4:] if len(s) > 8 else s
+
+
+def live_rows(tracks):
+    """Jan, 22 Nov: "will the dashboard show the live bots ... it's important they pertain all vital information,
+    %earned, amount it's betting". One block per real bot: mode, money, P&L, per $1, open bets, today, last bets, and
+    its paper twin over the same time. Read-only; the bots' own files are the truth."""
+    out = []
+    for b in LIVE_BOTS:
+        state, rows = live_files(b["bot"])
+        if not state and not rows:
+            continue
+        state = state or {}
+        starts = [r for r in rows if r.get("k") == "start"]
+        last_start = starts[-1] if starts else {}
+        live = bool(last_start.get("live"))
+        first_live = next((r["t"] for r in starts if r.get("live")), None)
+        stop = None
+        for r in rows:
+            if r.get("k") in ("phone_stop", "cap_total_loss"):
+                stop = r
+            elif r.get("k") in ("phone_start", "start") and stop and stop.get("k") == "phone_stop":
+                stop = None
+        settled = [r for r in rows if r.get("k") == "settled" and r.get("live") == live]
+        real = [r for r in settled if (r.get("filled", 1) or 0) > 0]
+        unfilled = len(settled) - len(real)
+        cost = lambda r: float(r.get("fill_cost") if r.get("fill_cost") is not None else r.get("cost") or 0)
+        put_in = sum(cost(r) + float(r.get("fees") or 0) for r in real)
+        pnl = sum(float(r.get("pnl") or 0) for r in real)
+        won = sum(1 for r in real if float(r.get("pnl") or 0) >= 0)
+        day = time.strftime("%Y-%m-%d", time.gmtime())
+        today = sum(float(r.get("pnl") or 0) for r in real if str(r.get("t", "")).startswith(day))
+        opn = state.get("open") or {}
+        logins = [r for r in rows if r.get("k") == "login"]
+        bet = last_start.get("usd_per_order") or last_start.get("max_bet")
+        since = (first_live if live else (starts[0]["t"] if starts else state.get("started"))) or state.get("started")
+        # the paper twin over the same stretch (bets opened since the real bot started in this mode)
+        tw = [c for c in (tracks.get(b["twin"]) or {}).get("closed", []) if str(c.get("opened") or "") >= str(since or "")]
+        tw_cost = sum(float(c.get("cost") or (c.get("entry", 0) * c.get("shares", 0) + c.get("entry_fee", 0))) for c in tw)
+        tw_pnl = sum(float(c.get("pnl") or 0) for c in tw)
+        last = rows[-1]["t"] if rows else None
+        recent = []
+        for r in real[::-1][:10]:
+            recent.append({"t": r.get("title") or r.get("ticker") or r.get("slug"), "at": str(r.get("t", ""))[:16],
+                           "cost": r2(cost(r)), "pnl": r2(float(r.get("pnl") or 0))})
+        out.append({
+            "bot": b["bot"], "label": b["label"], "say": b["say"], "twin": b["twin"], "live": live, "since": since,
+            "stopped": ({"why": "stopped from the phone" if stop.get("k") == "phone_stop" else
+                         f"stopped: total loss reached the cap", "at": stop.get("t")} if stop else None),
+            "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
+            "cash": (logins[-1].get("cash") if logins else None), "wallet": mask(logins[-1].get("wallet")) if logins else None,
+            "finished": len(real), "won": won, "lost": len(real) - won, "unfilled": unfilled,
+            "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today),
+            "open_n": len(opn), "open_cost": r2(sum(float(o.get("cost") or 0) for o in opn.values())),
+            "open_list": [o.get("title") or o.get("ticker") or k for k, o in list(opn.items())[:20]],
+            "recent": recent,
+            "twin_n": len(tw), "twin_pnl": r2(tw_pnl), "twin_per1": r2(tw_pnl / tw_cost * 100) if tw_cost else None,
+        })
+    return out
+
+
 def stopped_info(tc, tr):
     """Jan, 12 Nov: stopped tracks stay on the page but must look closed. "stopped" (no new bets, open ones settle) or
     "retired" (maker: everything closed). Returns {"on": "2026-11-12", "why": "..."} or None."""
@@ -509,7 +615,12 @@ def build(offline=False):
     plain_words(rows)
     if ext:            # same ranking rule as bot.ranked: worst case first, then P&L
         order = [r["name"] for r in sorted(rows, key=lambda r: (-r["trust"]["worst_per_100"], -r["pnl"]))]
-    data = {"generated": bot.iso(), "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "n_stopped": n_stop, "n_hidden": n_hid, "rank_size": bot.rs_rank_size(), "top": top,
+    try:
+        live_bots = live_rows(tracks)
+    except Exception as e:      # the real bots' block must never break the page
+        print(f"dashboard: real-money block failed ({e})")
+        live_bots = []
+    data = {"generated": bot.iso(), "live_bots": live_bots, "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "n_stopped": n_stop, "n_hidden": n_hid, "rank_size": bot.rs_rank_size(), "top": top,
             "order": order, "tracks": rows, "trial_end": "2027-01-01",
             "min_proven": bot.CFG.get("ranking", {}).get("min_trades_proven", 30),
             "repo": "https://github.com/palsk1/poly-paper-bot"}
