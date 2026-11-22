@@ -29601,3 +29601,4 @@
 {"minutes_left": 2.8, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV220930-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T14:27:17Z", "type": "kmaker_order"}
 {"minutes_left": 2.8, "price": 0.954, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV220930-30", "track": "kc_maker", "ts": "2026-11-22T14:27:18Z", "type": "kmaker_order"}
 {"minutes_left": 2.8, "price": 0.982, "queue": 296.86, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV220930-30", "track": "kc_maker", "ts": "2026-11-22T14:27:19Z", "type": "kmaker_order"}
+{"outcome": "Neftchi Baku PFC: No", "pnl": -1.9083, "price": 0.0, "reason": "resolved", "title": "Will Neftchi Baku PFC win on 2026-11-22?", "token": "20179659197627468824930037016716600152251277015311178767536552249063202656128", "track": "sharp_pinnacle", "ts": "2026-11-22T14:27:50Z", "type": "paper_close"}
