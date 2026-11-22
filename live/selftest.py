@@ -55,6 +55,9 @@ def test_sign():
 
 
 # ---------------------------------------------------------------- Kalshi place + settle
+BREAK = [[{"exchange_index": 0, "balance": "0.0000"}, {"exchange_index": 2, "balance": "30.0000"}]]
+
+
 def kalshi_fakes(t_close):
     def http_json(url, params=None, retries=3):
         if "/klines" in url:      # Binance: price far above the strike, small moves -> big z
@@ -103,7 +106,7 @@ def test_kalshi():
     def kreq(method, path, body=None, params=None):
         sent.append((method, path, body))
         if path == "/portfolio/balance":
-            return 200, {"balance": 3000, "balance_dollars": "30.00"}
+            return 200, {"balance": 3000, "balance_dollars": "30.00", "balance_breakdown": BREAK[0]}
         if method == "POST" and path == "/portfolio/orders":      # the old address: switched off by Kalshi
             return 410, {"error": {"code": "deprecated_v1_order_endpoint"}}
         if method == "POST":
@@ -134,6 +137,18 @@ def test_kalshi():
     K.settle(book)
     check(abs(book.state["realized"] + 3.884) < 1e-6 and book.state["lost"] == 1,
           "Kalshi live loss is booked from the real order (4 filled, -$3.88)")
+
+    # Kalshi pays a bot's bid only from the Crypto part of the account: money parked elsewhere = no bid sent
+    BREAK[0] = [{"exchange_index": 0, "balance": "30.0000"}, {"exchange_index": 2, "balance": "0.0000"}]
+    bookw = C.Book("kalshi-wrong")
+    at(26, 0)
+    kalshi_fakes(at(26, 0).replace(minute=30))
+    n_post = len([1 for m, p, b in sent if m == "POST"])
+    K.place(bookw)
+    check(K.balances() == (30.0, 0.0) and not bookw.state["open"]
+          and len([1 for m, p, b in sent if m == "POST"]) == n_post,
+          "money in the wrong part of the Kalshi account: no bid is sent (and the phone hears why)")
+    BREAK[0] = [{"exchange_index": 0, "balance": "0.0000"}, {"exchange_index": 2, "balance": "30.0000"}]
 
     # caps: open-money cap and the total-loss stop
     os.environ["KALSHI_MAX_OPEN_USD"] = "3"
