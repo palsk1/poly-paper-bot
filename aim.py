@@ -737,14 +737,13 @@ def usrc():
     for k in sorted(have["last"])[-2:]:
         print(" ", k, have["last"][k]["snap"], have["last"][k]["rows"][:4], "| first seen", have["first"][k]["snap"], have["first"][k]["rows"][:2], flush=True)
     # other places that keep the weekly page as it looked each day
-    for u in ("https://api.github.com/repos/jampongsathorn/openrouter-rankings/contents/data",
-              "https://api.github.com/repos/lyll23/OpenRouter-OS-Rankings-f/contents/data",
-              "https://openrouter.ai/api/v1/datasets/exports/README.md"):
+    for u in ("https://openrouter.ai/api/v1/datasets/exports/index.json",
+              "https://api.github.com/repos/lyll23/OpenRouter-OS-Rankings-f/contents/data/datasets"):
         try:
             import urllib.request
             with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "paper-bot"}), timeout=25) as r:
                 t = r.read().decode("utf-8", "replace")
-            print("OK", u, len(t), t[:1500].replace("\n", " "), flush=True)
+            print("OK", u, len(t), t[:6000].replace("\n", " "), flush=True)
         except Exception as e:
             print("FAILED", u, str(e)[:120], flush=True)
 
