@@ -184,6 +184,18 @@
       "source": "ktrump",
       "rules": "trump_week_k"
     },
+    "tennis_set_w": {
+      "label": "UNTESTED (added 2026-11-23). Tennis, women's main tour, on Kalshi: when a player has just won the first set and still costs 50c to under 80c, buys up to $25 of her and holds to the end of the match. Looks once per match, right after set 1. History: +$6.96 per $100 on 1,402 bets, about 7 in 10 win; found by looking, and it only works at the price shown, not 2c higher (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
+      "start_cash": 300,
+      "source": "ktennis",
+      "rules": "tennis_set_w"
+    },
+    "tennis_set": {
+      "label": "UNTESTED (added 2026-11-23). Tennis, all four pro tours (men, women and both second-tier tours), on Kalshi: the same bet as tennis_set_w on every match. When a player has just won the first set and still costs 50c to under 80c, buys up to $25 and holds to the end. History: +$2.45 per $100 on 6,469 bets; the men's matches alone were about $0 (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
+      "start_cash": 300,
+      "source": "ktennis",
+      "rules": "tennis_set"
+    },
     "econ_fav": {
       "label": "Forecast backs the favorite (added 2026-11-09): Kalshi CPI, jobless-claims, unemployment and jobs-report markets. 20-76 hours before the release, buys the side that costs 80-99c when a free forecast (Cleveland Fed for inflation, last release for the jobs numbers) says it is worth 3c+ more. Holds to the result. Real order-book fills. $50 paper",
       "start_cash": 50,
@@ -2003,6 +2015,30 @@
       "min_usd": 5,
       "min_usd_note": "Skip when less than $5 is on offer at a price that fits.",
       "scan_minutes": 55
+    },
+    "tennis_set_w": {
+      "why": "2026-11-23 (tennis thread, Jan: 'yes build a paper track'). tennis.py lead (backtest/tennis.md): on Kalshi the winner of set 1, bought at the real sell offer 50c to under 80c about 7 minutes after the set and held to the end, made +$6.96 per $100 on 1,402 women's main tour bets (both halves ahead; +$5.46 on 720 with a second, stricter clock), all four tours +$2.45 on 6,469. Found by looking (130 cuts), gone at 2c more a share. The live bot reads Kalshi's own live score every 5 minutes and looks ONCE per match, the first time set 1 is over and set 2 is at most 3 games old, so it buys 0 to about 15 minutes after the set. UNTESTED live. Claude's track, rule changes reported.",
+      "series": ["KXWTAMATCH"],
+      "min_price": 0.50,
+      "max_price": 0.80,
+      "price_note": "The set winner's real sell offer must be 50c to under 80c.",
+      "max_spread": 0.08,
+      "max_set2_games": 3,
+      "max_set2_games_note": "If the bot first sees the match more than 3 games into set 2 it is too late: no bet, ever, on that match.",
+      "usd_per_bet": 25,
+      "min_usd": 5,
+      "scan_minutes": 4
+    },
+    "tennis_set": {
+      "why": "2026-11-23. Same rule as tennis_set_w on all four tours Kalshi lists and 365scores could time in the history test (no ITF). History +$2.45 per $100 on 6,469 bets, exam: Promising, needs more bets; men's main tour about $0, men's challengers +$1.55, women's challengers -$0.27. Runs side by side with the women-only track to see if the women's lead is real or just the best of four. UNTESTED live. Claude's track, rule changes reported.",
+      "series": ["KXATPMATCH", "KXWTAMATCH", "KXATPCHALLENGERMATCH", "KXWTACHALLENGERMATCH"],
+      "min_price": 0.50,
+      "max_price": 0.80,
+      "max_spread": 0.08,
+      "max_set2_games": 3,
+      "usd_per_bet": 25,
+      "min_usd": 5,
+      "scan_minutes": 4
     },
     "econ_fav": {
       "why": "2026-11-09 econ.py backtest (backtest/econ.md): on 340 Kalshi data releases 2021-2026, buying the 80-99c side when the forecast said it was worth 3c+ more made +$6.73 per $100 24h before (141 bets, 7 lost) and +$7.75 72h before, both halves ahead, still ahead 2c worse; the same band without the forecast lost about $5 per $100. Found after looking at price bands, so the live track is the real test. Claude's track, rule changes reported.",
