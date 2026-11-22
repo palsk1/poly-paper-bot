@@ -312,8 +312,25 @@ def test_phone():
     del os.environ["NTFY_CONTROL"]
 
 
+def test_balance():
+    import json as _j
+    b = C.Book("balance")
+    C._beat["t"] = 0
+
+    def boom():
+        raise RuntimeError("site down")
+    C.beat(b, 0.1, balance_fn=lambda: {"balance": 30.004, "balance_crypto": 29.5})
+    C._beat["t"] = 0
+    C.beat(b, 0.1, balance_fn=boom)
+    rows = [_j.loads(x) for x in open(os.path.join(C.DIR, f"balance-{C.utcnow().strftime('%Y%m')}.jsonl")) if x.strip()]
+    al = [r for r in rows if r["k"] == "alive"]
+    check(len(al) == 2 and al[0]["balance"] == 30.0 and al[0]["balance_crypto"] == 29.5 and "balance" not in al[1],
+          "the alive line carries the real balance, and a failed balance read never stops the bot")
+
+
 if __name__ == "__main__":
     test_sign()
+    test_balance()
     test_phone()
     test_privacy()
     test_mode_switch()

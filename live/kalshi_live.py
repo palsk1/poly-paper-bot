@@ -126,6 +126,12 @@ def balance():
     return balances()[1]
 
 
+def balance_log():
+    """For the notebook: whole account and the Crypto part (the bot can only bid with that)."""
+    total, crypto = balances()
+    return {"balance": total, "balance_crypto": crypto}
+
+
 # ---------------------------------------------------------------- one loop
 def minutes_to_close(t=None):
     t = t or C.utcnow()
@@ -258,7 +264,7 @@ def place(book):
                 if cash is None:
                     cash = balance()
                 if cash < cost:
-                    book.log("skip_no_cash", ticker=tk, balance=round(cash, 2), cost=cost)
+                    book.log("skip_no_cash", ticker=tk, crypto_cash=round(cash, 2), cost=cost)
                     if book.state.get("cash_push") != C.today():
                         book.state["cash_push"] = C.today()
                         book.save()
@@ -293,7 +299,8 @@ def run():
         C.need("KALSHI_KEY_ID")
     book = C.Book("kalshi")
     book.log("start", rule=TRACK, usd_per_order=C.envf("KALSHI_USD_PER_ORDER", 4),
-             max_open=C.envf("KALSHI_MAX_OPEN_USD", 30), mode="LIVE (real money)" if C.is_live() else "dry run")
+             max_open=C.envf("KALSHI_MAX_OPEN_USD", 30), mode="LIVE (real money)" if C.is_live() else "dry run",
+             **C.read_balance(balance_log))
     last_up, was_stopped = 0, None
     while True:
         t0 = time.time()
@@ -311,7 +318,7 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
-        C.beat(book, time.time() - t0)
+        C.beat(book, time.time() - t0, balance_fn=balance_log)
         if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
