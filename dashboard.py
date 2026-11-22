@@ -510,7 +510,26 @@ def live_rows(tracks):
         for r in real[::-1][:10]:
             recent.append({"t": r.get("title") or r.get("ticker") or r.get("slug"), "at": str(r.get("t", ""))[:16],
                            "cost": r2(cost(r)), "pnl": r2(float(r.get("pnl") or 0))})
+        # Jan, 22 Nov: "a graph over time for the live bots like I have with the paper strategies". Same step line as
+        # the paper cards: P&L after each finished real bet, with the paper twin over the same time as a second line.
+        # (Balance is not graphed: it jumps when money is added or a bet is placed.)
+        now16, s16 = bot.iso()[:16], str(since or "")[:16]
+        run, cv = 0.0, [[s16, 0.0]] if s16 else []
+        for r in sorted(real, key=lambda r: str(r.get("t", ""))):
+            run += float(r.get("pnl") or 0)
+            cv.append([str(r.get("t", ""))[:16], round(run, 2)])
+        run, tcv = 0.0, [[s16, 0.0]] if s16 else []
+        for c in sorted(tw, key=lambda c: str(c.get("closed_at") or "")):
+            if c.get("closed_at"):
+                run += float(c.get("pnl") or 0)
+                tcv.append([str(c["closed_at"])[:16], round(run, 2)])
+        if len(cv) > MAX_POINTS * 2:
+            step = len(cv) / (MAX_POINTS * 2)
+            cv = [cv[int(i * step)] for i in range(MAX_POINTS * 2 - 1)] + [cv[-1]]
+        cv.append([now16, round(pnl, 2)])
+        tcv.append([now16, round(run, 2)])
         out.append({
+            "curve": cv if s16 else [], "curve2": tcv if s16 else [],
             "bot": b["bot"], "label": b["label"], "say": b["say"], "twin": b["twin"], "live": live, "since": since,
             "stopped": ({"why": "stopped from the phone" if stop.get("k") == "phone_stop" else
                          f"stopped: total loss reached the cap", "at": stop.get("t")} if stop else None),
