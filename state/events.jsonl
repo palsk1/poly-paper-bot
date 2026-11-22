@@ -28576,3 +28576,5 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXNFLTEAMTOTAL-26NOV22NOCHI-CHI18", "track": "kalshi_patient", "ts": "2026-11-22T02:50:08Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXTEMPMIAH-26NOV2122-T76.99", "track": "kalshi_patient", "ts": "2026-11-22T02:50:08Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLTDPROT-26NOV22ARIKC-ARIDDUVERNAY81-1", "track": "kalshi_patient", "ts": "2026-11-22T02:50:08Z", "type": "kpatient_order"}
+{"outcome": "Red Wings", "pnl": -2.3119, "price": 0.0, "reason": "resolved", "title": "Islanders vs. Red Wings", "token": "2999655490162356379883688645433567606713379397690773951078669001312278342007", "track": "w_the_joker", "ts": "2026-11-22T02:52:22Z", "type": "paper_close"}
+{"outcome": "Red Wings", "pnl": -2.3119, "price": 0.0, "reason": "resolved", "title": "Islanders vs. Red Wings", "token": "2999655490162356379883688645433567606713379397690773951078669001312278342007", "track": "wb_the_joker", "ts": "2026-11-22T02:52:22Z", "type": "paper_close"}
