@@ -132,6 +132,188 @@ def peek():
     show("communications rfqs without a key", lambda: kget("/communications/rfqs", {"limit": 5}))
 
 
+# ================================================================ fetch
+SPAN = int(os.environ.get("KCB_SPAN", "180"))          # seconds of the trade list per slice
+PER_DAY = int(os.environ.get("KCB_PER_DAY", "10"))
+MAX_PAGES = int(os.environ.get("KCB_PAGES", "40"))
+WORKERS = int(os.environ.get("KCB_WORKERS", "6"))
+BUDGET_MIN = float(os.environ.get("KCB_MIN", "200"))
+SKIP_DAYS = 2                                           # newest days are skipped so combos have settled
+
+
+def day_path(d0):
+    return os.path.join(CACHE, f"day_{dt.datetime.utcfromtimestamp(d0):%Y%m%d}.json.gz")
+
+
+def slices_of(d0, n=None):
+    rng = random.Random(d0 + 11)
+    n = n or PER_DAY
+    step = DAY // n
+    return [(d0 + i * step + rng.randrange(0, step - SPAN), ) for i in range(n)]
+
+
+def tape_slice(t0, t1):
+    """Every trade on Kalshi in [t0, t1) (all markets, newest first); keep the combo ones.
+    -> (combo rows [ts, ticker, yes price, contracts, taker bought yes], covered from, all trades seen, complete)"""
+    out, cur, seen, lo, done = [], None, 0, t1, False
+    for _ in range(MAX_PAGES):
+        p = {"min_ts": int(t0), "max_ts": int(t1), "limit": 1000}
+        if cur:
+            p["cursor"] = cur
+        r = kget("/markets/trades", p)
+        got = r.get("trades") or []
+        seen += len(got)
+        for t in got:
+            ts = its(t.get("created_time"))
+            if ts is not None:
+                lo = min(lo, ts)
+            tk = str(t.get("ticker") or "")
+            if not tk.startswith("KXMVE") or ts is None:
+                continue
+            yp = bot.fnum(t.get("yes_price_dollars"), None)
+            n = bot.fnum(t.get("count_fp") or t.get("count"), 0)
+            side = str(t.get("taker_side") or "")
+            if yp is None or n <= 0 or side not in ("yes", "no"):
+                continue
+            out.append([ts, tk, yp, round(n, 2), 1 if side == "yes" else 0, 1 if t.get("is_block_trade") else 0])
+        cur = r.get("cursor")
+        if not cur or not got:
+            done = True
+            break
+    return out, (t0 if done else lo + 1), seen, done
+
+
+def chunks(xs, n):
+    xs = list(xs)
+    return [xs[i:i + n] for i in range(0, len(xs), n)]
+
+
+def markets_by_ticker(tks, per=20):
+    out = {}
+
+    def one(part):
+        try:
+            r = kget("/markets", {"tickers": ",".join(part), "limit": 1000})
+            return r.get("markets") or []
+        except Exception as e:
+            return [{"_err": str(e)[:120]}]
+    with ThreadPoolExecutor(WORKERS) as ex:
+        for got in ex.map(one, chunks(sorted(tks), per)):
+            for m in got:
+                if m.get("ticker"):
+                    out[m["ticker"]] = m
+    return out
+
+
+def slim_combo(m):
+    return {"legs": [[lg.get("market_ticker"), 1 if str(lg.get("side")) == "yes" else 0] for lg in m.get("mve_selected_legs") or []],
+            "res": str(m.get("result") or ""), "sv": bot.fnum(m.get("settlement_value_dollars"), None),
+            "close": its(m.get("close_time")), "set": its(m.get("settlement_ts")), "open": its(m.get("open_time")),
+            "col": m.get("mve_collection_ticker"), "st": m.get("status")}
+
+
+def slim_leg(m):
+    return {"ev": m.get("event_ticker"), "q": f"{m.get('title') or ''} | {m.get('yes_sub_title') or ''}"[:120],
+            "res": str(m.get("result") or ""), "sv": bot.fnum(m.get("settlement_value_dollars"), None),
+            "close": its(m.get("close_time")), "exp": its(m.get("expected_expiration_time")), "open": its(m.get("open_time")),
+            "occ": its(m.get("occurrence_datetime"))}
+
+
+_DBG = [0]
+
+
+def leg_minutes(tks, t0, t1):
+    """{leg ticker: [[minute end, yes bid, yes ask, last trade price], ...]} for the slice (1-minute candles)."""
+    out = {}
+
+    def one(tk):
+        s = tk.split("-")[0]
+        for path in (f"/series/{s}/markets/{tk}/candlesticks", ):
+            try:
+                r = kget(path, {"start_ts": int(t0) - 180, "end_ts": int(t1) + 60, "period_interval": 1})
+            except Exception as e:
+                if _DBG[0] < 5:
+                    _DBG[0] += 1
+                    print("   candle fail", tk, str(e)[:120])
+                continue
+            rows = []
+            for c in (r.get("candlesticks") if isinstance(r, dict) else None) or []:
+                t, bid, ask = yesno.k_candle(c)
+                pr = c.get("price") or {}
+                last = bot.fnum(pr.get("close_dollars"), None)
+                rows.append([t, bid, ask, last])
+            return tk, rows
+        return tk, []
+    with ThreadPoolExecutor(WORKERS) as ex:
+        for tk, rows in ex.map(one, sorted(tks)):
+            out[tk] = rows
+    return out
+
+
+def fetch(days="14", per_day=None):
+    days = int(days)
+    global PER_DAY
+    if per_day:
+        PER_DAY = int(per_day)
+    os.makedirs(CACHE, exist_ok=True)
+    today = int(time.time()) // DAY * DAY
+    for back in range(SKIP_DAYS, SKIP_DAYS + days):
+        d0 = today - back * DAY
+        path = day_path(d0)
+        if rj(path):
+            continue
+        if time.time() - T0 > BUDGET_MIN * 60:
+            print("time budget used, run again to resume")
+            break
+        day = {"d0": d0, "slices": []}
+        for (a, ) in slices_of(d0):
+            b = a + SPAN
+            try:
+                rows, cov, seen, done = tape_slice(a, b)
+            except Exception as e:
+                print("  slice failed", a, str(e)[:150])
+                continue
+            tks = {r[1] for r in rows}
+            cm = markets_by_ticker(tks)
+            combos = {tk: slim_combo(m) for tk, m in cm.items()}
+            legs = {lg[0] for c in combos.values() for lg in c["legs"] if lg[0]}
+            lm = markets_by_ticker(legs)
+            mins = leg_minutes(legs, cov, b)
+            day["slices"].append({"a": a, "b": b, "cov": cov, "seen": seen, "done": done, "tr": rows, "combos": combos,
+                                  "legs": {tk: slim_leg(m) for tk, m in lm.items()}, "min": mins})
+            print(f"  {dt.datetime.utcfromtimestamp(a):%m-%d %H:%M} all trades {seen}{'' if done else ' (cut)'}, covered {b - cov}s, "
+                  f"combo trades {len(rows)}, combos {len(tks)} (found {len(combos)}), legs {len(legs)} (found {len(lm)}), "
+                  f"with minutes {sum(1 for v in mins.values() if v)}  [{(time.time() - T0) / 60:.1f} min]")
+        wj(path, day)
+        print(f"saved {os.path.basename(path)}: {sum(len(s['tr']) for s in day['slices'])} combo trades")
+
+
+def load():
+    out = []
+    for f in sorted(os.listdir(CACHE)) if os.path.isdir(CACHE) else []:
+        if f.startswith("day_"):
+            d = rj(os.path.join(CACHE, f))
+            if d:
+                out.append(d)
+    return out
+
+
+def stat():
+    days = load()
+    n = sum(len(s["tr"]) for d in days for s in d["slices"])
+    print(len(days), "days,", n, "combo trades")
+    for d in days[:2]:
+        for s in d["slices"][:2]:
+            print(json.dumps({k: (v if k in ("a", "b", "cov", "seen", "done") else None) for k, v in s.items()}))
+            for r in s["tr"][:6]:
+                c = s["combos"].get(r[1])
+                print("  ", r, json.dumps(c)[:400])
+                for lg in (c or {}).get("legs", [])[:3]:
+                    print("      ", lg, json.dumps(s["legs"].get(lg[0]))[:260], (s["min"].get(lg[0]) or [])[-3:])
+
+
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"peek": peek}[cmd](*sys.argv[2:])
+    {"peek": peek, "fetch": fetch, "stat": stat}[cmd](*sys.argv[2:])
