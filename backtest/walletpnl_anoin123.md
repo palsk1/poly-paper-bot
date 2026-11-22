@@ -40,3 +40,26 @@ Three separate counts agree within $0.2 million, so merges and redeems are not m
 The copy tracks `w_anoin123` / `wb_anoin123` copy its buys 5 minutes late. Many of its buys are one leg of a
 pair it later merges, so a copier gets half of a hedge. Lab is frozen to 1 Jan, so the tracks keep running as
 they are. Not a model to follow with money.
+
+## Skill or luck since August? (22 Nov, Jan asked; no new track)
+
+Finished markets only (one bet = one market, markets in one event count as one), its own prices, through the
+shared exam (`exam.score`, 7 cuts tried, not added to the ledger). Its own prices are better than a 5-minute-late
+copier would get, so these numbers are the best case for copying.
+
+| Slice | Markets | Bought | P&L | Per $100 | Exam |
+|---|---|---|---|---|---|
+| Since 1 Aug, all | 781 | $8.94M | +$519k | +$5.81 (luck range -$2.98 to +$14.60) | Ahead, but could be luck |
+| Since 1 Aug, both sides bought | 275 | $5.87M | +$245k | +$4.17 | Ahead, but could be luck (2nd half -$1.33) |
+| Since 1 Aug, one side only | 506 | $3.07M | +$275k | +$8.95 | Ahead, but could be luck (1st half -$2.00) |
+| Since 1 Aug, Iran / Israel / Russia-Ukraine | 171 | $3.37M | +$338k | +$10.05 (+$3.12 to +$16.98) | Promising, needs more bets (cut picked after looking) |
+| Since 1 Aug, everything else | 610 | $5.57M | +$181k | +$3.25 | Ahead, but could be luck |
+| Before 1 Aug, all | 583 | $63.7M | -$5.51M | -$8.65 | Losing |
+| Before 1 Aug, without the Iran-strike markets | 496 | $43.8M | -$1.10M | -$2.50 | Behind, but could be bad luck |
+
+Still open, started since 1 Aug: 253 markets, $2.81M bought, +$169k at today's prices.
+
+Plain answer: the run since August is real money but not proven skill. The 5 biggest wins (+$584k) are bigger than
+the whole profit (+$519k). The only slice that looks better than luck is its war-and-peace bets since August, which
+is the same topic that lost it $4.4 million in the spring, and that slice was picked after looking. Our own copies
+(`wb_anoin123`, 17 finished bets on 22 Nov: -$2.45 per $100) are too few to say anything.
