@@ -190,7 +190,8 @@ def place(book):
                 book.log("order_refused", slug=slug, code=getattr(res, "code", "?"), err=getattr(res, "message", "")[:200])
                 continue
             spent, got = float(res.making_amount), float(res.taking_amount)
-            rec.update({"order_id": str(res.order_id), "status": res.status, "spent": spent, "shares": got,
+            rec.update({"order_id": C.scrub(str(res.order_id)),   # short form: the full number points at the wallet
+                         "status": res.status, "spent": spent, "shares": got,
                         "ask": round(spent / got, 4) if got else rec["ask"], "cost": round(spent + fee, 4)})
             book.state["done"].remove(slug)
             have -= spent + fee
@@ -235,7 +236,7 @@ def run():
              mode="LIVE (real money)" if C.is_live() else "dry run")
     if C.is_live():
         cl = client()
-        book.log("login", wallet=str(cl.wallet), wallet_type=str(cl.wallet_type), cash=round(cash(), 2))
+        book.log("login", wallet_type=str(cl.wallet_type), cash=round(cash(), 2))   # no address: the log is public
     last_scan = last_settle = last_up = 0
     was_stopped = None
     while True:
