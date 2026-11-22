@@ -1307,12 +1307,87 @@ def fillaudit(arg=None):
     print("FA_SUM", track, json.dumps(dict(agg)))
 
 
+def night(minutes=3, level=0.95):
+    """Are nights worse? (20 Nov, Jan: "Are nights worse?" after kc_maker lost BTC, ETH and SOL in one window.)
+    Splits the 4-month history (kc_maker = plain bid, kc_maker_safe = z>=2) and the live kmaker tracks by
+    Stockholm time of day and weekday/weekend, with a luck range from resampling whole 15-minute rounds, and
+    counts rounds where 2+ coins lost at once. Report backtest/kcnight.md."""
+    from zoneinfo import ZoneInfo
+    sto = ZoneInfo("Europe/Stockholm")
+    bands = ["00-06 night", "06-12 morning", "12-18 afternoon", "18-24 evening"]
+    hour = lambda t: dt.datetime.fromtimestamp(t, sto).hour
+    out = ["# Are nights worse for the Kalshi 15-minute bids? (20 Nov 2026)", "",
+           "Times are Stockholm. A bet costs about $9.70 and pays $10.00; one loss eats about 30 wins (plain) "
+           "or 90+ (safe). 'Range' = the luck range (90 in 100) from re-drawing whole 15-minute rounds.", "",
+           "**Short answer:** for the plain bid, nights (00-06) are a bit worse than mornings in 4 months of history "
+           "(1 loss in 60 vs 1 in 80), but about the same as afternoons and evenings, and inside the luck range. With "
+           "the 2-move check, nights are the best stretch. What hurts is several coins losing in the same 15 minutes "
+           "(crypto moves together), and that happens at every hour.", ""]
+
+    def show(name, rs):
+        cost = sum(r["c"] for r in rs)
+        pnl = sum(r["p"] for r in rs)
+        lost = sum(r["p"] < 0 for r in rs)
+        g = defaultdict(list)
+        for r in rs:
+            g[r["t"]].append(r)
+        keys, bs = list(g), []
+        rnd = random.Random(1)
+        for _ in range(400):
+            c = p = 0.0
+            for k in rnd.choices(keys, k=len(keys)):
+                for r in g[k]:
+                    c += r["c"]
+                    p += r["p"]
+            bs.append(100 * p / c)
+        bs.sort()
+        return (f"| {name} | {len(rs):,} | {f'{lost} (1 in {len(rs) / lost:.0f})' if lost else '0'} | "
+                f"{money(100 * pnl / cost)} | {money(bs[20])} to {money(bs[380])} |")
+
+    def table(title, rows):
+        out.extend([f"## {title}", "", "| When | Bets | Lost | Per $100 | Range |", "|---|---|---|---|---|"])
+        by = defaultdict(list)
+        for r in rows:
+            by[bands[hour(r["t"]) // 6]].append(r)
+            by["weekend" if dt.datetime.fromtimestamp(r["t"], sto).weekday() >= 5 else "weekday"].append(r)
+        for k in bands + ["weekday", "weekend"]:
+            if by[k]:
+                out.append(show(k, by[k]))
+        out.append(show("all", rows))
+        g = defaultdict(list)
+        for r in rows:
+            g[r["t"]].append(r)
+        multi = [k for k, v in g.items() if sum(r["p"] < 0 for r in v) >= 2]
+        lost = sum(r["p"] < 0 for r in rows)
+        inm = sum(sum(r["p"] < 0 for r in g[k]) for k in multi)
+        nb = defaultdict(int)
+        for k in multi:
+            nb[bands[hour(k) // 6].split()[1]] += 1
+        out.extend(["", f"Rounds where 2+ coins lost at once: {len(multi)}, holding {inm} of {lost} lost bets "
+                    f"({', '.join(f'{k} {v}' for k, v in sorted(nb.items()))}).", ""])
+
+    sigs = signals(load_windows(), minutes)
+    for title, z in (("History, plain bid (kc_maker's rule)", None), ("History, with the 2-move check (kc_maker_safe)", 2.0)):
+        rows = [{"t": r["t"], "c": r["price"], "p": (1.0 if r["won"] else 0.0) - r["price"]}
+                for r in variant_trades(sigs, "improve", level, z) if r["fills"][1]]
+        table(f"{title}, {minutes} min left", rows)
+    st = json.load(open(os.path.join(bot.ROOT, "state", "tracks.json")))
+    for tn in ("kc_maker", "kc_maker_safe", "kc_maker_safe_usd"):
+        rows = [{"t": tsec(x["close"]) - 180, "c": x["cost"], "p": x["pnl"]} for x in st.get(tn, {}).get("closed", [])
+                if x.get("cost")]
+        if rows:
+            table(f"Live paper bets, {tn}", rows)
+    path = os.path.join(OUT, "kcnight.md")
+    open(path, "w").write("\n".join(out) + "\n")
+    print("\n".join(out))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if "_" in cmd:   # probe form: kc_fetch_30, kc_pmfetch_2
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "fillaudit": lambda: fillaudit(arg), "basis": live_basis, "gapcheck": lambda: gapcheck(log=arg == "log"),
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "fillaudit": lambda: fillaudit(arg), "basis": live_basis, "night": night, "gapcheck": lambda: gapcheck(log=arg == "log"),
      "pmfetch": lambda: pm_fetch(arg or 30), "pmrun": lambda: pm_run(log=arg == "log"),
      "pmall": lambda: (fetch(60), pm_fetch(arg or 30), pm_run()),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()

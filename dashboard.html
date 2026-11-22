@@ -11,6 +11,7 @@
   --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
   --s1: #2a78d6; --s2: #eb6834; --good: #006300; --bad: #d03b3b; --band: rgba(235,104,52,0.12);
+  --real: #9a6700; --realbg: rgba(212,160,23,0.10);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -18,6 +19,7 @@
     --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
     --s1: #3987e5; --s2: #d95926; --good: #0ca30c; --bad: #e66767; --band: rgba(217,89,38,0.18);
+    --real: #e3b341; --realbg: rgba(227,179,65,0.10);
   }
 }
 :root[data-theme="dark"] {
@@ -25,6 +27,7 @@
   --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
   --s1: #3987e5; --s2: #d95926; --good: #0ca30c; --bad: #e66767; --band: rgba(217,89,38,0.18);
+    --real: #e3b341; --realbg: rgba(227,179,65,0.10);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink);
@@ -81,6 +84,7 @@ svg text { fill: var(--muted); font-size: 11px; font-family: inherit; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 6px 0; }
 .vd { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--border); color: var(--ink2); white-space: nowrap; }
 .vd.good { color: var(--good); border-color: var(--good); } .vd.bad { color: var(--bad); border-color: var(--bad); }
+.vd.future, .tag.future { color: var(--ink2); border-color: var(--ink2); border-style: dotted; }
 .vd.maybe { color: var(--s2); border-color: var(--s2); } .vd.unlucky { color: var(--s2); border-color: var(--bad); border-style: dashed; } .vd.luck { color: var(--ink2); border-style: dashed; }
 .vrow { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--grid); cursor: pointer; font-size: 13px; }
 .vrow:last-child { border-bottom: 0; }
@@ -93,6 +97,14 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
 .plain .say { font-size: 15px; color: var(--ink); }
 .plain .lbl { font-weight: 650; }
 .oneliner { font-size: 12px; color: var(--ink2); margin: 2px 0 2px; }
+.realcard { border: 2px solid var(--real); background: var(--realbg); }
+.realhead { color: var(--real); font-weight: 750; letter-spacing: .3px; font-size: 12px; }
+.mode { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--real); color: var(--real); }
+.mode.on { background: var(--real); color: var(--surface); }
+.mode.off { border-color: var(--bad); color: var(--bad); }
+.kv { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2px 12px; font-size: 14px; margin: 8px 0; }
+.kv div:nth-child(odd) { color: var(--ink2); }
+.kv div:nth-child(even) { text-align: right; font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -100,6 +112,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <h1>Paper bot</h1>
   <div class="sub" id="updated"></div>
   <div class="tiles" id="tiles"></div>
+  <div id="real"></div>
   <p class="note" style="margin-top:8px"><a href="#all-h">Jump to all strategies ↓</a></p>
 
   <details class="card" id="primer"><summary><b>New here? How these bets work, in 30 seconds</b></summary>
@@ -116,7 +129,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <div id="top"></div>
 
   <h2>Tests outside the paper bot</h2>
-  <p class="note">These run on their own: the combo house on your AWS server, the fast Kalshi bot in its own nonstop job. Practice money only. They get the same card, verdict and graph as every other strategy. Tap one for details.</p>
+  <p class="note">These run on their own: the combo house on your AWS server, the fast Kalshi bot in its own nonstop job. Practice money only. The combo house cards say <b>FUTURE</b>: it needs thousands of dollars tied up, so it's parked for now. They get the same card, verdict and graph as every other strategy. Tap one for details.</p>
   <div id="ext"></div>
 
   <h2>Skill or luck?</h2>
@@ -150,6 +163,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
 
   <h2 id="all-h">All strategies</h2>
   <p class="note">Everything at a glance. "P&amp;L" (profit or loss) includes open bets at today's price. Tap a column name to sort, tap a row for details.</p>
+  <p class="note" id="hiddennote"></p>
   <div class="controls" id="allfilter"></div>
   <div class="tiles" id="allsum" style="margin:4px 0 8px"></div>
   <div class="card scroll" id="all"></div>
@@ -184,7 +198,7 @@ function goWhen(n, pace) {
 }
 function goLine(t) {
   const tr = t.trust, k = t.pv[0];
-  if (k === "luck" || t.stopped) return "";
+  if (k === "luck" || k === "future" || t.stopped) return "";
   if (tr.finished < FEW) { const n = FEW - tr.finished; return `Gets its first real tag after ${n} more finished bet${n === 1 ? "" : "s"}${goWhen(n, t.pace)}.`; }
   if (tr.to_go == null || tr.to_go === 0) return "";
   if (tr.to_go < 0) return "Even if it keeps going like this, it can't prove itself: it wins too little per bet for how much it swings.";
@@ -286,8 +300,10 @@ function niceTicks(lo, hi, n = 4) {
 
 function curveChart(el, t) {
   const p = points(t);
+  // optional second line (real-money cards: the paper twin over the same time)
+  const p2 = t.curve2 && t.curve2.length ? t.curve2.map(([ts, v]) => [new Date(ts + ":00Z").getTime(), v]) : null;
   const W = Math.max(300, el.clientWidth || 320), H = 200, L = 46, R = 10, T = 10, B = 24;
-  const xs = p.map(a => a[0]), ys = p.map(a => a[1]).concat([0]);
+  const xs = p.map(a => a[0]).concat(p2 ? p2.map(a => a[0]) : []), ys = p.map(a => a[1]).concat([0], p2 ? p2.map(a => a[1]) : []);
   const x0 = Math.min(...xs), x1 = Math.max(...xs);
   let y0 = Math.min(...ys), y1 = Math.max(...ys); if (y1 - y0 < 0.5) { y0 -= 0.25; y1 += 0.25; }
   const pad = (y1 - y0) * 0.08; y0 -= pad; y1 += pad;
@@ -303,6 +319,8 @@ function curveChart(el, t) {
     if (X(d) > L + 14 && X(d) < W - R - 14) g += `<text x="${X(d)}" y="${H - 6}" text-anchor="middle">${lab}</text>`;
   }
   // realized profit is a step line (changes only when a trade finishes); the last segment goes to today's total incl. open bets
+  if (p2) { let d2 = ""; p2.forEach((a, i) => { d2 += i ? `H${X(a[0]).toFixed(1)}V${Y(a[1]).toFixed(1)}` : `M${X(a[0]).toFixed(1)} ${Y(a[1]).toFixed(1)}`; });
+    g += `<path d="${d2}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-dasharray="5 3" stroke-linejoin="round"/>`; }
   const real = p.slice(0, -1);
   let d = ""; real.forEach((a, i) => { d += i ? `H${X(a[0]).toFixed(1)}V${Y(a[1]).toFixed(1)}` : `M${X(a[0]).toFixed(1)} ${Y(a[1]).toFixed(1)}`; });
   const lr = real[real.length - 1], now = p[p.length - 1];
@@ -311,7 +329,7 @@ function curveChart(el, t) {
   g += `<circle cx="${X(now[0])}" cy="${Y(now[1])}" r="4.5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>`;
   g += `<line id="xh" y1="${T}" y2="${H - B}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/><circle id="xd" r="4" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="Profit over time for ${esc(t.name)}">${g}<rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/></svg>
-    <div class="legend">${t.legend ? `<span>${esc(t.legend)}</span>` : `<span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span>`}</div>`;
+    <div class="legend">${t.legendHtml ? t.legendHtml : t.legend ? `<span>${esc(t.legend)}</span>` : `<span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span>`}</div>`;
   const svg = el.querySelector("svg"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
   const move = ev => {
     const r = svg.getBoundingClientRect(), mx = (ev.clientX - r.left) * W / r.width;
@@ -319,8 +337,9 @@ function curveChart(el, t) {
     const a = p[best];
     xh.setAttribute("x1", X(a[0])); xh.setAttribute("x2", X(a[0])); xh.setAttribute("visibility", "visible");
     xd.setAttribute("cx", X(a[0])); xd.setAttribute("cy", Y(a[1])); xd.setAttribute("visibility", "visible");
-    const label = best === p.length - 1 ? (t.legend ? "now" : "now, counting open bets") : best === 0 ? "start" : "after a bet finished";
-    showTip(`<b>${money(a[1])}</b><br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
+    const label = best === p.length - 1 ? (t.legend || t.legendHtml ? "now" : "now, counting open bets") : best === 0 ? "start" : "after a bet finished";
+    const tw = p2 ? (p2.filter(q => q[0] <= a[0]).pop() || p2[0])[1] : null;
+    showTip(`<b>${money(a[1])}</b>${tw != null ? ` <span class="sub">(paper twin ${money(tw)})</span>` : ""}<br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
   };
   svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
   svg.addEventListener("pointerleave", () => { hideTip(); xh.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); });
@@ -333,7 +352,7 @@ const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","
 const stopDay = t => t.stopped && t.stopped.on ? ` ${+t.stopped.on.slice(8, 10)} ${MON[+t.stopped.on.slice(5, 7) - 1]}` : "";
 const stopTag = t => t.stopped ? `<span class="tag stop">STOPPED${stopDay(t)}</span>` : "";
 const stopCls = t => t.stopped ? " isstop" : "";
-const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + stopTag(t) + (t.ext ? '<span class="tag">own test</span>' : "");
+const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + stopTag(t) + (t.ext ? '<span class="tag">own test</span>' : "") + (t.future ? '<span class="tag future">FUTURE</span>' : "");
 function miniCard(t, rank) {
   return `<div class="card top${stopCls(t)}" data-n="${esc(t.name)}"><div class="row">
       ${rank ? `<div class="rank">${rank}</div>` : ""}
@@ -350,6 +369,64 @@ function miniCard(t, rank) {
     (D.quoter_pending ? `<div class="card">The combo house numbers are being re-counted. They show up here within 30 minutes.</div>` : "") +
     (!D.ext.length && !D.quoter_pending ? `<div class="card">No notes from these tests yet.</div>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
+})();
+
+// Jan, 22 Nov: "clean up the dashboard". Say what's left off the page, so nothing looks like it vanished.
+$("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n_stopped || 0} stopped strategies and ${D.n_hidden || 0} clear losers ` +
+  `(enough finished bets, and losing even at the lucky end). The losers still run in the background, so the lab test stays clean until 1 Jan. ` +
+  `What each one taught us: <a href="${D.repo}/blob/main/LEARNINGS.md#cleared-off-the-dashboard-22-nov-clear-losers">LEARNINGS.md</a>.` : "";
+
+// ---------- REAL MONEY (Jan, 22 Nov): the two bots on his server, in their own color at the top.
+// From the logs they upload to GitHub about once an hour, so this can be up to an hour behind.
+(function realMoney() {
+  const L = D.live_bots || [];
+  if (!L.length) { $("real").innerHTML = ""; return; }
+  const ago = ts => { if (!ts) return "never"; const m = Math.round((Date.now() - new Date(ts)) / 6e4);
+    return m < 60 ? `${m} min ago` : m < 2880 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
+  const per1 = x => x == null ? "–" : `<span class="num ${cls(x)}">${x < 0 ? "−" : "+"}${Math.abs(x).toFixed(1)}c per $1 bet</span> <span class="sub">(${x < 0 ? "−" : "+"}${Math.abs(x).toFixed(1)}%)</span>`;
+  const card = b => {
+    const mode = b.stopped ? `<span class="mode off">STOPPED</span> <span class="sub">${esc(b.stopped.why)}, ${esc(ago(b.stopped.at))}</span>`
+      : b.live ? `<span class="mode on">REAL MONEY</span>` : `<span class="mode">PRACTICE RUN</span> <span class="sub">no real orders yet</span>`;
+    const late = b.last_seen && (Date.now() - new Date(b.last_seen)) > 3 * 36e5
+      ? `<p class="warn">No news from the server for ${esc(ago(b.last_seen))}. The bot may be down, or the hourly upload failed.</p>` : "";
+    const rows = [
+      ["Each bet", b.bet != null ? money(b.bet, false) + (b.bot === "poly" ? " at most" : "") : "–"],
+      ["Most out at once", b.max_open != null ? money(b.max_open, false) : "–"],
+      [b.bot === "poly" ? "Cash now (open bets not counted)" : "Balance now", b.bal_now != null ? `${money(b.bal_now, false)} <span class="sub">(${esc(ago(b.bal_at))})</span>` : `<span class="sub">not reported yet</span>`],
+      // Polymarket's number is cash only and jumps when money is added or bets are placed, so a "change" there
+      // would mislead; the P&L line above is the real result.
+      b.bot !== "poly" && b.bal_start != null ? ["First balance we saw", money(b.bal_start, false)] : null,
+      b.bot !== "poly" && b.bal_now != null && b.bal_start != null ? ["Change since then (money you add counts too)", M(b.bal_now - b.bal_start)] : null,
+      ["Finished bets", `${b.finished} (${b.won} won, ${b.lost} lost)`],
+      b.bot === "kalshi" ? ["Offers nobody sold to (no money spent)", String(b.unfilled)] : null,
+      ["Money bet on finished bets", money(b.put_in, false)],
+      ["P&L", M(b.pnl)],
+      ["Earned", per1(b.per1)],
+      ["Today", M(b.today)],
+      ["Open now", `${b.open_n} bet${b.open_n === 1 ? "" : "s"}, ${money(b.open_cost, false)}`],
+      ["Paper twin, same time", b.twin_n ? `${M(b.twin_pnl)} on ${b.twin_n} bets, ${per1(b.twin_per1)}` : "no finished bets yet"],
+    ].filter(Boolean);
+    const recent = b.recent.length ? `<details><summary>Last ${b.recent.length} finished bets</summary>` + b.recent.map(r =>
+      `<div class="bet"><div class="t">${esc(r.t)}</div><div class="m">${esc(stockholm(r.at))} · bet ${money(r.cost, false)} · ${M(r.pnl)}</div></div>`).join("") + `</details>` : "";
+    const open = b.open_list.length ? `<details><summary>Open bets (${b.open_n})</summary>` + b.open_list.map(t => `<div class="bet"><div class="t">${esc(t)}</div></div>`).join("") + `</details>` : "";
+    return `<div class="card realcard"><div class="realhead">REAL-MONEY BOT · on your server</div>
+      <div class="name" style="font-size:16px;margin-top:2px">${esc(b.label)}</div>
+      <div class="oneliner">${esc(b.say)}</div>
+      <div style="margin-top:6px">${mode}</div>${late}
+      <div class="kv">${rows.map(([k, v]) => `<div>${esc(k)}</div><div>${v}</div>`).join("")}</div>
+      ${b.finished && b.curve && b.curve.length > 1 ? `<div class="realchart" data-bot="${esc(b.bot)}" style="margin-top:8px"></div>` : ""}
+      ${recent}${open}
+      <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>. With this few bets, the result is mostly luck.</p></div>`;
+  };
+  $("real").innerHTML = `<h2>Real money</h2><p class="note">Your two small bots with real money, on your AWS server. Updated about once an hour.</p>` + L.map(card).join("");
+  document.querySelectorAll("#real a[data-twin]").forEach(a => a.onclick = ev => { ev.preventDefault(); openDetail(a.dataset.twin); });
+  // Jan, 22 Nov: "a graph over time for the live bots like I have with the paper strategies"
+  const draw = () => document.querySelectorAll("#real .realchart").forEach(el => {
+    const b = L.find(x => x.bot === el.dataset.bot);
+    curveChart(el, {name: b.label, curve: b.curve, curve2: b.curve2,
+      legendHtml: `<span><b style="color:var(--s1)">━</b> real money: P&L after each finished bet</span><span><b style="color:var(--s2)">╍</b> paper twin, same time</span>`});
+  });
+  draw(); addEventListener("resize", draw);
 })();
 
 // ---------- skill or luck: one plain verdict per strategy
@@ -393,7 +470,8 @@ const VMEAN = {
   "Promising, needs more bets": "Good so far: it's winning, even assuming some luck. A few more bets to be sure.",
   "Ahead, but could be luck": "It's making money, but not enough bets yet to know if that's skill or luck. Wait.",
   "Behind, but could be bad luck": "It's losing a bit, but that could still be bad luck. Wait.",
-  "Losing": "Bad: it's losing, and that's not just bad luck."};
+  "Losing": "Bad: it's losing, and that's not just bad luck.",
+  "Future idea: too much money for now": "Parked: it may work, but it needs far more money than we want to put in now."};
 function scoreLine(t) {
   const tr = t.trust, v = t.pv[1], mean = VMEAN[v] || (t.pv[0] === "early" ? "Too few finished bets to say anything yet. Ignore the numbers for now." : t.pv[0] === "luck" ? "This one is luck on purpose, to compare against." : "");
   if (!tr.finished) return `No bet has finished yet${endTxt(t)}. ${mean}`;

@@ -47,17 +47,11 @@
   },
   "2026-11-22": {
    "failed": 0,
-   "muted": 70,
-   "sent": 10
+   "muted": 97,
+   "sent": 25
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker] FLIP: a late favorite lost ($-9.64)",
-   "track": "kc_maker",
-   "ts": "2026-11-14T00:18:14Z"
-  },
   {
    "result": "sent",
    "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.64)",
@@ -1167,6 +1161,96 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-22T14:21:09Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.20)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-22T15:07:15Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T15:31:16Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 6 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T16:36:22Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 2 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T17:44:45Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 2 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T18:50:27Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold No at 83c (+$0.31)",
+   "track": "panic_fade",
+   "ts": "2026-11-22T19:15:48Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 3 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T19:55:44Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] bought 1 (practice money)",
+   "track": "panic_fade",
+   "ts": "2026-11-22T20:52:55Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.32)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-22T21:04:50Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.97)",
+   "track": "kc_maker",
+   "ts": "2026-11-22T21:23:08Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.97)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-22T21:23:08Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe_usd] FLIP: a late favorite lost ($-9.97)",
+   "track": "kc_maker_safe_usd",
+   "ts": "2026-11-22T21:23:09Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe_kprice] FLIP: a late favorite lost ($-9.97)",
+   "track": "kc_maker_safe_kprice",
+   "ts": "2026-11-22T21:23:09Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.82)",
+   "track": "kc_maker",
+   "ts": "2026-11-22T21:32:34Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.82)",
+   "track": "kc_maker_safe",
+   "ts": "2026-11-22T21:32:35Z"
   }
  ]
 }

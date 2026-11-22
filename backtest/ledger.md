@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**157 ideas examined, in about 60,361 versions.** 118 dropped, 39 still being tested or waiting. **Looks real: 3.**
+**205 ideas examined, in about 66,223 versions.** 160 dropped, 45 still being tested or waiting. **Looks real: 5.**
 
-Why count: if you test 157 ideas that are all worthless, the luckiest one still looks good. With 157 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 205 ideas that are all worthless, the luckiest one still looks good. With 205 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -165,5 +165,53 @@ Why count: if you test 157 ideas that are all worthless, the luckiest one still 
 | 2026-11-16 | Polymarket Netflix weekly #1: buy where the daily top 10 record is 10c+ away from the price | 330 | 71 | -$29.40 | Behind, but could be bad luck | dropped | kcharts.py, backtest/kcharts.md |
 | 2026-11-16 | Polymarket Spotify weekly #1 song (US): buy where the daily play counts are 10c+ away from the price | 60 | 10 | -$58.89 | Losing | dropped | spotw.py, backtest/spotify.md |
 | 2026-11-17 | GoodFallen 5-min BTC wallet (Reddit), its own results with Polymarket rebates | 2 | 19 | +$1.41 | Ahead, but could be luck | dropped | wallet5m.py run |
+| 2026-11-19 | kc_maker_safe check on Binance (re-test, 3 min) | 6 | 16120 | +$0.47 | Looks real | open | kdocs.py run |
+| 2026-11-19 | kc_maker_safe check on Kalshi's own number (twin rule, 3 min) | 6 | 16189 | +$0.40 | Looks real | open | kdocs.py run |
+| 2026-11-22 | AI release-day bets (Polymarket): No where Yes is 10-50c after the first third of the market's life | 260 | 23 | +$1.92 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Kalshi, fresh check): Yes on the name already holding first place, ask 50-97c, last 3 days | 2 | 101 | -$2.29 | Behind, but could be bad luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): No where the boards' own change record is 10c+ below the price | 150 | 85 | +$0.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the holder priced 3-50c with 2+ weeks left | 150 | 48 | +$5.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the name already holding the place, 50-97c, last 3 days | 150 | 39 | +$4.31 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes where the boards' own change record is 10c+ above the price | 150 | 59 | +$16.39 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Kalshi: always No on any other app, first look | 170 | 338 | +$1.29 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always No on the holder, first look | 170 | 468 | -$0.33 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always Yes on any other app, first look | 170 | 390 | -$14.02 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always Yes on the holder, first look | 170 | 446 | -$7.85 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi combo house: crypto 15-min combos | 20 | 325 | -$0.08 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi combo house: every Yes trade the pros sold | 20 | 28 | +$0.00 | Ahead, but could be luck | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi combo house: our rule, legs x 1.05, 2-4 legs | 20 | 331 | -$1.33 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi combo house: sports, every leg a different game | 20 | 332 | -$0.16 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi combos: buy nearly-sure combos (65c+), fresh days | 2 | 160 | -$5.31 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi combos: buy nearly-sure combos (65c+), small tickets, fresh days | 2 | 146 | -$10.66 | Losing | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi: No on the favourite 24h+ before, #1 spot | 170 | 254 | -$7.76 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite 24h+ before, #2 spot | 170 | 166 | +$37.76 | Promising, needs more bets | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite (50-97c) 24h+ before | 170 | 420 | +$10.27 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite 6-24h before | 170 | 422 | -$4.80 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the holder where the record is 10c+ below the price | 170 | 380 | +$14.18 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: Yes on the favourite 24h+ before | 170 | 396 | -$18.69 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: Yes on the holder where the record is 10c+ above the price | 170 | 200 | -$12.01 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins) | 1 | 78 | -$10.04 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
+| 2026-11-22 | Live paper: copy weather wallet HellYeahTrader (w_ and wb_ twins) | 1 | 57 | -$28.09 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
+| 2026-11-22 | Live paper: copy weather wallet sbel (w_ and wb_ twins) | 1 | 105 | -$20.25 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
+| 2026-11-22 | Live paper: endgame 95-97c, sell at 98.5c (endgame_sell98, lab) | 1 | 740 | -$2.56 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
+| 2026-11-22 | OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week | 150 | 11 | +$40.36 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid | 150 | 8 | -$15.31 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask | 150 | 7 | -$31.92 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Polymarket: always No on any other app, first look | 170 | 43 | +$8.48 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always No on the holder, first look | 170 | 50 | +$24.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always Yes on any other app, first look | 170 | 58 | -$52.62 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always Yes on the holder, first look | 170 | 50 | -$14.61 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 24h+ before | 170 | 53 | +$27.51 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 24h+ before, #2 spot | 170 | 13 | +$27.58 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 6-24h before | 170 | 53 | -$38.18 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: No on the holder where the record is 10c+ below the price | 170 | 44 | +$4.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: Yes on the holder where the record is 10c+ above the price | 170 | 38 | -$21.81 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always No, Yes at 3-97c, first look | 150 | 3 | -$19.95 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always Yes at 3-97c, first look | 150 | 3 | -$25.37 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly share of a lab: always No, Yes at 3-97c, first look | 150 | 14 | -$18.82 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always No, Yes at 3-97c, first look | 150 | 13 | +$0.37 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always Yes at 3-97c, first look | 150 | 13 | -$29.52 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always No, Yes at 3-97c, first look | 150 | 47 | -$18.95 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look | 150 | 47 | -$38.17 | Losing | dropped | aim.py, backtest/aim.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

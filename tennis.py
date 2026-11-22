@@ -1692,39 +1692,6 @@ def khist():
                 print(" ", path, "failed", str(e)[:150])
 
 
-def storemove():
-    """The first download put tennis files in the shared price-store release and filled it (1,000 files is
-    GitHub's limit). Delete each tennis file there once the same file (name and size) is in tennis-store."""
-    import store, subprocess
-    def rel(tag):
-        out = {}
-        r = store.gh(["api", f"repos/{store.repo()}/releases/tags/{tag}", "--jq", ".id"])
-        if r.returncode != 0:
-            return out
-        rid = r.stdout.decode().strip()
-        for pg in range(1, 12):
-            r = store.gh(["api", f"repos/{store.repo()}/releases/{rid}/assets?per_page=100&page={pg}"])
-            if r.returncode != 0:
-                break
-            rows = json.loads(r.stdout)
-            for a in rows:
-                out[a["name"]] = a
-            if len(rows) < 100:
-                break
-        return out
-    new, old = rel("tennis-store"), rel("price-store")
-    n = kept = 0
-    for name, a in sorted(old.items()):
-        if not name.startswith("ten_cache--"):
-            continue
-        b = new.get(name) or new.get(name.replace(".prev", ""))
-        if b and b["size"] >= a["size"]:
-            r = store.gh(["api", "-X", "DELETE", f"repos/{store.repo()}/releases/assets/{a['id']}"])
-            n += r.returncode == 0
-        else:
-            kept += 1
-    print(f"storemove: price-store had {len(old)} files; removed {n} tennis files now in tennis-store ({len(new)} files), {kept} left")
-
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scout"
     if cmd == "scout":
@@ -1750,8 +1717,6 @@ if __name__ == "__main__":
         setclock()
     elif cmd == "khist":
         khist()
-    elif cmd == "storemove":
-        storemove()
     elif cmd == "fetch":
         fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45, "itf" in sys.argv[3:], [s for s in K_SERIES if s in sys.argv[3:]] or None)
     elif cmd == "sets":

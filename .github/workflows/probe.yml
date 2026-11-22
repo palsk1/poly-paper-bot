@@ -55,7 +55,12 @@ jobs:
         if: startsWith(inputs.what, 'ten_')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 store.py pull ten_cache || true; STORE_TAG=tennis-store python3 store.py pull ten_cache || true
+        run: STORE_TAG=tennis-store python3 store.py pull ten_cache || true
+      - name: Kalshi combo data, fetch   # kcombos.py keeps its own small folder so a run doesn't download the whole store
+        if: startsWith(inputs.what, 'kcb_') && inputs.what != 'kcb_peek'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 store.py pull kcb_cache || true
       - name: Probe APIs
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
@@ -84,9 +89,11 @@ jobs:
           case "${{ inputs.what }}" in spd_*) pip install -q websockets; m="$(echo '${{ inputs.what }}' | sed 's/^spd_//')"; SPEED_DIR=/tmp/spd timeout "${m}m" python3 -u quoter/speedcheck.py run || true; for f in /tmp/spd/*.jsonl; do echo "$f"; python3 -c "import json,sys,collections;c=collections.Counter(json.loads(l)['k'] for l in open(sys.argv[1]));print(dict(c))" "$f"; grep -m 20 '"note"' "$f"; grep -m 3 '"k":"bk"' "$f"; grep -m 3 '"k":"cl"' "$f"; grep -m 2 '"k":"ping"' "$f"; done; python3 quoter/speedcheck.py score /tmp/spd/*.jsonl; exit 0;; esac
           case "${{ inputs.what }}" in w5m_*) PYTHONUNBUFFERED=1 python3 wallet5m.py $(echo '${{ inputs.what }}' | sed 's/^w5m_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in hab_*) PYTHONUNBUFFERED=1 python3 habits.py "$(echo '${{ inputs.what }}' | sed 's/^hab_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in aim_*) pip install -q pyarrow; export GH_TOKEN="${{ github.token }}"; python3 store.py pull bt_cache/aim || true; PYTHONUNBUFFERED=1 python3 aim.py "$(echo '${{ inputs.what }}' | sed 's/^aim_//')"; rc=$?; python3 store.py push bt_cache/aim || true; exit $rc;; esac   # only its own folder of the price store, so a run is quick
           case "${{ inputs.what }}" in kmn_*) PYTHONUNBUFFERED=1 python3 kmentions.py "$(echo '${{ inputs.what }}' | sed 's/^kmn_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kd_*) PYTHONUNBUFFERED=1 KC_WORKERS=16 timeout 270m python3 kdocs.py "$(echo '${{ inputs.what }}' | sed 's/^kd_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kh_*) PYTHONUNBUFFERED=1 python3 khouse.py "$(echo '${{ inputs.what }}' | sed 's/^kh_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in kcb_*) PYTHONUNBUFFERED=1 timeout 270m python3 kcombos.py $(echo '${{ inputs.what }}' | sed 's/^kcb_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kc_*) PYTHONUNBUFFERED=1 python3 kcrypto.py "$(echo '${{ inputs.what }}' | sed 's/^kc_//')"; exit $?;; esac
           case "${{ inputs.what }}" in kfl_*) KFL_NOSAVE=1 PYTHONUNBUFFERED=1 python3 kfastlive.py $(echo '${{ inputs.what }}' | sed 's/^kfl_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in kf_*) PYTHONUNBUFFERED=1 python3 kfast.py "$(echo '${{ inputs.what }}' | sed 's/^kf_//')"; exit $?;; esac
@@ -106,9 +113,14 @@ jobs:
         if: always() && startsWith(inputs.what, 'ten_')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: STORE_TAG=tennis-store python3 store.py push ten_cache || true; python3 tennis.py storemove || true
+        run: STORE_TAG=tennis-store python3 store.py push ten_cache || true
+      - name: Kalshi combo data, save
+        if: always() && startsWith(inputs.what, 'kcb_') && inputs.what != 'kcb_peek'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 store.py push kcb_cache || true
       - name: Shared price store, save   # also after a failure or timeout; win_* only reads
-        if: always() && (startsWith(inputs.what, 'w5m_') || startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kd_') || startsWith(inputs.what, 'kf_') || startsWith(inputs.what, 'kh_') || startsWith(inputs.what, 'opt_') || startsWith(inputs.what, 'tw_') || startsWith(inputs.what, 'men_') || startsWith(inputs.what, 'ern_') || startsWith(inputs.what, 'bo_') || startsWith(inputs.what, 'stk_') || startsWith(inputs.what, 'qk_') || startsWith(inputs.what, 'famf_') || startsWith(inputs.what, 'kmn_') || startsWith(inputs.what, 'kch_') || startsWith(inputs.what, 'spw_') || startsWith(inputs.what, 'hab_') || startsWith(inputs.what, 'pw_') || startsWith(inputs.what, 'sp_'))
+        if: always() && (startsWith(inputs.what, 'w5m_') || startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kd_') || startsWith(inputs.what, 'kf_') || startsWith(inputs.what, 'kh_') || startsWith(inputs.what, 'opt_') || startsWith(inputs.what, 'tw_') || startsWith(inputs.what, 'men_') || startsWith(inputs.what, 'ern_') || startsWith(inputs.what, 'bo_') || startsWith(inputs.what, 'stk_') || startsWith(inputs.what, 'qk_') || startsWith(inputs.what, 'famf_') || startsWith(inputs.what, 'kmn_') || startsWith(inputs.what, 'kch_') || startsWith(inputs.what, 'spw_') || startsWith(inputs.what, 'hab_') || startsWith(inputs.what, 'pw_') || startsWith(inputs.what, 'sp_') )
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 store.py push || true
