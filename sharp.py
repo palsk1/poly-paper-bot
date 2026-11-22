@@ -647,6 +647,15 @@ def bt():
     print("\n".join(lines))
 
 
+def drawpin():
+    """Live look, no trades (probe sharp_drawpin): today's soccer_draw candidates with Pinnacle's fair draw price."""
+    out = bot.draw_candidates(["soccer_draw"])
+    for c in out["soccer_draw"]:
+        p = c.get("pin")
+        print(f"{c['price'] * 100:5.1f}c  " + (f"Pinnacle {p['fair'][0] * 100:.1f}/{p['fair'][1] * 100:.1f}c "
+              f"({p['league']}, limit {p['limit']})" if p else "no Pinnacle match") + f"  {c['title'][:70]}")
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "scan"
-    {"probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "selftest": selftest, "bt": bt}[what]()
+    {"drawpin": drawpin, "probe": probe, "probe2": probe2, "probe3": probe3, "scan": scan, "selftest": selftest, "bt": bt}[what]()
