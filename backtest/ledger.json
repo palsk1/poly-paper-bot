@@ -2012,6 +2012,54 @@
    "verdict": "Looks real",
    "status": "open",
    "src": "kdocs.py run"
+  },
+  {
+   "id": "live_endgame_sell98",
+   "what": "Live paper: endgame 95-97c, sell at 98.5c (endgame_sell98, lab)",
+   "per100": -2.56,
+   "bets": 740,
+   "groups": 740,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_sbel",
+   "what": "Live paper: copy weather wallet sbel (w_ and wb_ twins)",
+   "per100": -20.25,
+   "bets": 105,
+   "groups": 105,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_hellyeahtrader",
+   "what": "Live paper: copy weather wallet HellYeahTrader (w_ and wb_ twins)",
+   "per100": -28.09,
+   "bets": 57,
+   "groups": 57,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_bigggggggg",
+   "what": "Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins)",
+   "per100": -10.04,
+   "bets": 78,
+   "groups": 78,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
   }
  ]
 }

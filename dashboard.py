@@ -270,6 +270,15 @@ def ext_row(name, label, bets, pot, tied=0.0, waiting=0, extra=None, notes=None,
             "legend": "Profit from finished bets, added up over time"}
 
 
+def park_future(row, why):
+    """Jan, 22 Nov: the combo house works on paper but needs far more money than he has ("too much money for now").
+    Its cards stay on the page, but marked as a future idea, not something to fund now."""
+    row["future"] = why
+    row["pv"] = ("future", "Future idea: too much money for now")
+    row["notes"] = [why] + row["notes"]
+    return row
+
+
 def combo_list(listed, k, stake=None):
     """Finished parlays (for the 'latest bets' list) and waiting ones, from a combo scorecard's "bets" listing.
     k scales the server's $25 a parlay to the card's bet size. The time shown is when the parlay was sold."""
@@ -314,6 +323,10 @@ def combo_row(q):
                   "When the parlay really sells and our price was lower than the pro's, we count it as our sale. No real money moves.",
                   bets, COMBO_POT, tied=tied, waiting=q.get("waiting") or 0, extra=extra, notes=notes, recent=recent[:12])
     row["open_list"] = wait[:30]
+    park_future(row, f"Future idea, too much money for now. Right now {q.get('waiting') or 0:,} parlays are waiting for their games, "
+                     f"which would tie up about ${tied:,.0f} at ${COMBO_STAKE:.0f} a parlay. That's far more than you want to put in, "
+                     "so this is parked. On 22 Nov the server switched from listening to parlays to the two small real-money bots, "
+                     "so these numbers stop growing.")
     return row
 
 
@@ -338,6 +351,8 @@ def combo_pot_row(q):
                           "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
+    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
+                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
     return row
 
 
@@ -360,6 +375,8 @@ def combo_pre_row(q):
                           "Same $300 pot and $5 a parlay as the main combo house card."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
+    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
+                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
     return row
 
 
@@ -451,7 +468,10 @@ def build(offline=False):
     stats = scoreboard(tracks)
     # Jan, 12 Nov evening: "Dump it and any other stopped from the dashboard". Stopped tracks still run in the bot
     # (their open bets settle) and stay in summary.md; the phone page just doesn't show them.
-    stats = {n: s for n, s in stats.items() if not bot.is_stopped(n)}
+    # Jan, 22 Nov: "clean up the dashboard". Clear losers get "hidden" in config: they keep running, the page skips them.
+    n_stop = sum(1 for n in stats if bot.is_stopped(n))
+    n_hid = sum(1 for n in stats if bot.is_hidden(n)) - n_stop
+    stats = {n: s for n, s in stats.items() if not bot.is_hidden(n)}
     names = list(stats)
     n_top = bot.CFG["push"].get("top_n", 10)
     top = [x for x in bot.ranked(stats) if bot.top_eligible(stats[x])][:n_top]
@@ -489,7 +509,7 @@ def build(offline=False):
     plain_words(rows)
     if ext:            # same ranking rule as bot.ranked: worst case first, then P&L
         order = [r["name"] for r in sorted(rows, key=lambda r: (-r["trust"]["worst_per_100"], -r["pnl"]))]
-    data = {"generated": bot.iso(), "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "rank_size": bot.rs_rank_size(), "top": top,
+    data = {"generated": bot.iso(), "quoter_pending": bool(quoter) and "all" not in quoter, "ext": [r["name"] for r in ext], "offline": offline, "n_stopped": n_stop, "n_hidden": n_hid, "rank_size": bot.rs_rank_size(), "top": top,
             "order": order, "tracks": rows, "trial_end": "2027-01-01",
             "min_proven": bot.CFG.get("ranking", {}).get("min_trades_proven", 30),
             "repo": "https://github.com/palsk1/poly-paper-bot"}

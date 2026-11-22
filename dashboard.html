@@ -81,6 +81,7 @@ svg text { fill: var(--muted); font-size: 11px; font-family: inherit; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 6px 0; }
 .vd { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--border); color: var(--ink2); white-space: nowrap; }
 .vd.good { color: var(--good); border-color: var(--good); } .vd.bad { color: var(--bad); border-color: var(--bad); }
+.vd.future, .tag.future { color: var(--ink2); border-color: var(--ink2); border-style: dotted; }
 .vd.maybe { color: var(--s2); border-color: var(--s2); } .vd.unlucky { color: var(--s2); border-color: var(--bad); border-style: dashed; } .vd.luck { color: var(--ink2); border-style: dashed; }
 .vrow { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--grid); cursor: pointer; font-size: 13px; }
 .vrow:last-child { border-bottom: 0; }
@@ -116,7 +117,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
   <div id="top"></div>
 
   <h2>Tests outside the paper bot</h2>
-  <p class="note">These run on their own: the combo house on your AWS server, the fast Kalshi bot in its own nonstop job. Practice money only. They get the same card, verdict and graph as every other strategy. Tap one for details.</p>
+  <p class="note">These run on their own: the combo house on your AWS server, the fast Kalshi bot in its own nonstop job. Practice money only. The combo house cards say <b>FUTURE</b>: it needs thousands of dollars tied up, so it's parked for now. They get the same card, verdict and graph as every other strategy. Tap one for details.</p>
   <div id="ext"></div>
 
   <h2>Skill or luck?</h2>
@@ -150,6 +151,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 13px; margin: 
 
   <h2 id="all-h">All strategies</h2>
   <p class="note">Everything at a glance. "P&amp;L" (profit or loss) includes open bets at today's price. Tap a column name to sort, tap a row for details.</p>
+  <p class="note" id="hiddennote"></p>
   <div class="controls" id="allfilter"></div>
   <div class="tiles" id="allsum" style="margin:4px 0 8px"></div>
   <div class="card scroll" id="all"></div>
@@ -184,7 +186,7 @@ function goWhen(n, pace) {
 }
 function goLine(t) {
   const tr = t.trust, k = t.pv[0];
-  if (k === "luck" || t.stopped) return "";
+  if (k === "luck" || k === "future" || t.stopped) return "";
   if (tr.finished < FEW) { const n = FEW - tr.finished; return `Gets its first real tag after ${n} more finished bet${n === 1 ? "" : "s"}${goWhen(n, t.pace)}.`; }
   if (tr.to_go == null || tr.to_go === 0) return "";
   if (tr.to_go < 0) return "Even if it keeps going like this, it can't prove itself: it wins too little per bet for how much it swings.";
@@ -333,7 +335,7 @@ const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","
 const stopDay = t => t.stopped && t.stopped.on ? ` ${+t.stopped.on.slice(8, 10)} ${MON[+t.stopped.on.slice(5, 7) - 1]}` : "";
 const stopTag = t => t.stopped ? `<span class="tag stop">STOPPED${stopDay(t)}</span>` : "";
 const stopCls = t => t.stopped ? " isstop" : "";
-const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + stopTag(t) + (t.ext ? '<span class="tag">own test</span>' : "");
+const tags = t => (t.lab ? '<span class="tag">lab</span>' : "") + stopTag(t) + (t.ext ? '<span class="tag">own test</span>' : "") + (t.future ? '<span class="tag future">FUTURE</span>' : "");
 function miniCard(t, rank) {
   return `<div class="card top${stopCls(t)}" data-n="${esc(t.name)}"><div class="row">
       ${rank ? `<div class="rank">${rank}</div>` : ""}
@@ -351,6 +353,11 @@ function miniCard(t, rank) {
     (!D.ext.length && !D.quoter_pending ? `<div class="card">No notes from these tests yet.</div>` : "");
   document.querySelectorAll(".top").forEach(e => e.onclick = () => openDetail(e.dataset.n));
 })();
+
+// Jan, 22 Nov: "clean up the dashboard". Say what's left off the page, so nothing looks like it vanished.
+$("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n_stopped || 0} stopped strategies and ${D.n_hidden || 0} clear losers ` +
+  `(enough finished bets, and losing even at the lucky end). The losers still run in the background, so the lab test stays clean until 1 Jan. ` +
+  `What each one taught us: <a href="${D.repo}/blob/main/LEARNINGS.md#cleared-off-the-dashboard-22-nov-clear-losers">LEARNINGS.md</a>.` : "";
 
 // ---------- skill or luck: one plain verdict per strategy
 let luckAll = false;
@@ -393,7 +400,8 @@ const VMEAN = {
   "Promising, needs more bets": "Good so far: it's winning, even assuming some luck. A few more bets to be sure.",
   "Ahead, but could be luck": "It's making money, but not enough bets yet to know if that's skill or luck. Wait.",
   "Behind, but could be bad luck": "It's losing a bit, but that could still be bad luck. Wait.",
-  "Losing": "Bad: it's losing, and that's not just bad luck."};
+  "Losing": "Bad: it's losing, and that's not just bad luck.",
+  "Future idea: too much money for now": "Parked: it may work, but it needs far more money than we want to put in now."};
 function scoreLine(t) {
   const tr = t.trust, v = t.pv[1], mean = VMEAN[v] || (t.pv[0] === "early" ? "Too few finished bets to say anything yet. Ignore the numbers for now." : t.pv[0] === "luck" ? "This one is luck on purpose, to compare against." : "");
   if (!tr.finished) return `No bet has finished yet${endTxt(t)}. ${mean}`;

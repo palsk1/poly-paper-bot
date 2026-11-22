@@ -6216,11 +6216,18 @@ def is_stopped(name):
     return bool(tc.get("stopped") or tc.get("retired"))
 
 
+def is_hidden(name):
+    """Jan, 22 Nov: "clean up the dashboard". A clear loser (enough finished bets, "Losing" even at the lucky end) gets
+    "hidden" in config: it keeps running exactly as before (lab tracks stay frozen to 1 Jan, their evidence keeps
+    growing), stays in summary.md, but the phone page and the top 10 skip it. Stopped tracks are hidden too."""
+    return is_stopped(name) or bool(CFG["tracks"].get(name, {}).get("hidden"))
+
+
 def save_top(stats):
     """Pick the top 10 (only strategies actually ahead on 3+ finished trades) and save it to state/top.json.
     Stopped tracks never make the list (Jan, 12 Nov: drop them from the dashboard)."""
     n = CFG["push"].get("top_n", 10)
-    top = [x for x in ranked(stats) if top_eligible(stats[x]) and not is_stopped(x)][:n]
+    top = [x for x in ranked(stats) if top_eligible(stats[x]) and not is_hidden(x)][:n]
     save("top.json", {"generated": iso(), "tracks": top})
     return top
 

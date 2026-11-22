@@ -216,6 +216,31 @@ and open bets finish there. Numbers are from the evening of 12 Nov, P&L counting
 The two lessons for the rest: **a strategy that wins small often and loses big rarely needs hundreds of bets before
 its total means anything**, and **a day of correlated wins is luck, however good it looks on the phone**.
 
+## Cleared off the dashboard (22 Nov): clear losers
+
+Jan asked to clean up the dashboard. Rule: enough finished bets (50+) and "Losing" even at the lucky end of the
+luck range. These 7 are hidden from the phone page and the top 10 (`"hidden"` in config, `bot.is_hidden`). They are
+**not stopped**: all 7 are lab tracks, frozen to 1 Jan, so they keep running and stay in `state/summary.md`.
+Numbers at $25 a bet, from 22 Nov. "Lucky end" = the best it could really be, given the bets so far.
+
+| Track | Finished bets | Per $100 | Lucky end | What we learned |
+|---|---|---|---|---|
+| `endgame_sell98` (95-97c buys, sold at 98.5c) | 740 | -$2.56 | -$1.36 | Selling early doesn't save the endgame idea. It looked ahead on 188 bets (12 Nov), then the rare flips caught up. Lost about $440 at $25 a bet |
+| `w_sbel` / `wb_sbel` (copy a weather specialist) | 105 / 111 | -$20.25 / -$23.59 | -$5.60 / -$9.48 | A weather pro's edge is speed and many tiny bets. Copying 5 minutes late at his prices loses |
+| `w_hellyeahtrader` / `wb_hellyeahtrader` (another weather specialist) | 57 / 76 | -$28.09 / -$28.14 | -$11.87 / -$14.89 | Same lesson, worse: the biggest copy losses we have |
+| `w_bigggggggg` / `wb_bigggggggg` (election-month hot hand) | 78 / 86 | -$10.04 / -$11.85 | -$5.30 / -$6.61 | The hot hand didn't last after the elections. A great month on a leaderboard says little about the next one |
+
+**Kept on purpose, Jan to decide (22 Nov):**
+- Behind, but could still be bad luck, with many bets: `wb_tokor` (121 bets, -$6.67 per $100), `w_cigarettes` / `wb_cigarettes` (94 / 104, -$3.12 / -$4.97). `w_tokor` (112) is up per bet but down in dollars, so its numbers disagree. Not clear enough to hide.
+- Losing, but too few bets to call: `w_debased` (18 bets, -$19.75), `mention_no` (12 bets, -$36.70; it is also in the 21 Dec holdout, so it stays).
+- In the 21 Dec holdout or still being scored, not touched: `crypto_no` (20 bets, -$20.25), `boring_no`, `soccer_draw`, `panic_fade_10c`, `postcount_no` (29 bets, too early), the `kc_maker*` tracks and the real-money bots in `live/`.
+- Never bet in 2 weeks (clutter, not losers): `w_flawfence`, `w_railcool`, `wb_railcool`, `w_youngalphagoat`, `sab_big`.
+
+**Combo house: parked as a future idea (22 Nov).** On paper it is ahead (6,612 finished parlays, about +$3 per $100),
+but it needs money tied up in every parlay until the games end: 1,984 were waiting on 22 Nov, about $9,920 at $5 a
+parlay. Jan can't fund that. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
+the two small real-money bots the same day.
+
 ## Tried and dropped (one line each)
 
 Don't re-test these the same way. Only with something new (new data, a new filter).
