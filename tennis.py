@@ -241,9 +241,282 @@ def scout():
         print("  ws failed", str(e)[:200])
 
 
+
+# ================================================================ the point-based win model
+# Each player wins a fixed share of the points on their own serve (pa, pb). Everything else follows by counting:
+# points -> game -> set (tiebreak at 6-6) -> match. The pre-match price fixes the gap between pa and pb.
+from functools import lru_cache
+
+
+def p_game(p, a=0, b=0):
+    """Chance the server wins the game from points a-b (0..3 = 0/15/30/40, deuce handled)."""
+    if a >= 4 and a - b >= 2:
+        return 1.0
+    if b >= 4 and b - a >= 2:
+        return 0.0
+    if a >= 3 and b >= 3:
+        d = p * p / (p * p + (1 - p) * (1 - p))
+        return d if a == b else (p + (1 - p) * d if a > b else p * d)
+    return p * p_game(p, a + 1, b) + (1 - p) * p_game(p, a, b + 1)
+
+
+@lru_cache(maxsize=None)
+def _tb(pa, pb, a, b, srv, to):
+    """Chance A wins a tiebreak to `to` from a-b; srv = 0 if A serves the NEXT point."""
+    if a >= to and a - b >= 2:
+        return 1.0
+    if b >= to and b - a >= 2:
+        return 0.0
+    if a >= to - 1 and b >= to - 1 and a == b:      # two points, one on each serve
+        wa, wb = pa, 1 - pb
+        return wa * wb / (wa * wb + (1 - wa) * (1 - wb))
+    w = pa if srv == 0 else 1 - pb
+    n = a + b + 1                                   # points played after this one
+    nxt = srv if n % 2 == 0 else 1 - srv            # serve changes after odd points (1, 3, 5, ...)
+    return w * _tb(pa, pb, a + 1, b, nxt, to) + (1 - w) * _tb(pa, pb, a, b + 1, nxt, to)
+
+
+@lru_cache(maxsize=None)
+def _set(pa, pb, ga, gb, srv):
+    """Chance A wins the set from games ga-gb, srv = 0 if A serves the next game (start of a game)."""
+    if ga >= 6 and ga - gb >= 2:
+        return 1.0
+    if gb >= 6 and gb - ga >= 2:
+        return 0.0
+    if ga == 6 and gb == 6:
+        return _tb(pa, pb, 0, 0, srv, 7)
+    h = p_game(pa) if srv == 0 else 1 - p_game(pb)
+    return h * _set(pa, pb, ga + 1, gb, 1 - srv) + (1 - h) * _set(pa, pb, ga, gb + 1, 1 - srv)
+
+
+@lru_cache(maxsize=None)
+def _match(pa, pb, sa, sb, best):
+    """Chance A wins the match at the START of a set with sets sa-sb. Who serves first in a set barely matters."""
+    need = best // 2 + 1
+    if sa >= need:
+        return 1.0
+    if sb >= need:
+        return 0.0
+    s = (_set(pa, pb, 0, 0, 0) + _set(pa, pb, 0, 0, 1)) / 2
+    return s * _match(pa, pb, sa + 1, sb, best) + (1 - s) * _match(pa, pb, sa, sb + 1, best)
+
+
+def p_match(pa, pb, sa=0, sb=0, ga=0, gb=0, srv=None, pts=None, best=3):
+    """Chance A wins the match from any score. srv: 0 = A serves this game, 1 = B, None = unknown (average).
+    pts = (server's points, receiver's points) inside the current game, or tiebreak points (a, b) at 6-6."""
+    pa, pb = round(pa, 4), round(pb, 4)
+    need = best // 2 + 1
+    if sa >= need:
+        return 1.0
+    if sb >= need:
+        return 0.0
+    if srv is None:
+        return (p_match(pa, pb, sa, sb, ga, gb, 0, None, best) + p_match(pa, pb, sa, sb, ga, gb, 1, None, best)) / 2
+    w_set, l_set = _match(pa, pb, sa + 1, sb, best), _match(pa, pb, sa, sb + 1, best)
+    if ga == 6 and gb == 6:
+        a, b = pts or (0, 0)
+        first = srv if (a + b) % 4 in (0, 3) else 1 - srv   # srv = who served the first tiebreak point
+        s = _tb(pa, pb, a, b, first if pts else srv, 7)
+    else:
+        if pts:
+            g = p_game(pa if srv == 0 else pb, pts[0], pts[1])
+            h = g if srv == 0 else 1 - g
+        else:
+            h = p_game(pa) if srv == 0 else 1 - p_game(pb)
+        s = h * _set(pa, pb, ga + 1, gb, 1 - srv) + (1 - h) * _set(pa, pb, ga, gb + 1, 1 - srv)
+    return s * w_set + (1 - s) * l_set
+
+
+def fit_gap(p0, base=0.62, best=3):
+    """Serve shares (pa, pb) around `base` whose pre-match chance for A equals the pre-match price p0."""
+    lo, hi = -0.3, 0.3
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        if p_match(base + mid, base - mid, best=best) < p0:
+            lo = mid
+        else:
+            hi = mid
+    d = (lo + hi) / 2
+    return round(base + d, 4), round(base - d, 4)
+
+
+def model_selftest():
+    assert abs(p_game(0.5) - 0.5) < 1e-9 and abs(p_game(0.6) - 0.7357) < 1e-3, p_game(0.6)
+    assert abs(p_match(0.62, 0.62) - 0.5) < 1e-9
+    assert abs(p_match(0.65, 0.60) + p_match(0.60, 0.65) - 1) < 1e-9
+    a, b = fit_gap(0.7)
+    assert abs(p_match(a, b) - 0.7) < 1e-3, (a, b)
+    even_down_set = p_match(0.62, 0.62, 0, 1)
+    assert abs(even_down_set - 0.25) < 1e-9, even_down_set
+    brk = p_match(0.62, 0.62, 0, 0, 2, 1, 0)        # a break up, serving
+    assert 0.6 < brk < 0.8, brk
+    assert p_match(0.62, 0.62, 0, 0, 0, 0, 0, (3, 0)) > p_match(0.62, 0.62, 0, 0, 0, 0, 0, (0, 3))
+    print(f"model ok: even match, a set down {even_down_set:.2f}; a break up at 2-1 {brk:.3f}; "
+          f"70c favourite a set down {p_match(a, b, 0, 1):.3f}, a set up {p_match(a, b, 1, 0):.3f}")
+
+
+
+def keys_tree(x, depth=3, pre=""):
+    """Compact shape of a JSON thing."""
+    if isinstance(x, dict):
+        if depth <= 0:
+            return "{..}"
+        return "{" + ", ".join(f"{k}: {keys_tree(v, depth - 1)}" for k, v in list(x.items())[:40]) + "}"
+    if isinstance(x, list):
+        return f"[{len(x)}x {keys_tree(x[0], depth - 1) if x else ''}]"
+    return short(str(x), 40)
+
+
+def scout2():
+    print("=== feeds: shapes ===", flush=True)
+    try:
+        j = json.loads(raw("https://site.api.espn.com/apis/site/v2/sports/tennis/atp/scoreboard"))
+        evs = j.get("events") or []
+        print("espn events", len(evs), [e.get("name") for e in evs][:5])
+        for e in evs[:2]:
+            for g in (e.get("groupings") or [])[:2]:
+                cs = g.get("competitions") or []
+                print("  grouping", (g.get("grouping") or {}).get("slug"), len(cs))
+                live = [c for c in cs if ((c.get("status") or {}).get("type") or {}).get("state") == "in"] or cs[-1:]
+                for c in live[:2]:
+                    print("   comp", short({"id": c.get("id"), "date": c.get("date"), "status": (c.get("status") or {}).get("type"), "period": (c.get("status") or {}).get("period"),
+                                             "players": [[(x.get("athlete") or {}).get("displayName"), x.get("linescores"), x.get("possession"), x.get("winner")] for x in c.get("competitors") or []]}, 900))
+    except Exception as e:
+        print("espn failed", str(e)[:150])
+    try:
+        j = json.loads(raw("https://webws.365scores.com/web/games/current/?appTypeId=5&langId=1&sports=3"))
+        gs = j.get("games") or []
+        print("365 games", len(gs), "live", sum(1 for g in gs if g.get("statusGroup") == 3))
+        lv = [g for g in gs if g.get("statusGroup") == 3] or gs[:1]
+        for g in lv[:2]:
+            print("  365 game:", short(g, 2500))
+    except Exception as e:
+        print("365 failed", str(e)[:150])
+    try:
+        j = json.loads(raw("https://prod-public-api.livescore.com/v1/api/app/live/tennis/0"))
+        for st in (j.get("Stages") or [])[:3]:
+            for e in (st.get("Events") or [])[:1]:
+                print("  livescore event:", st.get("Snm"), short(e, 1500))
+    except Exception as e:
+        print("livescore failed", str(e)[:150])
+
+    print("\n=== Kalshi tennis series (all) ===", flush=True)
+    ser, cur = [], None
+    for _ in range(30):
+        p = {"category": "Sports", "limit": 1000}
+        if cur:
+            p["cursor"] = cur
+        r = yesno.kget("/series", p)
+        ser += r.get("series") or []
+        cur = r.get("cursor")
+        if not cur:
+            break
+    ten = [s for s in ser if "Tennis" in (s.get("tags") or [])]
+    print(len(ten), "series:", "; ".join(f"{s['ticker']}={s.get('title')}" for s in ten))
+    now = int(time.time())
+    for s in ten:
+        tk = s["ticker"]
+        if not re.search(r"SET|GAME|GWIN|TOTAL|EXACT|S\dG", tk):
+            continue
+        try:
+            r = yesno.kget("/markets", {"series_ticker": tk, "status": "settled", "limit": 1000, "min_close_ts": now - 14 * 86400})
+        except Exception as e:
+            print(" ", tk, str(e)[:60])
+            continue
+        ms = r.get("markets") or []
+        if not ms:
+            continue
+        vs = sorted(bot.fnum(m.get("volume_fp"), 0) for m in ms)
+        evs = collections.defaultdict(list)
+        for m in ms:
+            evs[m.get("event_ticker")].append(m)
+        ev, mm = max(evs.items(), key=lambda kv: len(kv[1]))
+        print(f"  {tk}: {len(ms)} settled in 14 days (more {bool(r.get('cursor'))}), {len(evs)} events, contracts median {vs[len(vs) // 2]:,.0f}")
+        for m in sorted(mm, key=lambda m: m.get("close_time") or "")[:14]:
+            print(f"     {m['ticker']} | {m.get('title')} | {m.get('yes_sub_title')} | close {m.get('close_time')} | res {m.get('result')} | vol {m.get('volume_fp')}")
+    # tennis milestones + live data
+    try:
+        seen = 0
+        cur = None
+        for _ in range(8):
+            p = {"limit": 500, "minimum_start_date": time.strftime("%Y-%m-%dT00:00:00Z", time.gmtime(now - 86400)), "category": "Sports"}
+            if cur:
+                p["cursor"] = cur
+            ml = yesno.kget("/milestones", p)
+            for x in ml.get("milestones") or []:
+                if x.get("type") == "tennis_match" or "tennis" in str(x.get("type")) and "table" not in str(x.get("type")):
+                    seen += 1
+                    if seen <= 4:
+                        print("  milestone:", short(x, 700))
+                        try:
+                            print("   live_data:", short(yesno.kget(f"/live_data/{x.get('type')}/milestone/{x.get('id')}"), 1500))
+                        except Exception as e:
+                            print("   live_data failed", str(e)[:120])
+            cur = ml.get("cursor")
+            if not cur:
+                break
+        print("  tennis milestones:", seen)
+    except Exception as e:
+        print("  milestones failed", str(e)[:150])
+
+    print("\n=== Polymarket tennis matches ===", flush=True)
+    for q in ({"series_slug": "atp"}, {"tag_slug": "tennis", "order": "startDate", "ascending": "false"}):
+        try:
+            r = bot.http_json(f"{G}/events", dict(q, closed="true", limit=50))
+            r = bot.envelope_rows(r, "events", "data")
+            print(" query", q, "->", len(r), [(e.get("slug"), str(e.get("startDate"))[:10]) for e in r[:4]])
+        except Exception as e:
+            print(" query", q, "failed", str(e)[:100])
+    try:
+        srs = bot.http_json(f"{G}/series", {"slug": "atp"})
+        srs = bot.envelope_rows(srs, "series", "data")
+        for sr in srs[:2]:
+            print(" series atp:", short({k: v for k, v in sr.items() if k != "events"}, 500), "events", len(sr.get("events") or []))
+    except Exception as e:
+        print(" series failed", str(e)[:100])
+    # recent matches: set markets' closed times against the trades
+    try:
+        import informed
+        r = bot.http_json(f"{G}/events", {"tag_slug": "tennis", "closed": "true", "limit": 50, "order": "startDate", "ascending": "false"})
+        evs = [e for e in bot.envelope_rows(r, "events", "data") if e.get("gameId")]
+        evs.sort(key=lambda e: -bot.fnum(e.get("volume"), 0))
+        for e in evs[:3]:
+            print(f" MATCH {e.get('title')} | score {e.get('score')} | start {e.get('startTime')} | vol ${bot.fnum(e.get('volume'), 0):,.0f} | {len(e.get('markets') or [])} markets")
+            g0 = bot.parse_iso(e.get("startTime")).timestamp()
+            for m in e.get("markets") or []:
+                typ = m.get("sportsMarketType")
+                if typ not in ("moneyline", "tennis_first_set_winner", "tennis_set_winner"):
+                    continue
+                rows, more = informed.tape(m["conditionId"], 40)
+                tt = sorted((int(bot.fnum(x.get("timestamp"))), x.get("outcome_index"), x.get("side"), bot.fnum(x.get("price")), bot.fnum(x.get("size"))) for x in rows)
+                ct = bot.parse_iso(str(m.get("closedTime")).replace(" ", "T").replace("+00", "+00:00"))
+                ct = ct.timestamp() if ct else 0
+                inplay = [x for x in tt if x[0] >= g0]
+                print(f"   {typ} line {m.get('line')} | {m.get('question')} | prices {m.get('outcomePrices')} | closed +{(ct - g0) / 60:.1f} min after start | {len(tt)} trades (more {more}), {len(inplay)} in play, "
+                      f"$ in play {sum(x[3] * x[4] for x in inplay):,.0f}, umaEnd {m.get('umaEndDate')} resolvedBy {str(m.get('resolvedBy'))[:12]} automaticallyResolved {m.get('automaticallyResolved')}")
+                last = [x for x in tt if x[0] <= ct][-6:]
+                print("      last trades before close (sec before close, outcome, side, price, size):", [(int(ct - x[0]), x[1], x[2], x[3], round(x[4])) for x in last])
+                if typ == "moneyline":
+                    per = collections.Counter(int(x[0] - g0) // 600 for x in inplay)
+                    print("      trades per 10 min in play:", [per[i] for i in range(0, 20)])
+                    o0 = [(x[0], x[3] if x[1] == 0 else 1 - x[3]) for x in tt]
+                    pth = []
+                    for k in range(-2, 40):
+                        c = [p for t, p in o0 if t <= g0 + k * 300]
+                        pth.append(round(c[-1], 2) if c else None)
+                    print("      player-1 price every 5 min from 10 min before start:", pth)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scout"
     if cmd == "scout":
         scout()
+    elif cmd == "scout2":
+        scout2()
+    elif cmd == "selftest":
+        model_selftest()
     else:
         print(__doc__)
+
