@@ -48,16 +48,10 @@
   "2026-11-22": {
    "failed": 0,
    "muted": 105,
-   "sent": 26
+   "sent": 27
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[arb] locked in 2.1c a share",
-   "track": null,
-   "ts": "2026-11-14T02:50:46Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
@@ -1251,6 +1245,12 @@
    "title": "[soccer_draw] bought 4 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-22T22:12:04Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 2 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T23:17:05Z"
   }
  ]
 }
