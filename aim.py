@@ -748,6 +748,224 @@ def usrc():
             print("FAILED", u, str(e)[:120], flush=True)
 
 
+# ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
+def use_fam(s):
+    if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
+        return "vercel"                      # daily shares on Vercel's AI Gateway
+    if re.search(r"SHARE$", s) and s not in ("KXRFKSHARE", "KXMLABELSHARE"):
+        return "orshare"                     # a lab's share of the week on OpenRouter
+    if s.startswith("KXTOKENUSE"):
+        return "tokens"                      # OpenRouter's token total of the week / month
+    if re.search(r"APP$|APPARRAY$", s) and "APPSTORE" not in s and s != "KXTAXAPP":
+        return "apps"                        # monthly app downloads
+    return None
+
+
+def use_load():
+    """Settled usage ladders + tapes (100-times-too-small quotes repaired) + what each event ended at, read off its own ladder."""
+    import statistics
+    ms = {}
+    for t, m in ((rj(MK, {}) or {}).get("markets") or {}).items():
+        x = re.search(r"bove \$?([0-9.]+)", m["w"])
+        if re.search(USE_K, m["s"]) and use_fam(m["s"]) and x:
+            m["X"], m["fam"] = float(x.group(1)), use_fam(m["s"])
+            ms[t] = m
+    tp = {}
+    for s in {m["s"] for m in ms.values()}:
+        for tk, v in (rj(os.path.join(CACHE, f"ktapes_{s}.json.gz"), {}) or {}).items():
+            if tk in ms:
+                vals = [x for c in v["c"] for x in c[1:3] if x is not None]
+                if vals and max(vals) <= 0.0101 and v["tr"] and max(t[1] for t in v["tr"]) > 20:
+                    for c in v["c"]:
+                        c[1] = None if c[1] is None else c[1] * 100
+                        c[2] = None if c[2] is None else c[2] * 100
+                tp[tk] = v
+    evs = collections.defaultdict(list)
+    for m in ms.values():
+        evs[m["ev"]].append(m)
+    E = {}
+    for ev, v in evs.items():
+        yes, no = [m["X"] for m in v if m["res"] == "yes"], [m["X"] for m in v if m["res"] == "no"]
+        xs = sorted(m["X"] for m in v)
+        step = statistics.median([b - a for a, b in zip(xs, xs[1:])] or [0.01 * xs[0]])
+        val = (max(yes) + min(no)) / 2 if yes and no else (min(no) - step / 2 if no else max(yes) + step / 2)
+        E[ev] = {"s": v[0]["s"], "fam": v[0]["fam"], "close": v[0]["close"], "val": val,
+                 "known": max(m["exp"] for m in v) if v[0]["fam"] == "vercel" else v[0]["close"] + 6 * 3600}
+    return ms, tp, E
+
+
+def use_rows(ms, tp, E):
+    """Every market every hour with a real two-sided quote + a chance from 'the last result plus the usual change'."""
+    import math
+    bys = collections.defaultdict(list)
+    for ev, e in E.items():
+        bys[e["s"]].append((e["close"], ev))
+    pairs = collections.defaultdict(list)          # family -> (time the later result was known, days apart, log change)
+    for s, L in bys.items():
+        L.sort()
+        for i, (ca, a) in enumerate(L):
+            for cb, b in L[i + 1:i + 8]:
+                if E[a]["val"] > 0 and E[b]["val"] > 0:
+                    pairs[E[a]["fam"]].append((E[b]["known"], round((cb - ca) / 86400), math.log(E[b]["val"] / E[a]["val"])))
+    R = []
+    for t, m in ms.items():
+        v = tp.get(t)
+        if not v or m["ev"] not in E:
+            continue
+        L = bys[m["s"]]
+        for c in v["c"]:
+            ts, bid, ask = c[0], c[1], c[2]
+            if bid is None or ask is None or not (0 < ask < 1 and ask > bid) or ts >= m["close"] - 1800:
+                continue
+            prev = [(cl, ev) for cl, ev in L if E[ev]["known"] <= ts and cl < m["close"]]
+            pm = v1 = None
+            if prev and E[prev[-1][1]]["val"] > 0:
+                v1 = E[prev[-1][1]]["val"]
+                lag = round((m["close"] - prev[-1][0]) / 86400)
+                pool = [x[2] for x in pairs[m["fam"]] if x[0] <= ts and x[1] == lag]
+                if len(pool) >= 25:
+                    need = math.log(m["X"] / v1)
+                    pm = (sum(1 for x in pool if x > need) + 0.5) / (len(pool) + 1)
+            R.append({"k": t, "t": ts, "h": (m["close"] - ts) / 3600, "bid": bid, "ask": ask, "pp": (bid + ask) / 2, "pm": pm,
+                      "won": m["res"] == "yes", "holds": True, "gap": 0, "place": 0, "fam": m["fam"], "s": m["s"], "X": m["X"], "v1": v1})
+    return R
+
+
+def tokens_rows(ms, tp):
+    """KXTOKENUSE: chance from OpenRouter's public daily token totals (day D is public from D+1 03:00 UTC):
+    days known so far + the rest of the week scaled from last week, misses measured on every earlier 7-day window."""
+    import math
+    O = rj(os.path.join(CACHE, "openrouter_daily.json.gz"), {}) or {"first": {}}
+    D = {day: sum(r[1] for r in v["rows"]) / 1e12 for day, v in O["first"].items()}
+    if not D:
+        return [], D
+    d0 = dt.date.fromisoformat(min(D))
+
+    def tot(start, k0, k1):
+        xs = [D.get((start + dt.timedelta(days=k)).isoformat()) for k in range(k0, k1)]
+        return None if None in xs else sum(xs)
+
+    def point(start, n):
+        prev = tot(start - dt.timedelta(days=7), 0, 7)
+        if prev is None:
+            return None
+        if n == 0:
+            pp = tot(start - dt.timedelta(days=14), 0, 7)
+            return prev * (prev / pp if pp else 1.0)
+        known, pk = tot(start, 0, n), tot(start - dt.timedelta(days=7), 0, n)
+        return None if known is None or not pk else known + (prev - pk) * known / pk
+
+    def errs(before, n, memo={}):
+        if (before, n) not in memo:
+            out, s = [], d0 + dt.timedelta(days=14)
+            while s + dt.timedelta(days=7) <= before:
+                p, a = point(s, n), tot(s, 0, 7)
+                if p and a:
+                    out.append(math.log(a / p))
+                s += dt.timedelta(days=1)
+            memo[(before, n)] = out
+        return memo[(before, n)]
+    R = []
+    for t, m in ms.items():
+        v = tp.get(t)
+        if m["s"] != "KXTOKENUSE" or not v:
+            continue
+        start = dt.datetime.fromtimestamp(m["close"], dt.timezone.utc).date() - dt.timedelta(days=7)
+        for c in v["c"]:
+            ts, bid, ask = c[0], c[1], c[2]
+            if bid is None or ask is None or not (0 < ask < 1 and ask > bid) or ts >= m["close"] - 1800:
+                continue
+            asof = (dt.datetime.fromtimestamp(ts, dt.timezone.utc) - dt.timedelta(hours=3)).date()
+            n = max(0, min(7, (asof - start).days))
+            p = point(start, n)
+            e = errs(asof, n)
+            if p is None or (n < 7 and len(e) < 10):
+                continue
+            need = math.log(m["X"] / p)
+            pm = (1.0 if p > m["X"] else 0.0) if n >= 7 else (sum(1 for x in e if x > need) + 0.5) / (len(e) + 1)
+            R.append({"k": t, "t": ts, "h": (m["close"] - ts) / 3600, "bid": bid, "ask": ask, "pp": (bid + ask) / 2, "pm": pm, "n": n,
+                      "won": m["res"] == "yes", "holds": True, "gap": 0, "place": 0, "fam": "tokens", "s": m["s"], "X": m["X"]})
+    return R, D
+
+
+USE_TRIES = 150
+USE_NAMES = {"vercel": "Vercel AI Gateway daily shares", "orshare": "OpenRouter weekly share of a lab",
+             "tokens": "OpenRouter weekly token total", "apps": "monthly app downloads"}
+
+
+def use_report(log=False):
+    import statistics
+    ms, tp, E = use_load()
+    R = use_rows(ms, tp, E)
+    print(f"## Kalshi usage ladders: {len(ms)} settled markets, {len(E)} events, {len(R)} hourly looks with a real two-sided quote\n")
+    print("| kind | series | markets | events | first close | last close | middle gap between buy and sell price |\n|---|---|---|---|---|---|---|")
+    for fam, nm in USE_NAMES.items():
+        v = [m for m in ms.values() if m["fam"] == fam]
+        g = [r["ask"] - r["bid"] for r in R if r["fam"] == fam]
+        print(f"| {nm} | {len({m['s'] for m in v})} | {len(v)} | {len({m['ev'] for m in v})} | {d10(min(m['close'] for m in v))} | "
+              f"{d10(max(m['close'] for m in v))} | {statistics.median(g) * 100:.0f}c |")
+    KB = lambda sel, yes, mg=0.15: k_bets(ms, R, sel, yes, max_gap=mg)
+    wk = lambda x: d10(ms[x["id"]]["close"])
+    week = lambda b: [dict(x, ev=wk(x)) for x in b]       # one separate bet per week or day: labs in it are linked
+    print("\n### The last result plus the usual change, against the price\n")
+    print("| kind | time left | looks | miss score, last result | miss score, the price |\n|---|---|---|---|---|")
+    for fam, nm in USE_NAMES.items():
+        for h0, h1, lab in ((0, 24, "last day"), (24, 72, "1-3 days"), (72, 9e9, "3+ days")):
+            v = [r for r in R if r["fam"] == fam and r["pm"] is not None and h0 <= r["h"] < h1]
+            if len(v) >= 200:
+                print(f"| {nm} | {lab} | {len(v)} | {statistics.mean((r['pm'] - r['won']) ** 2 for r in v):.4f} | "
+                      f"{statistics.mean((r['pp'] - r['won']) ** 2 for r in v):.4f} |")
+    TR, D = tokens_rows(ms, tp)
+    print(f"\n### OpenRouter's public daily token totals ({len(D)} days, {min(D or ['-'])} to {max(D or ['-'])}) against the weekly token bets\n")
+    print("| days of the week already public | looks | miss score, the count | miss score, the price |\n|---|---|---|---|")
+    for n in range(8):
+        v = [r for r in TR if r["n"] == n]
+        if v:
+            print(f"| {n} | {len(v)} | {statistics.mean((r['pm'] - r['won']) ** 2 for r in v):.4f} | {statistics.mean((r['pp'] - r['won']) ** 2 for r in v):.4f} |")
+    print("\n### The exam\n\nReal asking price + Kalshi's fee, $10 a bet, first hour that fits, gap between buy and sell price at most 15c. "
+          "Separate bets = weeks or days, because the answers inside one are linked.\n\n" + HEAD)
+    TB = lambda sel, yes: k_bets(ms, TR, sel, yes)
+    _line("OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask",
+          week(TB(lambda r: r["pm"] - r["ask"] >= .15, True)), USE_TRIES, log)
+    _line("OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid",
+          week(TB(lambda r: r["bid"] - r["pm"] >= .15, False)), USE_TRIES, log)
+    for fam, nm in USE_NAMES.items():
+        F = lambda r: r["fam"] == fam and r["pm"] is not None
+        if any(F(r) for r in R):
+            _line(f"{nm}: Yes where the last result says 15c+ more than the ask", week(KB(lambda r: F(r) and r["pm"] - r["ask"] >= .15, True)), USE_TRIES)
+            _line(f"{nm}: No where the last result says 15c+ less than the bid", week(KB(lambda r: F(r) and r["bid"] - r["pm"] >= .15, False)), USE_TRIES)
+    for fam, nm in USE_NAMES.items():
+        F = lambda r: r["fam"] == fam
+        _line(f"Usage ladders (Kalshi), {nm}: always Yes at 3-97c, first look", week(KB(lambda r: F(r) and .03 <= r["ask"] <= .97, True)), USE_TRIES, log)
+        _line(f"Usage ladders (Kalshi), {nm}: always No, Yes at 3-97c, first look", week(KB(lambda r: F(r) and .03 <= r["bid"] <= .97, False)), USE_TRIES, log)
+        _line(f"{nm}: No on long shots, Yes at 3-15c", week(KB(lambda r: F(r) and .03 <= r["bid"] < .15, False)), USE_TRIES)
+        _line(f"{nm}: Yes on near-sure things, 85-97c", week(KB(lambda r: F(r) and .85 <= r["ask"] <= .97, True)), USE_TRIES)
+    print("\n### Backward look: the OpenRouter share bets on the first day of the week\n\n" + HEAD)
+    O = lambda r: r["fam"] == "orshare"
+    D1 = lambda r: O(r) and r["h"] >= 144
+    lead = KB(lambda r: D1(r) and .15 <= r["ask"] <= .85, True)
+    _line("OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week", week(lead), USE_TRIES, log)
+    _line("same, No instead of Yes", week(KB(lambda r: D1(r) and .15 <= r["bid"] <= .85, False)), USE_TRIES)
+    _line("same, Yes, the 4 big labs only", week(KB(lambda r: D1(r) and r["s"] in ("KXOPENSHARE", "KXGOOGSHARE", "KXDEEPSHARE", "KXANTHSHARE")
+                                                  and .15 <= r["ask"] <= .85, True)), USE_TRIES)
+    _line("same, Yes at 15-50c", week(KB(lambda r: D1(r) and .15 <= r["ask"] <= .50, True)), USE_TRIES)
+    _line("same, Yes at 50-85c", week(KB(lambda r: D1(r) and .50 < r["ask"] <= .85, True)), USE_TRIES)
+    _line("same, strike at or below last week's result", week(KB(lambda r: D1(r) and r["v1"] and r["X"] <= r["v1"] and .15 <= r["ask"] <= .85, True)), USE_TRIES)
+    _line("same, strike above last week's result", week(KB(lambda r: D1(r) and r["v1"] and r["X"] > r["v1"] and .15 <= r["ask"] <= .85, True)), USE_TRIES)
+    for a, b, lab in ((120, 144, "second day"), (72, 120, "days 3-4"), (24, 72, "days 5-6"), (0, 24, "last day")):
+        _line(f"Yes at 15-85c, {lab}", week(KB(lambda r: O(r) and a <= r["h"] < b and .15 <= r["ask"] <= .85, True)), USE_TRIES)
+    _line("Vercel daily shares: Yes at 15-85c on the first day", week(KB(lambda r: r["fam"] == "vercel" and r["h"] >= 96 and .15 <= r["ask"] <= .85, True)), USE_TRIES)
+    c = collections.defaultdict(list)
+    for x in lead:
+        c[wk(x)].append(x)
+    print("\nThe first-day Yes rule week by week (week's end, bets, won, dollars): " + ", ".join(
+        f"{k} {len(v)} / {sum(1 for y in v if y['pay'] > 0)} / {sum(y['pay'] - y['cost'] for y in v):+.0f}" for k, v in sorted(c.items(), key=lambda kv: kv[1][0]["t"])))
+    c = collections.defaultdict(list)
+    for x in lead:
+        c[x["s"]].append(x)
+    print("\nBy lab: " + ", ".join(f"{k} {len(v)} / {sum(1 for y in v if y['pay'] > 0)} / {sum(y['pay'] - y['cost'] for y in v):+.0f}" for k, v in sorted(c.items())))
+
+
 # ================================================================ the whole report
 def _line(name, b, tries, log=False, status="dropped", prereg=False):
     import exam, earn
@@ -877,6 +1095,8 @@ if __name__ == "__main__":
         report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
     elif cmd == "kcheck":
         k_check()
+    elif cmd == "use":
+        use_report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
     elif cmd == "usrc":
         usrc()
     elif cmd == "klist":
