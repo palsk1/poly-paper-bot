@@ -186,8 +186,10 @@ def test_poly():
                                    taking_amount=__import__("decimal").Decimal("6"))
 
         def list_positions(self, status):
-            return [SimpleNamespace(condition_id="0xc", current_value=6, title="A vs B draw"),
+            rows = [SimpleNamespace(condition_id="0xc", current_value=6, title="A vs B draw"),
                     SimpleNamespace(condition_id="0xold", current_value=3, title="an old win")]
+            # like the real kit: walking the answer gives pages, the rows come from iter_items()
+            return SimpleNamespace(iter_items=lambda: iter(rows), __iter__=lambda: iter([rows]))
 
         def redeem_positions(self, condition_id):
             calls.append({"redeem": condition_id})
