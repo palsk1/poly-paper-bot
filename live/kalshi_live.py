@@ -264,8 +264,9 @@ def place(book):
                 if cash is None:
                     cash = balance()
                 if cash < cost:
-                    book.log("skip_no_cash", ticker=tk, crypto_cash=round(cash, 2), cost=cost)
-                    if book.state.get("cash_push") != C.today():
+                    tied = round(book.open_cost(), 2)   # money waiting in our own bids comes back within 15 min
+                    book.log("skip_no_cash", ticker=tk, crypto_cash=round(cash, 2), cost=cost, in_bids=tied)
+                    if cash + tied < cost and book.state.get("cash_push") != C.today():
                         book.state["cash_push"] = C.today()
                         book.save()
                         C.push("Kalshi bot: no money to bid with",
