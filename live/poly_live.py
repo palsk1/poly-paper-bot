@@ -277,7 +277,7 @@ def run():
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
         C.beat(book, time.time() - t0)
-        if time.time() - last_up > 3600:
+        if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
                 print(C.upload("poly"), flush=True)

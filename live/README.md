@@ -69,7 +69,7 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 ## Files
 
 - `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
-- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), hourly upload to the release `live-data`
+- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
 - `setup.sh`, `update.sh`, `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
 - `selftest.py`: offline test with fake answers, must print ALL OK
