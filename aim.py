@@ -65,6 +65,9 @@ def kscan():
 
 ARENA_K = "^(KXLLM1|KXTOPMODEL|KXTOPAI|KXTECHRANKLISTAICODE|KXCHINAAI|KXMATHAI|KXARENASCORE|KXCODEAI)$"
 K_LIFE = 50 * 86400
+# usage bets: a lab's share of the week's tokens on OpenRouter, daily shares on Vercel's AI Gateway, app downloads
+USE_K = "^KX([A-Z]+SHARE|TOKENUSEM?|TOPUSAGEAI|[A-Z]+VSPEND|[A-Z]+VREQ|OSSPEND|[A-Z]+APP|AIAPPARRAY)$"
+PICKS = {"use": USE_K, "arena": ARENA_K}
 
 
 def klist(pick=ARENA_K):
@@ -799,11 +802,11 @@ if __name__ == "__main__":
     elif cmd == "kcheck":
         k_check()
     elif cmd == "klist":
-        klist(arg or ARENA_K)
+        klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
-        ktapes(arg or ARENA_K)
+        ktapes(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "kall":
-        klist()
-        ktapes()
+        klist(PICKS.get(arg, arg) or ARENA_K)
+        ktapes(PICKS.get(arg, arg) or ARENA_K)
     else:
         print(__doc__)
