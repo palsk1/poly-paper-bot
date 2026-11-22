@@ -928,29 +928,45 @@ def k_settled(series, t0, t1):
 
 
 def k_minutes(series, tk, a, b):
-    """[[minute end, bid, ask, contracts]] in cents, from 1-minute candles."""
+    """[[minute end, bid, ask, contracts, bid low, ask high]] in cents, from 1-minute candles.
+    Matches older than about two months only live on the /historical endpoint, which names its fields
+    close / low / high (no _dollars) and gives them in dollars or in cents: told apart per market by size."""
     out = []
     for path in (f"/series/{series}/markets/{tk}/candlesticks", f"/historical/markets/{tk}/candlesticks"):
+        raw_keys = False
         try:
             x = a
             while x < b:
                 r = yesno.kget(path, {"start_ts": int(x), "end_ts": int(min(b, x + 4000 * 60)), "period_interval": 1})
                 for c in r.get("candlesticks") or []:
-                    def px(blk, key="close_dollars"):
-                        v = (c.get(blk) or {}).get(key)
-                        return None if v in (None, "") else round(float(v) * 100, 1)
-                    out.append([int(c.get("end_period_ts") or 0), px("yes_bid"), px("yes_ask"), round(bot.fnum(c.get("volume_fp"), 0)),
-                                px("yes_bid", "low_dollars"), px("yes_ask", "high_dollars")])
+                    def px(blk, key="close"):
+                        nonlocal raw_keys
+                        d = c.get(blk) or {}
+                        v = d.get(key + "_dollars")
+                        if v not in (None, ""):
+                            return round(float(v) * 100, 1)
+                        v = d.get(key)
+                        if v in (None, ""):
+                            return None
+                        raw_keys = True
+                        return float(v)
+                    out.append([int(c.get("end_period_ts") or 0), px("yes_bid"), px("yes_ask"), round(bot.fnum(c.get("volume_fp") or c.get("volume"), 0)),
+                                px("yes_bid", "low"), px("yes_ask", "high")])
                 x += 4000 * 60
         except Exception:
             out = []
             continue
         if out:
+            if raw_keys and max((v for r_ in out for v in (r_[1], r_[2]) if v is not None), default=0) <= 1.0001:
+                for r_ in out:
+                    for i in (1, 2, 4, 5):
+                        if r_[i] is not None:
+                            r_[i] = round(r_[i] * 100, 1)
             break
     return out
 
 
-def fetch(days=45, itf=False):
+def fetch(days=45, itf=False, only=None):
     """probe `ten_fetch_<days>`: 365scores set times + Kalshi minute prices of every settled tennis match. Resumable."""
     from concurrent.futures import ThreadPoolExecutor
     T0 = time.time()
@@ -972,7 +988,7 @@ def fetch(days=45, itf=False):
         time.sleep(0.7)
     print(f"365scores: {n365} new finished matches, {len(os.listdir(S365_DIR)) if os.path.isdir(S365_DIR) else 0} day files ({time.time() - T0:.0f} s)", flush=True)
     for sr in K_SERIES:
-        if "ITF" in sr and not itf:   # ITF is 20,000+ matches a side: only with `fetch <days> itf`
+        if ("ITF" in sr and not itf) or (only and sr not in only):   # ITF is 20,000+ matches a side: only with `fetch <days> itf`
             continue
         mpath = os.path.join(KT_DIR, f"markets_{sr}.json.gz")
         have = {m["t"]: m for m in rj(mpath, [])}
@@ -992,7 +1008,7 @@ def fetch(days=45, itf=False):
         for i in range(n_sh):
             tp = os.path.join(KT_DIR, f"min_{sr}_{i:03d}.json.gz")
             old = rj(tp, {})
-            chunk = [m for m in todo[i * 200:(i + 1) * 200] if m["t"] not in old]
+            chunk = [m for m in todo[i * 200:(i + 1) * 200] if not any(r[1] is not None for r in old.get(m["t"]) or [])]   # also the old empty shells
             if not chunk:
                 continue
             if time.time() - T0 > 250 * 60:
@@ -1409,7 +1425,7 @@ if __name__ == "__main__":
     elif cmd == "storemove":
         storemove()
     elif cmd == "fetch":
-        fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45, "itf" in sys.argv[3:])
+        fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45, "itf" in sys.argv[3:], [s for s in K_SERIES if s in sys.argv[3:]] or None)
     elif cmd == "sets":
         sets_report(int(sys.argv[2]) if len(sys.argv) > 2 else 3)
     elif cmd == "selftest":
