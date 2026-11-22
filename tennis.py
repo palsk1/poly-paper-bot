@@ -733,7 +733,7 @@ def live(minutes):
 
     async def beat():
         while time.time() < until:
-            await asyncio.sleep(600)
+            await asyncio.sleep(max(1, min(600, until - time.time())))
             print(f"  {time.strftime('%H:%M', time.gmtime())} {dict(rec.n)} games followed {len(rec.slug_of)} markets {len(rec.mkts)}", flush=True)
 
     async def go():
@@ -855,6 +855,157 @@ def scout3():
     except Exception as e:
         print("kalshi set check failed", str(e)[:150])
 
+
+# ================================================================ history: Kalshi minute prices + 365scores set times
+S365_DIR = os.path.join("ten_cache", "s365")
+KT_DIR = os.path.join("ten_cache", "kalshi")
+DAY = 86400
+
+
+def rj(path, default=None):
+    try:
+        with gzip.open(path, "rt") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def wj(path, obj):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with gzip.open(path + ".tmp", "wt") as f:
+        json.dump(obj, f, separators=(",", ":"))
+    os.replace(path + ".tmp", path)
+
+
+def s365_day(d0):
+    """Finished tennis matches of one UTC day from 365scores: start time and minutes per set."""
+    d = time.strftime("%d/%m/%Y", time.gmtime(d0))
+    j = json.loads(raw(f"https://webws.365scores.com/web/games/allscores/?appTypeId=5&langId=1&sports=3&startDate={d}&endDate={d}&showOdds=false&onlyMajorGames=false", timeout=30))
+    out = []
+    for g in j.get("games") or []:
+        if g.get("statusGroup") != 4:
+            continue
+        sets = []
+        for x in g.get("stages") or []:
+            if str(x.get("name", "")).startswith("Set ") and x.get("homeCompetitorScore", -1) >= 0:
+                mm = re.sub(r"\D", "", str(x.get("time") or ""))
+                sets.append([int(x["homeCompetitorScore"]), int(x["awayCompetitorScore"]), int(mm) if mm else None])
+        h, a = g.get("homeCompetitor") or {}, g.get("awayCompetitor") or {}
+        out.append({"id": g["id"], "comp": g.get("competitionDisplayName"), "start": g.get("startTime"), "status": g.get("statusText"),
+                    "h": h.get("name"), "a": a.get("name"), "hs": h.get("score"), "as": a.get("score"), "sets": sets})
+    return out
+
+
+def k_settled(series, t0, t1):
+    rows = []
+    for path in ("/markets", "/historical/markets"):
+        cur = None
+        for _ in range(200):
+            p = {"series_ticker": series, "min_close_ts": int(t0), "max_close_ts": int(t1), "limit": 1000}
+            if path == "/markets":
+                p["status"] = "settled"
+            if cur:
+                p["cursor"] = cur
+            try:
+                r = yesno.kget(path, p)
+            except Exception as e:
+                print(f"  list {series} {path}: {str(e)[:90]}", flush=True)
+                break
+            got = r.get("markets") or []
+            rows += got
+            cur = r.get("cursor")
+            if not cur or not got:
+                break
+    seen, out = set(), []
+    for m in rows:
+        if m["ticker"] in seen or str(m.get("result")) not in ("yes", "no"):
+            continue
+        seen.add(m["ticker"])
+        out.append({"t": m["ticker"], "ev": m["event_ticker"], "name": m.get("yes_sub_title"), "title": m.get("title"), "rules": str(m.get("rules_primary") or "")[:260],
+                    "open": m.get("open_time"), "close": m.get("close_time"), "exp": m.get("expected_expiration_time"), "res": m.get("result"),
+                    "vol": bot.fnum(m.get("volume_fp") or m.get("volume"), 0)})
+    return out
+
+
+def k_minutes(series, tk, a, b):
+    """[[minute end, bid, ask, contracts]] in cents, from 1-minute candles."""
+    out = []
+    for path in (f"/series/{series}/markets/{tk}/candlesticks", f"/historical/markets/{tk}/candlesticks"):
+        try:
+            x = a
+            while x < b:
+                r = yesno.kget(path, {"start_ts": int(x), "end_ts": int(min(b, x + 4000 * 60)), "period_interval": 1})
+                for c in r.get("candlesticks") or []:
+                    def px(blk, key="close_dollars"):
+                        v = (c.get(blk) or {}).get(key)
+                        return None if v in (None, "") else round(float(v) * 100, 1)
+                    out.append([int(c.get("end_period_ts") or 0), px("yes_bid"), px("yes_ask"), round(bot.fnum(c.get("volume_fp"), 0)),
+                                px("yes_bid", "low_dollars"), px("yes_ask", "high_dollars")])
+                x += 4000 * 60
+        except Exception:
+            out = []
+            continue
+        if out:
+            break
+    return out
+
+
+def fetch(days=45):
+    """probe `ten_fetch_<days>`: 365scores set times + Kalshi minute prices of every settled tennis match. Resumable."""
+    from concurrent.futures import ThreadPoolExecutor
+    T0 = time.time()
+    today = int(time.time()) // DAY * DAY
+    n365 = 0
+    for d0 in range(today - days * DAY, today, DAY):
+        path = os.path.join(S365_DIR, time.strftime("%Y%m%d", time.gmtime(d0)) + ".json.gz")
+        if os.path.exists(path):
+            continue
+        try:
+            got = s365_day(d0)
+        except Exception as e:
+            print("  365 day failed", time.strftime("%Y-%m-%d", time.gmtime(d0)), str(e)[:100], flush=True)
+            time.sleep(3)
+            continue
+        if got or d0 < today - 2 * DAY:
+            wj(path, got)
+        n365 += len(got)
+        time.sleep(0.7)
+    print(f"365scores: {n365} new finished matches, {len(os.listdir(S365_DIR)) if os.path.isdir(S365_DIR) else 0} day files ({time.time() - T0:.0f} s)", flush=True)
+    for sr in K_SERIES:
+        mpath = os.path.join(KT_DIR, f"markets_{sr}.json.gz")
+        have = {m["t"]: m for m in rj(mpath, [])}
+        new = k_settled(sr, today - days * DAY, today + DAY)
+        for m in new:
+            have.setdefault(m["t"], m)
+        wj(mpath, list(have.values()))
+        evs = collections.defaultdict(list)
+        for m in have.values():
+            evs[m["ev"]].append(m)
+        print(f"{sr}: {len(have)} settled markets, {len(evs)} matches; closes {min((m['close'] for m in have.values()), default='')[:10]} .. {max((m['close'] for m in have.values()), default='')[:10]}", flush=True)
+        todo = []
+        for ev, mm in sorted(evs.items()):
+            m = sorted(mm, key=lambda m: m["t"])[0]
+            todo.append(m)
+        n_sh = (len(todo) + 199) // 200
+        for i in range(n_sh):
+            tp = os.path.join(KT_DIR, f"min_{sr}_{i:03d}.json.gz")
+            old = rj(tp, {})
+            chunk = [m for m in todo[i * 200:(i + 1) * 200] if m["t"] not in old]
+            if not chunk:
+                continue
+            if time.time() - T0 > 250 * 60:
+                print("  out of time, run again to continue", flush=True)
+                return
+
+            def one(m):
+                c = bot.parse_iso(m["close"]).timestamp()
+                return m["t"], k_minutes(sr, m["t"], c - 8 * 3600, c + 60)
+            with ThreadPoolExecutor(6) as ex:
+                for tk, rows in ex.map(one, chunk):
+                    old[tk] = rows
+            wj(tp, old)
+            print(f"  {sr} minutes file {i + 1}/{n_sh}: {sum(1 for v in old.values() if v)}/{len(old)} with prices ({(time.time() - T0) / 60:.0f} min)", flush=True)
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scout"
     if cmd == "scout":
@@ -868,6 +1019,8 @@ if __name__ == "__main__":
     elif cmd == "livereport":
         import glob
         live_report(sorted(glob.glob(os.path.join(LIVE_DIR, "*.jsonl.gz"))))
+    elif cmd == "fetch":
+        fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45)
     elif cmd == "selftest":
         model_selftest()
     else:
