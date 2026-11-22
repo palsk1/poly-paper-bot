@@ -232,6 +232,7 @@ def run():
             if time.time() - last_settle > SETTLE_S:
                 last_settle = time.time()
                 settle(book)
+            C.control("poly", book, lambda: status_text(book.state))
             why = C.stop_reason("poly", book)
             if why != was_stopped:
                 book.log("paused" if why else "running", why=why or "")
@@ -275,11 +276,17 @@ def check():
     print("Stop check:", C.stop_reason("poly", C.Book("poly")) or "nothing stops it")
 
 
+def status_text(s):
+    d = s["days"].get(C.today(), {"bets": 0, "pnl": 0.0})
+    return (f"Since {s['started'][:10]}: {s['bets']} bets, {s['won']} won, {s['lost']} lost, P&L ${s['realized']:+.2f}.\n"
+            f"Today: {d['bets']} new bets, P&L ${d['pnl']:+.2f}. "
+            f"Open now: {len(s['open'])} (${sum(o['cost'] for o in s['open'].values()):.2f}).")
+
+
 def status():
     C.load_env()
     s = C.Book("poly").state
-    print(f"Polymarket bot since {s['started']}: {s['bets']} bets, {s['won']} won, {s['lost']} lost, "
-          f"P&L ${s['realized']:+.2f}, {len(s['open'])} open now (${sum(o['cost'] for o in s['open'].values()):.2f}).")
+    print("Polymarket bot. " + status_text(s))
     for d in sorted(s["days"])[-7:]:
         v = s["days"][d]
         print(f"  {d}: {v['bets']} bets, ${v['spent']:.2f} put in, P&L ${v['pnl']:+.2f}")

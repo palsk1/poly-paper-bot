@@ -261,6 +261,7 @@ def run():
     while True:
         try:
             settle(book)
+            C.control("kalshi", book, lambda: status_text(book.state))
             why = C.stop_reason("kalshi", book)
             if why != was_stopped:
                 book.log("paused" if why else "running", why=why or "")
@@ -291,11 +292,16 @@ def check():
     print("Stop check:", C.stop_reason("kalshi", C.Book("kalshi")) or "nothing stops it")
 
 
+def status_text(s):
+    d = s["days"].get(C.today(), {"bets": 0, "pnl": 0.0})
+    return (f"Since {s['started'][:10]}: {s['bets']} bids, {s['won']} won, {s['lost']} lost, P&L ${s['realized']:+.2f}.\n"
+            f"Today: {d['bets']} bids, P&L ${d['pnl']:+.2f}. Waiting now: {len(s['open'])}.")
+
+
 def status():
     C.load_env()
     s = C.Book("kalshi").state
-    print(f"Kalshi bot since {s['started']}: {s['bets']} bids, {s['won']} won, {s['lost']} lost, "
-          f"P&L ${s['realized']:+.2f}, {len(s['open'])} waiting now.")
+    print("Kalshi bot. " + status_text(s))
     for d in sorted(s["days"])[-7:]:
         v = s["days"][d]
         print(f"  {d}: {v['bets']} bids, ${v['spent']:.2f} bid, P&L ${v['pnl']:+.2f}")

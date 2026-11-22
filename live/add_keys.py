@@ -7,6 +7,7 @@ The keys go to ~/.live.env and ~/.kalshi.key, readable only by you. Never paste 
 """
 import getpass
 import os
+import secrets
 
 ENV = os.path.expanduser("~/.live.env")
 KFILE = os.path.expanduser("~/.kalshi.key")
@@ -74,13 +75,21 @@ def main():
         if ra:
             new["POLY_RELAYER_ADDRESS"] = ra
 
+    print("\nPHONE CONTROL (stop / start / status from the ntfy app)")
+    have = [ln.split("=", 1)[1] for ln in read_env() if ln.startswith("NTFY_CONTROL=")]
+    if have:
+        print(f"  Your channel is already set: {have[0]}")
+    else:
+        name = "bots-" + secrets.token_hex(8)
+        new["NTFY_CONTROL"] = name
+        print(f"  Your private channel is:   {name}")
+        print("  In the ntfy app: press +, type exactly that name, Subscribe. Keep the name secret:")
+        print("  anyone who knows it can stop your bots (but never start a stopped-by-cap bot or move money).")
+
     print("\nOPTIONAL")
     t = getpass.getpass("  GitHub token so the logs reach the repo (same kind as the combo listener's, Enter to skip): ").strip()
     if t:
         new["GITHUB_TOKEN"] = t
-    n = getpass.getpass("  ntfy topic for phone alerts (Enter to skip): ").strip()
-    if n:
-        new["NTFY_TOPIC"] = n
 
     write_env(read_env(), new)
     print(f"\nSaved {', '.join(new) or 'nothing'} to {ENV} (only you can read it).")
