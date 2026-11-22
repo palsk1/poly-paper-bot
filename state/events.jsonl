@@ -29539,3 +29539,11 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV220800-00", "track": "kc_maker", "ts": "2026-11-22T13:03:56Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV220800-00", "track": "kc_maker_safe", "ts": "2026-11-22T13:03:56Z", "type": "kmaker_fill"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXATPCHALLENGERMATCH-26NOV22COSSCA-COS", "track": "kalshi_patient", "ts": "2026-11-22T13:03:57Z", "type": "kpatient_result"}
+{"cost": 4.1074, "title": "Will the price of Bitcoin be above $64,000 on November 25?", "token": "73727278477044631309134498596053734611719722105101532927486677788774709855924", "track": "crypto_no", "ts": "2026-11-22T13:12:45Z", "type": "skip_no_cash"}
+{"minutes_left": 1.69, "price": 0.985, "queue": 3243.61, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV220815-15", "track": "kc_maker", "ts": "2026-11-22T13:13:19Z", "type": "kmaker_order"}
+{"minutes_left": 1.69, "price": 0.99, "queue": 42.35, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV220815-15", "track": "kc_maker", "ts": "2026-11-22T13:13:20Z", "type": "kmaker_order"}
+{"minutes_left": 1.69, "price": 0.996, "queue": 979.68, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV220815-15", "track": "kc_maker", "ts": "2026-11-22T13:13:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.69, "price": 0.972, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV220815-15", "track": "kc_maker", "ts": "2026-11-22T13:13:22Z", "type": "kmaker_order"}
+{"minutes_left": 1.69, "price": 0.973, "queue": 150.1, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV220815-15", "track": "kc_maker", "ts": "2026-11-22T13:13:22Z", "type": "kmaker_order"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXHIGHTMIN-26NOV21-B64.5", "track": "kalshi_patient", "ts": "2026-11-22T13:13:24Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXLOWTMIN-26NOV21-T45", "track": "kalshi_patient", "ts": "2026-11-22T13:13:24Z", "type": "kpatient_result"}
