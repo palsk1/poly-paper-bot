@@ -69,6 +69,11 @@ def client():
     return _client
 
 
+# Permissions Polymarket's kit lists as "standard" that this bot never needs: the perps deposit contract and the
+# auto-claim operator (the bot claims wins itself). From polymarket/environments.py, 22 Nov. Fewer permissions = safer.
+EXTRAS = {"0xdca4af75705dbb50f62437045aff9921947917d2", "0xa1200000d0002264c9a1698e001292d00e1b00af"}
+
+
 def items(pages):
     """Polymarket's kit hands lists back page by page: walking the list itself gives pages, not rows.
     (Bug fix 22 Nov: the claim sweep walked pages, so it would have claimed nothing.)"""
@@ -272,13 +277,16 @@ def check():
         print(f"closed-only check failed: {e}")
     try:
         st = cl.get_trading_approvals_state()
-        if getattr(st, "is_fully_approved", False):
-            print("Trading permissions: all set.")
+        miss = getattr(st, "missing", None)
+        rows = list(getattr(miss, "erc20", []) or []) + list(getattr(miss, "erc1155", []) or [])
+        need = [r for r in rows if str(getattr(r, "spender", None) or getattr(r, "operator", "")).lower() not in EXTRAS]
+        if not need:
+            print("Trading permissions: all set for buying and claiming."
+                  + (f" ({len(rows)} extra ones are off: Polymarket's perps and auto-claim add-ons, which this "
+                     "bot does not use. Leave them off.)" if rows else ""))
         else:
-            miss = getattr(st, "missing", None)
-            n = len(getattr(miss, "erc20", []) or []) + len(getattr(miss, "erc1155", []) or [])
-            print(f"Trading permissions: {n} missing. This wallet has not yet allowed Polymarket's exchange to use "
-                  "its cash, so buys would be refused.\n  Fix (free, moves no money): "
+            print(f"Trading permissions: {len(need)} missing. This wallet has not yet allowed Polymarket's exchange "
+                  "to use its cash, so buys would be refused.\n  Fix (free, moves no money): "
                   "~/lenv/bin/python ~/poly-paper-bot/live/poly_live.py approve")
     except Exception as e:
         print(f"approvals check failed: {e}")
