@@ -218,6 +218,45 @@ and open bets finish there. Numbers are from the evening of 12 Nov, P&L counting
 The two lessons for the rest: **a strategy that wins small often and loses big rarely needs hundreds of bets before
 its total means anything**, and **a day of correlated wins is luck, however good it looks on the phone**.
 
+## Cleared off the dashboard (22 Nov): clear losers
+
+Jan asked to clean up the dashboard. Rule: enough finished bets (50+) and "Losing" even at the lucky end of the
+luck range. These 7 are hidden from the phone page and the top 10 (`"hidden"` in config, `bot.is_hidden`). They are
+**not stopped**: all 7 are lab tracks, frozen to 1 Jan, so they keep running and stay in `state/summary.md`.
+Numbers at $25 a bet, from 22 Nov. "Lucky end" = the best it could really be, given the bets so far.
+
+| Track | Finished bets | Per $100 | Lucky end | What we learned |
+|---|---|---|---|---|
+| `endgame_sell98` (95-97c buys, sold at 98.5c) | 740 | -$2.56 | -$1.36 | Selling early doesn't save the endgame idea. It looked ahead on 188 bets (12 Nov), then the rare flips caught up. Lost about $440 at $25 a bet |
+| `w_sbel` / `wb_sbel` (copy a weather specialist) | 105 / 111 | -$20.25 / -$23.59 | -$5.60 / -$9.48 | A weather pro's edge is speed and many tiny bets. Copying 5 minutes late at his prices loses |
+| `w_hellyeahtrader` / `wb_hellyeahtrader` (another weather specialist) | 57 / 76 | -$28.09 / -$28.14 | -$11.87 / -$14.89 | Same lesson, worse: the biggest copy losses we have |
+| `w_bigggggggg` / `wb_bigggggggg` (election-month hot hand) | 78 / 86 | -$10.04 / -$11.85 | -$5.30 / -$6.61 | The hot hand didn't last after the elections. A great month on a leaderboard says little about the next one |
+
+**Kept on purpose, Jan to decide (22 Nov):**
+- Behind, but could still be bad luck, with many bets: `wb_tokor` (121 bets, -$6.67 per $100), `w_cigarettes` / `wb_cigarettes` (94 / 104, -$3.12 / -$4.97). `w_tokor` (112) is up per bet but down in dollars, so its numbers disagree. Not clear enough to hide.
+- Losing, but too few bets to call: `w_debased` (18 bets, -$19.75), `mention_no` (12 bets, -$36.70; it is also in the 21 Dec holdout, so it stays).
+- In the 21 Dec holdout or still being scored, not touched: `crypto_no` (20 bets, -$20.25), `boring_no`, `soccer_draw`, `panic_fade_10c`, `postcount_no` (29 bets, too early), the `kc_maker*` tracks and the real-money bots in `live/`.
+- Never bet in 2 weeks (clutter, not losers): `w_flawfence`, `w_railcool`, `wb_railcool`, `w_youngalphagoat`, `sab_big`.
+
+**Combo house: parked as a future idea (22 Nov).** On paper it is ahead (6,612 finished parlays, about +$3 per $100),
+but it needs money tied up in every parlay until the games end. On full days (17-22 Nov, about 1,400 sales a day) up
+to about 950 parlays waited at once: about $4,800 at $5 a parlay, or about $950 at $1 (the "1,984 waiting" on the card
+also counts finished parlays whose results the scorer hadn't looked up yet). Replaying those days at $1 a parlay:
+a $300 pot takes about 3 sales in 4, $500 about 9 in 10, $1,000 all of them. Jan can't fund that now.
+
+**On hold (Jan, 22 Nov 16:32 Stockholm): "hold off on combo house altogether, just document it, bring it back if other
+strategies make us enough money to expand."** The listener (`quoter` service) is switched off; no paper logging until
+then. Where it stood: 6,612 finished parlays at about +$3 per $100 ("Ahead, but could be luck"; the locked 1,000-bet test
+in PROTOCOL 5c passed on 18 Nov), the pre-kick-off side scorecard behind, the $100 pot at $5 a parlay down $76.
+To bring it back:
+- **Money:** about $500 at $1 a parlay (takes about 9 sales in 10 on 17-22 Nov, roughly +$34 a day on paper, one
+  losing day of about -$19), $1,000 for every sale; at $5 a parlay about $2,000-3,000. Unknown: how many real requests
+  are small enough, because a real house must cover the size the buyer asks for.
+- **Where:** either an AWS box (`quoter/README.md`, `setup.sh`), or GitHub Actions like `kfastlive.yml` (nonstop
+  6-hour shifts, free on a public repo) with the empty wallet's login put in repo secrets by Jan. Jan's call.
+- **Real quoting** needs a funded wallet and a quote bot that answers in under 0.4 s, on Jan's server only. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
+the two small real-money bots the same day.
+
 ## Tried and dropped (one line each)
 
 Don't re-test these the same way. Only with something new (new data, a new filter).

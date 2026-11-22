@@ -34,6 +34,9 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
   pauses trading. Polymarket buys are all-or-nothing (FOK) and never above listed + 3c.
 - **Winnings:** Kalshi pays out by itself. Polymarket only pays a win once it is claimed: every 10 minutes the bot
   claims every claimable win in the wallet (old ones too) through Polymarket's free gasless claim, using the Relayer key.
+- **Privacy:** the hourly notebook copy goes to a public release, so it never holds a wallet address, order number or
+  payment number (cut to the last 4 characters). It does hold which markets were bet, when and how much. A determined
+  person could match those against Polymarket's public trade list and find the wallet.
 - Keys only in `~/.live.env` and `~/.kalshi.key` on the server, readable only by Jan's user. Never in this repo or chat.
 
 ## Setup (Jan, on the server, about 15 minutes)
@@ -42,7 +45,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK (27 checks)` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (33 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
@@ -55,6 +58,8 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
    Polymarket key is hidden while you paste).
 6. Check the keys (no orders): `~/lenv/bin/python ~/poly-paper-bot/live/kalshi_live.py check` and
    `~/lenv/bin/python ~/poly-paper-bot/live/poly_live.py check`. Each should say OK and show your balance.
+   Kalshi shows two numbers: the whole balance and the part in **Crypto**. The bot can only bid with the Crypto part
+   (Kalshi moves money by itself for bets made by hand, never for a bot). Move it at kalshi.com/account/exchange-indexes.
 7. Dry run: `sudo systemctl enable --now kalshi-live poly-live`, then watch for an hour:
    `journalctl -u kalshi-live -f` (Ctrl+C stops watching, not the bot). Look for `would_bid` / `would_buy` lines.
 8. Real money: `nano ~/.live.env`, delete the `#` in front of `LIVE=yes`, save (Ctrl+O, Enter, Ctrl+X), then
@@ -66,7 +71,7 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 ## Files
 
 - `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
-- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), hourly upload to the release `live-data`
+- `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
 - `setup.sh`, `update.sh`, `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
 - `selftest.py`: offline test with fake answers, must print ALL OK

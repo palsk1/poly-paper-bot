@@ -24,6 +24,7 @@ Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   POLY_RELAYER_KEY=...              Settings > API keys > Relayer key: lets the bot claim wins by itself
   POLY_RELAYER_ADDRESS=0x...        the address shown next to that Relayer key
   LIVE=yes                          without this line it only writes down what it WOULD do
+  POLY_TAKE=half                    half = every second signal (fits about $28), all = every signal (needs about $60)
   POLY_MAX_BET=2.10                 most money one bet may cost (paper's dearest draw bet so far: $2.06)
   POLY_MAX_OPEN_USD=28              most money in open bets at once
   POLY_MAX_OPEN=20                  most open bets at once
@@ -51,7 +52,10 @@ _client = None
 
 
 def take(slug):
-    """The blind half: True for about every second market, decided by its name only."""
+    """The blind half: True for about every second market, decided by its name only. With POLY_TAKE=all in
+    ~/.live.env (Jan, 22 Nov, after adding money) every signal is taken, like the paper track."""
+    if os.environ.get("POLY_TAKE", "half").strip().lower() == "all":
+        return True
     return int(hashlib.sha1(slug.encode()).hexdigest(), 16) % 2 == 0
 
 
@@ -80,6 +84,9 @@ def items(pages):
     return list(pages.iter_items()) if hasattr(pages, "iter_items") else list(pages)
 
 
+CLAIMS_PER_ROUND = 5
+
+
 def claim_all(book):
     """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
     "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
@@ -91,13 +98,19 @@ def claim_all(book):
     except Exception as e:
         book.log("claim_list_failed", err=f"{type(e).__name__}: {e}"[:200])
         return
-    seen = set()
+    seen, n = set(), 0
     for p in rows:
         cid = str(getattr(p, "condition_id", "") or "")
         if not cid or cid in seen:
             continue
         seen.add(cid)
         val = float(getattr(p, "current_value", 0) or 0)
+        if val < 0.01:
+            continue      # a lost bet also shows as "to be claimed" but pays $0: leave it (fix 22 Nov, the first
+                          # real run spent minutes claiming Jan's old lost bets one by one and could not answer)
+        if n >= CLAIMS_PER_ROUND:
+            break         # the rest next round, so the bot stays free to answer the phone and place bets
+        n += 1
         try:
             h = cl.redeem_positions(condition_id=cid)
             res = getattr(h, "wait", lambda: "sent")()
@@ -151,7 +164,9 @@ def place(book):
             continue
         if not (r["min_price"] <= px <= r["max_price"] + 0.01):
             continue
-        cap_px = round(c["price"] + r["max_over_listed"], 4)
+        # Polymarket takes price limits in whole cents only (22 Nov: half-cent limits were refused), so the limit is
+        # listed + 3c rounded DOWN to a cent: never looser than the paper rule.
+        cap_px = math.floor((c["price"] + r["max_over_listed"]) * 100 + 1e-9) / 100
         if px > cap_px + 1e-9:
             continue            # thin book: the real ask is 3c+ above the listed price (same skip as paper)
         fee = bot.taker_fee(shares, px, c["fee_rate"])
@@ -185,12 +200,16 @@ def place(book):
                                                   max_price=Decimal(str(cap_px)), order_type="FOK")
             except Exception as e:
                 book.log("order_failed", slug=slug, err=f"{type(e).__name__}: {e}"[:300])
+                if type(e).__name__ == "UserInputError":     # stopped on our side, nothing was sent: may try again
+                    book.state["done"].remove(slug)
+                    book.save()
                 continue
             if not getattr(res, "ok", False):
                 book.log("order_refused", slug=slug, code=getattr(res, "code", "?"), err=getattr(res, "message", "")[:200])
                 continue
             spent, got = float(res.making_amount), float(res.taking_amount)
-            rec.update({"order_id": str(res.order_id), "status": res.status, "spent": spent, "shares": got,
+            rec.update({"order_id": C.scrub(str(res.order_id)),   # short form: the full number points at the wallet
+                         "status": res.status, "spent": spent, "shares": got,
                         "ask": round(spent / got, 4) if got else rec["ask"], "cost": round(spent + fee, 4)})
             book.state["done"].remove(slug)
             have -= spent + fee
@@ -231,11 +250,18 @@ def settle(book):
 def run():
     C.load_env()
     book = C.Book("poly")
-    book.log("start", rule=TRACK, max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
+    if not book.state.get("fix_1122"):
+        # One time: on 22 Nov nine draws were refused for a half-cent price limit and marked "tried once".
+        # Nothing was sent for them, so they get their try back. (No market had finished yet, so the list
+        # held only those nine.)
+        book.state["done"] = [s for s in book.state["done"] if s in book.state["open"]]
+        book.state["fix_1122"] = True
+        book.save()
+    book.log("start", rule=TRACK, take=os.environ.get("POLY_TAKE", "half"), max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
              mode="LIVE (real money)" if C.is_live() else "dry run")
     if C.is_live():
         cl = client()
-        book.log("login", wallet=str(cl.wallet), wallet_type=str(cl.wallet_type), cash=round(cash(), 2))
+        book.log("login", wallet_type=str(cl.wallet_type), cash=round(cash(), 2))   # no address: the log is public
     last_scan = last_settle = last_up = 0
     was_stopped = None
     while True:
@@ -255,7 +281,7 @@ def run():
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
         C.beat(book, time.time() - t0)
-        if time.time() - last_up > 3600:
+        if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
                 print(C.upload("poly"), flush=True)
@@ -292,7 +318,8 @@ def check():
         print(f"approvals check failed: {e}")
     if os.environ.get("POLY_RELAYER_KEY"):
         try:
-            n = len(items(cl.list_positions(status="REDEEMABLE")))
+            n = len([p for p in items(cl.list_positions(status="REDEEMABLE"))
+                     if float(getattr(p, "current_value", 0) or 0) >= 0.01])
             print(f"Claiming: set up (relayer key). {n} won bet(s) waiting to be claimed now; the bot claims them.")
         except Exception as e:
             print(f"Claiming: relayer key set, but listing claimable bets failed: {e}")
