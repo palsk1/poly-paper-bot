@@ -1468,6 +1468,156 @@ def setclock():
             print("   ", short(json.dumps(m), 420))
 
 
+# ================================================================ the same lead on Polymarket (real trades, no asks in history)
+PM_DIR = os.path.join("ten_cache", "pm")
+
+
+def pm_fetch(days=120):
+    """probe `ten_pm_<days>`: finished Polymarket tennis matches (match-winner market) + every trade, as minute bars."""
+    from concurrent.futures import ThreadPoolExecutor
+    import informed
+    T0 = time.time()
+    cut = time.time() - days * DAY
+    epath = os.path.join(PM_DIR, "events.json.gz")
+    evs = {e["cid"]: e for e in rj(epath, []) or []}
+    n_seen = 0
+    for off in range(0, 60000, 50):
+        try:
+            page = bot.http_json(f"{G}/events", {"tag_id": 864, "closed": "true", "limit": 50, "offset": off, "order": "endDate", "ascending": "false",
+                                                    "end_date_min": time.strftime("%Y-%m-%dT00:00:00Z", time.gmtime(cut))})
+        except Exception as e:
+            print(f"  gamma page {off}: {str(e)[:90]}", flush=True)
+            time.sleep(2)
+            continue
+        page = page if isinstance(page, list) else []
+        if not page:
+            break
+        oldest = None
+        for ev in page:
+            n_seen += 1
+            d = bot.parse_iso(ev.get("endDate"))
+            if d:
+                oldest = d.timestamp() if oldest is None else min(oldest, d.timestamp())
+            for m in ev.get("markets") or []:
+                if m.get("sportsMarketType") != "moneyline" or not m.get("closed"):
+                    continue
+                tk, outs, pr = jl(m.get("clobTokenIds")), jl(m.get("outcomes")), jl(m.get("outcomePrices"))
+                vol = bot.fnum(m.get("volumeNum") or m.get("volume"), 0)
+                if not tk or not outs or len(outs) != 2 or not pr or vol < 20000:
+                    continue
+                st = bot.parse_iso(m.get("gameStartTime") or ev.get("startTime") or "")
+                evs[m["conditionId"]] = {"cid": m["conditionId"], "slug": ev.get("slug"), "title": ev.get("title"), "outs": outs, "pr": [bot.fnum(x, 0) for x in pr],
+                                         "start": st.timestamp() if st else None, "end": d.timestamp() if d else None, "vol": vol, "fee": m.get("feeSchedule"), "score": ev.get("score")}
+        if off % 1000 == 0:
+            print(f"  gamma offset {off}: oldest end on this page {time.strftime('%Y-%m-%d', time.gmtime(oldest or 0))}, {len(evs)} kept", flush=True)
+    wj(epath, list(evs.values()))
+    print(f"polymarket: {n_seen} closed tennis events read, {len(evs)} match-winner markets with $20,000+ traded ({time.time() - T0:.0f} s)", flush=True)
+    todo = sorted(evs.values(), key=lambda e: e["cid"])
+    n_sh = (len(todo) + 199) // 200
+
+    def one(e):
+        try:
+            rows, more = informed.tape(e["cid"], 60)
+        except Exception as ex:
+            return e["cid"], None
+        bars = {}
+        for r in rows:
+            ts = bot.fnum(bot.pick(r, "timestamp", "time"))
+            ts = ts / 1000 if ts and ts > 1e11 else ts
+            px, sh = bot.fnum(r.get("price")), bot.fnum(r.get("size"))
+            oi = r.get("outcome_index")
+            if oi not in (0, 1):
+                oi = 0 if str(r.get("outcome")) == e["outs"][0] else 1 if str(r.get("outcome")) == e["outs"][1] else None
+            if not ts or oi is None or not px or not 0 < px < 1 or not sh:
+                continue
+            p0 = px if oi == 0 else 1 - px
+            b = bars.setdefault(int(ts) // 60 * 60, [int(ts) // 60 * 60, p0, p0, p0, 0.0, int(ts)])
+            b[1], b[2] = min(b[1], p0), max(b[2], p0)
+            if int(ts) >= b[5]:
+                b[3], b[5] = p0, int(ts)
+            b[4] += px * sh
+        return e["cid"], [[b[0], round(b[1], 4), round(b[2], 4), round(b[3], 4), round(b[4], 1)] for _, b in sorted(bars.items())] + ([["cut"]] if more else [])
+    for i in range(n_sh):
+        tp = os.path.join(PM_DIR, f"bars_{i:03d}.json.gz")
+        old = rj(tp, {}) or {}
+        chunk = [e for e in todo[i * 200:(i + 1) * 200] if e["cid"] not in old]
+        if not chunk:
+            continue
+        if time.time() - T0 > 250 * 60:
+            print("  out of time, run again to continue", flush=True)
+            return
+        with ThreadPoolExecutor(6) as ex:
+            for cid, bars in ex.map(one, chunk):
+                if bars is not None:
+                    old[cid] = bars
+        wj(tp, old)
+        print(f"  bars file {i + 1}/{n_sh}: {len(old)} markets, {sum(len(v) for v in old.values())} minutes with trades ({(time.time() - T0) / 60:.0f} min)", flush=True)
+
+
+def pm_report(off=SAFE_MIN, win=3):
+    """The lead's bets on Kalshi, re-bought on Polymarket: the worst price anyone paid for that player in the `win`
+    minutes after our clock + 1c + Polymarket's fee (0.05 x p x (1-p) a share)."""
+    import exam
+    gs, ks = load_365(), load_kalshi()
+    join(ks, gs)
+    kb = lead_bets(ks, lo=0.0, hi=1.01, off=off)
+    evs = rj(os.path.join(PM_DIR, "events.json.gz"), []) or []
+    bars = {}
+    i = 0
+    while True:
+        d = rj(os.path.join(PM_DIR, f"bars_{i:03d}.json.gz"))
+        if d is None:
+            break
+        bars.update(d)
+        i += 1
+    by_tok = collections.defaultdict(list)
+    for e in evs:
+        e["tk"] = [toks(o) for o in e["outs"]]
+        for tk in e["tk"][0] | e["tk"][1]:
+            by_tok[tk].append(e)
+    print(f"{len(kb)} set-1 moments with a Kalshi price, {len(evs)} Polymarket matches, {len(bars)} with trades")
+    pb, kk, n_match, n_quiet = [], [], 0, 0
+    for b in kb:
+        nm = toks(b["name"])
+        best = None
+        for e in {id(e): e for tk in nm for e in by_tok.get(tk, [])}.values():
+            ref = e["start"] or e["end"]
+            if not ref or abs(ref - b["t"]) > 12 * 3600:
+                continue
+            side = 0 if nm & e["tk"][0] else 1 if nm & e["tk"][1] else None
+            if side is None or e["cid"] not in bars:
+                continue
+            best = (e, side)
+        if not best:
+            continue
+        n_match += 1
+        e, side = best
+        w = [x for x in bars[e["cid"]] if len(x) == 5 and b["t"] <= x[0] < b["t"] + win * 60 and x[4] >= 5]
+        if not w:
+            n_quiet += 1
+            continue
+        px = (max(x[2] for x in w) if side == 0 else 1 - min(x[1] for x in w)) + 0.01
+        if not 0.50 <= px < 0.80:
+            continue
+        n = int(25 / px)
+        won = e["pr"][side] > 0.5
+        pb.append({"ev": e["cid"], "t": b["t"], "cost": n * px + 0.05 * n * px * (1 - px), "pay": n * 1.0 if won else 0.0, "px": px})
+        if 0.50 <= b["px"] < 0.80:
+            kk.append(b)
+    print(f"matched to a Polymarket match: {n_match}; no $5+ of trades in the {win} minutes: {n_quiet}")
+    h = len(pb) // 2
+    print(f"Polymarket, set-1 winner at 50-80c (worst trade of the next {win} min + 1c + fee): {len(pb)} bets, {per100(pb):+.2f} per $100 "
+          f"(first half {per100(pb[:h]):+.2f}, second half {per100(pb[h:]):+.2f}), average price {100 * sum(b['px'] for b in pb) / max(1, len(pb)):.0f}c")
+    print(f"the same matches on Kalshi at the real ask + fee: {len(kk)} bets, {per100(kk):+.2f} per $100")
+    for nm_, f in (("women (wta)", lambda e: str(e).startswith("wta")), ("men (atp)", lambda e: str(e).startswith("atp"))):
+        sl = {e["cid"]: e["slug"] for e in evs}
+        bb = [b for b in pb if f(sl.get(b["ev"]))]
+        print(f"  {nm_}: {len(bb)} bets, {per100(bb):+.2f} per $100")
+    if pb:
+        exam.score(pb, "Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock)", tries=112, src="tennis.py pm", status="candidate")
+    return pb
+
+
 def khist():
     """Do old matches still have 1-minute bid / ask anywhere? (The live candle endpoint returns empty shells for them.)"""
     for tk, close in (("KXATPMATCH-26AUG31VIRRUB-RUB", None), ("KXATPMATCH-26AUG31VIRRUB-VIR", None), ("KXATPMATCH-26MAR", None), ("KXATPMATCH-25AUG01COBMAR-COB", None)):
@@ -1544,6 +1694,10 @@ if __name__ == "__main__":
         lead_report()
     elif cmd == "jumps":
         jumps_report(int(sys.argv[2]) if len(sys.argv) > 2 else 2)
+    elif cmd == "pm":
+        pm_fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 120)
+    elif cmd == "pmreport":
+        pm_report()
     elif cmd == "setclock":
         setclock()
     elif cmd == "khist":
