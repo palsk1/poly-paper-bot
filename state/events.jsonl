@@ -30287,3 +30287,11 @@
 {"filled": 10.0, "pnl": 0.35, "price": 0.965, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV221645-45", "track": "kc_maker", "ts": "2026-11-22T21:47:57Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV221645-45", "track": "kc_maker", "ts": "2026-11-22T21:47:57Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXETH15M-26NOV221645-45", "track": "kc_maker", "ts": "2026-11-22T21:47:58Z", "type": "kmaker_fill"}
+{"outcome": "No", "pnl": 0.5539, "price": 0.97, "reason": "wallet exit (book)", "title": "Will Ethereum reach $3,000 by December 31, 2026?", "token": "109485388632239321949522534949286742613587937674462715784053878432833137696796", "track": "wb_albert_1953", "ts": "2026-11-22T21:55:34Z", "type": "paper_close"}
+{"minutes_left": 2.07, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV221700-00", "track": "kc_maker", "ts": "2026-11-22T21:57:55Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.982, "queue": 3854.25, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV221700-00", "track": "kc_maker", "ts": "2026-11-22T21:57:57Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.982, "queue": 3854.25, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV221700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T21:57:57Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.994, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV221700-00", "track": "kc_maker", "ts": "2026-11-22T21:57:58Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.998, "queue": 6953.23, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV221700-00", "track": "kc_maker", "ts": "2026-11-22T21:57:59Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.998, "queue": 6953.23, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV221700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T21:58:00Z", "type": "kmaker_order"}
+{"minutes_left": 2.07, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV221700-00", "track": "kc_maker", "ts": "2026-11-22T21:58:00Z", "type": "kmaker_order"}
