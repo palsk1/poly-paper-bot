@@ -94,7 +94,16 @@ class Book:
                       "started": iso()}
         if os.path.exists(self.state_path):
             with open(self.state_path) as f:
-                self.state.update(json.load(f))
+                old = json.load(f)
+            if old.get("live", False) != is_live():
+                # Pretend bets and real bets never share a notebook page (22 Nov): on a switch between pretend
+                # mode and real money the old page is put aside and the count starts from zero. Otherwise
+                # pretend bets would use up the real caps and be counted as real wins and losses.
+                os.replace(self.state_path, os.path.join(
+                    DIR, f"{name}-{'real' if old.get('live') else 'pretend'}-until-{utcnow().strftime('%Y%m%dT%H%M%S')}.json"))
+            else:
+                self.state.update(old)
+        self.state["live"] = is_live()
 
     def save(self):
         tmp = self.state_path + ".tmp"
