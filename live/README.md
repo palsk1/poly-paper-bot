@@ -42,7 +42,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK (26 checks)` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (27 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.

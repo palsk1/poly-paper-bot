@@ -228,6 +228,13 @@ def test_phone():
                       **({"tags": ["moneybag"]} if title in C.BOT_TITLES else {})})
         C._ctrl["t"] = 0
         C.control("kalshi", book, status)
+    urls = []
+    C.ntfy_get = lambda url: urls.append(url) or ""
+    C._ctrl["t"] = 0
+    C.control("kalshi", book, status)
+    check(urls and urls[-1].split("since=")[1].isdigit(),
+          "the first phone read asks for everything since the bot started, not just the last minute")
+    C.ntfy_get = lambda url: "\n".join(J.dumps(m) for m in inbox)
     say("stop poly")
     check(C.stop_reason("kalshi", book) is None, "phone 'stop poly' leaves the Kalshi bot running")
     say("Stop")
