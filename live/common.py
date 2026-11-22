@@ -16,6 +16,7 @@ import datetime as dt
 import gzip
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -65,6 +66,23 @@ def today():
     return utcnow().strftime("%Y-%m-%d")
 
 
+# Privacy (22 Nov): the notebook goes to a PUBLIC release, so nothing in it may point at Jan's wallet. Every
+# wallet address, order number or payment number (0x + 40 or more hex characters) is cut to its last 4 characters.
+# Market ids are public and say nothing about who bet, so they stay.
+PUBLIC_IDS = {"condition_id", "token"}
+_HEX = re.compile(r"0x[0-9a-fA-F]{40,}")
+
+
+def scrub(v):
+    if isinstance(v, str):
+        return _HEX.sub(lambda m: "0x.." + m.group(0)[-4:], v)
+    if isinstance(v, dict):
+        return {k: (x if k in PUBLIC_IDS else scrub(x)) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [scrub(x) for x in v]
+    return v
+
+
 class Book:
     """The bot's own notebook: state file (what is open, money so far) + an append-only log (one line per event)."""
 
@@ -85,6 +103,7 @@ class Book:
         os.replace(tmp, self.state_path)
 
     def log(self, kind, **kw):
+        kw = {k: (v if k in PUBLIC_IDS else scrub(v)) for k, v in kw.items()}
         row = {"t": iso(), "k": kind, "live": is_live(), **kw}
         with open(os.path.join(DIR, f"{self.name}-{utcnow().strftime('%Y%m')}.jsonl"), "a") as f:
             f.write(json.dumps(row, separators=(",", ":")) + "\n")

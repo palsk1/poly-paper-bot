@@ -215,6 +215,15 @@ def test_poly():
     os.environ.pop("LIVE")
 
 
+def test_privacy():
+    b = C.Book("privacy")
+    addr, tx = "0x5c5d46356267CA22F90FA2d4A3B6EC4880B68E0f", "0x" + "ab12" * 16
+    b.log("claimed", condition_id=tx, result=f"sent {tx} from {addr}", wallet=addr, nested={"maker": addr})
+    line = open(os.path.join(TMP, "privacy-" + C.utcnow().strftime("%Y%m") + ".jsonl")).read()
+    check(addr not in line and addr.lower() not in line.lower().replace(tx, "") and line.count(tx) == 1,
+          "the public notebook never holds a wallet address or payment number (market ids stay)")
+
+
 def test_phone():
     import json as J
     os.environ["NTFY_CONTROL"] = "bots-test"
@@ -265,6 +274,7 @@ def test_phone():
 if __name__ == "__main__":
     test_sign()
     test_phone()
+    test_privacy()
     test_kalshi()
     test_poly()
     for w in OK:

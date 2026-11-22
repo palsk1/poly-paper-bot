@@ -34,6 +34,9 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
   pauses trading. Polymarket buys are all-or-nothing (FOK) and never above listed + 3c.
 - **Winnings:** Kalshi pays out by itself. Polymarket only pays a win once it is claimed: every 10 minutes the bot
   claims every claimable win in the wallet (old ones too) through Polymarket's free gasless claim, using the Relayer key.
+- **Privacy:** the hourly notebook copy goes to a public release, so it never holds a wallet address, order number or
+  payment number (cut to the last 4 characters). It does hold which markets were bet, when and how much. A determined
+  person could match those against Polymarket's public trade list and find the wallet.
 - Keys only in `~/.live.env` and `~/.kalshi.key` on the server, readable only by Jan's user. Never in this repo or chat.
 
 ## Setup (Jan, on the server, about 15 minutes)
@@ -42,7 +45,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK (27 checks)` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (28 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
