@@ -51,11 +51,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 store.py pull || true
-      - name: Tennis store, fetch   # tennis.py keeps its files in ten_cache/ (same price-store release)
+      - name: Tennis store, fetch   # tennis.py keeps its files in ten_cache/, in its own release tennis-store (a release holds at most 1,000 files)
         if: startsWith(inputs.what, 'ten_')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 store.py pull ten_cache || true
+        run: python3 store.py pull ten_cache || true; STORE_TAG=tennis-store python3 store.py pull ten_cache || true
       - name: Probe APIs
         run: |
           case "${{ inputs.what }}" in lag_*) pip install -q websockets; w="$(echo '${{ inputs.what }}' | sed 's/^lag_//')"; if [ "$w" = "scan" ]; then PYTHONUNBUFFERED=1 python3 livelag.py scan; else PYTHONUNBUFFERED=1 python3 livelag.py rec "$w"; fi; exit $?;; esac
@@ -106,7 +106,7 @@ jobs:
         if: always() && startsWith(inputs.what, 'ten_')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 store.py push ten_cache || true
+        run: STORE_TAG=tennis-store python3 store.py push ten_cache || true; python3 tennis.py storemove || true
       - name: Shared price store, save   # also after a failure or timeout; win_* only reads
         if: always() && (startsWith(inputs.what, 'w5m_') || startsWith(inputs.what, 'bt') || startsWith(inputs.what, 'econ') || startsWith(inputs.what, 'wx_') || startsWith(inputs.what, 'kc_') || startsWith(inputs.what, 'kd_') || startsWith(inputs.what, 'kf_') || startsWith(inputs.what, 'kh_') || startsWith(inputs.what, 'opt_') || startsWith(inputs.what, 'tw_') || startsWith(inputs.what, 'men_') || startsWith(inputs.what, 'ern_') || startsWith(inputs.what, 'bo_') || startsWith(inputs.what, 'stk_') || startsWith(inputs.what, 'qk_') || startsWith(inputs.what, 'famf_') || startsWith(inputs.what, 'kmn_') || startsWith(inputs.what, 'kch_') || startsWith(inputs.what, 'spw_') || startsWith(inputs.what, 'hab_') || startsWith(inputs.what, 'pw_') || startsWith(inputs.what, 'sp_'))
         env:

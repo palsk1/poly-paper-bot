@@ -35,7 +35,7 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-TAG = "price-store"
+TAG = os.environ.get("STORE_TAG") or "price-store"   # STORE_TAG: a dig with many files keeps its own release (a release holds at most 1,000 files)
 DIRS = ["bt_cache", "econ_cache", "wx_cache"]
 SEP = "--"
 RECORD = ".store_pulled.json"     # per dir: what pull saw, so push knows what this run changed
