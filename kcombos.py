@@ -16,7 +16,8 @@ legs. So the Polymarket combo question (combos.py) can be asked here without a s
     python3 kcombos.py run             # probe kcb_run (or locally, data is in the price store): backtest/kcombos.md
     python3 kcombos.py selftest        # offline
 
-Data: bt_cache/kcb/ (combos.json.gz, legs_NNN.json.gz), saved to the shared price store.
+Data: kcb_cache/ (its own folder in the shared price store, so a run needn't download the whole store:
+`python3 store.py pull kcb_cache`).
 """
 import collections
 import datetime as dt
@@ -34,7 +35,7 @@ import khouse
 import yesno
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(ROOT, "bt_cache", "kcb")
+CACHE = os.path.join(ROOT, "kcb_cache")
 OUT = os.path.join(ROOT, "backtest", "kcombos.md")
 DAY = 86400
 kget = yesno.kget
