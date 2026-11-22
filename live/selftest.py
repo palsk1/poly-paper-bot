@@ -172,6 +172,9 @@ def test_poly():
           + (f"{o['shares']} shares at {o['ask'] * 100:.1f}c" if o else "none"))
     check(len(book.state["open"]) == len(half) and not any(s in book.state["open"] for s in slugs if not P.take(s)),
           "Polymarket skips the other half")
+    os.environ["POLY_TAKE"] = "all"
+    check(all(P.take(s) for s in slugs), "with POLY_TAKE=all every signal is taken, like the paper track")
+    os.environ.pop("POLY_TAKE")
 
     bot.book = lambda tok: {"asks": [(0.22, 100)], "bids": [], "min_size": 5}
     b2 = C.Book("poly2")
