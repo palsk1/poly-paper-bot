@@ -29974,3 +29974,11 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTDPROT-26NOV23CINWAS-WASRWHITE1-2", "track": "kalshi_patient", "ts": "2026-11-22T18:23:47Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXETH-26NOV2717-B1560", "track": "kalshi_patient", "ts": "2026-11-22T18:23:47Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV25PVMRSH-PV", "track": "kalshi_patient", "ts": "2026-11-22T18:23:47Z", "type": "kpatient_order"}
+{"fee": 0.0096, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Alexander Zverev win the 2026 Nitto ATP Finals?", "token": "110392234736912160170097199419789802104022918685367402797451180129434870218218", "track": "endgame_sell98", "ts": "2026-11-22T18:28:11Z", "type": "paper_buy"}
+{"minutes_left": 1.77, "price": 0.986, "queue": 754.47, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV221330-30", "track": "kc_maker", "ts": "2026-11-22T18:28:14Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.998, "queue": 295.11, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV221330-30", "track": "kc_maker", "ts": "2026-11-22T18:28:15Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.998, "queue": 295.11, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV221330-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T18:28:16Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.994, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV221330-30", "track": "kc_maker", "ts": "2026-11-22T18:28:17Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.994, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV221330-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T18:28:17Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.998, "queue": 6786.67, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV221330-30", "track": "kc_maker", "ts": "2026-11-22T18:28:18Z", "type": "kmaker_order"}
+{"minutes_left": 1.77, "price": 0.998, "queue": 6786.67, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV221330-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T18:28:19Z", "type": "kmaker_order"}
