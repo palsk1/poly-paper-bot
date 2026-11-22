@@ -595,7 +595,9 @@ def run(score="1"):
     L += [""]
     # the backward look: start from who won
     old = [r for r in yes if is_first(r)]
-    new = [r for r in yes if not is_first(r)]
+    day_of = lambda r: time.strftime("%Y-%m-%d", time.gmtime(r["d0"]))
+    new = [r for r in yes if day_of(r) < FIRST_A]          # the fresh days named in the prereg
+    late = [r for r in yes if day_of(r) > FIRST_B]         # 18-19 Nov: seen once before the prereg, shown apart
     L += ["## The backward look: who did win?", "",
           "Same trades from the buyer's chair (price + the buyer's fee, $1 a contract if the combo wins). First the days "
           f"we looked at first ({FIRST_A[8:]}-{FIRST_B[8:]} Nov, {len(old):,} trades):", ""]
@@ -617,6 +619,12 @@ def run(score="1"):
               f"| 3. House side, all Yes trades, per $100 of tickets | {len(new):,} | "
               f"{usd(100 * sum(r['back'] - r['cost'] - r['mfee'] for r in new) / sum(r['paid'] for r in new))} | "
               f"{usd(100 * sum(r['back'] - r['cost'] - r['mfee'] for r in old) / max(1e-9, sum(r['paid'] for r in old)))} |", ""]
+        if late:
+            hl = [r for r in late if r["yp"] >= 0.65]
+            L += [f"The two newest days (18-19 Nov) are kept apart: we had glanced at them before the rule was written "
+                  f"down, so they are not a fair test. There: {len(hl):,} trades at 65c+, {usd(b100(buyer_bets(hl)))} per $100; "
+                  f"small tickets counted alike {usd(b100(buyer_bets([r for r in hl if r['paid'] <= 50], True)))}; house side "
+                  f"{usd(100 * sum(r['back'] - r['cost'] - r['mfee'] for r in late) / sum(r['paid'] for r in late))} per $100 of tickets.", ""]
         if score == "1":
             L += ["```"]
             for name, bs in (("Kalshi combos: buy nearly-sure combos (65c+), fresh days", buyer_bets(hi)),
@@ -645,9 +653,6 @@ def run(score="1"):
                 cards.append(c)
                 L += [exam.card_text(c), ""]
         L += ["```", ""]
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT + ".tables", "w") as f:
-        f.write("\n".join(L) + "\n")
     print("\n".join(L))
 
 
