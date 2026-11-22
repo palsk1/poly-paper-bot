@@ -224,7 +224,8 @@ def test_phone():
 
     def say(text, title=None):
         inbox.clear()
-        inbox.append({"event": "message", "id": f"m{len(sent)}", "message": text, **({"title": title} if title else {})})
+        inbox.append({"event": "message", "id": f"m{len(sent)}", "message": text, **({"title": title} if title else {}),
+                      **({"tags": ["moneybag"]} if title in C.BOT_TITLES else {})})
         C._ctrl["t"] = 0
         C.control("kalshi", book, status)
     say("stop poly")
@@ -234,6 +235,11 @@ def test_phone():
           "phone 'stop' stops the bot and it answers in the channel")
     say("start", title="Kalshi bot")
     check(C.stop_reason("kalshi", book) is not None, "the bots' own messages are never read as commands")
+    n = len(sent)
+    say("triggered", title="Status")
+    check(len(sent) == n + 1 and "3 bids" in sent[-1][2], "a command typed in the Title box (message empty) works too")
+    say("hello there")
+    check(len(sent) == n + 1, "other chatter in the channel is ignored")
     say("status")
     check("3 bids" in sent[-1][2] and "Paused" in sent[-1][2], "phone 'status' answers with numbers and why it's paused")
     say("start kalshi")

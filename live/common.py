@@ -186,6 +186,8 @@ CTRL_EVERY = 20
 NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
            "all": "all", "both": "all", "bots": "all"}
+COMMANDS = {"stop", "off", "pause", "start", "on", "resume", "status", "how", "?"}
+BOT_TITLES = set(NAMES.values())
 _ctrl = {"t": 0}
 
 
@@ -213,9 +215,17 @@ def control(bot, book, status_fn):
         if m.get("event") != "message":
             continue
         book.state["ctrl_since"] = m.get("id") or since
-        if m.get("title"):
+        if "moneybag" in (m.get("tags") or []) or str(m.get("title") or "") in BOT_TITLES \
+                or str(m.get("title") or "").endswith("STOPPED") or "a bid lost" in str(m.get("title") or ""):
             continue                       # the bots' own answers and alerts
-        words = str(m.get("message") or "").strip().lower().split()
+        # Jan may type the command in the Title box and leave Message empty (ntfy then shows "triggered"):
+        # read both boxes and take the first that starts with a command word (fix 22 Nov).
+        words = []
+        for text in (m.get("message"), m.get("title")):
+            w = str(text or "").strip().lower().strip(".!").split()
+            if w and w[0] in COMMANDS:
+                words = w
+                break
         if not words:
             continue
         cmd, target = words[0], ALIASES.get(words[1], words[1]) if len(words) > 1 else "all"
