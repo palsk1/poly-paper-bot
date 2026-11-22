@@ -28501,3 +28501,11 @@
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNETFLIXRANKSHOWGLOBAL2-26NOV23-TAK", "track": "kalshi_patient", "ts": "2026-11-22T01:54:14Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXETHD-26NOV2717-T1339.99", "track": "kalshi_patient", "ts": "2026-11-22T01:54:14Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXNCAAMB1H-26NOV21DUKEWSU-DUKE", "track": "kalshi_patient", "ts": "2026-11-22T01:54:14Z", "type": "kpatient_order"}
+{"minutes_left": 0.95, "price": 0.998, "queue": 0.01, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:03Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.998, "queue": 0.01, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T01:59:03Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.998, "queue": 0.01, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T01:59:03Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.972, "queue": 492.0, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:04Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.972, "queue": 492.0, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T01:59:04Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.951, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:04Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.952, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:05Z", "type": "kmaker_order"}
+{"minutes_left": 0.95, "price": 0.952, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T01:59:06Z", "type": "kmaker_order"}
