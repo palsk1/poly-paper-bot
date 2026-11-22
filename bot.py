@@ -4111,6 +4111,10 @@ def ktennis_scan(series):
             break
     live = [e for e in evs.values() if e.get("ms") and e.get("start")
             and e["start"] - dt.timedelta(minutes=15) <= t_now <= e["start"] + dt.timedelta(hours=8)]
+    if VERBOSE:
+        nxt = sorted(e["start"] for e in evs.values() if e.get("start"))
+        print(f"   {len(live)} matches inside their playing window; start times from {iso(nxt[0]) if nxt else '-'} to {iso(nxt[-1]) if nxt else '-'}, "
+              f"next after now: {next((iso(x) for x in nxt if x > t_now), '-')}")
     got = []
     try:
         for i in range(0, len(live), 50):
@@ -4125,6 +4129,8 @@ def ktennis_scan(series):
             except Exception:
                 pass
     by_ms = {e["ms"]: e for e in live}
+    if VERBOSE:
+        print(f"   live scores read: {len(got)} for {len(live)} matches" + (f", e.g. {json.dumps(got[0])[:500]}" if got else ""))
     out = []
     for ld in got:
         e = by_ms.get((ld or {}).get("milestone_id")) if isinstance(ld, dict) else None
@@ -4257,7 +4263,7 @@ def ktennistest():
     VERBOSE = True
     tracks = load_tracks()
     names = ktennis_names()
-    rows, n_open = ktennis_scan({s for n in names for s in rules_for(n).get("series", [])})
+    rows, n_open = ktennis_scan({s for n in names for s in rules_for(n).get("series", [])} | {"KXITFMATCH", "KXITFWMATCH"})   # ITF too, only to see more live scores in the dry run
     print(f"{n_open} open tennis matches, {len(rows)} with a live score right now")
     for e in rows:
         pair = ktennis_codes(e["ev"], sorted(e["mk"]))

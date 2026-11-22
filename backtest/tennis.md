@@ -17,7 +17,7 @@ at most $300, and gets a paper test before any real money.
    A second, stricter clock keeps the women's lead (+$5.46 per $100 on 720 bets) and kills the men's (-$0.94).
    Exam verdict: **Promising, needs more bets**. Found by looking, so it needs a live paper test.
 
-No track was built. Research mode: Jan decides.
+**23 Nov: Jan said "yes build a paper track".** Two paper tracks run it live on Kalshi since then: `tennis_set_w` (women's main tour) and `tennis_set` (all four tours), $300 each, $25 a bet. They read Kalshi's own live score and look once per match, right after set 1. Proposed pass rule: PROTOCOL 5i (not locked).
 
 ## What exists (both sites)
 
@@ -138,7 +138,9 @@ possible bet: one share, about 68c. So it fits $300, and it fits $100 with $10 b
 
 ## 4. Polymarket
 
-Not scored yet. Polymarket keeps no ask history, so the test re-buys the same set-1 moments at the worst price anyone paid in the next 3 minutes + 1c + fee (`tennis.py pmreport`). The download of 120 days of match-winner trades (`ten_pm_120`) was still running when this was written; the result is added here when it is in.
+Polymarket keeps no ask history, so the test re-buys the same set-1 moments at the worst price anyone paid in the next 3 minutes + 1c + fee (`tennis.py pmreport`).
+
+First check, 7 days of matches (Polymarket's list stops handing out older ones in one go): 76 bets, -$12.25 per $100. The same matches on Kalshi: -$6.07 on 67 bets. A bad week on both sites, and far too few bets to say anything. A wider download (`ten_pm_150`, in 4-day pieces) was still running when the tracks were built; the paper tracks are Kalshi only.
 
 What is known: same matches, a slightly lower fee (about 1.1c a share at 68c against 1.5c on Kalshi), and its own score feed is just as late.
 

@@ -168,6 +168,23 @@ bets at real offers can settle it.
   really fits.
 - **Anything else:** not proven, keep it on paper.
 
+## 5i. Proposed live test: tennis_set_w + tennis_set (written 2026-11-23, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`tennis.py`, `backtest/tennis.md`). The history says +$6.96 per $100 on 1,402
+women's main tour bets and +$2.45 per $100 on 6,469 bets on all four tours, "Promising, needs more bets". Found by
+looking (130 cuts), and gone when each share costs 2c more. Only live bets at real offers can settle it.
+
+- **What counts:** every finished bet of each track from its first run, rules as in config (a rule change restarts
+  the count). The two tracks are scored separately; the women's matches are in both.
+- **When:** `tennis_set_w` once, at 300 finished bets (about 4 a day in season and almost none in December, so
+  around April 2027). `tennis_set` once, at 1,000 finished bets (about 12 a day, so around March 2027). On
+  1 Jan 2027 there is a first look, which only says "on track" or "off track".
+- **Pass:** `tennis_set_w`: ahead, and the low end of the luck range above -$5 per $100. `tennis_set`: ahead, and
+  the low end of the luck range above -$2 per $100 (more bets, so a tighter bar).
+- **Side check:** the live bot buys 0 to about 15 minutes after the set (the history test: 7 minutes). Compare the
+  price really paid with the history's 63c average, and the "what $10 / $25 / $50 / $100 would have bought" numbers.
+- **Anything else:** not proven, keep it on paper.
+
 ## 6. Keep it simple
 
 Rule-based only. No machine learning on top of a signal that hasn't passed 1-4: it would just fit the noise better.
