@@ -413,7 +413,7 @@ def rows_of(days):
                 else:         # asker bought No (or sold Yes back); the house bought Yes at yp
                     cost, back = n * yp, n * sv
                 out.append({"ts": ts, "tk": tk, "yp": yp, "n": n, "tyes": tyes, "sv": sv, "nlegs": len(legs),
-                            "kind": kind_of(c["legs"]), "same": len(set(games)) < len(games), "slice": sl["a"],
+                            "kind": kind_of(c["legs"]), "same": len(set(games)) < len(games), "slice": sl["a"], "d0": d["d0"],
                             "prod": prod_mid if full else None, "prod_ask": prod_ask if full else None,
                             "cost": cost, "back": back, "mfee": fee(MAKER_RATE, n, yp), "tfee": fee(TAKER_RATE, n, yp),
                             "paid": n * yp if tyes else n * (1 - yp), "lock": max(0, (c.get("set") or ts) - ts),
@@ -481,6 +481,39 @@ def undercut(rows, margin, lo=2, hi=4):
         n = r["n"]
         out.append(dict(r, cost=n * (1 - q), back=n * (1 - r["sv"]), mfee=fee(MAKER_RATE, n, q), paid=n * q, q=q))
     return out
+
+
+FIRST_A, FIRST_B = "2026-11-06", "2026-11-17"      # the days looked at before backtest/kcombos_prereg.md was written
+
+
+def is_first(r):
+    return FIRST_A <= time.strftime("%Y-%m-%d", time.gmtime(r["d0"])) <= FIRST_B
+
+
+def buyer_bets(rows, equal=False):
+    """The asker's chair: pays price + the taker fee, gets $1 a contract if the combo wins. equal = every ticket $1."""
+    out = []
+    for r in rows:
+        cost, pay = r["paid"] + r["tfee"], r["n"] * r["sv"]
+        if equal:
+            cost, pay = 1.0, pay / cost
+        out.append({"ev": f"{r['slice']}", "t": r["ts"], "cost": cost, "pay": pay})
+    return out
+
+
+def b100(bs):
+    c = sum(b["cost"] for b in bs)
+    return 100 * sum(b["pay"] - b["cost"] for b in bs) / c if c else 0.0
+
+
+def buyer_table(yes):
+    L = ["| buyer's price | trades | combos that won | buyer profit per $100 spent, after the fee | the same, every ticket counted alike |",
+         "|---|---|---|---|---|"]
+    for b in BANDS:
+        g = [r for r in yes if price_band(r) == b]
+        if g:
+            L.append(f"| {b} | {len(g):,} | {sum(1 for r in g if r['sv'] >= 1):,} | {usd(b100(buyer_bets(g)))} | {usd(b100(buyer_bets(g, True)))} |")
+    return L + [""]
 
 
 def run(score="1"):
@@ -560,6 +593,38 @@ def run(score="1"):
             L.append(f"| +{mg * 100:.0f}% | {len(g):,} | {len(base):,} | {usd(per100(g))} | {usd(100 * net / sum(r['paid'] for r in g))} | "
                      f"{sum(1 for r in g if r['back'] > r['cost']):,} of {len(g):,} |")
     L += [""]
+    # the backward look: start from who won
+    old = [r for r in yes if is_first(r)]
+    new = [r for r in yes if not is_first(r)]
+    L += ["## The backward look: who did win?", "",
+          "Same trades from the buyer's chair (price + the buyer's fee, $1 a contract if the combo wins). First the days "
+          f"we looked at first ({FIRST_A[8:]}-{FIRST_B[8:]} Nov, {len(old):,} trades):", ""]
+    L += buyer_table(old)
+    hi_old = [r for r in old if r["yp"] >= 0.65]
+    L += [f"Long shots lose for buyers, as everywhere. The surprise is the top: buyers of nearly-sure combos (65c+) were "
+          f"ahead, {usd(b100(buyer_bets(hi_old)))} per $100 spent on {len(hi_old):,} trades. Found by looking (about 30 cuts), so "
+          "the rule was written down (`backtest/kcombos_prereg.md`) and tested on days it had never seen.", ""]
+    if new:
+        hi = [r for r in new if r["yp"] >= 0.65]
+        small = [r for r in hi if r["paid"] <= 50]
+        days_new = sorted({time.strftime("%d %b", time.gmtime(r["d0"])) for r in new}, key=lambda x: time.strptime(x + " 2026", "%d %b %Y"))
+        L += [f"### The fresh days ({days_new[0]} to {days_new[-1]}, {len(days_new)} days, {len(new):,} Yes trades)", ""]
+        L += buyer_table(new)
+        L += ["| test (fixed before the download) | trades | result per $100 | first sample |", "|---|---|---|---|",
+              f"| 1. Buyers at 65c+, dollars as they were | {len(hi):,} | {usd(b100(buyer_bets(hi)))} | {usd(b100(buyer_bets(hi_old)))} |",
+              f"| 2. Buyers at 65c+, tickets up to $50, every ticket alike | {len(small):,} | {usd(b100(buyer_bets(small, True)))} | "
+              f"{usd(b100(buyer_bets([r for r in hi_old if r['paid'] <= 50], True)))} |",
+              f"| 3. House side, all Yes trades, per $100 of tickets | {len(new):,} | "
+              f"{usd(100 * sum(r['back'] - r['cost'] - r['mfee'] for r in new) / sum(r['paid'] for r in new))} | "
+              f"{usd(100 * sum(r['back'] - r['cost'] - r['mfee'] for r in old) / max(1e-9, sum(r['paid'] for r in old)))} |", ""]
+        if score == "1":
+            L += ["```"]
+            for name, bs in (("Kalshi combos: buy nearly-sure combos (65c+), fresh days", buyer_bets(hi)),
+                             ("Kalshi combos: buy nearly-sure combos (65c+), small tickets, fresh days", buyer_bets(small, True))):
+                c = exam.score(bs, name, tries=2, prereg=True, src="kcombos.py",
+                               note="rule fixed in backtest/kcombos_prereg.md before the fresh days were downloaded")
+                L += [exam.card_text(c), ""]
+            L += ["```", ""]
     # time locked
     L += ["## How long is the money locked?", "", "| kind | middle | longest quarter from |", "|---|---|---|"]
     for k in ("crypto 15-min", "sports and other", "mixed with crypto"):
