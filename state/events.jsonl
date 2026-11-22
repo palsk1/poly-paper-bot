@@ -28522,3 +28522,4 @@
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXMLSSCORE-26NOV21MIACLB-MIA4CLB2", "track": "kalshi_patient", "ts": "2026-11-22T02:11:04Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXTOPUSAGEAI-26NOV16-TENC", "track": "kalshi_patient", "ts": "2026-11-22T02:11:08Z", "type": "kpatient_fill"}
 {"annual": 0.191, "edge": 0.0221, "pair": "KXTRUMPFLAVIOMEET-26DEC01-JAN01|will-trump-meet-with-flavio-bolsonaro-in-2026", "title": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?", "track": "arb", "ts": "2026-11-22T02:12:30Z", "type": "arb_opportunity"}
+{"fee": 0.0023, "outcome": "No", "price": 0.951, "shares": 5, "title": "Will the price of Bitcoin be above $62,000 on November 22?", "token": "77285815269626831986561620927141139441568043144307405303500513216734687383652", "track": "endgame_sell98", "ts": "2026-11-22T02:22:24Z", "type": "paper_buy"}
