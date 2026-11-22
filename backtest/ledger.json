@@ -2014,6 +2014,262 @@
    "src": "kdocs.py run"
   },
   {
+   "id": "arena_leaderboard_bets_polymarket_yes_where_the_boards_own_c",
+   "date": "2026-11-22",
+   "what": "Arena leaderboard bets (Polymarket): Yes where the boards' own change record is 10c+ above the price",
+   "tries": 150,
+   "bets": 81,
+   "groups": 59,
+   "per100": 16.39,
+   "floor100": -75.8,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "arena_leaderboard_bets_polymarket_no_where_the_boards_own_ch",
+   "date": "2026-11-22",
+   "what": "Arena leaderboard bets (Polymarket): No where the boards' own change record is 10c+ below the price",
+   "tries": 150,
+   "bets": 131,
+   "groups": 85,
+   "per100": 0.6,
+   "floor100": -18.33,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "arena_leaderboard_bets_polymarket_yes_on_the_name_already_ho",
+   "date": "2026-11-22",
+   "what": "Arena leaderboard bets (Polymarket): Yes on the name already holding the place, 50-97c, last 3 days",
+   "tries": 150,
+   "bets": 39,
+   "groups": 39,
+   "per100": 4.31,
+   "floor100": -15.18,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "arena_leaderboard_bets_polymarket_yes_on_the_holder_priced_3",
+   "date": "2026-11-22",
+   "what": "Arena leaderboard bets (Polymarket): Yes on the holder priced 3-50c with 2+ weeks left",
+   "tries": 150,
+   "bets": 56,
+   "groups": 48,
+   "per100": 5.6,
+   "floor100": -80.94,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "arena_leaderboard_bets_kalshi_fresh_check_yes_on_the_name_al",
+   "date": "2026-11-22",
+   "what": "Arena leaderboard bets (Kalshi, fresh check): Yes on the name already holding first place, ask 50-97c, last 3 days",
+   "tries": 2,
+   "bets": 102,
+   "groups": 101,
+   "per100": -2.29,
+   "floor100": -8.11,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "ai_release_day_bets_polymarket_no_where_yes_is_10_50c_after_",
+   "date": "2026-11-22",
+   "what": "AI release-day bets (Polymarket): No where Yes is 10-50c after the first third of the market's life",
+   "tries": 260,
+   "bets": 40,
+   "groups": 23,
+   "per100": 1.92,
+   "floor100": -21.01,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "live_endgame_sell98",
+   "what": "Live paper: endgame 95-97c, sell at 98.5c (endgame_sell98, lab)",
+   "per100": -2.56,
+   "bets": 740,
+   "groups": 740,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_sbel",
+   "what": "Live paper: copy weather wallet sbel (w_ and wb_ twins)",
+   "per100": -20.25,
+   "bets": 105,
+   "groups": 105,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_hellyeahtrader",
+   "what": "Live paper: copy weather wallet HellYeahTrader (w_ and wb_ twins)",
+   "per100": -28.09,
+   "bets": 57,
+   "groups": 57,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "live_copy_bigggggggg",
+   "what": "Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins)",
+   "per100": -10.04,
+   "bets": 78,
+   "groups": 78,
+   "date": "2026-11-22",
+   "tries": 1,
+   "verdict": "Losing",
+   "status": "hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan)",
+   "src": "state/summary.md, LEARNINGS.md"
+  },
+  {
+   "id": "openrouter_weekly_token_total_kalshi_yes_where_the_public_da",
+   "date": "2026-11-22",
+   "what": "OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask",
+   "tries": 150,
+   "bets": 53,
+   "groups": 7,
+   "per100": -31.92,
+   "floor100": -100.0,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "openrouter_weekly_token_total_kalshi_no_where_the_public_dai",
+   "date": "2026-11-22",
+   "what": "OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid",
+   "tries": 150,
+   "bets": 54,
+   "groups": 8,
+   "per100": -15.31,
+   "floor100": -100.0,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_vercel_ai_gateway_daily_shares_always_y",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 1727,
+   "groups": 47,
+   "per100": -38.17,
+   "floor100": -53.79,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_vercel_ai_gateway_daily_shares_always_n",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), Vercel AI Gateway daily shares: always No, Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 1632,
+   "groups": 47,
+   "per100": -18.95,
+   "floor100": -37.9,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_openrouter_weekly_share_of_a_lab_always",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), OpenRouter weekly share of a lab: always No, Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 573,
+   "groups": 14,
+   "per100": -18.82,
+   "floor100": -61.6,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_openrouter_weekly_token_total_always_ye",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), OpenRouter weekly token total: always Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 180,
+   "groups": 13,
+   "per100": -29.52,
+   "floor100": -73.49,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_openrouter_weekly_token_total_always_no",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), OpenRouter weekly token total: always No, Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 182,
+   "groups": 13,
+   "per100": 0.37,
+   "floor100": -100.0,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_monthly_app_downloads_always_yes_at_3_9",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), monthly app downloads: always Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 526,
+   "groups": 3,
+   "per100": -25.37,
+   "floor100": -100.0,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "usage_ladders_kalshi_monthly_app_downloads_always_no_yes_at_",
+   "date": "2026-11-22",
+   "what": "Usage ladders (Kalshi), monthly app downloads: always No, Yes at 3-97c, first look",
+   "tries": 150,
+   "bets": 535,
+   "groups": 3,
+   "per100": -19.95,
+   "floor100": -100.0,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "openrouter_lab_share_kalshi_yes_at_15_85c_on_the_first_day_o",
+   "date": "2026-11-22",
+   "what": "OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week",
+   "tries": 150,
+   "bets": 239,
+   "groups": 11,
+   "per100": 40.36,
+   "floor100": -50.45,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "aim.py, backtest/aim.md"
+  },
+  {
    "id": "kalshi_combos_buy_nearly_sure_combos_65c_fresh_days",
    "date": "2026-11-22",
    "what": "Kalshi combos: buy nearly-sure combos (65c+), fresh days",
@@ -2024,7 +2280,7 @@
    "floor100": -16.17,
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   },
   {
    "id": "kalshi_combos_buy_nearly_sure_combos_65c_small_tickets_fresh",
@@ -2037,7 +2293,7 @@
    "floor100": -21.88,
    "verdict": "Losing",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   },
   {
    "id": "kalshi_combo_house_every_yes_trade_the_pros_sold",
@@ -2050,7 +2306,7 @@
    "floor100": -14.77,
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   },
   {
    "id": "kalshi_combo_house_sports_every_leg_a_different_game",
@@ -2063,7 +2319,7 @@
    "floor100": -1.56,
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   },
   {
    "id": "kalshi_combo_house_crypto_15_min_combos",
@@ -2076,7 +2332,7 @@
    "floor100": -1.52,
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   },
   {
    "id": "kalshi_combo_house_our_rule_legs_x_1_05_2_4_legs",
@@ -2089,7 +2345,7 @@
    "floor100": -5.39,
    "verdict": "Behind, but could be bad luck",
    "status": "dropped",
-   "src": "kcombos.py"
+   "src": "kcombos.py, backtest/kcombos.md"
   }
  ]
 }

@@ -55,6 +55,9 @@ def test_sign():
 
 
 # ---------------------------------------------------------------- Kalshi place + settle
+BREAK = [[{"exchange_index": 0, "balance": "0.0000"}, {"exchange_index": 2, "balance": "30.0000"}]]
+
+
 def kalshi_fakes(t_close):
     def http_json(url, params=None, retries=3):
         if "/klines" in url:      # Binance: price far above the strike, small moves -> big z
@@ -103,9 +106,11 @@ def test_kalshi():
     def kreq(method, path, body=None, params=None):
         sent.append((method, path, body))
         if path == "/portfolio/balance":
-            return 200, {"balance": 3000, "balance_dollars": "30.00"}
+            return 200, {"balance": 3000, "balance_dollars": "30.00", "balance_breakdown": BREAK[0]}
+        if method == "POST" and path == "/portfolio/orders":      # the old address: switched off by Kalshi
+            return 410, {"error": {"code": "deprecated_v1_order_endpoint"}}
         if method == "POST":
-            return 201, {"order": {"order_id": "abc", "status": "resting"}}
+            return 201, {"order_id": "abc", "fill_count": "0.00", "remaining_count": "4.00", "ts_ms": 1}
         if path == "/portfolio/orders/abc":
             return 200, {"order": {"fill_count_fp": "4.00", "maker_fill_cost_dollars": "3.884",
                                    "taker_fill_cost_dollars": "0", "maker_fees_dollars": "0", "taker_fees_dollars": "0"}}
@@ -117,9 +122,14 @@ def test_kalshi():
     kalshi_fakes(close)
     K.place(book)
     post = [b for m, p, b in sent if m == "POST"]
-    check(len(post) == 1 and post[0]["post_only"] and post[0]["yes_price_dollars"] == "0.9710"
-          and post[0]["count"] == 4 and post[0]["expiration_ts"] == int(close.timestamp())
-          and post[0]["cancel_order_on_pause"], "Kalshi live bid is post-only, dies at the close, cancels on pause")
+    check(len(post) == 1 and [p for m, p, b in sent if m == "POST"] == ["/portfolio/events/orders"]
+          and post[0]["post_only"] and post[0]["side"] == "bid" and post[0]["price"] == "0.9710"
+          and post[0]["count"] == "4.00" and post[0]["expiration_time"] == int(close.timestamp())
+          and post[0]["time_in_force"] == "good_till_canceled" and post[0]["cancel_order_on_pause"]
+          and "abc" == book.state["open"]["KXBTC15M-T1"]["order_id"],
+          "Kalshi live bid uses the new order form: post-only, dies at the close, cancels on pause")
+    nb = K.order_body("T", "no", 0.994, 4, close)
+    check(nb["side"] == "ask" and nb["price"] == "0.0060", "a No bid at 99.4c goes in as 'sell Yes at 0.6c' (same thing)")
     at(46, 30)
     bot._kalshi_cache.clear()
     bot.http_json = (lambda f: lambda url, params=None, retries=3: (
@@ -127,6 +137,18 @@ def test_kalshi():
     K.settle(book)
     check(abs(book.state["realized"] + 3.884) < 1e-6 and book.state["lost"] == 1,
           "Kalshi live loss is booked from the real order (4 filled, -$3.88)")
+
+    # Kalshi pays a bot's bid only from the Crypto part of the account: money parked elsewhere = no bid sent
+    BREAK[0] = [{"exchange_index": 0, "balance": "30.0000"}, {"exchange_index": 2, "balance": "0.0000"}]
+    bookw = C.Book("kalshi-wrong")
+    at(26, 0)
+    kalshi_fakes(at(26, 0).replace(minute=30))
+    n_post = len([1 for m, p, b in sent if m == "POST"])
+    K.place(bookw)
+    check(K.balances() == (30.0, 0.0) and not bookw.state["open"]
+          and len([1 for m, p, b in sent if m == "POST"]) == n_post,
+          "money in the wrong part of the Kalshi account: no bid is sent (and the phone hears why)")
+    BREAK[0] = [{"exchange_index": 0, "balance": "0.0000"}, {"exchange_index": 2, "balance": "30.0000"}]
 
     # caps: open-money cap and the total-loss stop
     os.environ["KALSHI_MAX_OPEN_USD"] = "3"
@@ -165,6 +187,9 @@ def test_poly():
           + (f"{o['shares']} shares at {o['ask'] * 100:.1f}c" if o else "none"))
     check(len(book.state["open"]) == len(half) and not any(s in book.state["open"] for s in slugs if not P.take(s)),
           "Polymarket skips the other half")
+    os.environ["POLY_TAKE"] = "all"
+    check(all(P.take(s) for s in slugs), "with POLY_TAKE=all every signal is taken, like the paper track")
+    os.environ.pop("POLY_TAKE")
 
     bot.book = lambda tok: {"asks": [(0.22, 100)], "bids": [], "min_size": 5}
     b2 = C.Book("poly2")
@@ -187,7 +212,8 @@ def test_poly():
 
         def list_positions(self, status):
             rows = [SimpleNamespace(condition_id="0xc", current_value=6, title="A vs B draw"),
-                    SimpleNamespace(condition_id="0xold", current_value=3, title="an old win")]
+                    SimpleNamespace(condition_id="0xold", current_value=3, title="an old win"),
+                    SimpleNamespace(condition_id="0xlost", current_value=0, title="an old lost bet, pays $0")]
             # like the real kit: walking the answer gives pages, the rows come from iter_items()
             return SimpleNamespace(iter_items=lambda: iter(rows), __iter__=lambda: iter([rows]))
 
@@ -209,9 +235,33 @@ def test_poly():
     P.settle(b3)
     red = [c["redeem"] for c in calls if "redeem" in c]
     check(b3.state["won"] == 3 and b3.state["realized"] > 0 and red == ["0xc", "0xold"],
-          "Polymarket settles won draws, then claims every claimable win (old ones too), once each")
+          "Polymarket settles won draws, then claims every claimable win (old ones too), once each, and skips lost bets worth $0")
     del os.environ["POLY_RELAYER_KEY"]
     check(key in b3.state["done"], "a settled market is never bought again")
+    os.environ.pop("LIVE")
+
+
+def test_privacy():
+    b = C.Book("privacy")
+    addr, tx = "0x5c5d46356267CA22F90FA2d4A3B6EC4880B68E0f", "0x" + "ab12" * 16
+    b.log("claimed", condition_id=tx, result=f"sent {tx} from {addr}", wallet=addr, nested={"maker": addr})
+    line = open(os.path.join(TMP, "privacy-" + C.utcnow().strftime("%Y%m") + ".jsonl")).read()
+    check(addr not in line and addr.lower() not in line.lower().replace(tx, "") and line.count(tx) == 1,
+          "the public notebook never holds a wallet address or payment number (market ids stay)")
+
+
+def test_mode_switch():
+    os.environ.pop("LIVE", None)
+    b = C.Book("switch")
+    b.state["open"]["x"] = {"cost": 3.0}
+    b.state["bets"] = 7
+    b.save()
+    check(C.Book("switch").state["bets"] == 7, "a restart in the same mode keeps the notebook")
+    os.environ["LIVE"] = "yes"
+    b2 = C.Book("switch")
+    kept = [f for f in os.listdir(TMP) if f.startswith("switch-pretend-until-")]
+    check(b2.state["bets"] == 0 and not b2.state["open"] and len(kept) == 1,
+          "switching to real money starts a clean notebook: pretend bets don't count as real or use up the caps")
     os.environ.pop("LIVE")
 
 
@@ -262,9 +312,28 @@ def test_phone():
     del os.environ["NTFY_CONTROL"]
 
 
+def test_balance():
+    import json as _j
+    b = C.Book("balance")
+    C._beat["t"] = 0
+
+    def boom():
+        raise RuntimeError("site down")
+    C.beat(b, 0.1, balance_fn=lambda: {"balance": 30.004, "balance_crypto": 29.5})
+    C._beat["t"] = 0
+    C.beat(b, 0.1, balance_fn=boom)
+    rows = [_j.loads(x) for x in open(os.path.join(C.DIR, f"balance-{C.utcnow().strftime('%Y%m')}.jsonl")) if x.strip()]
+    al = [r for r in rows if r["k"] == "alive"]
+    check(len(al) == 2 and al[0]["balance"] == 30.0 and al[0]["balance_crypto"] == 29.5 and "balance" not in al[1],
+          "the alive line carries the real balance, and a failed balance read never stops the bot")
+
+
 if __name__ == "__main__":
     test_sign()
+    test_balance()
     test_phone()
+    test_privacy()
+    test_mode_switch()
     test_kalshi()
     test_poly()
     for w in OK:

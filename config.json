@@ -391,6 +391,7 @@
       "rules": "endgame_97"
     },
     "endgame_sell98": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$2.56 per $100 on 740 finished bets at $25 a bet; even the lucky end is -$1.36.",
       "label": "Endgame at 95-97c that sells as soon as the bid hits 98.5c instead of waiting for payout. $500 paper",
       "start_cash": 500,
       "source": "endgame",
@@ -696,6 +697,7 @@
       "rules": "wallet_copy"
     },
     "w_sbel": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$20.25 per $100 on 105 finished bets; lucky end -$5.60.",
       "label": "Copy wallet sbel: weather specialist (pays out daily). Leaderboard profit this month $8,683. 5 shares per copy, no cash limit",
       "start_cash": null,
       "source": "wallet",
@@ -705,6 +707,7 @@
       "rules": "wallet_copy"
     },
     "w_hellyeahtrader": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$28.09 per $100 on 57 finished bets; lucky end -$11.87.",
       "label": "Copy wallet HellYeahTrader: weather specialist (pays out daily). Leaderboard profit this month $21,376. 5 shares per copy, no cash limit",
       "start_cash": null,
       "source": "wallet",
@@ -759,6 +762,7 @@
       "rules": "wallet_copy"
     },
     "w_bigggggggg": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$10.04 per $100 on 78 finished bets; lucky end -$5.30.",
       "label": "Copy wallet Bigggggggg: election-month hot hand: does it last?. Leaderboard profit this month $1,866,419. 5 shares per copy, no cash limit",
       "start_cash": null,
       "source": "wallet",
@@ -1102,6 +1106,7 @@
       "backfill": true
     },
     "wb_sbel": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$23.59 per $100 on 111 finished bets; lucky end -$9.48.",
       "label": "Copy wallet sbel, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_sbel. No cash limit",
       "start_cash": null,
       "source": "wallet",
@@ -1112,6 +1117,7 @@
       "backfill": true
     },
     "wb_hellyeahtrader": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$28.14 per $100 on 76 finished bets; lucky end -$14.89.",
       "label": "Copy wallet HellYeahTrader, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_hellyeahtrader. No cash limit",
       "start_cash": null,
       "source": "wallet",
@@ -1172,6 +1178,7 @@
       "backfill": true
     },
     "wb_bigggggggg": {
+      "hidden": "2026-11-22: clear loser, hidden from the dashboard (still runs, lab frozen to 1 Jan). -$11.85 per $100 on 86 finished bets; lucky end -$6.61.",
       "label": "Copy wallet Bigggggggg, filled up: starts by buying 5 shares of each of its (up to 30 biggest) open positions at today's price, then copies new ones like w_bigggggggg. No cash limit",
       "start_cash": null,
       "source": "wallet",

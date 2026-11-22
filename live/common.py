@@ -16,6 +16,7 @@ import datetime as dt
 import gzip
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -65,6 +66,23 @@ def today():
     return utcnow().strftime("%Y-%m-%d")
 
 
+# Privacy (22 Nov): the notebook goes to a PUBLIC release, so nothing in it may point at Jan's wallet. Every
+# wallet address, order number or payment number (0x + 40 or more hex characters) is cut to its last 4 characters.
+# Market ids are public and say nothing about who bet, so they stay.
+PUBLIC_IDS = {"condition_id", "token"}
+_HEX = re.compile(r"0x[0-9a-fA-F]{40,}")
+
+
+def scrub(v):
+    if isinstance(v, str):
+        return _HEX.sub(lambda m: "0x.." + m.group(0)[-4:], v)
+    if isinstance(v, dict):
+        return {k: (x if k in PUBLIC_IDS else scrub(x)) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [scrub(x) for x in v]
+    return v
+
+
 class Book:
     """The bot's own notebook: state file (what is open, money so far) + an append-only log (one line per event)."""
 
@@ -76,7 +94,16 @@ class Book:
                       "started": iso()}
         if os.path.exists(self.state_path):
             with open(self.state_path) as f:
-                self.state.update(json.load(f))
+                old = json.load(f)
+            if old.get("live", False) != is_live():
+                # Pretend bets and real bets never share a notebook page (22 Nov): on a switch between pretend
+                # mode and real money the old page is put aside and the count starts from zero. Otherwise
+                # pretend bets would use up the real caps and be counted as real wins and losses.
+                os.replace(self.state_path, os.path.join(
+                    DIR, f"{name}-{'real' if old.get('live') else 'pretend'}-until-{utcnow().strftime('%Y%m%dT%H%M%S')}.json"))
+            else:
+                self.state.update(old)
+        self.state["live"] = is_live()
 
     def save(self):
         tmp = self.state_path + ".tmp"
@@ -85,6 +112,7 @@ class Book:
         os.replace(tmp, self.state_path)
 
     def log(self, kind, **kw):
+        kw = {k: (v if k in PUBLIC_IDS else scrub(v)) for k, v in kw.items()}
         row = {"t": iso(), "k": kind, "live": is_live(), **kw}
         with open(os.path.join(DIR, f"{self.name}-{utcnow().strftime('%Y%m')}.jsonl"), "a") as f:
             f.write(json.dumps(row, separators=(",", ":")) + "\n")
@@ -183,6 +211,7 @@ def push(title, body):
 
 # ---------------------------------------------------------------- phone control (Jan, 22 Nov: "make it easy")
 CTRL_EVERY = 20
+UPLOAD_S = 900      # copy the notebook to GitHub every 15 minutes (was hourly: too slow to watch the first real bets)
 NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
            "all": "all", "both": "all", "bots": "all"}
@@ -192,9 +221,24 @@ _ctrl = {"t": 0}
 _beat = {"t": 0, "n": 0, "slow": 0.0}
 
 
-def beat(book, took, every=600):
+def read_balance(fn):
+    """{'balance': dollars, ...} from the bot's own balance reader, or {} when it fails: a failed read never
+    stops a bot (Jan, 22 Nov: "why can't I see my Kalshi balance" -> the dashboard shows the newest one)."""
+    if fn is None:
+        return {}
+    try:
+        v = fn()
+        if isinstance(v, dict):
+            return {k: round(float(x), 2) for k, x in v.items()}
+        return {"balance": round(float(v), 2)}
+    except Exception as e:
+        print(f"balance read failed: {type(e).__name__}: {e}"[:200], flush=True)
+        return {}
+
+
+def beat(book, took, every=600, balance_fn=None):
     """A sign of life every 10 minutes (Jan, 22 Nov: a quiet bot looks like a dead one): rounds done, the slowest
-    round, and whether the phone channel is set. Never prints the channel's name."""
+    round, whether the phone channel is set, and the real account balance. Never prints the channel's name."""
     _beat["n"] += 1
     _beat["slow"] = max(_beat["slow"], took)
     if time.time() - _beat["t"] < every:
@@ -203,7 +247,7 @@ def beat(book, took, every=600):
     _beat["t"] = time.time()
     book.log("alive", rounds=_beat["n"], slowest_round_s=round(_beat["slow"], 1),
              phone="on" if os.environ.get("NTFY_CONTROL") else "OFF (no NTFY_CONTROL in ~/.live.env)",
-             **({"note": "first round done"} if first else {}))
+             **read_balance(balance_fn), **({"note": "first round done"} if first else {}))
     _beat["n"], _beat["slow"] = 0, 0.0
 
 
