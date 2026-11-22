@@ -300,8 +300,10 @@ function niceTicks(lo, hi, n = 4) {
 
 function curveChart(el, t) {
   const p = points(t);
+  // optional second line (real-money cards: the paper twin over the same time)
+  const p2 = t.curve2 && t.curve2.length ? t.curve2.map(([ts, v]) => [new Date(ts + ":00Z").getTime(), v]) : null;
   const W = Math.max(300, el.clientWidth || 320), H = 200, L = 46, R = 10, T = 10, B = 24;
-  const xs = p.map(a => a[0]), ys = p.map(a => a[1]).concat([0]);
+  const xs = p.map(a => a[0]).concat(p2 ? p2.map(a => a[0]) : []), ys = p.map(a => a[1]).concat([0], p2 ? p2.map(a => a[1]) : []);
   const x0 = Math.min(...xs), x1 = Math.max(...xs);
   let y0 = Math.min(...ys), y1 = Math.max(...ys); if (y1 - y0 < 0.5) { y0 -= 0.25; y1 += 0.25; }
   const pad = (y1 - y0) * 0.08; y0 -= pad; y1 += pad;
@@ -317,6 +319,8 @@ function curveChart(el, t) {
     if (X(d) > L + 14 && X(d) < W - R - 14) g += `<text x="${X(d)}" y="${H - 6}" text-anchor="middle">${lab}</text>`;
   }
   // realized profit is a step line (changes only when a trade finishes); the last segment goes to today's total incl. open bets
+  if (p2) { let d2 = ""; p2.forEach((a, i) => { d2 += i ? `H${X(a[0]).toFixed(1)}V${Y(a[1]).toFixed(1)}` : `M${X(a[0]).toFixed(1)} ${Y(a[1]).toFixed(1)}`; });
+    g += `<path d="${d2}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-dasharray="5 3" stroke-linejoin="round"/>`; }
   const real = p.slice(0, -1);
   let d = ""; real.forEach((a, i) => { d += i ? `H${X(a[0]).toFixed(1)}V${Y(a[1]).toFixed(1)}` : `M${X(a[0]).toFixed(1)} ${Y(a[1]).toFixed(1)}`; });
   const lr = real[real.length - 1], now = p[p.length - 1];
@@ -325,7 +329,7 @@ function curveChart(el, t) {
   g += `<circle cx="${X(now[0])}" cy="${Y(now[1])}" r="4.5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>`;
   g += `<line id="xh" y1="${T}" y2="${H - B}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/><circle id="xd" r="4" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="Profit over time for ${esc(t.name)}">${g}<rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/></svg>
-    <div class="legend">${t.legend ? `<span>${esc(t.legend)}</span>` : `<span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span>`}</div>`;
+    <div class="legend">${t.legendHtml ? t.legendHtml : t.legend ? `<span>${esc(t.legend)}</span>` : `<span>Solid line: profit from finished bets</span><span>Dotted: counting open bets at today's price (${money(now[1])})</span>`}</div>`;
   const svg = el.querySelector("svg"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
   const move = ev => {
     const r = svg.getBoundingClientRect(), mx = (ev.clientX - r.left) * W / r.width;
@@ -333,8 +337,9 @@ function curveChart(el, t) {
     const a = p[best];
     xh.setAttribute("x1", X(a[0])); xh.setAttribute("x2", X(a[0])); xh.setAttribute("visibility", "visible");
     xd.setAttribute("cx", X(a[0])); xd.setAttribute("cy", Y(a[1])); xd.setAttribute("visibility", "visible");
-    const label = best === p.length - 1 ? (t.legend ? "now" : "now, counting open bets") : best === 0 ? "start" : "after a bet finished";
-    showTip(`<b>${money(a[1])}</b><br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
+    const label = best === p.length - 1 ? (t.legend || t.legendHtml ? "now" : "now, counting open bets") : best === 0 ? "start" : "after a bet finished";
+    const tw = p2 ? (p2.filter(q => q[0] <= a[0]).pop() || p2[0])[1] : null;
+    showTip(`<b>${money(a[1])}</b>${tw != null ? ` <span class="sub">(paper twin ${money(tw)})</span>` : ""}<br>${esc(stockholm(t.curve[best][0]))}<br><span class="sub">${label}</span>`, ev.clientX, r.top + Y(a[1]) * r.height / H);
   };
   svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
   svg.addEventListener("pointerleave", () => { hideTip(); xh.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); });
@@ -409,11 +414,19 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
       <div class="oneliner">${esc(b.say)}</div>
       <div style="margin-top:6px">${mode}</div>${late}
       <div class="kv">${rows.map(([k, v]) => `<div>${esc(k)}</div><div>${v}</div>`).join("")}</div>
+      ${b.finished && b.curve && b.curve.length > 1 ? `<div class="realchart" data-bot="${esc(b.bot)}" style="margin-top:8px"></div>` : ""}
       ${recent}${open}
       <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>. With this few bets, the result is mostly luck.</p></div>`;
   };
   $("real").innerHTML = `<h2>Real money</h2><p class="note">Your two small bots with real money, on your AWS server. Updated about once an hour.</p>` + L.map(card).join("");
   document.querySelectorAll("#real a[data-twin]").forEach(a => a.onclick = ev => { ev.preventDefault(); openDetail(a.dataset.twin); });
+  // Jan, 22 Nov: "a graph over time for the live bots like I have with the paper strategies"
+  const draw = () => document.querySelectorAll("#real .realchart").forEach(el => {
+    const b = L.find(x => x.bot === el.dataset.bot);
+    curveChart(el, {name: b.label, curve: b.curve, curve2: b.curve2,
+      legendHtml: `<span><b style="color:var(--s1)">━</b> real money: P&L after each finished bet</span><span><b style="color:var(--s2)">╍</b> paper twin, same time</span>`});
+  });
+  draw(); addEventListener("resize", draw);
 })();
 
 // ---------- skill or luck: one plain verdict per strategy
