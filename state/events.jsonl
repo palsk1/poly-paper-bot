@@ -28548,3 +28548,5 @@
 {"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV212130-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T02:33:08Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV212130-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T02:33:08Z", "type": "kmaker_fill"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXCONMEBOLSUDTOTAL-26NOV21ATLBOC-5", "track": "kalshi_patient", "ts": "2026-11-22T02:33:09Z", "type": "kpatient_result"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Bitcoin reach $61,000 on November 21?", "token": "56837027897166259864849066348973351637942412537270383970998845025446520238396", "track": "endgame_sell98", "ts": "2026-11-22T02:38:42Z", "type": "paper_buy"}
+{"fee": 0.0369, "outcome": "Yes", "price": 0.82, "shares": 5, "title": "Will AI solve the Riemann Hypothesis in 2026?", "token": "20749841130196303837148426451451645883604233475151483773090206836677732642979", "track": "panic_fade_4c", "ts": "2026-11-22T02:39:22Z", "type": "paper_buy"}
