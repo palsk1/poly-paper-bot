@@ -187,7 +187,8 @@ def test_poly():
 
         def list_positions(self, status):
             rows = [SimpleNamespace(condition_id="0xc", current_value=6, title="A vs B draw"),
-                    SimpleNamespace(condition_id="0xold", current_value=3, title="an old win")]
+                    SimpleNamespace(condition_id="0xold", current_value=3, title="an old win"),
+                    SimpleNamespace(condition_id="0xlost", current_value=0, title="an old lost bet, pays $0")]
             # like the real kit: walking the answer gives pages, the rows come from iter_items()
             return SimpleNamespace(iter_items=lambda: iter(rows), __iter__=lambda: iter([rows]))
 
@@ -209,7 +210,7 @@ def test_poly():
     P.settle(b3)
     red = [c["redeem"] for c in calls if "redeem" in c]
     check(b3.state["won"] == 3 and b3.state["realized"] > 0 and red == ["0xc", "0xold"],
-          "Polymarket settles won draws, then claims every claimable win (old ones too), once each")
+          "Polymarket settles won draws, then claims every claimable win (old ones too), once each, and skips lost bets worth $0")
     del os.environ["POLY_RELAYER_KEY"]
     check(key in b3.state["done"], "a settled market is never bought again")
     os.environ.pop("LIVE")
