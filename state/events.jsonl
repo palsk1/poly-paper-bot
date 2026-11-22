@@ -28593,3 +28593,5 @@
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXLIGAMXSPREAD-26NOV21SLALEO-LEO3", "track": "kalshi_patient", "ts": "2026-11-22T03:04:33Z", "type": "kpatient_result"}
 {"filled": 0.18, "price": 0.94, "side": "no", "through": true, "ticker": "KXNETFLIXRANKSHOWGLOBAL2-26NOV23-TAK", "track": "kalshi_patient", "ts": "2026-11-22T03:04:34Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "yes", "through": true, "ticker": "KXTEMPNYCHS-26NOV2122-T49.99", "track": "kalshi_patient", "ts": "2026-11-22T03:04:36Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.087, "price": 0.978, "reason": "take profit (now 99c), book", "title": "Will Ethereum reach $1,750 on November 21?", "token": "77191497010838527262911834289248819048792411963321886883883173851549423533304", "track": "endgame_sell98", "ts": "2026-11-22T03:10:46Z", "type": "paper_close"}
+{"cost": 3.9086, "title": "Will the price of Bitcoin be above $62,000 on November 25?", "token": "14347916583664897231158927427150752569739380999308579297902791367140477503444", "track": "crypto_no", "ts": "2026-11-22T03:16:13Z", "type": "skip_no_cash"}
