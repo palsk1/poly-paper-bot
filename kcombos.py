@@ -12,7 +12,8 @@ legs. So the Polymarket combo question (combos.py) can be asked here without a s
   4. how much money does one sold combo lock up (does $30 go anywhere)?
 
     python3 kcombos.py peek            # probe kcb_peek: raw shapes of collections, combo markets, trades, legs
-    python3 kcombos.py fetch [days]    # probe kcb_fetch: settled combo markets, their trades, each leg's minute quotes
+    python3 kcombos.py fetch [days] [moments a day] [start, days back]   # probe kcb_fetch_14_12_17: random moments of
+                                       # Kalshi's public trade list, the combos traded then, their legs and results
     python3 kcombos.py run             # probe kcb_run (or locally, data is in the price store): backtest/kcombos.md
     python3 kcombos.py selftest        # offline
 
@@ -272,14 +273,16 @@ def leg_minutes(tks, t0, t1):
     return out
 
 
-def fetch(days="14", per_day=None):
+def fetch(days="14", per_day=None, start=None):
+    """days = how many days; per_day = moments a day; start = how many days back to begin (default 3)."""
     days = int(days)
     global PER_DAY
     if per_day:
         PER_DAY = int(per_day)
     os.makedirs(CACHE, exist_ok=True)
     today = int(time.time()) // DAY * DAY
-    for back in range(SKIP_DAYS, SKIP_DAYS + days):
+    first = max(SKIP_DAYS, int(start or SKIP_DAYS))
+    for back in range(first, first + days):
         d0 = today - back * DAY
         path = day_path(d0)
         if rj(path):
@@ -463,7 +466,7 @@ BANDS = ["under 1c", "1-5c", "5-15c", "15-35c", "35-65c", "65-90c", "90c+"]
 
 def bets(rows, price=None):
     """Bet list for the exam: one row per trade from the house's chair, grouped by the minute sampled."""
-    return [{"ev": f"{r['slice']}", "t": r["ts"], "cost": r["cost"], "back": r["back"] - r["mfee"]} for r in rows]
+    return [{"ev": f"{r['slice']}", "t": r["ts"], "cost": r["cost"], "pay": r["back"] - r["mfee"]} for r in rows]
 
 
 def undercut(rows, margin, lo=2, hi=4):
