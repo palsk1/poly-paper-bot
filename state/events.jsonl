@@ -29631,3 +29631,7 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV22NYJLAC-LACKVIDAL28-60", "track": "kalshi_patient", "ts": "2026-11-22T14:34:44Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV22TENDAL-DALJMITCHELL84-1", "track": "kalshi_patient", "ts": "2026-11-22T14:34:44Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLRECYDS-26NOV22NOCHI-NOJJOHNSON83-60", "track": "kalshi_patient", "ts": "2026-11-22T14:34:44Z", "type": "kpatient_order"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXF1FASTLAP-LASV26-HAD", "track": "kalshi_patient", "ts": "2026-11-22T14:52:47Z", "type": "kpatient_result"}
+{"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXF1RACE-LASV26-HAM", "track": "kalshi_patient", "ts": "2026-11-22T14:52:47Z", "type": "kpatient_result"}
+{"pnl": 0.7218, "price": 0.91, "shares": 8.02, "side": "yes", "ticker": "KXF1TOP10-LASV26-VER", "track": "kalshi_patient", "ts": "2026-11-22T14:52:47Z", "type": "kpatient_result"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXF1TOPCONSTRUCTOR-LASV26-MCL", "track": "kalshi_patient", "ts": "2026-11-22T14:52:47Z", "type": "kpatient_result"}
