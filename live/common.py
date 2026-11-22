@@ -221,9 +221,24 @@ _ctrl = {"t": 0}
 _beat = {"t": 0, "n": 0, "slow": 0.0}
 
 
-def beat(book, took, every=600):
+def read_balance(fn):
+    """{'balance': dollars, ...} from the bot's own balance reader, or {} when it fails: a failed read never
+    stops a bot (Jan, 22 Nov: "why can't I see my Kalshi balance" -> the dashboard shows the newest one)."""
+    if fn is None:
+        return {}
+    try:
+        v = fn()
+        if isinstance(v, dict):
+            return {k: round(float(x), 2) for k, x in v.items()}
+        return {"balance": round(float(v), 2)}
+    except Exception as e:
+        print(f"balance read failed: {type(e).__name__}: {e}"[:200], flush=True)
+        return {}
+
+
+def beat(book, took, every=600, balance_fn=None):
     """A sign of life every 10 minutes (Jan, 22 Nov: a quiet bot looks like a dead one): rounds done, the slowest
-    round, and whether the phone channel is set. Never prints the channel's name."""
+    round, whether the phone channel is set, and the real account balance. Never prints the channel's name."""
     _beat["n"] += 1
     _beat["slow"] = max(_beat["slow"], took)
     if time.time() - _beat["t"] < every:
@@ -232,7 +247,7 @@ def beat(book, took, every=600):
     _beat["t"] = time.time()
     book.log("alive", rounds=_beat["n"], slowest_round_s=round(_beat["slow"], 1),
              phone="on" if os.environ.get("NTFY_CONTROL") else "OFF (no NTFY_CONTROL in ~/.live.env)",
-             **({"note": "first round done"} if first else {}))
+             **read_balance(balance_fn), **({"note": "first round done"} if first else {}))
     _beat["n"], _beat["slow"] = 0, 0.0
 
 

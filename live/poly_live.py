@@ -258,7 +258,7 @@ def run():
         book.state["fix_1122"] = True
         book.save()
     book.log("start", rule=TRACK, take=os.environ.get("POLY_TAKE", "half"), max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
-             mode="LIVE (real money)" if C.is_live() else "dry run")
+             mode="LIVE (real money)" if C.is_live() else "dry run", **C.read_balance(cash))
     if C.is_live():
         cl = client()
         book.log("login", wallet_type=str(cl.wallet_type), cash=round(cash(), 2))   # no address: the log is public
@@ -280,7 +280,7 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
-        C.beat(book, time.time() - t0)
+        C.beat(book, time.time() - t0, balance_fn=cash)
         if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
