@@ -22,7 +22,7 @@ Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   POLY_PRIVATE_KEY=0x...            the key Polymarket shows under Settings, Export private key
   POLY_WALLET=0x...                 your Polymarket address (Profile, the 0x... under your name)
   LIVE=yes                          without this line it only writes down what it WOULD do
-  POLY_MAX_BET=2                    most money one bet may cost
+  POLY_MAX_BET=2.10                 most money one bet may cost (paper's dearest draw bet so far: $2.06)
   POLY_MAX_OPEN_USD=28              most money in open bets at once
   POLY_MAX_OPEN=20                  most open bets at once
   POLY_DAY_SPEND_MAX=15             most money put into new bets per day (UTC)
@@ -85,7 +85,7 @@ def place(book):
     r = bot.rules_for(TRACK)
     cands = bot.draw_candidates([TRACK])[TRACK]
     held_events = {o.get("event_key") for o in book.state["open"].values()}
-    max_bet, max_open_usd = C.envf("POLY_MAX_BET", 2), C.envf("POLY_MAX_OPEN_USD", 28)
+    max_bet, max_open_usd = C.envf("POLY_MAX_BET", 2.10), C.envf("POLY_MAX_OPEN_USD", 28)
     max_open, day_max = int(C.envf("POLY_MAX_OPEN", 20)), C.envf("POLY_DAY_SPEND_MAX", 15)
     have = None
     n_half = 0
@@ -191,7 +191,7 @@ def settle(book):
 def run():
     C.load_env()
     book = C.Book("poly")
-    book.log("start", rule=TRACK, max_bet=C.envf("POLY_MAX_BET", 2), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
+    book.log("start", rule=TRACK, max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
              mode="LIVE (real money)" if C.is_live() else "dry run")
     if C.is_live():
         cl = client()
