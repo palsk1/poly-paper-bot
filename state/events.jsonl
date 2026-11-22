@@ -30483,3 +30483,5 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXWTIH-26NOV2219-T83.39", "track": "kalshi_patient", "ts": "2026-11-22T23:17:50Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXRAIN-26NOV23-PHIL", "track": "kalshi_patient", "ts": "2026-11-22T23:17:50Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXCOPPERD-26NOV2317-T5.92", "track": "kalshi_patient", "ts": "2026-11-22T23:17:50Z", "type": "kpatient_order"}
+{"outcome": "No", "pnl": -0.0021, "price": 0.979, "reason": "take profit (now 98c), book", "title": "Will Ethereum dip to $1,550 on November 22?", "token": "111406760223665943487998630468935117949502609781129191296903046786704730710740", "track": "endgame_sell98", "ts": "2026-11-22T23:19:55Z", "type": "paper_close"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Ethereum dip to $1,600 on November 22?", "token": "63189979950677843300487498583971756299028631892241373091372960121830183001513", "track": "endgame_sell98", "ts": "2026-11-22T23:21:00Z", "type": "paper_buy"}
