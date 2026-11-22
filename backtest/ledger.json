@@ -2268,6 +2268,84 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "aim.py, backtest/aim.md"
+  },
+  {
+   "id": "kalshi_combos_buy_nearly_sure_combos_65c_fresh_days",
+   "date": "2026-11-22",
+   "what": "Kalshi combos: buy nearly-sure combos (65c+), fresh days",
+   "tries": 2,
+   "bets": 860,
+   "groups": 160,
+   "per100": -5.31,
+   "floor100": -16.17,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
+  },
+  {
+   "id": "kalshi_combos_buy_nearly_sure_combos_65c_small_tickets_fresh",
+   "date": "2026-11-22",
+   "what": "Kalshi combos: buy nearly-sure combos (65c+), small tickets, fresh days",
+   "tries": 2,
+   "bets": 604,
+   "groups": 146,
+   "per100": -10.66,
+   "floor100": -21.88,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
+  },
+  {
+   "id": "kalshi_combo_house_every_yes_trade_the_pros_sold",
+   "date": "2026-11-22",
+   "what": "Kalshi combo house: every Yes trade the pros sold",
+   "tries": 20,
+   "bets": 94537,
+   "groups": 28,
+   "per100": 0.0,
+   "floor100": -14.77,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
+  },
+  {
+   "id": "kalshi_combo_house_sports_every_leg_a_different_game",
+   "date": "2026-11-22",
+   "what": "Kalshi combo house: sports, every leg a different game",
+   "tries": 20,
+   "bets": 54166,
+   "groups": 332,
+   "per100": -0.16,
+   "floor100": -1.56,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
+  },
+  {
+   "id": "kalshi_combo_house_crypto_15_min_combos",
+   "date": "2026-11-22",
+   "what": "Kalshi combo house: crypto 15-min combos",
+   "tries": 20,
+   "bets": 5791,
+   "groups": 325,
+   "per100": -0.08,
+   "floor100": -1.52,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
+  },
+  {
+   "id": "kalshi_combo_house_our_rule_legs_x_1_05_2_4_legs",
+   "date": "2026-11-22",
+   "what": "Kalshi combo house: our rule, legs x 1.05, 2-4 legs",
+   "tries": 20,
+   "bets": 3919,
+   "groups": 331,
+   "per100": -1.33,
+   "floor100": -5.39,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "kcombos.py, backtest/kcombos.md"
   }
  ]
 }
