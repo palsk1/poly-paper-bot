@@ -387,7 +387,9 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
     const rows = [
       ["Each bet", b.bet != null ? money(b.bet, false) + (b.bot === "poly" ? " at most" : "") : "–"],
       ["Most out at once", b.max_open != null ? money(b.max_open, false) : "–"],
-      b.cash != null ? ["Cash in the account at start", money(b.cash, false)] : null,
+      [b.bot === "poly" ? "Cash now (open bets not counted)" : "Balance now", b.bal_now != null ? `${money(b.bal_now, false)} <span class="sub">(${esc(ago(b.bal_at))})</span>` : `<span class="sub">not reported yet</span>`],
+      b.bal_start != null ? ["Started with", money(b.bal_start, false)] : null,
+      b.bal_now != null && b.bal_start != null ? ["Change in the account", M(b.bal_now - b.bal_start)] : null,
       ["Finished bets", `${b.finished} (${b.won} won, ${b.lost} lost)`],
       b.bot === "kalshi" ? ["Offers nobody sold to (no money spent)", String(b.unfilled)] : null,
       ["Money bet on finished bets", money(b.put_in, false)],

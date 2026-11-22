@@ -501,6 +501,11 @@ def live_rows(tracks):
         tw_cost = sum(float(c.get("cost") or (c.get("entry", 0) * c.get("shares", 0) + c.get("entry_fee", 0))) for c in tw)
         tw_pnl = sum(float(c.get("pnl") or 0) for c in tw)
         last = rows[-1]["t"] if rows else None
+        # Jan, 22 Nov: "why can't I see my Kalshi balance". The bots note the real account balance (`balance`, or `cash`
+        # on the Polymarket login line); newest = balance now, first one since this mode started = started with.
+        bal = [(r["t"], float(r.get("balance") if r.get("balance") is not None else r.get("cash")))
+               for r in rows if r.get("t") and (r.get("balance") is not None or (r.get("k") == "login" and r.get("cash") is not None))]
+        bal_since = [x for x in bal if str(x[0]) >= str(since or "")]
         recent = []
         for r in real[::-1][:10]:
             recent.append({"t": r.get("title") or r.get("ticker") or r.get("slug"), "at": str(r.get("t", ""))[:16],
@@ -510,7 +515,9 @@ def live_rows(tracks):
             "stopped": ({"why": "stopped from the phone" if stop.get("k") == "phone_stop" else
                          f"stopped: total loss reached the cap", "at": stop.get("t")} if stop else None),
             "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
-            "cash": (logins[-1].get("cash") if logins else None), "wallet": mask(logins[-1].get("wallet")) if logins else None,
+            "cash": (logins[-1].get("cash") if logins else None),
+            "bal_now": r2(bal[-1][1]) if bal else None, "bal_at": bal[-1][0] if bal else None,
+            "bal_start": r2(bal_since[0][1]) if bal_since else None, "wallet": mask(logins[-1].get("wallet")) if logins else None,
             "finished": len(real), "won": won, "lost": len(real) - won, "unfilled": unfilled,
             "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today),
             "open_n": len(opn), "open_cost": r2(sum(float(o.get("cost") or 0) for o in opn.values())),
