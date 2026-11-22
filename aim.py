@@ -67,7 +67,8 @@ ARENA_K = "^(KXLLM1|KXTOPMODEL|KXTOPAI|KXTECHRANKLISTAICODE|KXCHINAAI|KXMATHAI|K
 K_LIFE = 50 * 86400
 # usage bets: a lab's share of the week's tokens on OpenRouter, daily shares on Vercel's AI Gateway, app downloads
 USE_K = "^KX([A-Z]+SHARE|TOKENUSEM?|TOPUSAGEAI|[A-Z]+VSPEND|[A-Z]+VREQ|OSSPEND|[A-Z]+APP|AIAPPARRAY)$"
-PICKS = {"use": USE_K, "arena": ARENA_K}
+APP_K = "^KXAPPRANK(FREE|FREE2|FREE3|FREESECOND|PAID)$"     # daily "#1 free app in the US App Store" (appstore.py)
+PICKS = {"use": USE_K, "arena": ARENA_K, "app": APP_K}
 
 
 def klist(pick=ARENA_K):
