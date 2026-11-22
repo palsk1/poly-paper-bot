@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**163 ideas examined, in about 60,377 versions.** 118 dropped, 45 still being tested or waiting. **Looks real: 5.**
+**169 ideas examined, in about 61,239 versions.** 124 dropped, 45 still being tested or waiting. **Looks real: 5.**
 
-Why count: if you test 163 ideas that are all worthless, the luckiest one still looks good. With 163 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 169 ideas that are all worthless, the luckiest one still looks good. With 169 tries, a result has to beat about 3.2 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -167,6 +167,12 @@ Why count: if you test 163 ideas that are all worthless, the luckiest one still 
 | 2026-11-17 | GoodFallen 5-min BTC wallet (Reddit), its own results with Polymarket rebates | 2 | 19 | +$1.41 | Ahead, but could be luck | dropped | wallet5m.py run |
 | 2026-11-19 | kc_maker_safe check on Binance (re-test, 3 min) | 6 | 16120 | +$0.47 | Looks real | open | kdocs.py run |
 | 2026-11-19 | kc_maker_safe check on Kalshi's own number (twin rule, 3 min) | 6 | 16189 | +$0.40 | Looks real | open | kdocs.py run |
+| 2026-11-22 | AI release-day bets (Polymarket): No where Yes is 10-50c after the first third of the market's life | 260 | 23 | +$1.92 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Kalshi, fresh check): Yes on the name already holding first place, ask 50-97c, last 3 days | 2 | 101 | -$2.29 | Behind, but could be bad luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): No where the boards' own change record is 10c+ below the price | 150 | 85 | +$0.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the holder priced 3-50c with 2+ weeks left | 150 | 48 | +$5.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the name already holding the place, 50-97c, last 3 days | 150 | 39 | +$4.31 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Arena leaderboard bets (Polymarket): Yes where the boards' own change record is 10c+ above the price | 150 | 59 | +$16.39 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins) | 1 | 78 | -$10.04 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
 | 2026-11-22 | Live paper: copy weather wallet HellYeahTrader (w_ and wb_ twins) | 1 | 57 | -$28.09 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
 | 2026-11-22 | Live paper: copy weather wallet sbel (w_ and wb_ twins) | 1 | 105 | -$20.25 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |

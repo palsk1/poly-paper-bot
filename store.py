@@ -104,7 +104,7 @@ def assets(rel):
 
 
 def in_dirs(name, dirs):
-    return any(name.startswith(d + SEP) for d in dirs)
+    return any(name.startswith(d.strip("/").replace("/", SEP) + SEP) for d in dirs)   # a sub-folder works too: pull bt_cache/aim
 
 
 def mb(n):
