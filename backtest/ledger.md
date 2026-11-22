@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**205 ideas examined, in about 66,223 versions.** 160 dropped, 45 still being tested or waiting. **Looks real: 5.**
+**213 ideas examined, in about 67,263 versions.** 165 dropped, 48 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 205 ideas that are all worthless, the luckiest one still looks good. With 205 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 213 ideas that are all worthless, the luckiest one still looks good. With 213 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -188,6 +188,14 @@ Why count: if you test 205 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | Kalshi: No on the favourite (50-97c) 24h+ before | 170 | 420 | +$10.27 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Kalshi: No on the favourite 6-24h before | 170 | 422 | -$4.80 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Kalshi: No on the holder where the record is 10c+ below the price | 170 | 380 | +$14.18 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi tennis: after a set, buy where a point-by-point model says 5c+ cheap | 130 | 7967 | +$0.83 | Ahead, but could be luck | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: after set 1, buy its winner at 50-80c (no-peek clock) | 130 | 6469 | +$2.45 | Promising, needs more bets | candidate | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just fell 8c+ in 2 minutes | 130 | 18369 | -$8.77 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just lost a set, 3 min later | 130 | 19489 | -$17.16 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just rose 8c+ in 2 minutes | 130 | 18369 | -$4.62 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: same, women's main tour only | 130 | 1402 | +$6.96 | Looks real | candidate | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: set-1 winner at 50-80c, men's main tour, timed by Kalshi's set market + 3 min | 130 | 1075 | -$0.94 | Behind, but could be bad luck | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: set-1 winner at 50-80c, women's main tour, timed by Kalshi's set market + 3 min | 130 | 720 | +$5.46 | Promising, needs more bets | candidate | tennis.py lead |
 | 2026-11-22 | Kalshi: Yes on the favourite 24h+ before | 170 | 396 | -$18.69 | Losing | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Kalshi: Yes on the holder where the record is 10c+ above the price | 170 | 200 | -$12.01 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins) | 1 | 78 | -$10.04 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
