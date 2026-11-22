@@ -140,7 +140,7 @@ possible bet: one share, about 68c. So it fits $300, and it fits $100 with $10 b
 
 Polymarket keeps no ask history, so the test re-buys the same set-1 moments at the worst price anyone paid in the next 3 minutes + 1c + fee (`tennis.py pmreport`).
 
-First check, 7 days of matches (Polymarket's list stops handing out older ones in one go): 76 bets, -$12.25 per $100. The same matches on Kalshi: -$6.07 on 67 bets. A bad week on both sites, and far too few bets to say anything. A wider download (`ten_pm_150`, in 4-day pieces) was still running when the tracks were built; the paper tracks are Kalshi only.
+Result on 155 days (`ten_pm_150`, 10,179 Polymarket matches, 7,389 matched to a set-1 moment): **1,949 bets, -$3.64 per $100**, both halves behind (-$3.61 / -$3.67), exam verdict **Losing**. Women -$1.63 on 604 bets, men -$4.60 on 1,338. The same matches on Kalshi at the real ask + fee: +$0.82 on 1,718 bets. The Polymarket price here is the worst trade of the next 3 minutes plus 1c, which is harder than Kalshi's real ask, so part of the gap is the test and not the site. Either way: no reason to run this on Polymarket. The paper tracks stay Kalshi only.
 
 What is known: same matches, a slightly lower fee (about 1.1c a share at 68c against 1.5c on Kalshi), and its own score feed is just as late.
 
