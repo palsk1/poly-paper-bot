@@ -186,7 +186,25 @@ CTRL_EVERY = 20
 NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
            "all": "all", "both": "all", "bots": "all"}
+COMMANDS = {"stop", "off", "pause", "start", "on", "resume", "status", "how", "?"}
+BOT_TITLES = set(NAMES.values())
 _ctrl = {"t": 0}
+_beat = {"t": 0, "n": 0, "slow": 0.0}
+
+
+def beat(book, took, every=600):
+    """A sign of life every 10 minutes (Jan, 22 Nov: a quiet bot looks like a dead one): rounds done, the slowest
+    round, and whether the phone channel is set. Never prints the channel's name."""
+    _beat["n"] += 1
+    _beat["slow"] = max(_beat["slow"], took)
+    if time.time() - _beat["t"] < every:
+        return
+    first = _beat["t"] == 0
+    _beat["t"] = time.time()
+    book.log("alive", rounds=_beat["n"], slowest_round_s=round(_beat["slow"], 1),
+             phone="on" if os.environ.get("NTFY_CONTROL") else "OFF (no NTFY_CONTROL in ~/.live.env)",
+             **({"note": "first round done"} if first else {}))
+    _beat["n"], _beat["slow"] = 0, 0.0
 
 
 def control(bot, book, status_fn):
@@ -198,7 +216,9 @@ def control(bot, book, status_fn):
     if not topic or time.time() - _ctrl["t"] < CTRL_EVERY:
         return
     _ctrl["t"] = time.time()
-    since = book.state.get("ctrl_since") or "1m"
+    # Fix 22 Nov: was "the last minute", so a command was lost whenever one round took longer than that.
+    # Now: everything since this bot started (ntfy takes a unix time), then everything after the last one read.
+    since = book.state.get("ctrl_since") or str(_ctrl.setdefault("from", int(time.time()) - 60))
     try:
         raw = ntfy_get(f"https://ntfy.sh/{topic}/json?poll=1&since={since}")
     except Exception as e:
@@ -213,11 +233,20 @@ def control(bot, book, status_fn):
         if m.get("event") != "message":
             continue
         book.state["ctrl_since"] = m.get("id") or since
-        if m.get("title"):
+        if "moneybag" in (m.get("tags") or []) or str(m.get("title") or "") in BOT_TITLES \
+                or str(m.get("title") or "").endswith("STOPPED") or "a bid lost" in str(m.get("title") or ""):
             continue                       # the bots' own answers and alerts
-        words = str(m.get("message") or "").strip().lower().split()
+        # Jan may type the command in the Title box and leave Message empty (ntfy then shows "triggered"):
+        # read both boxes and take the first that starts with a command word (fix 22 Nov).
+        words = []
+        for text in (m.get("message"), m.get("title")):
+            w = str(text or "").strip().lower().strip(".!").split()
+            if w and w[0] in COMMANDS:
+                words = w
+                break
         if not words:
             continue
+        book.log("phone_heard", cmd=" ".join(words[:2]))
         cmd, target = words[0], ALIASES.get(words[1], words[1]) if len(words) > 1 else "all"
         if target not in ("all", bot):
             continue
@@ -238,6 +267,29 @@ def control(bot, book, status_fn):
             push(name, status_fn() + ("\nRunning." if not why else f"\nPaused: {why}") +
                  ("" if is_live() else "\n(Pretend mode: no real money yet.)"))
     book.save()
+
+
+def phone_check(name):
+    """For `check`: send one test message to the phone channel and count what was typed there lately.
+    Tells a wrong channel name in the app (no test message arrives, 0 typed messages seen) from a bot problem."""
+    topic = os.environ.get("NTFY_CONTROL")
+    if not topic:
+        return "Phone: no channel set (run add_keys.py once more, it makes one)."
+    try:
+        ntfy_post(topic, name, "Test from the server: the phone link works. Type status here any time.")
+        raw = ntfy_get(f"https://ntfy.sh/{topic}/json?poll=1&since=12h")
+    except Exception as e:
+        return f"Phone: could not reach ntfy ({type(e).__name__}: {e})."
+    typed = 0
+    for ln in raw.splitlines():
+        try:
+            m = json.loads(ln)
+        except ValueError:
+            continue
+        if m.get("event") == "message" and "moneybag" not in (m.get("tags") or []):
+            typed += 1
+    return (f"Phone: sent a test message to the channel ending ...{topic[-4:]}. Messages typed there in the last "
+            f"12 hours: {typed}." + ("" if typed else " If you typed some, the app is on a different channel name."))
 
 
 # ---------------------------------------------------------------- hourly upload to the GitHub release `live-data`

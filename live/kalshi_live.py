@@ -259,6 +259,7 @@ def run():
              max_open=C.envf("KALSHI_MAX_OPEN_USD", 30), mode="LIVE (real money)" if C.is_live() else "dry run")
     last_up, was_stopped = 0, None
     while True:
+        t0 = time.time()
         try:
             settle(book)
             C.control("kalshi", book, lambda: status_text(book.state))
@@ -273,6 +274,7 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
+        C.beat(book, time.time() - t0)
         if time.time() - last_up > 3600:
             last_up = time.time()
             try:
@@ -290,6 +292,7 @@ def check():
     print(f"OK: the key works. Kalshi balance ${b:.2f}.")
     print("Mode:", "LIVE, real bids" if C.is_live() else "dry run (add LIVE=yes to ~/.live.env for real bids)")
     print("Stop check:", C.stop_reason("kalshi", C.Book("kalshi")) or "nothing stops it")
+    print(C.phone_check("Kalshi bot"))
 
 
 def status_text(s):

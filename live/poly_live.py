@@ -228,6 +228,7 @@ def run():
     last_scan = last_settle = last_up = 0
     was_stopped = None
     while True:
+        t0 = time.time()
         try:
             if time.time() - last_settle > SETTLE_S:
                 last_settle = time.time()
@@ -242,6 +243,7 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
+        C.beat(book, time.time() - t0)
         if time.time() - last_up > 3600:
             last_up = time.time()
             try:
@@ -274,6 +276,7 @@ def check():
               "Fix: add the Relayer key with add_keys.py (see live/README.md).")
     print("Mode:", "LIVE, real buys" if C.is_live() else "dry run (add LIVE=yes to ~/.live.env for real buys)")
     print("Stop check:", C.stop_reason("poly", C.Book("poly")) or "nothing stops it")
+    print(C.phone_check("Polymarket bot"))
 
 
 def status_text(s):
