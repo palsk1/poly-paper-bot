@@ -47,17 +47,11 @@
   },
   "2026-11-22": {
    "failed": 0,
-   "muted": 97,
-   "sent": 25
+   "muted": 105,
+   "sent": 26
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.64)",
-   "track": "kc_maker_safe",
-   "ts": "2026-11-14T00:18:16Z"
-  },
   {
    "result": "sent",
    "title": "[arb] locked in 2.1c a share",
@@ -1251,6 +1245,12 @@
    "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.82)",
    "track": "kc_maker_safe",
    "ts": "2026-11-22T21:32:35Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 4 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T22:12:04Z"
   }
  ]
 }
