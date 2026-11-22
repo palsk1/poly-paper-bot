@@ -237,8 +237,10 @@ Numbers at $25 a bet, from 22 Nov. "Lucky end" = the best it could really be, gi
 - Never bet in 2 weeks (clutter, not losers): `w_flawfence`, `w_railcool`, `wb_railcool`, `w_youngalphagoat`, `sab_big`.
 
 **Combo house: parked as a future idea (22 Nov).** On paper it is ahead (6,612 finished parlays, about +$3 per $100),
-but it needs money tied up in every parlay until the games end: 1,984 were waiting on 22 Nov, about $9,920 at $5 a
-parlay. Jan can't fund that. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
+but it needs money tied up in every parlay until the games end. On full days (17-22 Nov, about 1,400 sales a day) up
+to about 950 parlays waited at once: about $4,800 at $5 a parlay, or about $950 at $1 (the "1,984 waiting" on the card
+also counts finished parlays whose results the scorer hadn't looked up yet). Replaying those days at $1 a parlay:
+a $300 pot takes about 3 sales in 4, $500 about 9 in 10, $1,000 all of them. Jan can't fund that now. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
 the two small real-money bots the same day.
 
 ## Tried and dropped (one line each)

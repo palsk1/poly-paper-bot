@@ -323,10 +323,10 @@ def combo_row(q):
                   "When the parlay really sells and our price was lower than the pro's, we count it as our sale. No real money moves.",
                   bets, COMBO_POT, tied=tied, waiting=q.get("waiting") or 0, extra=extra, notes=notes, recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, f"Future idea, too much money for now. Right now {q.get('waiting') or 0:,} parlays are waiting for their games, "
-                     f"which would tie up about ${tied:,.0f} at ${COMBO_STAKE:.0f} a parlay. That's far more than you want to put in, "
-                     "so this is parked. On 22 Nov the server switched from listening to parlays to the two small real-money bots, "
-                     "so these numbers stop growing.")
+    park_future(row, "Future idea, too much money for now. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
+                     "up to about 950 sat waiting for their games at once: about $4,800 tied up at $5 a parlay, or about $950 at $1. "
+                     "That's more than you want to put in, so this is parked. On 22 Nov the server switched from listening to parlays "
+                     "to the two small real-money bots, so these numbers stop growing.")
     return row
 
 
