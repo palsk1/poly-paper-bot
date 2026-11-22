@@ -118,6 +118,14 @@ and you read the result in the run log. All of it is paper only.
 | `state/summary.md` | Live scoreboard |
 | `LEARNINGS.md` + `learnings.py` | **The main "what we've learned" page**: goal, candidates with pass rules and check dates, 1 Jan checklist, dropped ideas, open questions. Every finished dig updates it by hand; `python3 learnings.py` (run by daily.yml) rewrites its live-numbers block (incl. the combo house line from `state/quoter.json`, with a warning if Jan's server sent nothing for 3+ hours) and the week-by-week table (`state/learnings_weeks.json`). `python3 learnings.py selftest` checks it offline |
 
+## The real-money bots (22 Nov, Jan's server only)
+
+| Tool | What it does | How to run it |
+|---|---|---|
+| `live/kalshi_live.py`, `live/poly_live.py` | The two small REAL-MONEY bots (kc_maker_safe_usd, soccer_draw half the signals), same rule code as `bot.py`, spend caps + off switches in `live/common.py`. Jan's server only, keys only there | `check` / `run` / `status`; setup and caps in `live/README.md` |
+| `live/compare.py` | Real bots vs their paper twins, window by window and market by market, per $100 | `python3 live/compare.py` (reads the public release `live-data` + `state/tracks.json`) |
+| `live/selftest.py` | Offline test of both bots with fake answers (signing, order bodies, caps, switches) | `python3 live/selftest.py` (needs `cryptography`) |
+
 ## Already tested and dropped
 
 **`backtest/ledger.md` is the list of every idea tried, with its verdict** (kept by `exam.py`). Check it first, and add your idea to it when you test one.

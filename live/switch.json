@@ -1,0 +1,5 @@
+{
+  "note": "Remote OFF switch for the real-money bots (live/). 'off' stops new bets within ~5 minutes; open bets still settle. This file can only stop a bot: it never starts one or raises a limit (those live in ~/.live.env on Jan's server).",
+  "kalshi": "on",
+  "poly": "on"
+}

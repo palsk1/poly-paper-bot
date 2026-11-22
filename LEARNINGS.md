@@ -21,6 +21,11 @@ picked yet. 12 tracks were stopped on 12 Nov.
 
 ## Where we stand (12 Nov, hand-written)
 
+**Real money test (22 Nov, Jan said go, `live/`):** two tiny real-money bots on Jan's AWS server, each next to its
+paper twin: Kalshi `kc_maker_safe_usd` at $4 a bid (about $30 bank) and Polymarket `soccer_draw` on every second
+signal (about $28 bank, ~20 bets out at once). Hard caps ($20 total loss each, then a STOP file), three off switches,
+dry run first. The point is to see whether real fills match paper fills. Compare with `python3 live/compare.py`.
+
 Nothing is proven with live money yet. Of about 85 ideas tried, only 2 "look real" on history, and both still need
 live bets. That's normal: most ideas that look good on old data melt away once you pay real prices and fees.
 
@@ -132,6 +137,7 @@ A strategy gets real money only if **every** answer is yes:
 | 13 Nov | **Combo house first scorecard** (09:00 Stockholm), then the $25 real-bot strategy pick with Jan |
 | 23 Nov | Gas-price recorder scored (who reads AAA first). Expected dead |
 | late Nov | Fast Kalshi bot first look |
+| from 22 Nov | **Real-money bots** (`live/`): Kalshi kc_maker_safe_usd $4 bids, Polymarket soccer_draw half the signals, each compared with its paper twin |
 | about 1 Dec | **kc_maker_safe locked test** (2,500 bets). Order book shapes recheck |
 | 21 Dec | **Holdout, scored once**: mention_no, soccer draws, panic_fade_10c, boring No far out, crypto No, the everything-together model, CS2 favorite a day before |
 | 1 Jan 2027 | arb pays out. `kalshi_patient` and combo house locked tests (combo house earlier if it reaches 1,000 bets). **Money decision** |
