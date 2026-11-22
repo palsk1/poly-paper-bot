@@ -1346,6 +1346,128 @@ def jumps_report(lag=2):
     return rows, cards, tries
 
 
+# ================================================================ the lead: set-1 winner at 50-80c, with a clock that can't peek
+SAFE_MIN = 7      # minutes after 365scores' set end (its clock is within +-4 min of the price jump 8 times in 10)
+
+
+def lead_bets(ks, lo=0.50, hi=0.80, off=SAFE_MIN, which=1, stake=25.0, sel=None):
+    """After set `which` (1 = first set), buy the player who won it at Kalshi's real ask + fee if the ask is lo..hi,
+    `off` minutes after 365scores says the set ended (no use of the price jump, so no peeking). Held to the end."""
+    rows, _ = set_rows(ks, lags=(3,))
+    by = {k["ev"]: k for k in ks}
+    out = []
+    for r in rows:
+        if r["set"] != which or (sel and not sel(r)):
+            continue
+        k = by[r["ev"]]
+        t = r["est"] + off * 60
+        q = quote_at(k["mins"], t)
+        if not q or t >= k["close"] - 120:
+            continue
+        yes = bool(r["won"])
+        px = q[1] if yes else 1 - q[0]
+        if not lo <= px < hi:
+            continue
+        b = kbet(dict(r, q={0: q}, te=t), 0, yes, stake)
+        if b:
+            b.update(end=k["close"], series=r["series"], p0=r["p0"] if yes else 1 - r["p0"], games=r["games"], name=k["name"] if yes else k["other"])
+            out.append(b)
+    return sorted(out, key=lambda b: b["t"])
+
+
+def bank_sim(bets, bank=300.0, stake=25.0):
+    """One pot: a bet needs free cash, the money comes back when the match ends."""
+    cash, open_, taken, skipped, low, peak_out, peak, dd = bank, [], 0, 0, bank, 0.0, bank, 0.0
+    for b in bets:
+        for o in [o for o in open_ if o["end"] <= b["t"]]:
+            cash += o["pay"]
+            open_.remove(o)
+        worth = cash + sum(o["cost"] for o in open_)
+        peak = max(peak, worth)
+        dd = max(dd, peak - worth)
+        sc = b["cost"] * stake / 25.0
+        if cash < sc:
+            skipped += 1
+            continue
+        cash -= sc
+        open_.append({"end": b["end"], "pay": b["pay"] * stake / 25.0, "cost": sc})
+        taken += 1
+        peak_out = max(peak_out, sum(o["cost"] for o in open_))
+        low = min(low, cash)
+    cash += sum(o["pay"] for o in open_)
+    return {"taken": taken, "skipped": skipped, "end": cash, "most_out": peak_out, "worst_dip": dd}
+
+
+def lead_report():
+    import exam
+    gs, ks = load_365(), load_kalshi()
+    join(ks, gs)
+    src = "tennis.py lead"
+    tries = 110          # every cut looked at in this dig (set tables, bands, lags, tours, sudden moves)
+    rows, _ = set_rows(ks, lags=(3,))
+    los = [b for r in rows for b in [kbet(r, 3, not r["won"])] if b]
+    exam.score(los, "Kalshi tennis: buy the player who just lost a set, 3 min later", tries=tries, src=src, status="dropped")
+    mod = [b for r in rows if r["q"].get(3) for yes in (True, False)
+           if (r["model"] if yes else 1 - r["model"]) - (r["q"][3][1] if yes else 1 - r["q"][3][0]) >= 0.05 for b in [kbet(r, 3, yes)] if b]
+    exam.score(mod, "Kalshi tennis: after a set, buy where a point-by-point model says 5c+ cheap", tries=tries, src=src, status="dropped")
+    jr = jump_rows(ks)
+    for follow, nm in ((False, "fell"), (True, "rose")):
+        jb = [b for r in jr if abs(r["mv"]) >= 8 for b in [kbet(r, 2, (r["mv"] > 0) == follow)] if b]
+        exam.score(jb, f"Kalshi tennis: buy the player who just {nm} 8c+ in 2 minutes", tries=tries, src=src, status="dropped")
+    allb = lead_bets(ks)
+    print(f"\n=== the lead: after set 1, buy its winner at 50-80c, {SAFE_MIN} min after 365scores' set end ===")
+    for nm, f in (("all four tours", lambda b: True), ("women's main tour (WTA)", lambda b: b["series"] == "KXWTAMATCH"), ("men's main tour (ATP)", lambda b: b["series"] == "KXATPMATCH"),
+                  ("men's challengers", lambda b: b["series"] == "KXATPCHALLENGERMATCH"), ("women's challengers", lambda b: b["series"] == "KXWTACHALLENGERMATCH"),
+                  ("winner was NOT the pre-match underdog (40c+ before)", lambda b: b["p0"] >= 0.40), ("winner was the pre-match underdog (under 40c)", lambda b: b["p0"] < 0.40)):
+        bb = [b for b in allb if f(b)]
+        h = len(bb) // 2
+        qs = collections.defaultdict(list)
+        for b in bb:
+            g = time.gmtime(b["t"])
+            qs[f"{g.tm_year}Q{(g.tm_mon - 1) // 3 + 1}"].append(b)
+        print(f"  {nm}: {len(bb)} bets, {per100(bb):+.2f} per $100 (first half {per100(bb[:h]):+.2f}, second half {per100(bb[h:]):+.2f}), won {sum(1 for b in bb if b['pay'] > 0)}, "
+              f"average price {100 * sum(b['px'] for b in bb) / max(1, len(bb)):.0f}c; by quarter " + " ".join(f"{k} {per100(v):+.1f} ({len(v)})" for k, v in sorted(qs.items())))
+    for off in (4, 7, 10, 15, 20):
+        bb = lead_bets(ks, off=off)
+        print(f"  waiting {off} min instead: {len(bb)} bets, {per100(bb):+.2f} per $100")
+    for extra in (1, 2, 3):
+        bb = [dict(b, cost=b["cost"] + extra / 100 * int(25 / b["px"])) for b in allb]
+        print(f"  paying {extra}c more a share: {per100(bb):+.2f} per $100")
+    exam.score(allb, "Kalshi tennis: after set 1, buy its winner at 50-80c (no-peek clock)", tries=tries, src=src, status="candidate")
+    exam.score([b for b in allb if b["series"] == "KXWTAMATCH"], "Kalshi tennis: same, women's main tour only", tries=tries, src=src, status="candidate")
+    days = max(1, (allb[-1]["t"] - allb[0]["t"]) / DAY)
+    last = [b for b in allb if b["t"] >= allb[-1]["t"] - 60 * DAY]
+    print(f"\nbets a day: {len(allb) / days:.1f} over the whole time, {len(last) / 60:.1f} in the last 60 days; a match ends about "
+          f"{sorted((b['end'] - b['t']) / 60 for b in allb)[len(allb) // 2]:.0f} min after the bet (9 in 10 within {sorted((b['end'] - b['t']) / 60 for b in allb)[len(allb) * 9 // 10]:.0f} min)")
+    for bank, stake in ((300, 25), (300, 10), (100, 10)):
+        s = bank_sim(last, bank, stake)
+        print(f"  last 60 days, ${bank} pot, ${stake} a bet: {s['taken']} bets taken, {s['skipped']} skipped for lack of cash, most money out at once ${s['most_out']:.0f}, "
+              f"worst dip ${s['worst_dip']:.0f}, pot ends at ${s['end']:.2f}")
+        s = bank_sim(allb, bank, stake)
+        print(f"  whole history, same: {s['taken']} taken, {s['skipped']} skipped, most out ${s['most_out']:.0f}, worst dip ${s['worst_dip']:.0f}, pot ends at ${s['end']:.2f}")
+    print("\nten bets, as they were (to read by hand):")
+    import random
+    for b in random.Random(7).sample(allb, 10):
+        print(f"  {time.strftime('%Y-%m-%d %H:%M', time.gmtime(b['t']))} {b['ev']}: bought {b['name']} at {100 * b['px']:.0f}c (was {100 * b['p0']:.0f}c before the match, set 1 {b['games']}), "
+              f"cost ${b['cost']:.2f}, paid ${b['pay']:.2f}")
+    return allb
+
+
+SET_SERIES = ("KXATPSETWINNER", "KXWTASETWINNER", "KXATPCHALLENGERSETWINNER", "KXWTACHALLENGERSETWINNER")
+
+
+def setclock():
+    """probe `ten_setclock`: Kalshi's own set-winner markets close when the set ends: an exact set clock."""
+    now = int(time.time())
+    for sr in SET_SERIES:
+        ms = k_settled(sr, now - 600 * DAY, now + DAY)
+        if ms:
+            wj(os.path.join(KT_DIR, f"markets_{sr}.json.gz"), ms)
+        print(f"{sr}: {len(ms)} settled markets; closes {min((m['close'] for m in ms), default='')[:10]} .. {max((m['close'] for m in ms), default='')[:10]}", flush=True)
+        for m in ms[:3] + ms[-2:]:
+            print("   ", short(json.dumps(m), 420))
+
+
 def khist():
     """Do old matches still have 1-minute bid / ask anywhere? (The live candle endpoint returns empty shells for them.)"""
     for tk, close in (("KXATPMATCH-26AUG31VIRRUB-RUB", None), ("KXATPMATCH-26AUG31VIRRUB-VIR", None), ("KXATPMATCH-26MAR", None), ("KXATPMATCH-25AUG01COBMAR-COB", None)):
@@ -1418,8 +1540,12 @@ if __name__ == "__main__":
     elif cmd == "livereport":
         import glob
         live_report(sorted(glob.glob(os.path.join(LIVE_DIR, "*.jsonl.gz"))))
+    elif cmd == "lead":
+        lead_report()
     elif cmd == "jumps":
         jumps_report(int(sys.argv[2]) if len(sys.argv) > 2 else 2)
+    elif cmd == "setclock":
+        setclock()
     elif cmd == "khist":
         khist()
     elif cmd == "storemove":

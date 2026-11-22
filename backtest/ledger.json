@@ -2012,6 +2012,84 @@
    "verdict": "Looks real",
    "status": "open",
    "src": "kdocs.py run"
+  },
+  {
+   "id": "kalshi_tennis_buy_the_player_who_just_lost_a_set_3_min_later",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: buy the player who just lost a set, 3 min later",
+   "tries": 110,
+   "bets": 26113,
+   "groups": 19489,
+   "per100": -17.16,
+   "floor100": -21.13,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "tennis.py lead"
+  },
+  {
+   "id": "kalshi_tennis_after_a_set_buy_where_a_point_by_point_model_s",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: after a set, buy where a point-by-point model says 5c+ cheap",
+   "tries": 110,
+   "bets": 9282,
+   "groups": 7967,
+   "per100": 0.83,
+   "floor100": -6.33,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "tennis.py lead"
+  },
+  {
+   "id": "kalshi_tennis_buy_the_player_who_just_fell_8c_in_2_minutes",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: buy the player who just fell 8c+ in 2 minutes",
+   "tries": 110,
+   "bets": 89427,
+   "groups": 18369,
+   "per100": -8.77,
+   "floor100": -10.66,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "tennis.py lead"
+  },
+  {
+   "id": "kalshi_tennis_buy_the_player_who_just_rose_8c_in_2_minutes",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: buy the player who just rose 8c+ in 2 minutes",
+   "tries": 110,
+   "bets": 89427,
+   "groups": 18369,
+   "per100": -4.62,
+   "floor100": -5.75,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "tennis.py lead"
+  },
+  {
+   "id": "kalshi_tennis_after_set_1_buy_its_winner_at_50_80c_no_peek_c",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: after set 1, buy its winner at 50-80c (no-peek clock)",
+   "tries": 110,
+   "bets": 6469,
+   "groups": 6469,
+   "per100": 2.45,
+   "floor100": -0.37,
+   "verdict": "Promising, needs more bets",
+   "status": "candidate",
+   "src": "tennis.py lead"
+  },
+  {
+   "id": "kalshi_tennis_same_women_s_main_tour_only",
+   "date": "2026-11-22",
+   "what": "Kalshi tennis: same, women's main tour only",
+   "tries": 110,
+   "bets": 1402,
+   "groups": 1402,
+   "per100": 6.96,
+   "floor100": 0.98,
+   "verdict": "Looks real",
+   "status": "candidate",
+   "src": "tennis.py lead"
   }
  ]
 }
