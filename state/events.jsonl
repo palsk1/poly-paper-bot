@@ -30271,3 +30271,13 @@
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXLOWTHOU-26NOV22-T58", "track": "kalshi_patient", "ts": "2026-11-22T21:32:37Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLOWTMIN-26NOV22-B25.5", "track": "kalshi_patient", "ts": "2026-11-22T21:32:37Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNHLGOAL-26NOV22BUFTB-BUFBMALENSTYN29-1", "track": "kalshi_patient", "ts": "2026-11-22T21:32:40Z", "type": "kpatient_fill"}
+{"outcome": "Draw", "pnl": -1.2969, "price": 0.0, "reason": "resolved", "title": "Will Girona FC vs. SD Eibar end in a draw?", "token": "55261639521242412088471914187253046948787816926035320950407924893702763701451", "track": "soccer_draw", "ts": "2026-11-22T21:35:37Z", "type": "paper_close"}
+{"pnl": 0.29, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV22MIABUF-BUFJHAWES85", "track": "kalshi_patient", "ts": "2026-11-22T21:37:43Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNFLOT-26NOV22BALCAR-Y", "track": "kalshi_patient", "ts": "2026-11-22T21:37:43Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLOT-26NOV22TBDET-Y", "track": "kalshi_patient", "ts": "2026-11-22T21:37:43Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNFLRECYDS-26NOV22NOCHI-NOJJOHNSON83-60", "track": "kalshi_patient", "ts": "2026-11-22T21:37:43Z", "type": "kpatient_result"}
+{"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV22BALCAR-BAL17", "track": "kalshi_patient", "ts": "2026-11-22T21:37:44Z", "type": "kpatient_result"}
+{"pnl": 0.68, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV22MIABUF-MIA2", "track": "kalshi_patient", "ts": "2026-11-22T21:37:44Z", "type": "kpatient_result"}
+{"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV22NOCHI-NO7", "track": "kalshi_patient", "ts": "2026-11-22T21:37:44Z", "type": "kpatient_result"}
+{"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLSPREAD-26NOV22TBDET-TB15", "track": "kalshi_patient", "ts": "2026-11-22T21:37:44Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNFLWINMARGIN-26NOV22NOCHI-NO1TO6", "track": "kalshi_patient", "ts": "2026-11-22T21:37:44Z", "type": "kpatient_result"}
