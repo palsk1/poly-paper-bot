@@ -950,7 +950,7 @@ def k_minutes(series, tk, a, b):
     return out
 
 
-def fetch(days=45):
+def fetch(days=45, itf=False):
     """probe `ten_fetch_<days>`: 365scores set times + Kalshi minute prices of every settled tennis match. Resumable."""
     from concurrent.futures import ThreadPoolExecutor
     T0 = time.time()
@@ -972,6 +972,8 @@ def fetch(days=45):
         time.sleep(0.7)
     print(f"365scores: {n365} new finished matches, {len(os.listdir(S365_DIR)) if os.path.isdir(S365_DIR) else 0} day files ({time.time() - T0:.0f} s)", flush=True)
     for sr in K_SERIES:
+        if "ITF" in sr and not itf:   # ITF is 20,000+ matches a side: only with `fetch <days> itf`
+            continue
         mpath = os.path.join(KT_DIR, f"markets_{sr}.json.gz")
         have = {m["t"]: m for m in rj(mpath, [])}
         new = k_settled(sr, today - days * DAY, today + DAY)
@@ -1301,7 +1303,7 @@ if __name__ == "__main__":
     elif cmd == "storemove":
         storemove()
     elif cmd == "fetch":
-        fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45)
+        fetch(int(sys.argv[2]) if len(sys.argv) > 2 else 45, "itf" in sys.argv[3:])
     elif cmd == "sets":
         sets_report(int(sys.argv[2]) if len(sys.argv) > 2 else 3)
     elif cmd == "selftest":
