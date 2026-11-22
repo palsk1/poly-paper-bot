@@ -29701,3 +29701,5 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV22NOCHI-NOJJOHNSON83-60", "track": "kalshi_patient", "ts": "2026-11-22T15:42:51Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV22TENDAL-DALJMITCHELL84-1", "track": "kalshi_patient", "ts": "2026-11-22T15:42:51Z", "type": "kpatient_fill"}
 {"filled": 0.67, "price": 0.96, "side": "no", "through": true, "ticker": "KXSOLD-26NOV2217-T72.9999", "track": "kalshi_patient", "ts": "2026-11-22T15:42:54Z", "type": "kpatient_fill"}
+{"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV221045-45", "track": "kc_maker", "ts": "2026-11-22T15:48:43Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.4, "price": 0.96, "side": "no", "through": true, "ticker": "KXETH15M-26NOV221045-45", "track": "kc_maker", "ts": "2026-11-22T15:48:44Z", "type": "kmaker_fill"}
