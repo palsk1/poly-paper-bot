@@ -325,8 +325,8 @@ def combo_row(q):
     row["open_list"] = wait[:30]
     park_future(row, "Future idea, too much money for now. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
                      "up to about 950 sat waiting for their games at once: about $4,800 tied up at $5 a parlay, or about $950 at $1. "
-                     "That's more than you want to put in, so this is parked. On 22 Nov the server switched from listening to parlays "
-                     "to the two small real-money bots, so these numbers stop growing.")
+                     "That's more than you want to put in, so it's on hold (your call, 22 Nov) until other strategies earn enough to expand. "
+                     "The server stopped listening on 22 Nov, so these numbers stop growing.")
     return row
 
 

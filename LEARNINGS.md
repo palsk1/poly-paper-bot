@@ -240,7 +240,19 @@ Numbers at $25 a bet, from 22 Nov. "Lucky end" = the best it could really be, gi
 but it needs money tied up in every parlay until the games end. On full days (17-22 Nov, about 1,400 sales a day) up
 to about 950 parlays waited at once: about $4,800 at $5 a parlay, or about $950 at $1 (the "1,984 waiting" on the card
 also counts finished parlays whose results the scorer hadn't looked up yet). Replaying those days at $1 a parlay:
-a $300 pot takes about 3 sales in 4, $500 about 9 in 10, $1,000 all of them. Jan can't fund that now. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
+a $300 pot takes about 3 sales in 4, $500 about 9 in 10, $1,000 all of them. Jan can't fund that now.
+
+**On hold (Jan, 22 Nov 16:32 Stockholm): "hold off on combo house altogether, just document it, bring it back if other
+strategies make us enough money to expand."** The listener (`quoter` service) is switched off; no paper logging until
+then. Where it stood: 6,612 finished parlays at about +$3 per $100 ("Ahead, but could be luck"; the locked 1,000-bet test
+in PROTOCOL 5c passed on 18 Nov), the pre-kick-off side scorecard behind, the $100 pot at $5 a parlay down $76.
+To bring it back:
+- **Money:** about $500 at $1 a parlay (takes about 9 sales in 10 on 17-22 Nov, roughly +$34 a day on paper, one
+  losing day of about -$19), $1,000 for every sale; at $5 a parlay about $2,000-3,000. Unknown: how many real requests
+  are small enough, because a real house must cover the size the buyer asks for.
+- **Where:** either an AWS box (`quoter/README.md`, `setup.sh`), or GitHub Actions like `kfastlive.yml` (nonstop
+  6-hour shifts, free on a public repo) with the empty wallet's login put in repo secrets by Jan. Jan's call.
+- **Real quoting** needs a funded wallet and a quote bot that answers in under 0.4 s, on Jan's server only. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
 the two small real-money bots the same day.
 
 ## Tried and dropped (one line each)
