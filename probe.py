@@ -874,7 +874,7 @@ def audit_full(since="2026-11-09"):
     buys = []
     for n, tr in T.items():
         src = C.get(n, {}).get("source")
-        if src in ("kmaker", "kpatient", "ktrump", "econ", "arb", "maker"):   # Kalshi tracks / maker: fills come from the tape by design
+        if src in ("kmaker", "kpatient", "ktrump", "ktennis", "econ", "arb", "maker"):   # Kalshi tracks / maker: fills come from the tape by design
             continue
         for tok, p in list(tr.get("positions", {}).items()) + [(c.get("token"), c) for c in tr.get("closed", [])]:
             if tok and p.get("slug") and p.get("opened") and bot.parse_iso(p["opened"]) >= t_since:
@@ -953,7 +953,7 @@ def audit_full(since="2026-11-09"):
 
     print("== C) every resolved close since then vs today's final price")
     res = [(n, c) for n, tr in T.items() for c in tr.get("closed", []) if c.get("reason") == "resolved" and c.get("token")
-           and c.get("closed_at") and bot.parse_iso(c["closed_at"]) >= t_since and C.get(n, {}).get("source") not in ("kmaker", "kpatient", "ktrump", "econ", "arb")]
+           and c.get("closed_at") and bot.parse_iso(c["closed_at"]) >= t_since and C.get(n, {}).get("source") not in ("kmaker", "kpatient", "ktrump", "ktennis", "econ", "arb")]
     bot.prefetch_markets({c.get("slug") for n, c in res})
     bad = 0
     for n, c in res:
@@ -967,7 +967,7 @@ def audit_full(since="2026-11-09"):
     print("== D) open positions stuck after their market closed")
     stuck = 0
     for n, tr in T.items():
-        if C.get(n, {}).get("source") in ("kmaker", "kpatient", "ktrump", "econ", "arb"):
+        if C.get(n, {}).get("source") in ("kmaker", "kpatient", "ktrump", "ktennis", "econ", "arb"):
             continue
         for tok, p in tr.get("positions", {}).items():
             m = bot.market_by_slug(p.get("slug"))
