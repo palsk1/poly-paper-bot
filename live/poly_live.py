@@ -80,6 +80,9 @@ def items(pages):
     return list(pages.iter_items()) if hasattr(pages, "iter_items") else list(pages)
 
 
+CLAIMS_PER_ROUND = 5
+
+
 def claim_all(book):
     """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
     "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
@@ -91,13 +94,19 @@ def claim_all(book):
     except Exception as e:
         book.log("claim_list_failed", err=f"{type(e).__name__}: {e}"[:200])
         return
-    seen = set()
+    seen, n = set(), 0
     for p in rows:
         cid = str(getattr(p, "condition_id", "") or "")
         if not cid or cid in seen:
             continue
         seen.add(cid)
         val = float(getattr(p, "current_value", 0) or 0)
+        if val < 0.01:
+            continue      # a lost bet also shows as "to be claimed" but pays $0: leave it (fix 22 Nov, the first
+                          # real run spent minutes claiming Jan's old lost bets one by one and could not answer)
+        if n >= CLAIMS_PER_ROUND:
+            break         # the rest next round, so the bot stays free to answer the phone and place bets
+        n += 1
         try:
             h = cl.redeem_positions(condition_id=cid)
             res = getattr(h, "wait", lambda: "sent")()
@@ -293,7 +302,8 @@ def check():
         print(f"approvals check failed: {e}")
     if os.environ.get("POLY_RELAYER_KEY"):
         try:
-            n = len(items(cl.list_positions(status="REDEEMABLE")))
+            n = len([p for p in items(cl.list_positions(status="REDEEMABLE"))
+                     if float(getattr(p, "current_value", 0) or 0) >= 0.01])
             print(f"Claiming: set up (relayer key). {n} won bet(s) waiting to be claimed now; the bot claims them.")
         except Exception as e:
             print(f"Claiming: relayer key set, but listing claimable bets failed: {e}")
