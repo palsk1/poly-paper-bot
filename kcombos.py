@@ -331,6 +331,258 @@ def load():
     return out
 
 
+# ================================================================ run
+MAKER_RATE, TAKER_RATE = 0.035, 0.07       # combos: the answering side pays half the asker's fee (since 20 Aug 2026)
+BANK = 300.0
+
+
+def fee(rate, n, p):
+    return math.ceil(rate * n * p * (1 - p) * 10000 - 1e-9) / 10000
+
+
+def game_code(ev):
+    parts = str(ev or "").split("-")
+    return parts[1] if len(parts) > 1 else str(ev)
+
+
+def kind_of(legs):
+    ser = [str(lg[0]).split("-")[0] for lg in legs]
+    if all(x.endswith("15M") for x in ser):
+        return "crypto 15-min"
+    if any(x.endswith("15M") for x in ser):
+        return "mixed with crypto"
+    return "sports and other"
+
+
+def quote_at(rows, ts):
+    """Newest finished minute at or before the trade: (yes bid, yes ask)."""
+    best = None
+    for r in rows or []:
+        if r[0] <= ts + 59:
+            best = r
+        else:
+            break
+    if not best or best[1] is None or best[2] is None:
+        return None
+    return best[1], best[2]
+
+
+def rows_of(days):
+    """One row per combo trade. House = the answering side (it holds the opposite of the asker)."""
+    out, skip = [], collections.Counter()
+    for d in days:
+        horizon = d["d0"] + SKIP_DAYS * DAY - DAY // 2      # every leg must have been due by then (set before the result)
+        for sl in d["slices"]:
+            for ts, tk, yp, n, tyes, block in sl["tr"]:
+                c = sl["combos"].get(tk)
+                if not c or not c["legs"]:
+                    skip["combo not found"] += 1
+                    continue
+                legs = [sl["legs"].get(lg[0]) for lg in c["legs"]]
+                if any(l is None for l in legs):
+                    skip["a leg not found"] += 1
+                    continue
+                due = max((l.get("exp") or l.get("close") or 0) for l in legs)
+                if due > horizon:
+                    skip["a leg due after our cut-off (left out whatever the result)"] += 1
+                    continue
+                if c["res"] not in ("yes", "no") or c["sv"] is None:
+                    skip["due but not settled"] += 1
+                    continue
+                if not 0 < yp < 1:
+                    skip["price 0 or 1"] += 1
+                    continue
+                sv = c["sv"]
+                prod_mid = prod_ask = 1.0
+                full = True
+                for lg, l in zip(c["legs"], legs):
+                    q = quote_at(sl["min"].get(lg[0]), ts)
+                    if not q:
+                        full = False
+                        break
+                    bid, ask = q
+                    mid = (bid + ask) / 2
+                    prod_mid *= mid if lg[1] else 1 - mid
+                    prod_ask *= ask if lg[1] else 1 - bid
+                games = [game_code(l["ev"]) for l in legs]
+                if tyes:      # asker bought Yes at yp; the house bought No at 1 - yp
+                    cost, back = n * (1 - yp), n * (1 - sv)
+                else:         # asker bought No (or sold Yes back); the house bought Yes at yp
+                    cost, back = n * yp, n * sv
+                out.append({"ts": ts, "tk": tk, "yp": yp, "n": n, "tyes": tyes, "sv": sv, "nlegs": len(legs),
+                            "kind": kind_of(c["legs"]), "same": len(set(games)) < len(games), "slice": sl["a"],
+                            "prod": prod_mid if full else None, "prod_ask": prod_ask if full else None,
+                            "cost": cost, "back": back, "mfee": fee(MAKER_RATE, n, yp), "tfee": fee(TAKER_RATE, n, yp),
+                            "paid": n * yp if tyes else n * (1 - yp), "lock": max(0, (c.get("set") or ts) - ts),
+                            "left": (min((l.get("exp") or l.get("close") or ts) for l in legs) - ts)})
+    return out, skip
+
+
+def usd(x):
+    return f"-${-x:,.2f}" if x < 0 else f"${x:,.2f}"
+
+
+def per100(rows, key_cost="cost"):
+    c = sum(r[key_cost] for r in rows)
+    return 100 * sum(r["back"] - r["cost"] - r["mfee"] for r in rows) / c if c else 0.0
+
+
+def table(title, rows, keyfn, order=None, note=""):
+    groups = collections.defaultdict(list)
+    for r in rows:
+        k = keyfn(r)
+        if k is not None:
+            groups[k].append(r)
+    L = [f"### {title}", ""]
+    if note:
+        L += [note, ""]
+    L += ["| | trades | buyer's ticket (middle one) | house money locked (middle one) | house won | house profit per $100 locked | per $100 of tickets |",
+          "|---|---|---|---|---|---|---|"]
+    for k in (order or sorted(groups)):
+        g = groups.get(k)
+        if not g:
+            continue
+        paid = sorted(r["paid"] for r in g)
+        cost = sorted(r["cost"] for r in g)
+        won = sum(1 for r in g if r["back"] > r["cost"])
+        net = sum(r["back"] - r["cost"] - r["mfee"] for r in g)
+        L.append(f"| {k} | {len(g):,} | {usd(paid[len(paid) // 2])} | {usd(cost[len(cost) // 2])} | {won:,} of {len(g):,} | "
+                 f"{usd(per100(g))} | {usd(100 * net / sum(paid))} |")
+    return L + [""]
+
+
+def price_band(r):
+    y = r["yp"]
+    for hi, name in ((0.01, "under 1c"), (0.05, "1-5c"), (0.15, "5-15c"), (0.35, "15-35c"), (0.65, "35-65c"), (0.9, "65-90c"), (1.01, "90c+")):
+        if y < hi:
+            return name
+
+
+BANDS = ["under 1c", "1-5c", "5-15c", "15-35c", "35-65c", "65-90c", "90c+"]
+
+
+def bets(rows, price=None):
+    """Bet list for the exam: one row per trade from the house's chair, grouped by the minute sampled."""
+    return [{"ev": f"{r['slice']}", "t": r["ts"], "cost": r["cost"], "back": r["back"] - r["mfee"]} for r in rows]
+
+
+def undercut(rows, margin, lo=2, hi=4):
+    """A house that prices 'legs multiplied x (1 + margin)' and only gets the trade when that beats the real price."""
+    out = []
+    for r in rows:
+        if not r["tyes"] or r["prod"] is None or r["same"] or not lo <= r["nlegs"] <= hi:
+            continue
+        q = min(0.99, r["prod"] * (1 + margin))
+        if q <= 0 or q >= r["yp"]:
+            continue
+        n = r["n"]
+        out.append(dict(r, cost=n * (1 - q), back=n * (1 - r["sv"]), mfee=fee(MAKER_RATE, n, q), paid=n * q, q=q))
+    return out
+
+
+def run(score="1"):
+    days = load()
+    rows, skip = rows_of(days)
+    if not rows:
+        print("no data: run fetch first")
+        return
+    n_sl = sum(len(d["slices"]) for d in days)
+    secs = sum(sl["b"] - sl["cov"] for d in days for sl in d["slices"])
+    all_tr = sum(sl["seen"] for d in days for sl in d["slices"])
+    cmb_tr = sum(len(sl["tr"]) for d in days for sl in d["slices"])
+    n_all = sum(sl.get("n_all") or 0 for d in days for sl in d["slices"])
+    kept = sum(len(sl["combos"]) for d in days for sl in d["slices"])
+    yes = [r for r in rows if r["tyes"]]
+    first = time.strftime("%d %b", time.gmtime(min(d["d0"] for d in days)))
+    last = time.strftime("%d %b %Y", time.gmtime(max(d["d0"] for d in days)))
+    L = ["# Kalshi combos: can a small account be the house? (22 Nov 2026)", "",
+         "Research only. Public data, no key, no orders. Tool `kcombos.py`, data `kcb_cache/` in the price store.", ""]
+    L += ["## The sample", "",
+          f"{len(days)} days ({first} to {last}), {n_sl} random moments. At each one we read every Kalshi trade of about "
+          f"half a minute ({secs:,} seconds in all, {all_tr:,} trades), kept the combo trades, looked up each combo's legs, "
+          f"result and what each leg cost on its own that minute.", "",
+          f"- Combos traded in those seconds: {n_all:,} different ones (we kept a random {kept:,}, {cmb_tr:,} trades).",
+          f"- That is about {n_all / max(1, secs) * 60:,.0f} different combos sold a minute, around the clock.",
+          f"- Trades we could score (every leg due and settled): **{len(rows):,}**. Left out: "
+          + "; ".join(f"{v:,} {k}" for k, v in skip.most_common()) + ".",
+          f"- In {len(yes):,} of them the asker bought the combo (Yes). In {len(rows) - len(yes):,} the asker took the other side.", ""]
+    paid = sorted(r["paid"] for r in yes)
+    cost = sorted(r["cost"] for r in yes)
+    q = lambda xs, f: xs[min(len(xs) - 1, int(f * len(xs)))]
+    L += ["## How big is one combo, and how much must the house put up?", "",
+          "The house buys the No side: for every $1 a combo can pay, it puts up $1 minus the buyer's price.", "",
+          "| | smallest quarter | middle | biggest quarter | biggest 1 in 20 |", "|---|---|---|---|---|",
+          f"| Buyer's ticket | {usd(q(paid, .25))} | {usd(q(paid, .5))} | {usd(q(paid, .75))} | {usd(q(paid, .95))} |",
+          f"| House money locked | {usd(q(cost, .25))} | {usd(q(cost, .5))} | {usd(q(cost, .75))} | {usd(q(cost, .95))} |", "",
+          f"A house must answer for the whole size asked. Trades a $300 bank could carry with at most $30 locked: "
+          f"{sum(1 for c in cost if c <= 30):,} of {len(cost):,}.", ""]
+    L += ["## Who won: the house or the buyer?", "",
+          "Every scored trade, from the house's chair, after the house's fee. \"Per $100 locked\" is what a bank earns on the "
+          "money it must put up. \"Per $100 of tickets\" is the house's cut of what buyers spent.", ""]
+    L += table("By kind of combo (asker bought Yes)", yes, lambda r: r["kind"])
+    L += table("By the buyer's price", yes, price_band, BANDS)
+    L += table("By number of legs", yes, lambda r: f"{min(r['nlegs'], 8)}{'+' if r['nlegs'] >= 8 else ''} legs")
+    L += table("Legs from the same game or not (sports and other)", [r for r in yes if r["kind"] == "sports and other"],
+               lambda r: "two or more legs from one game" if r["same"] else "every leg a different game")
+    L += table("Small tickets only: house money locked", yes,
+               lambda r: "up to $5" if r["cost"] <= 5 else "$5-30" if r["cost"] <= 30 else "$30-300" if r["cost"] <= 300 else "over $300",
+               ["up to $5", "$5-30", "$30-300", "over $300"])
+    L += table("When the asker took the other side (sold a combo back, or bought No)", [r for r in rows if not r["tyes"]], lambda r: r["kind"])
+    # price against the legs
+    pr = [r for r in yes if r["prod"] is not None and r["prod"] > 0]
+    L += ["## The price against the legs", "",
+          f"For {len(pr):,} Yes trades every leg had a price that minute. Legs multiplied is a fair price only when legs "
+          "don't lean on each other (legs from one game do, and so do coins in the same 15 minutes).", "",
+          "| | trades | buyers paid | legs multiplied were worth | combo really paid back |", "|---|---|---|---|---|"]
+    for name, g in (("every leg a different game, sports", [r for r in pr if r["kind"] == "sports and other" and not r["same"]]),
+                    ("same-game legs, sports", [r for r in pr if r["kind"] == "sports and other" and r["same"]]),
+                    ("crypto 15-min", [r for r in pr if r["kind"] == "crypto 15-min"])):
+        if g:
+            p_ = sum(r["paid"] for r in g)
+            L.append(f"| {name} | {len(g):,} | $100 | {usd(100 * sum(r['n'] * r['prod'] for r in g) / p_)} | "
+                     f"{usd(100 * sum(r['n'] * r['sv'] for r in g) / p_)} |")
+    L += [""]
+    # undercut house
+    L += ["## Our own house rule: legs multiplied plus a margin", "",
+          "The Polymarket rule (combos.py): 2-4 legs, no two legs from one game, price = legs multiplied + 5%, and we only "
+          "get the trade when that is cheaper for the buyer than what the pro really charged.", "",
+          "| margin | trades we would have won | of how many asked | house profit per $100 locked | per $100 of tickets | house won |",
+          "|---|---|---|---|---|---|"]
+    base = [r for r in yes if r["prod"] is not None and not r["same"] and 2 <= r["nlegs"] <= 4]
+    cards = []
+    for mg in (0.02, 0.05, 0.10):
+        g = undercut(yes, mg)
+        if g:
+            net = sum(r["back"] - r["cost"] - r["mfee"] for r in g)
+            L.append(f"| +{mg * 100:.0f}% | {len(g):,} | {len(base):,} | {usd(per100(g))} | {usd(100 * net / sum(r['paid'] for r in g))} | "
+                     f"{sum(1 for r in g if r['back'] > r['cost']):,} of {len(g):,} |")
+    L += [""]
+    # time locked
+    L += ["## How long is the money locked?", "", "| kind | middle | longest quarter from |", "|---|---|---|"]
+    for k in ("crypto 15-min", "sports and other", "mixed with crypto"):
+        g = sorted(r["lock"] for r in yes if r["kind"] == k)
+        if g:
+            f = lambda s_: f"{s_ / 60:.0f} min" if s_ < 7200 else f"{s_ / 3600:.1f} hours"
+            L.append(f"| {k} | {f(q(g, .5))} | {f(q(g, .75))} |")
+    L += [""]
+    if score == "1":
+        L += ["## The shared exam", "", "```"]
+        tries = 20
+        for name, g in (("Kalshi combo house: every Yes trade the pros sold", yes),
+                        ("Kalshi combo house: sports, every leg a different game", [r for r in yes if r["kind"] == "sports and other" and not r["same"]]),
+                        ("Kalshi combo house: crypto 15-min combos", [r for r in yes if r["kind"] == "crypto 15-min"]),
+                        ("Kalshi combo house: our rule, legs x 1.05, 2-4 legs", undercut(yes, 0.05))):
+            if g:
+                c = exam.score(bets(g), name, tries=tries, src="kcombos.py", note="house side of real Kalshi combo trades, after the maker fee")
+                cards.append(c)
+                L += [exam.card_text(c), ""]
+        L += ["```", ""]
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT + ".tables", "w") as f:
+        f.write("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 def stat():
     days = load()
     n = sum(len(s["tr"]) for d in days for s in d["slices"])
@@ -347,6 +599,36 @@ def stat():
 
 
 
+def selftest():
+    """Offline: two made-up combo trades, checked by hand."""
+    global CACHE
+    import tempfile
+    CACHE = tempfile.mkdtemp()
+    d0 = 1795000000 // DAY * DAY
+    leg = lambda ev, res, exp: {"ev": ev, "q": "", "res": res, "sv": 1.0 if res == "yes" else 0.0, "close": exp, "exp": exp, "open": d0, "occ": exp}
+    sl = {"a": d0 + 100, "b": d0 + 160, "cov": d0 + 100, "seen": 1000, "done": True, "n_all": 2,
+          "tr": [[d0 + 130, "KXMVE-A", 0.30, 10.0, 1, 0], [d0 + 131, "KXMVE-B", 0.50, 4.0, 1, 0]],
+          "combos": {"KXMVE-A": {"legs": [["KXG-1-A", 1], ["KXG-2-B", 0]], "res": "no", "sv": 0.0, "close": d0 + 500, "set": d0 + 505, "open": d0, "col": "c", "st": "finalized"},
+                     "KXMVE-B": {"legs": [["KXG-1-A", 1], ["KXT-1-X", 1]], "res": "yes", "sv": 1.0, "close": d0 + 900, "set": d0 + 905, "open": d0, "col": "c", "st": "finalized"}},
+          "legs": {"KXG-1-A": leg("KXG-1", "yes", d0 + 800), "KXG-2-B": leg("KXG-2", "yes", d0 + 400), "KXT-1-X": leg("KXT-1", "yes", d0 + 900)},
+          "min": {"KXG-1-A": [[d0 + 120, 0.59, 0.61, None]], "KXG-2-B": [[d0 + 120, 0.49, 0.51, None]], "KXT-1-X": [[d0 + 120, 0.79, 0.81, None]]}}
+    wj(day_path(d0), {"d0": d0, "slices": [sl]})
+    rows, skip = rows_of(load())
+    assert len(rows) == 2 and not skip, (rows, skip)
+    a, b = rows
+    assert abs(a["cost"] - 7.0) < 1e-9 and abs(a["back"] - 10.0) < 1e-9 and abs(a["prod"] - 0.30) < 1e-9 and not a["same"]
+    assert abs(b["cost"] - 2.0) < 1e-9 and b["back"] == 0 and b["same"] and abs(b["prod"] - 0.48) < 1e-9
+    assert abs(a["mfee"] - 0.0735) < 1e-9
+    u = undercut(rows, 0.0)
+    assert not u, u            # A: 0.30 is not below 0.30; B is a same-game pair
+    sl["tr"][0][2] = 0.40
+    wj(day_path(d0), {"d0": d0, "slices": [sl]})
+    u = undercut(rows_of(load())[0], 0.05)
+    assert len(u) == 1 and abs(u[0]["q"] - 0.315) < 1e-9 and abs(u[0]["cost"] - 6.85) < 1e-9
+    run("0")
+    print("kcombos selftest OK")
+
+
 def trial():
     global CACHE
     CACHE = "/tmp/kcb_trial"
@@ -356,4 +638,4 @@ def trial():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"peek": peek, "fetch": fetch, "stat": stat, "trial": trial}[cmd](*sys.argv[2:])
+    {"peek": peek, "fetch": fetch, "stat": stat, "trial": trial, "run": run, "selftest": selftest}[cmd](*sys.argv[2:])
