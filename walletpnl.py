@@ -294,8 +294,6 @@ def report(addr):
     print(f"  'strikes Iran' markets: {len(iran)}, bought {money(sum(r['bought'] for r in iran))}, P&L {money(sum(r['flow'] for r in iran))}")
     rest = [r for r in rows if r not in iran]
     print(f"  everything else: {len(rest)} markets, bought {money(sum(r['bought'] for r in rest))}, P&L {money(sum(r['flow'] for r in rest))}")
-    print("  everything else, by month first bought:", {k: money(v) for k, v in sorted(
-        collections.Counter({day(first.get(r['cid']))[:7]: 0 for r in rest}).items())} if False else "")
     ce = collections.defaultdict(float)
     for r in rest:
         ce[day(first.get(r["cid"]))[:7]] += r["flow"]
