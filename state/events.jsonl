@@ -28521,3 +28521,4 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXMLSSCORE-26NOV21MIACLB-MIA4CLB2", "track": "kalshi_patient", "ts": "2026-11-22T02:11:04Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXTOPUSAGEAI-26NOV16-TENC", "track": "kalshi_patient", "ts": "2026-11-22T02:11:08Z", "type": "kpatient_fill"}
+{"annual": 0.191, "edge": 0.0221, "pair": "KXTRUMPFLAVIOMEET-26DEC01-JAN01|will-trump-meet-with-flavio-bolsonaro-in-2026", "title": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?", "track": "arb", "ts": "2026-11-22T02:12:30Z", "type": "arb_opportunity"}
