@@ -29305,3 +29305,13 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXNFLTOTAL-26NOV22MIABUF-26", "track": "kalshi_patient", "ts": "2026-11-22T09:44:19Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV22BALCAR-BALDHENRY22-130", "track": "kalshi_patient", "ts": "2026-11-22T09:44:19Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXSERIEASCORE-26NOV22ACMFRO-ACM2FRO2", "track": "kalshi_patient", "ts": "2026-11-22T09:44:19Z", "type": "kpatient_order"}
+{"cost": 4.1422, "title": "Will the price of Bitcoin be above $64,000 on November 25?", "token": "73727278477044631309134498596053734611719722105101532927486677788774709855924", "track": "crypto_no", "ts": "2026-11-22T09:51:53Z", "type": "skip_no_cash"}
+{"fee": 0.0385, "outcome": "Draw", "price": 0.19, "shares": 5, "title": "Will FK Neftchi Fargona vs. Al Hilal SFC end in a draw?", "token": "106024662156548053768967450829575351820234452765244154343382033685684390378553", "track": "soccer_draw", "ts": "2026-11-22T09:52:09Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV220445-45", "track": "kc_maker", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV220445-45", "track": "kc_maker", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV220445-45", "track": "kc_maker_safe", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV220445-45", "track": "kc_maker_safe", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV220445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV220445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV220445-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV220445-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T09:52:27Z", "type": "kmaker_fill"}

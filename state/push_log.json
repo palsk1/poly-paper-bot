@@ -48,7 +48,7 @@
   "2026-11-22": {
    "failed": 0,
    "muted": 45,
-   "sent": 7
+   "sent": 8
   }
  },
  "recent": [
@@ -1149,6 +1149,12 @@
    "title": "[soccer_draw] bought 2 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-22T07:43:05Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-22T09:52:09Z"
   }
  ]
 }
