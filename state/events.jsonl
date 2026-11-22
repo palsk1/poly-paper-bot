@@ -28509,3 +28509,15 @@
 {"minutes_left": 0.95, "price": 0.951, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:04Z", "type": "kmaker_order"}
 {"minutes_left": 0.95, "price": 0.952, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T01:59:05Z", "type": "kmaker_order"}
 {"minutes_left": 0.95, "price": 0.952, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T01:59:06Z", "type": "kmaker_order"}
+{"cost": 4.4251, "title": "Will the price of Bitcoin be above $64,000 on November 25?", "token": "73727278477044631309134498596053734611719722105101532927486677788774709855924", "track": "crypto_no", "ts": "2026-11-22T02:10:30Z", "type": "skip_no_cash"}
+{"fee": 0.0369, "outcome": "Draw", "price": 0.18, "shares": 5, "title": "Will CD San Antonio Bulo Bulo vs. Club Always Ready end in a draw?", "token": "86602966647300620621558615201822001451631362795158895813085940124058468513084", "track": "soccer_draw", "ts": "2026-11-22T02:10:55Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T02:10:56Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T02:10:59Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.49, "price": 0.951, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T02:10:59Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.48, "price": 0.952, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.28, "price": 0.972, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.48, "price": 0.952, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV212100-00", "track": "kc_maker_safe", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV212100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T02:11:00Z", "type": "kmaker_fill"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXMLSSCORE-26NOV21MIACLB-MIA4CLB2", "track": "kalshi_patient", "ts": "2026-11-22T02:11:04Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXTOPUSAGEAI-26NOV16-TENC", "track": "kalshi_patient", "ts": "2026-11-22T02:11:08Z", "type": "kpatient_fill"}
