@@ -29457,3 +29457,11 @@
 {"minutes_left": 2.74, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe", "ts": "2026-11-22T11:57:17Z", "type": "kmaker_order"}
 {"minutes_left": 2.74, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-22T11:57:17Z", "type": "kmaker_order"}
 {"minutes_left": 2.74, "price": 0.992, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T11:57:18Z", "type": "kmaker_order"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in London be 9\u00b0C on November 23?", "token": "107428429706804202693326025216576668474300970155714291571162381913240030286812", "track": "endgame_sell98", "ts": "2026-11-22T12:02:54Z", "type": "paper_buy"}
+{"cost": 3.9881, "title": "Will the price of Bitcoin be above $64,000 on November 25?", "token": "73727278477044631309134498596053734611719722105101532927486677788774709855924", "track": "crypto_no", "ts": "2026-11-22T12:07:29Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker", "ts": "2026-11-22T12:08:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe", "ts": "2026-11-22T12:08:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-22T12:08:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.08, "price": 0.992, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV220700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T12:08:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.92, "side": "yes", "through": true, "ticker": "KXETHD-26NOV2207-T1699.99", "track": "kalshi_patient", "ts": "2026-11-22T12:08:03Z", "type": "kpatient_fill"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXHIGHPHIL-26NOV21-B63.5", "track": "kalshi_patient", "ts": "2026-11-22T12:08:03Z", "type": "kpatient_result"}
