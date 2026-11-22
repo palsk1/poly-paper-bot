@@ -1403,7 +1403,7 @@ def lead_report():
     gs, ks = load_365(), load_kalshi()
     join(ks, gs)
     src = "tennis.py lead"
-    tries = 110          # every cut looked at in this dig (set tables, bands, lags, tours, sudden moves)
+    tries = 130          # every cut looked at in this dig (set tables, bands, lags, tours, sudden moves)
     rows, _ = set_rows(ks, lags=(3,))
     los = [b for r in rows for b in [kbet(r, 3, not r["won"])] if b]
     exam.score(los, "Kalshi tennis: buy the player who just lost a set, 3 min later", tries=tries, src=src, status="dropped")
@@ -1445,6 +1445,7 @@ def lead_report():
               f"worst dip ${s['worst_dip']:.0f}, pot ends at ${s['end']:.2f}")
         s = bank_sim(allb, bank, stake)
         print(f"  whole history, same: {s['taken']} taken, {s['skipped']} skipped, most out ${s['most_out']:.0f}, worst dip ${s['worst_dip']:.0f}, pot ends at ${s['end']:.2f}")
+    lead_clock2(ks)
     print("\nten bets, as they were (to read by hand):")
     import random
     for b in random.Random(7).sample(allb, 10):
@@ -1616,6 +1617,53 @@ def pm_report(off=SAFE_MIN, win=3):
     if pb:
         exam.score(pb, "Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock)", tries=112, src="tennis.py pm", status="candidate")
     return pb
+
+
+def lead_clock2(ks, exam_too=True):
+    """Second clock for the lead: Kalshi's own set-1 winner market. It closes after the set is over (middle case 9 min
+    after 365scores' set end), so a bet timed from it can't know anything early. Main tours only (ATP from Jan 2026,
+    WTA from May 2026)."""
+    by = {k["ev"]: k for k in ks}
+    clock = {}
+    for sr in SET_SERIES[:2]:
+        for m in rj(os.path.join(KT_DIR, f"markets_{sr}.json.gz"), []) or []:
+            p = m["ev"].split("-")
+            if len(p) < 3 or p[2] != "1":
+                continue
+            d = clock.setdefault(sr.replace("SETWINNER", "MATCH") + "-" + p[1], {})
+            d["close"] = bot.parse_iso(m["close"]).timestamp()
+            if m["res"] == "yes":
+                d["win"] = m["name"]
+    ms = [(ev, c) for ev, c in clock.items() if "win" in c and ev in by]
+    print(f"\n=== second clock: Kalshi's own set-1 market ({len(ms)} main-tour matches) ===")
+    keep = {}
+    for off in (0, 1, 3, 5, 10, 20):
+        for grp in ("all", "KXATPMATCH", "KXWTAMATCH"):
+            bets = []
+            for ev, c in ms:
+                k = by[ev]
+                t = c["close"] + off * 60
+                if (grp != "all" and k["series"] != grp) or t >= k["close"] - 120:
+                    continue
+                q = quote_at(k["mins"], t)
+                if not q:
+                    continue
+                yes = bool(toks(c["win"]) & toks(k["name"]))
+                px = q[1] if yes else 1 - q[0]
+                if 0.5 <= px < 0.8:
+                    b = kbet({"ev": ev, "q": {0: q}, "te": t, "est": t, "res": k["res"]}, 0, yes)
+                    if b:
+                        bets.append(b)
+            bets.sort(key=lambda b: b["t"])
+            h = len(bets) // 2
+            keep[(off, grp)] = bets
+            print(f"  {off:2d} min after that market closes, {'both tours' if grp == 'all' else 'men (ATP)' if 'ATP' in grp else 'women (WTA)'}: {len(bets)} bets, "
+                  f"{per100(bets):+.2f} per $100 (first half {per100(bets[:h]):+.2f}, second half {per100(bets[h:]):+.2f})")
+    if exam_too:
+        import exam
+        exam.score(keep[(3, "KXWTAMATCH")], "Kalshi tennis: set-1 winner at 50-80c, women's main tour, timed by Kalshi's set market + 3 min", tries=130, src="tennis.py lead", status="candidate")
+        exam.score(keep[(3, "KXATPMATCH")], "Kalshi tennis: set-1 winner at 50-80c, men's main tour, timed by Kalshi's set market + 3 min", tries=130, src="tennis.py lead", status="dropped")
+    return keep
 
 
 def khist():
