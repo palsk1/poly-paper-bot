@@ -102,12 +102,28 @@ def kreq(method, path, body=None, params=None):
     return 0, "gave up"
 
 
-def balance():
+CRYPTO_SHARD = 2    # Kalshi keeps each account's money in compartments ("exchange indexes"); crypto bets use number 2
+
+
+def balances():
+    """(whole account, the Crypto compartment). A bot's bid is only paid from the compartment its market
+    trades in: Kalshi moves money by itself for bets made by hand, never for a bot (22 Nov 2026)."""
     st, res = kreq("GET", "/portfolio/balance")
     if st != 200:
         raise RuntimeError(f"balance failed: {st} {res}")
     v = res.get("balance_dollars")
-    return float(v) if v not in (None, "") else res.get("balance", 0) / 100
+    total = float(v) if v not in (None, "") else res.get("balance", 0) / 100
+    parts = {}
+    for x in res.get("balance_breakdown") or []:
+        try:
+            parts[int(x["exchange_index"])] = float(x["balance"])
+        except (KeyError, TypeError, ValueError):
+            pass
+    return total, (parts.get(CRYPTO_SHARD, 0.0) if parts else total)
+
+
+def balance():
+    return balances()[1]
 
 
 # ---------------------------------------------------------------- one loop
@@ -243,6 +259,12 @@ def place(book):
                     cash = balance()
                 if cash < cost:
                     book.log("skip_no_cash", ticker=tk, balance=round(cash, 2), cost=cost)
+                    if book.state.get("cash_push") != C.today():
+                        book.state["cash_push"] = C.today()
+                        book.save()
+                        C.push("Kalshi bot: no money to bid with",
+                               f"The Crypto part of your Kalshi account has ${cash:.2f}, a bid needs ${cost:.2f}. "
+                               "Move money there: kalshi.com/account/exchange-indexes")
                     continue
                 body = order_body(tk, side, price, shares, close)
                 tries[tk] = tries.get(tk, 0) + 1
@@ -303,8 +325,10 @@ def check():
     C.load_env()
     C.need("KALSHI_KEY_ID")
     print(f"Key id {os.environ['KALSHI_KEY_ID'][:6]}..., key file {os.environ.get('KALSHI_KEY_FILE', '~/.kalshi.key')}")
-    b = balance()
-    print(f"OK: the key works. Kalshi balance ${b:.2f}.")
+    total, b = balances()
+    print(f"OK: the key works. Kalshi balance ${total:.2f}, of which ${b:.2f} in the Crypto part (the bot can only use that).")
+    if b < 4 <= total:
+        print("  !! The money is in the wrong part of the account. Move it to Crypto: kalshi.com/account/exchange-indexes")
     print("Mode:", "LIVE, real bids" if C.is_live() else "dry run (add LIVE=yes to ~/.live.env for real bids)")
     print("Stop check:", C.stop_reason("kalshi", C.Book("kalshi")) or "nothing stops it")
     print(C.phone_check("Kalshi bot"))
