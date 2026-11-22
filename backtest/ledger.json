@@ -2859,12 +2859,12 @@
    "date": "2026-11-22",
    "what": "Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock)",
    "tries": 112,
-   "bets": 76,
-   "groups": 74,
-   "per100": -12.25,
-   "floor100": -40.43,
-   "verdict": "Behind, but could be bad luck",
-   "status": "candidate",
+   "bets": 1949,
+   "groups": 1931,
+   "per100": -3.64,
+   "floor100": -9.12,
+   "verdict": "Losing",
+   "status": "dropped",
    "src": "tennis.py pm"
   }
  ]

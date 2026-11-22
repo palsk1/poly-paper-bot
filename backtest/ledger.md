@@ -2,7 +2,7 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**225 ideas examined, in about 68,695 versions.** 176 dropped, 49 still being tested or waiting. **Looks real: 6.**
+**225 ideas examined, in about 68,695 versions.** 177 dropped, 48 still being tested or waiting. **Looks real: 6.**
 
 Why count: if you test 225 ideas that are all worthless, the luckiest one still looks good. With 225 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
@@ -220,7 +220,7 @@ Why count: if you test 225 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | Polymarket check: No on the favourite 24h+ before, #2 spot | 170 | 13 | +$27.58 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Polymarket check: No on the favourite 6-24h before | 170 | 53 | -$38.18 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Polymarket: No on the holder where the record is 10c+ below the price | 170 | 44 | +$4.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
-| 2026-11-22 | Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock) | 112 | 74 | -$12.25 | Behind, but could be bad luck | candidate | tennis.py pm |
+| 2026-11-22 | Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock) | 112 | 1931 | -$3.64 | Losing | dropped | tennis.py pm |
 | 2026-11-22 | Polymarket: Yes on the holder where the record is 10c+ above the price | 170 | 38 | -$21.81 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Same, 10c+, last 10 days only, No | 120 | 13 | -$52.46 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Same, 10c+, last 10 days only, Yes | 120 | 13 | -$81.53 | Losing | dropped | spacex.py, backtest/spacex.md |
