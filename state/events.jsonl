@@ -29652,3 +29652,4 @@
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXATPCHALLENGERMATCH-26NOV22KLOSED-SED", "track": "kalshi_patient", "ts": "2026-11-22T15:04:21Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXBTC-26NOV2210-B60850", "track": "kalshi_patient", "ts": "2026-11-22T15:04:21Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXTEMPCHIHS-26NOV2210-T55.99", "track": "kalshi_patient", "ts": "2026-11-22T15:04:22Z", "type": "kpatient_fill"}
+{"pnl": -9.2, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV2210-B60850", "track": "kalshi_patient", "ts": "2026-11-22T15:07:15Z", "type": "kpatient_result"}
