@@ -314,6 +314,13 @@ def stat():
 
 
 
+def trial():
+    global CACHE
+    CACHE = "/tmp/kcb_trial"
+    fetch("1", "2")
+    stat()
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {"peek": peek, "fetch": fetch, "stat": stat}[cmd](*sys.argv[2:])
+    {"peek": peek, "fetch": fetch, "stat": stat, "trial": trial}[cmd](*sys.argv[2:])
