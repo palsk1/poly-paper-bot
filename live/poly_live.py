@@ -24,6 +24,7 @@ Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   POLY_RELAYER_KEY=...              Settings > API keys > Relayer key: lets the bot claim wins by itself
   POLY_RELAYER_ADDRESS=0x...        the address shown next to that Relayer key
   LIVE=yes                          without this line it only writes down what it WOULD do
+  POLY_TAKE=half                    half = every second signal (fits about $28), all = every signal (needs about $60)
   POLY_MAX_BET=2.10                 most money one bet may cost (paper's dearest draw bet so far: $2.06)
   POLY_MAX_OPEN_USD=28              most money in open bets at once
   POLY_MAX_OPEN=20                  most open bets at once
@@ -51,7 +52,10 @@ _client = None
 
 
 def take(slug):
-    """The blind half: True for about every second market, decided by its name only."""
+    """The blind half: True for about every second market, decided by its name only. With POLY_TAKE=all in
+    ~/.live.env (Jan, 22 Nov, after adding money) every signal is taken, like the paper track."""
+    if os.environ.get("POLY_TAKE", "half").strip().lower() == "all":
+        return True
     return int(hashlib.sha1(slug.encode()).hexdigest(), 16) % 2 == 0
 
 
@@ -253,7 +257,7 @@ def run():
         book.state["done"] = [s for s in book.state["done"] if s in book.state["open"]]
         book.state["fix_1122"] = True
         book.save()
-    book.log("start", rule=TRACK, max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
+    book.log("start", rule=TRACK, take=os.environ.get("POLY_TAKE", "half"), max_bet=C.envf("POLY_MAX_BET", 2.10), max_open_usd=C.envf("POLY_MAX_OPEN_USD", 28),
              mode="LIVE (real money)" if C.is_live() else "dry run")
     if C.is_live():
         cl = client()
