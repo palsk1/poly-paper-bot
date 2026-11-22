@@ -139,7 +139,7 @@ MAX_PAGES = int(os.environ.get("KCB_PAGES", "12"))
 MAX_COMBOS = int(os.environ.get("KCB_COMBOS", "300"))   # combos looked up per slice (a random draw of the traded ones)
 WORKERS = int(os.environ.get("KCB_WORKERS", "6"))
 BUDGET_MIN = float(os.environ.get("KCB_MIN", "200"))
-SKIP_DAYS = 2                                           # newest days are skipped so combos have settled
+SKIP_DAYS = 3                                           # newest days are skipped so most combos have finished
 
 
 def day_path(d0):
