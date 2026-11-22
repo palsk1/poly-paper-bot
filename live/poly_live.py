@@ -21,6 +21,8 @@ and py-clob-client-v2 was shelved 12 Nov, so this uses Polymarket's new official
 Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   POLY_PRIVATE_KEY=0x...            the key Polymarket shows under Settings, Export private key
   POLY_WALLET=0x...                 your Polymarket address (Profile, the 0x... under your name)
+  POLY_RELAYER_KEY=...              Settings > API keys > Relayer key: lets the bot claim wins by itself
+  POLY_RELAYER_ADDRESS=0x...        the address shown next to that Relayer key
   LIVE=yes                          without this line it only writes down what it WOULD do
   POLY_MAX_BET=2.10                 most money one bet may cost (paper's dearest draw bet so far: $2.06)
   POLY_MAX_OPEN_USD=28              most money in open bets at once
@@ -56,11 +58,42 @@ def take(slug):
 def client():
     global _client
     if _client is None:
-        from polymarket import SecureClient
+        from polymarket import RelayerApiKey, SecureClient
         C.need("POLY_PRIVATE_KEY")
+        rk = None
+        if os.environ.get("POLY_RELAYER_KEY"):   # lets the bot claim winnings itself (gasless, no fee)
+            rk = RelayerApiKey(key=os.environ["POLY_RELAYER_KEY"],
+                               address=os.environ.get("POLY_RELAYER_ADDRESS") or os.environ.get("POLY_WALLET"))
         _client = SecureClient.create(private_key=os.environ["POLY_PRIVATE_KEY"],
-                                      wallet=os.environ.get("POLY_WALLET") or None)
+                                      wallet=os.environ.get("POLY_WALLET") or None, api_key=rk)
     return _client
+
+
+def claim_all(book):
+    """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
+    "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
+    This sweeps ALL claimable positions of the wallet (also old ones from before the bot), once per settle round,
+    and retries ones that failed. Needs POLY_RELAYER_KEY (Polymarket Settings > API keys > Relayer key)."""
+    cl = client()
+    try:
+        rows = list(cl.list_positions(status="REDEEMABLE"))
+    except Exception as e:
+        book.log("claim_list_failed", err=f"{type(e).__name__}: {e}"[:200])
+        return
+    seen = set()
+    for p in rows:
+        cid = str(getattr(p, "condition_id", "") or "")
+        if not cid or cid in seen:
+            continue
+        seen.add(cid)
+        val = float(getattr(p, "current_value", 0) or 0)
+        try:
+            h = cl.redeem_positions(condition_id=cid)
+            res = getattr(h, "wait", lambda: "sent")()
+            book.log("claimed", condition_id=cid, title=str(getattr(p, "title", ""))[:80], value=round(val, 2),
+                     result=str(res)[:120])
+        except Exception as e:
+            book.log("claim_failed", condition_id=cid, value=round(val, 2), err=f"{type(e).__name__}: {e}"[:200])
 
 
 def cash():
@@ -178,14 +211,10 @@ def settle(book):
         spent = o.get("spent", o["shares"] * o["ask"])
         pnl = o["shares"] * pay - spent - o.get("fee_est", 0)
         extra = {"result": "draw" if pay else "no draw", "how": "real" if o.get("order_id") else "dry run"}
-        if pay and o.get("order_id") and o.get("condition_id"):
-            try:
-                h = client().redeem_positions(condition_id=o["condition_id"])
-                extra["redeem"] = str(getattr(h, "wait", lambda: "sent")())[:120]
-            except Exception as e:
-                extra["redeem"] = f"failed, press Claim in the Polymarket app: {type(e).__name__}: {e}"[:200]
         book.settle(slug, pnl, filled=o["shares"], **extra)   # a lost draw is normal (about 2 in 3): no push
     book.save()
+    if C.is_live() and os.environ.get("POLY_RELAYER_KEY"):
+        claim_all(book)       # wins are paid out by claiming; also picks up any that failed before
 
 
 def run():
@@ -233,6 +262,15 @@ def check():
         print("Trading approvals:", cl.get_trading_approvals_state())
     except Exception as e:
         print(f"approvals check failed: {e}")
+    if os.environ.get("POLY_RELAYER_KEY"):
+        try:
+            n = len(list(cl.list_positions(status="REDEEMABLE")))
+            print(f"Claiming: set up (relayer key). {n} won bet(s) waiting to be claimed now; the bot claims them.")
+        except Exception as e:
+            print(f"Claiming: relayer key set, but listing claimable bets failed: {e}")
+    else:
+        print("Claiming: NOT set up. Wins stay unclaimed until you press Claim in the app. "
+              "Fix: add the Relayer key with add_keys.py (see live/README.md).")
     print("Mode:", "LIVE, real buys" if C.is_live() else "dry run (add LIVE=yes to ~/.live.env for real buys)")
     print("Stop check:", C.stop_reason("poly", C.Book("poly")) or "nothing stops it")
 

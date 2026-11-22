@@ -185,6 +185,10 @@ def test_poly():
             return SimpleNamespace(ok=True, order_id="o1", status="matched", making_amount=kw["amount"],
                                    taking_amount=__import__("decimal").Decimal("6"))
 
+        def list_positions(self, status):
+            return [SimpleNamespace(condition_id="0xc", current_value=6, title="A vs B draw"),
+                    SimpleNamespace(condition_id="0xold", current_value=3, title="an old win")]
+
         def redeem_positions(self, condition_id):
             calls.append({"redeem": condition_id})
             return SimpleNamespace(wait=lambda: "done")
@@ -199,9 +203,12 @@ def test_poly():
     del os.environ["POLY_MAX_OPEN"]
     key = next(iter(b3.state["open"]))
     bot.http_json = lambda url, params=None, retries=3: [{"closed": True, "outcomePrices": '["1", "0"]'}]
+    os.environ["POLY_RELAYER_KEY"] = "k"
     P.settle(b3)
-    check(b3.state["won"] == 3 and b3.state["realized"] > 0 and any("redeem" in c for c in calls),
-          "Polymarket settles a won draw and asks Polymarket to pay it out")
+    red = [c["redeem"] for c in calls if "redeem" in c]
+    check(b3.state["won"] == 3 and b3.state["realized"] > 0 and red == ["0xc", "0xold"],
+          "Polymarket settles won draws, then claims every claimable win (old ones too), once each")
+    del os.environ["POLY_RELAYER_KEY"]
     check(key in b3.state["done"], "a settled market is never bought again")
     os.environ.pop("LIVE")
 

@@ -27,6 +27,8 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
   `bash ~/poly-paper-bot/live/update.sh`.
 - Kalshi bids are post-only (never take, never pay a taker fee), die when their window closes, and cancel if Kalshi
   pauses trading. Polymarket buys are all-or-nothing (FOK) and never above listed + 3c.
+- **Winnings:** Kalshi pays out by itself. Polymarket only pays a win once it is claimed: every 10 minutes the bot
+  claims every claimable win in the wallet (old ones too) through Polymarket's free gasless claim, using the Relayer key.
 - Keys only in `~/.live.env` and `~/.kalshi.key` on the server, readable only by Jan's user. Never in this repo or chat.
 
 ## Setup (Jan, on the server, about 15 minutes)
@@ -40,6 +42,8 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
    - **Polymarket:** polymarket.com > Settings > Export private key. And your address (Profile, the 0x... under your name).
+     Also Settings > API keys > create a **Relayer key** (and note the address shown next to it): with it the bot
+     claims every win by itself, so the cash is free for the next bets. Without it you press Claim in the app.
 5. Put them on the server: `~/lenv/bin/python ~/poly-paper-bot/live/add_keys.py` (it asks one at a time; the
    Polymarket key is hidden while you paste).
 6. Check the keys (no orders): `~/lenv/bin/python ~/poly-paper-bot/live/kalshi_live.py check` and

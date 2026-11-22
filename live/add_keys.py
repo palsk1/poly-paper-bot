@@ -66,6 +66,14 @@ def main():
     if w:
         new["POLY_WALLET"] = w
 
+    print("  Claiming wins by itself: polymarket.com > Settings > API keys > create a Relayer key.")
+    rk = getpass.getpass("  Relayer key (hidden, Enter to skip): ").strip()
+    if rk:
+        new["POLY_RELAYER_KEY"] = rk
+        ra = input("  The address shown next to that Relayer key (0x..., Enter = same as your Polymarket address): ").strip()
+        if ra:
+            new["POLY_RELAYER_ADDRESS"] = ra
+
     print("\nOPTIONAL")
     t = getpass.getpass("  GitHub token so the logs reach the repo (same kind as the combo listener's, Enter to skip): ").strip()
     if t:
