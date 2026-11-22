@@ -672,6 +672,83 @@ def k_bets(ms, R, sel, yes, stake=10.0, max_gap=0.15):
     return sorted(out, key=lambda x: x["t"])
 
 
+# ================================================================ usage numbers: Vercel AI Gateway and OpenRouter (free, public)
+VERCEL = "https://vercel.com/api/ai/leaderboard-export"
+ORX = "https://openrouter.ai/api/v1/datasets/exports/rankings-daily"
+
+
+def _try(url, params=None):
+    try:
+        return bot.http_json(url, params, retries=2)
+    except Exception as e:
+        print("  FAILED", url[:110], str(e)[:160], flush=True)
+        return None
+
+
+def usrc():
+    """probe aim_usrc: the public usage numbers the usage bets settle on -> bt_cache/aim/vercel_<set>.json.gz, openrouter_daily.json.gz"""
+    os.makedirs(CACHE, exist_ok=True)
+    today = dt.datetime.now(dt.timezone.utc).date()
+    for ds in ("labs", "models"):
+        rows, a = [], dt.date(2025, 10, 1)
+        while a <= today:
+            b = min(today, a + dt.timedelta(days=59))
+            r = _try(VERCEL, {"dataset": ds, "from": a.isoformat(), "to": b.isoformat()})
+            got = (r or {}).get("rows") or []
+            if r and not rows:
+                print("vercel", ds, {k: v for k, v in r.items() if k != "rows"}, got[:3], flush=True)
+            rows += got
+            a = b + dt.timedelta(days=1)
+        print("vercel", ds, len(rows), "rows", collections.Counter((x.get("metric"), x.get("modality")) for x in rows).most_common(12), flush=True)
+        if rows:
+            wj(os.path.join(CACHE, f"vercel_{ds}.json.gz"), rows)
+    # OpenRouter: one public file per snapshot day, each holding the 30 days before it. Keep every snapshot's view of every day
+    # ("first" = the first time a day was seen, "last" = the newest), so restated numbers can be told apart.
+    path = os.path.join(CACHE, "openrouter_daily.json.gz")
+    have = rj(path, None) or {"snaps": [], "first": {}, "last": {}}
+    d, miss = today, 0
+    while miss < 12 and d >= dt.date(2025, 1, 1):
+        ds = d.isoformat()
+        if ds not in have["snaps"]:
+            r = _try(f"{ORX}/{ds}.json")
+            if r and r.get("rows"):
+                miss = 0
+                have["snaps"].append(ds)
+                for x in r["rows"]:
+                    k = x["date"]
+                    row = [x["model_permaslug"], x["total_tokens"]]
+                    have["first"].setdefault(k, {})          # filled below, oldest snapshot wins
+                    have["last"].setdefault(k, {"snap": "", "rows": []})
+                    if ds >= have["last"][k]["snap"]:
+                        if ds > have["last"][k]["snap"]:
+                            have["last"][k] = {"snap": ds, "rows": []}
+                        have["last"][k]["rows"].append(row)
+                    f = have["first"][k]
+                    if not f or ds <= f["snap"]:
+                        if not f or ds < f["snap"]:
+                            have["first"][k] = f = {"snap": ds, "rows": []}
+                        f["rows"].append(row)
+            else:
+                miss += 1
+        d -= dt.timedelta(days=1)
+    wj(path, have)
+    print("openrouter snapshots", len(have["snaps"]), min(have["snaps"] or ["-"]), max(have["snaps"] or ["-"]),
+          "days", len(have["last"]), min(have["last"] or ["-"]), max(have["last"] or ["-"]), flush=True)
+    for k in sorted(have["last"])[-2:]:
+        print(" ", k, have["last"][k]["snap"], have["last"][k]["rows"][:4], "| first seen", have["first"][k]["snap"], have["first"][k]["rows"][:2], flush=True)
+    # other places that keep the weekly page as it looked each day
+    for u in ("https://api.github.com/repos/jampongsathorn/openrouter-rankings/contents/data",
+              "https://api.github.com/repos/lyll23/OpenRouter-OS-Rankings-f/contents/data",
+              "https://openrouter.ai/api/v1/datasets/exports/README.md"):
+        try:
+            import urllib.request
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "paper-bot"}), timeout=25) as r:
+                t = r.read().decode("utf-8", "replace")
+            print("OK", u, len(t), t[:1500].replace("\n", " "), flush=True)
+        except Exception as e:
+            print("FAILED", u, str(e)[:120], flush=True)
+
+
 # ================================================================ the whole report
 def _line(name, b, tries, log=False, status="dropped", prereg=False):
     import exam, earn
@@ -801,6 +878,8 @@ if __name__ == "__main__":
         report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
     elif cmd == "kcheck":
         k_check()
+    elif cmd == "usrc":
+        usrc()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
