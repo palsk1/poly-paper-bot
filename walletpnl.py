@@ -338,6 +338,32 @@ def report(addr):
     print("  trades by hour UTC:", dict(sorted(hr.items())))
     dd = collections.Counter(day(fnum(a.get("timestamp"))) for a in act if a.get("type") == "TRADE")
     print(f"  days with trades: {len(dd)}; median trades a day {sorted(dd.values())[len(dd)//2] if dd else 0}")
+    # ---- 5d) skill or luck? finished markets, by when first bought, through the shared exam
+    import exam
+    openc = {pick(p, "condition_id") for p in pos if str(p.get("status")).upper() == "OPEN"}
+    cut = dt.datetime(2026, 8, 1, tzinfo=dt.timezone.utc).timestamp()
+    def bets_of(f):
+        return [dict(cost=r["bought"], pnl=r["flow"], ev=r["event"] or r["cid"], t=first.get(r["cid"]))
+                for r in rows if r["bought"] > 0 and r["cid"] not in openc and first.get(r["cid"]) and f(r)]
+    print("\n== 5d) SKILL OR LUCK? (finished markets only, one bet = one market, linked markets in one event count together)")
+    for name, f in (("since 1 Aug, all", lambda r: first[r["cid"]] >= cut),
+                    ("since 1 Aug, both sides bought", lambda r: first[r["cid"]] >= cut and r["both"]),
+                    ("since 1 Aug, one side only", lambda r: first[r["cid"]] >= cut and not r["both"]),
+                    ("since 1 Aug, Iran/Israel/war", lambda r: first[r["cid"]] >= cut and any(w in (r["event"] + r["title"]).lower() for w in ("iran", "israel", "ceasefire", "russia", "ukraine", "houthi", "hormuz"))),
+                    ("since 1 Aug, everything else", lambda r: first[r["cid"]] >= cut and not any(w in (r["event"] + r["title"]).lower() for w in ("iran", "israel", "ceasefire", "russia", "ukraine", "houthi", "hormuz"))),
+                    ("before 1 Aug, all", lambda r: first[r["cid"]] < cut),
+                    ("before 1 Aug, without the Iran-strike markets", lambda r: first[r["cid"]] < cut and r not in iran)):
+        b = bets_of(f)
+        print(f"\n  --- {name}: {len(b)} markets, bought {money(sum(x['cost'] for x in b))}, P&L {money(sum(x['pnl'] for x in b))}")
+        if b:
+            top = sorted(b, key=lambda x: -x["pnl"])
+            print(f"  biggest 5 wins {money(sum(x['pnl'] for x in top[:5]))}, biggest 5 losses {money(sum(x['pnl'] for x in top[-5:]))}")
+            try:
+                exam.score(b, f"anoin123 {name}", tries=7, log=False)
+            except Exception as e:
+                print("  exam failed:", e)
+    ow = [r for r in rows if r["cid"] in openc and first.get(r["cid"], 0) >= cut]
+    print(f"\n  still open since 1 Aug (not in the exam): {len(ow)} markets, bought {money(sum(r['bought'] for r in ow))}, P&L if sold at today's price {money(sum(r['flow'] for r in ow))}")
     print("\n== 6) last 30 activity rows")
     for a in sorted(act, key=lambda a: fnum(a.get("timestamp")))[-30:]:
         t = fnum(a.get("timestamp"))
