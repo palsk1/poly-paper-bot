@@ -133,9 +133,10 @@ def peek():
 
 
 # ================================================================ fetch
-SPAN = int(os.environ.get("KCB_SPAN", "180"))          # seconds of the trade list per slice
+SPAN = int(os.environ.get("KCB_SPAN", "60"))          # seconds of the trade list per slice
 PER_DAY = int(os.environ.get("KCB_PER_DAY", "10"))
-MAX_PAGES = int(os.environ.get("KCB_PAGES", "40"))
+MAX_PAGES = int(os.environ.get("KCB_PAGES", "12"))
+MAX_COMBOS = int(os.environ.get("KCB_COMBOS", "300"))   # combos looked up per slice (a random draw of the traded ones)
 WORKERS = int(os.environ.get("KCB_WORKERS", "6"))
 BUDGET_MIN = float(os.environ.get("KCB_MIN", "200"))
 SKIP_DAYS = 2                                           # newest days are skipped so combos have settled
@@ -268,18 +269,29 @@ def fetch(days="14", per_day=None):
         day = {"d0": d0, "slices": []}
         for (a, ) in slices_of(d0):
             b = a + SPAN
+            t0s = time.time()
             try:
                 rows, cov, seen, done = tape_slice(a, b)
             except Exception as e:
                 print("  slice failed", a, str(e)[:150])
                 continue
-            tks = {r[1] for r in rows}
+            t1 = time.time()
+            tks = sorted({r[1] for r in rows})
+            n_all = len(tks)
+            if len(tks) > MAX_COMBOS:       # a random draw by ticker: it can't depend on the result
+                tks = random.Random(a).sample(tks, MAX_COMBOS)
+            keep = set(tks)
+            rows = [r for r in rows if r[1] in keep]
+            print(f"   tape {seen} trades in {t1 - t0s:.0f}s, combos traded {n_all}, kept {len(tks)}", flush=True)
             cm = markets_by_ticker(tks)
+            t2 = time.time()
             combos = {tk: slim_combo(m) for tk, m in cm.items()}
             legs = {lg[0] for c in combos.values() for lg in c["legs"] if lg[0]}
             lm = markets_by_ticker(legs)
+            t3 = time.time()
             mins = leg_minutes(legs, cov, b)
-            day["slices"].append({"a": a, "b": b, "cov": cov, "seen": seen, "done": done, "tr": rows, "combos": combos,
+            print(f"   combos {t2 - t1:.0f}s, legs {len(legs)} in {t3 - t2:.0f}s, minutes {time.time() - t3:.0f}s", flush=True)
+            day["slices"].append({"a": a, "b": b, "cov": cov, "seen": seen, "done": done, "tr": rows, "n_all": n_all, "combos": combos,
                                   "legs": {tk: slim_leg(m) for tk, m in lm.items()}, "min": mins})
             print(f"  {dt.datetime.utcfromtimestamp(a):%m-%d %H:%M} all trades {seen}{'' if done else ' (cut)'}, covered {b - cov}s, "
                   f"combo trades {len(rows)}, combos {len(tks)} (found {len(combos)}), legs {len(legs)} (found {len(lm)}), "
