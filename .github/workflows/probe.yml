@@ -70,6 +70,7 @@ jobs:
           case "${{ inputs.what }}" in qk_*) PYTHONUNBUFFERED=1 python3 quakes.py "$(echo '${{ inputs.what }}' | sed 's/^qk_//')"; exit $?;; esac
           case "${{ inputs.what }}" in famf_*) PYTHONUNBUFFERED=1 python3 families.py fetch "$(echo '${{ inputs.what }}' | sed 's/^famf_//')"; exit $?;; esac
           case "${{ inputs.what }}" in fam_*) PYTHONUNBUFFERED=1 python3 families.py peek "$(echo '${{ inputs.what }}' | sed 's/^fam_//')"; exit $?;; esac
+          case "${{ inputs.what }}" in tns_*) pip install -q websockets; PYTHONUNBUFFERED=1 python3 tennis.py $(echo '${{ inputs.what }}' | sed 's/^tns_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in ten_*) pip install -q websockets; PYTHONUNBUFFERED=1 python3 tennis.py $(echo '${{ inputs.what }}' | sed 's/^ten_//; s/_/ /g'); exit $?;; esac
           case "${{ inputs.what }}" in sp_*) PYTHONUNBUFFERED=1 python3 speeches.py "$(echo '${{ inputs.what }}' | sed 's/^sp_//')"; exit $?;; esac
           case "${{ inputs.what }}" in pw_*) PYTHONUNBUFFERED=1 python3 postwords.py "$(echo '${{ inputs.what }}' | sed 's/^pw_//')"; exit $?;; esac
