@@ -1254,6 +1254,108 @@ def sets_report(lag=3):
     return rows, cards
 
 
+# ================================================================ price-only test: after a sudden jump, fade or follow?
+def jump_rows(ks, lo=5, win=2, lag=2):
+    """Every in-play jump of the YES player's mid by lo+ cents within `win` minutes (a break of serve, a lost set, ...),
+    priced `lag` minutes after at the real bid / ask. No score needed, so it covers every match with prices."""
+    rows = []
+    for k in ks:
+        ms = [(m[0], (m[1] + m[2]) / 2, m[1], m[2]) for m in k["mins"]
+              if m[1] is not None and m[2] is not None and 0 < m[1] < m[2] < 100 and m[2] - m[1] <= 8]
+        if len(ms) < 30:
+            continue
+        idx = {m[0]: i for i, m in enumerate(ms)}
+        first = next((m[1] for m in ms), None)
+        last_t, nth = 0, 0
+        for i, (t, mid, b, a) in enumerate(ms):
+            j = idx.get(t - win * 60)
+            if j is None or t < last_t + 5 * 60 or t < k["close"] - 5 * 3600:
+                continue
+            pre = ms[j][1]
+            mv = mid - pre
+            if abs(mv) < lo or not 12 <= pre <= 88:
+                continue
+            q = idx.get(t + lag * 60)
+            l10 = idx.get(t + 10 * 60)
+            if q is None:
+                continue
+            qb, qa = ms[q][2], ms[q][3]
+            if not 5 <= qb and qa <= 95:
+                continue
+            last_t, nth = t, nth + 1
+            rows.append({"ev": k["ev"], "series": k["series"], "t": t, "nth": nth, "pre": pre, "mv": mv, "p0": first, "res": k["res"],
+                         "q": {lag: (qb / 100, qa / 100)}, "te": t, "est": t, "vol": k["vol"],
+                         "d10": (ms[l10][1] - ms[q][1]) * (1 if mv > 0 else -1) if l10 is not None else None})
+    return rows
+
+
+def jumps_report(lag=2):
+    import exam
+    ks = load_kalshi()
+    rows = jump_rows(ks, lag=lag)
+    print(f"{len(ks)} Kalshi matches with minute prices; {len(rows)} sudden moves of 5c+ within 2 minutes in {len({r['ev'] for r in rows})} matches")
+    tries = 0
+    cards = []
+
+    def line(name, sel, follow):
+        nonlocal tries
+        tries += 1
+        bets = [b for r in rows if sel(r) for b in [kbet(r, lag, (r["mv"] > 0) == follow)] if b]
+        if not bets:
+            print(f"  {name}: no bets")
+            return
+        print(f"  {name}: {len(bets)} bets in {len({b['ev'] for b in bets})} matches, {per100(bets):+.2f} per $100, average price {100 * sum(b['px'] for b in bets) / len(bets):.0f}c")
+        cards.append((name, bets))
+    for nm, lo_, hi_ in (("5-8c", 5, 8), ("8-12c", 8, 12), ("12-20c", 12, 20), ("20c+", 20, 101)):
+        sel = lambda r, lo_=lo_, hi_=hi_: lo_ <= abs(r["mv"]) < hi_
+        d = [r["d10"] for r in rows if sel(r) and r["d10"] is not None]
+        if d:
+            se = (sum((x - sum(d) / len(d)) ** 2 for x in d) / len(d)) ** 0.5 / len(d) ** 0.5
+            print(f"move of {nm}: {len(d)} cases; in the next 10 minutes the price went on {sum(d) / len(d):+.2f}c in the same direction (give or take {2 * se:.2f}c)")
+        line(f"  buy the player who just fell {nm}", sel, False)
+        line(f"  buy the player who just rose {nm}", sel, True)
+    print("cuts of the 8c+ moves:")
+    big = lambda r: abs(r["mv"]) >= 8
+    for nm, f in (("favourite (was 60c+) fell", lambda r: big(r) and ((r["mv"] < 0 and r["pre"] >= 60) or (r["mv"] > 0 and r["pre"] <= 40))),
+                  ("underdog (was under 40c) fell", lambda r: big(r) and ((r["mv"] < 0 and r["pre"] <= 40) or (r["mv"] > 0 and r["pre"] >= 60))),
+                  ("even match (40-60c)", lambda r: big(r) and 40 < r["pre"] < 60),
+                  ("first sudden move of the match", lambda r: big(r) and r["nth"] == 1),
+                  ("third or later sudden move", lambda r: big(r) and r["nth"] >= 3),
+                  ("main tour", lambda r: big(r) and r["series"] in ("KXATPMATCH", "KXWTAMATCH")),
+                  ("challengers and ITF", lambda r: big(r) and r["series"] not in ("KXATPMATCH", "KXWTAMATCH")),
+                  ("women", lambda r: big(r) and r["series"] in WOMEN),
+                  ("men", lambda r: big(r) and r["series"] not in WOMEN)):
+        line(f"{nm}: buy the faller", f, False)
+        line(f"{nm}: buy the riser", f, True)
+    return rows, cards, tries
+
+
+def khist():
+    """Do old matches still have 1-minute bid / ask anywhere? (The live candle endpoint returns empty shells for them.)"""
+    for tk, close in (("KXATPMATCH-26AUG31VIRRUB-RUB", None), ("KXATPMATCH-26AUG31VIRRUB-VIR", None), ("KXATPMATCH-26MAR", None), ("KXATPMATCH-25AUG01COBMAR-COB", None)):
+        ms = [m for m in rj(os.path.join(KT_DIR, "markets_KXATPMATCH.json.gz"), []) if m["t"].startswith(tk)][:1]
+        if not ms:
+            print(tk, "not in the list"); continue
+        m = ms[0]
+        c = bot.parse_iso(m["close"]).timestamp()
+        print(m["t"], m["close"], "cutoff", short(jl(yesno.kget("/historical/cutoff")), 200))
+        for path in (f"/series/KXATPMATCH/markets/{m['t']}/candlesticks", f"/historical/markets/{m['t']}/candlesticks"):
+            for iv in (1, 60):
+                try:
+                    r = yesno.kget(path, {"start_ts": int(c - 4 * 3600), "end_ts": int(c + 60), "period_interval": iv})
+                    cs = r.get("candlesticks") or []
+                    full = [x for x in cs if (x.get("yes_bid") or {}).get("close_dollars") not in (None, "") or (x.get("yes_bid") or {}).get("close") not in (None, "")]
+                    print(" ", path.split("/")[1], "interval", iv, ":", len(cs), "candles,", len(full), "with a bid;", short(jl((full or cs or [None])[len(full or cs or [None]) // 2]), 500))
+                except Exception as e:
+                    print(" ", path.split("/")[1], "interval", iv, "failed", str(e)[:150])
+        for path in ("/markets/trades", "/historical/trades"):
+            try:
+                r = yesno.kget(path, {"ticker": m["t"], "limit": 5})
+                print(" ", path, len(r.get("trades") or []), short(jl((r.get("trades") or [None])[0]), 300))
+            except Exception as e:
+                print(" ", path, "failed", str(e)[:150])
+
+
 def storemove():
     """The first download put tennis files in the shared price-store release and filled it (1,000 files is
     GitHub's limit). Delete each tennis file there once the same file (name and size) is in tennis-store."""
@@ -1300,6 +1402,10 @@ if __name__ == "__main__":
     elif cmd == "livereport":
         import glob
         live_report(sorted(glob.glob(os.path.join(LIVE_DIR, "*.jsonl.gz"))))
+    elif cmd == "jumps":
+        jumps_report(int(sys.argv[2]) if len(sys.argv) > 2 else 2)
+    elif cmd == "khist":
+        khist()
     elif cmd == "storemove":
         storemove()
     elif cmd == "fetch":
