@@ -30195,3 +30195,8 @@
 {"minutes_left": 3.06, "price": 0.997, "queue": 784.81, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV221615-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-22T21:11:58Z", "type": "kmaker_order"}
 {"minutes_left": 3.06, "price": 0.958, "queue": 241.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV221615-15", "track": "kc_maker", "ts": "2026-11-22T21:11:58Z", "type": "kmaker_order"}
 {"minutes_left": 3.06, "price": 0.958, "queue": 241.0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV221615-15", "track": "kc_maker_safe", "ts": "2026-11-22T21:11:59Z", "type": "kmaker_order"}
+{"outcome": "Draw", "pnl": -1.0915, "price": 0.0, "reason": "resolved", "title": "Will CA Rosario Central vs. CA Gimnasia y Esgrima de Mendoza end in a draw?", "token": "99263333199713056251900608540698689219685944895044379385149919156912671465979", "track": "soccer_draw", "ts": "2026-11-22T21:15:57Z", "type": "paper_close"}
+{"filled": 10.0, "pnl": 0.27, "price": 0.973, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV221615-15", "track": "kc_maker", "ts": "2026-11-22T21:18:01Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV221615-15", "track": "kc_maker", "ts": "2026-11-22T21:18:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.27, "price": 0.973, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV221615-15", "track": "kc_maker_safe", "ts": "2026-11-22T21:18:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.42, "price": 0.958, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV221615-15", "track": "kc_maker_safe", "ts": "2026-11-22T21:18:02Z", "type": "kmaker_fill"}
