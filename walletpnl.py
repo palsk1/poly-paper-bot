@@ -343,7 +343,7 @@ def report(addr):
     openc = {pick(p, "condition_id") for p in pos if str(p.get("status")).upper() == "OPEN"}
     cut = dt.datetime(2026, 8, 1, tzinfo=dt.timezone.utc).timestamp()
     def bets_of(f):
-        return [dict(cost=r["bought"], pnl=r["flow"], ev=r["event"] or r["cid"], t=first.get(r["cid"]))
+        return [dict(cost=r["bought"], pay=r["bought"] + r["flow"], pnl=r["flow"], ev=r["event"] or r["cid"], t=first.get(r["cid"]))
                 for r in rows if r["bought"] > 0 and r["cid"] not in openc and first.get(r["cid"]) and f(r)]
     print("\n== 5d) SKILL OR LUCK? (finished markets only, one bet = one market, linked markets in one event count together)")
     for name, f in (("since 1 Aug, all", lambda r: first[r["cid"]] >= cut),
