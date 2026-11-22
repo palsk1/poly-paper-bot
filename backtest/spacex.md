@@ -4,8 +4,8 @@
 
 - **The bets.** Kalshi's KXSPACEXCOUNT asks "more than X SpaceX launches in October?" every month: 101 finished monthly markets in 14 months (Jul 2025 to Oct 2026), $22.4 million traded, so the biggest tech family we have dug by money. Polymarket has a small copy (9 monthly lists with trades, most under $10,000). Kalshi also has Starship flight dates, all US commercial launches and Rocket Lab counts (small, not dug).
 - **The outside number.** Jonathan McDowell's free launch list GCAT (planet4589.org, readable from Actions, updated within days). It reproduces Kalshi's monthly SpaceX result in 12 of 14 months (two are one launch off, near a month's edge).
-- **The model loses to the price everywhere.** Model: launches so far this month + the pace of the last 60 days. The price forecasts two to ten times better at every point in the month (it knows the launch schedule, weather scrubs, and the 2026 slowdown). Yes where the model is 10c+ above the price: -$72.66 per $100 ("Losing").
-- **Prices alone:** Yes on long shots never paid (3-25c: 2 wins in 139 bets). No early in the month looked good at every price.
+- **The model loses to the price everywhere.** Model: launches so far this month + the pace of the last 60 days. The price forecasts better at every point in the month, and much better near the end (it knows the launch schedule, weather scrubs, and the 2026 slowdown). Yes where the model is 10c+ above the price: -$72.66 per $100 ("Losing").
+- **Prices alone:** Yes on long shots never paid (3-25c: 2 wins in about 150 bets). No early in the month looked good at every price.
 - **Backward look:** No at 10-97c with 10+ days left, +$32.37 per $100 on 79 bets, "Ahead, but could be luck", but ahead in only 6 of 14 months: four big months (Dec, Jan, Apr, Sep, when SpaceX launched fewer than expected) carry it, and the second half is behind. That is one bet on "SpaceX slows down", not a repeatable edge.
 - **Verdict: dropped, no track.** Only one month at a time; answers inside a month win and lose together, so a year gives 12 real tries.
 
