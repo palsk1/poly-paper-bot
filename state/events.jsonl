@@ -30049,3 +30049,6 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNHLGOAL-26NOV22CHIVAN-CHIAVLASIC72-1", "track": "kalshi_patient", "ts": "2026-11-22T19:24:58Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLREC-26NOV22JACNYG-NYGTJOHNSON84-4", "track": "kalshi_patient", "ts": "2026-11-22T19:24:58Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXWTI-26NOV2314-T80.49", "track": "kalshi_patient", "ts": "2026-11-22T19:24:58Z", "type": "kpatient_order"}
+{"fee": 0.0125, "outcome": "Yes", "price": 0.52, "shares": 5, "title": "Will xQc finish GTA VI by November 22?", "token": "24525950800654641782717335453479288958930168907298676614212482871655950980196", "track": "w_dominus", "ts": "2026-11-22T19:30:55Z", "type": "paper_buy"}
+{"fee": 0.0125, "outcome": "Yes", "price": 0.52, "shares": 5, "title": "Will xQc finish GTA VI by November 22?", "token": "24525950800654641782717335453479288958930168907298676614212482871655950980196", "track": "wb_dominus", "ts": "2026-11-22T19:30:56Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXAPFDDHTOTAL-26NOV22OLITRI-6", "track": "kalshi_patient", "ts": "2026-11-22T19:32:33Z", "type": "kpatient_fill"}
