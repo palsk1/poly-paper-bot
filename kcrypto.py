@@ -1017,6 +1017,63 @@ def gapcheck(log=False):
     return out
 
 
+def looks():
+    """23 Nov (real bot lost 3 of its first 133 fills, Jan: "is the bot too fast now?"): the real bot checks every 15 s
+    and bids at the first moment a window passes; the paper bot looks about once in the 5 minutes. History version:
+    every window looked at with 5, 4, 3, 2 and 1 min left (both z checks, improve 95c, 'fair' fills), loss rate by
+    cushion on Kalshi's scale, one look vs many looks, and stricter bars. Write-up backtest/kclive_1123.md."""
+    import collections
+    windows = load_windows()
+    mins = [5, 4, 3, 2, 1]
+    cand = collections.defaultdict(dict)
+    for m in mins:
+        sigs = signals(windows, m)
+        bys = {s["w"]["t"]: s for s in sigs}
+        for r in variant_trades(sigs, "improve", 0.95, None):
+            s = bys[r["tk"]]
+            z, zu = zscore(s["w"], s["t"], m, s["side"]), zscore_usd(s["w"], s["t"], m, s["side"])
+            if z is None or zu is None or z < 2 or zu < 2:
+                continue
+            r["zu"], r["m"] = zu, m
+            cand[r["tk"]][m] = r
+
+    def summ(name, rows):
+        f = [r for r in rows if r["fills"][1]]
+        lost = sum(1 for r in f if not r["won"])
+        cost = sum(r["price"] for r in f)
+        pnl = sum((1 if r["won"] else 0) - r["price"] for r in f)
+        print(f"{name:40s} filled {len(f):6d} lost {lost:4d} (1 in {len(f) / max(lost, 1):4.0f})  "
+              f"per $100 {money(pnl / cost * 100 if cost else 0)}")
+
+    print(f"{len(windows)} windows, {len({r['day'] for d in cand.values() for r in d.values()})} days")
+    one = [r for d in cand.values() for r in d.values()]
+    for lo, hi in ((2, 2.3), (2.3, 2.6), (2.6, 3), (3, 99)):
+        summ(f"one look, cushion {lo}-{hi}", [r for r in one if lo <= r["zu"] < hi])
+    for m in mins:
+        summ(f"one look only, {m} min left", [d[m] for d in cand.values() if m in d])
+    first = [d[max(d)] for d in cand.values()]
+    summ("many looks (like the real bot)", first)
+    for lo, hi in ((2, 2.3), (2.3, 2.6), (2.6, 99)):
+        summ(f"  many looks, cushion {lo}-{hi}", [r for r in first if lo <= r["zu"] < hi])
+    for thr in (2.2, 2.3, 2.5, 3.0):
+        rows = []
+        for d in cand.values():
+            for m in mins:
+                if m in d and d[m]["zu"] >= thr:
+                    rows.append(d[m])
+                    break
+        summ(f"many looks, cushion bar {thr}", rows)
+    rows = []
+    for d in cand.values():
+        for m in mins[1:]:
+            if m in d and m + 1 in d:
+                rows.append(d[m])
+                break
+    summ("many looks, passed a minute earlier too", rows)
+    for lo, hi in ((0.95, 0.98), (0.98, 0.99), (0.99, 0.995), (0.995, 1.0)):
+        summ(f"many looks, bid {lo * 100:.1f}-{hi * 100:.1f}c", [r for r in first if lo <= r["price"] < hi])
+
+
 # ================================================================ the same bid on Polymarket's 15-minute windows (12 Nov)
 # Jan: "why is this test only running on kalshi and not both?" Polymarket lists the same "up or down in 15 minutes"
 # windows (slug <coin>-updown-15m-<start>). Makers pay no fee there either. No order-book history exists for them
@@ -1387,7 +1444,7 @@ if __name__ == "__main__":
     arg = sys.argv[2] if len(sys.argv) > 2 else None
     if "_" in cmd:   # probe form: kc_fetch_30, kc_pmfetch_2
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "fillaudit": lambda: fillaudit(arg), "basis": live_basis, "night": night, "gapcheck": lambda: gapcheck(log=arg == "log"),
+    {"scan": scan, "fetch": lambda: fetch(arg or 60), "run": run, "selftest": selftest, "depth": depth, "losses": losstape, "fillaudit": lambda: fillaudit(arg), "basis": live_basis, "night": night, "looks": looks, "gapcheck": lambda: gapcheck(log=arg == "log"),
      "pmfetch": lambda: pm_fetch(arg or 30), "pmrun": lambda: pm_run(log=arg == "log"),
      "pmall": lambda: (fetch(60), pm_fetch(arg or 30), pm_run()),
      "all": lambda: (fetch(arg or 60), run())}[cmd]()
