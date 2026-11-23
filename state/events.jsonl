@@ -32694,3 +32694,4 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": false, "ticker": "KXSOL15M-26NOV231445-45", "track": "kc_maker_safe", "ts": "2026-11-23T19:47:45Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": false, "ticker": "KXSOL15M-26NOV231445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-23T19:47:45Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": false, "ticker": "KXSOL15M-26NOV231445-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T19:47:45Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNBA3PT-26NOV23OKCIND-INDANEMBHARD2-5", "track": "kalshi_patient", "ts": "2026-11-23T19:53:05Z", "type": "kpatient_fill"}
