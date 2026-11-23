@@ -648,16 +648,28 @@ def pm_fetch(arg=None):
                 continue
             st = int(str(m.get("slug")).rsplit("-", 1)[1])
             jobs.append((f"h{st + 3600}", m["conditionId"], st + 3600, "up", {"kind": "h", "close": st + 3600, "p": res, "vol": bot.fnum(m.get("volume"), 0)}))
-        slugs = []
+        # before about 18 Nov 2026 the hourly round was "<coin>-up-or-down-<month>-<day>-<year>-<hour>-et", settled on Binance's 1-hour candle
+        got_h = {j[0] for j in jobs} | set(have)
+        old = []
+        for st in range(now - now % 3600 - days_h * 86400, now - 3600, 3600):
+            if f"h{st + 3600}" in got_h or f"b{st + 3600}" in got_h:
+                continue
+            et = dt.datetime.fromtimestamp(st - (4 if st < 1793512800 else 5) * 3600, UTC)   # US clocks went back 1 Nov 2026 06:00 UTC
+            old.append((st, f"{long}-up-or-down-{et.strftime('%B').lower()}-{et.day}-{et.year}-{et.hour % 12 or 12}{'am' if et.hour < 12 else 'pm'}-et"))
+        days_ = []
         for d in range(1, days_d + 1):
             day = dt.datetime.fromtimestamp(now - d * 86400, UTC)
-            slugs += [f"{long}-above-on-{day.strftime('%B').lower()}-{day.day}", f"{long}-above-on-{day.strftime('%B').lower()}-{day.day}-{day.year}"]
-        evs = []
-        for i in range(0, len(slugs), 20):
-            try:
-                evs += [e for e in bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/events", {"slug": slugs[i:i + 20], "closed": "true", "limit": 100}), "events", "data") if isinstance(e, dict)]
-            except Exception as e:
-                print("  gamma events failed", str(e)[:100])
+            days_.append(f"{long}-above-on-{day.strftime('%B').lower()}-{day.day}-{day.year}")
+        with ThreadPoolExecutor(8) as ex:
+            evs_h = list(ex.map(lambda x: bot.event_by_slug(x[1]), old))
+            evs = [e for e in ex.map(bot.event_by_slug, days_) if e]
+        for (st, sl), e in zip(old, evs_h):
+            m = ((e or {}).get("markets") or [None])[0]
+            res = _pm_result(m, "up") if m else None
+            end = kc.tsec(m.get("endDate")) if m else None
+            if res is None or not end or abs(end - (st + 3600)) > 120:
+                continue
+            jobs.append((f"b{st + 3600}", m["conditionId"], st + 3600, "up", {"kind": "b", "close": st + 3600, "p": res, "vol": bot.fnum(m.get("volume"), 0)}))
         for e in evs:
             for m in e.get("markets") or []:
                 end = kc.tsec(m.get("endDate"))
@@ -684,7 +696,7 @@ def pm_fetch(arg=None):
                 if i and i % 1000 == 0:
                     kc.wjson(path, have)
         kc.wjson(path, have)
-        hh = [v for v in have.values() if v["kind"] == "h"]
+        hh = [v for v in have.values() if v["kind"] in ("h", "b")]
         dd = [v for v in have.values() if v["kind"] == "d"]
         say(f"Polymarket {short}: {len(hh)} hourly rounds (${sum(v['vol'] for v in hh):,.0f} traded, middle round ${sorted(v['vol'] for v in hh)[len(hh) // 2] if hh else 0:,.0f}), "
             f"{len(dd)} daily-ladder markets in {len({v['ev'] for v in dd})} days (${sum(v['vol'] for v in dd):,.0f}); {bad} failed, "
@@ -717,7 +729,10 @@ def pm_bets(minutes=3, look=15, level=0.95):
             later = [(f(r[1]), r[2]) for r in row["tr"] if 0 <= r[0] < left]
             sold = sum(n for px, n in later if px < price - EPS or (front and px <= price + EPS))
             t = row["close"] - left
-            if row["kind"] == "h":
+            if row["kind"] == "b":                           # old hourly round: Binance's own 1-hour candle, close at or above its open
+                k = D["spot"].get(str(row["close"] - 3600))
+                z = zu = kc.zscore({"spot": D["spot"], "strike": k}, t, minutes, side) if k else None
+            elif row["kind"] == "h":
                 k = D["idx"].get(row["close"] - 3600)       # the start price, on Kalshi's (US dollar) number
                 g = gap_at(D, t)
                 if not k or not g:
@@ -729,7 +744,7 @@ def pm_bets(minutes=3, look=15, level=0.95):
                 z = zu = kc.zscore({"spot": D["spot"], "strike": row["strike"]}, t, minutes, side)   # settles on Binance itself: no gap
             if z is None or zu is None:
                 continue
-            out.append({"kind": row["kind"], "s": short, "t": t, "close": row["close"], "ev": f"{short}{row['close']}", "side": side, "price": price,
+            out.append({"kind": "h" if row["kind"] == "b" else row["kind"], "s": short, "t": t, "close": row["close"], "ev": f"{short}{row['close']}", "side": side, "price": price,
                         "front": front, "z": z, "zu": zu, "won": (row["p"] == 1) == (side == "yes"), "sold": sold, "vol": row.get("vol")})
     return out
 
