@@ -501,7 +501,9 @@ def run(arg=None):
         lg = sum(1 for r in D["rounds"].values() if (r["close"] - (r["open"] or r["close"])) > 7200)
         say(f"  {s}: {len(D['rounds'])} rounds ({lg} open longer than 2 hours), contracts a round: middle {rv[len(rv) // 2]:,.0f}, "
             f"busiest {rv[-1]:,.0f}; {len(D['w'])} markets with candles, {len(D['tr'])} trade lists, {len(D['idx'])} minutes of Kalshi's number")
-    B = {m: [r for D in Ds.values() for r in bets(D, m)] for m in (2, 3, 5)}
+    ALL = {m: [r for D in Ds.values() for r in bets(D, m)] for m in (2, 3, 5)}
+    B = {m: [r for r in ALL[m] if not r["top"]] for m in ALL}      # there is a seller under $1.00: bids of 95c to 98c
+    T = [r for r in ALL[3] if r["top"]]                            # no seller under $1.00: nearly always a bid joined at 99c
     say("\n## A. All coins together: minutes left x cushion bar ($4 bids, tape fills)")
     say("| Min left | Bar | Signals | Bets filled | Filled in full | Lost | Per $100 | Profit | Bets a day | $ a day | Most $ out in one round |")
     say("|---|---|---|---|---|---|---|---|---|---|---|")
@@ -556,6 +558,28 @@ def run(arg=None):
     for r in sorted(keep(B[3], 2.0), key=lambda r: r["t"]):
         if not r["won"] and r["sold"]:
             say(f"| {iso(r['close'])} | {r['tk']} | {r['side']} | {r['price'] * 100:.0f}c | {r['z']:.2f} | {r['zu']:.2f} | {'' if r['zk'] is None else format(r['zk'], '.2f')} | {r['sold']:,.0f} |")
+    say("\n## H. The 99c line: markets with no seller under $1.00, 3 minutes left (a joined bid at 99c wins 1c a contract)")
+    say("| Coin | Bar | Signals a day | Lost, of all signals | Sure fills (something sold under our price): bets / lost / per $100 | Best case (any sale at our price fills us): bets / lost / per $100 | "
+        "Trade lists read | Contracts sold at our price after our bid: middle market | Markets with 100+ sold | with 1,000+ sold |")
+    say("|---|---|---|---|---|---|---|---|---|---|")
+
+    def c3(g, key):
+        f = [r for r in g if r[key]]
+        cost = sum(r["price"] for r in f)
+        return f"{len(f)} / {sum(not r['won'] for r in f)} / {money(sum((1.0 if r['won'] else 0.0) - r['price'] for r in f) / cost * 100 if cost else 0)}"
+    for s in names + ["all"]:
+        for bar in BARS:
+            g = [r for r in keep(T, bar) if s in (r["s"], "all")]
+            tp = sorted(r["at"] for r in g if r["sold"] is not None)
+            say(f"| {s} | {bar} | {len(g) / days:.0f} | {sum(not r['won'] for r in g)} of {len(g)} | {c3(g, 'candle')} | {c3(g, 'touch')} | {len(tp)} | "
+                f"{tp[len(tp) // 2] if tp else 0:,.0f} | {sum(1 for x in tp if x >= 100)} | {sum(1 for x in tp if x >= 1000)} |")
+    say("\n## I. Bidding earlier in the hour (candles only, bar 2.3, all coins)")
+    say("| Min left | Bids of 95c-98c: signals / sure fills / lost / per $100 | 99c line: signals a day / lost of all / sure fills: bets, lost, per $100 / best case: bets, lost, per $100 |")
+    say("|---|---|---|")
+    for m in (3, 5, 10, 20):
+        rows = keep([r for D in Ds.values() for r in bets(D, m)], 2.3)
+        lo_, top_ = [r for r in rows if not r["top"]], [r for r in rows if r["top"]]
+        say(f"| {m} | {len(lo_)} / {c3(lo_, 'candle')} | {len(top_) / days:.0f} / {sum(not r['won'] for r in top_)} of {len(top_)} / {c3(top_, 'candle')} / {c3(top_, 'touch')} |")
     say("\n## G. The exam")
     tries = 60
     for bar in BARS:
