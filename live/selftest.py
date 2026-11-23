@@ -92,6 +92,12 @@ def test_kalshi():
     o = book.state["open"]["KXBTC15M-T1"]
     check(abs(o["price"] - 0.971) < 1e-9 and o["shares"] == 4 and o["cost"] <= 4,
           "Kalshi bid is one 0.1c tick above the 97c best bid, 4 contracts for $4")
+    check(o["spot_z_usd"] >= 2.3, "Kalshi real bot bids only with a 2.3+ cushion after the Binance-vs-Kalshi gap (Jan, 23 Nov)")
+    os.environ["KALSHI_MIN_Z_USD"] = "999"
+    b_hi = C.Book("kalshi_hi")
+    K.place(b_hi)
+    check(not b_hi.state["open"], "a coin below the real bot's cushion bar gets no bid")
+    del os.environ["KALSHI_MIN_Z_USD"]
     K.place(book)
     check(len(book.state["open"]) == 1, "Kalshi places one bid per window, not one per loop")
     at(16, 30)
@@ -230,20 +236,22 @@ def test_poly():
           "Polymarket live buys are all-or-nothing, never above listed + 3c, and stop at the open-bets cap")
     del os.environ["POLY_MAX_OPEN"]
     key = next(iter(b3.state["open"]))
-    bot.http_json = lambda url, params=None, retries=3: [{"closed": True, "outcomePrices": '["1", "0"]'}]
+    # Like Gamma: the list address /markets?slug= leaves closed markets out; /markets/slug/<slug> has them.
+    bot.http_json = lambda url, params=None, retries=3: (
+        {"closed": True, "outcomePrices": '["1", "0"]'} if "/markets/slug/" in url else [])
     os.environ["POLY_RELAYER_KEY"] = "k"
     P.settle(b3)
     red = [c["redeem"] for c in calls if "redeem" in c]
     check(b3.state["won"] == 3 and b3.state["realized"] > 0 and red == ["0xc", "0xold"],
-          "Polymarket settles won draws, then claims every claimable win (old ones too), once each, and skips lost bets worth $0")
+          "Polymarket settles won draws (read from the one-market address, which keeps closed games), then claims every claimable win (old ones too), once each, and skips lost bets worth $0")
     del os.environ["POLY_RELAYER_KEY"]
     check(key in b3.state["done"], "a settled market is never bought again")
     # Polymarket's coming "fair value" payout (canceled / abandoned / very late games): a split final price
     b4 = C.Book("poly4")
     b4.state["open"] = {"a-draw": {"shares": 10, "ask": 0.30, "spent": 3.0}, "b-draw": {"shares": 10, "ask": 0.30, "spent": 3.0}}
     bot.http_json = lambda url, params=None, retries=3: (
-        [{"closed": True, "outcomePrices": '["0.31", "0.69"]', "umaResolutionStatus": "resolved"}]
-        if params.get("slug") == "a-draw" else [{"closed": True, "outcomePrices": '["0.31", "0.69"]'}])
+        {"closed": True, "outcomePrices": '["0.31", "0.69"]', "umaResolutionStatus": "resolved"}
+        if url.endswith("/markets/slug/a-draw") else {"closed": True, "outcomePrices": '["0.31", "0.69"]'})
     P.settle(b4)
     check("a-draw" not in b4.state["open"] and abs(b4.state["realized"] - 0.10) < 1e-6 and "b-draw" in b4.state["open"],
           "a split ('fair value') result pays its final price; a closed game without a final result waits")

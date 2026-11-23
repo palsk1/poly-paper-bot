@@ -37,6 +37,7 @@ import math
 import os
 import sys
 import time
+import urllib.parse
 from decimal import ROUND_UP, Decimal
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -227,11 +228,13 @@ def place(book):
 def settle(book):
     for slug, o in list(book.state["open"].items()):
         try:
-            rows = bot.http_json(f"{bot.GAMMA}/markets", {"slug": slug})
+            # The one-market address, like the paper bot (bot.market_by_slug). The list address
+            # /markets?slug= leaves out closed markets, so finished games never settled (fixed 23 Nov).
+            rows = bot.http_json(f"{bot.GAMMA}/markets/slug/{urllib.parse.quote(slug)}")
         except Exception as e:
             print(f"gamma failed for {slug}: {e}", flush=True)
             continue
-        m = rows[0] if isinstance(rows, list) and rows else None
+        m = rows[0] if isinstance(rows, list) and rows else (rows if isinstance(rows, dict) else None)
         if not m:
             continue
         prices = [bot.fnum(x, None) for x in bot.jlist(m.get("outcomePrices"))]
