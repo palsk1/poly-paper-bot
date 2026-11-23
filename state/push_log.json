@@ -52,23 +52,11 @@
   },
   "2026-11-23": {
    "failed": 0,
-   "muted": 29,
-   "sent": 11
+   "muted": 43,
+   "sent": 13
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.87)",
-   "track": null,
-   "ts": "2026-11-14T17:40:02Z"
-  },
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.83)",
-   "track": null,
-   "ts": "2026-11-14T17:40:03Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.79)",
@@ -1256,6 +1244,18 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-23T03:46:13Z"
+  },
+  {
+   "result": "sent",
+   "title": "[fade_rally] bought 2 (practice money)",
+   "track": "fade_rally",
+   "ts": "2026-11-23T05:02:50Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-23T05:06:07Z"
   }
  ]
 }

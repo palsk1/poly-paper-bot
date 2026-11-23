@@ -1436,316 +1436,316 @@
   "deposited": 300.0,
   "last_check": {
    "KX10YRDIRHM-26NOV30H-T5.28|will-the-10-year-treasury-yield-hit-5pt29-in-november": {
-    "annual": -0.396,
+    "annual": -0.397,
     "edge": -0.0121,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:36Z"
+    "ts": "2026-11-23T05:05:54Z"
    },
    "KX10YRDIRHM-27JAN01H-T5.39|will-the-10-year-treasury-yield-hit-5pt4-before-2027": {
-    "annual": -0.216,
-    "edge": -0.0257,
+    "annual": -0.133,
+    "edge": -0.0157,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:37Z"
+    "ts": "2026-11-23T05:05:54Z"
    },
    "KX10YRDIRHM-27JAN01H-T5.49|will-the-10-year-treasury-yield-hit-5pt5-before-2027-997-245": {
-    "annual": -0.422,
-    "edge": -0.0515,
+    "annual": -0.399,
+    "edge": -0.0486,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:34Z"
+    "ts": "2026-11-23T05:05:53Z"
    },
    "KX30YRDIRHM-26NOV30H-T5.52|will-the-30-year-treasury-yield-hit-5pt53-in-november": {
-    "annual": -1.351,
+    "annual": -1.353,
     "edge": -0.0425,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:39Z"
+    "ts": "2026-11-23T05:05:55Z"
    },
    "KXALIENS-27|will-the-us-confirm-that-aliens-exist-before-2027-789-924-249": {
-    "annual": -0.01,
-    "edge": -0.0012,
+    "annual": -0.001,
+    "edge": -0.0002,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:15Z"
+    "ts": "2026-11-23T05:05:41Z"
    },
    "KXAOCRUN-28-27APR01|will-aoc-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.055,
     "edge": -0.0204,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:22Z"
+    "ts": "2026-11-23T05:05:46Z"
    },
    "KXAOCRUN-28-27JAN01|will-alexandria-ocasio-cortez-announce-a-presidential-run-before-2027": {
     "annual": -0.139,
     "edge": -0.0164,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:25Z"
+    "ts": "2026-11-23T05:05:47Z"
    },
    "KXAOCRUN-28-27JUL01|will-aoc-announce-a-presidential-run-by-june-30-2027": {
     "annual": -0.017,
     "edge": -0.0104,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:30Z"
+    "ts": "2026-11-23T05:05:50Z"
    },
    "KXBESHEARRUN-28-27JAN01|will-andy-beshear-announce-a-presidential-run-before-2027": {
-    "annual": -0.572,
-    "edge": -0.0713,
+    "annual": -0.271,
+    "edge": -0.0325,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:17Z"
+    "ts": "2026-11-23T05:05:42Z"
    },
    "KXBUTTIGIEGRUN-28-27JAN01|will-pete-buttigieg-announce-a-presidential-run-before-2027": {
     "annual": -0.097,
     "edge": -0.0114,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:19Z"
+    "ts": "2026-11-23T05:05:44Z"
    },
    "KXCOMMISHFDA-26AUG20-DEC01|will-heidi-overton-be-confirmed-as-fda-commissioner-by-november-30": {
-    "annual": -0.069,
+    "annual": -0.07,
     "edge": -0.0021,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:33Z"
+    "ts": "2026-11-23T05:05:52Z"
    },
    "KXCRYPTOSTRUCTURE-26JAN-27|crypto-market-structure-legislation-becomes-law-in-2026-20260727223933088": {
     "annual": -0.061,
     "edge": -0.0072,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:21Z"
+    "ts": "2026-11-23T05:05:46Z"
    },
    "KXDESANTISRUN-28-27JAN01|will-ron-desantis-announce-a-presidential-run-before-2027": {
     "annual": -0.028,
     "edge": -0.0033,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:17Z"
+    "ts": "2026-11-23T05:05:43Z"
    },
    "KXEMANUELRUN-28-27JAN01|will-rahm-emanuel-announce-a-presidential-run-before-2027": {
     "annual": -0.163,
     "edge": -0.0194,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:18Z"
+    "ts": "2026-11-23T05:05:43Z"
    },
    "KXKAMALARUN-28-27JAN01|will-kamala-harris-announce-a-presidential-run-before-2027": {
     "annual": -0.122,
     "edge": -0.0144,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:18Z"
+    "ts": "2026-11-23T05:05:44Z"
    },
    "KXKELLYRUN-28-27JAN01|will-mark-kelly-announce-a-presidential-run-before-2027": {
     "annual": -0.099,
     "edge": -0.0116,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:27Z"
+    "ts": "2026-11-23T05:05:48Z"
    },
    "KXNEWSOMRUN-28-27JAN01|will-gavin-newsom-announce-a-presidential-run-before-2027": {
-    "annual": -0.229,
-    "edge": -0.0273,
+    "annual": -0.221,
+    "edge": -0.0263,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:29Z"
+    "ts": "2026-11-23T05:05:50Z"
    },
    "KXNYSECIRCUIT-27|nyse-marketwide-circuit-breaker-before-2027": {
     "annual": 0.031,
     "edge": 0.0036,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:43Z"
+    "ts": "2026-11-23T05:05:57Z"
    },
    "KXOSSOFFRUN-28-27APR01|will-jon-ossoff-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.084,
     "edge": -0.0315,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:20Z"
+    "ts": "2026-11-23T05:05:45Z"
    },
    "KXOSSOFFRUN-28-27JUL01|will-jon-ossoff-announce-a-presidential-run-by-june-30-2027": {
     "annual": -0.001,
     "edge": -0.0004,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:23Z"
+    "ts": "2026-11-23T05:05:46Z"
    },
    "KXREACTOR-26DEC31|us-grants-license-for-new-nuclear-reactor-in-2026": {
     "annual": -0.162,
     "edge": -0.019,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:26Z"
+    "ts": "2026-11-23T05:05:48Z"
    },
    "KXRECOGSOMALI-29-27|will-trump-recognize-somaliland-before-2027": {
     "annual": -0.034,
     "edge": -0.004,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:16Z"
+    "ts": "2026-11-23T05:05:42Z"
    },
    "KXRUBIORUN-28-27APR01|will-marco-rubio-announce-a-presidential-run-by-march-31-2027": {
     "annual": -0.01,
     "edge": -0.0035,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:20Z"
+    "ts": "2026-11-23T05:05:45Z"
    },
    "KXRUBIORUN-28-27JUL01|will-marco-rubio-announce-a-presidential-run-by-june-30-2027": {
     "annual": -0.017,
     "edge": -0.0105,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:24Z"
+    "ts": "2026-11-23T05:05:47Z"
    },
    "KXSATOSHIBTCYEAR-27|will-satoshi-move-any-bitcoin-in-2026": {
-    "annual": -0.054,
-    "edge": -0.0062,
+    "annual": 0.015,
+    "edge": 0.0018,
     "opportunity": false,
-    "ts": "2026-11-23T04:45:59Z"
+    "ts": "2026-11-23T05:05:33Z"
    },
    "KXSENATEREC-26JUN-27JAN01|will-the-senate-pass-a-reconciliation-bill-by-december-31-20260626182136411": {
     "annual": -0.221,
     "edge": -0.0264,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:38Z"
+    "ts": "2026-11-23T05:05:55Z"
    },
    "KXSP500ADDQ-26DEC31-LNG|will-cheniere-energy-lng-be-added-to-the-sp-500-by-december-31-2026": {
     "annual": -0.493,
     "edge": -0.0602,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:32Z"
+    "ts": "2026-11-23T05:05:52Z"
    },
    "KXTIME-26-ABD|will-abdul-el-sayed-be-time-person-of-the-year-2026": {
-    "annual": -0.03,
-    "edge": -0.0035,
+    "annual": 0.058,
+    "edge": 0.0066,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:14Z"
+    "ts": "2026-11-23T05:05:41Z"
    },
    "KXTIME-26-ALE|will-alexandria-ocasio-cortez-be-time-person-of-the-year-2026": {
     "annual": -0.088,
     "edge": -0.0103,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:11Z"
+    "ts": "2026-11-23T05:05:39Z"
    },
    "KXTIME-26-BER|will-bernie-sanders-be-time-person-of-the-year-2026": {
     "annual": -0.123,
     "edge": -0.0143,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:01Z"
+    "ts": "2026-11-23T05:05:34Z"
    },
    "KXTIME-26-CHR|will-christina-koch-be-time-person-of-the-year-2026": {
     "annual": -0.19,
     "edge": -0.0224,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:06Z"
+    "ts": "2026-11-23T05:05:36Z"
    },
    "KXTIME-26-DAR|will-dario-amodei-be-time-person-of-the-year-2026": {
     "annual": -0.108,
     "edge": -0.0125,
     "opportunity": false,
-    "ts": "2026-11-23T04:45:59Z"
+    "ts": "2026-11-23T05:05:33Z"
    },
    "KXTIME-26-DT|will-donald-trump-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0025,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:13Z"
+    "ts": "2026-11-23T05:05:40Z"
    },
    "KXTIME-26-JAM|will-james-talarico-be-time-person-of-the-year-2026": {
     "annual": -0.05,
     "edge": -0.0058,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:00Z"
+    "ts": "2026-11-23T05:05:34Z"
    },
    "KXTIME-26-JEN|will-jensen-huang-be-time-person-of-the-year-2026": {
     "annual": -0.08,
     "edge": -0.0093,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:31Z"
+    "ts": "2026-11-23T05:05:51Z"
    },
    "KXTIME-26-JON|will-jon-ossoff-be-time-person-of-the-year-2026": {
-    "annual": 0.028,
-    "edge": 0.0032,
+    "annual": -0.059,
+    "edge": -0.0068,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:35Z"
+    "ts": "2026-11-23T05:05:53Z"
    },
    "KXTIME-26-LUI|will-lula-da-silva-be-time-person-of-the-year-2026": {
     "annual": -0.02,
     "edge": -0.0023,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:28Z"
+    "ts": "2026-11-23T05:05:49Z"
    },
    "KXTIME-26-MARK|will-mark-carney-be-time-person-of-the-year-2026": {
     "annual": -0.144,
     "edge": -0.0169,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:09Z"
+    "ts": "2026-11-23T05:05:38Z"
    },
    "KXTIME-26-MAR|will-marco-rubio-be-time-person-of-the-year-2026": {
     "annual": -0.021,
     "edge": -0.0024,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:10Z"
+    "ts": "2026-11-23T05:05:38Z"
    },
    "KXTIME-26-MOH|will-mohammad-bagher-ghalibaf-be-time-person-of-the-year-2026": {
     "annual": -0.045,
     "edge": -0.0052,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:08Z"
+    "ts": "2026-11-23T05:05:37Z"
    },
    "KXTIME-26-MOJ|will-mojtaba-khamenei-be-time-person-of-the-year-2026": {
     "annual": -0.115,
     "edge": -0.0134,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:12Z"
+    "ts": "2026-11-23T05:05:39Z"
    },
    "KXTIME-26-PET|will-pter-magyar-be-time-person-of-the-year-2026": {
     "annual": -0.146,
     "edge": -0.017,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:04Z"
+    "ts": "2026-11-23T05:05:36Z"
    },
    "KXTIME-26-PHEG|will-pete-hegseth-be-time-person-of-the-year-2026": {
     "annual": 0.014,
     "edge": 0.0017,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:41Z"
+    "ts": "2026-11-23T05:05:56Z"
    },
    "KXTIME-26-POP|will-pope-leo-xiv-be-time-person-of-the-year-2026": {
     "annual": 0.03,
     "edge": 0.0034,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:02Z"
+    "ts": "2026-11-23T05:05:35Z"
    },
    "KXTIME-26-REI|will-reid-wiseman-be-time-person-of-the-year-2026": {
     "annual": -0.131,
     "edge": -0.0153,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:14Z"
+    "ts": "2026-11-23T05:05:40Z"
    },
    "KXTIME-26-SA|will-sam-altman-be-time-person-of-the-year-2026": {
     "annual": -0.231,
     "edge": -0.0273,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:05Z"
+    "ts": "2026-11-23T05:05:36Z"
    },
    "KXTIME-26-SHE|will-shehbaz-sharif-be-time-person-of-the-year-2026": {
     "annual": -0.071,
     "edge": -0.0083,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:42Z"
+    "ts": "2026-11-23T05:05:57Z"
    },
    "KXTIME-26-VIC|will-victor-glover-be-time-person-of-the-year-2026": {
     "annual": -0.131,
     "edge": -0.0153,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:07Z"
+    "ts": "2026-11-23T05:05:37Z"
    },
    "KXTIME-26-ZOH|will-zohran-mamdani-be-time-person-of-the-year-2026": {
-    "annual": -0.049,
-    "edge": -0.0057,
+    "annual": -0.134,
+    "edge": -0.0157,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:03Z"
+    "ts": "2026-11-23T05:05:35Z"
    },
    "KXTRUMPFLAVIOMEET-26DEC01-JAN01|will-trump-meet-with-flavio-bolsonaro-in-2026": {
     "annual": -0.069,
     "edge": -0.008,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:28Z"
+    "ts": "2026-11-23T05:05:49Z"
    },
    "KXTRUMPKIMMEET-29JAN01-27JAN01|will-trump-meet-with-kim-jong-un-in-2026": {
     "annual": 0.135,
     "edge": 0.0156,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:32Z"
+    "ts": "2026-11-23T05:05:51Z"
    },
    "KXTRUMPKIMMEET-29JAN01-27JUL01|trump-meets-with-kim-jong-un-by-june-30-2027": {
-    "annual": -0.026,
-    "edge": -0.0159,
+    "annual": -0.041,
+    "edge": -0.0259,
     "opportunity": false,
-    "ts": "2026-11-23T04:46:40Z"
+    "ts": "2026-11-23T05:05:56Z"
    }
   },
   "min_cash": 0.0,
@@ -7061,9 +7061,11 @@
   "skipped_no_cash": 0,
   "start_cash": 50,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "106 markets matched its rules, bought 0",
+   "skips": {
+    "full (max open bets)": 1
+   }
   },
   "unlimited": false
  },
@@ -8770,8 +8772,8 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "173 markets held by 2+ of the copied wallets right now (40 wallets read).",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "172 markets held by 2+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
   "unlimited": true
@@ -10764,7 +10766,7 @@
   "skipped_other_side": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "61 markets held by 3+ of the copied wallets right now (40 wallets read).",
    "skips": {}
   },
@@ -10784,7 +10786,7 @@
   ]
  },
  "control_longshot": {
-  "cash": 500.000185,
+  "cash": 498.860265,
   "closed": [
    {
     "closed_at": "2026-11-13T06:25:31Z",
@@ -11885,7 +11887,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 9.413349,
+  "peak_open_cost": 10.553269,
   "positions": {
    "102959860025519533768586392648393292830655850541879057833605543601433003729221": {
     "end": "2026-11-30",
@@ -12472,6 +12474,96 @@
     "theme": "middle east",
     "title": "US x Yemen ceasefire continues through November 30?"
    },
+   "44764473910579810482929862509735622980169084305449688514184014788269306564080": {
+    "end": "2026-11-27",
+    "entry": 0.051,
+    "entry_fee": 0.00242,
+    "event_key": "1432565",
+    "event_slug": "solana-above-on-november-27-2026",
+    "late": {
+     "px": 0.051,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:49Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       186.481,
+       10.0946,
+       true
+      ],
+      "100": [
+       700.0,
+       38.1172,
+       false
+      ],
+      "25": [
+       464.259,
+       25.2365,
+       true
+      ],
+      "50": [
+       700.0,
+       38.1172,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "solana-above-60-on-november-27-2026",
+    "source": "control_longshot",
+    "theme": null,
+    "title": "Will the price of Solana be above $60 on November 27?"
+   },
+   "47092259256642034808229024640965564379227532180310578921390764275914644588588": {
+    "end": "2026-11-29",
+    "entry": 0.1,
+    "entry_fee": 0.0225,
+    "event_key": "848435",
+    "event_slug": "hsinchu-city-mayor-election-winner-20260813135716400",
+    "late": {
+     "px": 0.1,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:48Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       100.0,
+       10.45,
+       true
+      ],
+      "100": [
+       919.545,
+       104.4563,
+       true
+      ],
+      "25": [
+       237.727,
+       26.1185,
+       true
+      ],
+      "50": [
+       465.0,
+       52.2312,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-ann-kao-win-the-next-hsinchu-city-mayor-election-20260813135716401",
+    "source": "control_longshot",
+    "theme": "us politics",
+    "title": "Will Ann Kao win the next Hsinchu City Mayor election?"
+   },
    "49483308972697161845565973074017078594452217183034102154432094990063924060748": {
     "end": "2026-12-15",
     "entry": 0.041,
@@ -12696,6 +12788,51 @@
     "source": "control_longshot",
     "theme": null,
     "title": "Will Ethereum reach $2,400 in November?"
+   },
+   "623924238872245942862034701422290251083094332750563558646400423202888056173": {
+    "end": "2026-12-01",
+    "entry": 0.072,
+    "entry_fee": 0.0,
+    "event_key": "1285996",
+    "event_slug": "who-will-trump-speak-to-by-november-30-2026",
+    "late": {
+     "px": 0.072,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:48Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       135.134,
+       10.0,
+       true
+      ],
+      "100": [
+       151.59,
+       11.3823,
+       false
+      ],
+      "25": [
+       151.59,
+       11.3823,
+       false
+      ],
+      "50": [
+       151.59,
+       11.3823,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-trump-speak-to-emmanuel-macron-by-november-30-2026",
+    "source": "control_longshot",
+    "theme": "us politics",
+    "title": "Will Trump speak to Emmanuel Macron by November 30?"
    },
    "6433676448992092658631536097711321462999221927468402273896418298625478337992": {
     "end": "2026-12-01",
@@ -13108,14 +13245,16 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "69 markets matched its rules, bought 3",
+   "skips": {
+    "already holds this market": 9
+   }
   },
   "unlimited": false
  },
  "control_random": {
-  "cash": 433.112601,
+  "cash": 428.649031,
   "closed": [
    {
     "closed_at": "2026-11-12T13:50:35Z",
@@ -13705,7 +13844,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 52.389359,
+  "peak_open_cost": 56.852929,
   "positions": {
    "100205215067722297517595068937257697192973299370955287626157382353628199508318": {
     "end": "2026-11-29",
@@ -13751,6 +13890,51 @@
     "source": "control_random",
     "theme": "us politics",
     "title": "Will Chiang Wan-an win the next Taipei Mayor election?"
+   },
+   "100389421942275273644383746131925207185507318737913534870861474466462176432157": {
+    "end": "2026-11-30",
+    "entry": 0.29,
+    "entry_fee": 0.051475,
+    "event_key": "1232497",
+    "event_slug": "spain-general-election-santa-cruz-de-tenerife-winner",
+    "late": {
+     "px": 0.29,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:48Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       34.483,
+       10.355,
+       true
+      ],
+      "100": [
+       344.828,
+       103.55,
+       true
+      ],
+      "25": [
+       86.207,
+       25.8875,
+       true
+      ],
+      "50": [
+       172.414,
+       51.775,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-psoe-win-the-most-seats-in-santa-cruz-de-tenerife-in-the-2026-spanish-general-election",
+    "source": "control_random",
+    "theme": "us politics",
+    "title": "Will PSOE win the most seats in Santa Cruz de Tenerife in the 2026 Spanish general election?"
    },
    "102337009609198106480338968849483239622959903802995452811541135100080095524168": {
     "end": "2026-12-01",
@@ -13841,6 +14025,51 @@
     "source": "control_random",
     "theme": null,
     "title": "Real American Freestyle: Donald Cerrone vs. Anthony Pettis"
+   },
+   "104632977886526275754962956997216941560374774401066931121596525864085416420906": {
+    "end": "2026-11-28",
+    "entry": 0.59,
+    "entry_fee": 0.012095,
+    "event_key": "1437761",
+    "event_slug": "solana-above-on-november-28-2026",
+    "late": {
+     "px": 0.64,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:48Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       16.949,
+       10.041,
+       true
+      ],
+      "100": [
+       169.492,
+       100.41,
+       true
+      ],
+      "25": [
+       42.373,
+       25.1025,
+       true
+      ],
+      "50": [
+       84.746,
+       50.205,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "solana-above-70-on-november-28-2026",
+    "source": "control_random",
+    "theme": null,
+    "title": "Will the price of Solana be above $70 on November 28?"
    },
    "107102019646641560859816755682204126666055001353995896146185659876934751903762": {
     "end": "2026-11-25",
@@ -14613,9 +14842,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "42 markets matched its rules, bought 2",
+   "skips": {
+    "already holds this market": 6
+   }
   },
   "unlimited": false
  },
@@ -17558,7 +17789,7 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
@@ -20763,8 +20994,8 @@
   "skipped_no_cash": 0,
   "start_cash": 100,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "0 markets matched its rules, bought 0",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "9 markets matched its rules, bought 0",
    "skips": {}
   },
   "unlimited": false
@@ -48370,7 +48601,7 @@
   "unlimited": false
  },
  "endgame_sell98": {
-  "cash": 248.843035,
+  "cash": 273.731951,
   "closed": [
    {
     "closed_at": "2026-11-08T21:15:50Z",
@@ -124215,6 +124446,516 @@
     "tier": "ending_soon",
     "title": "Will Bitcoin reach $62,000 on November 22?",
     "token": "76291801842463421786718553689278049980924903650326726108227446408456511469797"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:49Z",
+    "end": "2026-11-23",
+    "entry": 0.97,
+    "entry_fee": 0.001455,
+    "event_key": "1440654",
+    "event_slug": "what-price-will-xrp-hit-on-november-22-2026",
+    "exit": 0.999,
+    "exit_fee": 5e-05,
+    "late": {
+     "px": 0.967,
+     "s": 47
+    },
+    "opened": "2026-11-22T09:57:38Z",
+    "outcome": "No",
+    "pnl": 0.143495,
+    "price_source": "book",
+    "reason": "take profit (now 99c), book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.309,
+       10.003,
+       true
+      ],
+      "100": [
+       103.093,
+       100.03,
+       true
+      ],
+      "25": [
+       25.773,
+       25.0075,
+       true
+      ],
+      "50": [
+       51.546,
+       50.015,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.003,
+      0.2956,
+      true
+     ],
+     "100": [
+      100.03,
+      2.9589,
+      true
+     ],
+     "25": [
+      25.0075,
+      0.7395,
+      true
+     ],
+     "50": [
+      50.015,
+      1.4789,
+      true
+     ]
+    },
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T05:01:49Z",
+      "fee": 5e-05,
+      "px": 0.999
+     },
+     "bid_0.99": {
+      "at": "2026-11-23T05:01:49Z",
+      "fee": 5e-05,
+      "px": 0.999
+     }
+    },
+    "shadow_results": {
+     "after_24h": {
+      "days_sooner": 0.0,
+      "pnl": 0.143495,
+      "sold": false
+     },
+     "bid_0.98": {
+      "days_sooner": 0.0,
+      "pnl": 0.1435,
+      "sold": true
+     },
+     "bid_0.99": {
+      "days_sooner": 0.0,
+      "pnl": 0.1435,
+      "sold": true
+     }
+    },
+    "shares": 5,
+    "slug": "will-xrp-reach-1-on-november-22-2026",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "ending_soon",
+    "title": "Will XRP reach $1.00 on November 22?",
+    "token": "21612663370546893260529736021741015819297231058397045023896214153002546345532"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:50Z",
+    "end": "2026-11-23",
+    "entry": 0.974,
+    "entry_fee": 0.001266,
+    "event_key": "1417295",
+    "event_slug": "xqc-finishes-gta-vi-by",
+    "exit": 0.999,
+    "exit_fee": 5e-05,
+    "late": {
+     "px": 0.974,
+     "s": 50
+    },
+    "opened": "2026-11-23T04:12:51Z",
+    "outcome": "No",
+    "pnl": 0.123684,
+    "price_source": "book",
+    "reason": "take profit (now 100c), book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.267,
+       10.0026,
+       true
+      ],
+      "100": [
+       102.669,
+       100.026,
+       true
+      ],
+      "25": [
+       25.667,
+       25.0065,
+       true
+      ],
+      "50": [
+       51.335,
+       50.013,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0026,
+      0.254,
+      true
+     ],
+     "100": [
+      100.026,
+      2.5393,
+      true
+     ],
+     "25": [
+      25.0065,
+      0.6346,
+      true
+     ],
+     "50": [
+      50.013,
+      1.2702,
+      true
+     ]
+    },
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T05:01:50Z",
+      "fee": 5e-05,
+      "px": 0.999
+     },
+     "bid_0.99": {
+      "at": "2026-11-23T05:01:50Z",
+      "fee": 5e-05,
+      "px": 0.999
+     }
+    },
+    "shadow_results": {
+     "after_24h": {
+      "days_sooner": 0.0,
+      "pnl": 0.123684,
+      "sold": false
+     },
+     "bid_0.98": {
+      "days_sooner": 0.0,
+      "pnl": 0.12368,
+      "sold": true
+     },
+     "bid_0.99": {
+      "days_sooner": 0.0,
+      "pnl": 0.12368,
+      "sold": true
+     }
+    },
+    "shares": 5,
+    "slug": "will-xqc-finish-gta-vi-by-november-22",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "ending_soon",
+    "title": "Will xQc finish GTA VI by November 22?",
+    "token": "23028199863198731085251375092182217338484050587802918120903557979791589045332"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:50Z",
+    "end": "2026-11-23",
+    "entry": 0.979,
+    "entry_fee": 0.001028,
+    "event_key": "1399654",
+    "event_slug": "what-price-will-xrp-hit-november-16-22-2026",
+    "exit": 0.999,
+    "exit_fee": 5e-05,
+    "late": {
+     "px": 0.979,
+     "s": 37
+    },
+    "opened": "2026-11-22T05:04:02Z",
+    "outcome": "No",
+    "pnl": 0.098922,
+    "price_source": "book",
+    "reason": "take profit (now 99c), book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.215,
+       10.0021,
+       true
+      ],
+      "100": [
+       102.082,
+       100.0204,
+       true
+      ],
+      "25": [
+       25.536,
+       25.0053,
+       true
+      ],
+      "50": [
+       51.061,
+       50.0104,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0021,
+      0.2026,
+      true
+     ],
+     "100": [
+      100.0204,
+      1.9585,
+      true
+     ],
+     "25": [
+      25.0053,
+      0.5049,
+      true
+     ],
+     "50": [
+      50.0104,
+      0.999,
+      true
+     ]
+    },
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T05:01:50Z",
+      "fee": 5e-05,
+      "px": 0.999
+     },
+     "bid_0.99": {
+      "at": "2026-11-23T05:01:50Z",
+      "fee": 5e-05,
+      "px": 0.999
+     }
+    },
+    "shadow_results": {
+     "after_24h": {
+      "days_sooner": 0.0,
+      "pnl": 0.098922,
+      "sold": false
+     },
+     "bid_0.98": {
+      "days_sooner": 0.0,
+      "pnl": 0.09892,
+      "sold": true
+     },
+     "bid_0.99": {
+      "days_sooner": 0.0,
+      "pnl": 0.09892,
+      "sold": true
+     }
+    },
+    "shares": 5,
+    "slug": "will-xrp-reach-1-november-16-22-2026-from-november-18",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "ending_soon",
+    "title": "Will XRP reach $1.00 November 16-22?",
+    "token": "25513552424745218262613011745344703409395790634057609041899400643221426921249"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:51Z",
+    "end": "2026-11-23",
+    "entry": 0.974,
+    "entry_fee": 0.001266,
+    "event_key": "1440653",
+    "event_slug": "what-price-will-solana-hit-on-november-22-2026",
+    "exit": 0.999,
+    "exit_fee": 5e-05,
+    "late": {
+     "px": 0.974,
+     "s": 30
+    },
+    "opened": "2026-11-22T16:47:20Z",
+    "outcome": "No",
+    "pnl": 0.123684,
+    "price_source": "book",
+    "reason": "take profit (now 99c), book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.267,
+       10.0026,
+       true
+      ],
+      "100": [
+       102.669,
+       100.026,
+       true
+      ],
+      "25": [
+       25.667,
+       25.0065,
+       true
+      ],
+      "50": [
+       51.335,
+       50.013,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0026,
+      0.254,
+      true
+     ],
+     "100": [
+      100.026,
+      2.5393,
+      true
+     ],
+     "25": [
+      25.0065,
+      0.6346,
+      true
+     ],
+     "50": [
+      50.013,
+      1.2702,
+      true
+     ]
+    },
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T05:01:51Z",
+      "fee": 5e-05,
+      "px": 0.999
+     },
+     "bid_0.99": {
+      "at": "2026-11-23T05:01:51Z",
+      "fee": 5e-05,
+      "px": 0.999
+     }
+    },
+    "shadow_results": {
+     "after_24h": {
+      "days_sooner": 0.0,
+      "pnl": 0.123684,
+      "sold": false
+     },
+     "bid_0.98": {
+      "days_sooner": 0.0,
+      "pnl": 0.12368,
+      "sold": true
+     },
+     "bid_0.99": {
+      "days_sooner": 0.0,
+      "pnl": 0.12368,
+      "sold": true
+     }
+    },
+    "shares": 5,
+    "slug": "will-solana-reach-75-on-november-22-2026",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "ending_soon",
+    "title": "Will Solana reach $75 on November 22?",
+    "token": "27509044071478321792197910165357333003888483185574220804179818946881835122368"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:54Z",
+    "end": "2026-11-23",
+    "entry": 0.972,
+    "entry_fee": 0.001361,
+    "event_key": "1425784",
+    "event_slug": "elon-musk-of-tweets-november-21-november-23-2026",
+    "exit": 0.982,
+    "exit_fee": 0.000884,
+    "late": {
+     "px": 0.974,
+     "s": 43
+    },
+    "opened": "2026-11-22T22:42:52Z",
+    "outcome": "No",
+    "pnl": 0.047755,
+    "price_source": "book",
+    "reason": "take profit (now 99c), book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.278,
+       10.0027,
+       true
+      ],
+      "100": [
+       102.417,
+       100.0236,
+       true
+      ],
+      "25": [
+       25.647,
+       25.0063,
+       true
+      ],
+      "50": [
+       51.262,
+       50.0123,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0027,
+      0.0885,
+      true
+     ],
+     "100": [
+      100.0236,
+      0.4905,
+      true
+     ],
+     "25": [
+      25.0063,
+      0.1745,
+      true
+     ],
+     "50": [
+      50.0123,
+      0.3179,
+      true
+     ]
+    },
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T04:10:59Z",
+      "fee": 0.00088,
+      "px": 0.982
+     }
+    },
+    "shadow_results": {
+     "after_24h": {
+      "days_sooner": 0.0,
+      "pnl": 0.047755,
+      "sold": false
+     },
+     "bid_0.98": {
+      "days_sooner": 0.04,
+      "pnl": 0.04776,
+      "sold": true
+     },
+     "bid_0.99": {
+      "days_sooner": 0.0,
+      "pnl": 0.047755,
+      "sold": false
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-21-november-23-2026-140-164",
+    "source": "endgame_sell98",
+    "theme": null,
+    "tier": "ending_soon",
+    "title": "Will Elon Musk post 140-164 tweets from November 21 to November 23, 2026?",
+    "token": "89755157078308083174138503182589380286110093201783590231505499503934487788039"
    }
   ],
   "created": "2026-11-08T15:15:28Z",
@@ -124314,154 +125055,19 @@
       ]
      }
     },
-    "shadow": {},
+    "shadow": {
+     "bid_0.98": {
+      "at": "2026-11-23T05:01:49Z",
+      "fee": 0.00084,
+      "px": 0.983
+     }
+    },
     "shares": 5,
     "slug": "highest-temperature-in-london-on-november-23-2026-9c",
     "source": "endgame_sell98",
     "theme": null,
     "tier": "ending_soon",
     "title": "Will the highest temperature in London be 9\u00b0C on November 23?"
-   },
-   "21612663370546893260529736021741015819297231058397045023896214153002546345532": {
-    "end": "2026-11-23",
-    "entry": 0.97,
-    "entry_fee": 0.001455,
-    "event_key": "1440654",
-    "event_slug": "what-price-will-xrp-hit-on-november-22-2026",
-    "late": {
-     "px": 0.967,
-     "s": 47
-    },
-    "opened": "2026-11-22T09:57:38Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       10.309,
-       10.003,
-       true
-      ],
-      "100": [
-       103.093,
-       100.03,
-       true
-      ],
-      "25": [
-       25.773,
-       25.0075,
-       true
-      ],
-      "50": [
-       51.546,
-       50.015,
-       true
-      ]
-     }
-    },
-    "shadow": {},
-    "shares": 5,
-    "slug": "will-xrp-reach-1-on-november-22-2026",
-    "source": "endgame_sell98",
-    "theme": null,
-    "tier": "ending_soon",
-    "title": "Will XRP reach $1.00 on November 22?"
-   },
-   "23028199863198731085251375092182217338484050587802918120903557979791589045332": {
-    "end": "2026-11-23",
-    "entry": 0.974,
-    "entry_fee": 0.001266,
-    "event_key": "1417295",
-    "event_slug": "xqc-finishes-gta-vi-by",
-    "late": {
-     "px": 0.974,
-     "s": 50
-    },
-    "opened": "2026-11-23T04:12:51Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       10.267,
-       10.0026,
-       true
-      ],
-      "100": [
-       102.669,
-       100.026,
-       true
-      ],
-      "25": [
-       25.667,
-       25.0065,
-       true
-      ],
-      "50": [
-       51.335,
-       50.013,
-       true
-      ]
-     }
-    },
-    "shadow": {},
-    "shares": 5,
-    "slug": "will-xqc-finish-gta-vi-by-november-22",
-    "source": "endgame_sell98",
-    "theme": null,
-    "tier": "ending_soon",
-    "title": "Will xQc finish GTA VI by November 22?"
-   },
-   "25513552424745218262613011745344703409395790634057609041899400643221426921249": {
-    "end": "2026-11-23",
-    "entry": 0.979,
-    "entry_fee": 0.001028,
-    "event_key": "1399654",
-    "event_slug": "what-price-will-xrp-hit-november-16-22-2026",
-    "late": {
-     "px": 0.979,
-     "s": 37
-    },
-    "opened": "2026-11-22T05:04:02Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       10.215,
-       10.0021,
-       true
-      ],
-      "100": [
-       102.082,
-       100.0204,
-       true
-      ],
-      "25": [
-       25.536,
-       25.0053,
-       true
-      ],
-      "50": [
-       51.061,
-       50.0104,
-       true
-      ]
-     }
-    },
-    "shadow": {},
-    "shares": 5,
-    "slug": "will-xrp-reach-1-november-16-22-2026-from-november-18",
-    "source": "endgame_sell98",
-    "theme": null,
-    "tier": "ending_soon",
-    "title": "Will XRP reach $1.00 November 16-22?"
    },
    "25656616918109908778553197015725134931828759862955148259940961352826108101050": {
     "end": "2026-11-22",
@@ -124556,53 +125162,6 @@
     "theme": null,
     "tier": "ending_soon",
     "title": "Will the highest temperature in New York City be between 70-71\u00b0F on November 23?"
-   },
-   "27509044071478321792197910165357333003888483185574220804179818946881835122368": {
-    "end": "2026-11-23",
-    "entry": 0.974,
-    "entry_fee": 0.001266,
-    "event_key": "1440653",
-    "event_slug": "what-price-will-solana-hit-on-november-22-2026",
-    "late": {
-     "px": 0.974,
-     "s": 30
-    },
-    "opened": "2026-11-22T16:47:20Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       10.267,
-       10.0026,
-       true
-      ],
-      "100": [
-       102.669,
-       100.026,
-       true
-      ],
-      "25": [
-       25.667,
-       25.0065,
-       true
-      ],
-      "50": [
-       51.335,
-       50.013,
-       true
-      ]
-     }
-    },
-    "shadow": {},
-    "shares": 5,
-    "slug": "will-solana-reach-75-on-november-22-2026",
-    "source": "endgame_sell98",
-    "theme": null,
-    "tier": "ending_soon",
-    "title": "Will Solana reach $75 on November 22?"
    },
    "27897277458571635430429563487761563935797208669552267110937023364243920904535": {
     "end": "2026-11-22",
@@ -125735,59 +126294,6 @@
     "tier": "ending_soon",
     "title": "Will the highest temperature in Austin be between 64-65\u00b0F on November 23?"
    },
-   "89755157078308083174138503182589380286110093201783590231505499503934487788039": {
-    "end": "2026-11-23",
-    "entry": 0.972,
-    "entry_fee": 0.001361,
-    "event_key": "1425784",
-    "event_slug": "elon-musk-of-tweets-november-21-november-23-2026",
-    "late": {
-     "px": 0.974,
-     "s": 43
-    },
-    "opened": "2026-11-22T22:42:52Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       10.278,
-       10.0027,
-       true
-      ],
-      "100": [
-       102.417,
-       100.0236,
-       true
-      ],
-      "25": [
-       25.647,
-       25.0063,
-       true
-      ],
-      "50": [
-       51.262,
-       50.0123,
-       true
-      ]
-     }
-    },
-    "shadow": {
-     "bid_0.98": {
-      "at": "2026-11-23T04:10:59Z",
-      "fee": 0.00088,
-      "px": 0.982
-     }
-    },
-    "shares": 5,
-    "slug": "elon-musk-of-tweets-november-21-november-23-2026-140-164",
-    "source": "endgame_sell98",
-    "theme": null,
-    "tier": "ending_soon",
-    "title": "Will Elon Musk post 140-164 tweets from November 21 to November 23, 2026?"
-   },
    "92689122345027230760635202489201048766504844427731089718971316875844268988491": {
     "end": "2026-11-23",
     "entry": 0.972,
@@ -125961,16 +126467,16 @@
     "title": "Will Douglas Ruas win the 2026 Rio de Janeiro gubernatorial second round by 15%-20%?"
    }
   },
-  "realized": -76.697845,
+  "realized": -76.160305,
   "refills": 0,
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "16 markets matched its rules, bought 0",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "12 markets matched its rules, bought 0",
    "skips": {
-    "already holds this market": 14,
-    "real price outside its range": 2
+    "already holds this market": 8,
+    "real price outside its range": 4
    }
   },
   "tp_thin_skips": 180,
@@ -126703,8 +127209,8 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "65 markets matched its rules, bought 0",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "10 markets matched its rules, bought 0",
    "skips": {}
   },
   "unlimited": false
@@ -127462,7 +127968,7 @@
   "unlimited": false
  },
  "fade_rally": {
-  "cash": 492.910396,
+  "cash": 488.287446,
   "closed": [
    {
     "closed_at": "2026-11-10T14:15:54Z",
@@ -129111,6 +129617,100 @@
     "theme": null,
     "title": "Will Clavicular wear a Yarmulke in 2026?"
    },
+   "1586406854289718689660617167423525354907234586354047686124371951205118937393": {
+    "end": "2027-01-01",
+    "entry": 0.41,
+    "entry_fee": 0.060475,
+    "event_key": "990236",
+    "event_slug": "ai-lab-announces-another-millennium-prize-solution-by",
+    "late": {
+     "px": 0.41,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:49Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       24.39,
+       10.295,
+       true
+      ],
+      "100": [
+       239.548,
+       102.9127,
+       true
+      ],
+      "25": [
+       60.976,
+       25.7375,
+       true
+      ],
+      "50": [
+       120.5,
+       51.4627,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-an-ai-lab-announce-another-millennium-prize-solution-by-december-31-2026",
+    "source": "fade_rally",
+    "stop": 0.26,
+    "target": 0.49,
+    "theme": null,
+    "title": "Will an AI lab announce another Millennium Prize solution by December 31, 2026?"
+   },
+   "17769188746995805889009627485623784462879024540194570282917960402976991944943": {
+    "end": "2027-01-01",
+    "entry": 0.49,
+    "entry_fee": 0.062475,
+    "event_key": "85299",
+    "event_slug": "ai-bubble-burst-by",
+    "late": {
+     "px": 0.49,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:49Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       20.408,
+       10.255,
+       true
+      ],
+      "100": [
+       204.082,
+       102.55,
+       true
+      ],
+      "25": [
+       51.02,
+       25.6375,
+       true
+      ],
+      "50": [
+       102.041,
+       51.275,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "ai-industry-downturn-by-december-31-2026-857",
+    "source": "fade_rally",
+    "stop": 0.34,
+    "target": 0.57,
+    "theme": null,
+    "title": "AI bubble burst in 2026?"
+   },
    "25676839326063023015672006661339197357837414407983384021190320598409138787977": {
     "end": "2026-12-01",
     "entry": 0.47,
@@ -129164,8 +129764,8 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "9 markets matched its rules, bought 2",
    "skips": {}
   },
   "tp_thin_skips": 10,
@@ -136414,7 +137014,7 @@
   "unlimited": false
  },
  "fav_bigvol_85_95": {
-  "cash": 380.733534,
+  "cash": 376.078534,
   "closed": [
    {
     "closed_at": "2026-11-20T02:10:55Z",
@@ -136493,7 +137093,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 119.531071,
+  "peak_open_cost": 124.186071,
   "positions": {
    "103159225638359731790247383162357783913500681643575178525536406773575671450318": {
     "end": "2026-12-01",
@@ -136584,6 +137184,51 @@
     "source": "fav_bigvol_85_95",
     "theme": null,
     "title": "Jensen Huang divorce by December 31, 2026?"
+   },
+   "111988618077786263362718284278451225707405623288593888751575373086664059387290": {
+    "end": "2026-12-31",
+    "entry": 0.931,
+    "entry_fee": 0.0,
+    "event_key": "237598",
+    "event_slug": "iran-leader-end-of-2026",
+    "late": {
+     "px": 0.931,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:47Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       10.741,
+       10.0,
+       true
+      ],
+      "100": [
+       107.411,
+       100.0,
+       true
+      ],
+      "25": [
+       26.853,
+       25.0,
+       true
+      ],
+      "50": [
+       53.706,
+       50.0,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-mojtaba-khamenei-be-head-of-state-in-iran-end-of-2026",
+    "source": "fav_bigvol_85_95",
+    "theme": "middle east",
+    "title": "Will Mojtaba Khamenei be head of state in Iran end of 2026?"
    },
    "114033095271617070714983865791504478906266507670567428753203001241312040895286": {
     "end": "2027-01-01",
@@ -137671,14 +138316,16 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "21 markets matched its rules, bought 1",
+   "skips": {
+    "already holds this market": 20
+   }
   },
   "unlimited": false
  },
  "fav_cut_losses": {
-  "cash": 411.584586,
+  "cash": 402.377232,
   "closed": [
    {
     "closed_at": "2026-11-14T15:01:13Z",
@@ -138341,7 +138988,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 95.263384,
+  "peak_open_cost": 95.423003,
   "positions": {
    "111879023992805727427888007395202674359981965399934800914169457259690591042100": {
     "end": "2027-01-01",
@@ -138477,6 +139124,51 @@
     "source": "fav_cut_losses",
     "theme": "middle east",
     "title": "Will the U.S. invade Iran before 2027?"
+   },
+   "20508072772404576884266330300293267272741800260494416818259836712249628797288": {
+    "end": "2027-01-01",
+    "entry": 0.912,
+    "entry_fee": 0.004013,
+    "event_key": "89519",
+    "event_slug": "what-price-will-ethereum-hit-before-2027",
+    "late": {
+     "px": 0.912,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:48Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.965,
+       10.0088,
+       true
+      ],
+      "100": [
+       109.649,
+       100.088,
+       true
+      ],
+      "25": [
+       27.412,
+       25.022,
+       true
+      ],
+      "50": [
+       54.825,
+       50.044,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-ethereum-dip-to-1000-by-december-31-2026-273-175",
+    "source": "fav_cut_losses",
+    "theme": null,
+    "title": "Will Ethereum dip to $1,000 by December 31, 2026?"
    },
    "25500176721039521684230438445439604957498547571161362778953203408577843104534": {
     "end": "2027-01-01",
@@ -139018,6 +139710,51 @@
     "theme": "russia-ukraine",
     "title": "Russia x Ukraine ceasefire agreement by December 31, 2026?"
    },
+   "69924622127743346860742491804606293768199148137604178160078893238641086573607": {
+    "end": "2027-01-01",
+    "entry": 0.928,
+    "entry_fee": 0.003341,
+    "event_key": "89502",
+    "event_slug": "what-price-will-bitcoin-hit-before-2027",
+    "late": {
+     "px": 0.928,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:47Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.776,
+       10.0072,
+       true
+      ],
+      "100": [
+       107.759,
+       100.072,
+       true
+      ],
+      "25": [
+       26.94,
+       25.018,
+       true
+      ],
+      "50": [
+       53.879,
+       50.036,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-bitcoin-dip-to-40000-by-december-31-2026-593-522-842-874-931-776-991-167-531-959",
+    "source": "fav_cut_losses",
+    "theme": null,
+    "title": "Will Bitcoin dip to $40,000 by December 31, 2026?"
+   },
    "74076568846866714142503847026760702713555643778038790220454009063912340064073": {
     "end": "2026-12-31",
     "entry": 0.918,
@@ -139204,9 +139941,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "94 markets matched its rules, bought 2",
+   "skips": {
+    "already holds this market": 5
+   }
   },
   "unlimited": false
  },
@@ -140153,14 +140892,16 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "8 markets matched its rules, bought 0",
+   "skips": {
+    "already holds this market": 8
+   }
   },
   "unlimited": false
  },
  "fav_mid_80_90": {
-  "cash": 378.019143,
+  "cash": 369.661763,
   "closed": [
    {
     "closed_at": "2026-11-15T02:10:46Z",
@@ -140239,7 +140980,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 117.543897,
+  "peak_open_cost": 125.901277,
   "positions": {
    "103159225638359731790247383162357783913500681643575178525536406773575671450318": {
     "end": "2026-12-01",
@@ -140330,6 +141071,51 @@
     "source": "fav_mid_80_90",
     "theme": null,
     "title": "Will FURIA Win the PGL Major Singapore 2026?"
+   },
+   "110234370526287683894729327696614873707144855943099848995226737849576275505124": {
+    "end": "2026-12-13",
+    "entry": 0.82,
+    "entry_fee": 0.00738,
+    "event_key": "1274082",
+    "event_slug": "government-shutdown-by",
+    "late": {
+     "px": 0.82,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       12.195,
+       10.018,
+       true
+      ],
+      "100": [
+       121.951,
+       100.18,
+       true
+      ],
+      "25": [
+       30.488,
+       25.045,
+       true
+      ],
+      "50": [
+       60.976,
+       50.09,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "government-shutdown-by-december-12",
+    "source": "fav_mid_80_90",
+    "theme": null,
+    "title": "Government shutdown by December 12?"
    },
    "111879023992805727427888007395202674359981965399934800914169457259690591042100": {
     "end": "2027-01-01",
@@ -140600,6 +141386,51 @@
     "source": "fav_mid_80_90",
     "theme": null,
     "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+   },
+   "38920824596940566520627325808924938453425845390003657036912369412019539683738": {
+    "end": "2027-01-01",
+    "entry": 0.85,
+    "entry_fee": 0.0,
+    "event_key": "634802",
+    "event_slug": "iran-full-airspace-closure-byptptpt-20260625195253028",
+    "late": {
+     "px": 0.85,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       11.765,
+       10.0,
+       true
+      ],
+      "100": [
+       117.647,
+       100.0,
+       true
+      ],
+      "25": [
+       29.412,
+       25.0,
+       true
+      ],
+      "50": [
+       58.824,
+       50.0,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "iran-full-airspace-closure-by-december-31-20260727170429885",
+    "source": "fav_mid_80_90",
+    "theme": "middle east",
+    "title": "Iran full airspace closure by December 31?"
    },
    "39839649379979262874224474703228993451530996696316314037781119946088999891171": {
     "end": "2027-01-01",
@@ -141462,14 +142293,16 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "71 markets matched its rules, bought 2",
+   "skips": {
+    "already holds this market": 14
+   }
   },
   "unlimited": false
  },
  "fav_short_90_95": {
-  "cash": 410.710608,
+  "cash": 396.765747,
   "closed": [
    {
     "closed_at": "2026-11-12T17:20:46Z",
@@ -142935,7 +143768,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 89.860227,
+  "peak_open_cost": 103.199926,
   "positions": {
    "101163144810337914632453468681868970490023911720314282792713074882023687395806": {
     "end": "2026-11-30",
@@ -143252,6 +144085,96 @@
     "theme": "us politics",
     "title": "Will Huang Shih-chieh win the next Taoyuan Mayor election?"
    },
+   "35291645172588917457521605652032084946130296187859859151580316412122619317107": {
+    "end": "2026-11-30",
+    "entry": 0.917,
+    "entry_fee": 0.003806,
+    "event_key": "637442",
+    "event_slug": "next-prime-minister-of-spain-20260625005215443",
+    "late": {
+     "px": 0.917,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:45Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.905,
+       10.0083,
+       true
+      ],
+      "100": [
+       109.051,
+       100.083,
+       true
+      ],
+      "25": [
+       27.263,
+       25.0207,
+       true
+      ],
+      "50": [
+       54.526,
+       50.0415,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
+    "source": "fav_short_90_95",
+    "theme": null,
+    "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+   },
+   "4022912224721003511683999455605436285963305480717384153950336809911453496675": {
+    "end": "2026-11-29",
+    "entry": 0.95,
+    "entry_fee": 0.002375,
+    "event_key": "1443279",
+    "event_slug": "ethereum-price-on-november-29-2026",
+    "late": {
+     "px": 0.95,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:45Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.526,
+       10.005,
+       true
+      ],
+      "100": [
+       105.263,
+       100.05,
+       true
+      ],
+      "25": [
+       26.316,
+       25.0125,
+       true
+      ],
+      "50": [
+       52.632,
+       50.025,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-ethereum-be-between-1900-2000-on-november-29-2026",
+    "source": "fav_short_90_95",
+    "theme": null,
+    "title": "Will the price of Ethereum be between $1,900 and $2,000 on November 29?"
+   },
    "42234331617021352957533367746676448160436161779679178875568441203107991456731": {
     "end": "2026-12-01",
     "entry": 0.938,
@@ -143431,6 +144354,51 @@
     "source": "fav_short_90_95",
     "theme": null,
     "title": "Howard Lutnick out as Secretary of Commerce by November 30?"
+   },
+   "58622603423276706434303391709389317002060876350185229670411779963289131100483": {
+    "end": "2026-11-28",
+    "entry": 0.92,
+    "entry_fee": 0.00368,
+    "event_key": "1437761",
+    "event_slug": "solana-above-on-november-28-2026",
+    "late": {
+     "px": 0.92,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:45Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.87,
+       10.008,
+       true
+      ],
+      "100": [
+       108.696,
+       100.08,
+       true
+      ],
+      "25": [
+       27.174,
+       25.02,
+       true
+      ],
+      "50": [
+       54.348,
+       50.04,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "solana-above-80-on-november-28-2026",
+    "source": "fav_short_90_95",
+    "theme": null,
+    "title": "Will the price of Solana be above $80 on November 28?"
    },
    "59273134941764012408045569907046357545104808797292790712334779584918185110546": {
     "end": "2026-12-01",
@@ -143798,14 +144766,17 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "33 markets matched its rules, bought 3",
+   "skips": {
+    "already holds this market": 13,
+    "real price outside its range": 1
+   }
   },
   "unlimited": false
  },
  "fav_short_95_98": {
-  "cash": 434.22588,
+  "cash": 419.592295,
   "closed": [
    {
     "closed_at": "2026-11-13T17:40:52Z",
@@ -145857,6 +146828,51 @@
   "min_cash": 0.0,
   "peak_open_cost": 93.120455,
   "positions": {
+   "100470107571855994066487182459512949358182070487056435633274808569945687145741": {
+    "end": "2026-11-28",
+    "entry": 0.988,
+    "entry_fee": 0.000593,
+    "event_key": "1437760",
+    "event_slug": "ethereum-price-on-november-28-2026",
+    "late": {
+     "px": 0.988,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.118,
+       10.0012,
+       true
+      ],
+      "100": [
+       101.076,
+       100.0106,
+       true
+      ],
+      "25": [
+       25.285,
+       25.0028,
+       true
+      ],
+      "50": [
+       50.563,
+       50.0056,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-ethereum-be-between-2000-2100-on-november-28-2026",
+    "source": "fav_short_95_98",
+    "theme": null,
+    "title": "Will the price of Ethereum be between $2,000 and $2,100 on November 28?"
+   },
    "11003911791544019703431273543842802265575678794776491145026188379936280843948": {
     "end": "2026-11-23",
     "entry": 0.955,
@@ -146127,6 +147143,51 @@
     "theme": null,
     "title": "Will the price of Ethereum be above $2,100 on November 24?"
    },
+   "33011205948088054321309314893528632310604781404837523666074316688298889938279": {
+    "end": "2026-11-24",
+    "entry": 0.958,
+    "entry_fee": 0.002012,
+    "event_key": "1384357",
+    "event_slug": "elon-musk-of-tweets-november-17-november-24-2026",
+    "late": {
+     "px": 0.971,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:46Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.438,
+       10.0042,
+       true
+      ],
+      "100": [
+       104.384,
+       100.042,
+       true
+      ],
+      "25": [
+       26.096,
+       25.0105,
+       true
+      ],
+      "50": [
+       52.192,
+       50.021,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "elon-musk-of-tweets-november-17-november-24-2026-260-279",
+    "source": "fav_short_95_98",
+    "theme": null,
+    "title": "Will Elon Musk post 260-279 tweets from November 17 to November 24, 2026?"
+   },
    "54033704996670365844828037612365476267292382822483446896148860744977402912187": {
     "end": "2026-11-27",
     "entry": 0.985,
@@ -146261,6 +147322,51 @@
     "source": "fav_short_95_98",
     "theme": null,
     "title": "Will the price of Bitcoin be above $68,000 on November 27?"
+   },
+   "77806535841671261531253432735548987497465369826692404228944905770919749793994": {
+    "end": "2026-11-29",
+    "entry": 0.98,
+    "entry_fee": 0.00098,
+    "event_key": "1443279",
+    "event_slug": "ethereum-price-on-november-29-2026",
+    "late": {
+     "px": 0.98,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:45Z",
+    "outcome": "No",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.204,
+       10.002,
+       true
+      ],
+      "100": [
+       102.041,
+       100.02,
+       true
+      ],
+      "25": [
+       25.51,
+       25.005,
+       true
+      ],
+      "50": [
+       51.02,
+       50.01,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-the-price-of-ethereum-be-between-1400-1500-on-november-29-2026",
+    "source": "fav_short_95_98",
+    "theme": null,
+    "title": "Will the price of Ethereum be between $1,400 and $1,500 on November 29?"
    },
    "78853749533620606561454661163966142482776904030759824988017409524628468933188": {
     "end": "2026-11-23",
@@ -146448,9 +147554,12 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "20 markets matched its rules, bought 3",
+   "skips": {
+    "already holds this market": 2,
+    "too little profit after the fee": 1
+   }
   },
   "unlimited": false
  },
@@ -146584,14 +147693,14 @@
   "skipped_no_cash": 1,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "Watching his 73 open positions. Last new one seen: 2026-11-22.",
    "skips": {}
   },
   "unlimited": false
  },
  "kalshi_patient": {
-  "cash": 117.801671,
+  "cash": 127.801671,
   "closed": [
    {
     "ask": 0.99,
@@ -180936,6 +182045,60 @@
     "through": false,
     "ticker": "KXNFLWINMARGIN-26NOV22MINSF-MIN15PLUS",
     "title": "Will Minnesota win by at least 15 points? (Minnesota by 15 or more)"
+   },
+   {
+    "ask": 0.93,
+    "bid": 0.91,
+    "close": "2026-11-23T04:59:00Z",
+    "closed_at": "2026-11-23T05:01:41Z",
+    "cost": 9.2,
+    "entry": 0.92,
+    "entry_fee": 0.0,
+    "event": "KXTRUTHSOCIALD-26NOV22",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "expires": "2026-11-22T18:32:07Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-22T18:34:12Z",
+    "front": true,
+    "kind": "other",
+    "opened": "2026-11-22T17:27:07Z",
+    "outcome": "no",
+    "placed": "2026-11-22T17:27:07Z",
+    "pnl": 0.8,
+    "price": 0.92,
+    "price_source": "book",
+    "queue": 0.0,
+    "reason": "resolved",
+    "rs_pnl": {
+     "10": [
+      10.0,
+      0.8696,
+      1.0
+     ],
+     "100": [
+      100.0,
+      8.6957,
+      1.0
+     ],
+     "25": [
+      25.0,
+      2.1739,
+      1.0
+     ],
+     "50": [
+      50.0,
+      4.3478,
+      1.0
+     ]
+    },
+    "series": "KXTRUTHSOCIALD",
+    "shares": 10.0,
+    "side": "no",
+    "tape_complete": true,
+    "through": true,
+    "ticker": "KXTRUTHSOCIALD-26NOV22-T40",
+    "title": "Will Donald Trump make at least 40 Truth Social posts on Nov 22, 2026? (40+)"
    }
   ],
   "created": "2026-11-12T17:30:47Z",
@@ -181645,7 +182808,8 @@
    "KXNCAAWBGAME-26NOV23RIDHALL",
    "KXNCAAWBGAME-26NOV23SPCFDU",
    "KXRAINTHANKSGIVING-26NOV26",
-   "KXHIGHTHOU-26NOV23"
+   "KXHIGHTHOU-26NOV23",
+   "KXBTCD-26NOV2300"
   ],
   "last_check": {
    "fit": 221,
@@ -181671,6 +182835,7 @@
     "ask": 0.95,
     "bid": 0.93,
     "chance": 0.94,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T04:59:00Z",
     "cost": 9.4,
     "entry_fee": 0.0,
@@ -181800,6 +182965,7 @@
     "ask": 0.96,
     "bid": 0.92,
     "chance": 0.93,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T04:59:00Z",
     "cost": 9.3,
     "entry_fee": 0.0,
@@ -181863,21 +183029,34 @@
    "KXBTCD-26NOV2300-T61899.99": {
     "ask": 0.98,
     "bid": 0.96,
+    "chance": 0.97,
     "close": "2026-11-23T05:00:00Z",
     "cost": 9.7,
+    "entry_fee": 0.0,
     "event": "KXBTCD-26NOV2300",
     "expires": "2026-11-23T05:00:00Z",
+    "filled": 10.0,
+    "filled_at": "2026-11-23T05:01:39Z",
     "front": true,
     "kind": "other",
     "outcome": "no",
     "placed": "2026-11-23T04:13:04Z",
     "price": 0.97,
     "queue": 0.0,
+    "rs_fill": {
+     "10": 10.3093,
+     "100": 103.0928,
+     "25": 25.7732,
+     "50": 51.5464
+    },
     "series": "KXBTCD",
-    "shares": 10,
+    "shares": 10.0,
     "side": "no",
+    "tape_complete": true,
+    "through": true,
     "ticker": "KXBTCD-26NOV2300-T61899.99",
-    "title": "Bitcoin price on Nov 23, 2026? ($61,900 or above)"
+    "title": "Bitcoin price on Nov 23, 2026? ($61,900 or above)",
+    "what": "bought NO on Kalshi, waiting for the result"
    },
    "KXBTCD-26NOV2317-T64999.99": {
     "ask": 0.98,
@@ -182769,6 +183948,7 @@
     "ask": 0.94,
     "bid": 0.9,
     "chance": 0.91,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T05:00:00Z",
     "cost": 9.1,
     "entry_fee": 0.0,
@@ -183947,6 +185127,7 @@
     "ask": 0.97,
     "bid": 0.95,
     "chance": 0.96,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T05:00:00Z",
     "cost": 9.6,
     "entry_fee": 0.0,
@@ -184030,6 +185211,7 @@
     "ask": 0.98,
     "bid": 0.96,
     "chance": 0.97,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T05:00:00Z",
     "cost": 1.94,
     "entry_fee": 0.0,
@@ -184291,6 +185473,7 @@
     "ask": 0.99,
     "bid": 0.96,
     "chance": 0.97,
+    "check_after": "2026-11-23T05:31:39Z",
     "close": "2026-11-23T04:59:00Z",
     "cost": 9.7,
     "entry_fee": 0.0,
@@ -184388,38 +185571,6 @@
     "side": "no",
     "ticker": "KXTRUMPPHOTOD-26NOV22-SUN",
     "title": "Will Trump be photographed on Nov 22, 2026? (Nov 22)"
-   },
-   "KXTRUTHSOCIALD-26NOV22-T40": {
-    "ask": 0.93,
-    "bid": 0.91,
-    "chance": 0.92,
-    "close": "2026-11-23T04:59:00Z",
-    "cost": 9.2,
-    "entry_fee": 0.0,
-    "event": "KXTRUTHSOCIALD-26NOV22",
-    "expires": "2026-11-22T18:32:07Z",
-    "filled": 10.0,
-    "filled_at": "2026-11-22T18:34:12Z",
-    "front": true,
-    "kind": "other",
-    "outcome": "no",
-    "placed": "2026-11-22T17:27:07Z",
-    "price": 0.92,
-    "queue": 0.0,
-    "rs_fill": {
-     "10": 10.8696,
-     "100": 108.6957,
-     "25": 27.1739,
-     "50": 54.3478
-    },
-    "series": "KXTRUTHSOCIALD",
-    "shares": 10.0,
-    "side": "no",
-    "tape_complete": true,
-    "through": true,
-    "ticker": "KXTRUTHSOCIALD-26NOV22-T40",
-    "title": "Will Donald Trump make at least 40 Truth Social posts on Nov 22, 2026? (40+)",
-    "what": "bought NO on Kalshi, waiting for the result"
    },
    "KXUCLGAME-26NOV24SLORBB-SLO": {
     "ask": 0.93,
@@ -184597,7 +185748,7 @@
   },
   "peak_open_cost": 1033.246429,
   "positions": {},
-  "realized": 8.6303,
+  "realized": 9.4303,
   "refills": 0,
   "skipped_no_cash": 147,
   "start_cash": 1000,
@@ -533844,7 +534995,7 @@
   "skipped_no_cash": 4,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "Watching his 73 open positions. Last new one seen: 2026-11-22.",
    "skips": {}
   },
@@ -534213,14 +535364,14 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "Watching his 73 open positions. Last new one seen: 2026-11-22.",
    "skips": {}
   },
   "unlimited": true
  },
  "momentum_week": {
-  "cash": 474.536554,
+  "cash": 468.317604,
   "closed": [
    {
     "closed_at": "2026-11-10T13:45:54Z",
@@ -535878,6 +537029,53 @@
   "min_cash": 0.0,
   "peak_open_cost": 45.23564,
   "positions": {
+   "20749841130196303837148426451451645883604233475151483773090206836677732642979": {
+    "end": "2027-01-01",
+    "entry": 0.61,
+    "entry_fee": 0.059475,
+    "event_key": "995363",
+    "event_slug": "which-math-problems-will-ai-solve-in-2026",
+    "late": {
+     "px": 0.61,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:49Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       16.393,
+       10.195,
+       true
+      ],
+      "100": [
+       162.5,
+       101.9231,
+       true
+      ],
+      "25": [
+       40.984,
+       25.4875,
+       true
+      ],
+      "50": [
+       81.855,
+       50.9729,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-ai-solve-the-riemann-hypothesis-in-2026",
+    "source": "momentum_week",
+    "stop": 0.49,
+    "target": 0.69,
+    "theme": null,
+    "title": "Will AI solve the Riemann Hypothesis in 2026?"
+   },
    "2850080638485078487119156792065577759676622346318773387984061906346610063157": {
     "end": "2027-01-01",
     "entry": 0.86,
@@ -536066,6 +537264,53 @@
     "theme": "middle east",
     "title": "US-Iran Hormuz Agreement by December 31?"
    },
+   "80108765023562418278305756757327490293166310800251142023703626044311144753731": {
+    "end": "2027-01-01",
+    "entry": 0.61,
+    "entry_fee": 0.059475,
+    "event_key": "990236",
+    "event_slug": "ai-lab-announces-another-millennium-prize-solution-by",
+    "late": {
+     "px": 0.61,
+     "s": 196
+    },
+    "opened": "2026-11-23T05:02:49Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       16.393,
+       10.195,
+       true
+      ],
+      "100": [
+       163.934,
+       101.95,
+       true
+      ],
+      "25": [
+       40.984,
+       25.4875,
+       true
+      ],
+      "50": [
+       81.967,
+       50.975,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-an-ai-lab-announce-another-millennium-prize-solution-by-december-31-2026",
+    "source": "momentum_week",
+    "stop": 0.49,
+    "target": 0.69,
+    "theme": null,
+    "title": "Will an AI lab announce another Millennium Prize solution by December 31, 2026?"
+   },
    "80480615864496054518534481664401458122946181878204882508499859562482914861231": {
     "end": "2026-11-30",
     "entry": 0.85,
@@ -536166,8 +537411,8 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "14 markets matched its rules, bought 2",
    "skips": {}
   },
   "tp_thin_skips": 2,
@@ -538134,9 +539379,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "54 markets matched its rules, bought 0",
+   "skips": {
+    "full (max open bets)": 1
+   }
   },
   "unlimited": false
  },
@@ -539843,7 +541090,7 @@
   "skipped_no_cash": 0,
   "start_cash": 50,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "0 markets matched its rules, bought 0",
    "skips": {}
   },
@@ -541829,9 +543076,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "1 market matched its rules, bought 1",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "1 market matched its rules, bought 0",
+   "skips": {
+    "already holds this market": 1
+   }
   },
   "tp_thin_skips": 20,
   "unlimited": false
@@ -545997,7 +547246,7 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "2 markets matched its rules, bought 0",
    "skips": {
     "already holds this market": 1,
@@ -550015,7 +551264,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "Watching his 73 open positions. Last new one seen: 2026-11-22.",
    "skips": {}
   },
@@ -550328,7 +551577,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:01:41Z",
    "msg": "Watching his 73 open positions. Last new one seen: 2026-11-22.",
    "skips": {}
   },
@@ -550457,12 +551706,14 @@
   },
   "realized": 0.911525,
   "refills": 0,
-  "skipped_no_cash": 19,
+  "skipped_no_cash": 20,
   "start_cash": 20,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "224 markets matched its rules, bought 0",
+   "skips": {
+    "out of cash": 1
+   }
   },
   "unlimited": false
  },
@@ -578183,13 +579434,13 @@
    "KXATPCHALLENGERMATCH-26NOV22DONHOE-DON"
   ],
   "last_check": {
-   "bought": 1,
-   "markets_in_window": 9,
-   "open_matches": 60,
-   "signals": 1,
-   "ts": "2026-11-23T04:56:00Z"
+   "bought": 0,
+   "markets_in_window": 6,
+   "open_matches": 59,
+   "signals": 0,
+   "ts": "2026-11-23T05:01:39Z"
   },
-  "last_scan": "2026-11-23T04:56:00Z",
+  "last_scan": "2026-11-23T05:01:39Z",
   "min_cash": 0.0,
   "orders": {
    "KXATPCHALLENGERMATCH-26NOV22BASISO-BAS": {
@@ -578364,11 +579615,11 @@
   "last_check": {
    "bought": 0,
    "markets_in_window": 0,
-   "open_matches": 60,
+   "open_matches": 59,
    "signals": 0,
-   "ts": "2026-11-23T04:56:00Z"
+   "ts": "2026-11-23T05:01:39Z"
   },
-  "last_scan": "2026-11-23T04:56:00Z",
+  "last_scan": "2026-11-23T05:01:39Z",
   "min_cash": 0.0,
   "orders": {},
   "peak_open_cost": 0.0,
@@ -580954,7 +582205,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 16 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -581142,7 +582393,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -582991,7 +584242,7 @@
   "skipped_split": 6,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1391 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -587311,7 +588562,7 @@
   "skipped_split": 131,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 962 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -587618,7 +588869,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 107 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -588055,7 +589306,7 @@
   "skipped_split": 11,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 51 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -588823,7 +590074,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 79 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -596104,7 +597355,7 @@
   "skipped_split": 72,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3799 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -596950,14 +598201,14 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 39 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
  },
  "w_cigarettes": {
-  "cash": -197.046781,
+  "cash": -172.046781,
   "closed": [
    {
     "closed_at": "2026-11-09T05:04:52Z",
@@ -603352,29 +604603,24 @@
     "their_size": 950.0,
     "title": "Big Bash League, Women: Melbourne Stars vs Melbourne Renegades",
     "token": "85327875881983322710028572639573578460583170846687795821956384057478446780291"
-   }
-  ],
-  "created": "2026-11-08T15:15:28Z",
-  "day_opens": {
-   "date": "2026-11-23",
-   "n": 6
-  },
-  "deposited": 0.0,
-  "min_cash": -204.991808,
-  "peak_open_cost": 187.777236,
-  "positions": {
-   "100404440441464048756551027099459810319211974998969970247531816548077027118072": {
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
     "end": "2026-11-29",
     "entry": 0.18,
     "entry_fee": 0.0369,
     "event_slug": "atp-poljak-zhukov-2026-11-21",
+    "exit": 0.0,
+    "exit_fee": 0.0,
     "late": {
      "px": 0.07,
      "s": 176
     },
     "opened": "2026-11-22T07:20:45Z",
     "outcome": "Maxim Zhukov",
+    "pnl": -0.9369,
     "price_source": "book",
+    "reason": "resolved",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -603401,13 +604647,776 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.41,
+      -10.41,
+      true
+     ],
+     "100": [
+      104.1,
+      -104.1,
+      true
+     ],
+     "25": [
+      26.025,
+      -26.025,
+      true
+     ],
+     "50": [
+      52.05,
+      -52.05,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "atp-poljak-zhukov-2026-11-21",
     "source": "w_cigarettes",
     "their_avg": 0.22,
     "their_size": 900.0,
-    "title": "Yokohama: David Poljak vs Maxim Zhukov"
+    "title": "Yokohama: David Poljak vs Maxim Zhukov",
+    "token": "100404440441464048756551027099459810319211974998969970247531816548077027118072"
    },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.28,
+    "entry_fee": 0.0504,
+    "event_slug": "crint-pakw-scow-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.28,
+     "s": 204
+    },
+    "opened": "2026-11-22T06:20:44Z",
+    "outcome": "Scotland Women",
+    "pnl": -1.4504,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       35.714,
+       10.36,
+       true
+      ],
+      "100": [
+       349.753,
+       103.5704,
+       true
+      ],
+      "25": [
+       89.286,
+       25.9,
+       true
+      ],
+      "50": [
+       177.34,
+       51.7951,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.36,
+      -10.36,
+      true
+     ],
+     "100": [
+      103.5704,
+      -103.5704,
+      true
+     ],
+     "25": [
+      25.9,
+      -25.9,
+      true
+     ],
+     "50": [
+      51.7951,
+      -51.7951,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "crint-pakw-scow-2026-11-22",
+    "source": "w_cigarettes",
+    "their_avg": 0.27,
+    "their_size": 95.14,
+    "title": "ICC Women's Emerging Nations Trophy T20s: Pakistan Women vs Scotland Women",
+    "token": "109784418926733883261490092686984940148394341930737042675264487288684437050682"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.031,
+    "entry_fee": 0.00751,
+    "event_slug": "atp-ghetu-sakel-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.031,
+     "s": 110
+    },
+    "opened": "2026-11-22T08:01:16Z",
+    "outcome": "Michalis Sakellaridis",
+    "pnl": -0.16251,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       230.27,
+       10.2321,
+       true
+      ],
+      "100": [
+       230.27,
+       10.2321,
+       false
+      ],
+      "25": [
+       230.27,
+       10.2321,
+       false
+      ],
+      "50": [
+       230.27,
+       10.2321,
+       false
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.2321,
+      -10.2321,
+      true
+     ],
+     "100": [
+      10.2321,
+      -10.2321,
+      false
+     ],
+     "25": [
+      10.2321,
+      -10.2321,
+      false
+     ],
+     "50": [
+      10.2321,
+      -10.2321,
+      false
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-ghetu-sakel-2026-11-22",
+    "source": "w_cigarettes",
+    "their_avg": 0.034,
+    "their_size": 1000.0,
+    "title": "Hersonissos 4: Gabriel Ghetu vs Michalis Sakellaridis",
+    "token": "14026975153196535766526748566328084669778913050984881419973194657495813914628"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-22",
+    "entry": 0.85,
+    "entry_fee": 0.006375,
+    "event_slug": "highest-temperature-in-shanghai-on-november-22-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.85,
+     "s": 252
+    },
+    "opened": "2026-11-21T09:21:22Z",
+    "outcome": "No",
+    "pnl": 0.743625,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       11.765,
+       10.015,
+       true
+      ],
+      "100": [
+       116.897,
+       100.1445,
+       true
+      ],
+      "25": [
+       29.412,
+       25.0375,
+       true
+      ],
+      "50": [
+       58.824,
+       50.075,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.015,
+      1.75,
+      true
+     ],
+     "100": [
+      100.1445,
+      16.7525,
+      true
+     ],
+     "25": [
+      25.0375,
+      4.3745,
+      true
+     ],
+     "50": [
+      50.075,
+      8.749,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "highest-temperature-in-shanghai-on-november-22-2026-16c",
+    "source": "w_cigarettes",
+    "their_avg": 0.81,
+    "their_size": 40.0,
+    "title": "Will the highest temperature in Shanghai be 16\u00b0C on November 22?",
+    "token": "19175521914720244043146146387087536126735691055968402139133569099234209797010"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.24,
+    "entry_fee": 0.0456,
+    "event_slug": "bknbl-bri-syd-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.29,
+     "s": 176
+    },
+    "opened": "2026-11-22T07:20:45Z",
+    "outcome": "Sydney Kings",
+    "pnl": -1.2456,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       41.667,
+       10.38,
+       true
+      ],
+      "100": [
+       416.667,
+       103.8,
+       true
+      ],
+      "25": [
+       104.167,
+       25.95,
+       true
+      ],
+      "50": [
+       208.333,
+       51.9,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.38,
+      -10.38,
+      true
+     ],
+     "100": [
+      103.8,
+      -103.8,
+      true
+     ],
+     "25": [
+      25.95,
+      -25.95,
+      true
+     ],
+     "50": [
+      51.9,
+      -51.9,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bknbl-bri-syd-2026-11-22",
+    "source": "w_cigarettes",
+    "their_avg": 0.4613,
+    "their_size": 220.95,
+    "title": "Brisbane Bullets vs. Sydney Kings",
+    "token": "51780439264030497589416668275679797568286895367280874708791746925284137600111"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-30",
+    "entry": 0.249,
+    "entry_fee": 0.04675,
+    "event_slug": "atp-sik-stevens-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.181,
+     "s": 92
+    },
+    "opened": "2026-11-23T02:20:40Z",
+    "outcome": "Mustafa Ege Sik",
+    "pnl": -1.29175,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       39.183,
+       10.3724,
+       true
+      ],
+      "100": [
+       389.377,
+       103.7159,
+       true
+      ],
+      "25": [
+       97.549,
+       25.9296,
+       true
+      ],
+      "50": [
+       194.825,
+       51.8584,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.3724,
+      -10.3724,
+      true
+     ],
+     "100": [
+      103.7159,
+      -103.7159,
+      true
+     ],
+     "25": [
+      25.9296,
+      -25.9296,
+      true
+     ],
+     "50": [
+      51.8584,
+      -51.8584,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-sik-stevens-2026-11-22",
+    "source": "w_cigarettes",
+    "their_avg": 0.2767,
+    "their_size": 200.0,
+    "title": "Playford: Mustafa Ege Sik vs Zane Stevens",
+    "token": "55213069447973356940505586871115307514173853344536115289277621396934472498883"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.886,
+    "entry_fee": 0.025251,
+    "event_slug": "atp-dev-sinha-2026-11-21",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.926,
+     "s": 183
+    },
+    "opened": "2026-11-22T05:33:26Z",
+    "outcome": "Nitin Kumar Sinha",
+    "pnl": -4.455251,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       11.287,
+       10.057,
+       true
+      ],
+      "100": [
+       112.81,
+       100.5678,
+       true
+      ],
+      "25": [
+       28.217,
+       25.1425,
+       true
+      ],
+      "50": [
+       56.433,
+       50.285,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.057,
+      -10.057,
+      true
+     ],
+     "100": [
+      100.5678,
+      -100.5678,
+      true
+     ],
+     "25": [
+      25.1425,
+      -25.1425,
+      true
+     ],
+     "50": [
+      50.285,
+      -50.285,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-dev-sinha-2026-11-21",
+    "source": "w_cigarettes",
+    "their_avg": 0.869,
+    "their_size": 1000.0,
+    "title": "Yokohama: S D Prajwal Dev vs Nitin Kumar Sinha",
+    "token": "55687234179809888752514558359402900903301845183439757310151904307751853716651"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.84,
+    "entry_fee": 0.0336,
+    "event_slug": "itf-chepel1-popko1-2026-11-22",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.83,
+     "s": 110
+    },
+    "opened": "2026-11-22T08:01:16Z",
+    "outcome": "Dmitry Popko",
+    "pnl": 0.7664,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       11.905,
+       10.08,
+       true
+      ],
+      "100": [
+       119.048,
+       100.8,
+       true
+      ],
+      "25": [
+       29.762,
+       25.2,
+       true
+      ],
+      "50": [
+       59.524,
+       50.4,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.08,
+      1.825,
+      true
+     ],
+     "100": [
+      100.8,
+      18.248,
+      true
+     ],
+     "25": [
+      25.2,
+      4.562,
+      true
+     ],
+     "50": [
+      50.4,
+      9.124,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "itf-chepel1-popko1-2026-11-22",
+    "source": "w_cigarettes",
+    "their_avg": 0.79,
+    "their_size": 350.0,
+    "title": "M15 Antalya: Andrey Chepelev vs Dmitry Popko",
+    "token": "74396670764531419969166878288845297793963485243705909653161906908477493156078"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.18,
+    "entry_fee": 0.0369,
+    "event_slug": "atp-palan-dong-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.13,
+     "s": 190
+    },
+    "opened": "2026-11-22T07:01:11Z",
+    "outcome": "Chen Dong",
+    "pnl": 4.0631,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       55.556,
+       10.41,
+       true
+      ],
+      "100": [
+       555.556,
+       104.1,
+       true
+      ],
+      "25": [
+       138.889,
+       26.025,
+       true
+      ],
+      "50": [
+       277.778,
+       52.05,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.41,
+      45.146,
+      true
+     ],
+     "100": [
+      104.1,
+      451.456,
+      true
+     ],
+     "25": [
+      26.025,
+      112.864,
+      true
+     ],
+     "50": [
+      52.05,
+      225.728,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-palan-dong-2026-11-21",
+    "source": "w_cigarettes",
+    "their_avg": 0.19,
+    "their_size": 1000.0,
+    "title": "Playford: Dominik Palan vs Chen Dong",
+    "token": "89193593752187744740451130823572378226914453047046032903040331459044294851882"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.83,
+    "entry_fee": 0.035275,
+    "event_slug": "f1-las-vegas-grand-prix-driver-podium-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.83,
+     "s": 125
+    },
+    "opened": "2026-11-22T00:35:37Z",
+    "outcome": "Yes",
+    "pnl": 0.814725,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       12.048,
+       10.085,
+       true
+      ],
+      "100": [
+       120.19,
+       100.8399,
+       true
+      ],
+      "25": [
+       30.12,
+       25.2125,
+       true
+      ],
+      "50": [
+       60.241,
+       50.425,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.085,
+      1.963,
+      true
+     ],
+     "100": [
+      100.8399,
+      19.3501,
+      true
+     ],
+     "25": [
+      25.2125,
+      4.9075,
+      true
+     ],
+     "50": [
+      50.425,
+      9.816,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "f1-las-vegas-grand-prix-driver-podium-verstappen-2026-11-21",
+    "source": "w_cigarettes",
+    "their_avg": 0.834,
+    "their_size": 50.0,
+    "title": "Will Max Verstappen finish on the podium at the 2026 F1 Las Vegas Grand Prix?",
+    "token": "92825844652492060105226469019120325162219246822259180848561036492394721772417"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.89,
+    "entry_fee": 0.024475,
+    "event_slug": "f1-las-vegas-grand-prix-winner-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.89,
+     "s": 142
+    },
+    "opened": "2026-11-21T04:31:35Z",
+    "outcome": "No",
+    "pnl": 0.525525,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       11.236,
+       10.055,
+       true
+      ],
+      "100": [
+       112.36,
+       100.55,
+       true
+      ],
+      "25": [
+       28.09,
+       25.1375,
+       true
+      ],
+      "50": [
+       56.18,
+       50.275,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.055,
+      1.181,
+      true
+     ],
+     "100": [
+      100.55,
+      11.81,
+      true
+     ],
+     "25": [
+      25.1375,
+      2.9525,
+      true
+     ],
+     "50": [
+      50.275,
+      5.905,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "f1-las-vegas-grand-prix-winner-norris-2026-11-21",
+    "source": "w_cigarettes",
+    "their_avg": 0.889,
+    "their_size": 292.86,
+    "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?",
+    "token": "93760685468635401361534327069612392687592099015054697879830406096648033545295"
+   }
+  ],
+  "created": "2026-11-08T15:15:28Z",
+  "day_opens": {
+   "date": "2026-11-23",
+   "n": 6
+  },
+  "deposited": 0.0,
+  "min_cash": -204.991808,
+  "peak_open_cost": 187.777236,
+  "positions": {
    "101305708665076702320211050939797522314979479444025514744022126499999782149237": {
     "end": "2027-03-15",
     "entry": 0.86,
@@ -603813,51 +605822,6 @@
     "their_size": 30.0,
     "title": "Will De'Von Achane finish as a top-5 FLEX in the 2026-27 NFL season?"
    },
-   "109784418926733883261490092686984940148394341930737042675264487288684437050682": {
-    "end": "2026-11-29",
-    "entry": 0.28,
-    "entry_fee": 0.0504,
-    "event_slug": "crint-pakw-scow-2026-11-22",
-    "late": {
-     "px": 0.28,
-     "s": 204
-    },
-    "opened": "2026-11-22T06:20:44Z",
-    "outcome": "Scotland Women",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       35.714,
-       10.36,
-       true
-      ],
-      "100": [
-       349.753,
-       103.5704,
-       true
-      ],
-      "25": [
-       89.286,
-       25.9,
-       true
-      ],
-      "50": [
-       177.34,
-       51.7951,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "crint-pakw-scow-2026-11-22",
-    "source": "w_cigarettes",
-    "their_avg": 0.27,
-    "their_size": 95.14,
-    "title": "ICC Women's Emerging Nations Trophy T20s: Pakistan Women vs Scotland Women"
-   },
    "110219335610031235501544881215400525742054268325629373693068279893719004442080": {
     "end": "2027-03-15",
     "entry": 0.933,
@@ -604038,51 +606002,6 @@
     "their_size": 323.01,
     "title": "Will the Minnesota Vikings make the 2027 NFL Playoffs?"
    },
-   "14026975153196535766526748566328084669778913050984881419973194657495813914628": {
-    "end": "2026-11-29",
-    "entry": 0.031,
-    "entry_fee": 0.00751,
-    "event_slug": "atp-ghetu-sakel-2026-11-22",
-    "late": {
-     "px": 0.031,
-     "s": 110
-    },
-    "opened": "2026-11-22T08:01:16Z",
-    "outcome": "Michalis Sakellaridis",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       230.27,
-       10.2321,
-       true
-      ],
-      "100": [
-       230.27,
-       10.2321,
-       false
-      ],
-      "25": [
-       230.27,
-       10.2321,
-       false
-      ],
-      "50": [
-       230.27,
-       10.2321,
-       false
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-ghetu-sakel-2026-11-22",
-    "source": "w_cigarettes",
-    "their_avg": 0.034,
-    "their_size": 1000.0,
-    "title": "Hersonissos 4: Gabriel Ghetu vs Michalis Sakellaridis"
-   },
    "14721613896015623720285830627515764014337111157127999243455039544131231535599": {
     "end": "2027-07-01",
     "entry": 0.726,
@@ -604217,51 +606136,6 @@
     "their_avg": 0.55,
     "their_size": 40.0,
     "title": "Will PSOE win the most seats in Seville in the 2026 Spanish general election?"
-   },
-   "19175521914720244043146146387087536126735691055968402139133569099234209797010": {
-    "end": "2026-11-22",
-    "entry": 0.85,
-    "entry_fee": 0.006375,
-    "event_slug": "highest-temperature-in-shanghai-on-november-22-2026",
-    "late": {
-     "px": 0.85,
-     "s": 252
-    },
-    "opened": "2026-11-21T09:21:22Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       11.765,
-       10.015,
-       true
-      ],
-      "100": [
-       116.897,
-       100.1445,
-       true
-      ],
-      "25": [
-       29.412,
-       25.0375,
-       true
-      ],
-      "50": [
-       58.824,
-       50.075,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "highest-temperature-in-shanghai-on-november-22-2026-16c",
-    "source": "w_cigarettes",
-    "their_avg": 0.81,
-    "their_size": 40.0,
-    "title": "Will the highest temperature in Shanghai be 16\u00b0C on November 22?"
    },
    "20611567398252716052573083678634277489203893965573667706764543469340936342429": {
     "end": "2027-03-15",
@@ -604593,51 +606467,6 @@
     "their_size": 109.64,
     "title": "Will Chicago Bears win the 2026 NFC North?"
    },
-   "51780439264030497589416668275679797568286895367280874708791746925284137600111": {
-    "end": "2026-11-29",
-    "entry": 0.24,
-    "entry_fee": 0.0456,
-    "event_slug": "bknbl-bri-syd-2026-11-22",
-    "late": {
-     "px": 0.29,
-     "s": 176
-    },
-    "opened": "2026-11-22T07:20:45Z",
-    "outcome": "Sydney Kings",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       41.667,
-       10.38,
-       true
-      ],
-      "100": [
-       416.667,
-       103.8,
-       true
-      ],
-      "25": [
-       104.167,
-       25.95,
-       true
-      ],
-      "50": [
-       208.333,
-       51.9,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bknbl-bri-syd-2026-11-22",
-    "source": "w_cigarettes",
-    "their_avg": 0.4613,
-    "their_size": 220.95,
-    "title": "Brisbane Bullets vs. Sydney Kings"
-   },
    "53363944150317449298656304597232377442047565741490856224499197059203936000192": {
     "end": "2027-04-16",
     "entry": 0.5,
@@ -604682,96 +606511,6 @@
     "their_avg": 0.48,
     "their_size": 60.0,
     "title": "Will the Anaheim Ducks make the 2026-27 NHL Playoffs?"
-   },
-   "55213069447973356940505586871115307514173853344536115289277621396934472498883": {
-    "end": "2026-11-30",
-    "entry": 0.249,
-    "entry_fee": 0.04675,
-    "event_slug": "atp-sik-stevens-2026-11-22",
-    "late": {
-     "px": 0.181,
-     "s": 92
-    },
-    "opened": "2026-11-23T02:20:40Z",
-    "outcome": "Mustafa Ege Sik",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       39.183,
-       10.3724,
-       true
-      ],
-      "100": [
-       389.377,
-       103.7159,
-       true
-      ],
-      "25": [
-       97.549,
-       25.9296,
-       true
-      ],
-      "50": [
-       194.825,
-       51.8584,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-sik-stevens-2026-11-22",
-    "source": "w_cigarettes",
-    "their_avg": 0.2767,
-    "their_size": 200.0,
-    "title": "Playford: Mustafa Ege Sik vs Zane Stevens"
-   },
-   "55687234179809888752514558359402900903301845183439757310151904307751853716651": {
-    "end": "2026-11-29",
-    "entry": 0.886,
-    "entry_fee": 0.025251,
-    "event_slug": "atp-dev-sinha-2026-11-21",
-    "late": {
-     "px": 0.926,
-     "s": 183
-    },
-    "opened": "2026-11-22T05:33:26Z",
-    "outcome": "Nitin Kumar Sinha",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       11.287,
-       10.057,
-       true
-      ],
-      "100": [
-       112.81,
-       100.5678,
-       true
-      ],
-      "25": [
-       28.217,
-       25.1425,
-       true
-      ],
-      "50": [
-       56.433,
-       50.285,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-dev-sinha-2026-11-21",
-    "source": "w_cigarettes",
-    "their_avg": 0.869,
-    "their_size": 1000.0,
-    "title": "Yokohama: S D Prajwal Dev vs Nitin Kumar Sinha"
    },
    "56570094360934785601435239856123945717194033255391528608450850796235555822644": {
     "end": "2027-07-01",
@@ -605223,51 +606962,6 @@
     "their_size": 109.64,
     "title": "Will Minnesota Vikings win the 2026 NFC North?"
    },
-   "74396670764531419969166878288845297793963485243705909653161906908477493156078": {
-    "end": "2026-11-29",
-    "entry": 0.84,
-    "entry_fee": 0.0336,
-    "event_slug": "itf-chepel1-popko1-2026-11-22",
-    "late": {
-     "px": 0.83,
-     "s": 110
-    },
-    "opened": "2026-11-22T08:01:16Z",
-    "outcome": "Dmitry Popko",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       11.905,
-       10.08,
-       true
-      ],
-      "100": [
-       119.048,
-       100.8,
-       true
-      ],
-      "25": [
-       29.762,
-       25.2,
-       true
-      ],
-      "50": [
-       59.524,
-       50.4,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "itf-chepel1-popko1-2026-11-22",
-    "source": "w_cigarettes",
-    "their_avg": 0.79,
-    "their_size": 350.0,
-    "title": "M15 Antalya: Andrey Chepelev vs Dmitry Popko"
-   },
    "74839735949752791552069773075479479938067573294229793204328108762491549347056": {
     "end": "2026-12-01",
     "entry": 0.72,
@@ -605583,51 +607277,6 @@
     "their_size": 2000.0,
     "title": "Will Darian Mensah win the 2026 Heisman Trophy?"
    },
-   "89193593752187744740451130823572378226914453047046032903040331459044294851882": {
-    "end": "2026-11-29",
-    "entry": 0.18,
-    "entry_fee": 0.0369,
-    "event_slug": "atp-palan-dong-2026-11-21",
-    "late": {
-     "px": 0.13,
-     "s": 190
-    },
-    "opened": "2026-11-22T07:01:11Z",
-    "outcome": "Chen Dong",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       55.556,
-       10.41,
-       true
-      ],
-      "100": [
-       555.556,
-       104.1,
-       true
-      ],
-      "25": [
-       138.889,
-       26.025,
-       true
-      ],
-      "50": [
-       277.778,
-       52.05,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-palan-dong-2026-11-21",
-    "source": "w_cigarettes",
-    "their_avg": 0.19,
-    "their_size": 1000.0,
-    "title": "Playford: Dominik Palan vs Chen Dong"
-   },
    "91849533645496354757754581927093055254331827774408717350398774673534252594357": {
     "end": "2027-01-05",
     "entry": 0.96,
@@ -605762,96 +607411,6 @@
     "their_avg": 0.75,
     "their_size": 60.0,
     "title": "Will the San Jose Sharks make the 2026-27 NHL Playoffs?"
-   },
-   "92825844652492060105226469019120325162219246822259180848561036492394721772417": {
-    "end": "2026-11-29",
-    "entry": 0.83,
-    "entry_fee": 0.035275,
-    "event_slug": "f1-las-vegas-grand-prix-driver-podium-2026-11-21",
-    "late": {
-     "px": 0.83,
-     "s": 125
-    },
-    "opened": "2026-11-22T00:35:37Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       12.048,
-       10.085,
-       true
-      ],
-      "100": [
-       120.19,
-       100.8399,
-       true
-      ],
-      "25": [
-       30.12,
-       25.2125,
-       true
-      ],
-      "50": [
-       60.241,
-       50.425,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "f1-las-vegas-grand-prix-driver-podium-verstappen-2026-11-21",
-    "source": "w_cigarettes",
-    "their_avg": 0.834,
-    "their_size": 50.0,
-    "title": "Will Max Verstappen finish on the podium at the 2026 F1 Las Vegas Grand Prix?"
-   },
-   "93760685468635401361534327069612392687592099015054697879830406096648033545295": {
-    "end": "2026-11-29",
-    "entry": 0.89,
-    "entry_fee": 0.024475,
-    "event_slug": "f1-las-vegas-grand-prix-winner-2026-11-21",
-    "late": {
-     "px": 0.89,
-     "s": 142
-    },
-    "opened": "2026-11-21T04:31:35Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       11.236,
-       10.055,
-       true
-      ],
-      "100": [
-       112.36,
-       100.55,
-       true
-      ],
-      "25": [
-       28.09,
-       25.1375,
-       true
-      ],
-      "50": [
-       56.18,
-       50.275,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "f1-las-vegas-grand-prix-winner-norris-2026-11-21",
-    "source": "w_cigarettes",
-    "their_avg": 0.889,
-    "their_size": 292.86,
-    "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?"
    },
    "94338902490889069281923344482473718727082711054366437812105352535317911623634": {
     "end": "2026-11-30",
@@ -606124,7 +607683,7 @@
     "title": "Will the highest temperature in Amsterdam be 6\u00b0C on November 24?"
    }
   },
-  "realized": -9.269545,
+  "realized": -11.898581,
   "refills": 0,
   "skipped_cap": 8582,
   "skipped_chase": 73,
@@ -606133,7 +607692,7 @@
   "skipped_split": 903,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3999 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -608095,7 +609654,7 @@
   "skipped_split": 45,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 408 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -609161,7 +610720,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 21 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -609868,7 +611427,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 166 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -610704,7 +612263,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 71 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -611608,7 +613167,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 57 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -612578,31 +614137,77 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 224 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
   "unlimited": true
  },
  "w_flawfence": {
-  "cash": 0.0,
+  "cash": -2.996,
   "closed": [],
   "created": "2026-11-08T15:15:28Z",
   "day_opens": {
    "date": "2026-11-23",
-   "n": 0
+   "n": 1
   },
   "deposited": 0.0,
-  "min_cash": 0.0,
-  "peak_open_cost": 0.0,
-  "positions": {},
+  "min_cash": -2.996,
+  "peak_open_cost": 2.996,
+  "positions": {
+   "49741663698050220766734867654462223659731568478526387688777386084381389841569": {
+    "end": "2027-07-01",
+    "entry": 0.5992,
+    "entry_fee": 0.0,
+    "event_slug": "netanyahu-out-before-2027",
+    "late": {
+     "px": 0.5992,
+     "s": 102
+    },
+    "opened": "2026-11-23T04:59:59Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       6.42,
+       3.848,
+       false
+      ],
+      "100": [
+       6.42,
+       3.848,
+       false
+      ],
+      "25": [
+       6.42,
+       3.848,
+       false
+      ],
+      "50": [
+       6.42,
+       3.848,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "netanyahu-out-by-june-30-2027",
+    "source": "w_flawfence",
+    "their_avg": 0.5595,
+    "their_size": 1790.09,
+    "title": "Netanyahu out by June 30, 2027?"
+   }
+  },
   "realized": 0.0,
   "refills": 0,
   "skipped_no_cash": 0,
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 410 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -614287,7 +615892,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 187 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -614432,7 +616037,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 17 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -614839,7 +616444,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -619399,7 +621004,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 919 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -621319,7 +622924,7 @@
   "skipped_split": 20,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 69 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -621417,7 +623022,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 41 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -622175,7 +623780,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 192 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -622339,9 +623944,11 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Watching 1207 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "Watching 1207 open positions of this wallet; 1 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "too small (under $20)": 1
+   }
   },
   "unlimited": true
  },
@@ -622646,7 +624253,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 95 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -622716,7 +624323,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 121 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -623252,7 +624859,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 114 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -625138,7 +626745,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1290 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -625161,7 +626768,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 19 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -626227,7 +627834,7 @@
   "skipped_split": 56,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 930 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -634820,7 +636427,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 40 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -635773,7 +637380,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 57 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -636008,7 +637615,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 62 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -645934,7 +647541,7 @@
   "skipped_split": 333,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 233 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -646444,7 +648051,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -647921,7 +649528,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -648082,7 +649689,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -648649,7 +650256,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 376 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -648674,7 +650281,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 130 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -651278,7 +652885,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 16 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -651684,7 +653291,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 7 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -654196,7 +655803,7 @@
   "skipped_split": 6,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1391 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -659023,7 +660630,7 @@
   "skipped_split": 131,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 962 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -659711,7 +661318,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 107 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -660954,7 +662561,7 @@
   "skipped_split": 11,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 51 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -662415,7 +664022,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 79 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -670332,7 +671939,7 @@
   "skipped_split": 72,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3799 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -672204,7 +673811,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 39 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -672247,7 +673854,7 @@
    "8137920294188327",
    "5461950712817548"
   ],
-  "cash": -215.247438,
+  "cash": -190.247438,
   "closed": [
    {
     "backfill": true,
@@ -679777,29 +681384,24 @@
     "their_size": 950.0,
     "title": "Big Bash League, Women: Melbourne Stars vs Melbourne Renegades",
     "token": "85327875881983322710028572639573578460583170846687795821956384057478446780291"
-   }
-  ],
-  "created": "2026-11-08T18:40:25Z",
-  "day_opens": {
-   "date": "2026-11-23",
-   "n": 6
-  },
-  "deposited": 0.0,
-  "min_cash": -229.592999,
-  "peak_open_cost": 203.119992,
-  "positions": {
-   "100404440441464048756551027099459810319211974998969970247531816548077027118072": {
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
     "end": "2026-11-29",
     "entry": 0.18,
     "entry_fee": 0.0369,
     "event_slug": "atp-poljak-zhukov-2026-11-21",
+    "exit": 0.0,
+    "exit_fee": 0.0,
     "late": {
      "px": 0.07,
      "s": 176
     },
     "opened": "2026-11-22T07:20:46Z",
     "outcome": "Maxim Zhukov",
+    "pnl": -0.9369,
     "price_source": "book",
+    "reason": "resolved",
     "rs": {
      "how": "book",
      "rate": 0.05,
@@ -679826,13 +681428,776 @@
       ]
      }
     },
+    "rs_pnl": {
+     "10": [
+      10.41,
+      -10.41,
+      true
+     ],
+     "100": [
+      104.1,
+      -104.1,
+      true
+     ],
+     "25": [
+      26.025,
+      -26.025,
+      true
+     ],
+     "50": [
+      52.05,
+      -52.05,
+      true
+     ]
+    },
     "shares": 5,
     "slug": "atp-poljak-zhukov-2026-11-21",
     "source": "wb_cigarettes",
     "their_avg": 0.22,
     "their_size": 900.0,
-    "title": "Yokohama: David Poljak vs Maxim Zhukov"
+    "title": "Yokohama: David Poljak vs Maxim Zhukov",
+    "token": "100404440441464048756551027099459810319211974998969970247531816548077027118072"
    },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.28,
+    "entry_fee": 0.0504,
+    "event_slug": "crint-pakw-scow-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.28,
+     "s": 204
+    },
+    "opened": "2026-11-22T06:20:44Z",
+    "outcome": "Scotland Women",
+    "pnl": -1.4504,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       35.714,
+       10.36,
+       true
+      ],
+      "100": [
+       349.753,
+       103.5704,
+       true
+      ],
+      "25": [
+       89.286,
+       25.9,
+       true
+      ],
+      "50": [
+       177.34,
+       51.7951,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.36,
+      -10.36,
+      true
+     ],
+     "100": [
+      103.5704,
+      -103.5704,
+      true
+     ],
+     "25": [
+      25.9,
+      -25.9,
+      true
+     ],
+     "50": [
+      51.7951,
+      -51.7951,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "crint-pakw-scow-2026-11-22",
+    "source": "wb_cigarettes",
+    "their_avg": 0.27,
+    "their_size": 95.14,
+    "title": "ICC Women's Emerging Nations Trophy T20s: Pakistan Women vs Scotland Women",
+    "token": "109784418926733883261490092686984940148394341930737042675264487288684437050682"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.031,
+    "entry_fee": 0.00751,
+    "event_slug": "atp-ghetu-sakel-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.031,
+     "s": 109
+    },
+    "opened": "2026-11-22T08:01:17Z",
+    "outcome": "Michalis Sakellaridis",
+    "pnl": -0.16251,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       230.27,
+       10.2321,
+       true
+      ],
+      "100": [
+       230.27,
+       10.2321,
+       false
+      ],
+      "25": [
+       230.27,
+       10.2321,
+       false
+      ],
+      "50": [
+       230.27,
+       10.2321,
+       false
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.2321,
+      -10.2321,
+      true
+     ],
+     "100": [
+      10.2321,
+      -10.2321,
+      false
+     ],
+     "25": [
+      10.2321,
+      -10.2321,
+      false
+     ],
+     "50": [
+      10.2321,
+      -10.2321,
+      false
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-ghetu-sakel-2026-11-22",
+    "source": "wb_cigarettes",
+    "their_avg": 0.034,
+    "their_size": 1000.0,
+    "title": "Hersonissos 4: Gabriel Ghetu vs Michalis Sakellaridis",
+    "token": "14026975153196535766526748566328084669778913050984881419973194657495813914628"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-22",
+    "entry": 0.85,
+    "entry_fee": 0.006375,
+    "event_slug": "highest-temperature-in-shanghai-on-november-22-2026",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.85,
+     "s": 252
+    },
+    "opened": "2026-11-21T09:21:22Z",
+    "outcome": "No",
+    "pnl": 0.743625,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       11.765,
+       10.015,
+       true
+      ],
+      "100": [
+       116.897,
+       100.1445,
+       true
+      ],
+      "25": [
+       29.412,
+       25.0375,
+       true
+      ],
+      "50": [
+       58.824,
+       50.075,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.015,
+      1.75,
+      true
+     ],
+     "100": [
+      100.1445,
+      16.7525,
+      true
+     ],
+     "25": [
+      25.0375,
+      4.3745,
+      true
+     ],
+     "50": [
+      50.075,
+      8.749,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "highest-temperature-in-shanghai-on-november-22-2026-16c",
+    "source": "wb_cigarettes",
+    "their_avg": 0.81,
+    "their_size": 40.0,
+    "title": "Will the highest temperature in Shanghai be 16\u00b0C on November 22?",
+    "token": "19175521914720244043146146387087536126735691055968402139133569099234209797010"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.24,
+    "entry_fee": 0.0456,
+    "event_slug": "bknbl-bri-syd-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.29,
+     "s": 176
+    },
+    "opened": "2026-11-22T07:20:46Z",
+    "outcome": "Sydney Kings",
+    "pnl": -1.2456,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       41.667,
+       10.38,
+       true
+      ],
+      "100": [
+       416.667,
+       103.8,
+       true
+      ],
+      "25": [
+       104.167,
+       25.95,
+       true
+      ],
+      "50": [
+       208.333,
+       51.9,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.38,
+      -10.38,
+      true
+     ],
+     "100": [
+      103.8,
+      -103.8,
+      true
+     ],
+     "25": [
+      25.95,
+      -25.95,
+      true
+     ],
+     "50": [
+      51.9,
+      -51.9,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "bknbl-bri-syd-2026-11-22",
+    "source": "wb_cigarettes",
+    "their_avg": 0.4613,
+    "their_size": 220.95,
+    "title": "Brisbane Bullets vs. Sydney Kings",
+    "token": "51780439264030497589416668275679797568286895367280874708791746925284137600111"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-30",
+    "entry": 0.249,
+    "entry_fee": 0.04675,
+    "event_slug": "atp-sik-stevens-2026-11-22",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.181,
+     "s": 92
+    },
+    "opened": "2026-11-23T02:20:40Z",
+    "outcome": "Mustafa Ege Sik",
+    "pnl": -1.29175,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       39.183,
+       10.3724,
+       true
+      ],
+      "100": [
+       389.377,
+       103.7159,
+       true
+      ],
+      "25": [
+       97.549,
+       25.9296,
+       true
+      ],
+      "50": [
+       194.825,
+       51.8584,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.3724,
+      -10.3724,
+      true
+     ],
+     "100": [
+      103.7159,
+      -103.7159,
+      true
+     ],
+     "25": [
+      25.9296,
+      -25.9296,
+      true
+     ],
+     "50": [
+      51.8584,
+      -51.8584,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-sik-stevens-2026-11-22",
+    "source": "wb_cigarettes",
+    "their_avg": 0.2767,
+    "their_size": 200.0,
+    "title": "Playford: Mustafa Ege Sik vs Zane Stevens",
+    "token": "55213069447973356940505586871115307514173853344536115289277621396934472498883"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.887,
+    "entry_fee": 0.025058,
+    "event_slug": "atp-dev-sinha-2026-11-21",
+    "exit": 0.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.926,
+     "s": 182
+    },
+    "opened": "2026-11-22T05:33:26Z",
+    "outcome": "Nitin Kumar Sinha",
+    "pnl": -4.460058,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       11.274,
+       10.0565,
+       true
+      ],
+      "100": [
+       112.655,
+       100.5617,
+       true
+      ],
+      "25": [
+       28.185,
+       25.1412,
+       true
+      ],
+      "50": [
+       56.37,
+       50.2825,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0565,
+      -10.0565,
+      true
+     ],
+     "100": [
+      100.5617,
+      -100.5617,
+      true
+     ],
+     "25": [
+      25.1412,
+      -25.1412,
+      true
+     ],
+     "50": [
+      50.2825,
+      -50.2825,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-dev-sinha-2026-11-21",
+    "source": "wb_cigarettes",
+    "their_avg": 0.869,
+    "their_size": 1000.0,
+    "title": "Yokohama: S D Prajwal Dev vs Nitin Kumar Sinha",
+    "token": "55687234179809888752514558359402900903301845183439757310151904307751853716651"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.82,
+    "entry_fee": 0.0369,
+    "event_slug": "itf-chepel1-popko1-2026-11-22",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.83,
+     "s": 109
+    },
+    "opened": "2026-11-22T08:01:17Z",
+    "outcome": "Dmitry Popko",
+    "pnl": 0.8631,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       12.169,
+       10.0891,
+       true
+      ],
+      "100": [
+       120.602,
+       100.8541,
+       true
+      ],
+      "25": [
+       30.241,
+       25.2166,
+       true
+      ],
+      "50": [
+       60.361,
+       50.4291,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.0891,
+      2.0799,
+      true
+     ],
+     "100": [
+      100.8541,
+      19.7479,
+      true
+     ],
+     "25": [
+      25.2166,
+      5.0244,
+      true
+     ],
+     "50": [
+      50.4291,
+      9.9319,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "itf-chepel1-popko1-2026-11-22",
+    "source": "wb_cigarettes",
+    "their_avg": 0.79,
+    "their_size": 350.0,
+    "title": "M15 Antalya: Andrey Chepelev vs Dmitry Popko",
+    "token": "74396670764531419969166878288845297793963485243705909653161906908477493156078"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.18,
+    "entry_fee": 0.0369,
+    "event_slug": "atp-palan-dong-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.13,
+     "s": 190
+    },
+    "opened": "2026-11-22T07:01:11Z",
+    "outcome": "Chen Dong",
+    "pnl": 4.0631,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       55.556,
+       10.41,
+       true
+      ],
+      "100": [
+       555.556,
+       104.1,
+       true
+      ],
+      "25": [
+       138.889,
+       26.025,
+       true
+      ],
+      "50": [
+       277.778,
+       52.05,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.41,
+      45.146,
+      true
+     ],
+     "100": [
+      104.1,
+      451.456,
+      true
+     ],
+     "25": [
+      26.025,
+      112.864,
+      true
+     ],
+     "50": [
+      52.05,
+      225.728,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "atp-palan-dong-2026-11-21",
+    "source": "wb_cigarettes",
+    "their_avg": 0.19,
+    "their_size": 1000.0,
+    "title": "Playford: Dominik Palan vs Chen Dong",
+    "token": "89193593752187744740451130823572378226914453047046032903040331459044294851882"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.83,
+    "entry_fee": 0.035275,
+    "event_slug": "f1-las-vegas-grand-prix-driver-podium-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.83,
+     "s": 125
+    },
+    "opened": "2026-11-22T00:35:37Z",
+    "outcome": "Yes",
+    "pnl": 0.814725,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       12.048,
+       10.085,
+       true
+      ],
+      "100": [
+       120.19,
+       100.8399,
+       true
+      ],
+      "25": [
+       30.12,
+       25.2125,
+       true
+      ],
+      "50": [
+       60.241,
+       50.425,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.085,
+      1.963,
+      true
+     ],
+     "100": [
+      100.8399,
+      19.3501,
+      true
+     ],
+     "25": [
+      25.2125,
+      4.9075,
+      true
+     ],
+     "50": [
+      50.425,
+      9.816,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "f1-las-vegas-grand-prix-driver-podium-verstappen-2026-11-21",
+    "source": "wb_cigarettes",
+    "their_avg": 0.834,
+    "their_size": 50.0,
+    "title": "Will Max Verstappen finish on the podium at the 2026 F1 Las Vegas Grand Prix?",
+    "token": "92825844652492060105226469019120325162219246822259180848561036492394721772417"
+   },
+   {
+    "closed_at": "2026-11-23T05:01:48Z",
+    "end": "2026-11-29",
+    "entry": 0.89,
+    "entry_fee": 0.024475,
+    "event_slug": "f1-las-vegas-grand-prix-winner-2026-11-21",
+    "exit": 1.0,
+    "exit_fee": 0.0,
+    "late": {
+     "px": 0.89,
+     "s": 142
+    },
+    "opened": "2026-11-21T04:31:36Z",
+    "outcome": "No",
+    "pnl": 0.525525,
+    "price_source": "book",
+    "reason": "resolved",
+    "rs": {
+     "how": "book",
+     "rate": 0.05,
+     "s": {
+      "10": [
+       11.236,
+       10.055,
+       true
+      ],
+      "100": [
+       112.36,
+       100.55,
+       true
+      ],
+      "25": [
+       28.09,
+       25.1375,
+       true
+      ],
+      "50": [
+       56.18,
+       50.275,
+       true
+      ]
+     }
+    },
+    "rs_pnl": {
+     "10": [
+      10.055,
+      1.181,
+      true
+     ],
+     "100": [
+      100.55,
+      11.81,
+      true
+     ],
+     "25": [
+      25.1375,
+      2.9525,
+      true
+     ],
+     "50": [
+      50.275,
+      5.905,
+      true
+     ]
+    },
+    "shares": 5,
+    "slug": "f1-las-vegas-grand-prix-winner-norris-2026-11-21",
+    "source": "wb_cigarettes",
+    "their_avg": 0.889,
+    "their_size": 292.86,
+    "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?",
+    "token": "93760685468635401361534327069612392687592099015054697879830406096648033545295"
+   }
+  ],
+  "created": "2026-11-08T18:40:25Z",
+  "day_opens": {
+   "date": "2026-11-23",
+   "n": 6
+  },
+  "deposited": 0.0,
+  "min_cash": -229.592999,
+  "peak_open_cost": 203.119992,
+  "positions": {
    "101305708665076702320211050939797522314979479444025514744022126499999782149237": {
     "end": "2027-03-15",
     "entry": 0.86,
@@ -680280,51 +682645,6 @@
     "their_size": 30.0,
     "title": "Will De'Von Achane finish as a top-5 FLEX in the 2026-27 NFL season?"
    },
-   "109784418926733883261490092686984940148394341930737042675264487288684437050682": {
-    "end": "2026-11-29",
-    "entry": 0.28,
-    "entry_fee": 0.0504,
-    "event_slug": "crint-pakw-scow-2026-11-22",
-    "late": {
-     "px": 0.28,
-     "s": 204
-    },
-    "opened": "2026-11-22T06:20:44Z",
-    "outcome": "Scotland Women",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       35.714,
-       10.36,
-       true
-      ],
-      "100": [
-       349.753,
-       103.5704,
-       true
-      ],
-      "25": [
-       89.286,
-       25.9,
-       true
-      ],
-      "50": [
-       177.34,
-       51.7951,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "crint-pakw-scow-2026-11-22",
-    "source": "wb_cigarettes",
-    "their_avg": 0.27,
-    "their_size": 95.14,
-    "title": "ICC Women's Emerging Nations Trophy T20s: Pakistan Women vs Scotland Women"
-   },
    "110219335610031235501544881215400525742054268325629373693068279893719004442080": {
     "end": "2027-03-15",
     "entry": 0.933,
@@ -680505,51 +682825,6 @@
     "their_size": 323.01,
     "title": "Will the Minnesota Vikings make the 2027 NFL Playoffs?"
    },
-   "14026975153196535766526748566328084669778913050984881419973194657495813914628": {
-    "end": "2026-11-29",
-    "entry": 0.031,
-    "entry_fee": 0.00751,
-    "event_slug": "atp-ghetu-sakel-2026-11-22",
-    "late": {
-     "px": 0.031,
-     "s": 109
-    },
-    "opened": "2026-11-22T08:01:17Z",
-    "outcome": "Michalis Sakellaridis",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       230.27,
-       10.2321,
-       true
-      ],
-      "100": [
-       230.27,
-       10.2321,
-       false
-      ],
-      "25": [
-       230.27,
-       10.2321,
-       false
-      ],
-      "50": [
-       230.27,
-       10.2321,
-       false
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-ghetu-sakel-2026-11-22",
-    "source": "wb_cigarettes",
-    "their_avg": 0.034,
-    "their_size": 1000.0,
-    "title": "Hersonissos 4: Gabriel Ghetu vs Michalis Sakellaridis"
-   },
    "14721613896015623720285830627515764014337111157127999243455039544131231535599": {
     "end": "2027-07-01",
     "entry": 0.726,
@@ -680684,51 +682959,6 @@
     "their_avg": 0.55,
     "their_size": 40.0,
     "title": "Will PSOE win the most seats in Seville in the 2026 Spanish general election?"
-   },
-   "19175521914720244043146146387087536126735691055968402139133569099234209797010": {
-    "end": "2026-11-22",
-    "entry": 0.85,
-    "entry_fee": 0.006375,
-    "event_slug": "highest-temperature-in-shanghai-on-november-22-2026",
-    "late": {
-     "px": 0.85,
-     "s": 252
-    },
-    "opened": "2026-11-21T09:21:22Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.01,
-     "s": {
-      "10": [
-       11.765,
-       10.015,
-       true
-      ],
-      "100": [
-       116.897,
-       100.1445,
-       true
-      ],
-      "25": [
-       29.412,
-       25.0375,
-       true
-      ],
-      "50": [
-       58.824,
-       50.075,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "highest-temperature-in-shanghai-on-november-22-2026-16c",
-    "source": "wb_cigarettes",
-    "their_avg": 0.81,
-    "their_size": 40.0,
-    "title": "Will the highest temperature in Shanghai be 16\u00b0C on November 22?"
    },
    "20611567398252716052573083678634277489203893965573667706764543469340936342429": {
     "end": "2027-03-15",
@@ -681129,51 +683359,6 @@
     "their_size": 109.64,
     "title": "Will Chicago Bears win the 2026 NFC North?"
    },
-   "51780439264030497589416668275679797568286895367280874708791746925284137600111": {
-    "end": "2026-11-29",
-    "entry": 0.24,
-    "entry_fee": 0.0456,
-    "event_slug": "bknbl-bri-syd-2026-11-22",
-    "late": {
-     "px": 0.29,
-     "s": 176
-    },
-    "opened": "2026-11-22T07:20:46Z",
-    "outcome": "Sydney Kings",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       41.667,
-       10.38,
-       true
-      ],
-      "100": [
-       416.667,
-       103.8,
-       true
-      ],
-      "25": [
-       104.167,
-       25.95,
-       true
-      ],
-      "50": [
-       208.333,
-       51.9,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "bknbl-bri-syd-2026-11-22",
-    "source": "wb_cigarettes",
-    "their_avg": 0.4613,
-    "their_size": 220.95,
-    "title": "Brisbane Bullets vs. Sydney Kings"
-   },
    "53363944150317449298656304597232377442047565741490856224499197059203936000192": {
     "end": "2027-04-16",
     "entry": 0.5,
@@ -681218,96 +683403,6 @@
     "their_avg": 0.48,
     "their_size": 60.0,
     "title": "Will the Anaheim Ducks make the 2026-27 NHL Playoffs?"
-   },
-   "55213069447973356940505586871115307514173853344536115289277621396934472498883": {
-    "end": "2026-11-30",
-    "entry": 0.249,
-    "entry_fee": 0.04675,
-    "event_slug": "atp-sik-stevens-2026-11-22",
-    "late": {
-     "px": 0.181,
-     "s": 92
-    },
-    "opened": "2026-11-23T02:20:40Z",
-    "outcome": "Mustafa Ege Sik",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       39.183,
-       10.3724,
-       true
-      ],
-      "100": [
-       389.377,
-       103.7159,
-       true
-      ],
-      "25": [
-       97.549,
-       25.9296,
-       true
-      ],
-      "50": [
-       194.825,
-       51.8584,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-sik-stevens-2026-11-22",
-    "source": "wb_cigarettes",
-    "their_avg": 0.2767,
-    "their_size": 200.0,
-    "title": "Playford: Mustafa Ege Sik vs Zane Stevens"
-   },
-   "55687234179809888752514558359402900903301845183439757310151904307751853716651": {
-    "end": "2026-11-29",
-    "entry": 0.887,
-    "entry_fee": 0.025058,
-    "event_slug": "atp-dev-sinha-2026-11-21",
-    "late": {
-     "px": 0.926,
-     "s": 182
-    },
-    "opened": "2026-11-22T05:33:26Z",
-    "outcome": "Nitin Kumar Sinha",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       11.274,
-       10.0565,
-       true
-      ],
-      "100": [
-       112.655,
-       100.5617,
-       true
-      ],
-      "25": [
-       28.185,
-       25.1412,
-       true
-      ],
-      "50": [
-       56.37,
-       50.2825,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-dev-sinha-2026-11-21",
-    "source": "wb_cigarettes",
-    "their_avg": 0.869,
-    "their_size": 1000.0,
-    "title": "Yokohama: S D Prajwal Dev vs Nitin Kumar Sinha"
    },
    "56570094360934785601435239856123945717194033255391528608450850796235555822644": {
     "end": "2027-07-01",
@@ -681756,51 +683851,6 @@
     "their_size": 4390.42,
     "title": "Will Barcelona win the 2026-27 LALIGA Championship?"
    },
-   "74396670764531419969166878288845297793963485243705909653161906908477493156078": {
-    "end": "2026-11-29",
-    "entry": 0.82,
-    "entry_fee": 0.0369,
-    "event_slug": "itf-chepel1-popko1-2026-11-22",
-    "late": {
-     "px": 0.83,
-     "s": 109
-    },
-    "opened": "2026-11-22T08:01:17Z",
-    "outcome": "Dmitry Popko",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       12.169,
-       10.0891,
-       true
-      ],
-      "100": [
-       120.602,
-       100.8541,
-       true
-      ],
-      "25": [
-       30.241,
-       25.2166,
-       true
-      ],
-      "50": [
-       60.361,
-       50.4291,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "itf-chepel1-popko1-2026-11-22",
-    "source": "wb_cigarettes",
-    "their_avg": 0.79,
-    "their_size": 350.0,
-    "title": "M15 Antalya: Andrey Chepelev vs Dmitry Popko"
-   },
    "74839735949752791552069773075479479938067573294229793204328108762491549347056": {
     "end": "2026-12-01",
     "entry": 0.72,
@@ -682199,51 +684249,6 @@
     "their_size": 56.31,
     "title": "Will OpenAI\u2019s valuation be between $1.00T and $1.15T at the end of December 2026?"
    },
-   "89193593752187744740451130823572378226914453047046032903040331459044294851882": {
-    "end": "2026-11-29",
-    "entry": 0.18,
-    "entry_fee": 0.0369,
-    "event_slug": "atp-palan-dong-2026-11-21",
-    "late": {
-     "px": 0.13,
-     "s": 190
-    },
-    "opened": "2026-11-22T07:01:11Z",
-    "outcome": "Chen Dong",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       55.556,
-       10.41,
-       true
-      ],
-      "100": [
-       555.556,
-       104.1,
-       true
-      ],
-      "25": [
-       138.889,
-       26.025,
-       true
-      ],
-      "50": [
-       277.778,
-       52.05,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "atp-palan-dong-2026-11-21",
-    "source": "wb_cigarettes",
-    "their_avg": 0.19,
-    "their_size": 1000.0,
-    "title": "Playford: Dominik Palan vs Chen Dong"
-   },
    "89834173904330763484253920547334466899594146604536573597149057796433429079300": {
     "backfill": true,
     "end": "2028-01-01",
@@ -682420,96 +684425,6 @@
     "their_avg": 0.75,
     "their_size": 60.0,
     "title": "Will the San Jose Sharks make the 2026-27 NHL Playoffs?"
-   },
-   "92825844652492060105226469019120325162219246822259180848561036492394721772417": {
-    "end": "2026-11-29",
-    "entry": 0.83,
-    "entry_fee": 0.035275,
-    "event_slug": "f1-las-vegas-grand-prix-driver-podium-2026-11-21",
-    "late": {
-     "px": 0.83,
-     "s": 125
-    },
-    "opened": "2026-11-22T00:35:37Z",
-    "outcome": "Yes",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       12.048,
-       10.085,
-       true
-      ],
-      "100": [
-       120.19,
-       100.8399,
-       true
-      ],
-      "25": [
-       30.12,
-       25.2125,
-       true
-      ],
-      "50": [
-       60.241,
-       50.425,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "f1-las-vegas-grand-prix-driver-podium-verstappen-2026-11-21",
-    "source": "wb_cigarettes",
-    "their_avg": 0.834,
-    "their_size": 50.0,
-    "title": "Will Max Verstappen finish on the podium at the 2026 F1 Las Vegas Grand Prix?"
-   },
-   "93760685468635401361534327069612392687592099015054697879830406096648033545295": {
-    "end": "2026-11-29",
-    "entry": 0.89,
-    "entry_fee": 0.024475,
-    "event_slug": "f1-las-vegas-grand-prix-winner-2026-11-21",
-    "late": {
-     "px": 0.89,
-     "s": 142
-    },
-    "opened": "2026-11-21T04:31:36Z",
-    "outcome": "No",
-    "price_source": "book",
-    "rs": {
-     "how": "book",
-     "rate": 0.05,
-     "s": {
-      "10": [
-       11.236,
-       10.055,
-       true
-      ],
-      "100": [
-       112.36,
-       100.55,
-       true
-      ],
-      "25": [
-       28.09,
-       25.1375,
-       true
-      ],
-      "50": [
-       56.18,
-       50.275,
-       true
-      ]
-     }
-    },
-    "shares": 5,
-    "slug": "f1-las-vegas-grand-prix-winner-norris-2026-11-21",
-    "source": "wb_cigarettes",
-    "their_avg": 0.889,
-    "their_size": 292.86,
-    "title": "Will Lando Norris win the 2026 F1 Las Vegas Grand Prix?"
    },
    "94338902490889069281923344482473718727082711054366437812105352535317911623634": {
     "end": "2026-11-30",
@@ -682782,7 +684697,7 @@
     "title": "Will the highest temperature in Amsterdam be 6\u00b0C on November 24?"
    }
   },
-  "realized": -14.081475,
+  "realized": -16.618618,
   "refills": 0,
   "skipped_cap": 8284,
   "skipped_chase": 73,
@@ -682791,7 +684706,7 @@
   "skipped_split": 903,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3999 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -685486,7 +687401,7 @@
   "skipped_split": 45,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 408 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -686930,7 +688845,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 21 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -688215,7 +690130,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 166 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -689333,7 +691248,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 71 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -691516,7 +693431,7 @@
   "skipped_split": 4,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 57 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -693008,7 +694923,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 224 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -693048,7 +694963,7 @@
    "2837649708153579",
    "3601338130087334"
   ],
-  "cash": -32.989088,
+  "cash": -35.985088,
   "closed": [
    {
     "backfill": true,
@@ -693124,11 +695039,11 @@
   "created": "2026-11-08T18:40:25Z",
   "day_opens": {
    "date": "2026-11-23",
-   "n": 0
+   "n": 1
   },
   "deposited": 0.0,
-  "min_cash": -32.989088,
-  "peak_open_cost": 32.989088,
+  "min_cash": -35.985088,
+  "peak_open_cost": 35.312468,
   "positions": {
    "20956303336125136470063359865932272460212692452090356065653029898195377485247": {
     "backfill": true,
@@ -693297,6 +695212,51 @@
     "their_avg": 0.3168,
     "their_size": 1424.85,
     "title": "Will exactly 1 Israeli legislative election occur before a government is formed?"
+   },
+   "49741663698050220766734867654462223659731568478526387688777386084381389841569": {
+    "end": "2027-07-01",
+    "entry": 0.5992,
+    "entry_fee": 0.0,
+    "event_slug": "netanyahu-out-before-2027",
+    "late": {
+     "px": 0.5992,
+     "s": 102
+    },
+    "opened": "2026-11-23T04:59:59Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       6.42,
+       3.848,
+       false
+      ],
+      "100": [
+       6.42,
+       3.848,
+       false
+      ],
+      "25": [
+       6.42,
+       3.848,
+       false
+      ],
+      "50": [
+       6.42,
+       3.848,
+       false
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "netanyahu-out-by-june-30-2027",
+    "source": "wb_flawfence",
+    "their_avg": 0.5595,
+    "their_size": 1790.09,
+    "title": "Netanyahu out by June 30, 2027?"
    },
    "55332901958392032145693361235671116866150200247956455611083130864602277398175": {
     "backfill": true,
@@ -693641,7 +695601,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 410 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -696675,7 +698635,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 187 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -697551,7 +699511,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 17 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -698430,7 +700390,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 3 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -704577,7 +706537,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 919 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -707230,7 +709190,7 @@
   "skipped_split": 20,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 69 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -707548,7 +709508,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 41 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -708549,7 +710509,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 192 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -709049,9 +711009,11 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Watching 1207 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "Watching 1207 open positions of this wallet; 1 new since the last check. Watching since 2026-11-08.",
+   "skips": {
+    "too small (under $20)": 1
+   }
   },
   "unlimited": true
  },
@@ -710579,7 +712541,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 95 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -711054,7 +713016,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 121 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -711960,7 +713922,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 114 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -713927,7 +715889,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1290 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -713966,7 +715928,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 19 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -716409,7 +718371,7 @@
   "skipped_split": 56,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 930 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -725507,7 +727469,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 40 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -727275,7 +729237,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 57 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -728369,7 +730331,7 @@
   "skipped_split": 1,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 62 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -739515,7 +741477,7 @@
   "skipped_split": 333,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 233 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -740172,7 +742134,7 @@
   "skipped_no_cash": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 49 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -741586,7 +743548,7 @@
   "skipped_split": 2,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 1 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -742050,7 +744012,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 5 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -743323,7 +745285,7 @@
   "skipped_split": 0,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 376 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -744727,7 +746689,7 @@
   "skipped_split": 3,
   "start_cash": null,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
+   "at": "2026-11-23T05:06:06Z",
    "msg": "Watching 130 open positions of this wallet; 0 new since the last check. Watching since 2026-11-08.",
    "skips": {}
   },
@@ -758350,7 +760312,7 @@
   "unlimited": false
  },
  "yes_fav_85_95": {
-  "cash": 426.227718,
+  "cash": 416.675798,
   "closed": [
    {
     "closed_at": "2026-11-13T06:25:34Z",
@@ -759013,7 +760975,7 @@
   "created": "2026-11-08T15:15:28Z",
   "deposited": 500.0,
   "min_cash": 0.0,
-  "peak_open_cost": 81.936566,
+  "peak_open_cost": 86.956986,
   "positions": {
    "104457655035644664190107609435119087986605303486944480827005860585105588718708": {
     "end": "2026-11-25",
@@ -759555,6 +761517,96 @@
     "theme": null,
     "title": "Will Google have the best AI model at the end of November 2026?"
    },
+   "50345623379736457258929274873310408633879550355569385711535920626202157338646": {
+    "end": "2026-12-01",
+    "entry": 0.95,
+    "entry_fee": 0.0,
+    "event_key": "1285996",
+    "event_slug": "who-will-trump-speak-to-by-november-30-2026",
+    "late": {
+     "px": 0.95,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:47Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.0,
+     "s": {
+      "10": [
+       10.526,
+       10.0,
+       true
+      ],
+      "100": [
+       105.263,
+       100.0,
+       true
+      ],
+      "25": [
+       26.316,
+       25.0,
+       true
+      ],
+      "50": [
+       52.632,
+       50.0,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "will-trump-speak-to-emmanuel-macron-by-november-30-2026",
+    "source": "yes_fav_85_95",
+    "theme": "us politics",
+    "title": "Will Trump speak to Emmanuel Macron by November 30?"
+   },
+   "51479682523289732013939688462322459419320905965870305335236641403492407291697": {
+    "end": "2026-11-27",
+    "entry": 0.96,
+    "entry_fee": 0.00192,
+    "event_key": "1432567",
+    "event_slug": "xrp-above-on-november-27-2026",
+    "late": {
+     "px": 0.96,
+     "s": 197
+    },
+    "opened": "2026-11-23T05:02:47Z",
+    "outcome": "Yes",
+    "price_source": "book",
+    "rs": {
+     "how": "book",
+     "rate": 0.01,
+     "s": {
+      "10": [
+       10.417,
+       10.004,
+       true
+      ],
+      "100": [
+       104.167,
+       100.04,
+       true
+      ],
+      "25": [
+       26.042,
+       25.01,
+       true
+      ],
+      "50": [
+       52.083,
+       50.02,
+       true
+      ]
+     }
+    },
+    "shares": 5,
+    "slug": "xrp-above-0pt8-on-november-27-2026",
+    "source": "yes_fav_85_95",
+    "theme": null,
+    "title": "Will the price of XRP be above $0.80 on November 27?"
+   },
    "57038501330199400394966417524435624537519283307101100519729541159097324482033": {
     "end": "2026-11-23",
     "entry": 0.88,
@@ -759786,9 +761838,11 @@
   "skipped_no_cash": 0,
   "start_cash": 500,
   "status": {
-   "at": "2026-11-23T04:57:31Z",
-   "msg": "Picks once a day at the morning run (about 06:00 Stockholm); no pick yet today.",
-   "skips": {}
+   "at": "2026-11-23T05:06:06Z",
+   "msg": "14 markets matched its rules, bought 2",
+   "skips": {
+    "already holds this market": 8
+   }
   },
   "unlimited": false
  }
