@@ -32032,3 +32032,6 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV230930-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T14:32:44Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV230930-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T14:32:44Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV230930-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T14:32:44Z", "type": "kmaker_fill"}
+{"fee": 0.0068, "outcome": "Yes", "price": 0.972, "shares": 5, "title": "Will Microsoft (MSFT) close above $480 on November 23?", "token": "81580128708894544476485252419092491202138370876982439175819757294733538108895", "track": "endgame_sell98", "ts": "2026-11-23T14:36:47Z", "type": "paper_buy"}
+{"fee": 0.0051, "outcome": "Yes", "price": 0.979, "shares": 5, "title": "Will Google (GOOGL) close above $265 on November 23?", "token": "10613985113495004304274735094957519960319058718701352513241856430136602764943", "track": "endgame_sell98", "ts": "2026-11-23T14:36:47Z", "type": "paper_buy"}
+{"pnl": -25.02, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV23RAYSCA-RAY", "track": "tennis_set", "ts": "2026-11-23T14:36:51Z", "type": "econ_settle"}
