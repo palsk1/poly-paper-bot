@@ -52,23 +52,11 @@
   },
   "2026-11-23": {
    "failed": 0,
-   "muted": 62,
-   "sent": 16
+   "muted": 64,
+   "sent": 18
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[crypto_late] bought 2 (practice money)",
-   "track": "crypto_late",
-   "ts": "2026-11-14T21:32:38Z"
-  },
-  {
-   "result": "sent",
-   "title": "[crypto_late] bought 2 (practice money)",
-   "track": "crypto_late",
-   "ts": "2026-11-14T22:16:49Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
@@ -1256,6 +1244,18 @@
    "title": "[fade_rally] sold No at 64c (+$0.60)",
    "track": "fade_rally",
    "ts": "2026-11-23T08:45:50Z"
+  },
+  {
+   "result": "sent",
+   "title": "[fade_rally] sold No at 54c (+$0.35)",
+   "track": "fade_rally",
+   "ts": "2026-11-23T09:15:46Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 3 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-23T09:22:02Z"
   }
  ]
 }
