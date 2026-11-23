@@ -52,17 +52,11 @@
   },
   "2026-11-23": {
    "failed": 0,
-   "muted": 15,
-   "sent": 7
+   "muted": 17,
+   "sent": 8
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[arb] locked in 2.1c a share",
-   "track": null,
-   "ts": "2026-11-14T05:51:01Z"
-  },
   {
    "result": "sent",
    "title": "[kc_maker] FLIP: a late favorite lost ($-9.57)",
@@ -1256,6 +1250,12 @@
    "title": "[panic_fade] sold No at 91c (+$0.44)",
    "track": "panic_fade",
    "ts": "2026-11-23T03:01:25Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] sold No at 92c (+$0.49)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-23T03:11:00Z"
   }
  ]
 }
