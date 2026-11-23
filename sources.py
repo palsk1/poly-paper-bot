@@ -592,7 +592,151 @@ def gaspages():
             print("  time:", m.group(0)[:120])
 
 
-MODES = {"livegas": gaspages, "eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
+# ---------------------------------------------------------------- gas recording score (recorder `gas` lines, PR #40)
+def _rel_files(prefix="data-2026"):
+    import os
+    hdr = {"User-Agent": "poly-paper-bot", "Accept": "application/vnd.github+json"}
+    tok = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if tok:
+        hdr["Authorization"] = f"Bearer {tok}"
+    out, page = [], 1
+    while True:
+        req = urllib.request.Request(f"https://api.github.com/repos/palsk1/poly-paper-bot/releases?per_page=100&page={page}", headers=hdr)
+        rows = json.loads(urllib.request.urlopen(req, timeout=30).read())
+        for r in rows:
+            if r.get("tag_name", "").startswith(prefix):
+                out += [a["browser_download_url"] for a in r.get("assets") or [] if a["name"].endswith(".jsonl.gz")]
+        if len(rows) < 100:
+            break
+        page += 1
+    return sorted(out)
+
+
+def _grab(url):
+    import gzip
+    keep = []
+    for i in range(3):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "poly-paper-bot"})
+            with urllib.request.urlopen(req, timeout=120) as r, gzip.open(r, "rt") as fh:
+                for line in fh:
+                    h = line[:200]
+                    if '"k":"gas"' in h or ('"k":"kbook"' in h and "KXAAAGASD" in h):
+                        keep.append(json.loads(line))
+            return keep
+        except Exception as e:
+            print("  retry", url.rsplit("/", 1)[-1], e)
+            keep = []
+            time.sleep(5)
+    return keep
+
+
+def gasrec(arg=""):
+    """Does GasBuddy's live state average predict AAA's next number better than the Kalshi ladder does?
+    Week 1 fits the rule, week 2 scores it (plan in backtest/sources.md)."""
+    import datetime as dt
+    from concurrent.futures import ThreadPoolExecutor
+    files = [u for u in _rel_files() if u.rsplit("rec-", 1)[-1] >= "20261109-22"]
+    print(f"{len(files)} hour files since the merge")
+    with ThreadPoolExecutor(8) as ex:
+        rows = [r for part in ex.map(_grab, files) for r in part]
+    rows.sort(key=lambda r: r["t"])
+    gasl = [r for r in rows if r["k"] == "gas" and r.get("gb")]
+    books = [r for r in rows if r["k"] == "kbook"]
+    print(f"gas snapshots {len(gasl)}, gas ladder books {len(books)}")
+    if not gasl:
+        return
+    ev = ladder("KXAAAGASD")
+    settle = {k: e for k, e in ev.items()}
+    # book state per ticker over time
+    bt = collections.defaultdict(list)
+    for r in books:
+        yb = max((p for p, s in r.get("yb") or []), default=None)
+        nb = max((p for p, s in r.get("nb") or []), default=None)
+        bt[r["tk"]].append((r["t"], yb, None if nb is None else 1 - nb))
+    gts = [g["t"] for g in gasl]
+
+    def gas_at(t):
+        import bisect
+        i = bisect.bisect_right(gts, t) - 1
+        return gasl[i] if i >= 0 and t - gts[i] < 1800 else None
+
+    def book_at(tk, t):
+        xs = [x for x in bt.get(tk, []) if x[0] <= t]
+        return xs[-1] if xs else None
+
+    def gbmean(g):
+        v = [p for st, (p, c) in g["gb"].items() if st not in ("PR",)]
+        return sum(v) / len(v)
+
+    def gbchg(g):
+        v = [c for st, (p, c) in g["gb"].items() if st not in ("PR",)]
+        return sum(v) / len(v)
+
+    hours = (14, 16, 18, 20, 22, 2)
+    obs = []   # (event close, hour, settle, aaa_now, market median, gb mean, gb change, gb mean 24h earlier)
+    for k, e in sorted(settle.items(), key=lambda kv: kv[1]["close"]):
+        if e["close"] < gts[0] + 86400:
+            continue
+        for hr in hours:
+            t = e["open"] + ((hr * 3600 - e["open"] % 86400) % 86400)
+            if t >= e["close"] - 600 or t > gts[-1]:
+                continue
+            g, g0 = gas_at(t), gas_at(t - 86400)
+            if not g or not g0 or "aaa" not in g:
+                continue
+            mids = []
+            for tk, K, res, vol in e["mk"]:
+                b = book_at(tk, t)
+                if b and b[1] is not None and b[2] is not None and t - b[0] < 6 * 3600:
+                    mids.append((K, (b[1] + b[2]) / 2))
+            mids.sort()
+            med = None
+            for (k1, m1), (k2, m2) in zip(mids, mids[1:]):
+                if m1 >= 0.5 >= m2 and m1 != m2:
+                    med = k1 + (m1 - 0.5) / (m1 - m2) * (k2 - k1)
+                    break
+            obs.append((e["close"], hr, e["v"], g["aaa"], med, gbmean(g), gbchg(g), gbmean(g0), k))
+    days = sorted({o[0] for o in obs})
+    print(f"{len(obs)} observations over {len(days)} settle days: {[o[8][-7:] for o in obs if o[1] == hours[0]]}")
+    if len(days) < 6:
+        print("not enough days yet")
+        return
+    cut = days[len(days) // 2]
+    tr, te = [o for o in obs if o[0] < cut], [o for o in obs if o[0] >= cut]
+
+    def fit(xs, feat):
+        # settle - aaa_now = a + b * feature, least squares on the training half
+        pts = [(feat(o), o[2] - o[3]) for o in xs]
+        n = len(pts)
+        mx, my = sum(p[0] for p in pts) / n, sum(p[1] for p in pts) / n
+        vx = sum((p[0] - mx) ** 2 for p in pts)
+        b = sum((p[0] - mx) * (p[1] - my) for p in pts) / vx if vx else 0
+        return my - b * mx, b
+
+    feats = {"GasBuddy change today (avg of states)": lambda o: o[6],
+             "GasBuddy level vs 24h ago": lambda o: o[5] - o[7]}
+    print(f"\nfit on {len({o[0] for o in tr})} days, scored on {len({o[0] for o in te})} days. Average miss in cents (smaller is better)")
+    print(f"{'guesser':42s} " + " ".join(f"{h:>5d}h" for h in hours))
+
+    def row(name, guess, xs):
+        out = []
+        for h in hours:
+            m = [abs(guess(o) - o[2]) for o in xs if o[1] == h and guess(o) is not None]
+            out.append(f"{100 * sum(m) / len(m):6.2f}" if m else "     -")
+        print(f"{name:42s} " + " ".join(out))
+    row("market (week 2)", lambda o: o[4], te)
+    row("AAA today, no change (week 2)", lambda o: o[3], te)
+    for name, fe in feats.items():
+        for h in hours:
+            pass
+        fits = {h: fit([o for o in tr if o[1] == h], fe) for h in hours if [o for o in tr if o[1] == h]}
+        row(name + " (week 2)", lambda o, fe=fe, fits=fits: (o[3] + fits[o[1]][0] + fits[o[1]][1] * fe(o)) if o[1] in fits else None, te)
+        print("   fit per hour (a, b):", {h: (round(a * 100, 2), round(b, 2)) for h, (a, b) in fits.items()})
+    row("market (week 1, for reference)", lambda o: o[4], tr)
+
+
+MODES = {"gasrec": gasrec, "livegas": gaspages, "eo": eo, "reach": reach, "quake": quake, "map": mapping, "kdaily": kdaily, "precur": precurring}
 
 if __name__ == "__main__":
     a = sys.argv[1] if len(sys.argv) > 1 else "map"
