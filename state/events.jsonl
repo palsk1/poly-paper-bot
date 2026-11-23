@@ -31033,3 +31033,4 @@
 {"filled": 3.35, "price": 0.94, "side": "no", "through": true, "ticker": "KXHIGHTHOU-26NOV23-B68.5", "track": "kalshi_patient", "ts": "2026-11-23T04:21:21Z", "type": "kpatient_fill"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXNFL1HTOTAL-26NOV22MINSF-8", "track": "kalshi_patient", "ts": "2026-11-23T04:21:21Z", "type": "kpatient_result"}
 {"pnl": 0.49, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV22MINSF-SFDSAMUEL19", "track": "kalshi_patient", "ts": "2026-11-23T04:21:21Z", "type": "kpatient_result"}
+{"player": "Finn Bass", "price": 0.77, "set1": "6-4", "set2_games": 0, "shares": 32, "ticker": "KXATPCHALLENGERMATCH-26NOV22BASISO-BAS", "track": "tennis_set", "ts": "2026-11-23T04:23:47Z", "type": "ktennis_buy"}
