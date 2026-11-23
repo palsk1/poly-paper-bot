@@ -4557,6 +4557,7 @@ def draw_candidates(names):
                                "league": str(g["event"].get("slug") or "").split("-")[0]})
                 c["outcome"] = "Draw"
                 c["theme"] = "soccer"
+                c["start"] = iso(g["start"])   # kickoff, for the real bot's open-bet list (Jan, 23 Nov)
                 out[n].append(c)
     for n in out:
         out[n].sort(key=lambda c: -c["liquidity"])

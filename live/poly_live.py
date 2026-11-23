@@ -184,7 +184,7 @@ def place(book):
         rec = {"slug": slug, "token": c["token"], "condition_id": m.get("conditionId"), "event_key": c["event_key"],
                "title": c["title"], "listed": c["price"], "ask": round(px, 4), "shares": shares, "cost": cost,
                "fee_est": round(fee, 4), "signal": c.get("signal"), "placed": C.iso(), "day": C.today(),
-               "end": c["end"]}
+               "end": c["end"], "kickoff": c.get("start")}
         if C.is_live():
             if have is None:
                 have = cash()
