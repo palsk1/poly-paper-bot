@@ -11,6 +11,11 @@ from types import SimpleNamespace
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TMP = tempfile.mkdtemp()
+# Start clean: the server's own settings (POLY_TAKE=all, caps, LIVE=yes, ...) can sit in the environment when the
+# auto-update runs this test, and they changed what the checks saw (23 Nov: "takes every second signal" failed).
+for _k in list(os.environ):
+    if _k.startswith(("KALSHI_", "POLY_", "NTFY_", "LIVE")):
+        os.environ.pop(_k)
 os.environ["LIVE_DIR"] = TMP
 os.environ["LIVE_ENV"] = os.path.join(TMP, "none.env")
 sys.path.insert(0, os.path.dirname(HERE))
