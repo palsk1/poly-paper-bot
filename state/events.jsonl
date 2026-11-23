@@ -31028,3 +31028,4 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXDENSUPERLIGATOTAL-26NOV23BROFCM-1", "track": "kalshi_patient", "ts": "2026-11-23T04:13:41Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXSNOWTHANKSGIVING-26NOV26-BOS", "track": "kalshi_patient", "ts": "2026-11-23T04:13:41Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXHORMUZMAX-26NOV22-NOV17", "track": "kalshi_patient", "ts": "2026-11-23T04:13:41Z", "type": "kpatient_order"}
+{"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV222315-15", "track": "kc_maker", "ts": "2026-11-23T04:17:57Z", "type": "kmaker_fill"}
