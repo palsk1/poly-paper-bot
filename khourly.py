@@ -996,9 +996,75 @@ def run15(arg=None):
     save_log("run15.txt")
 
 
+# ================================================================ the other side: offering the safe side at 99c early (probe khr_lsfetch)
+LS_MIN = (30, 20, 10)
+
+
+def ls_fetch(arg=None):
+    """Trade lists of the last half hour (only trades at 95c+ / 5c or less) for every market whose leading side sat at
+    90c+ with a cushion of 1.5 to 5 at 30, 20 or 10 minutes before the close. Saved as bt_cache/khr/ls_<series>.json.gz."""
+    from concurrent.futures import ThreadPoolExecutor
+    for series in [x for x in (arg.split(",") if arg else SERIES) if x in SERIES]:
+        t_s = time.time()
+        D = load(series)
+        if not D["w"]:
+            continue
+        path = os.path.join(CACHE, f"ls_{series}.json.gz")
+        tr = kc.rjson(path, {}) or {}
+        want = []
+        for w in D["w"]:
+            if w["t"] in tr:
+                continue
+            for mn in LS_MIN:
+                t = w["close"] - 60 * mn
+                row = w["c"].get(t)
+                side = leader(row) if row else None
+                g = gap_at(D, t) if side else None
+                if not g or kc.side_view(row, side)[0] < 0.9 - EPS:
+                    continue
+                z = kc.zscore(dict(w, strike=w["strike"] * g), t, mn, side)
+                if z is not None and 1.5 <= z < 5:
+                    want.append(w)
+                    break
+
+        def tape(w):
+            out, cur = [], None
+            try:
+                for _ in range(40):
+                    q = {"ticker": w["t"], "min_ts": w["close"] - 1830, "max_ts": w["close"] + 5, "limit": 1000}
+                    if cur:
+                        q["cursor"] = cur
+                    res = kget("/markets/trades", q)
+                    rows = res.get("trades") or []
+                    for x in rows:
+                        d = bot.parse_iso(x.get("created_time"))
+                        yp = bot.fnum(x.get("yes_price_dollars"), None)
+                        if d and yp is not None and (yp >= 0.95 - EPS or yp <= 0.05 + EPS):
+                            out.append([round(d.timestamp(), 2), yp, bot.fnum(x.get("count_fp") or x.get("count"), 0), str(x.get("taker_side") or "")[:1]])
+                    cur = res.get("cursor")
+                    if not cur or not rows:
+                        break
+            except Exception as ex_:
+                return w, ex_
+            return w, sorted(out)
+        bad = 0
+        with ThreadPoolExecutor(kc.WORKERS) as ex:
+            for i, (w, out) in enumerate(ex.map(tape, want)):
+                if isinstance(out, Exception):
+                    bad += 1
+                    continue
+                tr[w["t"]] = out
+                if i and i % 2000 == 0:
+                    kc.wjson(path, tr)
+                    print(f"   {series} {i}/{len(want)} ({time.time() - t_s:.0f}s)", flush=True)
+        kc.wjson(path, tr)
+        say(f"{series}: {len(want)} asked, {bad} failed, {len(tr)} kept, {sum(len(v) for v in tr.values()):,} trades ({time.time() - t_s:.0f}s)")
+    save_log("lsfetch.txt")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = None
     if "_" in cmd:
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report, "more15": lambda: more15(arg), "run15": lambda: run15(arg)}[cmd]()
+    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report, "more15": lambda: more15(arg), "lsfetch": lambda: ls_fetch(arg), "run15": lambda: run15(arg)}[cmd]()

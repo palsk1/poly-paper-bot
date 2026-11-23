@@ -2957,6 +2957,32 @@
    "verdict": "Ahead, but could be luck",
    "status": "lead: untested live",
    "src": "khourly.py run15, backtest/khourly.md"
+  },
+  {
+   "id": "kalshi_hourly_crypto_offer_the_safe_side_at_99c_bid_1c_on_th",
+   "date": "2026-11-23",
+   "what": "Kalshi hourly crypto: offer the safe side at 99c (bid 1c on the long shot) 20-30 min before the close, best-case fills",
+   "tries": 1100,
+   "bets": 3418,
+   "groups": 61,
+   "per100": 60.91,
+   "floor100": -100.0,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped: no sellers' money there, best-case fills",
+   "src": "khourly_sweep.py, backtest/khourly.md"
+  },
+  {
+   "id": "kalshi_hourly_crypto_last_minute_model_of_the_60_second_aver",
+   "date": "2026-11-23",
+   "what": "Kalshi hourly crypto: last-minute model of the 60-second average, buy where it says 3c+ too cheap",
+   "tries": 1100,
+   "bets": 330,
+   "groups": 290,
+   "per100": -13.33,
+   "floor100": -45.21,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "khourly_sweep.py, backtest/khourly.md"
   }
  ]
 }
