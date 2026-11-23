@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 7,
-   "sent": 4
+   "sent": 5
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[arb] locked in 2.1c a share",
-   "track": null,
-   "ts": "2026-11-14T04:50:59Z"
-  },
   {
    "result": "sent",
    "title": "[endgame] bought 1 (practice money)",
@@ -1256,6 +1250,12 @@
    "title": "[panic_fade_4c] bought 1 (practice money)",
    "track": "panic_fade_4c",
    "ts": "2026-11-23T00:53:04Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-23T01:32:11Z"
   }
  ]
 }

@@ -30711,3 +30711,12 @@
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLOT-26NOV26KCBUF-Y", "track": "kalshi_patient", "ts": "2026-11-23T01:22:13Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXPCEHEAD-26NOV25-T0.2", "track": "kalshi_patient", "ts": "2026-11-23T01:22:13Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXSILVERD-26NOV2317-T45", "track": "kalshi_patient", "ts": "2026-11-23T01:22:13Z", "type": "kpatient_order"}
+{"cost": 3.7594, "title": "Will the price of Bitcoin be above $64,000 on November 29?", "token": "40161465632881177031804609315151552092460160496325565368353812956394297689686", "track": "crypto_no", "ts": "2026-11-23T01:31:57Z", "type": "skip_no_cash"}
+{"fee": 0.0515, "outcome": "Draw", "price": 0.29, "shares": 5, "title": "Will LD Alajuelense vs. CS Cartagin\u00e9s end in a draw?", "token": "77215152683160544358822687613755827718406014497827870195291710475875774681115", "track": "soccer_draw", "ts": "2026-11-23T01:32:11Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": false, "ticker": "KXAFCCLSPREAD-26NOV23TRAWAS-WAS3", "track": "kalshi_patient", "ts": "2026-11-23T01:32:34Z", "type": "kpatient_fill"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBRASILEIROBSPREAD-26NOV22GOIVIN-GOI3", "track": "kalshi_patient", "ts": "2026-11-23T01:32:35Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.96, "side": "yes", "through": false, "ticker": "KXCBDISRAEL-26NOV23-HOLD", "track": "kalshi_patient", "ts": "2026-11-23T01:32:35Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLOWTSFO-26NOV22-T50", "track": "kalshi_patient", "ts": "2026-11-23T01:32:37Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLRECYDS-26NOV23CINWAS-CINJCHASE1-190", "track": "kalshi_patient", "ts": "2026-11-23T01:32:39Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLWINMARGIN-26NOV23CINWAS-WAS7TO14", "track": "kalshi_patient", "ts": "2026-11-23T01:32:40Z", "type": "kpatient_fill"}
+{"filled": 3.13, "price": 0.92, "side": "no", "through": true, "ticker": "KXUCLGAME-26NOV24SLORBB-SLO", "track": "kalshi_patient", "ts": "2026-11-23T01:32:41Z", "type": "kpatient_fill"}
