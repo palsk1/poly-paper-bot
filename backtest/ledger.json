@@ -2931,6 +2931,32 @@
    "verdict": "Too early to tell",
    "status": "dropped: about 1 bet a day",
    "src": "khourly.py pmrun, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_kxnear15m_bar_2_3_history_3_min_candle_",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on KXNEAR15M, bar 2.3 (history, 3 min, candle fills)",
+   "tries": 6,
+   "bets": 828,
+   "groups": 828,
+   "per100": 0.36,
+   "floor100": -0.47,
+   "verdict": "Ahead, but could be luck",
+   "status": "lead: untested live",
+   "src": "khourly.py run15, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_kxzec15m_bar_2_3_history_3_min_candle_f",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on KXZEC15M, bar 2.3 (history, 3 min, candle fills)",
+   "tries": 6,
+   "bets": 754,
+   "groups": 754,
+   "per100": 0.39,
+   "floor100": -0.37,
+   "verdict": "Ahead, but could be luck",
+   "status": "lead: untested live",
+   "src": "khourly.py run15, backtest/khourly.md"
   }
  ]
 }

@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**230 ideas examined, in about 68,995 versions.** 182 dropped, 48 still being tested or waiting. **Looks real: 6.**
+**232 ideas examined, in about 69,007 versions.** 182 dropped, 50 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 230 ideas that are all worthless, the luckiest one still looks good. With 230 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 232 ideas that are all worthless, the luckiest one still looks good. With 232 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -236,6 +236,8 @@ Why count: if you test 230 ideas that are all worthless, the luckiest one still 
 | 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.0 (history, 3 min, $4 bids) | 60 | 161 | -$3.69 | Losing | dropped | khourly.py run, backtest/khourly.md |
 | 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 105 | -$3.76 | Behind, but could be bad luck | dropped | khourly.py run, backtest/khourly.md |
 | 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.5 (history, 3 min, $4 bids) | 60 | 68 | -$3.06 | Behind, but could be bad luck | dropped | khourly.py run, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on KXNEAR15M, bar 2.3 (history, 3 min, candle fills) | 6 | 828 | +$0.36 | Ahead, but could be luck | lead: untested live | khourly.py run15, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on KXZEC15M, bar 2.3 (history, 3 min, candle fills) | 6 | 754 | +$0.39 | Ahead, but could be luck | lead: untested live | khourly.py run15, backtest/khourly.md |
 | 2026-11-23 | kc_maker_safe_usd on Polymarket daily noon ladder crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 0 |  | Too early to tell | dropped: about 1 bet a day | khourly.py pmrun, backtest/khourly.md |
 | 2026-11-23 | kc_maker_safe_usd on Polymarket hourly up / down crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 31 | +$0.90 | Ahead, but could be luck | dropped: about 1 bet a day | khourly.py pmrun, backtest/khourly.md |
 
