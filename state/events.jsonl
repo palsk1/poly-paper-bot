@@ -31830,3 +31830,12 @@
 {"minutes_left": 3.27, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV230745-45", "track": "kc_maker", "ts": "2026-11-23T12:41:46Z", "type": "kmaker_order"}
 {"minutes_left": 3.27, "price": 0.992, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV230745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T12:41:47Z", "type": "kmaker_order"}
 {"pnl": 0.1, "price": 0.95, "shares": 2.0, "side": "yes", "ticker": "KXHIGHTDC-26NOV22-B64.5", "track": "kalshi_patient", "ts": "2026-11-23T12:41:48Z", "type": "kpatient_result"}
+{"fee": 0.0623, "outcome": "Yes", "price": 0.47, "shares": 5, "title": "Will Elon Musk\u2019s net worth be between $800B and $900B on November 30?", "token": "109180610600324160229205027186687393973623339760586716767992658208576078441597", "track": "w_albert_1953", "ts": "2026-11-23T12:44:08Z", "type": "paper_buy"}
+{"fee": 0.0623, "outcome": "Yes", "price": 0.47, "shares": 5, "title": "Will Elon Musk\u2019s net worth be between $800B and $900B on November 30?", "token": "109180610600324160229205027186687393973623339760586716767992658208576078441597", "track": "wb_albert_1953", "ts": "2026-11-23T12:44:08Z", "type": "paper_buy"}
+{"player": "Niklas Schell", "price": 0.67, "set1": "6-3", "set2_games": 0, "shares": 37, "ticker": "KXATPCHALLENGERMATCH-26NOV23HEMSCH-SCH", "track": "tennis_set", "ts": "2026-11-23T12:45:58Z", "type": "ktennis_buy"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXODIMATCH-26NOV240500NEPPAK-PAK", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXOPENSOURCESHARE-26NOV24-T60.3", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNASDAQ100U-26NOV23H1000-T26249.99", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXNBATEAMTOTAL-26NOV23PORPHI-POR95", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXTRUMPENDORSEMENTS-26NOV27-A5", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXUST10AD-26NOV23-T5.00", "track": "kalshi_patient", "ts": "2026-11-23T12:46:28Z", "type": "kpatient_order"}
