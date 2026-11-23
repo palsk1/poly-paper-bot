@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 81,
-   "sent": 21
+   "sent": 22
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[crypto_late] bought 1 (practice money)",
-   "track": "crypto_late",
-   "ts": "2026-11-15T00:47:35Z"
-  },
   {
    "result": "sent",
    "title": "[crypto_late] bought 1 (practice money)",
@@ -1256,6 +1250,12 @@
    "title": "[fade_rally] sold No at 24c (-$1.01)",
    "track": "fade_rally",
    "ts": "2026-11-23T13:49:21Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.55)",
+   "track": "kc_maker",
+   "ts": "2026-11-23T14:17:45Z"
   }
  ]
 }
