@@ -2866,6 +2866,71 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "tennis.py pm"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_kalshi_hourly_crypto_rounds_bar_2_0_his",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.0 (history, 3 min, $4 bids)",
+   "tries": 60,
+   "bets": 191,
+   "groups": 161,
+   "per100": -3.69,
+   "floor100": -12.33,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "khourly.py run, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_kalshi_hourly_crypto_rounds_bar_2_3_his",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.3 (history, 3 min, $4 bids)",
+   "tries": 60,
+   "bets": 121,
+   "groups": 105,
+   "per100": -3.76,
+   "floor100": -12.95,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "khourly.py run, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_kalshi_hourly_crypto_rounds_bar_2_5_his",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.5 (history, 3 min, $4 bids)",
+   "tries": 60,
+   "bets": 78,
+   "groups": 68,
+   "per100": -3.06,
+   "floor100": -14.67,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "khourly.py run, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_polymarket_hourly_up_down_crypto_rounds",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on Polymarket hourly up / down crypto rounds, bar 2.3 (history, 3 min, $4 bids)",
+   "tries": 60,
+   "bets": 33,
+   "groups": 31,
+   "per100": 0.9,
+   "floor100": -12.66,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped: about 1 bet a day",
+   "src": "khourly.py pmrun, backtest/khourly.md"
+  },
+  {
+   "id": "kc_maker_safe_usd_on_polymarket_daily_noon_ladder_crypto_rou",
+   "date": "2026-11-23",
+   "what": "kc_maker_safe_usd on Polymarket daily noon ladder crypto rounds, bar 2.3 (history, 3 min, $4 bids)",
+   "tries": 60,
+   "bets": 0,
+   "groups": 0,
+   "per100": null,
+   "floor100": null,
+   "verdict": "Too early to tell",
+   "status": "dropped: about 1 bet a day",
+   "src": "khourly.py pmrun, backtest/khourly.md"
   }
  ]
 }

@@ -494,6 +494,8 @@ def run(arg=None):
     import exam
     names = [s for s in SERIES if os.path.exists(p(s, "markets"))]
     Ds = {s: load(s) for s in names}
+    Ds = {s: D for s, D in Ds.items() if D["rounds"]}
+    names = list(Ds)
     days = max((D["to"] - D["from"]) / 86400 for D in Ds.values())
     say(f"Data: {', '.join(names)}; {iso(min(D['from'] for D in Ds.values()))} to {iso(max(D['to'] for D in Ds.values()))} UTC ({days:.0f} days)")
     for s, D in Ds.items():
@@ -573,6 +575,29 @@ def run(arg=None):
             tp = sorted(r["at"] for r in g if r["sold"] is not None)
             say(f"| {s} | {bar} | {len(g) / days:.0f} | {sum(not r['won'] for r in g)} of {len(g)} | {c3(g, 'candle')} | {c3(g, 'touch')} | {len(tp)} | "
                 f"{tp[len(tp) // 2] if tp else 0:,.0f} | {sum(1 for x in tp if x >= 100)} | {sum(1 for x in tp if x >= 1000)} |")
+    say("\n## H2. The 99c line if we were always FIRST in it (we would not be: the best case), bar 2.3, 3 minutes left, scaled up from the rounds whose trade lists were read")
+    say("| Coin | Bid size | Bids a day | Bids that get anything | Lost | $ bought a day | Wins a day, best case | Wins a day counting only sales BELOW our price (the sure ones) | Losses a day (every loser of the full 61 days fills in full) | Best case after losses | Sure fills after losses |")
+    say("|---|---|---|---|---|---|---|---|---|---|---|")
+    for s in [x for x in ("KXBTCD", "KXETHD") if x in names]:
+        g = [r for r in keep(T, 2.3) if s in (r["s"], "all") and r["sold"] is not None and sampled(r["close"])]
+        losers = [r for r in keep(T, 2.3) if r["s"] == s and not r["won"]]
+        dd = days / 3
+        for usd in SIZES:
+            n = lost = 0
+            cost = pnl = sure = 0.0
+            for r in g:
+                need = int(usd / r["price"] + EPS)
+                below = r["sold"] - (r["at"] if r["front"] else 0)
+                got = min(need, int(below + r["at"]))
+                if got < 1 or not r["won"]:
+                    continue
+                n += 1
+                cost += got * r["price"]
+                pnl += got * (1.0 - r["price"])
+                sure += min(need, int(below)) * (1.0 - r["price"])
+            ld = sum(int(usd / r["price"] + EPS) * r["price"] for r in losers) / days
+            say(f"| {s} | ${usd} | {len(g) / dd:.0f} | {n / dd:.0f} | {len(losers)} in {days:.0f} days | ${cost / dd:,.0f} | {money(pnl / dd)} | {money(sure / dd)} | {money(-ld)} | "
+                f"{money(pnl / dd - ld)} | {money(sure / dd - ld)} |")
     say("\n## I. Bidding earlier in the hour (candles only, bar 2.3, all coins)")
     say("| Min left | Bids of 95c-98c: signals / sure fills / lost / per $100 | 99c line: signals a day / lost of all / sure fills: bets, lost, per $100 / best case: bets, lost, per $100 |")
     say("|---|---|---|")
@@ -584,7 +609,7 @@ def run(arg=None):
     tries = 60
     for bar in BARS:
         exam.score(exam_bets(keep(B[3], bar)), f"kc_maker_safe_usd on Kalshi hourly crypto rounds, bar {bar} (history, 3 min, $4 bids)", tries=tries,
-                   src="khourly.py run", log=arg == "log",
+                   src="khourly.py run, backtest/khourly.md", log=arg == "log", status="dropped",
                    note="The real Kalshi bot's rule moved from the 15-minute rounds to the hourly above/below rounds. Tape fills.")
     os.makedirs(CACHE, exist_ok=True)
     save_log("run.txt")
@@ -809,8 +834,8 @@ def pm_run(arg=None):
     for label, g in keepers.items():
         bl = [{"cost": min(int(4 / r["price"] + EPS), int(r["sold"])) * r["price"], "pay": min(int(4 / r["price"] + EPS), int(r["sold"])) * (1.0 if r["won"] else 0.0),
                "t": r["t"], "ev": str(r["close"])} for r in g]
-        exam.score(bl, f"kc_maker_safe_usd on Polymarket {label} crypto rounds, bar 2.3 (history, 3 min, $4 bids)", tries=60, src="khourly.py pmrun",
-                   log=arg == "log", note="The real Kalshi bot's rule on Polymarket's hourly up/down and daily noon ladder. Bid rebuilt from trades.")
+        exam.score(bl, f"kc_maker_safe_usd on Polymarket {label} crypto rounds, bar 2.3 (history, 3 min, $4 bids)", tries=60, src="khourly.py pmrun, backtest/khourly.md",
+                   log=arg == "log", status="dropped: about 1 bet a day", note="The real Kalshi bot's rule on Polymarket's hourly up/down and daily noon ladder. Bid rebuilt from trades.")
     save_log("pmrun.txt")
 
 
@@ -911,9 +936,69 @@ def queue_report(out=None):
                 f"{sum(1 for r in g if r['below'] > 0)} markets | {len(r4)} | {len(r40)} | {sum(1 for r in r4 if r['res'] and r['res'] != r['side'])} |")
 
 
+# ================================================================ two more 15-minute coins (probe khr_more15)
+MORE15 = {"KXNEAR15M": "NEARUSDT", "KXZEC15M": "ZECUSDT"}
+CACHE15 = os.path.join(CACHE, "kc15")
+
+
+def more15(arg=None):
+    """Kalshi also lists 15-minute rounds for NEAR and Zcash, which the bots don't bid on. Same download as kcrypto.py
+    fetch, into bt_cache/khr/kc15/."""
+    kc.SERIES, kc.CACHE = dict(MORE15), CACHE15
+    kc.fetch(int(arg or 61))
+
+
+def run15(arg=None):
+    """The 15-minute rule (kcrypto.py's own replay: bid one tick in front at 95c+, 3 minutes left, 'fair' candle fills)
+    on NEAR and Zcash next to the 7 coins the bots already bid on, same days, by cushion bar."""
+    import exam
+    sets = [("new", CACHE15, MORE15)]
+    if os.path.exists(os.path.join(bot.ROOT, "bt_cache", "kc", "candles_KXBTC15M.json.gz")):
+        sets.append(("the 7 we have", os.path.join(bot.ROOT, "bt_cache", "kc"), dict(kc.SERIES)))
+    allr = {}
+    for label, cache, series in sets:
+        kc.CACHE = cache
+        for sname in series:
+            ws = kc.load_windows([sname])
+            if not ws:
+                continue
+            sigs = kc.signals(ws, 3)
+            bys = {x["w"]["t"]: x for x in sigs}
+            rows = []
+            for r in kc.variant_trades(sigs, "improve", 0.95, None):
+                x = bys[r["tk"]]
+                r["z"], r["zu"] = kc.zscore(x["w"], x["t"], 3, x["side"]), kc.zscore_usd(x["w"], x["t"], 3, x["side"])
+                if r["fills"][1] and r["z"] is not None and r["zu"] is not None:
+                    rows.append(r)
+            allr[sname] = (label, rows, ws)
+    t_lo = max(min(w["close"] for w in ws) for _, _, ws in allr.values())
+    t_hi = min(max(w["close"] for w in ws) for _, _, ws in allr.values())
+    days = (t_hi - t_lo) / 86400
+    say(f"\n## N. Two more 15-minute coins: the same rule, 3 minutes left, candle fills, {iso(t_lo)} to {iso(t_hi)} UTC ({days:.0f} days, $4 bids)")
+    say("| Coin | Bar | Bets | Lost | 1 loss per | Per $100 | Profit at $4 bids | Bets a day | $ a day | Contracts a round (middle) |")
+    say("|---|---|---|---|---|---|---|---|---|---|")
+    for sname, (label, rows, ws) in allr.items():
+        vv = sorted(w["vol"] for w in ws if t_lo <= w["close"] <= t_hi)
+        for bar in BARS:
+            g = [r for r in rows if t_lo <= r["t"] <= t_hi and r["z"] >= 2 and r["zu"] >= bar]
+            lost = sum(not r["won"] for r in g)
+            cost = sum(r["price"] for r in g)
+            pnl = sum((1.0 if r["won"] else 0.0) - r["price"] for r in g)
+            usd = sum(((1.0 if r["won"] else 0.0) - r["price"]) / r["price"] * 4 for r in g)
+            say(f"| {sname} ({label}) | {bar} | {len(g)} | {lost} | {len(g) / lost if lost else 0:.0f} | {money(pnl / cost * 100 if cost else 0)} | {money(usd)} | "
+                f"{len(g) / days:.1f} | {money(usd / days)} | {vv[len(vv) // 2] if vv else 0:,.0f} |")
+    for sname in MORE15:
+        if sname in allr:
+            g = [r for r in allr[sname][1] if r["z"] >= 2 and r["zu"] >= 2.3]
+            exam.score([{"cost": r["price"] * 4, "pay": 4.0 if r["won"] else 0.0, "t": r["t"], "ev": r["t"]} for r in g],
+                       f"kc_maker_safe_usd on {sname}, bar 2.3 (history, 3 min, candle fills)", tries=6, src="khourly.py run15, backtest/khourly.md",
+                       log=arg == "log", status="lead: untested live", note="The real Kalshi bot's rule on a 15-minute coin it does not bid on yet.")
+    save_log("run15.txt")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = None
     if "_" in cmd:
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report}[cmd]()
+    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report, "more15": lambda: more15(arg), "run15": lambda: run15(arg)}[cmd]()
