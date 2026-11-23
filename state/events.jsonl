@@ -30547,3 +30547,8 @@
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNFLTD-26NOV22TBDET-DETJWILLIAMS1-2", "track": "kalshi_patient", "ts": "2026-11-23T00:03:05Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNFLTD-26NOV22TENDAL-DALJMITCHELL84-1", "track": "kalshi_patient", "ts": "2026-11-23T00:03:05Z", "type": "kpatient_result"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXNFL1HFT-26NOV22NYJLAC-TIENYJ", "track": "kalshi_patient", "ts": "2026-11-23T00:07:34Z", "type": "kpatient_result"}
+{"fee": 0.0569, "outcome": "No", "price": 0.65, "shares": 5, "title": "Will Anthropic's valuation hit (HIGH) $1.6T by December 31?", "token": "60471718194314967330094092834471090621769102855349289401008779993561666676943", "track": "w_tokor", "ts": "2026-11-23T00:10:44Z", "type": "paper_buy"}
+{"fee": 0.0569, "outcome": "No", "price": 0.65, "shares": 5, "title": "Will Anthropic's valuation hit (HIGH) $1.6T by December 31?", "token": "60471718194314967330094092834471090621769102855349289401008779993561666676943", "track": "wb_tokor", "ts": "2026-11-23T00:10:45Z", "type": "paper_buy"}
+{"minutes_left": 2.74, "price": 0.982, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV221915-15", "track": "kc_maker", "ts": "2026-11-23T00:12:16Z", "type": "kmaker_order"}
+{"minutes_left": 2.74, "price": 0.982, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV221915-15", "track": "kc_maker_safe", "ts": "2026-11-23T00:12:16Z", "type": "kmaker_order"}
+{"minutes_left": 2.74, "price": 0.955, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV221915-15", "track": "kc_maker", "ts": "2026-11-23T00:12:17Z", "type": "kmaker_order"}
