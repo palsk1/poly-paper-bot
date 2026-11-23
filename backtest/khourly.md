@@ -272,6 +272,72 @@ No bets to grade.
 
 _To be filled in when the 4-hour watch finishes (`khourly.py queue`, probe `khr_queue_250`)._
 
+## Two more 15-minute coins: NEAR and Zcash (the growth idea that is left)
+
+Kalshi also runs 15-minute rounds for NEAR and Zcash. The bots don't bid on them. Each trades about as much
+as BNB or HYPE, which the real bot already uses. Same rule, same 62 days, next to the 7 coins we have. Fills
+here use the older, kinder candle rule (not trade lists), so read the dollars as "about", and compare coins
+with each other rather than with the real bot's results.
+
+- **NEAR at the 2.3 bar:** 763 bets, 2 lost, about +$10 in 62 days at $4 bids (17c a day).
+- **Zcash at the 2.3 bar:** 707 bets, 1 lost, about +$11 (19c a day).
+- Both look like the small coins the bot already bids on (BNB +19c a day, HYPE +27c a day in the same table).
+  So adding both would add roughly a quarter to a third on top of today's bot. Exam verdict for both: "Ahead,
+  but could be luck". No surprise: a 2-bets-lost difference decides the whole result.
+- **Side finding, bitcoin:** in this same table the bitcoin 15-minute round is the only coin that is behind
+  (6 lost of 552 at the 2.3 bar, about -$6). It is also the most crowded round by far. Worth a look at the
+  real bot's own bitcoin results before anything is changed.
+- Nothing was changed. Adding coins to the real bot or the paper tracks is Jan's call.
+
+## N. Two more 15-minute coins: the same rule, 3 minutes left, candle fills, 2026-09-23 22:30 to 2026-11-19 16:45 UTC (57 days, $4 bids)
+| Coin | Bar | Bets | Lost | 1 loss per | Per $100 | Profit at $4 bids | Bets a day | $ a day | Contracts a round (middle) |
+|---|---|---|---|---|---|---|---|---|---|
+| KXNEAR15M (new) | 2.0 | 939 | 3 | 313 | +$0.38 | +$14.38 | 16.5 | +$0.25 | 24,820 |
+| KXNEAR15M (new) | 2.3 | 763 | 2 | 382 | +$0.34 | +$10.33 | 13.4 | +$0.18 | 24,820 |
+| KXNEAR15M (new) | 2.5 | 637 | 1 | 637 | +$0.38 | +$9.82 | 11.2 | +$0.17 | 24,820 |
+| KXZEC15M (new) | 2.0 | 869 | 2 | 434 | +$0.37 | +$12.76 | 15.3 | +$0.22 | 27,587 |
+| KXZEC15M (new) | 2.3 | 707 | 1 | 707 | +$0.38 | +$10.71 | 12.5 | +$0.19 | 27,587 |
+| KXZEC15M (new) | 2.5 | 617 | 1 | 617 | +$0.31 | +$7.70 | 10.9 | +$0.14 | 27,587 |
+| KXBTC15M (the 7 we have) | 2.0 | 681 | 9 | 76 | -$0.38 | -$10.67 | 12.0 | -$0.19 | 3,119,607 |
+| KXBTC15M (the 7 we have) | 2.3 | 552 | 6 | 92 | -$0.26 | -$5.82 | 9.7 | -$0.10 | 3,119,607 |
+| KXBTC15M (the 7 we have) | 2.5 | 483 | 6 | 80 | -$0.46 | -$9.01 | 8.5 | -$0.16 | 3,119,607 |
+| KXETH15M (the 7 we have) | 2.0 | 790 | 4 | 198 | +$0.19 | +$6.06 | 13.9 | +$0.11 | 196,945 |
+| KXETH15M (the 7 we have) | 2.3 | 636 | 2 | 318 | +$0.29 | +$7.28 | 11.2 | +$0.13 | 196,945 |
+| KXETH15M (the 7 we have) | 2.5 | 548 | 2 | 274 | +$0.19 | +$4.21 | 9.7 | +$0.07 | 196,945 |
+| KXSOL15M (the 7 we have) | 2.0 | 911 | 2 | 456 | +$0.47 | +$17.29 | 16.0 | +$0.30 | 79,089 |
+| KXSOL15M (the 7 we have) | 2.3 | 767 | 0 | 0 | +$0.61 | +$18.74 | 13.5 | +$0.33 | 79,089 |
+| KXSOL15M (the 7 we have) | 2.5 | 674 | 0 | 0 | +$0.55 | +$14.82 | 11.9 | +$0.26 | 79,089 |
+| KXXRP15M (the 7 we have) | 2.0 | 885 | 4 | 221 | +$0.32 | +$11.39 | 15.6 | +$0.20 | 97,680 |
+| KXXRP15M (the 7 we have) | 2.3 | 750 | 2 | 375 | +$0.42 | +$12.73 | 13.2 | +$0.22 | 97,680 |
+| KXXRP15M (the 7 we have) | 2.5 | 651 | 0 | 0 | +$0.63 | +$16.46 | 11.5 | +$0.29 | 97,680 |
+| KXDOGE15M (the 7 we have) | 2.0 | 932 | 0 | 0 | +$0.70 | +$26.19 | 16.4 | +$0.46 | 48,082 |
+| KXDOGE15M (the 7 we have) | 2.3 | 780 | 0 | 0 | +$0.60 | +$18.66 | 13.7 | +$0.33 | 48,082 |
+| KXDOGE15M (the 7 we have) | 2.5 | 669 | 0 | 0 | +$0.55 | +$14.70 | 11.8 | +$0.26 | 48,082 |
+| KXHYPE15M (the 7 we have) | 2.0 | 795 | 1 | 795 | +$0.56 | +$17.74 | 14.0 | +$0.31 | 31,427 |
+| KXHYPE15M (the 7 we have) | 2.3 | 652 | 0 | 0 | +$0.59 | +$15.45 | 11.5 | +$0.27 | 31,427 |
+| KXHYPE15M (the 7 we have) | 2.5 | 562 | 0 | 0 | +$0.54 | +$12.26 | 9.9 | +$0.22 | 31,427 |
+| KXBNB15M (the 7 we have) | 2.0 | 716 | 2 | 358 | +$0.43 | +$12.49 | 12.6 | +$0.22 | 22,140 |
+| KXBNB15M (the 7 we have) | 2.3 | 589 | 1 | 589 | +$0.45 | +$10.68 | 10.4 | +$0.19 | 22,140 |
+| KXBNB15M (the 7 we have) | 2.5 | 496 | 1 | 496 | +$0.36 | +$7.14 | 8.7 | +$0.13 | 22,140 |
+
+=== EXAM: kc_maker_safe_usd on KXNEAR15M, bar 2.3 (history, 3 min, candle fills) ===
+Verdict: Ahead, but could be luck
+Bets: 828 bets on 828 events over 62 days. Counted as 828 separate bets (bets on the same event count once).
+Result: +$0.36 per $100 bet (total +$11.78 on $3292.22). Luck range +$0.07 to +$0.64.
+Halves: first +$0.68, second +$0.04 per $100. Both ahead.
+Luck bar: this is 1 of 236 tries. The luckiest of 236 worthless ideas would show about +$0.70 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$0.47. Below $0: not proven.
+To prove it: about 6,518 more separate bets like these. At its pace (13.6 separate bets a day) that is around 2028-03-18, after 2027-01-01: too slow for the 1 Jan decision.
+
+=== EXAM: kc_maker_safe_usd on KXZEC15M, bar 2.3 (history, 3 min, candle fills) ===
+Verdict: Ahead, but could be luck
+Bets: 754 bets on 754 events over 62 days. Counted as 754 separate bets (bets on the same event count once).
+Result: +$0.39 per $100 bet (total +$11.67 on $3000.33). Luck range +$0.17 to +$0.61.
+Halves: first +$0.57, second +$0.21 per $100. Both ahead.
+Luck bar: this is 1 of 236 tries. The luckiest of 236 worthless ideas would show about +$0.63 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$0.37. Below $0: not proven.
+To prove it: about 3,814 more separate bets like these. At its pace (12.4 separate bets a day) that is around 2027-09-28, after 2027-01-01: too slow for the 1 Jan decision.
+
 ## How it was tested, and what could be off
 
 - 61 days (24 Sep-23 Nov 2026, as far back as Kalshi's normal endpoints go), every hourly "above X" round of
