@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 66,
-   "sent": 18
+   "sent": 19
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
-   "track": null,
-   "ts": "2026-11-14T22:40:42Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade] sold No at 31c (-$2.51)",
@@ -1256,6 +1250,12 @@
    "title": "[soccer_draw] bought 3 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-23T09:22:02Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-23T10:29:51Z"
   }
  ]
 }
