@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 108,
-   "sent": 24
+   "sent": 25
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[crypto_late] bought 3 (practice money)",
-   "track": "crypto_late",
-   "ts": "2026-11-15T01:36:44Z"
-  },
   {
    "result": "sent",
    "title": "[crypto_late] bought 1 (practice money)",
@@ -1256,6 +1250,12 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.10)",
    "track": "kalshi_patient",
    "ts": "2026-11-23T16:05:49Z"
+  },
+  {
+   "result": "sent",
+   "title": "[stock_no] bought 1 (practice money)",
+   "track": "stock_no",
+   "ts": "2026-11-23T16:37:35Z"
   }
  ]
 }
