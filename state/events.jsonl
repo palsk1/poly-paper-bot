@@ -31808,3 +31808,4 @@
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV2307-B61250", "track": "kalshi_patient", "ts": "2026-11-23T12:07:24Z", "type": "kpatient_result"}
 {"pnl": -9.4, "price": 0.94, "shares": 10.0, "side": "yes", "ticker": "KXHIGHTEWR-26NOV22-T61", "track": "kalshi_patient", "ts": "2026-11-23T12:07:25Z", "type": "kpatient_result"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXLOWTNYC-26NOV22-B54.5", "track": "kalshi_patient", "ts": "2026-11-23T12:07:25Z", "type": "kpatient_result"}
+{"fee": 0.002, "outcome": "No", "price": 0.959, "shares": 5, "title": "Will the highest temperature in Amsterdam be 6\u00b0C on November 24?", "token": "97706447179687871176802531058174480100730692044961595519808754517501511113360", "track": "endgame_sell98", "ts": "2026-11-23T12:11:45Z", "type": "paper_buy"}
