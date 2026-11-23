@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 5,
-   "sent": 3
+   "sent": 4
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.30)",
-   "track": "kalshi_patient",
-   "ts": "2026-11-14T04:37:34Z"
-  },
   {
    "result": "sent",
    "title": "[arb] locked in 2.1c a share",
@@ -1256,6 +1250,12 @@
    "title": "[panic_fade_4c] sold No at 84c (+$0.16)",
    "track": "panic_fade_4c",
    "ts": "2026-11-23T00:29:03Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 1 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-23T00:53:04Z"
   }
  ]
 }
