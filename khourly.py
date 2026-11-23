@@ -324,9 +324,441 @@ def fetch(arg=None):
     save_log(f"fetch_{'_'.join(names)[:60]}.txt")
 
 
+# ================================================================ replay
+# The rule, written down before the first result (23 Nov): exactly kc_maker_safe_usd, moved to the hourly rounds.
+#   - with M minutes left (main case M = 3, as in the 15-minute history test), in every "above X" market of the round:
+#     the leading side (middle price 50c+), best bid 95c+, bid one tick (1c here) above it, or join it when there is
+#     no room under the ask. Hold to the result. Makers pay no fee on these series (fee_type quadratic, 23 Nov).
+#   - cushion: Binance sits 2+ "typical moves until the close" on our side of the line (kcrypto.zscore), AND still
+#     at least BAR (2.0 paper, 2.3 real bot since 23 Nov, 2.5) after moving Binance onto Kalshi's price scale. The
+#     15-minute rule reads the Binance-vs-Kalshi gap at the window's start; an hourly round has no such start line,
+#     so the gap is read at the last quarter hour from Kalshi's own number (the same moment, the same number).
+#   - fills: "tape" = only contracts really sold into bids after our bid: everything sold BELOW our price, plus sales
+#     AT our price when we were alone at a new price. Sales at a price we merely joined are not counted (the line in
+#     front of us is unknown), so this is the careful end. "candle" = kcrypto.py's 'fair' model, for comparison.
+BARS = (2.0, 2.3, 2.5)
+SIZES = (4, 10, 20, 40)
+EPS = 1e-9
+
+
+def load(series):
+    mk = kc.rjson(p(series, "markets"), {}) or {}
+    cs = kc.rjson(p(series, "candles"), {}) or {}
+    idx = {int(k): v for k, v in ((kc.rjson(p(series, "idx"), {}) or {}).get("min") or {}).items()}
+    spot = kc.rjson(p(series, "spot"), {}) or {}
+    tr = kc.rjson(p(series, "trades"), {}) or {}
+    ws = []
+    for m in mk.get("m", []):
+        c = {r[0]: r[1:] for r in cs.get(m["t"]) or [] if r and r[0]}
+        if not c:
+            continue
+        kc.fix_cents(c)
+        ws.append({**m, "s": series, "c": c, "spot": spot})
+    return {"series": series, "w": ws, "rounds": mk.get("rounds", {}), "idx": idx, "spot": spot, "tr": tr,
+            "from": mk.get("from"), "to": mk.get("to")}
+
+
+def gap_at(D, t):
+    """Binance / Kalshi's number at the last quarter hour at or before t (None without data)."""
+    t0 = t - t % 900
+    a, b, k = D["spot"].get(str(t0)), D["spot"].get(str(t0 - 60)), D["idx"].get(t0)
+    if not a or not k:
+        return None
+    return ((a + b) / 2 if b else a) / k
+
+
+def tape_fill(tr, t_place, side, price, front):
+    """Contracts sold into bids we would have been in front of, after t_place. [below our price, at our price]."""
+    below = at = 0.0
+    for ts, yp, n, taker in tr or []:
+        if ts <= t_place:
+            continue
+        if taker != ("n" if side == "yes" else "y"):
+            continue
+        px = yp if side == "yes" else 1 - yp
+        if px < price - EPS:
+            below += n
+        elif px <= price + EPS:
+            at += n
+    return below + (at if front else 0.0), at
+
+
+def bets(D, minutes=3, level=0.95, tick=0.01):
+    """One row per market where the rule could bid with `minutes` left; cushions and fills attached."""
+    import kdocs
+    out = []
+    for w in D["w"]:
+        t = w["close"] - 60 * minutes
+        row = w["c"].get(t)
+        side = kc.leader(row) if row else None
+        if not side:
+            continue
+        bid, ask, _, _ = kc.side_view(row, side)
+        if bid < level - EPS:
+            continue
+        price = round(bid + tick, 4)
+        front = price < ask - EPS
+        if not front:
+            price = bid
+        z = kc.zscore(w, t, minutes, side)
+        g = gap_at(D, t)
+        zu = kc.zscore(dict(w, strike=w["strike"] * g), t, minutes, side) if g else None
+        zk = kdocs.zk_minute(D["idx"], w, t, minutes, side)
+        if z is None or zu is None:
+            continue
+        sold, at = tape_fill(D["tr"].get(w["t"]), t, side, price, front) if w["t"] in D["tr"] else (None, None)
+        out.append({"tk": w["t"], "ev": w["ev"], "s": w["s"], "t": t, "close": w["close"], "side": side, "bid": bid, "ask": ask,
+                    "price": price, "front": front, "z": z, "zu": zu, "zk": zk, "won": w["res"] == side, "sold": sold, "at": at,
+                    "candle": kc.fill_after(w, t, side, price, front)[1], "m": minutes,
+                    "long": (w["close"] - (w.get("open") or w["close"])) > 7200})
+    return out
+
+
+def keep(rows, bar, zmin=2.0):
+    return [r for r in rows if r["z"] >= zmin and r["zu"] >= bar]
+
+
+def nearest(rows):
+    """One bet per round and coin: the passing market whose price is lowest (the one nearest the line)."""
+    best = {}
+    for r in rows:
+        k = (r["ev"], r["s"])
+        if k not in best or r["price"] < best[k]["price"]:
+            best[k] = r
+    return list(best.values())
+
+
+def card(rows, usd=4, model="tape"):
+    """Money numbers for bids of `usd` each. tape: contracts filled = what was really sold to us, at most our size."""
+    n = lost = 0
+    cost = pnl = 0.0
+    full = 0
+    out_by_round = collections.defaultdict(float)
+    for r in rows:
+        need = int(usd / r["price"] + EPS)
+        if need < 1:
+            continue
+        if model == "tape":
+            if r["sold"] is None:
+                continue
+            got = min(need, int(r["sold"]))
+        else:
+            got = need if r["candle"] else 0
+        if got < 1:
+            continue
+        n += 1
+        full += got >= need
+        lost += not r["won"]
+        cost += got * r["price"]
+        pnl += got * ((1.0 if r["won"] else 0.0) - r["price"])
+        out_by_round[r["close"]] += got * r["price"]
+    o = sorted(out_by_round.values())
+    return {"signals": len(rows), "bets": n, "full": full, "lost": lost, "cost": cost, "pnl": pnl,
+            "per100": pnl / cost * 100 if cost else 0.0, "out_max": o[-1] if o else 0.0, "out_mid": o[len(o) // 2] if o else 0.0}
+
+
+def money(x, d=2):
+    return f"{'+' if x >= 0 else '-'}${abs(x):,.{d}f}"
+
+
+def exam_bets(rows, usd=4):
+    out = []
+    for r in rows:
+        need = int(usd / r["price"] + EPS)
+        got = min(need, int(r["sold"] or 0))
+        if got >= 1:
+            out.append({"cost": got * r["price"], "pay": got * 1.0 if r["won"] else 0.0, "t": r["t"], "ev": str(r["close"])})
+    return out
+
+
+def run(arg=None):
+    import exam
+    names = [s for s in SERIES if os.path.exists(p(s, "markets"))]
+    Ds = {s: load(s) for s in names}
+    days = max((D["to"] - D["from"]) / 86400 for D in Ds.values())
+    say(f"Data: {', '.join(names)}; {iso(min(D['from'] for D in Ds.values()))} to {iso(max(D['to'] for D in Ds.values()))} UTC ({days:.0f} days)")
+    for s, D in Ds.items():
+        rv = sorted(r["vol"] for r in D["rounds"].values())
+        lg = sum(1 for r in D["rounds"].values() if (r["close"] - (r["open"] or r["close"])) > 7200)
+        say(f"  {s}: {len(D['rounds'])} rounds ({lg} open longer than 2 hours), contracts a round: middle {rv[len(rv) // 2]:,.0f}, "
+            f"busiest {rv[-1]:,.0f}; {len(D['w'])} markets with candles, {len(D['tr'])} trade lists, {len(D['idx'])} minutes of Kalshi's number")
+    B = {m: [r for D in Ds.values() for r in bets(D, m)] for m in (2, 3, 5)}
+    say("\n## A. All coins together: minutes left x cushion bar ($4 bids, tape fills)")
+    say("| Min left | Bar | Signals | Bets filled | Filled in full | Lost | Per $100 | Profit | Bets a day | $ a day | Most $ out in one round |")
+    say("|---|---|---|---|---|---|---|---|---|---|---|")
+    for m in (2, 3, 5):
+        for bar in (None,) + BARS:
+            rows = B[m] if bar is None else keep(B[m], bar)
+            c = card(rows)
+            say(f"| {m} | {'no check' if bar is None else bar} | {c['signals']} | {c['bets']} | {c['full']} | {c['lost']} | {money(c['per100'])} | {money(c['pnl'])} | "
+                f"{c['bets'] / days:.1f} | {money(c['pnl'] / days)} | ${c['out_max']:.0f} |")
+    say("\n## B. By coin, 3 minutes left ($4 bids, tape fills)")
+    say("| Coin | Bar | Signals | Bets filled | Lost | Per $100 | Profit | Bets a day | $ a day |")
+    say("|---|---|---|---|---|---|---|---|---|")
+    for s in names:
+        for bar in BARS:
+            c = card([r for r in keep(B[3], bar) if r["s"] == s])
+            say(f"| {s} | {bar} | {c['signals']} | {c['bets']} | {c['lost']} | {money(c['per100'])} | {money(c['pnl'])} | {c['bets'] / days:.1f} | {money(c['pnl'] / days)} |")
+    say("\n## C. Bid size, 3 minutes left, all coins (tape fills: only what was really sold to us)")
+    say("| Bar | Bid size | Bets with any fill | Filled in full | Lost | $ really bought | Per $100 | Profit | $ a day | Most $ out in one round | Usual $ out in a round |")
+    say("|---|---|---|---|---|---|---|---|---|---|---|")
+    for bar in BARS:
+        for usd in SIZES:
+            c = card(keep(B[3], bar), usd)
+            say(f"| {bar} | ${usd} | {c['bets']} | {c['full']} | {c['lost']} | ${c['cost']:,.0f} | {money(c['per100'])} | {money(c['pnl'])} | {money(c['pnl'] / days)} | "
+                f"${c['out_max']:.0f} | ${c['out_mid']:.0f} |")
+    say("\n## D. By our price, 3 minutes left, bar 2.3 ($4 bids)")
+    say("| Our price | Signals | Front of the line | Bets filled (tape) | Lost | Per $100 | Profit | Candle-model bets | Candle per $100 |")
+    say("|---|---|---|---|---|---|---|---|---|")
+    for lo, hi in ((0.95, 0.96), (0.97, 0.97), (0.98, 0.98), (0.99, 0.99)):
+        rows = [r for r in keep(B[3], 2.3) if lo - EPS <= r["price"] <= hi + EPS]
+        c, c2 = card(rows), card(rows, model="candle")
+        say(f"| {lo * 100:.0f}c{'' if lo == hi else f'-{hi * 100:.0f}c'} | {c['signals']} | {sum(r['front'] for r in rows)} | {c['bets']} | {c['lost']} | {money(c['per100'])} | {money(c['pnl'])} | "
+            f"{c2['bets']} | {money(c2['per100'])} |")
+    say("\n## E. Other ways to cut it, 3 minutes left ($4 bids, tape fills)")
+    say("| Version | Signals | Bets filled | Lost | Per $100 | Profit | $ a day |")
+    say("|---|---|---|---|---|---|---|")
+    cuts = [("bar 2.3, candle fills (kcrypto 'fair' model)", keep(B[3], 2.3), "candle"),
+            ("bar 2.3, one bet a round and coin (nearest the line)", nearest(keep(B[3], 2.3)), "tape"),
+            ("bar 2.3, only prices under 99c", [r for r in keep(B[3], 2.3) if r["price"] < 0.985], "tape"),
+            ("bar 2.3, only yes side", [r for r in keep(B[3], 2.3) if r["side"] == "yes"], "tape"),
+            ("bar 2.3, only no side", [r for r in keep(B[3], 2.3) if r["side"] == "no"], "tape"),
+            ("Binance check only, 2.0 (kc_maker_safe)", [r for r in B[3] if r["z"] >= 2], "tape"),
+            ("Kalshi's own number 2.0 (kprice twin)", [r for r in B[3] if r["zk"] is not None and r["zk"] >= 2], "tape"),
+            ("Kalshi's own number 3.0", [r for r in B[3] if r["zk"] is not None and r["zk"] >= 3], "tape"),
+            ("bar 3.0", keep(B[3], 3.0), "tape"), ("bar 4.0", keep(B[3], 4.0), "tape"),
+            ("bar 2.3, rounds open longer than 2 hours (the 'daily' ones)", [r for r in keep(B[3], 2.3) if r["long"]], "tape")]
+    for label, rows, model in cuts:
+        c = card(rows, model=model)
+        say(f"| {label} | {c['signals']} | {c['bets']} | {c['lost']} | {money(c['per100'])} | {money(c['pnl'])} | {money(c['pnl'] / days)} |")
+    say("\n## F. Every lost bet, 3 minutes left, bar 2.0 (tape fills)")
+    say("| Round closes (UTC) | Market | Side | Our price | Cushion Binance | After the gap fix | On Kalshi's number | Sold to us |")
+    say("|---|---|---|---|---|---|---|---|")
+    for r in sorted(keep(B[3], 2.0), key=lambda r: r["t"]):
+        if not r["won"] and r["sold"]:
+            say(f"| {iso(r['close'])} | {r['tk']} | {r['side']} | {r['price'] * 100:.0f}c | {r['z']:.2f} | {r['zu']:.2f} | {'' if r['zk'] is None else format(r['zk'], '.2f')} | {r['sold']:,.0f} |")
+    say("\n## G. The exam")
+    tries = 60
+    for bar in BARS:
+        exam.score(exam_bets(keep(B[3], bar)), f"kc_maker_safe_usd on Kalshi hourly crypto rounds, bar {bar} (history, 3 min, $4 bids)", tries=tries,
+                   src="khourly.py run", log=arg == "log",
+                   note="The real Kalshi bot's rule moved from the 15-minute rounds to the hourly above/below rounds. Tape fills.")
+    os.makedirs(CACHE, exist_ok=True)
+    save_log("run.txt")
+    return B
+
+
+# ================================================================ Polymarket's hourly and daily crypto rounds
+# Hourly: "<coin>-updown-1h-<start>", Up if Chainlink's price at the end is at or above the price at the start.
+# Daily: "<coin>-above-on-<month>-<day>[-<year>]", a ladder of "above $X" lines, read off Binance's one-minute close
+# at noon New York time. Makers pay no fee on either. No order-book history exists, so (as in kcrypto.py pm_bets)
+# the bid is rebuilt from the trades of the 15 seconds before we look, and filled only by later real trades.
+PM_COINS = {"btc": ("bitcoin", "KXBTCD"), "eth": ("ethereum", "KXETHD"), "sol": ("solana", "KXSOLD"), "xrp": ("xrp", "KXXRPD")}
+PM_KEEP = 480
+
+
+def _pm_rows(slugs):
+    from concurrent.futures import ThreadPoolExecutor
+
+    def batch(chunk):
+        try:
+            return bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/markets", {"slug": chunk, "closed": "true", "limit": 100}), "markets", "data")
+        except Exception as e:
+            print(f"  gamma batch failed: {str(e)[:100]}")
+            return []
+    out = []
+    with ThreadPoolExecutor(6) as ex:
+        for rows in ex.map(batch, [slugs[i:i + 20] for i in range(0, len(slugs), 20)]):
+            out += [m for m in rows if isinstance(m, dict)]
+    return out
+
+
+def _pm_result(m, first):
+    try:
+        names = json.loads(m.get("outcomes") or "[]")
+        prices = [float(x) for x in json.loads(m.get("outcomePrices") or "[]")]
+    except Exception:
+        return None
+    i = [j for j, n in enumerate(names) if str(n).lower() == first]
+    if len(prices) == 2 and sorted(prices) == [0.0, 1.0] and i and m.get("conditionId"):
+        return int(prices[i[0]] == 1.0)
+    return None
+
+
+def _pm_tape(cid, close, first, max_pages=40):
+    """Trades of the last PM_KEEP seconds as [seconds before close, price of the first outcome, size]; (rows, complete)."""
+    rows, cur, done = [], None, False
+    for _ in range(max_pages):
+        q = {"condition_id": cid, "limit": 500}
+        if cur:
+            q["cursor"] = cur
+        res = bot.http_json(f"{bot.DATA}/v2/trades", q)
+        page = bot.envelope_rows(res, "data", "trades")
+        cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
+        ts = []
+        for r in page:
+            t = bot.fnum(r.get("timestamp"))
+            t = t / 1000 if t > 1e11 else t
+            px, sz = bot.fnum(r.get("price")), bot.fnum(r.get("size"))
+            ts.append(t)
+            if not 0 < px < 1 or sz <= 0 or not (close - PM_KEEP <= t <= close):
+                continue
+            rows.append([round(close - t, 1), round(px if str(r.get("outcome", "")).lower() == first else 1 - px, 4), round(sz, 2)])
+        newest_first = len(ts) < 2 or ts[0] >= ts[-1]
+        if not page or not cur or (newest_first and ts and min(ts) < close - PM_KEEP):
+            done = True
+            break
+    rows.sort(key=lambda r: -r[0])
+    return rows, done
+
+
+def pm_fetch(arg=None):
+    from concurrent.futures import ThreadPoolExecutor
+    days_h, days_d = 30, 61
+    os.makedirs(CACHE, exist_ok=True)
+    now = int(time.time()) - 7200
+    for short, (long, _) in PM_COINS.items():
+        t_s = time.time()
+        path = os.path.join(CACHE, f"pm_{short}.json.gz")
+        have = kc.rjson(path, {}) or {}
+        jobs = []
+        starts = [st for st in range(now - now % 3600 - days_h * 86400, now - 3600, 3600) if f"h{st + 3600}" not in have]
+        for m in _pm_rows([f"{short}-updown-1h-{st}" for st in starts]):
+            res = _pm_result(m, "up")
+            if res is None:
+                continue
+            st = int(str(m.get("slug")).rsplit("-", 1)[1])
+            jobs.append((f"h{st + 3600}", m["conditionId"], st + 3600, "up", {"kind": "h", "close": st + 3600, "p": res, "vol": bot.fnum(m.get("volume"), 0)}))
+        slugs = []
+        for d in range(1, days_d + 1):
+            day = dt.datetime.fromtimestamp(now - d * 86400, UTC)
+            slugs += [f"{long}-above-on-{day.strftime('%B').lower()}-{day.day}", f"{long}-above-on-{day.strftime('%B').lower()}-{day.day}-{day.year}"]
+        evs = []
+        for i in range(0, len(slugs), 20):
+            try:
+                evs += [e for e in bot.envelope_rows(bot.http_json(f"{bot.GAMMA}/events", {"slug": slugs[i:i + 20], "closed": "true", "limit": 100}), "events", "data") if isinstance(e, dict)]
+            except Exception as e:
+                print("  gamma events failed", str(e)[:100])
+        for e in evs:
+            for m in e.get("markets") or []:
+                end = kc.tsec(m.get("endDate"))
+                k = re.search(r"above \$([\d,.]+)", str(m.get("question")))
+                res = _pm_result(m, "yes")
+                if not end or end < now - (days_d + 2) * 86400 or not k or res is None or f"d{m.get('conditionId')}" in have:
+                    continue
+                jobs.append((f"d{m['conditionId']}", m["conditionId"], end, "yes", {"kind": "d", "close": end, "p": res, "strike": float(k.group(1).replace(",", "")),
+                                                                                    "vol": bot.fnum(m.get("volume"), 0), "ev": e.get("slug")}))
+
+        def one(j):
+            try:
+                tr, ok = _pm_tape(j[1], j[2], j[3])
+                return j, tr, ok
+            except Exception as ex_:
+                return j, ex_, False
+        bad = 0
+        with ThreadPoolExecutor(kc.WORKERS) as ex:
+            for i, (j, tr, ok) in enumerate(ex.map(one, jobs)):
+                if isinstance(tr, Exception):
+                    bad += 1
+                    continue
+                have[j[0]] = dict(j[4], tr=tr, ok=ok)
+                if i and i % 1000 == 0:
+                    kc.wjson(path, have)
+        kc.wjson(path, have)
+        hh = [v for v in have.values() if v["kind"] == "h"]
+        dd = [v for v in have.values() if v["kind"] == "d"]
+        say(f"Polymarket {short}: {len(hh)} hourly rounds (${sum(v['vol'] for v in hh):,.0f} traded, middle round ${sorted(v['vol'] for v in hh)[len(hh) // 2] if hh else 0:,.0f}), "
+            f"{len(dd)} daily-ladder markets in {len({v['ev'] for v in dd})} days (${sum(v['vol'] for v in dd):,.0f}); {bad} failed, "
+            f"incomplete tapes {sum(1 for v in have.values() if not v.get('ok'))} ({time.time() - t_s:.0f}s)")
+    save_log("pmfetch.txt")
+
+
+def pm_bets(minutes=3, look=15, level=0.95):
+    out = []
+    for short, (long, series) in PM_COINS.items():
+        have = kc.rjson(os.path.join(CACHE, f"pm_{short}.json.gz"), {}) or {}
+        if not have or not os.path.exists(p(series, "spot")):
+            continue
+        D = load(series)
+        for key, row in have.items():
+            if not row.get("ok") or not row.get("tr"):
+                continue
+            left = 60 * minutes
+            before = [r for r in row["tr"] if left <= r[0] <= left + look]
+            if len(before) < 2:
+                continue
+            side = "yes" if before[-1][1] >= 0.5 else "no"
+            f = (lambda x: x) if side == "yes" else (lambda x: round(1 - x, 4))
+            lo, hi = min(f(r[1]) for r in before), max(f(r[1]) for r in before)
+            if lo < level - EPS or lo >= 1 - EPS:
+                continue
+            tick = 0.001 if lo >= 0.96 - EPS else 0.01
+            front = hi > lo + tick + EPS
+            price = round(lo + tick, 4) if front else lo
+            later = [(f(r[1]), r[2]) for r in row["tr"] if 0 <= r[0] < left]
+            sold = sum(n for px, n in later if px < price - EPS or (front and px <= price + EPS))
+            t = row["close"] - left
+            if row["kind"] == "h":
+                k = D["idx"].get(row["close"] - 3600)       # the start price, on Kalshi's (US dollar) number
+                g = gap_at(D, t)
+                if not k or not g:
+                    continue
+                w = {"spot": D["spot"], "strike": k}
+                z = kc.zscore(w, t, minutes, side)
+                zu = kc.zscore(dict(w, strike=k * g), t, minutes, side)
+            else:
+                z = zu = kc.zscore({"spot": D["spot"], "strike": row["strike"]}, t, minutes, side)   # settles on Binance itself: no gap
+            if z is None or zu is None:
+                continue
+            out.append({"kind": row["kind"], "s": short, "t": t, "close": row["close"], "ev": f"{short}{row['close']}", "side": side, "price": price,
+                        "front": front, "z": z, "zu": zu, "won": (row["p"] == 1) == (side == "yes"), "sold": sold, "vol": row.get("vol")})
+    return out
+
+
+def pm_card(rows, usd=4):
+    n = lost = 0
+    cost = pnl = 0.0
+    for r in rows:
+        got = min(int(usd / r["price"] + EPS), int(r["sold"]))
+        if got < 1:
+            continue
+        n += 1
+        lost += not r["won"]
+        cost += got * r["price"]
+        pnl += got * ((1.0 if r["won"] else 0.0) - r["price"])
+    return {"signals": len(rows), "bets": n, "lost": lost, "cost": cost, "pnl": pnl, "per100": pnl / cost * 100 if cost else 0.0}
+
+
+def pm_run(arg=None):
+    import exam
+    say("\n## P. Polymarket ($4 and $40 bids, filled only by later real trades)")
+    say("| Rounds | Min left | Bar | Signals | Bets filled | Lost | Per $100 | Profit at $4 | Days | Bets a day | Profit at $40 bids |")
+    say("|---|---|---|---|---|---|---|---|---|---|---|")
+    keepers = {}
+    for kind, label in (("h", "hourly up / down"), ("d", "daily noon ladder")):
+        for m in (2, 3, 5):
+            rows = [r for r in pm_bets(m) if r["kind"] == kind]
+            if not rows:
+                continue
+            days = max(1.0, (max(r["t"] for r in rows) - min(r["t"] for r in rows)) / 86400)
+            for bar in (None,) + BARS:
+                g = rows if bar is None else keep(rows, bar)
+                c, c40 = pm_card(g), pm_card(g, 40)
+                say(f"| {label} | {m} | {'no check' if bar is None else bar} | {c['signals']} | {c['bets']} | {c['lost']} | {money(c['per100'])} | {money(c['pnl'])} | "
+                    f"{days:.0f} | {c['bets'] / days:.1f} | {money(c40['pnl'])} |")
+                if m == 3 and bar == 2.3:
+                    keepers[label] = g
+    for label, g in keepers.items():
+        bl = [{"cost": min(int(4 / r["price"] + EPS), int(r["sold"])) * r["price"], "pay": min(int(4 / r["price"] + EPS), int(r["sold"])) * (1.0 if r["won"] else 0.0),
+               "t": r["t"], "ev": str(r["close"])} for r in g]
+        exam.score(bl, f"kc_maker_safe_usd on Polymarket {label} crypto rounds, bar 2.3 (history, 3 min, $4 bids)", tries=60, src="khourly.py pmrun",
+                   log=arg == "log", note="The real Kalshi bot's rule on Polymarket's hourly up/down and daily noon ladder. Bid rebuilt from trades.")
+    save_log("pmrun.txt")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = None
     if "_" in cmd:
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg)}[cmd]()
+    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg)}[cmd]()
