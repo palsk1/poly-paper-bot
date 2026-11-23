@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 15,
-   "sent": 5
+   "sent": 6
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[endgame] bought 1 (practice money)",
-   "track": "endgame",
-   "ts": "2026-11-14T05:02:14Z"
-  },
   {
    "result": "sent",
    "title": "Paper top 10",
@@ -1256,6 +1250,12 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-23T01:32:11Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade_4c] bought 2 (practice money)",
+   "track": "panic_fade_4c",
+   "ts": "2026-11-23T02:53:43Z"
   }
  ]
 }
