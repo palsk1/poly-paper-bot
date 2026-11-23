@@ -408,7 +408,17 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
     ].filter(Boolean);
     const recent = b.recent.length ? `<details><summary>Last ${b.recent.length} finished bets</summary>` + b.recent.map(r =>
       `<div class="bet"><div class="t">${esc(r.t)}</div><div class="m">${esc(stockholm(r.at))} · bet ${money(r.cost, false)} · ${M(r.pnl)}</div></div>`).join("") + `</details>` : "";
-    const open = b.open_list.length ? `<details><summary>Open bets (${b.open_n})</summary>` + b.open_list.map(t => `<div class="bet"><div class="t">${esc(t)}</div></div>`).join("") + `</details>` : "";
+    // Jan, 23 Nov: when does each open bet end, and how much is on it. A soccer game is over about 2 hours after
+    // kickoff; the bot books the result at its next look after Polymarket settles it.
+    const plus2h = iso => new Date(new Date(iso + ":00Z").getTime() + 2 * 3600e3).toISOString().slice(0, 16);
+    const openLine = o => {
+      const stake = `bet ${money(o.cost, false)}${o.n && o.p ? ` (${+o.n.toFixed(2)} shares at ${cents(o.p)})` : ""}`;
+      const when = o.kick ? `kickoff ${o.guess ? "about " : ""}${esc(stockholm(o.kick))}, game over about ${esc(stockholm(plus2h(o.kick)).split(", ").pop())}`
+        : o.close ? `ends ${esc(stockholm(o.close))}` : "";
+      return `<div class="bet"><div class="t">${esc(o.t)}</div><div class="m">${stake}${when ? " · " + when : ""}</div></div>`;
+    };
+    const open = b.open_list.length ? `<details><summary>Open bets (${b.open_n}), soonest first</summary>` + b.open_list.map(openLine).join("") +
+      (b.open_n > b.open_list.length ? `<p class="note">Showing ${b.open_list.length} of ${b.open_n}.</p>` : "") + `</details>` : "";
     return `<div class="card realcard"><div class="realhead">REAL-MONEY BOT · on your server</div>
       <div class="name" style="font-size:16px;margin-top:2px">${esc(b.label)}</div>
       <div class="oneliner">${esc(b.say)}</div>

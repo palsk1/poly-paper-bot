@@ -468,6 +468,33 @@ def mask(x):
     return "..." + s[-4:] if len(s) > 8 else s
 
 
+def kickoff_of(o):
+    """When a real bet's game starts (UTC iso). Bets placed from 23 Nov keep the exact kickoff; older ones only have
+    the signal text "kickoff in 24h" (whole hours), so placed + those hours is about right (within ~30 min)."""
+    if o.get("kickoff"):
+        return str(o["kickoff"])[:16]
+    m = re.search(r"kickoff in (\d+)h", str(o.get("signal") or ""))
+    t0 = bot.parse_iso(o.get("placed")) if o.get("placed") else None
+    if m and t0:
+        k = t0 + dt.timedelta(hours=int(m.group(1)))
+        k = dt.datetime.fromtimestamp(round(k.timestamp() / 900) * 900, dt.timezone.utc)   # games start on the quarter hour
+        return bot.iso(k)[:16]
+    return None
+
+
+def live_open(opn):
+    """Jan, 23 Nov: "see when these approx resolve ... and how much was bet on each". One line per open real bet:
+    title, stake, shares and price, kickoff (soccer) or close time (Kalshi). Soonest first."""
+    out = []
+    for k, o in opn.items():
+        kick = kickoff_of(o)
+        out.append({"t": o.get("title") or o.get("ticker") or k, "cost": r2(float(o.get("cost") or 0)),
+                    "n": r2(float(o.get("shares") or 0)) or None, "p": r2(float(o.get("ask") or o.get("price") or 0) * 100) or None,
+                    "kick": kick, "guess": bool(kick) and not o.get("kickoff"), "close": None if kick else (str(o.get("close") or "")[:16] or None)})
+    out.sort(key=lambda x: x["kick"] or x["close"] or "9999")
+    return out[:60]
+
+
 def live_rows(tracks):
     """Jan, 22 Nov: "will the dashboard show the live bots ... it's important they pertain all vital information,
     %earned, amount it's betting". One block per real bot: mode, money, P&L, per $1, open bets, today, last bets, and
@@ -545,7 +572,7 @@ def live_rows(tracks):
             "finished": len(real), "won": won, "lost": len(real) - won, "unfilled": unfilled,
             "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today),
             "open_n": len(opn), "open_cost": r2(sum(float(o.get("cost") or 0) for o in opn.values())),
-            "open_list": [o.get("title") or o.get("ticker") or k for k, o in list(opn.items())[:20]],
+            "open_list": live_open(opn),
             "recent": recent,
             "twin_n": len(tw), "twin_pnl": r2(tw_pnl), "twin_per1": r2(tw_pnl / tw_cost * 100) if tw_cost else None,
         })
