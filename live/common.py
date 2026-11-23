@@ -71,6 +71,7 @@ def today():
 # wallet address, order number or payment number (0x + 40 or more hex characters) is cut to its last 4 characters.
 # Market ids are public and say nothing about who bet, so they stay.
 PUBLIC_IDS = {"condition_id", "token"}
+ORDER_KEYS = {"order_id", "client_order_id", "tx", "tx_hash"}   # order numbers: only the last 4 go public (23 Nov)
 _HEX = re.compile(r"0x[0-9a-fA-F]{40,}")
 
 
@@ -78,7 +79,8 @@ def scrub(v):
     if isinstance(v, str):
         return _HEX.sub(lambda m: "0x.." + m.group(0)[-4:], v)
     if isinstance(v, dict):
-        return {k: (x if k in PUBLIC_IDS else scrub(x)) for k, x in v.items()}
+        return {k: (x if k in PUBLIC_IDS else (".." + x[-4:] if k in ORDER_KEYS and isinstance(x, str) else scrub(x)))
+                for k, x in v.items()}
     if isinstance(v, (list, tuple)):
         return [scrub(x) for x in v]
     return v
@@ -113,7 +115,7 @@ class Book:
         os.replace(tmp, self.state_path)
 
     def log(self, kind, **kw):
-        kw = {k: (v if k in PUBLIC_IDS else scrub(v)) for k, v in kw.items()}
+        kw = scrub(kw)
         row = {"t": iso(), "k": kind, "live": is_live(), **kw}
         with open(os.path.join(DIR, f"{self.name}-{utcnow().strftime('%Y%m')}.jsonl"), "a") as f:
             f.write(json.dumps(row, separators=(",", ":")) + "\n")
@@ -409,6 +411,20 @@ def gh(method, url, token, body=None, data=None, ctype=None):
     return json.loads(raw) if raw else None
 
 
+def public_copy(src, gz):
+    """gzip a notebook file for the public release, scrubbed again: the state file keeps full order numbers
+    (needed to cancel), and log rows written before 23 Nov still hold them."""
+    with open(src) as a, gzip.open(gz, "wt") as b:
+        if src.endswith(".jsonl"):
+            for line in a:
+                try:
+                    b.write(json.dumps(scrub(json.loads(line)), separators=(",", ":")) + "\n")
+                except ValueError:
+                    pass
+        else:
+            json.dump(scrub(json.load(a)), b, indent=1, sort_keys=True)
+
+
 def upload(prefix):
     """gzip this bot's log and state files and put them on the release `live-data` (replacing old copies).
     The files hold tickers, prices and results, no keys or account numbers. Needs GITHUB_TOKEN in ~/.live.env."""
@@ -435,8 +451,7 @@ def upload(prefix):
             continue
         src = os.path.join(DIR, fn)
         gz = src + ".gz"
-        with open(src, "rb") as a, gzip.open(gz, "wb") as b:
-            shutil.copyfileobj(a, b)
+        public_copy(src, gz)
         name = fn + ".gz"
         if name in have:
             gh("DELETE", f"{api}/releases/assets/{have[name]}", token)
