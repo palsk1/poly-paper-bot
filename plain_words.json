@@ -163,14 +163,14 @@
       "example": "A player wins set 1 by 6-4 and someone sells her at 63c. The bot buys 39 shares for about $25. If she wins the match it gets $39.00: about $14 won. If she loses, the $25 is gone.",
       "wins": "The set winner goes on to win the match. In the history that happened about 7 times in 10.",
       "loses": "She loses the next two sets and the whole bet is gone. One loss eats about two wins, so it needs to win clearly more than 2 in 3.",
-      "status": "New since 23 Nov. The history looked good, but the lead is thin and hasn't been tested live. The women's season restarts in January, so expect few bets in December."
+      "status": "New since 23 Nov. It never pays more than the price it saw; if the price has moved up, it skips the bet. The history looked good, but the lead is thin and hasn't been tested live. The women's season restarts in January, so expect few bets in December."
     },
     "tennis_set": {
       "say": "The same tennis bet on every pro match Kalshi lists: men, women and the two second-tier tours. Right after set 1, it buys $25 of the set winner if the price is between 50c and 80c.",
       "example": "A player wins set 1 by 7-5 and someone sells him at 70c. The bot buys 35 shares for about $25. If he wins the match it gets $35.00: about $10 won. If he loses, the $25 is gone.",
       "wins": "The set winner goes on to win the match.",
       "loses": "The other player comes back. In the history the men's matches only broke even, so this one is here to compare with the women-only version.",
-      "status": "New since 23 Nov, not tested live yet. About 10 to 17 bets a day when the tours are playing, each done in about an hour."
+      "status": "New since 23 Nov, not tested live yet. It never pays more than the price it saw; if the price has moved up, it skips the bet. About 10 to 17 bets a day when the tours are playing, each done in about an hour."
     },
     "kalshi_patient": {
       "say": "On Kalshi, instead of paying the full price for a near-sure thing, it puts in a slightly lower offer and waits an hour, hoping someone in a hurry sells to it.",
