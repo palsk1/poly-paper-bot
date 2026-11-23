@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 18,
-   "sent": 8
+   "sent": 9
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker] FLIP: a late favorite lost ($-9.57)",
-   "track": "kc_maker",
-   "ts": "2026-11-14T09:32:24Z"
-  },
   {
    "result": "sent",
    "title": "DATA CHECK: something doesn't add up",
@@ -1256,6 +1250,12 @@
    "title": "[panic_fade_4c] sold No at 92c (+$0.49)",
    "track": "panic_fade_4c",
    "ts": "2026-11-23T03:11:00Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-23T03:27:13Z"
   }
  ]
 }
