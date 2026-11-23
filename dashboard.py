@@ -524,6 +524,7 @@ def live_rows(tracks):
         won = sum(1 for r in real if float(r.get("pnl") or 0) >= 0)
         day = time.strftime("%Y-%m-%d", time.gmtime())
         today = sum(float(r.get("pnl") or 0) for r in real if str(r.get("t", "")).startswith(day))
+        today_n = sum(1 for r in real if str(r.get("t", "")).startswith(day))   # Jan, 23 Nov: bets made today
         opn = state.get("open") or {}
         logins = [r for r in rows if r.get("k") == "login"]
         bet = last_start.get("usd_per_order") or last_start.get("max_bet")
@@ -570,7 +571,7 @@ def live_rows(tracks):
             "bal_now": r2(bal[-1][1]) if bal else None, "bal_at": bal[-1][0] if bal else None,
             "bal_start": r2(bal_since[0][1]) if bal_since else None, "wallet": mask(logins[-1].get("wallet")) if logins else None,
             "finished": len(real), "won": won, "lost": len(real) - won, "unfilled": unfilled,
-            "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today),
+            "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today), "today_n": today_n,
             "open_n": len(opn), "open_cost": r2(sum(float(o.get("cost") or 0) for o in opn.values())),
             "open_list": live_open(opn),
             "recent": recent,

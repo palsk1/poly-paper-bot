@@ -402,7 +402,7 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
       ["Money bet on finished bets", money(b.put_in, false)],
       ["P&L", M(b.pnl)],
       ["Earned", per1(b.per1)],
-      ["Today", M(b.today)],
+      ["Today", `${M(b.today)} on ${b.today_n || 0} finished bet${b.today_n === 1 ? "" : "s"}`],
       ["Open now", `${b.open_n} bet${b.open_n === 1 ? "" : "s"}, ${money(b.open_cost, false)}`],
       ["Paper twin, same time", b.twin_n ? `${M(b.twin_pnl)} on ${b.twin_n} bets, ${per1(b.twin_per1)}` : "no finished bets yet"],
     ].filter(Boolean);
