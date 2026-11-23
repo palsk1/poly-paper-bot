@@ -318,6 +318,24 @@ def test_phone():
     check(C.stop_reason("kalshi", book) is not None and "still paused" in sent[-1][2],
           "phone 'start' can't undo a loss-cap stop")
     os.remove(os.path.join(TMP, "STOP-kalshi"))
+    say("status")
+    check("Auto-updates on" in sent[-1][2],
+          "phone 'status' also says when the code was updated and if auto-updates are on")
+    say("update")
+    check(os.path.exists(os.path.join(TMP, "UPDATE-NOW")) and sent[-1][1] == "Server update",
+          "phone 'update' asks the server to update now and says so")
+    n = len(sent)
+    C._ctrl["t"] = 0
+    C.control("poly", C.Book("poly-phone"), status)          # the other bot reads the same message
+    check(len(sent) == n, "both bots hear 'update', but only one answers")
+    say("updates off")
+    check(os.path.exists(os.path.join(TMP, "NO-AUTO-UPDATE")) and "OFF" in sent[-1][2], "phone 'updates off' works")
+    say("updates on")
+    check(not os.path.exists(os.path.join(TMP, "NO-AUTO-UPDATE")), "phone 'updates on' works")
+    say("help")
+    check("updates off" in sent[-1][2] and C.stop_reason("kalshi", book) is None,
+          "phone 'help' lists the words, and none of these server words stops a bot")
+    os.remove(os.path.join(TMP, "UPDATE-NOW"))
     del os.environ["NTFY_CONTROL"]
 
 

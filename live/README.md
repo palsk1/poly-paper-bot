@@ -19,7 +19,8 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
   stopped until Jan deletes the file).
 - **Off switches. The easy one is the phone:** in the ntfy app, subscribe to your private channel (its name is
   printed by `add_keys.py`, saved as `NTFY_CONTROL` in `~/.live.env`) and type:
-  `stop` (both bots), `stop kalshi`, `stop poly`, `start` (or `start kalshi` / `start poly`), or `status`.
+  `stop` (both bots), `stop kalshi`, `stop poly`, `start` (or `start kalshi` / `start poly`), `status`,
+  `update` (newest code now), `updates off` / `updates on`, or `help`.
   The bots read it every ~20 seconds and answer in the same channel. Alerts (a lost Kalshi bid, a cap reached) land
   there too. `start` only undoes a phone stop, never a loss-cap stop. Anyone who knows the channel name can stop
   the bots (not move money), so keep the name to yourself. The other switches:
@@ -28,8 +29,17 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
      This file can only stop a bot. It can't start one or raise a limit.
   3. `sudo systemctl stop kalshi-live poly-live`.
   On a stop, the Kalshi bot cancels its waiting bids. Bets already made still settle and are booked.
-- **No self-updates.** The bots never pull new code on their own. Code changes reach the server only when Jan runs
-  `bash ~/poly-paper-bot/live/update.sh`.
+- **Updates by themselves, tested first (23 Nov, Jan: "super hard on phone").** `autoupdate.py`, run by the timer
+  `live-update.timer` every 10 minutes and at once when Jan types `update` in the phone channel:
+  1. Nothing new for the bots (`live/`, `bot.py`, `config.json`)? The copy moves forward quietly, no restart.
+  2. New bot code: its own `selftest.py` runs first in a side folder (offline, no orders). Fails -> the old code
+     keeps running, the phone is told, and that same code is not tried again.
+  3. Passes -> switch, restart the bots that are switched on (never one Jan turned off), wait 90 seconds. A bot not
+     running fine -> back to the old code, restart, phone told.
+  It never touches `~/.live.env` (keys, caps, `LIVE=yes`): caps and the money switch stay Jan's alone.
+  Phone words: `update` (now), `updates off` / `updates on`, `help`. `status` also says when the code was updated.
+  Turn on once: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/autoupdate_setup.sh | bash`.
+  `update.sh` still works by hand as a fallback.
 - Kalshi bids are post-only (never take, never pay a taker fee), die when their window closes, and cancel if Kalshi
   pauses trading. Polymarket buys are all-or-nothing (FOK) and never above listed + 3c.
 - **Winnings:** Kalshi pays out by itself. Polymarket only pays a win once it is claimed: every 10 minutes the bot
@@ -73,7 +83,8 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 - `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
 - `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
-- `setup.sh`, `update.sh`, `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
+- `autoupdate.py` + `autoupdate_setup.sh`: the server updates itself, tested first (`autoupdate.py selftest`)
+- `setup.sh`, `update.sh` (by hand, fallback), `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
 - `selftest.py`: offline test with fake answers, must print ALL OK
 - `compare.py`: real vs paper twin
 - `switch.json`: the remote off switch

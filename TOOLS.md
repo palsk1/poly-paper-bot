@@ -136,6 +136,7 @@ and you read the result in the run log. All of it is paper only.
 | `live/kalshi_live.py`, `live/poly_live.py` | The two small REAL-MONEY bots (kc_maker_safe_usd, soccer_draw half the signals), same rule code as `bot.py`, spend caps + off switches in `live/common.py`. Jan's server only, keys only there | `check` / `run` / `status`; setup and caps in `live/README.md` |
 | `live/compare.py` | Real bots vs their paper twins, window by window and market by market, per $100 | `python3 live/compare.py` (reads the public release `live-data` + `state/tracks.json`) |
 | `live/selftest.py` | Offline test of both bots with fake answers (signing, order bodies, caps, switches) | `python3 live/selftest.py` (needs `cryptography`) |
+| `live/autoupdate.py` | The server updates the real bots by itself (23 Nov): every 10 min (systemd `live-update.timer`) or on the phone word `update`, tests new `live/` / `bot.py` / `config.json` code in a side folder, switches, restarts, goes back if a bot won't run; tells the phone | Jan once: `curl -fsSL .../live/autoupdate_setup.sh \| bash`; offline test `python3 live/autoupdate.py selftest` |
 
 ## Already tested and dropped
 
