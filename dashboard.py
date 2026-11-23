@@ -107,7 +107,11 @@ def open_bets(name, tr):
 def recent_closed(tr):
     out = []
     for c in sorted(tr.get("closed", []), key=lambda c: c.get("closed_at") or "", reverse=True)[:MAX_CLOSED]:
+        # Jan, 23 Nov: "I want to be able to see how much was put on each bet" (all paper strategies). Same money basis
+        # as bot.trade_returns: the recorded cost, else shares x buy price + buy fee.
+        basis = c.get("cost") or ((c.get("shares") or 0) * (c.get("entry") or 0) + (c.get("entry_fee") or 0.0))
         out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2(c["entry"] * 100) if c.get("entry") is not None else None,
+                    "c": r2(basis) if basis and basis > 0 else None, "n": r2(c.get("shares")) if c.get("shares") else None,
                     "x": r2(c["exit"] * 100) if c.get("exit") is not None else None, "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
                     "why": c.get("reason", "")})
     return out
@@ -404,6 +408,7 @@ def kfast_rows():
             bets.append((w["close"], cost, f["pnl"]))
             won += 1 if b["won"] else 0
             recent.append({"t": w["tk"], "o": b["side"].upper(), "e": r2(f["avg"] * 100), "x": 100.0 if b["won"] else 0.0, "pnl": r2(f["pnl"]),
+                           "c": r2(cost), "n": r2(f["filled"]),
                            "why": "window ended", "at": iso_s(w["close"])[:16]})
         wait = "waits with a buy offer" if v["kind"] == "bid" else "buys at the asking price"
         out.append(ext_row("kfast_" + k, f"Fast Kalshi bot (its own nonstop job, practice only): Kalshi 15-minute crypto, {v['L']} seconds before "

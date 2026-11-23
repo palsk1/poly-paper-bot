@@ -551,7 +551,7 @@ function detail(n) {
   // grey fold-out that vanished when nothing had finished yet.
   h += `<h2 style="font-size:16px">${t.recent.length < t.closed ? `Last ${t.recent.length} finished bets (of ${t.closed})` : `Finished bets (${t.closed})`}</h2><div class="card">` +
     (t.recent.length ? t.recent.map(c =>
-    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.e != null ? ` · bought ${cents(c.e)}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("")
+    `<div class="bet"><div class="t">${esc(c.t)}</div><div class="m">${esc(c.o)}${c.c != null ? ` · bet ${money(c.c, false)}${c.n != null && c.e != null ? ` (${+c.n.toFixed(2)} shares at ${cents(c.e)})` : ""}` : ""}${c.e != null ? `${c.c != null && c.n != null ? "" : ` · bought ${cents(c.e)}`}, ended ${cents(c.x)}` : ""} · ${M(c.pnl)} · ${esc(why(c.why))} · ${esc(stockholm(c.at))}</div></div>`).join("")
     : `None finished yet${endTxt(t)}.`) + `</div>`;
   $("detail").innerHTML = h;
   curveChart($("curve"), t);
