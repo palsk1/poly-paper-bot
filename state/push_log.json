@@ -53,16 +53,10 @@
   "2026-11-23": {
    "failed": 0,
    "muted": 15,
-   "sent": 6
+   "sent": 7
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "Paper top 10",
-   "track": null,
-   "ts": "2026-11-14T05:05:57Z"
-  },
   {
    "result": "sent",
    "title": "[arb] locked in 2.1c a share",
@@ -1256,6 +1250,12 @@
    "title": "[panic_fade_4c] bought 2 (practice money)",
    "track": "panic_fade_4c",
    "ts": "2026-11-23T02:53:43Z"
+  },
+  {
+   "result": "sent",
+   "title": "[panic_fade] sold No at 91c (+$0.44)",
+   "track": "panic_fade",
+   "ts": "2026-11-23T03:01:25Z"
   }
  ]
 }
