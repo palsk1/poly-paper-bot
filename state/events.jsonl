@@ -31131,3 +31131,4 @@
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV24SHURUTG-SHU", "track": "kalshi_patient", "ts": "2026-11-23T05:08:29Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXATPCHALLENGERMATCH-26NOV22ONOJON-ONO", "track": "kalshi_patient", "ts": "2026-11-23T05:08:29Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNATGASD-26NOV2317-T3.850", "track": "kalshi_patient", "ts": "2026-11-23T05:08:29Z", "type": "kpatient_order"}
+{"outcome": "No", "pnl": 0.0627, "price": 0.983, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in London be 9\u00b0C on November 23?", "token": "107428429706804202693326025216576668474300970155714291571162381913240030286812", "track": "endgame_sell98", "ts": "2026-11-23T05:10:50Z", "type": "paper_close"}
