@@ -32360,3 +32360,7 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": false, "ticker": "KXDOGE15M-26NOV231145-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T16:47:47Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXETH15M-26NOV231145-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T16:47:47Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV231145-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T16:47:47Z", "type": "kmaker_fill"}
+{"fee": 0.0625, "outcome": "Al Quwa Al Jawiya: No", "price": 0.51, "shares": 5, "title": "Will Al Quwa Al Jawiya win on 2026-11-23?", "token": "94550882629443684651409642062953897108541917743361218852961019586870594774199", "track": "sharp_pinnacle", "ts": "2026-11-23T16:53:05Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXEPL1HSPREAD-26NOV23BREEVE-EVE2", "track": "kalshi_patient", "ts": "2026-11-23T16:53:09Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "yes", "through": false, "ticker": "KXNCAAFTOTAL-26NOV27TEXTXAM-22", "track": "kalshi_patient", "ts": "2026-11-23T16:53:13Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXYTVIEWSW-WEE26NOV22-22.0M", "track": "kalshi_patient", "ts": "2026-11-23T16:53:15Z", "type": "kpatient_fill"}
