@@ -138,7 +138,7 @@ A strategy gets real money only if **every** answer is yes:
 | Date | What happens |
 |---|---|
 | 13 Nov | **Combo house first scorecard** (09:00 Stockholm), then the $25 real-bot strategy pick with Jan |
-| 23 Nov | Gas-price recorder scored (who reads AAA first). Expected dead |
+| 23 Nov | Gas-price recorder scored (who reads AAA first): **dead**, market 0.05-0.2c off, GasBuddy 0.3-1.3c |
 | late Nov | Fast Kalshi bot first look |
 | from 22 Nov | **Real-money bots** (`live/`): Kalshi kc_maker_safe_usd $4 bids, Polymarket soccer_draw half the signals, each compared with its paper twin |
 | about 1 Dec | **kc_maker_safe locked test** (2,500 bets). Order book shapes recheck |
@@ -283,7 +283,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Holding rewards:** real, but $3.25 a year per $100.
 - **Quote both sides for maker rewards:** rewards 1-38c a day per $100, price moves cost far more.
 - **Odd kinds of markets** (weekend, quiet, tiny, long-dated, long shots): all lose about the costs.
-- **Read the settle source first** (gas, earthquakes, executive orders): -$34 to -$80 on gas.
+- **Read the settle source first** (gas, earthquakes, executive orders): -$34 to -$80 on gas. Live GasBuddy check (recorded 10-23 Nov, scored 23 Nov): the Kalshi price misses AAA by 0.05-0.2c, a GasBuddy guess by 0.3-1.3c. Dead, don't redo.
 - **Free Fed forecasts vs Kalshi economy markets:** -$4 to +$3, Kalshi knows better.
 - **Ugly rule wording and disputes:** predicts disputes, but prices are already fair (-$18).
 - **Idea machine, 34,000 pattern ideas:** 1 survivor (`quiet_no`), about break-even.

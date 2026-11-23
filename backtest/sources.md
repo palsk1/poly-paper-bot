@@ -54,3 +54,19 @@ trade at 99c / 1c (10 weeks, 36 rungs). Leftovers are 1-5c, the "already decided
 On these Kalshi data families the crowd already reads the source as fast as a free 5-minute bot could. What's left
 is the already-decided 95-99c leftover. Not tested: thin count markets (Truth Social daily posts, settle via
 Roll Call), Netflix daily in-app top 10 (FlixPatrol blocked), Hormuz (no free live ship data).
+
+## 5. Live GasBuddy check, scored 2026-11-23 (probe `src_gasrec`)
+
+300 hour files of the recorder (10-23 Nov): 3,142 gas snapshots, 38,452 Kalshi gas ladder books, 11 settle days.
+Rule fitted on the first 5 days (AAA today + a x b x GasBuddy's average change of the day), scored on the last 6.
+Average miss vs AAA's settle, in cents (UTC hour of the guess, the day before):
+
+| Guesser (days 6-11) | 14h | 16h | 18h | 20h | 22h | 2h |
+|---|---|---|---|---|---|---|
+| Kalshi price | 0.06 | 0.10 | 0.20 | 0.05 | 0.11 | 0.11 |
+| AAA today, no change | 3.09 | 2.66 | 3.05 | 2.63 | 2.63 | 2.78 |
+| GasBuddy change today | 1.27 | 0.70 | 0.26 | 0.38 | 0.37 | 0.51 |
+| GasBuddy level vs 24h ago | 0.99 | 1.27 | 1.26 | 1.20 | 0.44 | 0.65 |
+
+GasBuddy explains most of the day's move, but the price is 2 to 10 times sharper at every hour. **Dead, no track,
+don't redo.** The recorder keeps saving `gas` lines (cheap); remove `watch_series` / `gas_live` if space matters.
