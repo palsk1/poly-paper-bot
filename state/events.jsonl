@@ -32883,3 +32883,5 @@
 {"filled": 10.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXLOWTSDF-26NOV23-B31.5", "track": "kalshi_patient", "ts": "2026-11-23T21:47:39Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV23CINWAS-WASJDANIELS5-2", "track": "kalshi_patient", "ts": "2026-11-23T21:47:42Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLTEAMFIRSTTD-26NOV23CINWAS-WAS-AEKELER30", "track": "kalshi_patient", "ts": "2026-11-23T21:47:42Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.0287, "price": 1.0, "reason": "resolved", "title": "Will Troy Jackson run 6 to 9 points behind Hannah Pingree?", "token": "28520762683375569269272702787941697699802842767414928034574576770016903604340", "track": "endgame_97", "ts": "2026-11-23T21:55:36Z", "type": "paper_close"}
+{"minutes_left": 3.25, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV231700-00", "track": "kc_maker", "ts": "2026-11-23T21:56:45Z", "type": "kmaker_order"}
