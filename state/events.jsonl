@@ -32736,3 +32736,5 @@
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV231500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T20:03:24Z", "type": "kmaker_fill"}
 {"pnl": -9.2, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXAFCCLSPREAD-26NOV23TRAWAS-WAS3", "track": "kalshi_patient", "ts": "2026-11-23T20:03:26Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.97, "side": "yes", "through": true, "ticker": "KXWTIH-26NOV2315-T79.59", "track": "kalshi_patient", "ts": "2026-11-23T20:03:29Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": -4.8558, "price": 0.0, "reason": "resolved", "title": "Will Canva's valuation hit (LOW) $29.25B by November 30?", "token": "16695884093725724697439620333871062224916297618401607031363349633034085728445", "track": "wb_youngalphagoat", "ts": "2026-11-23T20:05:38Z", "type": "paper_close"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "yes", "ticker": "KXWTIH-26NOV2315-T79.59", "track": "kalshi_patient", "ts": "2026-11-23T20:08:48Z", "type": "kpatient_result"}
