@@ -32817,3 +32817,5 @@
 {"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV231600-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T21:02:31Z", "type": "kmaker_fill"}
 {"pnl": 0.3995, "price": 0.95, "shares": 8.19, "side": "no", "ticker": "KXNCAAMBGAME-26NOV23IUSBEIU-IUSB", "track": "kalshi_patient", "ts": "2026-11-23T21:02:32Z", "type": "kpatient_result"}
 {"pnl": -25.29, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV23SHIFRA-FRA", "track": "tennis_set", "ts": "2026-11-23T21:06:45Z", "type": "econ_settle"}
+{"outcome": "No", "pnl": 0.6699, "price": 1.0, "reason": "resolved", "title": "Will White House post 160-179 posts from November 17 to November 24, 2026?", "token": "44628613925149948415753942877116262412239455113825302713788579458306394183323", "track": "postcount_no", "ts": "2026-11-23T21:10:52Z", "type": "paper_close"}
+{"minutes_left": 2.74, "price": 0.964, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV231615-15", "track": "kc_maker", "ts": "2026-11-23T21:12:16Z", "type": "kmaker_order"}
