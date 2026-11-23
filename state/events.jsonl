@@ -32594,3 +32594,10 @@
 {"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV231345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T18:47:44Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV231345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T18:47:44Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV231345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T18:47:44Z", "type": "kmaker_fill"}
+{"player": "Sandro Kopp", "price": 0.68, "set1": "7-5", "set2_games": 0, "shares": 36, "ticker": "KXATPCHALLENGERMATCH-26NOV23DEBKOP-KOP", "track": "tennis_set", "ts": "2026-11-23T18:52:28Z", "type": "ktennis_buy"}
+{"filled": 3.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KXDOGE-26NOV2317-B0.057", "track": "kalshi_patient", "ts": "2026-11-23T18:52:28Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNETFLIXRANKSHOWRUNNERUP-26NOV23-TAK", "track": "kalshi_patient", "ts": "2026-11-23T18:52:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNFLSPREAD-26NOV23CINWAS-WAS14", "track": "kalshi_patient", "ts": "2026-11-23T18:52:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "yes", "through": true, "ticker": "KXNFLTOTAL-26NOV23CINWAS-38", "track": "kalshi_patient", "ts": "2026-11-23T18:52:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXUCLSCORE-26NOV24RMAPSV-RMA2PSV1", "track": "kalshi_patient", "ts": "2026-11-23T18:52:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXXRPD-26NOV2317-T0.9999", "track": "kalshi_patient", "ts": "2026-11-23T18:52:37Z", "type": "kpatient_fill"}
