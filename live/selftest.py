@@ -270,6 +270,17 @@ def test_privacy():
     line = open(os.path.join(TMP, "privacy-" + C.utcnow().strftime("%Y%m") + ".jsonl")).read()
     check(addr not in line and addr.lower() not in line.lower().replace(tx, "") and line.count(tx) == 1,
           "the public notebook never holds a wallet address or payment number (market ids stay)")
+    oid = "01a209fb-3db0-7dd9-8574-0bf774a96a6b"
+    b.log("placed", order_id=oid, ticker="KXBTC15M-T1")
+    b.state["open"]["KXBTC15M-T1"] = {"order_id": oid}
+    b.save()
+    import gzip as _gz
+    pub = ""
+    for fn in ("privacy-" + C.utcnow().strftime("%Y%m") + ".jsonl", "privacy-state.json"):
+        C.public_copy(os.path.join(TMP, fn), os.path.join(TMP, fn + ".gz"))
+        pub += _gz.open(os.path.join(TMP, fn + ".gz"), "rt").read()
+    check(oid not in pub and "..6a6b" in pub and C.Book("privacy").state["open"]["KXBTC15M-T1"]["order_id"] == oid,
+          "order numbers reach the public copy as their last 4 only; the server keeps the full one to cancel")
 
 
 def test_mode_switch():
