@@ -9,6 +9,7 @@ PAPER ONLY. Reads public history and never trades.
 import collections
 import datetime as dt
 import json
+import math
 import os
 import re
 import sys
@@ -155,6 +156,20 @@ SIG_MIN = (2, 3, 5)  # trade lists are downloaded for markets where the rule cou
 DAYS = int(os.environ.get("KHR_DAYS", "61"))
 
 
+def leader(row):
+    """kcrypto.leader, but a book of 99c bid / $1.00 ask (or 0c / 1c) counts too: with 1c steps that is the usual
+    look of a safe market here. Empty books (bid and ask more than 50c apart) have no leader."""
+    yb, ya = row[0], row[1]
+    if yb is None or ya is None or not (0 <= yb <= ya <= 1) or ya - yb > 0.5:
+        return None
+    return "yes" if (yb + ya) / 2 >= 0.5 else "no"
+
+
+def sampled(close):
+    """Every third round, shifting by a hour each day: the rounds whose 99c markets get their trade lists too."""
+    return (close // 3600 + close // 86400) % 3 == 0
+
+
 def p(series, kind):
     return os.path.join(CACHE, f"{kind}_{series}.json.gz")
 
@@ -282,8 +297,11 @@ def fetch(arg=None):
             kc.fix_cents(c)
             for mn in SIG_MIN:
                 row = c.get(m["close"] - 60 * mn)
-                side = kc.leader(row) if row else None
-                if side and kc.side_view(row, side)[0] >= 0.95 - 1e-9:
+                side = leader(row) if row else None
+                if not side:
+                    continue
+                bid, ask = kc.side_view(row, side)[:2]
+                if bid >= 0.95 - 1e-9 and (ask < 1 - 1e-9 or (mn == 3 and sampled(m["close"]))):
                     want.append(m)
                     break
 
@@ -390,7 +408,7 @@ def bets(D, minutes=3, level=0.95, tick=0.01):
     for w in D["w"]:
         t = w["close"] - 60 * minutes
         row = w["c"].get(t)
-        side = kc.leader(row) if row else None
+        side = leader(row) if row else None
         if not side:
             continue
         bid, ask, _, _ = kc.side_view(row, side)
@@ -410,7 +428,8 @@ def bets(D, minutes=3, level=0.95, tick=0.01):
         out.append({"tk": w["t"], "ev": w["ev"], "s": w["s"], "t": t, "close": w["close"], "side": side, "bid": bid, "ask": ask,
                     "price": price, "front": front, "z": z, "zu": zu, "zk": zk, "won": w["res"] == side, "sold": sold, "at": at,
                     "candle": kc.fill_after(w, t, side, price, front)[1], "m": minutes,
-                    "long": (w["close"] - (w.get("open") or w["close"])) > 7200})
+                    "long": (w["close"] - (w.get("open") or w["close"])) > 7200, "top": ask >= 1 - EPS,
+                    "touch": kc.fill_after(w, t, side, price, front)[2]})
     return out
 
 
@@ -756,9 +775,106 @@ def pm_run(arg=None):
     save_log("pmrun.txt")
 
 
+# ================================================================ live look at the line in front of us (probe khr_queue_<minutes>)
+def queue(arg=None):
+    """History has no order-book sizes. This watches live: 3 minutes before each hourly close it reads the real order
+    books of the markets the rule would bid in (bid 95c+ on the leading side), notes how many contracts already wait at
+    the price we would join, and after the close counts how many were really sold at that price or lower."""
+    minutes = int(arg or 240)
+    end = time.time() + minutes * 60
+    names = ("KXBTCD", "KXETHD", "KXSOLD", "KXXRPD")
+    out = kc.rjson(os.path.join(CACHE, "queue.json.gz"), []) or []
+    while time.time() < end:
+        nxt = (int(time.time()) // 3600 + 1) * 3600
+        wait = nxt - 180 - time.time()
+        if wait > 0:
+            if time.time() + wait + 240 > end + 600:
+                break
+            time.sleep(wait)
+        elif wait < -40:
+            time.sleep(nxt + 5 - time.time())
+            continue
+        snap = []
+        for s in names:
+            try:
+                ms = kget("/markets", {"series_ticker": s, "status": "open", "min_close_ts": nxt - 30, "max_close_ts": nxt + 30, "limit": 1000}).get("markets") or []
+                ks = bot.http_json(f"{bot.BINANCE}/klines", {"symbol": SERIES[s], "interval": "1m", "limit": 62})
+                cl = [float(k[4]) for k in ks]
+                rets = [math.log(b / a) for a, b in zip(cl[:-1], cl[1:])][-60:]
+                sd = math.sqrt(sum(r * r for r in rets) / len(rets)) * cl[-1] * math.sqrt(3)
+            except Exception as e:
+                print("  snapshot failed", s, str(e)[:100], flush=True)
+                continue
+            for m in ms:
+                yb, ya = bot.fnum(m.get("yes_bid_dollars"), 0), bot.fnum(m.get("yes_ask_dollars"), 1)
+                side = leader([yb, ya])
+                k = bot.fnum(m.get("floor_strike"), None)
+                if not side or not k or m.get("strike_type") != "greater":
+                    continue
+                bid, ask = (yb, ya) if side == "yes" else (1 - ya, 1 - yb)
+                if bid < 0.95 - EPS:
+                    continue
+                z = (cl[-1] - k) / sd * (1 if side == "yes" else -1)
+                if z < 2 or z > 12:
+                    continue
+                bk = bot.kalshi_book_sides(m["ticker"]) or {}
+                lv = bk.get(side) or []
+                best = lv[0] if lv else (bid, 0)
+                front = round(best[0] + 0.01, 4) < ask - EPS
+                snap.append({"s": s, "tk": m["ticker"], "close": nxt, "t": time.time(), "side": side, "bid": best[0], "ask": ask, "z": round(z, 2),
+                             "line": best[1], "front": front, "price": round(best[0] + 0.01, 4) if front else best[0]})
+        print(f"{iso(nxt)}: {len(snap)} markets watched, read {nxt - time.time():.0f}s before the close", flush=True)
+        time.sleep(max(0, nxt + 45 - time.time()))
+        for r in snap:
+            try:
+                trs = get_trades(r["tk"], 1000).get("trades") or []
+                mk = (kget(f"/markets/{r['tk']}").get("market") or {})
+            except Exception as e:
+                print("  after-close read failed", str(e)[:100], flush=True)
+                continue
+            below = at = 0.0
+            for x in trs:
+                d = bot.parse_iso(x.get("created_time"))
+                if not d or d.timestamp() <= r["t"] or str(x.get("taker_side") or "")[:1] != ("n" if r["side"] == "yes" else "y"):
+                    continue
+                yp = bot.fnum(x.get("yes_price_dollars"), None)
+                px = yp if r["side"] == "yes" else 1 - yp
+                n = bot.fnum(x.get("count_fp") or x.get("count"), 0)
+                if px < r["price"] - EPS:
+                    below += n
+                elif px <= r["price"] + EPS:
+                    at += n
+            r.update(below=below, at=at, res=str(mk.get("result") or ""), more=len(trs) >= 1000)
+            out.append(r)
+        kc.wjson(os.path.join(CACHE, "queue.json.gz"), out)
+    queue_report(out)
+    save_log("queue.txt")
+
+
+def queue_report(out=None):
+    out = out if out is not None else (kc.rjson(os.path.join(CACHE, "queue.json.gz"), []) or [])
+    say(f"\n## Q. Live: the line in front of us, {len({r['close'] for r in out})} hourly closes, {len(out)} markets (bid 95c+, Binance cushion 2+, read 3 min before the close)")
+    say("| Coin | Our price | Markets | Could step in front | Line at the price we join (middle / smallest / biggest) | Sold at our price afterwards (middle) | Sold below our price | Reached a $4 bid at the back | a $40 bid | Lost among those reached |")
+    say("|---|---|---|---|---|---|---|---|---|---|")
+    for s in sorted({r["s"] for r in out}):
+        for px in (0.99, 0.98, 0.97, 0.96, 0.95):
+            g = [r for r in out if r["s"] == s and abs(r["price"] - px) < 0.005 and "at" in r]
+            if not g:
+                continue
+            ln = sorted(r["line"] for r in g if not r["front"]) or [0]
+            at = sorted(r["at"] for r in g)
+
+            def reach(r, usd):
+                ahead = 0 if r["front"] else r["line"]
+                return r["below"] > 0 or r["at"] >= ahead + usd / r["price"]
+            r4, r40 = [r for r in g if reach(r, 4)], [r for r in g if reach(r, 40)]
+            say(f"| {s} | {px * 100:.0f}c | {len(g)} | {sum(r['front'] for r in g)} | {ln[len(ln) // 2]:,.0f} / {ln[0]:,.0f} / {ln[-1]:,.0f} | {at[len(at) // 2]:,.0f} | "
+                f"{sum(1 for r in g if r['below'] > 0)} markets | {len(r4)} | {len(r40)} | {sum(1 for r in r4 if r['res'] and r['res'] != r['side'])} |")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = None
     if "_" in cmd:
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg)}[cmd]()
+    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report}[cmd]()
