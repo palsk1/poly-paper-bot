@@ -31890,3 +31890,8 @@
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV230815-15", "track": "kc_maker_safe_usd", "ts": "2026-11-23T13:16:51Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXHYPE15M-26NOV230815-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T13:16:51Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV230815-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T13:16:51Z", "type": "kmaker_fill"}
+{"minutes_left": 2.34, "price": 0.959, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV230830-30", "track": "kc_maker", "ts": "2026-11-23T13:27:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.34, "price": 0.959, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV230830-30", "track": "kc_maker_safe", "ts": "2026-11-23T13:27:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.34, "price": 0.992, "queue": 293.42, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV230830-30", "track": "kc_maker", "ts": "2026-11-23T13:27:41Z", "type": "kmaker_order"}
+{"minutes_left": 2.34, "price": 0.992, "queue": 293.42, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV230830-30", "track": "kc_maker_safe", "ts": "2026-11-23T13:27:42Z", "type": "kmaker_order"}
+{"player": "Menelaos Efstathiou", "price": 0.64, "set1": "6-4", "set2_games": 0, "shares": 39, "ticker": "KXATPCHALLENGERMATCH-26NOV23CADEFS-EFS", "track": "tennis_set", "ts": "2026-11-23T13:27:44Z", "type": "ktennis_buy"}
