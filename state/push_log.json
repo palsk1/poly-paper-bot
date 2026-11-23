@@ -52,23 +52,11 @@
   },
   "2026-11-23": {
    "failed": 0,
-   "muted": 18,
-   "sent": 9
+   "muted": 21,
+   "sent": 11
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "DATA CHECK: something doesn't add up",
-   "track": null,
-   "ts": "2026-11-14T13:57:47Z"
-  },
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.84)",
-   "track": null,
-   "ts": "2026-11-14T17:40:01Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.87)",
@@ -1256,6 +1244,18 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
    "track": "kalshi_patient",
    "ts": "2026-11-23T03:27:13Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.80)",
+   "track": null,
+   "ts": "2026-11-23T03:40:48Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-23T03:46:13Z"
   }
  ]
 }
