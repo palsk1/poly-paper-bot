@@ -92,6 +92,12 @@ def test_kalshi():
     o = book.state["open"]["KXBTC15M-T1"]
     check(abs(o["price"] - 0.971) < 1e-9 and o["shares"] == 4 and o["cost"] <= 4,
           "Kalshi bid is one 0.1c tick above the 97c best bid, 4 contracts for $4")
+    check(o["spot_z_usd"] >= 2.3, "Kalshi real bot bids only with a 2.3+ cushion after the Binance-vs-Kalshi gap (Jan, 23 Nov)")
+    os.environ["KALSHI_MIN_Z_USD"] = "999"
+    b_hi = C.Book("kalshi_hi")
+    K.place(b_hi)
+    check(not b_hi.state["open"], "a coin below the real bot's cushion bar gets no bid")
+    del os.environ["KALSHI_MIN_Z_USD"]
     K.place(book)
     check(len(book.state["open"]) == 1, "Kalshi places one bid per window, not one per loop")
     at(16, 30)

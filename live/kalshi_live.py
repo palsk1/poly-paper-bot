@@ -21,6 +21,7 @@ Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   KALSHI_USD_PER_ORDER=4            money per bid
   KALSHI_MAX_OPEN_USD=30            most money in bids at once
   KALSHI_DAY_LOSS_STOP=10           stop new bids for the rest of the day (UTC) after losing this much
+  KALSHI_MIN_Z_USD=2.3              safety bar after the Binance-vs-Kalshi gap correction (paper twin uses 2.0)
   KALSHI_TOTAL_LOSS_STOP=20         stop for good (writes ~/live-data/STOP-kalshi) after losing this much in total
 """
 import base64
@@ -246,8 +247,9 @@ def place(book):
             if z is None or z < r["min_spot_z"]:
                 continue
             zu = bot.kmaker_z(series, strike, left, side, open_ts=(close - dt.timedelta(minutes=15)).timestamp())
-            if zu is None or zu < r["min_spot_z"]:
-                continue
+            if zu is None or zu < max(r["min_spot_z"], C.envf("KALSHI_MIN_Z_USD", 2.3)):
+                continue                   # real bot only (Jan, 23 Nov): it looks every 15 s, so it caught coins the
+                                           # moment they first cleared 2.0; all 3 first real losses sat at 2.1-2.26
             shares = max(1, int(usd / price + 1e-9))
             cost = round(shares * price, 4)
             if cost > usd + 1e-6:
