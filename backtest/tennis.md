@@ -17,7 +17,7 @@ at most $300, and gets a paper test before any real money.
    A second, stricter clock keeps the women's lead (+$5.46 per $100 on 720 bets) and kills the men's (-$0.94).
    Exam verdict: **Promising, needs more bets**. Found by looking, so it needs a live paper test.
 
-**23 Nov: Jan said "yes build a paper track".** Two paper tracks run it live on Kalshi since then: `tennis_set_w` (women's main tour) and `tennis_set` (all four tours), $300 each, $25 a bet. They read Kalshi's own live score and look once per match, right after set 1. Proposed pass rule: PROTOCOL 5i (not locked).
+**23 Nov: Jan said "yes build a paper track".** Two paper tracks run it live on Kalshi since then: `tennis_set_w` (women's main tour) and `tennis_set` (all four tours), $300 each, $25 a bet. They read Kalshi's own live score and look once per match, right after set 1. Proposed pass rule: PROTOCOL 5i (not locked). First morning (23 Nov): 12 bets, all men's second-tier matches, 9 won, +$50 (luck at this size); $25 was on offer every time and at most $76 was out at once, but 3 bets paid 2c to 6c more than the price seen. Since then the tracks have a price limit: never pay more than the price seen, otherwise no bet.
 
 ## What exists (both sites)
 

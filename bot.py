@@ -4201,8 +4201,13 @@ def ktennis_place(tracks, names, force=False):
             tr["last_check"]["signals"] += 1
             if bk is None:
                 bk = kalshi_asks(tk) or ((), ())
-            asks = [(p_, sz) for p_, sz in bk[0] if p_ < hi]
+            cap = ask + r.get("max_over_seen", 0.0) + 1e-9   # like a real order: "I pay at most the price I saw"
+            asks = [(p_, sz) for p_, sz in bk[0] if p_ < hi and p_ <= cap]
             if not asks or asks[0][0] < lo:
+                if bk[0] and bk[0][0][0] > cap:
+                    tr["missed_price"] = tr.get("missed_price", 0) + 1
+                    tr["last_check"]["missed_price"] = tr["last_check"].get("missed_price", 0) + 1
+                    print(f"{n}: no bet on {who} ({tk}): saw {cents(ask)}, but the cheapest real offer was {cents(bk[0][0][0])}")
                 continue
             shares = min(max(1, int(r.get("usd_per_bet", 25) / asks[0][0])), int(sum(sz for _, sz in asks)))
             if shares < 1 or shares * asks[0][0] < r.get("min_usd", 5):

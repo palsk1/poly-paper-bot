@@ -181,6 +181,7 @@ looking (130 cuts), and gone when each share costs 2c more. Only live bets at re
   1 Jan 2027 there is a first look, which only says "on track" or "off track".
 - **Pass:** `tennis_set_w`: ahead, and the low end of the luck range above -$5 per $100. `tennis_set`: ahead, and
   the low end of the luck range above -$2 per $100 (more bets, so a tighter bar).
+- **Rule change 23 Nov, 10:45 UTC (Jan's OK):** the bot never pays more than the sell price it saw (a price limit, like a real order). The first 12 bets were made without it; the count for this test starts at the change.
 - **Side check:** the live bot buys 0 to about 15 minutes after the set (the history test: 7 minutes). Compare the
   price really paid with the history's 63c average, and the "what $10 / $25 / $50 / $100 would have bought" numbers.
 - **Anything else:** not proven, keep it on paper.
