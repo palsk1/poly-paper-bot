@@ -32878,3 +32878,8 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNCAAWBGAME-26NOV24LASVILL-LAS", "track": "kalshi_patient", "ts": "2026-11-23T21:37:12Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNBA2D-26NOV23UTALAL-LALQGRIMES5", "track": "kalshi_patient", "ts": "2026-11-23T21:37:12Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNBASPREAD-26NOV23SASSAC-SAC13", "track": "kalshi_patient", "ts": "2026-11-23T21:37:12Z", "type": "kpatient_order"}
+{"cost": 3.9086, "title": "Will the price of Ethereum be above $1,800 on November 27?", "token": "68104221008125890115888882309789482852748653490976870929450365260748234679293", "track": "crypto_no", "ts": "2026-11-23T21:47:25Z", "type": "skip_no_cash"}
+{"fee": 0.0481, "outcome": "Draw", "price": 0.26, "shares": 5, "title": "Will Associa\u00e7\u00e3o Chapecoense de Futebol vs. SE Palmeiras end in a draw?", "token": "79993335229489695567598216109198910489238589416201591161499798038547017049455", "track": "soccer_draw", "ts": "2026-11-23T21:47:38Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXLOWTSDF-26NOV23-B31.5", "track": "kalshi_patient", "ts": "2026-11-23T21:47:39Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV23CINWAS-WASJDANIELS5-2", "track": "kalshi_patient", "ts": "2026-11-23T21:47:42Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLTEAMFIRSTTD-26NOV23CINWAS-WAS-AEKELER30", "track": "kalshi_patient", "ts": "2026-11-23T21:47:42Z", "type": "kpatient_fill"}
