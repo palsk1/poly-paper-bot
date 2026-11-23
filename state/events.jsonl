@@ -32164,3 +32164,5 @@
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXCBDISRAEL-26NOV23-HOLD", "track": "kalshi_patient", "ts": "2026-11-23T15:32:08Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXRT-HUN-70", "track": "kalshi_patient", "ts": "2026-11-23T15:32:08Z", "type": "kpatient_result"}
 {"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXRT-IPL-90", "track": "kalshi_patient", "ts": "2026-11-23T15:32:08Z", "type": "kpatient_result"}
+{"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will the highest temperature in Helsinki be 0\u00b0C on November 24?", "token": "106766482082866599739069644771942441191694358091446254064190916077163022710447", "track": "endgame_sell98", "ts": "2026-11-23T15:37:09Z", "type": "paper_buy"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Bitcoin dip to $59,000 on November 23?", "token": "101824184829701843325082468180285694391932276129550541058809287882207699692510", "track": "endgame_sell98", "ts": "2026-11-23T15:37:09Z", "type": "paper_buy"}
