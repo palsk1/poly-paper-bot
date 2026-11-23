@@ -31856,3 +31856,11 @@
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXAFCCLSPREAD-26NOV23NEFHIL-NEF2", "track": "kalshi_patient", "ts": "2026-11-23T12:58:04Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.96, "side": "yes", "through": false, "ticker": "KXDENSUPERLIGATOTAL-26NOV23BROFCM-1", "track": "kalshi_patient", "ts": "2026-11-23T12:58:05Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV26KCBUF-KCPMAHOMES15-1", "track": "kalshi_patient", "ts": "2026-11-23T12:58:08Z", "type": "kpatient_fill"}
+{"fee": 0.0105, "outcome": "No", "price": 0.7, "shares": 5, "title": "Will the 2026 National Thanksgiving Turkeys be named Freedom and Feathers?", "token": "17147939306775514802276245700295254881817663954044393426549436604233225586986", "track": "w_lpgb", "ts": "2026-11-23T13:01:13Z", "type": "paper_buy"}
+{"fee": 0.0105, "outcome": "No", "price": 0.7, "shares": 5, "title": "Will the 2026 National Thanksgiving Turkeys be named Freedom and Feathers?", "token": "17147939306775514802276245700295254881817663954044393426549436604233225586986", "track": "wb_lpgb", "ts": "2026-11-23T13:01:13Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV230800-00", "track": "kc_maker", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV230800-00", "track": "kc_maker", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV230800-00", "track": "kc_maker_safe", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV230800-00", "track": "kc_maker_safe", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV230800-00", "track": "kc_maker_safe_usd", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV230800-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-23T13:02:16Z", "type": "kmaker_fill"}
