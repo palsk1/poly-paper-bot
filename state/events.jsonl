@@ -35274,3 +35274,4 @@
 {"minutes_left": 1.13, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV241645-45", "track": "kc_maker", "ts": "2026-11-24T21:43:53Z", "type": "kmaker_order"}
 {"filled": 0.4, "pnl": 0.0036, "price": 0.991, "side": "no", "through": false, "ticker": "KXDOGE15M-26NOV241645-45", "track": "kc_maker", "ts": "2026-11-24T21:48:16Z", "type": "kmaker_fill"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXUCLSPREAD-26NOV24GALAVL-AVL3", "track": "kalshi_patient", "ts": "2026-11-24T21:48:20Z", "type": "kpatient_result"}
+{"outcome": "No", "pnl": 0.5947, "price": 1.0, "reason": "resolved", "title": "Will Trump or Melania say \"Tomato\" during the Thanksgiving Turkey Pardon on November 24?", "token": "19223754964014465857615384465698560244275735978057745403511679759560605810492", "track": "mention_no", "ts": "2026-11-24T21:50:46Z", "type": "paper_close"}
