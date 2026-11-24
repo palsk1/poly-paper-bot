@@ -34487,3 +34487,4 @@
 {"fee": 0.0125, "outcome": "Yes", "price": 0.515, "shares": 5, "title": "Will Solana dip to $60 by December 31, 2026?", "token": "69024779234100418825265716746602929644796752945259475286197657688432971405592", "track": "w_tokor", "ts": "2026-11-24T13:36:44Z", "type": "paper_buy"}
 {"fee": 0.0125, "outcome": "Yes", "price": 0.515, "shares": 5, "title": "Will Solana dip to $60 by December 31, 2026?", "token": "69024779234100418825265716746602929644796752945259475286197657688432971405592", "track": "wb_tokor", "ts": "2026-11-24T13:36:44Z", "type": "paper_buy"}
 {"minutes_left": 2.19, "price": 0.968, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV240845-45", "track": "kc_maker", "ts": "2026-11-24T13:42:50Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.32, "price": 0.968, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV240845-45", "track": "kc_maker", "ts": "2026-11-24T13:46:53Z", "type": "kmaker_fill"}
