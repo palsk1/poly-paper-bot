@@ -3,6 +3,8 @@
 backtest/fed.md. PAPER ONLY: reads public data, never trades, never writes state/.
 
   python3 fed.py src      (probe fed_src: which free futures / options histories Actions can read, and the markets)
+  python3 fed.py fetch    (probe fed_fetch: Atlanta Fed options-implied odds, Treasury bill rates, Kalshi Fed + CPI
+                           markets with hourly bid/ask and trades, Polymarket fed-rates / cpi tags -> bt_cache/fed/)
 """
 import datetime as dt
 import json
@@ -113,6 +115,78 @@ def src():
             print("PM tag", slug, "failed", str(e)[:120])
 
 
+MPT_URL = ("https://www.atlantafed.org/-/media/Project/Atlanta/FRBA/Documents/research-and-data/data/"
+           "market-probability-tracker/mpt_histdata.xlsx")
+BILLS = ("https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/"
+         "{y}/all?type=daily_treasury_bill_rates&field_tdr_date_value={y}&page&_format=csv")
+K_SERIES = ("KXFEDDECISION", "KXFED", "FEDDECISION", "FED", "KXCPI", "KXCPIYOY", "KXCPICORE")
+P_TAGS = ("fed-rates", "cpi")
+
+
+def fetch():
+    import csv
+    import io
+    import time
+    from concurrent.futures import ThreadPoolExecutor
+    import khouse
+    import kmentions as km
+    import dates
+    os.makedirs(CACHE, exist_ok=True)
+    rj, wj = khouse.rj, khouse.wj
+    xl = os.path.join(CACHE, "mpt_histdata.xlsx")
+    if not os.path.exists(xl):
+        code, body, _ = raw(MPT_URL, timeout=120)
+        print("MPT", code, len(body), flush=True)
+        if code == 200:
+            open(xl, "wb").write(body)
+    if os.path.exists(xl):
+        import openpyxl
+        wb = openpyxl.load_workbook(xl, read_only=True)
+        for ws in wb.worksheets:
+            print(f"\nSHEET {ws.title} dims {ws.max_row}x{ws.max_column}")
+            for i, row in enumerate(ws.iter_rows(values_only=True)):
+                print("  ", [str(v)[:22] for v in row[:16]])
+                if i >= 7:
+                    break
+    bp = os.path.join(CACHE, "bills.json.gz")
+    bills = rj(bp, {}) or {}
+    for y in range(2021, 2027):
+        if str(y) in bills and y < 2026:
+            continue
+        code, body, _ = raw(BILLS.format(y=y), timeout=60)
+        if code == 200:
+            rows = list(csv.DictReader(io.StringIO(body.decode("utf-8", "replace"))))
+            bills[str(y)] = rows
+            print("bills", y, len(rows), flush=True)
+    wj(bp, bills)
+    mk = os.path.join(CACHE, "kmarkets.json.gz")
+    have = rj(mk, {}) or {}
+    for s in K_SERIES:
+        if s in have and s not in ("KXFEDDECISION", "KXFED"):
+            continue
+        _, ok, n = km.series_markets(s)
+        have[s] = ok
+        print("kalshi", s, len(ok), "settled", flush=True)
+        wj(mk, have)
+    t0 = time.time()
+    for s in K_SERIES:
+        ms = [m for m in have.get(s, {}).values() if m["vol"] >= 500]
+        path = os.path.join(CACHE, f"tapes_{s}.json.gz")
+        got = rj(path, {}) or {}
+        todo = [m for m in ms if m["t"] not in got]
+        for i in range(0, len(todo), 120):
+            with ThreadPoolExecutor(6) as ex:
+                for tk, dd in ex.map(dates.tape_one, todo[i:i + 120]):
+                    got[tk] = dd
+            wj(path, got)
+            print(f"  {s}: {len(got)} of {len(ms)} ({time.time() - t0:.0f}s)", flush=True)
+            if time.time() - t0 > 3.5 * 3600:
+                print("time's up, run again", flush=True)
+                return
+    import families
+    families.fetch(",".join(P_TAGS))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "src"
-    {"src": src}[cmd]()
+    {"src": src, "fetch": fetch}[cmd]()
