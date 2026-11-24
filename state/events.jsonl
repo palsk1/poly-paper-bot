@@ -33893,3 +33893,6 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXRAINLEXM-26NOV-3", "track": "kalshi_patient", "ts": "2026-11-24T07:22:26Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV24ALCNLT-ALCN", "track": "kalshi_patient", "ts": "2026-11-24T07:22:26Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXCS2GAME-26NOV240630PSNAINN-INN", "track": "kalshi_patient", "ts": "2026-11-24T07:22:26Z", "type": "kpatient_order"}
+{"fee": 0.027, "outcome": "No", "price": 0.877, "shares": 5, "title": "Will AI solve 2 more Millennium Prize Problems in 2026?", "token": "35333420365512578892257233512052112213476845034567571902719107094816848251673", "track": "w_lpgb", "ts": "2026-11-24T07:25:39Z", "type": "paper_buy"}
+{"fee": 0.027, "outcome": "No", "price": 0.877, "shares": 5, "title": "Will AI solve 2 more Millennium Prize Problems in 2026?", "token": "35333420365512578892257233512052112213476845034567571902719107094816848251673", "track": "wb_lpgb", "ts": "2026-11-24T07:25:39Z", "type": "paper_buy"}
+{"minutes_left": 3.33, "price": 0.974, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV240230-30", "track": "kc_maker", "ts": "2026-11-24T07:26:40Z", "type": "kmaker_order"}
