@@ -4301,6 +4301,7 @@ METAR = "https://aviationweather.gov/api/data/metar"
 BINANCE = "https://data-api.binance.vision/api/v3"  # Binance's public market-data mirror (the .com API blocks US IPs)
 CRYPTO_SYMBOLS = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT", "solana": "SOLUSDT", "xrp": "XRPUSDT",
                   "dogecoin": "DOGEUSDT", "bnb": "BNBUSDT"}
+CRYPTO_SHORT = {"bitcoin": "btc", "ethereum": "eth", "solana": "sol", "xrp": "xrp", "dogecoin": "doge", "bnb": "bnb"}
 MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"]
 FAST_SOURCES = ("weather", "crypto", "sharp", "mentions", "quiet", "kind", "draws", "postcount", "wordno", "stocklong", "trumpweek")
@@ -5056,8 +5057,13 @@ def crypto_events():
         for coin in ("bitcoin", "ethereum", "solana", "xrp"):
             slugs.append((coin, "above", f"{coin}-above-on-{MONTHS[d.month - 1]}-{d.day}-{d.year}"))
     h = et.hour % 12 or 12
+    hour_start = int(now().timestamp()) // 3600 * 3600
     for coin in CRYPTO_SYMBOLS:
         slugs.append((coin, "updown", f"{coin}-up-or-down-{MONTHS[et.month - 1]}-{et.day}-{et.year}-{h}{'am' if et.hour < 12 else 'pm'}-et"))
+        # Bug fix 2026-11-24: about 16-18 Nov Polymarket moved the hourly round to "<btc|eth|...>-updown-1h-<start>"
+        # (settled on Chainlink's price at the start and end of the hour, not Binance's candle). The old name
+        # above found nothing after that, so crypto_late quietly bought nothing from 16 Nov on.
+        slugs.append((coin, "updown", f"{CRYPTO_SHORT[coin]}-updown-1h-{hour_start}"))
     with ThreadPoolExecutor(8) as ex:
         evs = list(ex.map(lambda s: event_by_slug(s[2]), slugs))
     return [(coin, kind, e) for (coin, kind, _), e in zip(slugs, evs) if e and not e.get("closed")]
