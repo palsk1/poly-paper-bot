@@ -34521,3 +34521,4 @@
 {"kind": "other", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXEURUSDAW-26NOV27-1.0830", "track": "kalshi_patient", "ts": "2026-11-24T14:14:49Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXRAINSATXM-26NOV-3", "track": "kalshi_patient", "ts": "2026-11-24T14:14:49Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXBTC-26NOV2417-B59375", "track": "kalshi_patient", "ts": "2026-11-24T14:14:49Z", "type": "kpatient_order"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNCAAFSPREAD-26NOV28NAVYCHAR-NAVY36", "track": "kalshi_patient", "ts": "2026-11-24T14:22:43Z", "type": "kpatient_fill"}
