@@ -38,7 +38,9 @@ def peek():
         print("   apis:", apis[:20], flush=True)
 
 
-API = "https://rollcall.com/wp-json/factbase/v1/search?media=&type=&sort=date&location=all&place=all&page={}&format=json"
+# Bug fix 2026-11-24: the old list address (wp-json/factbase/v1/search) answers 404 since about 18 Nov 2026, which
+# left trump_week / trump_week_k with a stale record (no bets). The new one gives the same rows, newest first, 40 a page.
+API = "https://rollcall.com/api/factbase/transcripts?person=trump&page={}"
 
 
 def peek5():
