@@ -33353,3 +33353,7 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNBA3D-26NOV23UTALAL-LALLDONCIC77", "track": "kalshi_patient", "ts": "2026-11-24T02:37:00Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.9146, "side": "no", "through": true, "ticker": "KXNBAESCALATORPTS-26NOV23SASSAC-SASSCASTLE5", "track": "kalshi_patient", "ts": "2026-11-24T02:37:00Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXNCAAFSPREAD-26NOV28TROYARST-TROY18", "track": "kalshi_patient", "ts": "2026-11-24T02:37:00Z", "type": "kpatient_fill"}
+{"outcome": "Yes", "pnl": -3.0105, "price": 0.0, "reason": "resolved", "title": "Will SC Internacional win on 2026-11-23?", "token": "40577233484780289381507385331879146547324594043233701515724321932492443246935", "track": "w_rabbitfoot1", "ts": "2026-11-24T02:40:45Z", "type": "paper_close"}
+{"outcome": "Yes", "pnl": -3.0105, "price": 0.0, "reason": "resolved", "title": "Will SC Internacional win on 2026-11-23?", "token": "40577233484780289381507385331879146547324594043233701515724321932492443246935", "track": "wb_rabbitfoot1", "ts": "2026-11-24T02:40:45Z", "type": "paper_close"}
+{"minutes_left": 2.97, "price": 0.95, "queue": 15.0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV232145-45", "track": "kc_maker", "ts": "2026-11-24T02:42:02Z", "type": "kmaker_order"}
+{"minutes_left": 2.97, "price": 0.975, "queue": 242.93, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV232145-45", "track": "kc_maker", "ts": "2026-11-24T02:42:02Z", "type": "kmaker_order"}
