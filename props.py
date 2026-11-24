@@ -148,10 +148,10 @@ import time
 LIVE = os.path.join(CACHE, "live.json.gz")
 # Pinnacle "special" description ending -> (Kalshi series, sport)
 PMAP = [(4, r"total points$", "KXNBAPTS"), (4, r"total rebounds$", "KXNBAREB"), (4, r"total assists$", "KXNBAAST"),
-        (4, r"(three|3).?point.*made$|total 3.?pt", "KXNBA3PT"), (4, r"pts.?\+.?rebs.?\+.?asts|points.?\+.?rebounds.?\+.?assists", "KXNBAPRA"),
+        (4, r"(three|3).?point.*made$|total 3.?pt|threes made$", "KXNBA3PT"), (4, r"pts.?\+.?rebs.?\+.?asts|points.?\+.?rebounds.?\+.?assists", "KXNBAPRA"),
         (15, r"receiving yards$", "KXNFLRECYDS"), (15, r"rushing yards$", "KXNFLRSHYDS"), (15, r"passing yards$", "KXNFLPASSYDS"),
-        (15, r"total receptions$", "KXNFLREC"), (15, r"passing touchdowns$|passing tds$", "KXNFLPASSTDS"),
-        (15, r"touchdowns?$|anytime td|to score a (td|touchdown)", "KXNFLTD"), (15, r"rushing attempts$", "KXNFLRSHATT"),
+        (15, r"total receptions$", "KXNFLREC"), (15, r"passing touchdowns$|passing tds$|touchdown passes$", "KXNFLPASSTDS"),
+        (15, r"touchdowns?$|anytime td|to score a (td|touchdown)", "KXNFLTD"), (15, r"rushing attempts$|rush attempts$", "KXNFLRSHATT"),
         (15, r"interceptions?$", "KXNFLPASSINT"),
         (19, r"total goals$|to score", "KXNHLGOAL"), (19, r"total points$", "KXNHLPTS"), (19, r"total assists$", "KXNHLAST")]
 
@@ -287,7 +287,7 @@ def live(minutes="0", every="15"):
         mg = sorted(r["mid_gap"] for r in rows if "mid_gap" in r)
         yg = [r for r in rows if r.get("yes_gap", -1) >= 0.03]
         ng = [r for r in rows if r.get("no_gap", -1) >= 0.03]
-        print(f"\n== snapshot {dt.datetime.utcfromtimestamp(now):%Y-%m-%d %H:%M} UTC: pinnacle {n}, matched to Kalshi {len(rows)}")
+        print(f"\n== snapshot {dt.datetime.fromtimestamp(now, dt.timezone.utc):%Y-%m-%d %H:%M} UTC: pinnacle {n}, matched to Kalshi {len(rows)}")
         if mg:
             q = lambda f: mg[min(len(mg) - 1, int(f * len(mg)))]
             print(f"  Kalshi middle minus Pinnacle fair: median {q(.5):+.3f}, 10th {q(.1):+.3f}, 90th {q(.9):+.3f}")
@@ -300,7 +300,8 @@ def live(minutes="0", every="15"):
                     print(f"   {ser}: {len(g)} matched, median middle gap {g[len(g)//2]:+.3f}, "
                           f"yes cheap 3c+ after fee {sum(r.get('yes_gap', -1) >= .03 for r in rows if r['series'] == ser)}, "
                           f"no cheap 3c+ {sum(r.get('no_gap', -1) >= .03 for r in rows if r['series'] == ser)}")
-        print(f"  cheap 3c+ after fee: Yes {len(yg)}, No {len(ng)}")
+        print(f"  cheap 3c+ after fee: Yes {len(yg)}, No {len(ng)}; 1c+: Yes {sum(r.get('yes_gap', -1) >= .01 for r in rows)}, "
+              f"No {sum(r.get('no_gap', -1) >= .01 for r in rows)}; 0c+: {sum(max(r.get('yes_gap', -1), r.get('no_gap', -1)) >= 0 for r in rows)}")
         for r in sorted(yg + ng, key=lambda r: -max(r.get('yes_gap', -1), r.get('no_gap', -1)))[:15]:
             print(f"   {r['kt']} | {r['desc']} {r['line']}+ | pin fair {r['fair'][0]:.3f}/{r['fair'][1]:.3f} lim ${r['limit']:.0f} "
                   f"| kalshi {r['bid']}/{r['ask']} vol {r['vol']:.0f} | yes {r.get('yes_gap')} no {r.get('no_gap')}")
