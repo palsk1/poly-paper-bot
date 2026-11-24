@@ -34479,3 +34479,8 @@
 {"pnl": 6.96, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24MASMAZ-MAZ", "track": "tennis_set", "ts": "2026-11-24T13:16:59Z", "type": "econ_settle"}
 {"player": "Giulio Perego", "price": 0.5522, "set1": "7-5", "set2_games": 0, "shares": 45, "ticker": "KXATPCHALLENGERMATCH-26NOV24GIUPER-PER", "track": "tennis_set", "ts": "2026-11-24T13:16:59Z", "type": "ktennis_buy"}
 {"fee": 0.0605, "outcome": "Port Vale FC: Yes", "price": 0.41, "shares": 5, "title": "Will Port Vale FC win on 2026-09-26?", "token": "25300886337919606477126939327169256015150089355651291137582389231410937538193", "track": "sharp_pinnacle", "ts": "2026-11-24T13:22:42Z", "type": "paper_buy"}
+{"cost": 3.635, "title": "Will Bitcoin dip to $55,000 in November?", "token": "34486274497219401190105867456670397932477225968828604202014096609283683225717", "track": "crypto_no", "ts": "2026-11-24T13:35:33Z", "type": "skip_no_cash"}
+{"pnl": 0.201, "price": 0.94, "shares": 3.35, "side": "no", "ticker": "KXHIGHTHOU-26NOV23-B68.5", "track": "kalshi_patient", "ts": "2026-11-24T13:35:56Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXITFWMATCH-26NOV24GOLNIK-GOL", "track": "kalshi_patient", "ts": "2026-11-24T13:35:57Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXLOWTHOU-26NOV23-B52.5", "track": "kalshi_patient", "ts": "2026-11-24T13:35:57Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXRT-FOC-40", "track": "kalshi_patient", "ts": "2026-11-24T13:36:02Z", "type": "kpatient_fill"}
