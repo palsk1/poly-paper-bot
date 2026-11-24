@@ -57,17 +57,11 @@
   },
   "2026-11-24": {
    "failed": 0,
-   "muted": 94,
-   "sent": 17
+   "muted": 96,
+   "sent": 18
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker] FLIP: a late favorite lost ($-9.79)",
-   "track": "kc_maker",
-   "ts": "2026-11-17T13:02:21Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade_4c] bought 1 (practice money)",
@@ -1261,6 +1255,12 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-24T18:11:59Z"
+  },
+  {
+   "result": "sent",
+   "title": "[stock_no] bought 1 (practice money)",
+   "track": "stock_no",
+   "ts": "2026-11-24T18:49:20Z"
   }
  ]
 }
