@@ -35358,3 +35358,17 @@
 {"minutes_left": 1.87, "price": 0.998, "queue": 203.91, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker_safe_usd", "ts": "2026-11-24T22:43:13Z", "type": "kmaker_order"}
 {"minutes_left": 1.87, "price": 0.998, "queue": 203.91, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T22:43:13Z", "type": "kmaker_order"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXCOPPERD-26NOV2417-T5.62", "track": "kalshi_patient", "ts": "2026-11-24T22:43:14Z", "type": "kpatient_result"}
+{"fee": 0.0388, "outcome": "Yes", "price": 0.192, "shares": 5, "title": "Will Ho Hsin-chun win the next Taichung Mayor election?", "token": "109154022859656863704237266356795174857416669843727834866047140066258204079083", "track": "w_lava_lava", "ts": "2026-11-24T22:45:21Z", "type": "paper_buy"}
+{"fee": 0.0388, "outcome": "Yes", "price": 0.192, "shares": 5, "title": "Will Ho Hsin-chun win the next Taichung Mayor election?", "token": "109154022859656863704237266356795174857416669843727834866047140066258204079083", "track": "wb_lava_lava", "ts": "2026-11-24T22:45:21Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV241745-45", "track": "kc_maker", "ts": "2026-11-24T22:48:35Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.38, "price": 0.962, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV241745-45", "track": "kc_maker", "ts": "2026-11-24T22:48:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV241745-45", "track": "kc_maker", "ts": "2026-11-24T22:48:36Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV241745-45", "track": "kc_maker", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.22, "price": 0.978, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV241745-45", "track": "kc_maker_safe", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.38, "price": 0.962, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV241745-45", "track": "kc_maker_safe", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV241745-45", "track": "kc_maker_safe", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker_safe", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker_safe_usd", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV241745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV241745-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T22:48:37Z", "type": "kmaker_fill"}
