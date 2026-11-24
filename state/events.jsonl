@@ -33976,3 +33976,15 @@
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXHIGHTDC-26NOV24-T52", "track": "kalshi_patient", "ts": "2026-11-24T08:33:04Z", "type": "kpatient_fill"}
 {"filled": 1.66, "price": 0.93, "side": "yes", "through": false, "ticker": "KXITFWMATCH-26NOV24SEMLEO-SEM", "track": "kalshi_patient", "ts": "2026-11-24T08:33:05Z", "type": "kpatient_fill"}
 {"filled": 9.75, "price": 0.93, "side": "yes", "through": true, "ticker": "KXT20MATCH-26NOV240600MUMODSH-MUM", "track": "kalshi_patient", "ts": "2026-11-24T08:33:08Z", "type": "kpatient_fill"}
+{"fee": 0.0576, "outcome": "Australia", "price": 0.36, "shares": 5, "title": "England Tour of Australia T20s: Australia vs England", "token": "53969989799283731621547855373936494441139802200546370949579537827046628834897", "track": "w_cigarettes", "ts": "2026-11-24T08:40:42Z", "type": "paper_buy"}
+{"fee": 0.0576, "outcome": "Australia", "price": 0.36, "shares": 5, "title": "England Tour of Australia T20s: Australia vs England", "token": "53969989799283731621547855373936494441139802200546370949579537827046628834897", "track": "wb_cigarettes", "ts": "2026-11-24T08:40:43Z", "type": "paper_buy"}
+{"minutes_left": 2.85, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV240345-45", "track": "kc_maker", "ts": "2026-11-24T08:42:08Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV240345-45", "track": "kc_maker_safe", "ts": "2026-11-24T08:42:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV240345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T08:42:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV240345-45", "track": "kc_maker", "ts": "2026-11-24T08:42:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV240345-45", "track": "kc_maker_safe", "ts": "2026-11-24T08:42:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.983, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV240345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T08:42:10Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV240345-45", "track": "kc_maker", "ts": "2026-11-24T08:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV240345-45", "track": "kc_maker_safe", "ts": "2026-11-24T08:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV240345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T08:42:11Z", "type": "kmaker_order"}
+{"player": "Tuncay Duran", "price": 0.69, "set1": "6-3", "set2_games": 0, "shares": 36, "ticker": "KXATPCHALLENGERMATCH-26NOV24DURERE-DUR", "track": "tennis_set", "ts": "2026-11-24T08:42:13Z", "type": "ktennis_buy"}
