@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**225 ideas examined, in about 68,695 versions.** 177 dropped, 48 still being tested or waiting. **Looks real: 6.**
+**229 ideas examined, in about 68,935 versions.** 180 dropped, 49 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 225 ideas that are all worthless, the luckiest one still looks good. With 225 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 229 ideas that are all worthless, the luckiest one still looks good. With 229 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -233,5 +233,9 @@ Why count: if you test 225 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look | 150 | 47 | -$38.17 | Losing | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Yes where count + pace is 10c+ above the price | 120 | 13 | -$72.66 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Yes where count + pace is 20c+ above the price | 120 | 13 | -$79.43 | Losing | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-24 | AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 60 | 12 | +$17.70 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 60 | 137 | +$7.87 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 60 | 104 | +$1.06 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Starship flight dates: No where Yes is 2-50c | 60 | 10 | +$24.82 | Promising, needs more bets | re-check | dates.py, backtest/dates.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
