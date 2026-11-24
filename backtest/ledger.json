@@ -3243,6 +3243,45 @@
    "verdict": "Too early to tell",
    "status": "dropped",
    "src": "fed.py backward"
+  },
+  {
+   "id": "foreign_elections_polymarket_follow_the_polls_10c_apart_wiki",
+   "date": "2026-11-24",
+   "what": "Foreign elections, Polymarket: follow the polls, 10c+ apart (Wikipedia poll average vs price)",
+   "tries": 40,
+   "bets": 145,
+   "groups": 29,
+   "per100": 26.71,
+   "floor100": -76.1,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "elect.py, backtest/elect.md"
+  },
+  {
+   "id": "foreign_elections_kalshi_follow_the_polls_10c_apart_wikipedi",
+   "date": "2026-11-24",
+   "what": "Foreign elections, Kalshi: follow the polls, 10c+ apart (Wikipedia poll average vs price)",
+   "tries": 40,
+   "bets": 50,
+   "groups": 14,
+   "per100": 3.0,
+   "floor100": -87.86,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "elect.py, backtest/elect.md"
+  },
+  {
+   "id": "foreign_elections_polymarket_no_on_the_60_98c_favourite_a_we",
+   "date": "2026-11-24",
+   "what": "Foreign elections, Polymarket: No on the 60-98c favourite a week before (backward look)",
+   "tries": 40,
+   "bets": 31,
+   "groups": 25,
+   "per100": 13.07,
+   "floor100": -100.0,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "elect.py, backtest/elect.md"
   }
  ]
 }
