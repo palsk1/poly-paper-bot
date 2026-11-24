@@ -378,6 +378,8 @@ MINV = int(os.environ.get("PP_MINV", "300"))  # contracts traded, at least (FINA
 # Trap (24 Nov): the final-volume filter keeps long shots that came in (people pile in after a goal), so the first
 # fetch (tag "") made NHL / MLB long shots look like +$90-165 per $100. Tag "u" samples every settled market instead.
 TAG = os.environ.get("PP_TAG", "")
+SEED = 7
+SKIP_T = set()
 ONLY = [x for x in os.environ.get("PP_SER", "").split(",") if x]
 SPAN = 4 * 86400                              # quotes and trades of the last 4 days before close
 T0 = time.time()
@@ -460,7 +462,8 @@ def fetch(part="0", parts="1"):
             mm = re.match(r"^(.*?):\s*(\d+)\+\s*$", m["w"])
             m["player"], m["line"] = (mm.group(1).strip(), int(mm.group(2))) if mm else (m["w"], None)
         wj(os.path.join(CACHE, f"mk_{TAG}{ser}.json.gz"), {m["t"]: m for m in v})
-        random.Random(7).shuffle(v)
+        random.Random(SEED).shuffle(v)
+        v = [m for m in v if m["t"] not in SKIP_T]
         todo = [m for m in v[:PER] if m["t"] not in got]
         print(f"{ser}: {n} listed, {len(ok)} settled, {len(v)} with {MINV}+ traded, taping {len(todo)} more "
               f"(have {len(got)})", flush=True)
@@ -671,6 +674,38 @@ def _unbiased():
     SER = UNBIASED
 
 
+# Fresh check (written 24 Nov BEFORE these markets were downloaded): the one lead of the fair sample was
+# "NFL player props, buy No where Yes is bid 50-75c, 24h before kickoff" (+$11.21 per $100 on 454 bets).
+# Rule fixed: same series, same price band, same time, No at 1 - Yes bid + fee, $25 a bet, gap 10c at most.
+# Pass: ahead at +1c a share on 1,000 new random markets per series that the fair sample never saw.
+FRESH = ["KXNFLRECYDS", "KXNFLRSHYDS", "KXNFLREC", "KXNFLTD", "KXNFLFIRSTTD"]
+
+
+def ffetch(part="0", parts="1"):
+    global TAG, MINV, ONLY, PER, SER, SEED, SKIP_T
+    for ser in FRESH:
+        SKIP_T |= set((rj(os.path.join(CACHE, f"tapes_u{ser}.json.gz"), {}) or {}).keys())
+    TAG, MINV, ONLY, PER, SER, SEED = "f", 0, FRESH, 1000, FRESH, 11
+    fetch(part, parts)
+
+
+def freport():
+    global TAG, SER
+    import exam
+    TAG, SER = "f", FRESH
+    rows, _ = load_rows()
+    for h in (24, 6, 2):
+        b = props_no(rows, h)
+        print(f"fresh check {h}h: {len(b)} bets, {len({x['ev'] for x in b})} games, {p100(b):+.2f} per $100, "
+              f"+1c {p100([dict(x, cost=x['cost'] + 0.01 * x['sh']) for x in b]):+.2f}")
+    exam.score(props_no(rows, 24), "Kalshi NFL props: No where Yes is 50-75c, 24h before (fresh check)", tries=1,
+               prereg=True, src="props.py freport")
+
+
+def props_no(rows, h):
+    return bets_for(rows, h, "no", 0.50, 0.75)
+
+
 def ufetch(part="0", parts="1"):
     """Every settled market of the series (no volume filter), 1,000 picked at random per series."""
     _unbiased()
@@ -695,4 +730,4 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     {"scan": scan, "kalshi": kalshi_scan, "poly": poly_scan, "pin": pin_scan, "live": live, "livescore": live_score,
      "fetch": lambda *a: fetch(*a), "report": lambda *a: report(*a), "ufetch": lambda *a: ufetch(*a),
-     "ureport": lambda *a: ureport(*a)}[cmd](*sys.argv[2:])
+     "ureport": lambda *a: ureport(*a), "ffetch": lambda *a: ffetch(*a), "freport": lambda *a: freport()}[cmd](*sys.argv[2:])
