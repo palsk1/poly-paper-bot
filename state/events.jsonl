@@ -34484,3 +34484,5 @@
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXITFWMATCH-26NOV24GOLNIK-GOL", "track": "kalshi_patient", "ts": "2026-11-24T13:35:57Z", "type": "kpatient_result"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXLOWTHOU-26NOV23-B52.5", "track": "kalshi_patient", "ts": "2026-11-24T13:35:57Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXRT-FOC-40", "track": "kalshi_patient", "ts": "2026-11-24T13:36:02Z", "type": "kpatient_fill"}
+{"fee": 0.0125, "outcome": "Yes", "price": 0.515, "shares": 5, "title": "Will Solana dip to $60 by December 31, 2026?", "token": "69024779234100418825265716746602929644796752945259475286197657688432971405592", "track": "w_tokor", "ts": "2026-11-24T13:36:44Z", "type": "paper_buy"}
+{"fee": 0.0125, "outcome": "Yes", "price": 0.515, "shares": 5, "title": "Will Solana dip to $60 by December 31, 2026?", "token": "69024779234100418825265716746602929644796752945259475286197657688432971405592", "track": "wb_tokor", "ts": "2026-11-24T13:36:44Z", "type": "paper_buy"}
