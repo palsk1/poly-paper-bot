@@ -57,17 +57,11 @@
   },
   "2026-11-24": {
    "failed": 0,
-   "muted": 85,
-   "sent": 15
+   "muted": 89,
+   "sent": 16
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade_4c] sold Yes at 91c (+$0.32)",
-   "track": "panic_fade_4c",
-   "ts": "2026-11-17T12:41:38Z"
-  },
   {
    "result": "sent",
    "title": "[kc_maker] FLIP: a late favorite lost ($-9.56)",
@@ -1261,6 +1255,12 @@
    "title": "[stock_no] bought 5 (practice money)",
    "track": "stock_no",
    "ts": "2026-11-24T17:06:37Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
+   "track": null,
+   "ts": "2026-11-24T17:40:53Z"
   }
  ]
 }
