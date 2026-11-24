@@ -125,6 +125,22 @@ def peek8():
             print("FAIL", u, str(e)[:100], flush=True)
 
 
+def peek9():
+    """Shape of the transcript JSON (api/factbase/transcripts?person=trump&slug=...)."""
+    import json as _j
+    slug = "donald-trump-remarks-protecting-families-department-of-justice-november-23-2026"
+    j = _j.loads(raw(f"https://rollcall.com/api/factbase/transcripts?person=trump&slug={slug}", 40))
+    print("top", list(j), flush=True)
+    for k, v in j.items():
+        if k == "meta":
+            print("meta keys", list(v), flush=True)
+            continue
+        print(k, type(v).__name__, len(v) if hasattr(v, "__len__") else v, flush=True)
+        items = v if isinstance(v, list) else list(v.values()) if isinstance(v, dict) else []
+        for it in items[:3]:
+            print("   item", _j.dumps(it)[:900], flush=True)
+
+
 def peek2():
     import json
     d = json.loads(raw(API.format(1)))
@@ -831,4 +847,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "peek8": peek8, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "peek8": peek8, "peek9": peek9, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
