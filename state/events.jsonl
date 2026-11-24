@@ -34667,3 +34667,12 @@
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV241100-00", "track": "kc_maker_safe", "ts": "2026-11-24T16:03:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV241100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T16:03:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXBTC-26NOV2411-B59750", "track": "kalshi_patient", "ts": "2026-11-24T16:03:26Z", "type": "kpatient_fill"}
+{"outcome": "No", "pnl": 0.2173, "price": 0.994, "reason": "take profit (now 100c), book", "title": "Will the price of Bitcoin be between $62,000 and $64,000 on November 24?", "token": "73703917164178455318653163783717351387617194070211724308775164303936031261989", "track": "endgame_sell98", "ts": "2026-11-24T16:05:50Z", "type": "paper_close"}
+{"fee": 0.0011, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will the price of Solana be above $70 on November 24?", "token": "30905319489945595575261259909332859625159922052326099570735293973544245260926", "track": "endgame_sell98", "ts": "2026-11-24T16:07:35Z", "type": "paper_buy"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV2411-B59750", "track": "kalshi_patient", "ts": "2026-11-24T16:07:43Z", "type": "kpatient_result"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXUCL1HSCORE-26NOV24RMAPSV-RMA3PSV1", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXRAINMINM-26NOV-4", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXSILVERW-26NOV2714-T44.99", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXMSFTPERM-26OCT-26DEC01", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXLOWTSEA-26NOV24-B42.5", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXUKCHAGOS-28JAN01-26DEC01", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
