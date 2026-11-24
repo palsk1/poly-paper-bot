@@ -27,7 +27,7 @@ import bot
 
 CACHE = os.path.join(bt.CACHE, "kn")
 TRIES = 0          # versions looked at, counted as they are added (report)
-HOLD = bt.T("2026-11-10") if hasattr(bt, "T") else 1762732800
+HOLD = 1794268800   # 2026-11-10 00:00 UTC, the holdout start (btcheck.HOLDOUT_FROM)
 
 
 def rj(p, d=None):
@@ -171,13 +171,6 @@ def bets_after(rows, delay=300, extra=0.01, hi=0.97, stake=25.0):
     return out
 
 
-# ================================================================ stocks (offline)
-def stock_rows():
-    import stocks
-    ms, tp, daily = stocks.load()[:3] if isinstance(stocks.load(), tuple) else (None, None, None)
-    return ms, tp, daily
-
-
 # ================================================================ sports fetch (probe)
 LEAGUE_CAP = 160
 
@@ -315,3 +308,24 @@ if __name__ == "__main__":
             print(d, dict(c), {k: round(v) for k, v in dol.items()})
     else:
         print(__doc__)
+
+
+def stock_rows():
+    """Polymarket stock close markets (bt_cache/stk) with the answer from Nasdaq's official daily close, known a couple
+    of minutes after 4 PM New York. All markets with a daily close, also the ones the close does NOT reproduce."""
+    import stocks
+    ms = bt.rjson(os.path.join(stocks.CACHE, "markets.json.gz"), {}) or {}
+    D = bt.rjson(os.path.join(stocks.CACHE, "daily.json.gz"), {}) or {}
+    _, tp, _, _, _ = stocks.load()
+    out = []
+    for mid, m in ms.items():
+        t = tp.get(mid)
+        d = D.get(m["tk"], {}).get(stocks._day(m["end"]))
+        if not t or not d:
+            continue
+        guess = (m["lo"] is None or d[3] > m["lo"]) and (m["hi"] is None or d[3] < m["hi"])
+        line = [x for x in (m["lo"], m["hi"]) if x]
+        out.append({"id": mid, "q": m.get("q", ""), "kind": m.get("kind"), "known": m["end"] + 120, "guess": guess,
+                    "yes": m["final"][0] == 1.0, "b": t["b"], "end": m["end"], "fee": m.get("fee") or 0.0,
+                    "ev": m.get("ev") or mid, "near": min(abs(d[3] - x) / d[3] for x in line) if line else 1.0})
+    return out
