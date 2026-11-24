@@ -3089,6 +3089,45 @@
    "src": "music.py, backtest/music.md"
   },
   {
+   "id": "known_answer_winner_still_under_97c_buy_it_crypto_stocks_soc",
+   "date": "2026-11-24",
+   "what": "Known answer, winner still under 97c: buy it (crypto, stocks, soccer)",
+   "tries": 14,
+   "bets": 44,
+   "groups": 38,
+   "per100": -27.3,
+   "floor100": -100.0,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "known.py report"
+  },
+  {
+   "id": "soccer_after_the_final_whistle_buy_the_leader_at_99c_the_gri",
+   "date": "2026-11-24",
+   "what": "Soccer after the final whistle: buy the leader at 99c+ (the grind)",
+   "tries": 14,
+   "bets": 830,
+   "groups": 801,
+   "per100": 0.06,
+   "floor100": -0.68,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "known.py report"
+  },
+  {
+   "id": "crypto_stock_bets_after_the_answer_is_fixed_buy_the_winner_a",
+   "date": "2026-11-24",
+   "what": "Crypto / stock bets after the answer is fixed: buy the winner at 99c+",
+   "tries": 14,
+   "bets": 5996,
+   "groups": 1953,
+   "per100": 0.16,
+   "floor100": -0.07,
+   "verdict": "Promising, needs more bets",
+   "status": "dropped",
+   "src": "known.py report"
+  },
+  {
    "id": "fed_decisions_vs_options_odds_both_10c",
    "date": "2026-11-24",
    "what": "Fed decisions vs options odds (both, 10c+)",
