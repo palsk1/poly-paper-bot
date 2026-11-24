@@ -199,6 +199,210 @@ def do_hits(first="2024-11-07"):
         wj(HITS, have)
 
 
+# ================================================================ analysis (offline, on the price store)
+MON = {m: i + 1 for i, m in enumerate("JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC".split())}
+fee = lambda p: 0.07 * p * (1 - p)                                         # Kalshi taker fee per contract
+TRIES = 70        # versions looked at in this dig (hours x price bands x sides, HITS-model variants, Spotify ranks)
+
+
+def norm(x):
+    import spotw
+    return spotw.norm(x)
+
+
+def quote(tp, tk, t, stale=3 * 3600):
+    """(yes bid, yes ask) of the last hourly candle at or before t, None if older than `stale`."""
+    v, c = tp.get(tk), None
+    if not v:
+        return None
+    for x in v["c"]:
+        if x[0] > t:
+            break
+        c = x
+    if not c or c[1] is None or c[2] is None or t - c[0] > stale:
+        return None
+    return c[1], c[2]
+
+
+def rung(m):
+    """the 'above X' number of a Kalshi album-units market"""
+    x = re.search(r"above ([\d,\.]+)\s*(K)?", m["q"])
+    if not x:
+        return None
+    v = float(x.group(1).replace(",", ""))
+    return v * 1000 if x.group(2) else v
+
+
+def week_end(ev):
+    """KXALBUMEQUIV-FRE26NOV12 -> date(2026, 11, 12), the Thursday the tracking week ends"""
+    mm = re.search(r"(\d\d)([A-Z]{3})(\d\d)$", ev)
+    return dt.date(2000 + int(mm.group(1)), MON[mm.group(2)], int(mm.group(3))) if mm else None
+
+
+def hits_row(rows, album, artist):
+    a = norm(album)
+    for r in rows:
+        b = norm(r[2])
+        if b == a or (len(a) > 5 and (b.startswith(a) or a.startswith(b)) and norm(artist)[:5] in norm(r[1])):
+            return r
+    return None
+
+
+def album_events(series=("KXALBUMEQUIV", "KXPUREALBUMS")):
+    """Kalshi album ladders with the HITS midweek and final number of the same album and week."""
+    ms, tp = K.load("|".join(series))
+    h = rj(HITS, {}) or {"final": {}, "mid": {}}
+    ev = collections.defaultdict(list)
+    for m in ms.values():
+        ev[(m["s"], m["ev"])].append(m)
+    out = []
+    for (s, e), L in ev.items():
+        wd = week_end(e)
+        x = re.match(r"Will (.*) by (.*?) have above", L[0]["q"])
+        if not wd or not x:
+            continue
+        col = 4 if s == "KXALBUMEQUIV" else 5                     # activity (all units) or albums (pure sales)
+        M = (h["mid"].get(wd.isoformat()) or [None, []])[1]
+        F = (h["final"].get(wd.isoformat()) or [None, []])[1]
+        mr, fr = hits_row(M, x.group(1), x.group(2)), hits_row(F, x.group(1), x.group(2))
+        ys = [rung(m) for m in L if m["res"] == "yes" and rung(m)]
+        ns = [rung(m) for m in L if m["res"] == "no" and rung(m)]
+        out.append(dict(s=s, e=e, we=wd, L=L, close=min(m["close"] for m in L), mid=mr[col] if mr else None,
+                        fin=fr[col] if fr else None, lo=max(ys) if ys else 0, hi=min(ns) if ns else None))
+    return out, ms, tp
+
+
+def mid_model(E, tp, look_h=30):
+    """HITS midweek number x (Luminate / HITS ratio of the OTHER albums) -> chance per rung, vs Kalshi's price.
+    Signal time: Friday 06:00 UTC after the tracking week (the midweek page was up by Thursday ~23:00-Fri 03:00 UTC
+    in every Wayback copy we have)."""
+    import math
+    def ratios(skip, s):
+        return [math.log(math.sqrt(x["lo"] * x["hi"]) / x["mid"]) for x in E
+                if x["e"] != skip and x["s"] == s and x["mid"] and x["hi"] and x["lo"] > 0]
+    bets, sq = [], collections.defaultdict(lambda: [0, 0.0, 0.0])
+    for x in E:
+        if not x["mid"]:
+            continue
+        rs = ratios(x["e"], x["s"])
+        if len(rs) < 8:
+            continue
+        t = dt.datetime(x["we"].year, x["we"].month, x["we"].day, tzinfo=dt.timezone.utc).timestamp() + look_h * 3600
+        for m in x["L"]:
+            T = rung(m)
+            p = quote(tp, m["t"], t) if T else None
+            if not p:
+                continue
+            y = m["res"] == "yes"
+            pr = sum(1 for r in rs if x["mid"] * math.exp(r) > T) / len(rs)
+            a = sq[x["s"]]
+            a[0] += 1; a[1] += (pr - y) ** 2; a[2] += ((p[0] + p[1]) / 2 - y) ** 2
+            if pr - p[1] >= 0.10 and 0.03 <= p[1] <= 0.97:
+                bets.append(dict(ev=x["e"], t=t, cost=p[1] + fee(p[1]), pay=1.0 * y, s=x["s"]))
+            elif p[0] - pr >= 0.10 and 0.03 <= 1 - p[0] <= 0.97:
+                bets.append(dict(ev=x["e"], t=t, cost=1 - p[0] + fee(1 - p[0]), pay=1.0 * (not y), s=x["s"]))
+    return bets, {k: (v[0], v[1] / v[0], v[2] / v[0]) for k, v in sq.items() if v[0]}
+
+
+def filled(tp, tk, t, px, win=7200):
+    """contracts that really traded at or under our price in the next `win` seconds (trade prices are in 1/1000 $)"""
+    return sum(tr[2] for tr in tp[tk]["tr"] if t <= tr[0] < t + win and tr[1] / 1000 <= px + 1e-9)
+
+
+def band_rule(E, tp, H, lo=0.10, hi=0.90, need_fill=True, series="KXALBUMEQUIV"):
+    """THE LEAD: H hours before the ladder closes, buy Yes on every rung whose mid price is lo-hi (ask <= 97c,
+    bid-ask gap <= 15c) at the hourly ask + fee; with need_fill, only where someone really traded at or under that
+    price in the next 2 hours."""
+    out = []
+    for x in E:
+        if x["s"] != series:
+            continue
+        t = x["close"] - H * 3600
+        for m in x["L"]:
+            p = quote(tp, m["t"], t)
+            if not p or p[1] - p[0] > 0.15:
+                continue
+            mid = (p[0] + p[1]) / 2
+            if not (lo <= mid < hi and p[1] <= 0.97):
+                continue
+            sz = filled(tp, m["t"], t, p[1]) if need_fill else 1
+            if sz <= 0:
+                continue
+            out.append(dict(ev=x["e"], t=t, cost=p[1] + fee(p[1]), pay=1.0 * (m["res"] == "yes"), px=p[1], sz=sz,
+                            tk=m["t"], w=m["q"][5:70], T=rung(m), mid_hits=x["mid"]))
+    return sorted(out, key=lambda b: b["t"])
+
+
+def hot100_spotify(look_h=(110, 60, 30, 12)):
+    """Kalshi Hot 100 #1: buy Yes on the song with the most US Spotify plays in the tracking week (days known by then)."""
+    import gzip
+    ms, tp = K.load("KXTOPSONG$")
+    us = json.load(gzip.open(os.path.join(ROOT, "bt_cache", "spw", "us.json.gz")))
+    ev = collections.defaultdict(list)
+    for m in ms.values():
+        ev[m["ev"]].append(m)
+    res = {}
+    for off in look_h:
+        bets = []
+        for e, L in ev.items():
+            c = min(m["close"] for m in L)
+            chart = dt.datetime.fromtimestamp(c, dt.timezone.utc).date() + dt.timedelta(days=5)   # chart date (Saturday)
+            t0, tl = chart - dt.timedelta(days=15), c - off * 3600                                # tracking week Fri-Thu
+            tot, nm = collections.Counter(), {}
+            for i in range(7):
+                d = t0 + dt.timedelta(days=i)
+                if dt.datetime(d.year, d.month, d.day, tzinfo=dt.timezone.utc).timestamp() + 42 * 3600 > tl:
+                    continue                                      # a day's chart is readable ~18:00 UTC the day after
+                for sid, tt, pl in us.get(d.isoformat(), []):
+                    tot[sid] += pl
+                    nm[sid] = tt
+            if not tot:
+                continue
+            lead = nm[tot.most_common(1)[0][0]]
+            for m in L:
+                if norm(m["w"])[:10] != norm(lead)[:10]:
+                    continue
+                p = quote(tp, m["t"], tl, 4 * 3600)
+                if p and 0.05 <= p[1] <= 0.90:
+                    bets.append(dict(ev=e, t=tl, cost=p[1] + fee(p[1]), pay=1.0 * (m["res"] == "yes")))
+        res[off] = bets
+    return res
+
+
+def per100(B):
+    return 100 * sum(x["pay"] - x["cost"] for x in B) / sum(x["cost"] for x in B) if B else None
+
+
+def do_run():
+    E, ms, tp = album_events()
+    print("album ladders", len(E), "with a HITS midweek number", sum(1 for x in E if x["mid"]))
+    b, sq = mid_model(E, tp)
+    print("HITS midweek model vs price (n, model miss score, market miss score; lower is better):", sq)
+    print("  bets", len(b), "per $100", per100(b))
+    for H in (96, 72, 60, 48, 42, 36, 30, 24, 12):
+        B = band_rule(E, tp, H)
+        hh = len(B) // 2
+        print(f"Yes at 10-90c, {H}h before close: bets {len(B)} albums {len({x['ev'] for x in B})} "
+              f"per $100 {per100(B)} halves {per100(B[:hh])} / {per100(B[hh:])}")
+    for off, B in hot100_spotify().items():
+        print(f"Hot 100 #1 = Spotify leader, {off}h before close: bets {len(B)} per $100 {per100(B)}")
+
+
+def do_report():
+    import exam
+    E, ms, tp = album_events()
+    src = "music.py, backtest/music.md"
+    B = band_rule(E, tp, 36)
+    print(exam.score(B, "Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC)",
+                     tries=TRIES, src=src, status="lead, no track", quiet=True))
+    b, sq = mid_model(E, tp)
+    print(exam.score(b, "Kalshi album first-week units: buy where HITS's midweek forecast is 10c+ away from the price (Fri 06:00 UTC)",
+                     tries=4, src=src, status="dropped", quiet=True))
+    hs = hot100_spotify()[110]
+    print(exam.score(hs, "Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week",
+                     tries=8, src=src, status="dropped", quiet=True))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": do_peek, "hddpeek": do_hdd_peek, "hits": do_hits}[cmd]()
+    {"peek": do_peek, "hddpeek": do_hdd_peek, "hits": do_hits, "run": do_run, "report": do_report}[cmd]()
