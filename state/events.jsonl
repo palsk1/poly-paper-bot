@@ -33564,3 +33564,4 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXODIMATCH-26NOV240500NEPPAK-NEP", "track": "kalshi_patient", "ts": "2026-11-24T04:34:56Z", "type": "kpatient_fill"}
 {"outcome": "Commanders", "pnl": 3.5496, "price": 1.0, "reason": "resolved", "title": "Bengals vs. Commanders", "token": "92154047555995510858045479379882997241595850825173013701906638283047591212323", "track": "w_rabbitfoot1", "ts": "2026-11-24T04:35:37Z", "type": "paper_close"}
 {"outcome": "Commanders", "pnl": 3.5496, "price": 1.0, "reason": "resolved", "title": "Bengals vs. Commanders", "token": "92154047555995510858045479379882997241595850825173013701906638283047591212323", "track": "wb_rabbitfoot1", "ts": "2026-11-24T04:35:37Z", "type": "paper_close"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXTEMPCHIHS-26NOV2323-T29.99", "track": "kalshi_patient", "ts": "2026-11-24T04:41:48Z", "type": "kpatient_result"}
