@@ -98,10 +98,26 @@ def z_later(r, t, side):
     return kc.zscore_usd(r["w"], t, M, side)
 
 
-def one_bet(r, M, band, bar, life, kind="improve", zsrc="zu", fill="fair"):
+def calm_ok(w, t, side):
+    """'Calm Kalshi' (found by looking, kearly_ta.md): this minute's contracts traded are under 1.32 times the
+    window's average so far, and the winning side's bid rose less than 19c in the last 2 minutes."""
+    r_now, r_old = w["c"].get(t), w["c"].get(t - 120)
+    if r_now and r_old:
+        a, b = kc.side_view(r_now, side)[0], kc.side_view(r_old, side)[0]
+        if a is not None and b is not None and a - b >= 0.19:
+            return False
+    vols = [v[4] for k, v in w["c"].items() if k <= t and len(v) > 4 and v[4] is not None]
+    if vols and sum(vols) > 0 and vols[-1] / (sum(vols) / len(vols)) >= 1.32:
+        return False
+    return True
+
+
+def one_bet(r, M, band, bar, life, kind="improve", zsrc="zu", fill="fair", calm=False):
     """The bet the rule makes in window r at M minutes left, or None. Returns a dict with price, filled, won."""
     sn = r["snap"].get(M)
     if not sn:
+        return None
+    if calm and not calm_ok(r["w"], r["close"] - 60 * M, sn[0]):
         return None
     side, bid, ask, zu, zk = sn
     lo, hi = band
@@ -337,15 +353,166 @@ def parse_key(key):
         bar = None if bar == "None" else float(bar)
         hi = {0.80: 0.90, 0.90: 0.95, 0.95: 0.97, 0.97: 0.99}[lo]
         return lambda r: one_bet(r, M, (lo, hi), bar, "hold", kind="taker")
-    span, band, bar, life = key.split("_")
+    parts = key.split("_")
+    span, band, bar, life = parts[:4]
+    calm = len(parts) > 4 and parts[4] == "calm"
     a, b = (int(x) for x in span.split("-"))
     lo, hi = (float(x) for x in band.split("-"))
-    return lambda r: first_bet(r, range(a, b + 1), (lo, hi), float(bar[1:]), life)
+    return lambda r: first_bet(r, range(a, b + 1), (lo, hi), float(bar[1:]), life, calm=calm)
 
 
 def bets_for(key, rows):
     fn = parse_key(key)
     return [x for x in (fn(r) for r in rows) if x]
+
+
+# ================================================================ chart signals (Jan, 24 Nov: "try with real technical analysis on charts too")
+def _closes(sp, t, n):
+    """The last n Binance 1-minute closes up to minute end t (oldest first), or None if any is missing."""
+    out = []
+    for i in range(n - 1, -1, -1):
+        v = sp.get(str(t - 60 * i))
+        if v is None:
+            return None
+        out.append(v)
+    return out
+
+
+def _ema(xs, n):
+    k = 2 / (n + 1)
+    e = xs[0]
+    for x in xs[1:]:
+        e = x * k + e * (1 - k)
+    return e
+
+
+def chart(w, t, side, M):
+    """Chart readings on Binance 1-minute closes at minute end t, turned toward our side (+ = agrees with us)."""
+    sp = w["spot"]
+    xs = _closes(sp, t, 240)
+    if not xs:
+        return None
+    sgn = 1 if side == "yes" else -1
+    px = xs[-1]
+    rets = [math.log(b / a) for a, b in zip(xs[-61:-1], xs[-60:])]
+    sd1 = math.sqrt(sum(r * r for r in rets) / len(rets)) or 1e-9
+    rets4 = [math.log(b / a) for a, b in zip(xs[:-1], xs[1:])]
+    sd4 = math.sqrt(sum(r * r for r in rets4) / len(rets4)) or 1e-9
+    g = [max(0, b - a) for a, b in zip(xs[-15:-1], xs[-14:])]
+    l = [max(0, a - b) for a, b in zip(xs[-15:-1], xs[-14:])]
+    rsi = 100 - 100 / (1 + (sum(g) / (sum(l) or 1e-12)))
+    e9, e21 = _ema(xs[-60:], 9), _ema(xs[-60:], 21)
+    m20 = sum(xs[-20:]) / 20
+    sd20 = math.sqrt(sum((x - m20) ** 2 for x in xs[-20:]) / 20) or 1e-9
+    pb = (px - (m20 - 2 * sd20)) / (4 * sd20)
+    macd_line = [_ema(xs[:i], 12) - _ema(xs[:i], 26) for i in range(len(xs) - 8, len(xs) + 1)]
+    hist = macd_line[-1] - _ema(macd_line, 9)
+    mom3 = math.log(px / xs[-4]) / (sd1 * math.sqrt(3))
+    mom10 = math.log(px / xs[-11]) / (sd1 * math.sqrt(10))
+    hi60, lo60 = max(xs[-60:]), min(xs[-60:])
+    rng_pos = (px - lo60) / ((hi60 - lo60) or 1e-9)
+    # Kalshi's own chart: leader bid now vs 2 minutes ago, and this minute's contracts traded vs the window's average
+    r_now, r_old = w["c"].get(t), w["c"].get(t - 120)
+    kmove = None
+    if r_now and r_old:
+        a, b = kc.side_view(r_now, side)[0], kc.side_view(r_old, side)[0]
+        if a is not None and b is not None:
+            kmove = a - b
+    vols = [v[4] for k, v in w["c"].items() if k <= t and len(v) > 4 and v[4] is not None]
+    kvol = (vols[-1] / (sum(vols) / len(vols))) if vols and sum(vols) > 0 else None
+    return {"rsi": rsi if sgn > 0 else 100 - rsi,
+            "ema": sgn * (e9 - e21) / (px * sd1),
+            "bollinger": pb if sgn > 0 else 1 - pb,
+            "macd": sgn * hist / (px * sd1),
+            "mom3": sgn * mom3, "mom10": sgn * mom10,
+            "range60": rng_pos if sgn > 0 else 1 - rng_pos,
+            "volregime": sd1 / sd4,
+            "kalshi_move": kmove, "kalshi_volume": kvol,
+            "hour": (t // 3600) % 24}
+
+
+def ta(Ms=range(10, 3, -1), band=(0.85, 0.97)):
+    """One bid per window, at the first minute 10..4 left where the winning side's bid is 85-97c (no cushion bar),
+    one tick in front, held to the close (fair fills). Then: which chart readings split winners from losers?
+    Learned on 'find', checked on 'check'. Writes backtest/kearly_ta.md."""
+    import kdocs
+    kx = kdocs.load_kidx()
+    W = kc.load_windows()
+    rows = prep(W, kx, 10)
+    # how many coins lead the same way at the same minute (a market-wide move?)
+    lead = defaultdict(dict)
+    for r in rows:
+        for M, sn in r["snap"].items():
+            lead[(r["close"], M)][r["s"]] = sn[0]
+    sig = []
+    for r in rows:
+        b = first_bet(r, Ms, band, None, "hold")
+        if not b or not b["filled"]:
+            continue
+        side = r["snap"][b["M"]][0]
+        f = chart(r["w"], b["t"], side, b["M"])
+        if not f:
+            continue
+        f["cushion"] = r["snap"][b["M"]][3]
+        f["kalshi_cushion"] = r["snap"][b["M"]][4]
+        others = [v for k, v in lead[(r["close"], b["M"])].items() if k != r["s"]]
+        f["same_way"] = (sum(1 for v in others if v == side) / len(others)) if others else None
+        b["f"] = f
+        sig.append(b)
+    find = [b for b in sig if b["t"] < SPLIT]
+    chk = [b for b in sig if b["t"] >= SPLIT]
+    L = ["# Chart signals on the earlier, cheaper bids", "",
+         f"Generated {bot.iso()}. Code: `kearly.py ta`. One bid per window at the first minute with 10 to 4 minutes "
+         f"left where the winning side's bid is 85-97c, one tick in front, no cushion bar, held to the close. "
+         f"{len(find)} filled bids in 'find' (to 15 Oct), {len(chk)} in 'check'. Each reading is turned toward our "
+         "side: high = the chart agrees with our bet. Rows = thirds of the find bids by that reading.", "",
+         f"All find bids: {cell(score(find))}. All check bids: {cell(score(chk))}.", "",
+         "| Reading | Low third | Middle third | High third | High third on check |", "|---|---|---|---|---|"]
+    names = ["cushion", "kalshi_cushion", "rsi", "ema", "macd", "bollinger", "mom3", "mom10", "range60",
+             "volregime", "kalshi_move", "kalshi_volume", "same_way", "hour"]
+    cuts = {}
+    for nm in names:
+        xs = sorted(b["f"][nm] for b in find if b["f"].get(nm) is not None)
+        if len(xs) < 30:
+            continue
+        q1, q2 = xs[len(xs) // 3], xs[2 * len(xs) // 3]
+        cuts[nm] = (q1, q2)
+        parts = [[b for b in find if b["f"].get(nm) is not None and b["f"][nm] < q1],
+                 [b for b in find if b["f"].get(nm) is not None and q1 <= b["f"][nm] < q2],
+                 [b for b in find if b["f"].get(nm) is not None and b["f"][nm] >= q2]]
+        hc = [b for b in chk if b["f"].get(nm) is not None and b["f"][nm] >= q2]
+        L.append(f"| {nm} (cuts {q1:.2f} / {q2:.2f}) | " + " | ".join(cell(score(p)) for p in parts) +
+                 f" | {cell(score(hc))} |")
+    # combos: cushion >= 1.5 (a soft bar) AND each reading in its best third
+    L += ["", "## Soft cushion (1.5+) plus one chart reading in its top third", "",
+          "| Filter | Find | Check |", "|---|---|---|"]
+    soft_f = [b for b in find if (b["f"]["cushion"] or -9) >= 1.5]
+    soft_c = [b for b in chk if (b["f"]["cushion"] or -9) >= 1.5]
+    L.append(f"| cushion 1.5+ alone | {cell(score(soft_f))} | {cell(score(soft_c))} |")
+    for nm, (q1, q2) in cuts.items():
+        if nm in ("cushion", "hour"):
+            continue
+        a = [b for b in soft_f if b["f"].get(nm) is not None and b["f"][nm] >= q2]
+        c = [b for b in soft_c if b["f"].get(nm) is not None and b["f"][nm] >= q2]
+        L.append(f"| + {nm} top third | {cell(score(a))} | {cell(score(c))} |")
+    # a small chart score: count of readings that agree (rsi>55, ema>0, macd>0, bollinger>0.5, mom3>0, mom10>0)
+    def votes(f):
+        return sum([f["rsi"] > 55, f["ema"] > 0, f["macd"] > 0, f["bollinger"] > 0.5, f["mom3"] > 0, f["mom10"] > 0])
+    L += ["", "## Chart vote: how many of 6 classic readings agree with our side (RSI over 55, fast average above slow, "
+          "MACD up, upper half of the Bollinger band, up over 3 min, up over 10 min)", "",
+          "| Votes | Find | Check |", "|---|---|---|"]
+    for v in range(7):
+        L.append(f"| {v} | {cell(score([b for b in find if votes(b['f']) == v]))} | "
+                 f"{cell(score([b for b in chk if votes(b['f']) == v]))} |")
+    for bar in (1.0, 1.5, 2.0):
+        a = [b for b in find if votes(b["f"]) >= 5 and (b["f"]["cushion"] or -9) >= bar]
+        c = [b for b in chk if votes(b["f"]) >= 5 and (b["f"]["cushion"] or -9) >= bar]
+        L.append(f"| 5+ votes and cushion {bar}+ | {cell(score(a))} | {cell(score(c))} |")
+    txt = "\n".join(L) + "\n"
+    with open(os.path.join(OUT, "kearly_ta.md"), "w") as fh:
+        fh.write(txt)
+    print(txt)
+    return sig
 
 
 # ================================================================ real trade lists with sizes (probe ke_*)
@@ -451,7 +618,8 @@ def sizecheck():
     keys = ["1-5_0.95-1.00_z2.3_hold", "1-10_0.95-1.00_z2.3_hold", "1-10_0.90-1.00_z2.3_hold",
             "1-10_0.85-0.95_z2.3_hold", "4-8_0.90-1.00_z2.3_hold", "6-10_0.90-1.00_z2.3_hold",
             "5-10_0.85-0.95_z2.3_hold", "1-10_0.85-0.95_z3.0_hold", "1-10_0.90-1.00_z2.0_hold",
-            "1-10_0.85-0.95_z2.0_hold"]
+            "1-10_0.85-0.95_z2.0_hold", "4-10_0.85-0.97_z1.5_hold", "4-10_0.85-0.97_z1.5_hold_calm",
+            "4-10_0.85-0.97_z2.0_hold_calm", "4-10_0.90-0.97_z2.0_hold", "1-10_0.90-1.00_z2.3_hold_calm"]
     say("| Setting | Candle model | $4 real | $10 real | $25 real | $50 real |")
     say("|---|---|---|---|---|---|")
     for key in keys:
@@ -489,4 +657,4 @@ if __name__ == "__main__":
         tfetch(arg or 7)
         sizecheck()
     else:
-        {"run": run}[cmd]()
+        {"run": run, "ta": ta}[cmd]()
