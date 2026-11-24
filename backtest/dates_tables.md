@@ -27,13 +27,13 @@
 
 | rule | bets | ladders | won | per $100 | first half / second half | luck range per $100 | worst case per $100 | exam verdict |
 |---|---|---|---|---|---|---|---|---|
-| Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 455 | 137 | 237 | +$7.87 | +$8.11 / +$7.62 | -4.14 to 19.88 | -18.56 | Ahead, but could be luck |
-| same, 2c extra a share | 455 | 137 | 237 | +$3.50 | +$3.76 / +$3.25 | -8.02 to 15.02 | -21.86 | Ahead, but could be luck |
-| No where Yes is 50-90c | 299 | 110 | 117 | +$11.72 | +$13.64 / +$9.76 | -8.55 to 31.98 | -33.43 | Ahead, but could be luck |
-| No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 170 | 104 | 94 | +$1.06 | +$8.74 / -$7.06 | -10.62 to 12.75 | -24.86 | Ahead, but could be luck |
-| AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 54 | 12 | 27 | +$17.70 | +$7.17 / +$29.51 | -24.11 to 59.51 | -77.53 | Ahead, but could be luck |
-| Starship flight dates: No where Yes is 2-50c | 34 | 10 | 34 | +$24.82 | +$28.30 / +$21.52 | 18.11 to 31.52 | -15.54 | Promising, needs more bets |
-| Starship, same, 4c extra | 34 | 10 | 34 | +$20.10 | +$23.10 / +$17.24 | 14.11 to 26.09 | -17.85 | Ahead, but could be luck |
+| Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 455 | 137 | 237 | +$7.87 | +$8.11 / +$7.62 | -4.14 to 19.88 | -18.63 | Ahead, but could be luck |
+| same, 2c extra a share | 455 | 137 | 237 | +$3.50 | +$3.76 / +$3.25 | -8.02 to 15.02 | -21.93 | Ahead, but could be luck |
+| No where Yes is 50-90c | 299 | 110 | 117 | +$11.72 | +$13.64 / +$9.76 | -8.55 to 31.98 | -33.54 | Ahead, but could be luck |
+| No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 170 | 104 | 94 | +$1.06 | +$8.74 / -$7.06 | -10.62 to 12.75 | -24.92 | Ahead, but could be luck |
+| AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 54 | 12 | 27 | +$17.70 | +$7.17 / +$29.51 | -24.11 to 59.51 | -77.76 | Ahead, but could be luck |
+| Starship flight dates: No where Yes is 2-50c | 34 | 10 | 34 | +$24.82 | +$28.30 / +$21.52 | 18.11 to 31.52 | -15.63 | Promising, needs more bets |
+| Starship, same, 4c extra | 34 | 10 | 34 | +$20.10 | +$23.10 / +$17.24 | 14.11 to 26.09 | -17.93 | Ahead, but could be luck |
 
 Who carries it: profit $17.29 on $219.71 bet ($1 a share). Best 5 ladders: KXFISAEXTEND-26MAY +$5.32, KXHORMUZNORM-26MAR17 +$4.56, KXDHSFUND +$4.29, KXGEMINI-GEMI35P +$3.79, KXMEDIARELEASEADDTRAILER-26 +$3.42. Without them: -2.04 per $100.
 
