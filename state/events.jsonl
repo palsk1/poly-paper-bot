@@ -34478,3 +34478,4 @@
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV240815-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T13:16:56Z", "type": "kmaker_fill"}
 {"pnl": 6.96, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24MASMAZ-MAZ", "track": "tennis_set", "ts": "2026-11-24T13:16:59Z", "type": "econ_settle"}
 {"player": "Giulio Perego", "price": 0.5522, "set1": "7-5", "set2_games": 0, "shares": 45, "ticker": "KXATPCHALLENGERMATCH-26NOV24GIUPER-PER", "track": "tennis_set", "ts": "2026-11-24T13:16:59Z", "type": "ktennis_buy"}
+{"fee": 0.0605, "outcome": "Port Vale FC: Yes", "price": 0.41, "shares": 5, "title": "Will Port Vale FC win on 2026-09-26?", "token": "25300886337919606477126939327169256015150089355651291137582389231410937538193", "track": "sharp_pinnacle", "ts": "2026-11-24T13:22:42Z", "type": "paper_buy"}
