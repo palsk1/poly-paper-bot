@@ -34183,3 +34183,11 @@
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV240515-15", "track": "kc_maker", "ts": "2026-11-24T10:17:52Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.14, "price": 0.986, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV240515-15", "track": "kc_maker_safe", "ts": "2026-11-24T10:17:52Z", "type": "kmaker_fill"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV2405-B60350", "track": "kalshi_patient", "ts": "2026-11-24T10:17:54Z", "type": "kpatient_result"}
+{"fee": 0.0047, "outcome": "Feathers", "price": 0.105, "shares": 5, "title": "Which turkey will Trump pardon?", "token": "104919632950627176926465921063056221279401215704666573055004748038241719266488", "track": "w_dominus", "ts": "2026-11-24T10:25:38Z", "type": "paper_buy"}
+{"fee": 0.0047, "outcome": "Feathers", "price": 0.105, "shares": 5, "title": "Which turkey will Trump pardon?", "token": "104919632950627176926465921063056221279401215704666573055004748038241719266488", "track": "wb_dominus", "ts": "2026-11-24T10:25:38Z", "type": "paper_buy"}
+{"minutes_left": 2.26, "price": 0.998, "queue": 89.09, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV240530-30", "track": "kc_maker", "ts": "2026-11-24T10:27:45Z", "type": "kmaker_order"}
+{"minutes_left": 2.26, "price": 0.998, "queue": 89.09, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV240530-30", "track": "kc_maker_safe", "ts": "2026-11-24T10:27:45Z", "type": "kmaker_order"}
+{"minutes_left": 2.26, "price": 0.998, "queue": 89.09, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV240530-30", "track": "kc_maker_safe_usd", "ts": "2026-11-24T10:27:45Z", "type": "kmaker_order"}
+{"minutes_left": 2.26, "price": 0.998, "queue": 89.09, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV240530-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T10:27:45Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXDJTATTACKVANCE-26NOV-26DEC01", "track": "kalshi_patient", "ts": "2026-11-24T10:27:51Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "yes", "through": true, "ticker": "KXHIGHTNOLA-26NOV24-T62", "track": "kalshi_patient", "ts": "2026-11-24T10:27:51Z", "type": "kpatient_fill"}
