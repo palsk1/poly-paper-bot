@@ -34488,3 +34488,8 @@
 {"fee": 0.0125, "outcome": "Yes", "price": 0.515, "shares": 5, "title": "Will Solana dip to $60 by December 31, 2026?", "token": "69024779234100418825265716746602929644796752945259475286197657688432971405592", "track": "wb_tokor", "ts": "2026-11-24T13:36:44Z", "type": "paper_buy"}
 {"minutes_left": 2.19, "price": 0.968, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV240845-45", "track": "kc_maker", "ts": "2026-11-24T13:42:50Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.32, "price": 0.968, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV240845-45", "track": "kc_maker", "ts": "2026-11-24T13:46:53Z", "type": "kmaker_fill"}
+{"minutes_left": 2.99, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV240900-00", "track": "kc_maker", "ts": "2026-11-24T13:57:00Z", "type": "kmaker_order"}
+{"minutes_left": 2.99, "price": 0.969, "queue": 1080.89, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV240900-00", "track": "kc_maker", "ts": "2026-11-24T13:57:01Z", "type": "kmaker_order"}
+{"minutes_left": 2.99, "price": 0.972, "queue": 124.85, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV240900-00", "track": "kc_maker", "ts": "2026-11-24T13:57:02Z", "type": "kmaker_order"}
+{"pnl": 19.3701, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24GIUPER-PER", "track": "tennis_set", "ts": "2026-11-24T13:57:04Z", "type": "econ_settle"}
+{"pnl": 7.27, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24PIECAR-PIE", "track": "tennis_set", "ts": "2026-11-24T13:57:04Z", "type": "econ_settle"}
