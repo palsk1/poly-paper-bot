@@ -35023,3 +35023,9 @@
 {"player": "Juan Sebastian Gomez", "price": 0.74, "set1": "6-2", "set2_games": 0, "shares": 33, "ticker": "KXATPCHALLENGERMATCH-26NOV24GOMGEO-GOM", "track": "tennis_set", "ts": "2026-11-24T18:57:27Z", "type": "ktennis_buy"}
 {"fee": 0.0346, "outcome": "No", "price": 0.834, "shares": 5, "title": "AI bubble burst in 2026?", "token": "17769188746995805889009627485623784462879024540194570282917960402976991944943", "track": "panic_fade_4c", "ts": "2026-11-24T18:58:19Z", "type": "paper_buy"}
 {"fee": 0.0346, "outcome": "No", "price": 0.834, "shares": 5, "title": "AI bubble burst in 2026?", "token": "17769188746995805889009627485623784462879024540194570282917960402976991944943", "track": "panic_fade_10c", "ts": "2026-11-24T18:58:20Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV241400-00", "track": "kc_maker", "ts": "2026-11-24T19:03:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV241400-00", "track": "kc_maker_safe", "ts": "2026-11-24T19:03:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV241400-00", "track": "kc_maker_safe_usd", "ts": "2026-11-24T19:03:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV241400-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T19:03:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.94, "side": "yes", "through": true, "ticker": "KXINXU-26NOV24H1400-T7164.9999", "track": "kalshi_patient", "ts": "2026-11-24T19:03:17Z", "type": "kpatient_fill"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXITFWMATCH-26NOV24RIVALV-RIV", "track": "kalshi_patient", "ts": "2026-11-24T19:03:18Z", "type": "kpatient_result"}
