@@ -167,7 +167,28 @@ def bets_after(rows, delay=300, extra=0.01, hi=0.97, stake=25.0):
             continue
         win = r["yes"] == g
         out.append({"ev": r["ev"], "t": nxt[0][0], "cost": f["cost"], "pay": f["sh"] if win else 0.0, "px": f["px"],
-                    "q": r["q"], "win": win})
+                    "name": r["q"], "win": win})
+    return out
+
+
+def stock_rows():
+    """Polymarket stock close markets (bt_cache/stk) with the answer from Nasdaq's official daily close, known a couple
+    of minutes after 4 PM New York. All markets with a daily close, also the ones the close does NOT reproduce."""
+    import stocks
+    ms = bt.rjson(os.path.join(stocks.CACHE, "markets.json.gz"), {}) or {}
+    D = bt.rjson(os.path.join(stocks.CACHE, "daily.json.gz"), {}) or {}
+    _, tp, _, _, _ = stocks.load()
+    out = []
+    for mid, m in ms.items():
+        t = tp.get(mid)
+        d = D.get(m["tk"], {}).get(stocks._day(m["end"]))
+        if not t or not d:
+            continue
+        guess = (m["lo"] is None or d[3] > m["lo"]) and (m["hi"] is None or d[3] < m["hi"])
+        line = [x for x in (m["lo"], m["hi"]) if x]
+        out.append({"id": mid, "q": m.get("q", ""), "kind": m.get("kind"), "known": m["end"] + 120, "guess": guess,
+                    "yes": m["final"][0] == 1.0, "b": t["b"], "end": m["end"], "fee": m.get("fee") or 0.0,
+                    "ev": m.get("ev") or mid, "near": min(abs(d[3] - x) / d[3] for x in line) if line else 1.0})
     return out
 
 
@@ -363,10 +384,186 @@ def live():
     wj(os.path.join(CACHE, f"live_{time.strftime('%Y%m%d_%H%M', time.gmtime())}.json.gz"), cand)
 
 
+# ================================================================ Kalshi tennis (offline, tennis-store)
+def tennis_rows():
+    """Kalshi tennis matches (minute bid / ask) joined to 365scores' finished match: start + minutes of each set gives
+    an outside clock for the match end. -> rows with est_end, close, winner side and minute quotes."""
+    import tennis
+    gs, ks = tennis.load_365(), tennis.load_kalshi()
+    tennis.join(ks, gs)
+    out = []
+    for k in ks:
+        g = k.get("g")
+        if not g or not g.get("sets") or any(x[2] is None for x in g["sets"]):
+            continue
+        mins = sum(x[2] for x in g["sets"])
+        est = g["t0"] + mins * 60 + (len(g["sets"]) - 1) * 120
+        out.append({"ev": k["ev"], "series": k["series"], "res": k["res"], "close": k["close"], "est": est, "mins": k["mins"],
+                    "q": f"{k['name']} vs {k['other']}"})
+    return out
+
+
+def tennis_scan(rows, lags=(5, 10, 20)):
+    """Kalshi closes a match market soon after the end: how long after 365scores' end, and is the winner still
+    cheap in between (real ask in the minute bars)?"""
+    import tennis
+    gap = sorted((r["close"] - r["est"]) / 60 for r in rows)
+    print(f"{len(rows)} Kalshi tennis matches with an outside end clock")
+    if gap:
+        print(f"Kalshi close minus 365scores end: middle {gap[len(gap) // 2]:+.0f} min, 10th-90th {gap[len(gap) // 10]:+.0f} .. {gap[len(gap) * 9 // 10]:+.0f}")
+    out = {}
+    for lag in lags:
+        c = collections.Counter()
+        for r in rows:
+            t = r["est"] + lag * 60
+            if t >= r["close"]:
+                c["closed already"] += 1
+                continue
+            q = tennis.quote_at(r["mins"], t, max_gap=180, max_spread=99)
+            if not q:
+                c["no quote"] += 1
+                continue
+            ask = q[1] if r["res"] == 1 else 1 - q[0]
+            c["quoted"] += 1
+            if ask <= 0.97:
+                c["winner ask 97c or less"] += 1
+            if ask <= 0.90:
+                c["winner ask 90c or less"] += 1
+        out[lag] = c
+        print(f"  {lag} min after the 365scores end: {dict(c)}")
+    return out
+
+
+# ================================================================ sports after the whistle (offline, bt_cache/kn)
+CUPS = ("ucl", "uel", "uwcl", "dfb", "scop", "lib", "clf", "acle", "acl2", "fifwc", "fif", "unl")
+WHISTLE = 135 * 60     # league soccer: kickoff + 2h15m = the game is over in practice (no extra time in league games)
+
+
+def soccer_rows():
+    """League soccer 3-way markets ('Will X win on <day>?', '... end in a draw?') from bt_cache/kn. The bot's guess is
+    the side leading on the last trade before kickoff + 2h15m (no peeking at the payout); a wrong guess is a loss."""
+    M, T = rj(os.path.join(CACHE, "markets.json.gz"), {}) or {}, rj(os.path.join(CACHE, "tapes.json.gz"), {}) or {}
+    out = []
+    for k, m in M.items():
+        q = m["q"]
+        if not (" win on 20" in q or "end in a draw" in q) or m["slug"].split("-")[0] in CUPS:
+            continue
+        t0 = m["gst"] + WHISTLE
+        b = [x for x in T[k]["b"] if x[0] < m["closed_t"]]
+        seen = [x for x in b if x[0] < t0]
+        if not seen:
+            continue
+        out.append({"id": k, "q": q, "known": t0, "guess": seen[-1][2] >= 0.5, "yes": m["final"][0] == 1.0, "b": b,
+                    "end": m["closed_t"], "fee": m.get("fee") or 0.05, "ev": m.get("ev_slug") or k, "near": None})
+    return out
+
+
+def grind(rows, lo=0.90, cap=0.9995, stake=25.0, best=False):
+    """The 99c grind: right after the answer is known, buy the leader (last trade at `lo`+) at the worst (or best)
+    trade of the next hour + fee, whatever the price under `cap`. Paid by the real result."""
+    out = []
+    for r in rows:
+        nxt = [x for x in r["b"] if x[0] >= r["known"]]
+        seen = [x for x in r["b"] if x[0] < r["known"]]
+        if not nxt or not seen:
+            continue
+        g = r["guess"]
+        ref = seen[-1][2] if g else 1 - seen[-1][2]
+        w = [x for x in nxt if x[0] < nxt[0][0] + 3600]
+        px = min((x[3] if g else 1 - x[4]) for x in w) if best else max((x[4] if g else 1 - x[3]) for x in w)
+        if ref < lo or px >= cap:
+            continue
+        sh = stake / px
+        out.append({"ev": r["ev"], "t": nxt[0][0], "cost": sh * px + fee(px, sh, r["fee"]), "pay": sh if g == r["yes"] else 0.0,
+                    "px": px, "name": r["q"], "win": g == r["yes"], "hours": (r["end"] - nxt[0][0]) / 3600,
+                    "room": sum(x[5] for x in w)})
+    return out
+
+
+def p100(b):
+    c = sum(x["cost"] for x in b)
+    return (sum(x["pay"] for x in b) - c) / c * 100 if c else 0.0
+
+
+def report(log=False):
+    import exam
+    L = []
+    say = lambda s="": (L.append(s), print(s, flush=True))
+    tries = 14
+    cr, sk, so = crypto_rows(), stock_rows(), soccer_rows()
+    fams = [("Bitcoin / Ethereum price bets (answer = Binance's 1-minute price)", cr, 300),
+            ("Stock close bets (answer = Nasdaq's official close)", sk, 300),
+            ("League soccer, after the final whistle (kickoff + 2h15m)", so, 0)]
+    say("# Bets still cheap after the answer is known")
+    say()
+    say(f"Generated {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `known.py report`. Paper only, research only.")
+    say()
+    say("**Question (Jan, 24 Nov):** are there markets where the real answer is already public (game over, price fixed, "
+        "market closed) but the winning side can still be bought under 97-99c? How often, how much, how long is the money stuck, "
+        "and how often does the payout go the other way?")
+    say()
+    say("## 1. How often the known winner is still cheap")
+    say()
+    say("Every real trade, in 1- or 5-minute steps. 'Known' = the moment the outside source fixes the answer. A step counts "
+        "as cheap when someone traded the known winner at that price or less (the kind count: one crumb trade is enough).")
+    say()
+    say("| Family | Markets | Traded after the answer was known | Winner traded at 97c or less | at 99c or less | Our source disagreed with the payout |")
+    say("|---|---|---|---|---|---|")
+    for nm, rows, d in fams:
+        c, dol, _ = scan(rows, d)
+        say(f"| {nm} | {c['known']:,} | {c['traded after']:,} | {c['winner traded at 97c or less']:,} (${dol[0.97]:,.0f} traded) | "
+            f"{c['winner traded at 99c or less']:,} (${dol[0.99]:,.0f}) | {c['source disagreed with the payout']:,} |")
+    say()
+    say("## 2. A bot that buys the known winner when it is still under 97c")
+    say()
+    say("Wait 5 minutes after the answer is fixed (soccer: kickoff + 2h15m), buy the side the source says won if its last "
+        "trade is 97c or less, pay the WORST trade of the next hour + 1c + fee, $25 a bet, paid by the real result.")
+    say()
+    say("| Family | Bets | Lost | Profit per $100 |")
+    say("|---|---|---|---|")
+    cheap = {}
+    for nm, rows, d in fams:
+        b = bets_after(rows, delay=d, hi=0.97)
+        cheap[nm] = b
+        say(f"| {nm} | {len(b)} | {sum(not x['win'] for x in b)} | {usd(p100(b))} |")
+    say()
+    say("## 3. The 99c grind: buy the known winner at whatever it costs")
+    say()
+    g = grind(so)
+    gc = grind([dict(r, known=r["known"] + 300) for r in cr])
+    gs = grind([dict(r, known=r["known"] + 300) for r in sk])
+    say("| Family | Bets | Lost | Average price | Profit per $100 (worst trade of the hour) | Hours until paid | $ traded in that hour |")
+    say("|---|---|---|---|---|---|---|")
+    for nm, b in (("League soccer after the whistle", g), ("Crypto price bets", gc), ("Stock close bets", gs)):
+        if b:
+            say(f"| {nm} | {len(b)} | {sum(not x['win'] for x in b)} | {sum(x['px'] for x in b) / len(b) * 100:.2f}c | {usd(p100(b))} | "
+                f"{(f"{st.median(x['hours'] for x in b):.1f}" if b is g else "under 1 (pays fast)")} | ${sum(x['room'] for x in b):,.0f} |")
+    say()
+    cards = []
+    for nm, b, stt in (("Known answer, winner still under 97c: buy it (crypto, stocks, soccer)", sum(cheap.values(), []), "dropped"),
+                       ("Soccer after the final whistle: buy the leader at 99c+ (the grind)", g, "dropped"),
+                       ("Crypto / stock bets after the answer is fixed: buy the winner at 99c+", gc + gs, "dropped")):
+        if b:
+            cards.append((nm, exam.score(b, nm, tries=tries, src="known.py report", status=stt, log=log, quiet=True)))
+    say("## 4. Exam")
+    say()
+    for nm, cd in cards:
+        say(f"- **{nm}:** {cd.get('bets')} bets, {usd(cd['per100']) if cd.get('per100') is not None else '-'} per $100, "
+            f"verdict **{cd.get('verdict')}**.")
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backtest", "known_tables.md")
+    with open(path, "w") as f:
+        f.write("\n".join(L) + "\n")
+    print("wrote", path)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
     if cmd == "sfetch":
         sfetch(int(sys.argv[2]) if len(sys.argv) > 2 else 4000)
+    elif cmd == "report":
+        report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
+    elif cmd == "tennis":
+        tennis_scan(tennis_rows())
     elif cmd == "live":
         live()
     elif cmd == "crypto":
@@ -376,24 +573,3 @@ if __name__ == "__main__":
             print(d, dict(c), {k: round(v) for k, v in dol.items()})
     else:
         print(__doc__)
-
-
-def stock_rows():
-    """Polymarket stock close markets (bt_cache/stk) with the answer from Nasdaq's official daily close, known a couple
-    of minutes after 4 PM New York. All markets with a daily close, also the ones the close does NOT reproduce."""
-    import stocks
-    ms = bt.rjson(os.path.join(stocks.CACHE, "markets.json.gz"), {}) or {}
-    D = bt.rjson(os.path.join(stocks.CACHE, "daily.json.gz"), {}) or {}
-    _, tp, _, _, _ = stocks.load()
-    out = []
-    for mid, m in ms.items():
-        t = tp.get(mid)
-        d = D.get(m["tk"], {}).get(stocks._day(m["end"]))
-        if not t or not d:
-            continue
-        guess = (m["lo"] is None or d[3] > m["lo"]) and (m["hi"] is None or d[3] < m["hi"])
-        line = [x for x in (m["lo"], m["hi"]) if x]
-        out.append({"id": mid, "q": m.get("q", ""), "kind": m.get("kind"), "known": m["end"] + 120, "guess": guess,
-                    "yes": m["final"][0] == 1.0, "b": t["b"], "end": m["end"], "fee": m.get("fee") or 0.0,
-                    "ev": m.get("ev") or mid, "near": min(abs(d[3] - x) / d[3] for x in line) if line else 1.0})
-    return out
