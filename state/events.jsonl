@@ -33789,3 +33789,4 @@
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNBA3PT-26NOV23SASSAC-SASSCASTLE5-5", "track": "kalshi_patient", "ts": "2026-11-24T06:02:34Z", "type": "kpatient_result"}
 {"pnl": 0.29, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV23SASSAC-SAC15", "track": "kalshi_patient", "ts": "2026-11-24T06:02:34Z", "type": "kpatient_result"}
 {"pnl": 0.39, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNBASPREAD-26NOV23UTALAL-LAL39", "track": "kalshi_patient", "ts": "2026-11-24T06:02:34Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.5015, "price": 0.0, "reason": "resolved", "title": "Will LD Alajuelense vs. CS Cartagin\u00e9s end in a draw?", "token": "77215152683160544358822687613755827718406014497827870195291710475875774681115", "track": "soccer_draw", "ts": "2026-11-24T06:05:42Z", "type": "paper_close"}
