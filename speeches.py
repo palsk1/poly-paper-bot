@@ -41,6 +41,24 @@ def peek():
 API = "https://rollcall.com/wp-json/factbase/v1/search?media=&type=&sort=date&location=all&place=all&page={}&format=json"
 
 
+def peek5():
+    """Roll Call moved its list API about 18 Nov 2026 (the old wp-json search answers 404). Look at the new one."""
+    base = "https://rollcall.com/api/factbase/transcripts"
+    for q in ("?person=trump", "?person=trump&page=2", "?person=trump&page=1&per_page=50", "?person=trump&sort=date&page=1"):
+        try:
+            s = raw(base + q, 40)
+        except Exception as e:
+            print("FAIL", q, str(e)[:150], flush=True)
+            continue
+        print("OK", q, len(s), flush=True)
+        print("   body:", re.sub(r"\s+", " ", s[:3000]), flush=True)
+        try:
+            j = json.loads(s)
+            print("   keys:", list(j)[:20] if isinstance(j, dict) else type(j).__name__, flush=True)
+        except Exception:
+            pass
+
+
 def peek2():
     import json
     d = json.loads(raw(API.format(1)))
@@ -747,4 +765,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
