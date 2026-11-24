@@ -59,6 +59,23 @@ def peek5():
             pass
 
 
+def peek6():
+    """Kalshi's weekly KXTRUMPSAY list showed 0 open markets on 24 Nov 2026: newest events, and any similar series."""
+    import bot
+    for st in ("open", "closed", "settled", None):
+        try:
+            q = {"series_ticker": "KXTRUMPSAY", "limit": 10, **({"status": st} if st else {})}
+            ev = bot.kalshi_get("/events", q).get("events") or []
+            print("events", st, [(e.get("event_ticker"), e.get("title"), e.get("strike_date") or e.get("close_time")) for e in ev[:10]], flush=True)
+        except Exception as e:
+            print("events", st, "FAIL", str(e)[:150], flush=True)
+    try:
+        sers = bot.kalshi_get("/series", {"category": "Mentions"}).get("series") or []
+        print("series with TRUMP:", [(x.get("ticker"), x.get("title"), x.get("frequency")) for x in sers if "TRUMP" in str(x.get("ticker"))][:60], flush=True)
+    except Exception as e:
+        print("series FAIL", str(e)[:150], flush=True)
+
+
 def peek2():
     import json
     d = json.loads(raw(API.format(1)))
@@ -765,4 +782,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "peek5": peek5, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
