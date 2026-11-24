@@ -297,10 +297,78 @@ def sfetch(n=4000):
     print(f"done: {len(have_t)} tapes, {len(have_e)} events, {time.time() - t0:.0f} s", flush=True)
 
 
+# ================================================================ live snapshot (probe kn_live)
+def kind_of(m):
+    q = str(m.get("question") or "").lower()
+    if bot.is_sports(m):
+        return "sports"
+    if any(w in q for w in ("election", "win the", "primary", "senate", "house", "governor", "mayor", "seats", "popular vote", "prime minister", "president")):
+        return "election/politics"
+    if any(w in q for w in ("bitcoin", "ethereum", "solana", "xrp", "price of")):
+        return "crypto"
+    if any(w in q for w in ("say", "mention", "post", "tweet")):
+        return "mentions/posts"
+    return "other"
+
+
+def live():
+    """Right now: every open Polymarket market whose end date has passed (last 60 days). Leading side's listed price,
+    the oracle status, and what the real order book sells under 97c and 99c."""
+    import datetime as dt
+    f = {"end_date_min": bot.iso(bot.now() - dt.timedelta(days=60)), "end_date_max": bot.iso(bot.now()), "liquidity_num_min": 100}
+    ms = bot.scan_markets(f)
+    print(f"{len(ms)} open markets past their end date (last 60 days, $100+ liquidity)", flush=True)
+    rows = []
+    for m in ms:
+        pr = bot.binary(m)
+        if not pr or m.get("closed") or m.get("acceptingOrders") is False:
+            continue
+        st_ = [str(x).lower() for x in bot.jlist(m.get("umaResolutionStatuses"))]
+        tier = "disputed" if any("disput" in x for x in st_) else "resolved" if "resolved" in st_ else "proposed" if st_ and st_[-1] == "proposed" else "nothing proposed"
+        i = 0 if pr[0] >= pr[1] else 1
+        end = bot.parse_iso(m.get("endDate") or m.get("endDateIso"))
+        rows.append({"q": m.get("question"), "kind": kind_of(m), "tier": tier, "lead": pr[i], "i": i, "tok": bot.market_tokens(m)[i],
+                     "days": (bot.now() - end).total_seconds() / 86400 if end else None, "slug": m.get("slug"),
+                     "vol": bot.fnum(bot.pick(m, "volumeNum", "volume"))})
+    cand = [r for r in rows if 0.80 <= r["lead"] < 0.995]
+    print(f"{len(rows)} binary, {len(cand)} with the leading side at 80c to 99.5c", flush=True)
+
+    def bk(r):
+        b = bot.book(r["tok"])
+        if not b:
+            return r
+        asks = b["asks"] if isinstance(b, dict) else b[0]
+        r["ask"] = asks[0][0] if asks else None
+        r["d97"] = sum(p * s for p, s in asks if p <= 0.97)
+        r["d99"] = sum(p * s for p, s in asks if p <= 0.99)
+        return r
+    with ThreadPoolExecutor(8) as ex:
+        cand = list(ex.map(bk, cand))
+    tab = collections.defaultdict(lambda: [0, 0, 0.0, 0.0])
+    for r in cand:
+        k = (r["kind"], r["tier"])
+        tab[k][0] += 1
+        if r.get("ask") is not None and r["ask"] <= 0.97:
+            tab[k][1] += 1
+        tab[k][2] += r.get("d97") or 0
+        tab[k][3] += r.get("d99") or 0
+    print("| kind | oracle status | markets | ask at 97c or less | $ for sale up to 97c | $ for sale up to 99c |")
+    for k, v in sorted(tab.items(), key=lambda x: -x[1][0]):
+        print(f"| {k[0]} | {k[1]} | {v[0]} | {v[1]} | ${v[2]:,.0f} | ${v[3]:,.0f} |")
+    cand.sort(key=lambda r: -(r.get("d97") or 0))
+    print("\nbiggest under 97c:")
+    for r in cand[:40]:
+        print(f"  {r['kind']:<18} {r['tier']:<16} lead {r['lead']:.3f} ask {r.get('ask')} $97 {r.get('d97', 0):,.0f} $99 {r.get('d99', 0):,.0f} "
+              f"{(r['days'] or 0):.1f}d past  {str(r['q'])[:90]}", flush=True)
+    wj(os.path.join(CACHE, f"live_{time.strftime('%Y%m%d_%H%M', time.gmtime())}.json.gz"), cand)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
     if cmd == "sfetch":
         sfetch(int(sys.argv[2]) if len(sys.argv) > 2 else 4000)
+    elif cmd == "live":
+        live()
     elif cmd == "crypto":
         rows = crypto_rows()
         for d in (60, 300, 900):
