@@ -472,6 +472,178 @@ def fetch(part="0", parts="1"):
               f"{sum(len(d['tr']) for d in got.values())} trades ({time.time() - T0:.0f}s)", flush=True)
 
 
+# ================================================================ history analysis
+FAM = {"KXNBA": "NBA", "KXWNBA": "WNBA", "KXNFL": "NFL", "KXMLB": "MLB", "KXNHL": "NHL", "KXEPL": "soccer",
+       "KXUCL": "soccer", "KXLALIGA": "soccer"}
+HOURS = (24, 6, 2, 0.5)
+BANDS = ((0.02, 0.10), (0.10, 0.25), (0.25, 0.50), (0.50, 0.75), (0.75, 0.90), (0.90, 0.98))
+
+
+def fam(ser):
+    return next((v for k, v in sorted(FAM.items(), key=lambda kv: -len(kv[0])) if ser.startswith(k)), "?")
+
+
+def quote_at(cs, t, back=2 * 3600):
+    q = None
+    for c in cs:
+        if c[0] > t:
+            break
+        if c[0] >= t - back and c[1] is not None and c[2] is not None and 0 < c[1] < c[2] < 1:
+            q = c
+    return q
+
+
+def buy(px, stake=25.0):
+    n = max(1, int(stake / px))
+    return n, n * px + bot.kalshi_fee(n, px)
+
+
+def load_rows():
+    st = rj(STARTS, {}) or {}
+    rows, nost = [], 0
+    for ser in SER:
+        mk = rj(os.path.join(CACHE, f"mk_{ser}.json.gz"), {}) or {}
+        tp = rj(os.path.join(CACHE, f"tapes_{ser}.json.gz"), {}) or {}
+        for t, d in tp.items():
+            m = mk.get(t)
+            if not m or not d["c"]:
+                continue
+            S = st.get(game_key(m["ev"]))
+            if not S:
+                nost += 1
+                continue
+            rows.append({"t": t, "s": ser, "f": fam(ser), "ev": game_key(m["ev"]), "S": S, "res": m["res"],
+                         "player": m.get("player"), "line": m.get("line"), "close": m["close"], "c": d["c"],
+                         "tr": d["tr"]})
+    print(f"rows with quotes and a start time: {len(rows)}, without a start time: {nost}")
+    return rows, mk
+
+
+def record_map(ser):
+    """{(player, line): [(close, won)]} from every settled market of the series (not only taped ones)."""
+    mk = rj(os.path.join(CACHE, f"mk_{ser}.json.gz"), {}) or {}
+    out = collections.defaultdict(list)
+    for m in mk.values():
+        if m.get("line") is not None:
+            out[(m["player"], m["line"])].append((m["close"], m["res"] == "yes"))
+    for v in out.values():
+        v.sort()
+    return out
+
+
+def bets_for(rows, h, side, lo, hi, extra=0.0, pick=None):
+    out = []
+    for r in rows:
+        if pick and not pick(r):
+            continue
+        q = quote_at(r["c"], r["S"] - h * 3600)
+        if not q or q[2] - q[1] > 0.10:
+            continue
+        px = q[2] if side == "yes" else 1 - q[1]
+        yes_px = q[2] if side == "yes" else q[1]
+        if not lo <= yes_px < hi:
+            continue
+        px = min(0.99, px + extra)
+        n, cost = buy(px)
+        out.append({"ev": r["ev"], "t": r["S"] - h * 3600, "cost": cost, "pay": n * (r["res"] == side), "sh": n})
+    return out
+
+
+def p100(b):
+    c = sum(x["cost"] for x in b)
+    return 100 * (sum(x["pay"] for x in b) - c) / c if c else 0.0
+
+
+def report(log=None):
+    import exam
+    rows, _ = load_rows()
+    tries = 0
+    print("\n== price only: buy at Kalshi's real sell offer + fee, $25 a bet, hours before the game")
+    print("| family | side | when | Yes price | bets | games | won | per $100 | 1st half | 2nd half |")
+    res = []
+    for f in sorted({r["f"] for r in rows}):
+        fr = [r for r in rows if r["f"] == f]
+        for side in ("yes", "no"):
+            for h in HOURS:
+                for lo, hi in BANDS:
+                    b = bets_for(fr, h, side, lo, hi)
+                    tries += 1
+                    if len(b) < 30:
+                        continue
+                    b.sort(key=lambda x: x["t"])
+                    k = len(b) // 2
+                    res.append((f, side, h, lo, hi, b))
+                    print(f"| {f} | {side} | {h}h | {lo:.2f}-{hi:.2f} | {len(b)} | {len({x['ev'] for x in b})} | "
+                          f"{sum(x['pay'] > 0 for x in b)} | {p100(b):+.2f} | {p100(b[:k]):+.2f} | {p100(b[k:]):+.2f} |")
+    print("\n== whole families, every price 2-98c, 2 hours before")
+    for f in sorted({r["f"] for r in rows}):
+        for side in ("yes", "no"):
+            b = bets_for([r for r in rows if r["f"] == f], 2, side, 0.02, 0.98)
+            print(f"  {f} {side}: {len(b)} bets, {p100(b):+.2f} per $100")
+    for side in ("yes", "no"):
+        b = bets_for(rows, 2, side, 0.02, 0.98)
+        print(f"  ALL {side}: {len(b)} bets, {p100(b):+.2f} per $100")
+    print("\n== per series, 2 hours before, every price")
+    for ser in SER:
+        sr = [r for r in rows if r["s"] == ser]
+        if not sr:
+            continue
+        y, n = bets_for(sr, 2, "yes", .02, .98), bets_for(sr, 2, "no", .02, .98)
+        print(f"  {ser}: {len(sr)} taped | Yes {len(y)} bets {p100(y):+.2f} | No {len(n)} bets {p100(n):+.2f}")
+
+    # player's own record at the same line (like word_no): earlier settled markets of the same player and line
+    print("\n== the player's own record at the same line (last 15 earlier games, 5+ needed) vs the price, 2h before")
+    recs = {ser: record_map(ser) for ser in SER}
+    for gap in (0.10, 0.15, 0.25):
+        for side in ("yes", "no"):
+            b, cal = [], []
+            for r in rows:
+                if r["line"] is None:
+                    continue
+                past = [w for c, w in recs[r["s"]].get((r["player"], r["line"]), []) if c < r["S"] - 3600][-15:]
+                if len(past) < 5:
+                    continue
+                rec = sum(past) / len(past)
+                q = quote_at(r["c"], r["S"] - 2 * 3600)
+                if not q or q[2] - q[1] > 0.10:
+                    continue
+                if gap == 0.10 and side == "yes":
+                    cal.append((rec, (q[1] + q[2]) / 2, r["res"] == "yes"))
+                ok = rec - q[2] >= gap if side == "yes" else (1 - rec) - (1 - q[1]) >= gap
+                if not ok:
+                    continue
+                px = q[2] if side == "yes" else 1 - q[1]
+                n, cost = buy(px)
+                b.append({"ev": r["ev"], "t": r["S"] - 7200, "cost": cost, "pay": n * (r["res"] == side), "sh": n})
+            tries += 1
+            print(f"  record {int(gap*100)}c+ {'above' if side == 'yes' else 'below'} the price, buy {side}: "
+                  f"{len(b)} bets, {p100(b):+.2f} per $100")
+            if cal:
+                br = sum((a - y) ** 2 for a, _, y in cal) / len(cal)
+                bp = sum((p - y) ** 2 for _, p, y in cal) / len(cal)
+                print(f"   forecast error on {len(cal)} (lower is better): own record {br:.4f}, Kalshi price {bp:.4f}")
+            res.append(("record", side, 2, gap, 1, b))
+
+    # backward look: which bets won most, and what did they share?
+    print("\n== backward look: best 12 cuts with 150+ bets, both halves ahead")
+    good = []
+    for f, side, h, lo, hi, b in res:
+        if len(b) < 150:
+            continue
+        b = sorted(b, key=lambda x: x["t"])
+        k = len(b) // 2
+        if p100(b[:k]) > 0 and p100(b[k:]) > 0:
+            good.append((p100(b), f, side, h, lo, hi, b))
+    good.sort(key=lambda x: -x[0])
+    for g in good[:12]:
+        print(f"  {g[1]} {g[2]} {g[3]}h {g[4]}-{g[5]}: {len(g[6])} bets, {g[0]:+.2f} per $100, "
+              f"+2c a share {p100([dict(x, cost=x['cost'] + 0.02 * x['sh']) for x in g[6]]):+.2f}")
+    print(f"\ncuts looked at: {tries}")
+    for g in good[:3]:
+        exam.score(g[6], f"Kalshi props: {g[1]} {g[2]} {g[3]}h before, Yes {g[4]}-{g[5]}", tries=tries,
+                   src="props.py report", log=bool(log))
+
+
 def scan():
     for f in (kalshi_scan, poly_scan, pin_scan):
         try:
