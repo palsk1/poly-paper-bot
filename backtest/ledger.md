@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**242 ideas examined, in about 72,889 versions.** 191 dropped, 51 still being tested or waiting. **Looks real: 6.**
+**245 ideas examined, in about 72,971 versions.** 193 dropped, 52 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 242 ideas that are all worthless, the luckiest one still looks good. With 242 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 245 ideas that are all worthless, the luckiest one still looks good. With 245 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -245,6 +245,9 @@ Why count: if you test 242 ideas that are all worthless, the luckiest one still 
 | 2026-11-24 | AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 60 | 12 | +$17.70 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
 | 2026-11-24 | Crypto / stock bets after the answer is fixed: buy the winner at 99c+ | 14 | 1953 | +$0.16 | Promising, needs more bets | dropped | known.py report |
 | 2026-11-24 | Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 60 | 137 | +$7.87 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Kalshi album first-week units: buy where HITS's midweek forecast is 10c+ away from the price (Fri 06:00 UTC) | 4 | 27 | +$10.76 | Ahead, but could be luck | dropped | music.py, backtest/music.md |
+| 2026-11-24 | Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC) | 70 | 36 | +$36.51 | Promising, needs more bets | lead, no track | music.py, backtest/music.md |
+| 2026-11-24 | Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week | 8 | 35 | -$26.70 | Losing | dropped | music.py, backtest/music.md |
 | 2026-11-24 | Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to 400 contracts | 1,400 | 1433 | +$11.57 | Ahead, but could be luck | dropped | khourly_sweep.py offer |
 | 2026-11-24 | Known answer, winner still under 97c: buy it (crypto, stocks, soccer) | 14 | 38 | -$27.30 | Behind, but could be bad luck | dropped | known.py report |
 | 2026-11-24 | No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 60 | 104 | +$1.06 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |

@@ -1,6 +1,6 @@
 # Bets still cheap after the answer is known
 
-Generated 2026-11-24 13:26 UTC by `known.py report`. Paper only, research only.
+Generated 2026-11-24 20:53 UTC by `known.py report`. Paper only, research only.
 
 **Question (Jan, 24 Nov):** are there markets where the real answer is already public (game over, price fixed, market closed) but the winning side can still be bought under 97-99c? How often, how much, how long is the money stuck, and how often does the payout go the other way?
 

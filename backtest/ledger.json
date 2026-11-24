@@ -3050,6 +3050,45 @@
    "src": "dates.py, backtest/dates.md"
   },
   {
+   "id": "kalshi_album_first_week_units_ladders_yes_on_a_rung_priced_1",
+   "date": "2026-11-24",
+   "what": "Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC)",
+   "tries": 70,
+   "bets": 49,
+   "groups": 36,
+   "per100": 36.51,
+   "floor100": -1.05,
+   "verdict": "Promising, needs more bets",
+   "status": "lead, no track",
+   "src": "music.py, backtest/music.md"
+  },
+  {
+   "id": "kalshi_album_first_week_units_buy_where_hits_s_midweek_forec",
+   "date": "2026-11-24",
+   "what": "Kalshi album first-week units: buy where HITS's midweek forecast is 10c+ away from the price (Fri 06:00 UTC)",
+   "tries": 4,
+   "bets": 64,
+   "groups": 27,
+   "per100": 10.76,
+   "floor100": -82.8,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "music.py, backtest/music.md"
+  },
+  {
+   "id": "kalshi_billboard_hot_100_1_yes_on_the_song_with_the_most_us_",
+   "date": "2026-11-24",
+   "what": "Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week",
+   "tries": 8,
+   "bets": 35,
+   "groups": 35,
+   "per100": -26.7,
+   "floor100": -80.42,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "music.py, backtest/music.md"
+  },
+  {
    "id": "known_answer_winner_still_under_97c_buy_it_crypto_stocks_soc",
    "date": "2026-11-24",
    "what": "Known answer, winner still under 97c: buy it (crypto, stocks, soccer)",
