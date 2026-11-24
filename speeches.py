@@ -78,6 +78,21 @@ def peek6():
         print("series FAIL", str(e)[:150], flush=True)
 
 
+def peek7():
+    """Does a new transcript page still parse? (24 Nov 2026: list fixed, but new days came back empty)"""
+    import json as _j
+    rows = _j.loads(raw(API.format(1), 40)).get("data") or []
+    for x in [r for r in rows if "no-transcript" not in str(r.get("slug"))][:2]:
+        u = x["factbase_url"]
+        s = raw(u, 60)
+        b = parse(s)
+        print("URL", u, "len", len(s), "blocks", len(b), b[:3], flush=True)
+        i = max(s.find("Donald Trump"), 0)
+        for k in ("speaker", "transcript", "data-", "__NEXT_DATA__", "wp-json", "/api/"):
+            j = s.find(k, i)
+            print("  near", k, j, re.sub(r"\s+", " ", s[j:j + 700]) if j >= 0 else "", flush=True)
+
+
 def peek2():
     import json
     d = json.loads(raw(API.format(1)))
@@ -784,4 +799,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
