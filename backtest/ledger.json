@@ -2983,6 +2983,19 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "khourly_sweep.py, backtest/khourly.md"
+  },
+  {
+   "id": "kalshi_hourly_crypto_offer_the_safe_side_at_99c_cushion_2_4_",
+   "date": "2026-11-24",
+   "what": "Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to 400 contracts",
+   "tries": 1400,
+   "bets": 1735,
+   "groups": 1433,
+   "per100": 11.57,
+   "floor100": -100.0,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "khourly_sweep.py offer"
   }
  ]
 }

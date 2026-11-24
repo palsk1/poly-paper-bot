@@ -8,6 +8,8 @@ bt_cache/khr/*.pkl. Write-up: backtest/khourly.md "The deep dig".
                                             waiting bid, touch = best case; KXBTCD instead of all = one coin)
   python3 khourly_sweep.py pool             buying the safe side at 96-99c, by cushion and time
   python3 khourly_sweep.py improve          a bid one cent in front of the best bid, every time / price / cushion
+  python3 khourly_sweep.py offer [--log]    the one lead, sized: offer the safe side at 99c (bid 1c on the long shot), counted
+                                            on the real buyers at 99c (needs bt_cache/khr/ls_*.json.gz, probe khr_lsfetch)
   python3 khourly_sweep.py lastmin          model of the last minute (the result is a 60-second average) vs real trades
 """
 import os, sys
@@ -227,6 +229,85 @@ for lo, hi in ((-1, -0.1), (-0.1, -0.03), (-0.03, 0), (0, 0.03), (0.03, 0.1), (0
     f = list(first.values()); c1 = sum(o[5] + o[10] for o in f); p1 = sum((1.0 if o[9] else 0) - o[5] - o[10] for o in f)
     print(f"{lo:+.2f}..{hi:+.2f} | {len(g)} | {sum(o[8] for o in g):,.0f} | {len(f)} | {sum(o[9] for o in g)} | {pnl / cost * 100:+.2f} | {p1 / c1 * 100:+.2f} ({sum(o[9] for o in f)} won)")
 import pickle; pickle.dump(out, open(HERE + "/lastmin.pkl", "wb"))
+'''
+
+PARTS['offer'] = r'''import sys, pickle, gzip, json, collections, os
+HERE = globals().get("HERE") or "bt_cache/khr"
+SER = ("KXBTCD", "KXETHD", "KXSOLD", "KXXRPD", "KXBNBD", "KXHYPED")
+rows = pickle.load(open(HERE + "/sweep.pkl", "rb"))
+ts = sorted({r[1] for r in rows}); mid = ts[len(ts) // 2]; days = (ts[-1] - ts[0]) / 86400
+# signal: the long shot has NO buyer at all (bid 0) and its sell offer is 2c+ (so the safe side's best bid is 98c or
+# less and nobody offers it at 99c): we bid 1c on the long shot = offer the safe side at 99c, first in line.
+sig = {}
+for r in rows:
+    s, close, m, side, bid, ask, z, won, vol, thru, touch, ev, tk = r
+    if m not in (30, 20, 10) or bid > 1e-9 or ask < 0.02 - 1e-9 or ask > 0.10 + 1e-9: continue
+    cush = -z
+    if not (1.5 <= cush < 5): continue
+    k = (tk, m)
+    sig[k] = dict(s=s, close=close, m=m, side=side, cush=cush, won=won, ev=ev, tk=tk, ask=ask)
+print("signals:", len(sig), "days", round(days, 1))
+T = {s: json.load(gzip.open(f"{HERE}/ls_{s}.json.gz")) for s in SER}
+def sold(g, frm=None):
+    """contracts takers bought of the safe side at 99c after our offer went up (we are first in line)"""
+    tr = T[g["s"]].get(g["tk"])
+    if tr is None: return None
+    t0 = g["close"] - 60 * g["m"] if frm is None else frm
+    yp, tk = (0.01, "n") if g["side"] == "yes" else (0.99, "y")
+    return sum(c for t, p, c, sd in tr if t > t0 + 5 and t <= g["close"] and abs(p - yp) < 1e-6 and sd == tk)
+miss = 0
+for g in sig.values():
+    g["sold"] = sold(g)
+    if g["sold"] is None: miss += 1; g["sold"] = 0
+print("signals without a trade list:", miss)
+def zb(c):
+    return "1.5-2" if c < 2 else "2-3" if c < 3 else "3-4" if c < 4 else "4-5"
+def line(name, gs, N):
+    n = f = w = 0; pnl = cost = 0.0; h = [0.0, 0.0]; rounds = set(); wr = set()
+    for g in gs:
+        got = min(N, int(g["sold"]))
+        if got < 1: continue
+        n += 1; f += got; cost += got * 0.01
+        p = got * (0.99 if g["won"] else -0.01)
+        pnl += p; h[0 if g["close"] < mid else 1] += p; rounds.add((g["s"], g["close"]))
+        if g["won"]: w += 1; wr.add((g["s"], g["close"]))
+    if not n: return
+    print(f"  {name:<28} | {n:>5} orders filled ({n / days:5.1f} a day) | {f:>8} contracts | long shot won {w:>3} ({len(wr)} rounds) | P&L ${pnl:+9.2f} = ${pnl / days:+6.2f} a day | halves ${h[0]:+.0f} / ${h[1]:+.0f} | at risk a day ${cost / days:.2f}")
+# one order per market: the earliest of 30 / 20 / 10 min that fits
+first = {}
+for (tk, m), g in sorted(sig.items(), key=lambda x: -x[0][1]):
+    first.setdefault(tk, g)
+F = list(first.values())
+for N in (100, 400, 1000, 5000):
+    print(f"\n=== one order per market, up to {N} contracts (${N / 100:.0f} at risk each), first signal of 30/20/10 min ===")
+    for cl, ch in ((1.5, 2), (2, 3), (3, 4), (4, 5), (2, 4), (2, 5)):
+        line(f"all coins cushion {cl}-{ch}", [g for g in F if cl <= g["cush"] < ch], N)
+    for s in SER:
+        line(f"{s} cushion 2-4", [g for g in F if g["s"] == s and 2 <= g["cush"] < 4], N)
+print("\n=== by signal minute (each minute on its own), 400 contracts ===")
+for m in (30, 20, 10):
+    for cl, ch in ((1.5, 2), (2, 3), (3, 4), (4, 5)):
+        line(f"{m} min cushion {cl}-{ch}", [g for g in sig.values() if g["m"] == m and cl <= g["cush"] < ch], 400)
+print("\n=== fill share: of signals (cushion 2-4, first), how many got any fill / full 400 ===")
+G = [g for g in F if 2 <= g["cush"] < 4]
+print("  signals", len(G), "any fill", sum(g["sold"] >= 1 for g in G), "400+", sum(g["sold"] >= 400 for g in G), "| long shot won among ALL signals", sum(g["won"] for g in G), "among filled", sum(g["won"] for g in G if g["sold"] >= 1))
+print("\n=== the winning rounds (cushion 2-4), biggest first ===")
+W = collections.defaultdict(lambda: [0, 0])
+for g in G:
+    if g["won"] and g["sold"] >= 1: W[(g["s"], g["close"])][0] += 1; W[(g["s"], g["close"])][1] += min(400, int(g["sold"]))
+import time
+for k, v in sorted(W.items(), key=lambda x: -x[1][1])[:15]:
+    print("  ", k[0], time.strftime("%d %b %H:%M", time.gmtime(k[1])), "markets", v[0], "contracts", v[1], f"${v[1] * 0.99:.0f}")
+pickle.dump(F, open(HERE + "/offer.pkl", "wb"))
+import exam
+for N in (100, 400):
+    bets = []
+    for g in G:
+        got = min(N, int(g["sold"]))
+        if got >= 1:
+            bets.append({"cost": got * 0.01, "pay": got * 1.0 if g["won"] else 0.0, "t": g["close"], "ev": f'{g["s"]}{g["close"]}'})
+    exam.score(bets, f"Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to {N} contracts", tries=1400,
+               src="khourly_sweep.py offer", note="found by looking; loses when sized up", status="dropped", log="--log" in sys.argv)
 '''
 
 if __name__ == "__main__":

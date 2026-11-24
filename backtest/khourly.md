@@ -29,6 +29,10 @@ Code: `khourly.py` (`scan`, `fetch`, `run`, `pmfetch`, `pmrun`, `queue`; probes 
   - Counting only the sure fills: about -$0.38 a day on bitcoin.
   - The truth is in between, and depends on how long the line really is. History doesn't record that, so a live
     watch of the real line ran for 4 hours on 23-24 Nov: see "The live line" below.
+- **The deep dig (24 Nov): about 1,400 other settings, none makes $10 a day.** Buying, waiting, bidding in
+  front, pairs of markets, a model of the last minute: all fair or losing. One lead (sell the safe side at 99c
+  early, which is buying the long shot at 1c) made +$5.73 a day at $1 a market and LOST money from $10 a market
+  up, so it can't grow. Exam: "Ahead, but could be luck". Dropped. See "The deep dig" below.
 - **Daily rounds: there aren't separate ones.** Kalshi's "daily" bitcoin bet is just the 5 PM New York hourly
   round, open longer. 61 of them, 11 signals, 6 bets. Nothing there.
 - **The smaller coins are tiny.** A middle bitcoin hour trades about 1.4 million contracts. Ether 33,000, Solana
@@ -267,6 +271,59 @@ To prove it: can't say. It isn't ahead once one more disaster is added.
 Verdict: Too early to tell
 No bets to grade.
 ```
+
+## The deep dig (23-24 Nov, Jan: "check other parameters, build tools, dig deep")
+
+Jan asked for every other setting, not just the real bot's, and for anything that could make more than $10 a
+day with more cash. Tool: `khourly_sweep.py` (parts `table`, `grid`, `pool`, `improve`, `lastmin`, `offer`).
+About 1,400 versions were looked at. Short answer: **nothing on the hourly rounds makes $10 a day, and nothing
+passed the exam.** One idea looked alive for a few hours and died when it was counted in real contracts.
+
+What was tried, on all 6 coins, 61 days:
+
+| What | How many versions | Result |
+|---|---|---|
+| Buy either side at the sell price, at 11 times (30 min to 1 min before the end) x 7 price bands x 8 cushion bands | 266 with enough bets | 21 ahead in both halves, which is what pure chance gives. All together -$6.24 per $100. Prices are fair. |
+| Wait with a bid at the best buy price, counting only fills we can be sure of | 198 | 0 ahead in both halves. -$17.24 per $100. |
+| Same, best case (always first in line) | 271 | 92 ahead in both halves, but only if we really were first in line, which we would not be. |
+| Bid 1c in front of the best bid, inside a 2c+ gap | all times, prices, cushions | -$9.85 per $100. |
+| Two markets of the same hour that together cost under $1 for a sure $1 | 581,562 pairs of reads | 2. Not a typo. |
+| A model of the last minute (the result is a 60-second average, so with 20 seconds left most of it is already known) | 330 bets it called cheap | The model halves the forecast miss, but the trades it calls cheap lose: -$13.33 per $100, exam "Losing". The people trading the last minute already do this math. |
+
+**The one lead: SELL the safe side at 99c early.** Everything above says the same thing from the other end: the
+"safe" side at 99c is a little too dear when its cushion is only 2-4 and there are still 10-30 minutes left. So
+turn it around: bid 1c on the long shot (same thing as offering the safe side at 99c) in markets where nobody
+bids on the long shot at all. You pay 1c a contract and get $1 when the long shot comes in. On the price charts
+the long shot came in about 1.4-2 times per 100 fills, and 1 per 100 is break-even. That looked like the find.
+
+Then the real trade lists (`khourly.py lsfetch`, 38,452 markets, 2.5 million trades at 95c+ / 5c-) said how many
+contracts people really buy at 99c after our offer goes up. One order per market, cushion 2-4, we are first in
+line:
+
+| Most we put on one market | Orders filled a day | Long shot came in | Total, 61 days | A day | First half / second half |
+|---|---|---|---|---|---|
+| $1 (100 contracts) | 28.5 | 30 of 1,735 | +$348.23 | +$5.73 | +$149 / +$200 |
+| $4 (400 contracts) | 28.5 | 30 of 1,735 | +$170.40 | +$2.80 | -$132 / +$302 |
+| $10 (1,000 contracts) | 28.5 | 30 of 1,735 | -$190.34 | -$3.13 | -$410 / +$220 |
+| $50 (5,000 contracts) | 28.5 | 30 of 1,735 | -$1,875.02 | -$30.84 | -$836 / -$1,039 |
+
+**More money makes it worse.** That is the tell. In the markets where the long shot comes in, almost nobody was
+buying the safe side at 99c (the coin was already wobbling), so we get 25-100 contracts. In the markets where
+the safe side holds, buyers take everything we offer, and we lose 1c on each. Only 1,735 of 8,848 offers got
+any fill at all; the long shot came in on 106 of the 8,848, but on only 30 of the ones that filled.
+
+- By coin at $4: bitcoin -$1.47 a day, ether -$1.92 a day (that is where the buyers are). The plus sits in XRP
+  (+$2.54 a day, 3 wins) and HYPE (+$3.02 a day, 7 wins), which trade about 30 contracts a fill. Two bitcoin hours
+  (20 and 22 Nov) paid $396 each and decide the sign of the $4 line.
+- Exam, $1 version: **"Ahead, but could be luck"**, +$50.12 per $100 on 1,735 bets, luck range -$12.03 to
+  +$112.27. The luckiest of 1,634 worthless ideas would show about +$144 on this many bets, so this is well
+  inside what luck does. $4 version: also "Ahead, but could be luck", first half behind.
+- **Ceiling, the way Jan asks for it:** most it could make is about $5 a day and that number is probably luck.
+  Money needed: about $12 a day at risk at $1 a market. It stops growing at $1 a market and turns into a loss
+  from $10 a market. A bad day costs what was staked: about $10-25.
+
+Dropped, no track. Don't redo. What would change it: nothing on these rounds. A long-shot-at-1c idea needs the
+long shot's wins to be spread over many rounds, and here 30 wins in 61 days carry everything.
 
 ## The live line (23-24 Nov)
 
