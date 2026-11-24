@@ -52,6 +52,40 @@ def do_peek():
             print("FAIL poly", p, str(e)[:150], flush=True)
 
 
+def do_hdd_peek():
+    s = raw("https://hitsdailydouble.com/sales_plus_streaming", 60)
+    hrefs = sorted(set(re.findall(r'href="([^"]+)"', s)))
+    print("HREFS", [h for h in hrefs if re.search(r"chart|midweek|ytd|top|week", h, re.I)][:80], flush=True)
+    i = s.find("Midweek")
+    print("AROUND MIDWEEK", s[max(0, i - 600):i + 400], flush=True)
+    for h in hrefs:
+        if re.search(r"midweek", h, re.I):
+            u = h if h.startswith("http") else "https://hitsdailydouble.com" + h
+            try:
+                t = raw(u, 60)
+                print("MID OK", u, len(t), text(t, 3000, "Week"), flush=True)
+            except Exception as e:
+                print("MID FAIL", u, str(e)[:120], flush=True)
+    for u in ("hitsdailydouble.com/sales_plus_streaming", "hitsdailydouble.com/midweek", "hitsdailydouble.com/midweek_20",
+              "hitsdailydouble.com/chart/midweek", "hitsdailydouble.com/sales_plus_streaming*"):
+        try:
+            c = raw("http://web.archive.org/cdx/search/cdx?url=" + u + "&from=2024&output=json&collapse=digest&filter=statuscode:200&limit=3000", 120)
+            rows = json.loads(c)[1:] if c.strip() else []
+            print("CDX", u, len(rows), "first", rows[:1], "last", rows[-3:], flush=True)
+            by = collections.Counter(r[1][:6] for r in rows)
+            print("   per month", sorted(by.items()), flush=True)
+            if "*" in u:
+                print("   urls", collections.Counter(r[2] for r in rows).most_common(30), flush=True)
+        except Exception as e:
+            print("CDX FAIL", u, str(e)[:150], flush=True)
+    for ts in ("20250110000505", "20250601000000", "20260301000000", "20260901000000"):
+        try:
+            t = raw(f"http://web.archive.org/web/{ts}id_/https://hitsdailydouble.com/sales_plus_streaming", 120)
+            print("SNAP", ts, len(t), text(t, 1500, "Week Ending"), flush=True)
+        except Exception as e:
+            print("SNAP FAIL", ts, str(e)[:150], flush=True)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
-    {"peek": do_peek}[cmd]()
+    {"peek": do_peek, "hddpeek": do_hdd_peek}[cmd]()
