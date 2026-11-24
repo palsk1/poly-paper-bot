@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   108,
-   258
+   110,
+   266
   ],
   "S:andy burnham": [
    8,
@@ -61,8 +61,8 @@
    8
   ],
   "S:trump": [
-   21,
-   47
+   23,
+   55
   ],
   "S:walmart": [
    4,
@@ -788,6 +788,10 @@
    0,
    1
   ],
+  "ST:trump|animal": [
+   0,
+   1
+  ],
   "ST:trump|ballroom": [
    0,
    1
@@ -804,8 +808,16 @@
    0,
    1
   ],
+  "ST:trump|biden/kamala/obama (3+ times)": [
+   0,
+   1
+  ],
   "ST:trump|biden/obama": [
    1,
+   1
+  ],
+  "ST:trump|china (3+ times)/xi": [
+   0,
    1
   ],
   "ST:trump|china/chinese": [
@@ -814,6 +826,10 @@
   ],
   "ST:trump|china/russia (15+ times)": [
    0,
+   1
+  ],
+  "ST:trump|death penalty/death row": [
+   1,
    1
   ],
   "ST:trump|deficit": [
@@ -852,13 +868,21 @@
    0,
    1
   ],
+  "ST:trump|huang/jensen": [
+   0,
+   1
+  ],
+  "ST:trump|illegal alien": [
+   1,
+   1
+  ],
   "ST:trump|impeach/impeached/impeachment": [
    1,
    1
   ],
   "ST:trump|iran": [
    1,
-   1
+   2
   ],
   "ST:trump|iran (5+ times)": [
    1,
@@ -895,6 +919,10 @@
   "ST:trump|nuclear/nuke": [
    2,
    2
+  ],
+  "ST:trump|nvidia": [
+   0,
+   1
   ],
   "ST:trump|putin": [
    0,
@@ -1048,6 +1076,10 @@
    0,
    1
   ],
+  "T:animal": [
+   0,
+   1
+  ],
   "T:anthropic/claude": [
    1,
    1
@@ -1093,6 +1125,10 @@
    2
   ],
   "T:biden (3+ times)": [
+   0,
+   1
+  ],
+  "T:biden/kamala/obama (3+ times)": [
    0,
    1
   ],
@@ -1172,6 +1208,10 @@
    0,
    1
   ],
+  "T:china (3+ times)/xi": [
+   0,
+   1
+  ],
   "T:china/chinese": [
    1,
    1
@@ -1213,6 +1253,10 @@
    1
   ],
   "T:customer#30+": [
+   1,
+   1
+  ],
+  "T:death penalty/death row": [
    1,
    1
   ],
@@ -1400,6 +1444,10 @@
    0,
    1
   ],
+  "T:huang/jensen": [
+   0,
+   1
+  ],
   "T:huge": [
    0,
    1
@@ -1422,6 +1470,10 @@
   ],
   "T:iger": [
    0,
+   1
+  ],
+  "T:illegal alien": [
+   1,
    1
   ],
   "T:immigration": [
@@ -1454,7 +1506,7 @@
   ],
   "T:iran": [
    1,
-   2
+   3
   ],
   "T:iran (5+ times)": [
    1,
@@ -1563,6 +1615,10 @@
   "T:nuclear/nuke": [
    2,
    2
+  ],
+  "T:nvidia": [
+   0,
+   1
   ],
   "T:nypd": [
    0,
@@ -1875,6 +1931,10 @@
   "W:what will trump say news conference": [
    9,
    12
+  ],
+  "W:what will trump say protecting american families remarks": [
+   2,
+   8
   ],
   "W:what will trump say trilateral meeting with xi and putin": [
    3,
@@ -2704,6 +2764,38 @@
    0,
    1
   ],
+  "WT:what will trump say protecting american families remarks|animal": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|biden/kamala/obama (3+ times)": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|china (3+ times)/xi": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|death penalty/death row": [
+   1,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|huang/jensen": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|illegal alien": [
+   1,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|iran": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|nvidia": [
+   0,
+   1
+  ],
   "WT:what will trump say trilateral meeting with xi and putin|alaska": [
    0,
    1
@@ -3063,7 +3155,15 @@
   "7177987": 1795219140,
   "7177988": 1795219140,
   "7177989": 1795219140,
-  "7177990": 1795219140
+  "7177990": 1795219140,
+  "7288809": 1795478340,
+  "7288810": 1795478340,
+  "7288811": 1795478340,
+  "7288812": 1795478340,
+  "7288813": 1795478340,
+  "7288814": 1795478340,
+  "7288815": 1795478340,
+  "7288816": 1795478340
  },
- "synced": 1795478610
+ "synced": 1795480394
 }
