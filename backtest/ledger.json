@@ -2996,6 +2996,58 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "khourly_sweep.py offer"
+  },
+  {
+   "id": "date_ladders_on_kalshi_no_where_yes_is_25_90c_first_weekly_l",
+   "date": "2026-11-24",
+   "what": "Date ladders on Kalshi: No where Yes is 25-90c (first weekly look)",
+   "tries": 60,
+   "bets": 455,
+   "groups": 137,
+   "per100": 7.87,
+   "floor100": -18.63,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "dates.py, backtest/dates.md"
+  },
+  {
+   "id": "no_on_the_nearest_open_rung_only_the_it_will_slip_bet_yes_25",
+   "date": "2026-11-24",
+   "what": "No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c",
+   "tries": 60,
+   "bets": 170,
+   "groups": 104,
+   "per100": 1.06,
+   "floor100": -24.92,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "dates.py, backtest/dates.md"
+  },
+  {
+   "id": "ai_model_release_ladders_kxgpt_kxclaude_kxgemini_no_where_ye",
+   "date": "2026-11-24",
+   "what": "AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c",
+   "tries": 60,
+   "bets": 54,
+   "groups": 12,
+   "per100": 17.7,
+   "floor100": -77.76,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "dates.py, backtest/dates.md"
+  },
+  {
+   "id": "starship_flight_dates_no_where_yes_is_2_50c",
+   "date": "2026-11-24",
+   "what": "Starship flight dates: No where Yes is 2-50c",
+   "tries": 60,
+   "bets": 34,
+   "groups": 10,
+   "per100": 24.82,
+   "floor100": -15.63,
+   "verdict": "Promising, needs more bets",
+   "status": "re-check",
+   "src": "dates.py, backtest/dates.md"
   }
  ]
 }
