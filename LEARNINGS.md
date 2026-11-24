@@ -300,6 +300,7 @@ Don't re-test these the same way. Only with something new (new data, a new filte
 - **Odd kinds of markets** (weekend, quiet, tiny, long-dated, long shots): all lose about the costs.
 - **Read the settle source first** (gas, earthquakes, executive orders): -$34 to -$80 on gas.
 - **Free Fed forecasts vs Kalshi economy markets:** -$4 to +$3, Kalshi knows better.
+- **Fed decisions and CPI vs the big-money markets (24 Nov, `fed.py`, `backtest/fed.md`):** the Atlanta Fed's free file of CME options odds (every day since March 2023) against Kalshi and Polymarket Fed bets: only 8 meetings per site can be read cleanly; buying where the options said 10c+ more lost $8.43 per $100 (26 bets, "Too early to tell"), and Kalshi guessed about as well. Kalshi and Polymarket Fed prices never sat 5c+ apart. CPI has no free futures history; Polymarket CPI brackets 10c+ under Kalshi's ladder made +$47.87 per $100 on 23 bets ("could be luck": 3c and 5c gaps lose, thin markets, two long shots made most of it), free re-check on the Dec-Feb CPI months. Ceiling even if real: the Fed meets 8 times a year, about $30 a year at $25 a bet. Dropped, no track. Don't redo.
 - **Ugly rule wording and disputes:** predicts disputes, but prices are already fair (-$18).
 - **Idea machine, 34,000 pattern ideas:** 1 survivor (`quiet_no`), about break-even.
 - **Calendar effects, "choices add up to":** 10,000 versions, 0 survivors.
