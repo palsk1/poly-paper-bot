@@ -224,7 +224,7 @@ ELECTIONS = {
     "pt25": "2025 Portuguese legislative election", "pt26p": "2026 Portuguese presidential election",
     "ie25p": "2025 Irish presidential election", "pe26": "2026 Peruvian general election",
     "hu26": "2026 Hungarian parliamentary election", "cl25": "2025 Chilean presidential election",
-    "nl25": "2025 Dutch general election", "co26": "2026 Colombian presidential election",
+    "nl25": "2025 Dutch general election", "co26": "2026 Colombian presidential election", "pe26b": "2026 Peruvian presidential election",
     "co26l": "2026 Colombian parliamentary election",
     "bo25": "2025 Bolivian general election", "ar25": "2025 Argentine legislative election",
     "hn25": "2025 Honduran general election", "cz25": "2025 Czech parliamentary election",
@@ -283,13 +283,16 @@ def wiki():
         words = [w for w in re.findall(r"[A-Za-zÀ-ÿ-]+", q) if len(w) > 3 and w.lower() not in ("election", "general")]
         good = [h for h in hits if h.lower().startswith("opinion polling") and yr in h
                 and sum(w.lower()[:5] in h.lower() for w in words) >= max(1, len(words) - 1)]
-        titles = good[:3] or [f"Opinion polling for the {q}"]
+        exact = f"Opinion polling for the {q}"
+        titles = [exact] + [h for h in good if h != exact][:2]
         pages = []
         for t in titles:
             try:
                 tt, rev, html = wiki_page(t)
             except Exception as e:
                 print(key, t, "failed", str(e)[:80], flush=True)
+                continue
+            if any(p["title"] == tt for p in pages):
                 continue
             if not html or "wikitable" not in html:
                 continue
@@ -309,6 +312,215 @@ def wiki():
         print(key, "|", q, "|", [(p["title"], p["tables"]) for p in pages], "| article", art, flush=True)
         wj(os.path.join(WCACHE, "index.json.gz"), index)
         time.sleep(0.5)
+
+
+# ---------------------------------------------------------------- poll tables -> poll lists
+SKIP_COL = re.compile(r"sample|margin|lead|other|undecided|don.?t know|\bdk\b|dk/|n/?a\b|abs\.?|turnout|link|none|blank|"
+                      r"would not|no one|refus|null|spoil|method|mode|size|moe|error|date|firm|pollster|agency|source|"
+                      r"commission|aggregat|area|region|type|lean|swing|gov|opp|total|white|invalid|no answer|nota|"
+                      r"\bnr\b|ns/nc|blanco|nulo|indecis|ninguno|neither|others|abstain|unsure", re.I)
+OTHER_COL = re.compile(r"^others?\b|^oth\b|^altri|^otros|^outros", re.I)
+DATE_COL = re.compile(r"date|fieldwork|conducted|polling$|last date|period|when|fecha|data", re.I)
+MONTHS = {m: i + 1 for i, m in enumerate(("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"))}
+
+
+def _num(x):
+    x = re.sub(r"\[.*?\]|%|\s", "", str(x)).replace(",", ".").replace("−", "-")
+    m = re.match(r"^<?(\d{1,2}(\.\d+)?)$", x)
+    return float(m.group(1)) if m else None
+
+
+def _end_date(txt, year):
+    """Last date in a fieldwork string like '17–19 Feb 2025', 'Feb 28 – Mar 2, 2025', '2025-02-19'. -> 'YYYY-MM-DD' or None."""
+    t = str(txt).lower()
+    if "result" in t or "election" in t:
+        return None
+    t = re.sub(r"\[.*?\]", "", t)
+    iso = re.findall(r"(20\d\d)-(\d\d)-(\d\d)", t)
+    if iso:
+        y, m, d = iso[-1]
+        return f"{y}-{m}-{d}"
+    yrs = re.findall(r"20\d\d", t)
+    y = int(yrs[-1]) if yrs else year
+    t2 = re.sub(r"20\d\d", " ", t)
+    toks = re.findall(r"[a-z]+|\d+", t2)
+    mon, day, last = None, None, None
+    for i, k in enumerate(toks):
+        if k[:3] in MONTHS:
+            mon = MONTHS[k[:3]]
+            if day is not None and last is None:
+                last = (mon, day)
+            elif i + 1 < len(toks) and toks[i + 1].isdigit() and int(toks[i + 1]) <= 31:
+                last = (mon, int(toks[i + 1]))
+            elif day is not None:
+                last = (mon, day)
+            day = None
+        elif k.isdigit() and int(k) <= 31:
+            day = int(k)
+            if mon is not None:
+                last = (mon, day)
+    if mon is not None and day is not None:
+        last = (mon, day)
+    if not last:
+        nums = re.findall(r"(\d{1,2})[./](\d{1,2})[./]?(\d{2,4})?", t)
+        if not nums:
+            return None
+        d, m, yy = nums[-1]
+        last = (int(m), int(d))
+        if yy:
+            y = int(yy) + (2000 if len(yy) == 2 else 0)
+    try:
+        return dt.date(y, last[0], last[1]).isoformat()
+    except ValueError:
+        return None
+
+
+def _flat(col):
+    parts = col if isinstance(col, tuple) else (col,)
+    out = []
+    for p in parts:
+        p = re.sub(r"\[.*?\]", "", str(p)).strip()
+        if p.startswith("Unnamed") or not p or p in out:
+            continue
+        out.append(p)
+    return " / ".join(out)
+
+
+def _cell_name(c):
+    t = re.sub(r"\[.*?\]", "", c.text_content()).strip()
+    if t:
+        return re.sub(r"\s+", " ", t)
+    for a in c.xpath(".//a[@title]"):
+        return a.get("title").strip()
+    for a in c.xpath(".//img[@alt]"):
+        if a.get("alt").strip():
+            return a.get("alt").strip()
+    return ""
+
+
+def _grid(el):
+    """A wikitable as a grid of (is_header, name) cells with row/col spans spread out."""
+    rows, pend = [], {}
+    for tr in el.xpath("./tr|./thead/tr|./tbody/tr|./tfoot/tr"):
+        row, ci = [], 0
+        cells = tr.xpath("./th|./td")
+        k = 0
+        while k < len(cells) or ci in pend:
+            if ci in pend:
+                v, left = pend[ci]
+                row.append(v)
+                if left <= 1:
+                    del pend[ci]
+                else:
+                    pend[ci] = (v, left - 1)
+                ci += 1
+                continue
+            c = cells[k]
+            k += 1
+            try:
+                cs = int(re.match(r"\d+", c.get("colspan") or "1").group(0))
+                rs = int(re.match(r"\d+", c.get("rowspan") or "1").group(0))
+            except Exception:
+                cs, rs = 1, 1
+            v = (c.tag == "th", _cell_name(c))
+            for j in range(min(cs, 60)):
+                row.append(v)
+                if rs > 1:
+                    pend[ci] = (v, rs - 1)
+                ci += 1
+        rows.append(row)
+    return rows
+
+
+def parse_page(html, year):
+    """Every poll table of a page -> [{'cols': [names], 'polls': [(end day, {name: share of valid votes})]}]."""
+    import lxml.html
+    try:
+        doc = lxml.html.fromstring(html)
+    except Exception:
+        return []
+    out = []
+    for el in doc.xpath('//table[contains(@class, "wikitable")]'):
+        g = _grid(el)
+        if len(g) < 4:
+            continue
+        # header = the top rows until the first row with 3+ numbers
+        h = 0
+        while h < len(g) and sum(_num(v) is not None and not th for th, v in g[h]) < 3:
+            h += 1
+        if h == 0 or h >= len(g):
+            continue
+        width = max(len(r) for r in g)
+        names = []
+        for i in range(width):
+            parts = []
+            for r in g[:h]:
+                if i < len(r) and r[i][1] and len(r[i][1]) <= 40 and r[i][1] not in parts and _num(r[i][1]) is None:
+                    parts.append(r[i][1])
+            names.append(" / ".join(parts))
+        dcol = next((i for i, n in enumerate(names) if DATE_COL.search(n)), None)
+        if dcol is None:
+            continue
+        body = [r for r in g[h:] if len(r) > 3]
+        cand, oth = [], None
+        for i, n in enumerate(names):
+            if i == dcol or not n:
+                continue
+            vals = [_num(r[i][1]) if i < len(r) else None for r in body]
+            ok = [v for v in vals if v is not None]
+            if len(ok) < max(2, 0.4 * len(vals)) or max(ok) > 100:
+                continue
+            if OTHER_COL.search(n):
+                oth = i
+            elif not SKIP_COL.search(n):
+                cand.append(i)
+        if len(cand) < 2:
+            continue
+        polls = []
+        for r in body:
+            first = " ".join(r[j][1] for j in range(min(2, len(r)))).lower()
+            if re.search(r"result|election|official|exit poll|count", first) or dcol >= len(r):
+                continue
+            d = _end_date(r[dcol][1], year)
+            if not d:
+                continue
+            sh = {names[i]: _num(r[i][1]) for i in cand if i < len(r)}
+            sh = {k: v for k, v in sh.items() if v is not None}
+            if len(sh) < 2:
+                continue
+            o = _num(r[oth][1]) if oth is not None and oth < len(r) else None
+            tot = sum(sh.values()) + (o or 0)
+            if tot < 50 or tot > 103:
+                continue
+            polls.append((d, {k: round(100 * v / tot, 2) for k, v in sh.items()}))
+        if len(polls) >= 3:
+            out.append({"cols": [names[i] for i in cand], "polls": polls})
+    return out
+
+
+def polls_all():
+    """Parse every saved poll page -> {election key: [tables]} (pages whose title doesn't fit the election are skipped)."""
+    import gzip
+    idx = rj(os.path.join(WCACHE, "index.json.gz"), {}) or {}
+    res = {}
+    for key, info in idx.items():
+        q = info["q"]
+        year = int(q[:4])
+        country = q.split()[1][:6].lower()
+        files = [p["file"] for p in info["pages"] if country in p["title"].lower() and q[:4] in p["title"]]
+        files.append(f"{key}_article.html.gz")
+        tabs = []
+        for fn in files:
+            path = os.path.join(WCACHE, fn)
+            if not os.path.exists(path):
+                continue
+            with gzip.open(path, "rt") as f:
+                html = f.read()
+            for tb in parse_page(html, year):
+                tb["src"] = fn
+                tabs.append(tb)
+        res[key] = tabs
+    return res
 
 
 if __name__ == "__main__":
