@@ -34676,3 +34676,11 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXMSFTPERM-26OCT-26DEC01", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXLOWTSEA-26NOV24-B42.5", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXUKCHAGOS-28JAN01-26DEC01", "track": "kalshi_patient", "ts": "2026-11-24T16:08:14Z", "type": "kpatient_order"}
+{"outcome": "Draw", "pnl": -1.2969, "price": 0.0, "reason": "resolved", "title": "Will Shanghai Port FC vs. Buriram United end in a draw?", "token": "35704828967914170267932494546005934570038719085048848839936015993063549566158", "track": "soccer_draw", "ts": "2026-11-24T16:10:58Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": 3.9085, "price": 1.0, "reason": "resolved", "title": "Will Ratchaburi FC vs. Johor Darul Ta'zim end in a draw?", "token": "68552193088729235924910122373379126601438164918192758572812806030835884157431", "track": "soccer_draw", "ts": "2026-11-24T16:10:58Z", "type": "paper_close"}
+{"minutes_left": 1.51, "price": 0.993, "queue": 23.91, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:30Z", "type": "kmaker_order"}
+{"minutes_left": 1.51, "price": 0.997, "queue": 6191.28, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:31Z", "type": "kmaker_order"}
+{"minutes_left": 1.51, "price": 0.994, "queue": 1256.51, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:32Z", "type": "kmaker_order"}
+{"minutes_left": 1.51, "price": 0.997, "queue": 5183.42, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:33Z", "type": "kmaker_order"}
+{"minutes_left": 1.51, "price": 0.993, "queue": 66.92, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:35Z", "type": "kmaker_order"}
+{"minutes_left": 1.51, "price": 0.954, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV241115-15", "track": "kc_maker", "ts": "2026-11-24T16:13:36Z", "type": "kmaker_order"}
