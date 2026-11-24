@@ -28,7 +28,8 @@ Code: `khourly.py` (`scan`, `fetch`, `run`, `pmfetch`, `pmrun`, `queue`; probes 
   - If we were magically always FIRST in line: about +$2.20 a day on bitcoin at $4 bids, +$0.54 on ether.
   - Counting only the sure fills: about -$0.38 a day on bitcoin.
   - The truth is in between, and depends on how long the line really is. History doesn't record that, so a live
-    watch of the real line ran for 4 hours on 23-24 Nov: see "The live line" below.
+    watch of the real line ran for 4 hours on 23-24 Nov: the line is about 6,000 contracts long on bitcoin and a
+    $4 bid at the back was reached in 1 of 58 markets. So: nothing there. See "The live line" below.
 - **The deep dig (24 Nov): about 1,400 other settings, none makes $10 a day.** Buying, waiting, bidding in
   front, pairs of markets, a model of the last minute: all fair or losing. One lead (sell the safe side at 99c
   early, which is buying the long shot at 1c) made +$5.73 a day at $1 a market and LOST money from $10 a market
@@ -327,7 +328,34 @@ long shot's wins to be spread over many rounds, and here 30 wins in 61 days carr
 
 ## The live line (23-24 Nov)
 
-_To be filled in when the 4-hour watch finishes (`khourly.py queue`, probe `khr_queue_250`)._
+A 4-hour watch of the real order lists (`khourly.py queue`, probe `khr_queue_250`, 23 Nov 22:40 to 24 Nov 02:55
+Stockholm, 5 hourly closes, 143 markets). It answers the open question from the 99c line: how long is the line?
+
+- **Long.** On bitcoin, 58 markets sat at 99c with a cushion of 2+ and 3 minutes left. The line of buyers already
+  waiting at 99c was 6,004 contracts in the middle case (smallest 2,329, biggest 58,908). A $4 bid is 4 contracts
+  at the back of that.
+- **And nobody sells into it.** In the middle case 0 contracts were sold at 99c after we would have joined. A $4
+  bid at the back was reached in 1 of 58 bitcoin markets, 1 of 39 on ether, 1 of 33 on Solana, 0 of 3 on XRP.
+- Nobody could step in front either: the next price up is $1.00.
+
+So the "always first in line" number (+$2.20 a day on bitcoin) is a fairy tale, and the real answer sits at the
+"sure fills only" end: about nothing, slightly negative. Small sample (5 closes), but it is not close.
+
+## Q. Live: the line in front of us, 5 hourly closes, 143 markets (bid 95c+, Binance cushion 2+, read 3 min before the close)
+| Coin | Our price | Markets | Could step in front | Line at the price we join (middle / smallest / biggest) | Sold at our price afterwards (middle) | Sold below our price | Reached a $4 bid at the back | a $40 bid | Lost among those reached |
+|---|---|---|---|---|---|---|---|---|---|
+| KXBTCD | 99c | 58 | 0 | 6,004 / 2,329 / 58,908 | 0 | 0 markets | 1 | 1 | 0 |
+| KXBTCD | 98c | 1 | 0 | 4,330 / 4,330 / 4,330 | 3,842 | 1 markets | 1 | 1 | 0 |
+| KXBTCD | 97c | 1 | 0 | 1,713 / 1,713 / 1,713 | 0 | 0 markets | 0 | 0 | 0 |
+| KXBTCD | 96c | 1 | 0 | 1,157 / 1,157 / 1,157 | 1,016 | 0 markets | 0 | 0 | 0 |
+| KXETHD | 99c | 39 | 0 | 2,166 / 897 / 34,215 | 0 | 1 markets | 1 | 1 | 0 |
+| KXETHD | 98c | 1 | 0 | 710 / 710 / 710 | 144 | 0 markets | 0 | 0 | 0 |
+| KXETHD | 97c | 1 | 0 | 88 / 88 / 88 | 0 | 0 markets | 0 | 0 | 0 |
+| KXSOLD | 99c | 33 | 4 | 1,274 / 20 / 2,516 | 0 | 1 markets | 1 | 1 | 0 |
+| KXSOLD | 98c | 2 | 2 | 0 / 0 / 0 | 0 | 1 markets | 1 | 1 | 0 |
+| KXSOLD | 97c | 2 | 2 | 0 / 0 / 0 | 980 | 1 markets | 1 | 1 | 0 |
+| KXXRPD | 99c | 3 | 0 | 1,298 / 10 / 1,357 | 0 | 0 markets | 0 | 0 | 0 |
+| KXXRPD | 97c | 1 | 0 | 10 / 10 / 10 | 0 | 0 markets | 0 | 0 | 0 |
 
 ## Two more 15-minute coins: NEAR and Zcash (the growth idea that is left)
 
