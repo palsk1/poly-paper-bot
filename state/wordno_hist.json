@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   110,
-   266
+   117,
+   278
   ],
   "S:andy burnham": [
    8,
@@ -63,6 +63,10 @@
   "S:trump": [
    23,
    55
+  ],
+  "S:trump or melania": [
+   7,
+   12
   ],
   "S:walmart": [
    4,
@@ -780,6 +784,54 @@
    1,
    1
   ],
+  "ST:trump or melania|ballroom": [
+   1,
+   1
+  ],
+  "ST:trump or melania|bean": [
+   0,
+   1
+  ],
+  "ST:trump or melania|biden/joe": [
+   0,
+   1
+  ],
+  "ST:trump or melania|border": [
+   1,
+   1
+  ],
+  "ST:trump or melania|chicken/egg": [
+   1,
+   1
+  ],
+  "ST:trump or melania|china/xi": [
+   0,
+   1
+  ],
+  "ST:trump or melania|drone/helipad": [
+   1,
+   1
+  ],
+  "ST:trump or melania|iran": [
+   1,
+   1
+  ],
+  "ST:trump or melania|potato": [
+   0,
+   1
+  ],
+  "ST:trump or melania|poultry": [
+   1,
+   1
+  ],
+  "ST:trump or melania|tomato": [
+   0,
+   1
+  ],
+  "ST:trump or melania|west virginia": [
+   1,
+   1
+  ],
   "ST:trump|alaska": [
    0,
    1
@@ -1109,11 +1161,15 @@
    1
   ],
   "T:ballroom": [
-   0,
-   1
+   1,
+   2
   ],
   "T:bandwidth": [
    1,
+   1
+  ],
+  "T:bean": [
+   0,
    1
   ],
   "T:bean/soybean": [
@@ -1125,6 +1181,10 @@
    2
   ],
   "T:biden (3+ times)": [
+   0,
+   1
+  ],
+  "T:biden/joe": [
    0,
    1
   ],
@@ -1157,6 +1217,10 @@
    1
   ],
   "T:board#3+": [
+   1,
+   1
+  ],
+  "T:border": [
    1,
    1
   ],
@@ -1200,6 +1264,10 @@
    1,
    1
   ],
+  "T:chicken/egg": [
+   1,
+   1
+  ],
   "T:chimp/monkey": [
    0,
    1
@@ -1217,6 +1285,10 @@
    1
   ],
   "T:china/russia (15+ times)": [
+   0,
+   1
+  ],
+  "T:china/xi": [
    0,
    1
   ],
@@ -1314,6 +1386,10 @@
   ],
   "T:drone": [
    0,
+   1
+  ],
+  "T:drone/helipad": [
+   1,
    1
   ],
   "T:ebitda": [
@@ -1505,8 +1581,8 @@
    1
   ],
   "T:iran": [
-   1,
-   3
+   2,
+   4
   ],
   "T:iran (5+ times)": [
    1,
@@ -1657,6 +1733,14 @@
    1
   ],
   "T:pokemon": [
+   1,
+   1
+  ],
+  "T:potato": [
+   0,
+   1
+  ],
+  "T:poultry": [
    1,
    1
   ],
@@ -1836,6 +1920,10 @@
    0,
    1
   ],
+  "T:tomato": [
+   0,
+   1
+  ],
   "T:tony": [
    0,
    1
@@ -1878,6 +1966,10 @@
   ],
   "T:war": [
    0,
+   1
+  ],
+  "T:west virginia": [
+   1,
    1
   ],
   "T:world war": [
@@ -1927,6 +2019,10 @@
   "W:trump-weekly-mentions": [
    5,
    10
+  ],
+  "W:what will trump or melania say thanksgiving turkey pardon": [
+   7,
+   12
   ],
   "W:what will trump say news conference": [
    9,
@@ -2716,6 +2812,54 @@
    1,
    1
   ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|ballroom": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|bean": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|biden/joe": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|border": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|chicken/egg": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|china/xi": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|drone/helipad": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|iran": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|potato": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|poultry": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|tomato": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|west virginia": [
+   1,
+   1
+  ],
   "WT:what will trump say news conference|bean/soybean": [
    0,
    1
@@ -3156,6 +3300,18 @@
   "7177988": 1795219140,
   "7177989": 1795219140,
   "7177990": 1795219140,
+  "7211307": 1795564740,
+  "7211308": 1795564740,
+  "7211309": 1795564740,
+  "7211310": 1795564740,
+  "7211311": 1795564740,
+  "7211312": 1795564740,
+  "7211313": 1795564740,
+  "7211314": 1795564740,
+  "7211315": 1795564740,
+  "7211316": 1795564740,
+  "7211317": 1795564740,
+  "7229965": 1795564740,
   "7288809": 1795478340,
   "7288810": 1795478340,
   "7288811": 1795478340,
@@ -3165,5 +3321,5 @@
   "7288815": 1795478340,
   "7288816": 1795478340
  },
- "synced": 1795556303
+ "synced": 1795558137
 }
