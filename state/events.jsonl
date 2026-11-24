@@ -34113,3 +34113,11 @@
 {"minutes_left": 2.09, "price": 0.995, "queue": 222.2, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV240445-45", "track": "kc_maker_safe", "ts": "2026-11-24T09:43:01Z", "type": "kmaker_order"}
 {"pnl": 10.62, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24DURERE-DUR", "track": "tennis_set", "ts": "2026-11-24T09:43:02Z", "type": "econ_settle"}
 {"pnl": 9.64, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24MARPAP-MAR", "track": "tennis_set", "ts": "2026-11-24T09:43:02Z", "type": "econ_settle"}
+{"fee": 0.0609, "outcome": "Roman Kharlamov", "price": 0.58, "shares": 5, "title": "M15 Sharm ElSheikh: Roman Kharlamov vs Vladimir Osminkin", "token": "99409354244083988271750898691559862094268362351239813990471802509246420508418", "track": "w_cigarettes", "ts": "2026-11-24T09:45:44Z", "type": "paper_buy"}
+{"fee": 0.0609, "outcome": "Roman Kharlamov", "price": 0.58, "shares": 5, "title": "M15 Sharm ElSheikh: Roman Kharlamov vs Vladimir Osminkin", "token": "99409354244083988271750898691559862094268362351239813990471802509246420508418", "track": "wb_cigarettes", "ts": "2026-11-24T09:45:44Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV240445-45", "track": "kc_maker", "ts": "2026-11-24T09:46:52Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV240445-45", "track": "kc_maker", "ts": "2026-11-24T09:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV240445-45", "track": "kc_maker_safe", "ts": "2026-11-24T09:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.05, "price": 0.995, "side": "yes", "through": false, "ticker": "KXXRP15M-26NOV240445-45", "track": "kc_maker_safe", "ts": "2026-11-24T09:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV240445-45", "track": "kc_maker_safe_usd", "ts": "2026-11-24T09:46:53Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXBTC15M-26NOV240445-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T09:46:53Z", "type": "kmaker_fill"}
