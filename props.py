@@ -4,7 +4,13 @@ vs sportsbook lines with the bookie's cut taken out. backtest/props.md.
 
 PAPER ONLY. Reads public data, never trades, never writes state/.
 
-  python3 props.py scan      (probe pp_scan: which prop / award series exist on Kalshi, Polymarket and Pinnacle)
+  python3 props.py scan       (probe pp_scan: which prop / award series exist on Kalshi, Polymarket and Pinnacle)
+  python3 props.py live M E   (probe pp_live_<M>_<E>: Pinnacle vs Kalshi prop snapshots every E minutes for M minutes)
+  python3 props.py livescore  (settle the saved snapshots)
+  python3 props.py ufetch i n (probe pp_ufetch_<i>_<n>: fair sample, 1,000 random settled markets per prop kind)
+  python3 props.py ureport    (price bands, player's own record, backward look, exam)
+  python3 props.py ffetch / freport   (the pre-written fresh check of the NFL lead)
+  fetch / report = the first download, filtered on final volume: BIASED, kept only as the trap example
 """
 import collections
 import json

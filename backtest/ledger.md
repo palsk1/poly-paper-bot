@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**239 ideas examined, in about 72,847 versions.** 188 dropped, 51 still being tested or waiting. **Looks real: 6.**
+**244 ideas examined, in about 73,342 versions.** 193 dropped, 51 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 239 ideas that are all worthless, the luckiest one still looks good. With 239 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 244 ideas that are all worthless, the luckiest one still looks good. With 244 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -245,6 +245,11 @@ Why count: if you test 239 ideas that are all worthless, the luckiest one still 
 | 2026-11-24 | AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 60 | 12 | +$17.70 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
 | 2026-11-24 | Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 60 | 137 | +$7.87 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
 | 2026-11-24 | Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to 400 contracts | 1,400 | 1433 | +$11.57 | Ahead, but could be luck | dropped | khourly_sweep.py offer |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (all 3 samples) | 246 | 308 | -$0.22 | Behind, but could be bad luck | dropped | props.py |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (found by looking) | 246 | 227 | +$11.21 | Promising, needs more bets | dropped | props.py ureport |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (fresh check) | 1 | 232 | +$7.88 | Ahead, but could be luck | dropped | props.py freport |
+| 2026-11-24 | Kalshi player props: always No, 2h before (14 kinds, fair sample) | 1 | 2537 | -$4.74 | Losing | dropped | props.py ureport |
+| 2026-11-24 | Kalshi player props: always Yes, 2h before (14 kinds, fair sample) | 1 | 2588 | -$13.07 | Losing | dropped | props.py ureport |
 | 2026-11-24 | No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 60 | 104 | +$1.06 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
 | 2026-11-24 | Starship flight dates: No where Yes is 2-50c | 60 | 10 | +$24.82 | Promising, needs more bets | re-check | dates.py, backtest/dates.md |
 
