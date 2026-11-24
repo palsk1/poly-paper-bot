@@ -35272,3 +35272,5 @@
 {"outcome": "No", "pnl": 0.1427, "price": 1.0, "reason": "resolved", "title": "Will Meta (META) close above $600 on November 24?", "token": "97425236123933222899081517499621804669609434191509878131052418115064216636714", "track": "endgame_sell98", "ts": "2026-11-24T21:36:43Z", "type": "paper_close"}
 {"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Ethereum dip to $1,600 on November 24?", "token": "52527443006874886534253916885275809394341047729373070753974317266705748693168", "track": "endgame_sell98", "ts": "2026-11-24T21:38:05Z", "type": "paper_buy"}
 {"minutes_left": 1.13, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV241645-45", "track": "kc_maker", "ts": "2026-11-24T21:43:53Z", "type": "kmaker_order"}
+{"filled": 0.4, "pnl": 0.0036, "price": 0.991, "side": "no", "through": false, "ticker": "KXDOGE15M-26NOV241645-45", "track": "kc_maker", "ts": "2026-11-24T21:48:16Z", "type": "kmaker_fill"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXUCLSPREAD-26NOV24GALAVL-AVL3", "track": "kalshi_patient", "ts": "2026-11-24T21:48:20Z", "type": "kpatient_result"}
