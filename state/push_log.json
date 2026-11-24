@@ -58,16 +58,10 @@
   "2026-11-24": {
    "failed": 0,
    "muted": 104,
-   "sent": 20
+   "sent": 21
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker] FLIP: a late favorite lost ($-9.56)",
-   "track": "kc_maker",
-   "ts": "2026-11-17T17:03:01Z"
-  },
   {
    "result": "sent",
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
@@ -1261,6 +1255,12 @@
    "title": "[endgame] bought 1 (practice money)",
    "track": "endgame",
    "ts": "2026-11-24T20:07:50Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 3 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-24T20:26:13Z"
   }
  ]
 }
