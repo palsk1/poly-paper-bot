@@ -93,6 +93,38 @@ def peek7():
             print("  near", k, j, re.sub(r"\s+", " ", s[j:j + 700]) if j >= 0 else "", flush=True)
 
 
+def peek8():
+    """Transcript pages now load their text from an API in the browser: find that API."""
+    import json as _j
+    rows = _j.loads(raw(API.format(1), 40)).get("data") or []
+    x = [r for r in rows if "no-transcript" not in str(r.get("slug"))][0]
+    slug = x["slug"]
+    s = raw(x["factbase_url"], 60)
+    for m in re.finditer(r"factbaseTranscript", s):
+        print("  page:", re.sub(r"\s+", " ", s[max(0, m.start() - 300):m.start() + 300]), flush=True)
+        break
+    for js in sorted(set(re.findall(r'src="(https://rollcall.com/build/assets/[^"]+\.js)"', s))):
+        try:
+            t = raw(js, 60)
+        except Exception as e:
+            print("JS FAIL", js, str(e)[:100], flush=True)
+            continue
+        print("JS", js, len(t), flush=True)
+        for k in ("factbaseTranscript", "api/factbase", "factbaseSlug"):
+            for m in list(re.finditer(re.escape(k), t))[:4]:
+                print("   ", k, ":", t[max(0, m.start() - 250):m.start() + 450].replace("\n", " "), flush=True)
+    for u in (f"https://rollcall.com/api/factbase/transcripts?person=trump&slug={slug}",
+              f"https://rollcall.com/api/factbase/transcript?person=trump&slug={slug}",
+              f"https://rollcall.com/api/factbase/transcripts/{slug}",
+              f"https://rollcall.com/api/factbase/transcript/{slug}",
+              f"https://rollcall.com/api/factbase/transcripts?person=trump&document_id={x['document_id']}"):
+        try:
+            t = raw(u, 40)
+            print("OK", u, len(t), re.sub(r"\s+", " ", t[:1200]), flush=True)
+        except Exception as e:
+            print("FAIL", u, str(e)[:100], flush=True)
+
+
 def peek2():
     import json
     d = json.loads(raw(API.format(1)))
@@ -799,4 +831,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "peek8": peek8, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
