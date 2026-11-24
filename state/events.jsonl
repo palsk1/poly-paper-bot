@@ -34396,3 +34396,4 @@
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV240730-30", "track": "kc_maker", "ts": "2026-11-24T12:32:34Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV240730-30", "track": "kc_maker_safe", "ts": "2026-11-24T12:32:34Z", "type": "kmaker_fill"}
 {"pnl": -25.19, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24OKOBEL-OKO", "track": "tennis_set", "ts": "2026-11-24T12:41:56Z", "type": "econ_settle"}
+{"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Solana dip to $65 on November 24?", "token": "67712314176186186329877699758088611899071989470822316544029126120669183003185", "track": "endgame_sell98", "ts": "2026-11-24T12:52:53Z", "type": "paper_buy"}
