@@ -374,7 +374,11 @@ SER = ["KXNBAPTS", "KXNBAREB", "KXNBAAST", "KXNBA3PT", "KXNFLTD", "KXNFLANYTD", 
 MKS = os.path.join(CACHE, "markets.json.gz")
 STARTS = os.path.join(CACHE, "starts.json.gz")
 PER = int(os.environ.get("PP_N", "1500"))      # markets taped per series (random, fixed seed)
-MINV = 300                                    # contracts traded, at least
+MINV = int(os.environ.get("PP_MINV", "300"))  # contracts traded, at least (FINAL volume: biased, see TAG)
+# Trap (24 Nov): the final-volume filter keeps long shots that came in (people pile in after a goal), so the first
+# fetch (tag "") made NHL / MLB long shots look like +$90-165 per $100. Tag "u" samples every settled market instead.
+TAG = os.environ.get("PP_TAG", "")
+ONLY = [x for x in os.environ.get("PP_SER", "").split(",") if x]
 SPAN = 4 * 86400                              # quotes and trades of the last 4 days before close
 T0 = time.time()
 BUDGET = float(os.environ.get("PP_MIN", "250")) * 60
@@ -439,23 +443,23 @@ def tape(m):
 def fetch(part="0", parts="1"):
     part, parts = int(part), int(parts)
     os.makedirs(CACHE, exist_ok=True)
-    if part == 0:
+    if part == 0 and not os.path.exists(STARTS):
         starts()
     allm = rj(MKS, {}) or {}
-    for i, ser in enumerate(SER):
+    for i, ser in enumerate(ONLY or SER):
         if i % parts != part:
             continue
         if time.time() - T0 > BUDGET:
             print("time budget used, run again to resume")
             break
-        sp = os.path.join(CACHE, f"tapes_{ser}.json.gz")
+        sp = os.path.join(CACHE, f"tapes_{TAG}{ser}.json.gz")
         got = rj(sp, {}) or {}
         _, ok, n = km.series_markets(ser)
         v = [m for m in ok.values() if m["vol"] >= MINV]
         for m in v:
             mm = re.match(r"^(.*?):\s*(\d+)\+\s*$", m["w"])
             m["player"], m["line"] = (mm.group(1).strip(), int(mm.group(2))) if mm else (m["w"], None)
-        wj(os.path.join(CACHE, f"mk_{ser}.json.gz"), {m["t"]: m for m in v})
+        wj(os.path.join(CACHE, f"mk_{TAG}{ser}.json.gz"), {m["t"]: m for m in v})
         random.Random(7).shuffle(v)
         todo = [m for m in v[:PER] if m["t"] not in got]
         print(f"{ser}: {n} listed, {len(ok)} settled, {len(v)} with {MINV}+ traded, taping {len(todo)} more "
@@ -498,16 +502,29 @@ def buy(px, stake=25.0):
     return n, n * px + bot.kalshi_fee(n, px)
 
 
+def fix_quotes(d):
+    """Trap (kmentions.load): Kalshi's live candle endpoint gives some markets' quotes 100 times too small. Kalshi's
+    smallest step is 1c, so any quote strictly between 0 and 1c means the whole market came scaled down."""
+    vals = [x for c in d["c"] for x in c[1:3] if x is not None]
+    tr_hi = max([t[1] for t in d["tr"]] or [0]) / 1000
+    if vals and (any(0 < x < 0.0099 for x in vals) or (max(vals) <= 0.0101 and tr_hi > 0.02)):
+        for c in d["c"]:
+            c[1] = None if c[1] is None else round(c[1] * 100, 4)
+            c[2] = None if c[2] is None else round(c[2] * 100, 4)
+        d["fixed"] = True
+
+
 def load_rows():
     st = rj(STARTS, {}) or {}
     rows, nost = [], 0
     for ser in SER:
-        mk = rj(os.path.join(CACHE, f"mk_{ser}.json.gz"), {}) or {}
-        tp = rj(os.path.join(CACHE, f"tapes_{ser}.json.gz"), {}) or {}
+        mk = rj(os.path.join(CACHE, f"mk_{TAG}{ser}.json.gz"), {}) or {}
+        tp = rj(os.path.join(CACHE, f"tapes_{TAG}{ser}.json.gz"), {}) or {}
         for t, d in tp.items():
             m = mk.get(t)
             if not m or not d["c"]:
                 continue
+            fix_quotes(d)
             S = st.get(game_key(m["ev"]))
             if not S:
                 nost += 1
@@ -521,7 +538,7 @@ def load_rows():
 
 def record_map(ser):
     """{(player, line): [(close, won)]} from every settled market of the series (not only taped ones)."""
-    mk = rj(os.path.join(CACHE, f"mk_{ser}.json.gz"), {}) or {}
+    mk = rj(os.path.join(CACHE, f"mk_{TAG}{ser}.json.gz"), {}) or {}
     out = collections.defaultdict(list)
     for m in mk.values():
         if m.get("line") is not None:
@@ -644,6 +661,27 @@ def report(log=None):
                    src="props.py report", log=bool(log))
 
 
+UNBIASED = ["KXNHLGOAL", "KXNHLPTS", "KXMLBHIT", "KXMLBHR", "KXNBAPTS", "KXNBAREB", "KXNBAAST", "KXNBA3PT",
+            "KXNFLRECYDS", "KXNFLRSHYDS", "KXNFLREC", "KXNFLTD", "KXNFLFIRSTTD", "KXWNBAPTS"]
+
+
+def _unbiased():
+    global TAG, MINV, ONLY, PER, SER
+    TAG, MINV, ONLY, PER = "u", 0, UNBIASED, int(os.environ.get("PP_N", "1000"))
+    SER = UNBIASED
+
+
+def ufetch(part="0", parts="1"):
+    """Every settled market of the series (no volume filter), 1,000 picked at random per series."""
+    _unbiased()
+    fetch(part, parts)
+
+
+def ureport(log=None):
+    _unbiased()
+    report(log)
+
+
 def scan():
     for f in (kalshi_scan, poly_scan, pin_scan):
         try:
@@ -656,4 +694,5 @@ def scan():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     {"scan": scan, "kalshi": kalshi_scan, "poly": poly_scan, "pin": pin_scan, "live": live, "livescore": live_score,
-     "fetch": lambda *a: fetch(*a), "report": lambda *a: report(*a)}[cmd](*sys.argv[2:])
+     "fetch": lambda *a: fetch(*a), "report": lambda *a: report(*a), "ufetch": lambda *a: ufetch(*a),
+     "ureport": lambda *a: ureport(*a)}[cmd](*sys.argv[2:])
