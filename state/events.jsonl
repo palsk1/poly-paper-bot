@@ -34219,3 +34219,7 @@
 {"player": "Oliver Okonkwo", "price": 0.75, "set1": "6-4", "set2_games": 0, "shares": 33, "ticker": "KXATPCHALLENGERMATCH-26NOV24OKOBEL-OKO", "track": "tennis_set", "ts": "2026-11-24T10:47:32Z", "type": "ktennis_buy"}
 {"minutes_left": 3.27, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV240600-00", "track": "kc_maker", "ts": "2026-11-24T10:56:44Z", "type": "kmaker_order"}
 {"minutes_left": 3.27, "price": 0.982, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV240600-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T10:56:44Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV240600-00", "track": "kc_maker", "ts": "2026-11-24T11:03:41Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV240600-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-24T11:03:41Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXTEMPNYCHS-26NOV2406-T41.99", "track": "kalshi_patient", "ts": "2026-11-24T11:03:44Z", "type": "kpatient_fill"}
+{"fee": 0.0604, "outcome": "Yes", "price": 0.591, "shares": 5, "title": "Will Nvidia\u2019s market capitalization be less than $4.00T at the end of 2026?", "token": "75184185460235875385343932552601861806273235321353622101075745551195596449064", "track": "panic_fade_10c", "ts": "2026-11-24T11:04:45Z", "type": "paper_buy"}
