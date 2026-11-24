@@ -35000,3 +35000,6 @@
 {"pnl": -25.36, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24BARTAB-BAR", "track": "tennis_set", "ts": "2026-11-24T18:22:19Z", "type": "econ_settle"}
 {"pnl": -25.73, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24OSOBON-OSO", "track": "tennis_set", "ts": "2026-11-24T18:22:19Z", "type": "econ_settle"}
 {"pnl": 12.69, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24KELTAB-KEL", "track": "tennis_set", "ts": "2026-11-24T18:33:04Z", "type": "econ_settle"}
+{"fee": 0.0049, "outcome": "No", "price": 0.11, "shares": 5, "title": "Will Spider-Man: Brand New Day be the top grossing movie of 2026?", "token": "80757130658075377588211268321341672637109151783616954046136590997276659075008", "track": "consensus_3", "ts": "2026-11-24T18:40:44Z", "type": "paper_buy"}
+{"minutes_left": 1.89, "price": 0.99, "queue": 1132.39, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV241345-45", "track": "kc_maker", "ts": "2026-11-24T18:43:07Z", "type": "kmaker_order"}
+{"minutes_left": 1.89, "price": 0.951, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV241345-45", "track": "kc_maker", "ts": "2026-11-24T18:43:10Z", "type": "kmaker_order"}
