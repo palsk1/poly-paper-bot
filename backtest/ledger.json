@@ -3321,6 +3321,19 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kearly.py"
+  },
+  {
+   "id": "speed_check_buy_polymarket_5_min_btc_side_within_0_1_s_of_a_",
+   "date": "2026-11-25",
+   "what": "Speed check: buy Polymarket 5-min BTC side within 0.1 s of a Binance jump (asks 40-95c), unseen days 19-24 Nov",
+   "tries": 12,
+   "bets": 1723,
+   "groups": 1723,
+   "per100": 2.73,
+   "floor100": 0.28,
+   "verdict": "Looks real",
+   "status": "open",
+   "src": "quoter/speedcheck.py edge"
   }
  ]
 }
