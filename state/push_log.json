@@ -62,17 +62,11 @@
   },
   "2026-11-25": {
    "failed": 0,
-   "muted": 85,
-   "sent": 10
+   "muted": 87,
+   "sent": 11
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade_4c] sold No at 92c (+$0.20)",
-   "track": "panic_fade_4c",
-   "ts": "2026-11-18T09:50:41Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade] sold No at 84c (+$0.22)",
@@ -1266,6 +1260,12 @@
    "title": "[stock_no] bought 7 (practice money)",
    "track": "stock_no",
    "ts": "2026-11-25T17:02:37Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame] bought 1 (practice money)",
+   "track": "endgame",
+   "ts": "2026-11-25T18:03:37Z"
   }
  ]
 }
