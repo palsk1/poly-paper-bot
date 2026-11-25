@@ -62,17 +62,11 @@
   },
   "2026-11-25": {
    "failed": 0,
-   "muted": 18,
-   "sent": 1
+   "muted": 31,
+   "sent": 2
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.20)",
-   "track": "kalshi_patient",
-   "ts": "2026-11-17T20:06:24Z"
-  },
   {
    "result": "sent",
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.30)",
@@ -1266,6 +1260,12 @@
    "title": "[endgame] bought 1 (practice money)",
    "track": "endgame",
    "ts": "2026-11-25T04:02:12Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-25T05:06:50Z"
   }
  ]
 }
