@@ -135,5 +135,5 @@ What it says:
 No new track. The earlier, cheaper idea mostly runs into the fact that Kalshi already prices a safe coin at 95c+.
 The one practical change, letting the real bot start at 10 minutes left and take 90c+ bids with the same 2.3
 cushion, beat today's rule in all three stretches (about +$0.90 a day at $4 bids, real fills on the fresh week). It is
-a rule change on a real-money bot, so it is Jan's call; a paper twin first would be the careful way. Exam
+a rule change on a real-money bot, so it is Jan's call. **25 Nov: Jan picked "Paper twin first"**: paper track `kc_maker_safe_usd_10m` runs it next to `kc_maker_safe_usd`; compare after 1-2 weeks. Exam
 rows added to `backtest/ledger.md`. Don't redo the chart-signal cuts on these rounds.
