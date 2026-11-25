@@ -62,17 +62,11 @@
   },
   "2026-11-25": {
    "failed": 0,
-   "muted": 16,
-   "sent": 0
+   "muted": 17,
+   "sent": 1
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.80)",
-   "track": null,
-   "ts": "2026-11-17T19:32:08Z"
-  },
   {
    "result": "sent",
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.20)",
@@ -1266,6 +1260,12 @@
    "title": "[soccer_draw] bought 3 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-24T23:49:33Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame] bought 1 (practice money)",
+   "track": "endgame",
+   "ts": "2026-11-25T04:02:12Z"
   }
  ]
 }
