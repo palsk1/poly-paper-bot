@@ -321,7 +321,10 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
-        C.beat(book, time.time() - t0, balance_fn=balance_log)
+        C.beat(book, time.time() - t0,
+               # Jan, 25 Nov: Kalshi's balance leaves out money held in waiting bids, so a reading during a round
+               # looked like a $20 loss; the dashboard adds `in_bids` back
+               balance_fn=lambda: {**balance_log(), "in_bids": book.open_cost()})
         if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:
