@@ -37478,3 +37478,7 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV25WPGBOS-BOSMGEEKIE39", "track": "kalshi_patient", "ts": "2026-11-25T21:08:44Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLMOSTRECYDS-26NOV27DENPIT-DENJCOLEMAN20", "track": "kalshi_patient", "ts": "2026-11-25T21:08:44Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNCAAWBGAME-26NOV27PSUBAY-PSU", "track": "kalshi_patient", "ts": "2026-11-25T21:08:44Z", "type": "kpatient_order"}
+{"minutes_left": 2.94, "price": 0.974, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV251615-15", "track": "kc_maker", "ts": "2026-11-25T21:12:05Z", "type": "kmaker_order"}
+{"minutes_left": 2.94, "price": 0.974, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV251615-15", "track": "kc_maker_safe", "ts": "2026-11-25T21:12:06Z", "type": "kmaker_order"}
+{"pnl": 14.54, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24NIKBOS-NIK", "track": "tennis_set", "ts": "2026-11-25T21:12:06Z", "type": "econ_settle"}
+{"pnl": 9.98, "side": "yes", "ticker": "KXWTACHALLENGERMATCH-26NOV25HERGEE-HER", "track": "tennis_set", "ts": "2026-11-25T21:12:06Z", "type": "econ_settle"}
