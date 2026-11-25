@@ -36440,3 +36440,5 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXTRUMPAPPROVE-26NOV25-E38.1", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDSPROT-26NOV26KCBUF-BUFJALLEN17-90", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTEAMFIRSTTD-26NOV25GBLAR-LAR-KMUMPFIELD4", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"minutes_left": 1.25, "price": 0.994, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV250400-00", "track": "kc_maker", "ts": "2026-11-25T08:58:45Z", "type": "kmaker_order"}
+{"minutes_left": 1.25, "price": 0.994, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV250400-00", "track": "kc_maker_safe", "ts": "2026-11-25T08:58:45Z", "type": "kmaker_order"}
