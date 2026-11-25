@@ -37431,3 +37431,5 @@
 {"fee": 0.0624, "outcome": "76ers", "price": 0.48, "shares": 5, "title": "Heat vs. 76ers", "token": "43496384572136368015648963145473996186882550068563172532538497511819394500857", "track": "sharp_pinnacle", "ts": "2026-11-25T20:18:25Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251515-15", "track": "kc_maker", "ts": "2026-11-25T20:18:27Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251515-15", "track": "kc_maker_safe", "ts": "2026-11-25T20:18:28Z", "type": "kmaker_fill"}
+{"cost": 4.5045, "title": "Will Solana reach $80 November 23-29?", "token": "35513727423536401443621707990316145206503613160121029926194975139533219229948", "track": "crypto_no", "ts": "2026-11-25T20:35:14Z", "type": "skip_no_cash"}
+{"fee": 0.0493, "outcome": "Draw", "price": 0.27, "shares": 5, "title": "Will AC Sparta Praha vs. AZ end in a draw?", "token": "58865107345941223929174496676128640500635351596757712550513749258809082460898", "track": "soccer_draw", "ts": "2026-11-25T20:35:27Z", "type": "paper_buy"}
