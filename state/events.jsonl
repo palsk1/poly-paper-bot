@@ -35482,3 +35482,4 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXSAGDPQOQ-26DEC01-T1.2", "track": "kalshi_patient", "ts": "2026-11-25T00:02:54Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXUKCHAGOS-28JAN01-26DEC01", "track": "kalshi_patient", "ts": "2026-11-25T00:02:54Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXITFWMATCH-26NOV25YANJAK-YAN", "track": "kalshi_patient", "ts": "2026-11-25T00:02:54Z", "type": "kpatient_order"}
+{"outcome": "Port Vale FC: Yes", "pnl": -2.1105, "price": 0.0, "reason": "resolved", "title": "Will Port Vale FC win on 2026-09-26?", "token": "25300886337919606477126939327169256015150089355651291137582389231410937538193", "track": "sharp_pinnacle", "ts": "2026-11-25T00:05:49Z", "type": "paper_close"}
