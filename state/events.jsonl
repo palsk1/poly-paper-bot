@@ -37428,3 +37428,6 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXCOPPERMON-26NOV3017-T5.91", "track": "kalshi_patient", "ts": "2026-11-25T20:13:39Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXHURRICANE-26DEC01CPACMAJ-3", "track": "kalshi_patient", "ts": "2026-11-25T20:13:39Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNETFLIXRANKSHOWGLOBAL-26NOV30-THE", "track": "kalshi_patient", "ts": "2026-11-25T20:13:39Z", "type": "kpatient_order"}
+{"fee": 0.0624, "outcome": "76ers", "price": 0.48, "shares": 5, "title": "Heat vs. 76ers", "token": "43496384572136368015648963145473996186882550068563172532538497511819394500857", "track": "sharp_pinnacle", "ts": "2026-11-25T20:18:25Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251515-15", "track": "kc_maker", "ts": "2026-11-25T20:18:27Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251515-15", "track": "kc_maker_safe", "ts": "2026-11-25T20:18:28Z", "type": "kmaker_fill"}
