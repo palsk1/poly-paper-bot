@@ -35745,3 +35745,6 @@
 {"fee": 0.0609, "outcome": "Alessandro Bellifemine", "price": 0.42, "shares": 5, "title": "M15 Antalya: Alessandro Bellifemine vs Matthias Ujvary", "token": "35706521447040151466802772756657580909240007643024013607666103885073853209371", "track": "w_cigarettes", "ts": "2026-11-25T02:25:33Z", "type": "paper_buy"}
 {"fee": 0.0609, "outcome": "Alessandro Bellifemine", "price": 0.42, "shares": 5, "title": "M15 Antalya: Alessandro Bellifemine vs Matthias Ujvary", "token": "35706521447040151466802772756657580909240007643024013607666103885073853209371", "track": "wb_cigarettes", "ts": "2026-11-25T02:25:33Z", "type": "paper_buy"}
 {"minutes_left": 2.94, "price": 0.964, "queue": 96.44, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV242130-30", "track": "kc_maker", "ts": "2026-11-25T02:27:04Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV242130-30", "track": "kc_maker", "ts": "2026-11-25T02:32:16Z", "type": "kmaker_fill"}
+{"pnl": 12.69, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV24SHEBOU-BOU", "track": "tennis_set", "ts": "2026-11-25T02:32:16Z", "type": "econ_settle"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNCAAWBGAME-26NOV24SIUEMIZZ-SIUE", "track": "kalshi_patient", "ts": "2026-11-25T02:32:18Z", "type": "kpatient_result"}
