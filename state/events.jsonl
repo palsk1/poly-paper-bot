@@ -36992,3 +36992,5 @@
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNASDAQDUD-26NOV25H1600-T26214.17", "track": "kalshi_patient", "ts": "2026-11-25T15:04:56Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXNHLFIRSTGOAL-26NOV25NYRBUF-BUFJQUINN22", "track": "kalshi_patient", "ts": "2026-11-25T15:04:58Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": false, "ticker": "KXSAUDIPLSPREAD-26NOV26FAIDIR-FAI2", "track": "kalshi_patient", "ts": "2026-11-25T15:04:59Z", "type": "kpatient_fill"}
+{"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "Will Amazon (AMZN) close above $250 on November 25?", "token": "62003236009999428545681461203286918907663228377949811030722050066933456581931", "track": "endgame_sell98", "ts": "2026-11-25T15:06:42Z", "type": "paper_buy"}
+{"pnl": -9.3, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBNBD-26NOV2510-T534.99", "track": "kalshi_patient", "ts": "2026-11-25T15:06:43Z", "type": "kpatient_result"}
