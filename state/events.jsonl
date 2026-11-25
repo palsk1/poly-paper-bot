@@ -37385,3 +37385,6 @@
 {"minutes_left": 2.74, "price": 0.976, "queue": 28.8, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:15Z", "type": "kmaker_order"}
 {"minutes_left": 2.74, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:17Z", "type": "kmaker_order"}
 {"minutes_left": 2.74, "price": 0.991, "queue": 257.07, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:18Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:48:34Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:48:34Z", "type": "kmaker_fill"}
+{"player": "Johan Nikles", "price": 0.62, "set1": "6-4", "set2_games": 0, "shares": 40, "ticker": "KXATPCHALLENGERMATCH-26NOV24NIKBOS-NIK", "track": "tennis_set", "ts": "2026-11-25T19:48:37Z", "type": "ktennis_buy"}
