@@ -35791,3 +35791,7 @@
 {"minutes_left": 2.54, "price": 0.99, "queue": 1021.8, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV242215-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T03:12:31Z", "type": "kmaker_order"}
 {"minutes_left": 2.54, "price": 0.963, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV242215-15", "track": "kc_maker", "ts": "2026-11-25T03:12:32Z", "type": "kmaker_order"}
 {"minutes_left": 2.54, "price": 0.963, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV242215-15", "track": "kc_maker_safe", "ts": "2026-11-25T03:12:32Z", "type": "kmaker_order"}
+{"fee": 0.0099, "outcome": "No", "price": 0.27, "shares": 5, "title": "Will Elon Musk post 40-64 tweets from November 23 to November 25, 2026?", "token": "59297533167324344528903505724054610910280592371098179792985616212657670096515", "track": "postcount_no", "ts": "2026-11-25T03:15:55Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXBTC-26NOV2517-B60125", "track": "kalshi_patient", "ts": "2026-11-25T03:15:57Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "yes", "through": false, "ticker": "KXBTCD-26NOV2517-T54999.99", "track": "kalshi_patient", "ts": "2026-11-25T03:15:57Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXNCAAFSPREAD-26NOV28UTEPNIU-UTEP17", "track": "kalshi_patient", "ts": "2026-11-25T03:16:04Z", "type": "kpatient_fill"}
