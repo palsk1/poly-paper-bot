@@ -36699,3 +36699,5 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXSILVERW-26NOV2714-T35.99", "track": "kalshi_patient", "ts": "2026-11-25T12:54:35Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXMEDIARELEASESPIDERMAN-DEC26", "track": "kalshi_patient", "ts": "2026-11-25T12:54:35Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXTRUMPMAMDANI-27JAN01-DEC01", "track": "kalshi_patient", "ts": "2026-11-25T12:54:35Z", "type": "kpatient_order"}
+{"minutes_left": 2.85, "price": 0.978, "queue": 391.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV250800-00", "track": "kc_maker", "ts": "2026-11-25T12:57:09Z", "type": "kmaker_order"}
+{"minutes_left": 2.85, "price": 0.978, "queue": 391.0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV250800-00", "track": "kc_maker_safe", "ts": "2026-11-25T12:57:09Z", "type": "kmaker_order"}
