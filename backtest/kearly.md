@@ -13,16 +13,17 @@ too", "try them all" and "always test both Polymarket and Kalshi". Research only
   instead of 5.5 (90c and up, cushion 2.3) made **+$0.68 per $100 on the fresh month** vs **+$0.50** for today's
   rule. At $4 bids that is about **$2.60 a day instead of $1.75** on the candle model. Exam: "Promising, needs more
   bets".
-- **Cheaper and earlier with a softer cushion pays more per bet but finds fewer bets.** 85-97c, 4-10 minutes left,
-  cushion 2.0: **+$1.81 per $100** on the fresh month (620 bets, 18 lost), about **$1.25 a day** at $4 bids. Exam
-  "Promising, needs more bets", but the luck bar for 1,139 ideas tried is +$3.07, so not proven.
+- **Cheaper and earlier with a softer cushion looked good on the check month and then failed.** 85-97c, 4-10 minutes
+  left, cushion 2.0: +$1.81 per $100 on the check month (620 bets), then **-$2.79** on the fresh week. Dropped.
 - **Before 10 minutes left there is almost nothing**: prices are rarely 85c+ that early (a handful of bids a day).
 - **Chart signals (RSI, moving averages, MACD, Bollinger, momentum, volume, other coins) add nothing the cushion
   doesn't already know.** Six classic readings all agreeing: $0.00 per $100 on the fresh month. Losers looked the same
   as winners on every chart reading. Flips are news-like jumps; charts don't see them coming.
 - **Polymarket: no.** The same bids on Polymarket's 15-minute rounds lose at 85-95c at every time (-$3 to -$7 per
   $100 without a cushion, about $0 with one) and find under $1 a day.
-- **Real-size check:** see section 6 (real trade lists with contract counts, last 7 days).
+- **Real-size check on a fresh week (17-24 Nov, every trade with its size):** the 10-minute, 90c+, cushion 2.3 version
+  made +$0.85 per $100 vs +$0.59 for today's rule (about $2.55 vs $1.60 a day at $4 bids), and fills held up to $50
+  bids. **Every cheaper or softer-bar version lost that week** (-$0.83 to -$6.04 per $100).
 
 What is different from `kc_maker_early` (dumped 12 Nov, -$2.45 per $100 live): it bid 90c+ with 6.5-11.5 minutes
 left and **no cushion check at all**. Without a cushion, early cheap bids lose about 1 in 10 and come out
@@ -96,19 +97,43 @@ windows in 1,000. Dropped.
 
 ## 6. Real sizes (real trade lists with contract counts, last 7 days)
 
-SIZECHECK
+7 fresh days that no setting was picked on (17-24 Nov, 4,213 windows), every trade with its size from Kalshi
+(probe `ke_all_7`, `bt_cache/ke/`). A bid gets only contracts that sellers really sold at or below our price after
+we placed it, capped at the bid size. P&L per $100 (bets, lost, total $):
+
+| Setting | $4 bids | $50 bids |
+|---|---|---|
+| Today's rule: 1-5.5 min, 95c+, cushion 2.3 | +$0.59 (492, 1 lost, +$11.33 in 7 days) | +$0.58 (+$134.63) |
+| **1-10 min, 90c+, cushion 2.3** | **+$0.85 (534, 2 lost, +$17.82)** | +$0.86 (+$219.51) |
+| 1-10 min, 90c+, cushion 2.3, calm Kalshi | +$1.01 (301, 1 lost, +$11.86) | +$1.02 (+$146.19) |
+| 6-10 min only, 90c+, cushion 2.3 | +$1.50 (177, 1 lost, +$10.39) | +$1.51 (+$130.82) |
+| 1-10 min, 85-95c, cushion 2.3 | +$6.46 (14, 0 lost, +$3.40) | +$6.46 (+$44.84) |
+| 1-10 min, 90c+, cushion **2.0** | **-$0.12** (813, 14 lost, -$3.84) | -$0.17 (-$65.75) |
+| 4-10 min, 85-97c, cushion 2.0 | **-$2.79** (113, 8 lost, -$12.03) | -$2.95 (-$160.80) |
+| 4-10 min, 85-97c, cushion 1.5 | **-$0.83** (602, 37 lost, -$18.94) | -$0.98 (-$283.43) |
+| 4-10 min, 85-97c, cushion 1.5, calm Kalshi | **-$1.48** (384, 26 lost, -$21.48) | -$1.56 (-$291.04) |
+
+What it says:
+- Real contract counts match the candle model almost to the cent, even at $50 bids. Early bids do fill on the good
+  ones too, not only before a flip.
+- **The cheaper, softer-bar versions all lost on the fresh week.** The +$1.81 per $100 "85-97c, cushion 2.0" lead from
+  the check month became -$2.79. Below 95c you need the full 2.3 cushion, and then bets are rare (14 in 7 days).
+- **The longer window with the same 2.3 bar held up a third time:** +$0.85 vs +$0.59 for today's rule, about
+  **$2.55 a day vs $1.60 at $4 bids**. That is three separate stretches (find, check month, fresh week) ahead of
+  today's rule, by about $0.20-0.30 per $100 each time. Only 2 lost bets in the week, so luck still matters.
+
 
 ## Ceilings (rough guesses)
 
 | Version | Most in an average day | Money needed | Where it stops growing | Bad day |
 |---|---|---|---|---|
 | Today's rule (1-5.5 min, 95c+) | about $1.75 at $4 bids, about $15 at its best size | about $700 | about $100 a bid | about -$100 |
-| Window to 10 min, 90c+ | about $2.60 at $4 bids (rough: $20 at its best size) | about $700 | about $100 a bid (see section 6) | about -$100 (one loss = one bid) |
-| 4-10 min, 85-97c, cushion 2.0 | about $1.25 at $4 bids | about $100 | about $25-50 a bid (section 6) | about -$50 |
+| Window to 10 min, 90c+ | about $2.55 at $4 bids, about $30 a day at $50 bids on the fresh week | about $700 at $50 bids (about 7-10 bids out at once) | fills still full at $50; untested above | about -$50 at $50 bids (one loss = one bid) |
 
 ## Verdict
 
 No new track. The earlier, cheaper idea mostly runs into the fact that Kalshi already prices a safe coin at 95c+.
-The one practical change, letting the real bot start at 10 minutes left and take 90c+ bids, is small (+$0.85 a day
-at $4 bids on the fresh month, candle model) and is a rule change on a real-money bot, so it is Jan's call. Exam
+The one practical change, letting the real bot start at 10 minutes left and take 90c+ bids with the same 2.3
+cushion, beat today's rule in all three stretches (about +$0.90 a day at $4 bids, real fills on the fresh week). It is
+a rule change on a real-money bot, so it is Jan's call; a paper twin first would be the careful way. Exam
 rows added to `backtest/ledger.md`. Don't redo the chart-signal cuts on these rounds.
