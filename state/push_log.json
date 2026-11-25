@@ -63,16 +63,10 @@
   "2026-11-25": {
    "failed": 0,
    "muted": 111,
-   "sent": 14
+   "sent": 15
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
-   "track": "kalshi_patient",
-   "ts": "2026-11-18T12:32:47Z"
-  },
   {
    "result": "sent",
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-6.44)",
@@ -1266,6 +1260,12 @@
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
    "track": null,
    "ts": "2026-11-25T21:35:49Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.50)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-25T22:04:04Z"
   }
  ]
 }
