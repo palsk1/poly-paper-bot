@@ -36582,3 +36582,33 @@
 {"filled": 10.0, "pnl": 0.43, "price": 0.957, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV250645-45", "track": "kc_maker", "ts": "2026-11-25T11:47:28Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV250645-45", "track": "kc_maker", "ts": "2026-11-25T11:47:28Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.37, "price": 0.963, "side": "no", "through": true, "ticker": "KXETH15M-26NOV250645-45", "track": "kc_maker", "ts": "2026-11-25T11:47:29Z", "type": "kmaker_fill"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXTRUMPLAGODAYS-26NOV30-AL11", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXWTI-26NOV2514-T84.99", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBULLETBRAWLTOP-26NOV28T8-BLIN", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXRAINATLM-26NOV-3", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBRENTW-26NOV2717-T91.99", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLTEAMTOTAL-26NOV25GBLAR-LAR39", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV28NEVUNLV-NEV15", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXCOPPERD-26NOV2517-T5.62", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNCAAF1H-26NOV27NEBIOWA-TIE", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV27DENPIT-DENCSUTTON14", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXUKCHAGOS-28JAN01-26DEC01", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV28AUBALA-AUB11", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXGOLDD-26NOV2517-T3593", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "yes", "ticker": "KXEIACRUDEW-26NOV25-T414", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNBAWINMARGIN-26NOV25CHICHA-CHI21PLUS", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXMOTOGPRACE-VALE26-PEAC", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXBBWSERIEAGAME-26NOV251330COSVEN-VEN", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "yes", "ticker": "KXNATGASW-26NOV2717-T3.199", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXRAINEWRM-26NOV-4", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXHIGHTATL-26NOV25-B56.5", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXNCAAMBSPREAD-26NOV25ARPBSDAK-SDAK3", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXRAINDCM-26NOV-4", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXBIGGESTQUAKEMONTH-30NOV26-8.2", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXUCLTOTAL-26NOV25LILBMU-6", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXUCL1HSCORE-26NOV25SBHBAR-SBH1BAR0", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXDDCOLDBREW-26DEC02-T4.48", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXUELSCORE-26NOV26VIKBEN-VIK2BEN4", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV27MSSTMISS-MSST2", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLRECYDS-26NOV25GBLAR-GBMGOLDEN0-140", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXUCL1HSPREAD-26NOV25SPOMUN-MUN2", "track": "kalshi_patient", "ts": "2026-11-25T11:53:51Z", "type": "kpatient_order"}
