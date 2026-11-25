@@ -93,32 +93,32 @@ More bots or accounts don't raise a ceiling: they stand in the same line for the
 
 <!-- AUTO:START (learnings.py writes this part every morning, don't edit by hand) -->
 
-## Live numbers (updated 2026-11-24)
+## Live numbers (updated 2026-11-25)
 
-**38 days left** until the money decision on 1 Jan 2027.
-Ideas tried so far: **239**. Dropped: 188. Still in play: 51. Looking real: **6**.
+**37 days left** until the money decision on 1 Jan 2027.
+Ideas tried so far: **260**. Dropped: 206. Still in play: 54. Looking real: **6**.
 
 | Candidate | Finished bets | Won / lost | P&L per $100 | What it means | Check |
 |---|---|---|---|---|---|
-| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 1837 | 1826 / 11 | +$0.42 | Ahead, but could be luck | 1 Dec (7 days): after 2,500 bets: pass if above +$0.22 per $100 |
-| NO on 'will X say Y' (`mention_no`) | 12 | 6 / 6 | -$36.70 | Losing | 21 Dec (27 days): holdout, scored once |
-| Boring side after a 10c scare (`panic_fade_10c`) | 24 | 18 / 6 | -$0.79 | Behind, but could be bad luck | 21 Dec (27 days): holdout, scored once |
-| NO at 90-97c, 30+ days out (`boring_no`) | 5 | 5 / 0 | +$5.78 | Too early to tell (5 finished) | 21 Dec (27 days): holdout, scored once |
-| NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 25 | 17 / 8 | -$17.56 | Behind, but could be bad luck | 21 Dec (27 days): holdout, scored once |
+| Kalshi 15-min crypto bids, spot check (`kc_maker_safe`) | 1931 | 1919 / 12 | +$0.41 | Ahead, but could be luck | 1 Dec (6 days): after 2,500 bets: pass if above +$0.22 per $100 |
+| NO on 'will X say Y' (`mention_no`) | 14 | 8 / 6 | -$12.30 | Behind, but could be bad luck | 21 Dec (26 days): holdout, scored once |
+| Boring side after a 10c scare (`panic_fade_10c`) | 24 | 18 / 6 | -$0.79 | Behind, but could be bad luck | 21 Dec (26 days): holdout, scored once |
+| NO at 90-97c, 30+ days out (`boring_no`) | 5 | 5 / 0 | +$5.78 | Too early to tell (5 finished) | 21 Dec (26 days): holdout, scored once |
+| NO on crypto price, 70-90c, 3-7 days out (`crypto_no`) | 25 | 17 / 8 | -$17.56 | Behind, but could be bad luck | 21 Dec (26 days): holdout, scored once |
 | Economy favorites the forecast backs (`econ_fav`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | no date: not registered yet |
-| Kalshi patient buyer, nearly-sure side (untested) (`kalshi_patient`) | 738 | 699 / 39 | +$0.46 | Ahead, but could be luck | 1 Jan (38 days): 1,000+ bets, ahead, low end of the luck range above $0 |
-| NO on post counts the counter says are overpriced (untested) (`postcount_no`) | 38 | 28 / 10 | -$2.08 | Behind, but could be bad luck | 1 Jan (38 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
-| NO on mention words priced far above the word's own record (untested) (`word_no`) | 3 | 1 / 2 | -$52.95 | Too early to tell (3 finished) | 1 Jan (38 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
-| NO on stock long shots in the afternoon (untested) (`stock_no`) | 52 | 48 / 4 | +$2.19 | Ahead, but could be luck | 1 Jan (38 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
-| Tennis, winner of set 1, women's main tour on Kalshi (untested) (`tennis_set_w`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (38 days): first look only; verdict at 300 bets: ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
-| Tennis, winner of set 1, all four tours on Kalshi (untested) (`tennis_set`) | 29 | 22 / 7 | +$8.57 | Ahead, but could be luck | 1 Jan (38 days): first look only; verdict at 1,000 bets: ahead, low end of the luck range above -$2 per $100 (proposed, not locked) |
-| YES on words Trump says most weeks, Kalshi (untested) (`trump_week_k`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (38 days): first look only; verdict at 100 bets with trump_week: ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
-| YES on words Trump says most weeks, Polymarket (untested) (`trump_week`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (38 days): first look only; counted together with trump_week_k (proposed, not locked) |
-| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.96 locked in | 36 sets cost $173.15 and pay $180.00 if both sites agree. Nothing to judge before then. | 1 Jan (38 days): pays out on 1 Jan |
+| Kalshi patient buyer, nearly-sure side (untested) (`kalshi_patient`) | 786 | 746 / 40 | +$0.69 | Ahead, but could be luck | 1 Jan (37 days): 1,000+ bets, ahead, low end of the luck range above $0 |
+| NO on post counts the counter says are overpriced (untested) (`postcount_no`) | 50 | 35 / 15 | -$5.44 | Behind, but could be bad luck | 1 Jan (37 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
+| NO on mention words priced far above the word's own record (untested) (`word_no`) | 3 | 1 / 2 | -$52.95 | Too early to tell (3 finished) | 1 Jan (37 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
+| NO on stock long shots in the afternoon (untested) (`stock_no`) | 58 | 54 / 4 | +$3.66 | Ahead, but could be luck | 1 Jan (37 days): 150+ bets, ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
+| Tennis, winner of set 1, women's main tour on Kalshi (untested) (`tennis_set_w`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (37 days): first look only; verdict at 300 bets: ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
+| Tennis, winner of set 1, all four tours on Kalshi (untested) (`tennis_set`) | 43 | 30 / 13 | -$1.09 | Behind, but could be bad luck | 1 Jan (37 days): first look only; verdict at 1,000 bets: ahead, low end of the luck range above -$2 per $100 (proposed, not locked) |
+| YES on words Trump says most weeks, Kalshi (untested) (`trump_week_k`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (37 days): first look only; verdict at 100 bets with trump_week: ahead, low end of the luck range above -$5 per $100 (proposed, not locked) |
+| YES on words Trump says most weeks, Polymarket (untested) (`trump_week`) | 0 | 0 / 0 | - | Too early to tell (0 finished) | 1 Jan (37 days): first look only; counted together with trump_week_k (proposed, not locked) |
+| Same question on Kalshi and Polymarket (`arb`) | 0 | - | +$3.96 locked in | 36 sets cost $173.15 and pay $180.00 if both sites agree. Nothing to judge before then. | 1 Jan (37 days): pays out on 1 Jan |
 
-**kc_maker_safe toward its locked test:** 1,837 of 2,500 bets, 11 lost, +$74.99 so far (+$0.41 per $100; the bar is +$0.22). About 123 bets a day, so the look is due about 29 Nov. This is only a peek: the number counts once, at 2,500.
-**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 1333 bought, 19 lost, -$56.03 (-$0.43 per $100). Full table: `state/kfast_live/report.md`.
-**Combo house on Jan's AWS server (Stockholm)**, paper, rule `main`: 8,523 parlays finished, the house won 6,820, +$1.59 per $100 at risk (Looks real), 73 still waiting. Only a peek: it counts once, at 1 Jan or 1,000 finished parlays. `state/quoter.json`. **Warning: no new data from the server for 53 hours. Ask Jan to check it runs.**
+**kc_maker_safe toward its locked test:** 1,933 of 2,500 bets, 12 lost, +$75.83 so far (+$0.40 per $100; the bar is +$0.22). About 122 bets a day, so the look is due about 30 Nov. This is only a peek: the number counts once, at 2,500.
+**Fast Kalshi bot, last 45 seconds** (main test "Wait at 99.8c, 45 s left (z 2+) (main)", 10 contracts): 1402 bought, 20 lost, -$58.53 (-$0.43 per $100). Full table: `state/kfast_live/report.md`.
+**Combo house on Jan's AWS server (Stockholm)**, paper, rule `main`: 8,527 parlays finished, the house won 6,824, +$1.61 per $100 at risk (Looks real), 69 still waiting. Only a peek: it counts once, at 1 Jan or 1,000 finished parlays. `state/quoter.json`. **Warning: no new data from the server for 74 hours. Ask Jan to check it runs.**
 
 ### Week by week (numbers as of the last day of each week, all bets so far)
 
@@ -126,7 +126,7 @@ Ideas tried so far: **239**. Dropped: 188. Still in play: 51. Looking real: **6*
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2026-W46 | 760 bets, +$0.44 | 5 bets, -$17.04 | 9 bets, -$14.34 | 1 bets, +$7.15 | 6 bets, -$37.80 | 0 bets | 135 bets, +$1.34 | 6 bets, +$2.98 | 0 bets | 16 bets, -$4.34 | - | - | - | - |
 | 2026-W47 | 1582 bets, +$0.45 | 12 bets, -$36.70 | 19 bets, -$1.73 | 5 bets, +$5.78 | 20 bets, -$19.90 | 0 bets | 565 bets, +$0.49 | 29 bets, -$5.84 | 3 bets, -$52.95 | 48 bets, +$0.99 | - | - | 0 bets | 0 bets |
-| 2026-W48 | 1837 bets, +$0.42 | 12 bets, -$36.70 | 24 bets, -$0.79 | 5 bets, +$5.78 | 25 bets, -$17.56 | 0 bets | 738 bets, +$0.46 | 38 bets, -$2.08 | 3 bets, -$52.95 | 52 bets, +$2.19 | 0 bets | 29 bets, +$8.57 | 0 bets | 0 bets |
+| 2026-W48 | 1931 bets, +$0.41 | 14 bets, -$12.30 | 24 bets, -$0.79 | 5 bets, +$5.78 | 25 bets, -$17.56 | 0 bets | 786 bets, +$0.69 | 50 bets, -$5.44 | 3 bets, -$52.95 | 58 bets, +$3.66 | 0 bets | 43 bets, -$1.09 | 0 bets | 0 bets |
 
 Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
@@ -282,6 +282,9 @@ To bring it back:
   $5,000 at $5 about $3,100 a month, worst drop -$353. Risks: the lead is thin (low luck end +$0.07 per $100), the
   pre-kick-off side scorecard is behind (-$1.82), and without Polymarket's "last look" (only after about $2,500 of
   combo volume) every accepted quote binds us even if the legs moved in the buyer's 10 seconds.
+- **Back on as paper (25 Nov, Jan: "we can create a new box"):** the listener restarts on its own new $12 box to get
+  more full days, and now also re-reads the legs when a sale is heard (`after` lines), so `combos.py stale` can show
+  how many of our sales a last-look pro would have refused and what they cost. Still listen only, no money.
 - **Where:** either an AWS box (`quoter/README.md`, `setup.sh`), or GitHub Actions like `kfastlive.yml` (nonstop
   6-hour shifts, free on a public repo) with the empty wallet's login put in repo secrets by Jan. Jan's call.
 - **Real quoting** needs a funded wallet and a quote bot that answers in under 0.4 s, on Jan's server only. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
