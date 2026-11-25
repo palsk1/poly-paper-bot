@@ -62,17 +62,11 @@
   },
   "2026-11-25": {
    "failed": 0,
-   "muted": 108,
-   "sent": 13
+   "muted": 110,
+   "sent": 14
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[kc_maker_safe] FLIP: a late favorite lost ($-9.74)",
-   "track": "kc_maker_safe",
-   "ts": "2026-11-18T12:02:55Z"
-  },
   {
    "result": "sent",
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
@@ -1266,6 +1260,12 @@
    "title": "[panic_fade] sold No at 38c (-$2.10)",
    "track": "panic_fade",
    "ts": "2026-11-25T21:20:48Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
+   "track": null,
+   "ts": "2026-11-25T21:35:49Z"
   }
  ]
 }
