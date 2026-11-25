@@ -36994,3 +36994,15 @@
 {"filled": 10.0, "price": 0.92, "side": "no", "through": false, "ticker": "KXSAUDIPLSPREAD-26NOV26FAIDIR-FAI2", "track": "kalshi_patient", "ts": "2026-11-25T15:04:59Z", "type": "kpatient_fill"}
 {"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "Will Amazon (AMZN) close above $250 on November 25?", "token": "62003236009999428545681461203286918907663228377949811030722050066933456581931", "track": "endgame_sell98", "ts": "2026-11-25T15:06:42Z", "type": "paper_buy"}
 {"pnl": -9.3, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXBNBD-26NOV2510-T534.99", "track": "kalshi_patient", "ts": "2026-11-25T15:06:43Z", "type": "kpatient_result"}
+{"minutes_left": 2.47, "price": 0.963, "queue": 410.02, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:32Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.981, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:33Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.985, "queue": 21.74, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:34Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.997, "queue": 349.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:35Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.997, "queue": 349.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV251015-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T15:12:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251015-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T15:12:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.996, "queue": 352.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:12:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.47, "price": 0.996, "queue": 352.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV251015-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T15:12:38Z", "type": "kmaker_order"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXLOWTLAX-26NOV24-B50.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXLOWTLV-26NOV24-B43.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXLOWTSEA-26NOV24-B42.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
