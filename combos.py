@@ -807,8 +807,87 @@ def usd(x):
     return "n/a" if x is None else (f"+${x:.2f}" if x >= 0 else f"-${-x:.2f}")
 
 
+def money(local=None, edge=None):
+    """Jan, 25 Nov: "how much would we need minimum to get combo house to work?" (backtest/combo_money.md).
+    Replays the main rule's sales from the full logging days (17-22 Nov; set QUOTER_DIR to a folder of the unpacked
+    day files, or it reads the release) with a real bank. Polymarket lets a quoter fill only part of a request
+    (docs: "Quote Partial Fills"), so each parlay puts up min(stake, the buyer's whole size) of house money. Settle
+    time as in pot_sim (GAME_HOURS after the deciding leg's start). Prints the buyers' sizes, hours locked, most
+    parlays out at once, and per bank: share of sales taken, real result, expected a month at the scorecard's
+    per-$100 (and its luck ends), worst drop and worst day."""
+    import heapq
+    st = json.load(open("state/quoter.json"))
+    edge = edge or (st.get("per100"), st.get("lo100"), st.get("hi100"))
+    lines = q_logs(local or os.environ.get("QUOTER_DIR"))
+    lines = [x for x in lines if (x.get("t") or 0) / 1000 >= SAME_FIX_FROM - 8.5 * 3600]   # 17 Nov 00:00 UTC on
+    cache = st.get("leg_results") or {}
+    _, _, won, _, _ = q_match(lines, "main", result=lambda t: cache.get(t))
+    names = {}
+    for x in lines:
+        if x.get("k") == "legs":
+            names.update(x.get("legs") or {})
+    rows = []
+    for r in won:
+        toks, q = r.get("tokens") or [], r["quotes"]["main"]
+        rs = [cache.get(t) for t in toks]
+        sts = [_start_ts((names.get(t) or {}).get("start")) for t in toks]
+        sale = (r.get("seen") or 0) / 1000
+        if 0 in rs:
+            lost = [s for s, v in zip(sts, rs) if v == 0 and s]
+            free, win = (min(lost) if lost else sale) + GAME_HOURS * 3600, True
+        elif rs and all(v == 1 for v in rs):
+            free, win = max([s for s in sts if s] or [sale]) + GAME_HOURS * 3600, False
+        else:
+            continue
+        buyer = float(r.get("size") or 0) / 1e6                  # BUY requests are sized in dollars
+        rows.append({"sale": sale, "free": max(free, sale), "q": q, "win": win, "house": buyer * (1 - q) / q, "buyer": buyer})
+    rows.sort(key=lambda x: x["sale"])
+    if not rows:
+        print("no settled sales")
+        return
+    days = (rows[-1]["sale"] - rows[0]["sale"]) / 86400
+
+    def pct(a, p):
+        a = sorted(a)
+        return a[int(p * (len(a) - 1))]
+    hrs = [(x["free"] - x["sale"]) / 3600 for x in rows]
+    print(f"{len(rows)} settled sales in {days:.1f} days ({len(rows) / days:.0f} a day), house won {sum(x['win'] for x in rows)}")
+    print(f"buyer's ticket: middle ${pct([x['buyer'] for x in rows], .5):.2f}, 1 in 10 over ${pct([x['buyer'] for x in rows], .9):.0f}; "
+          f"house money for the whole ticket: middle ${pct([x['house'] for x in rows], .5):.0f}, 1 in 10 over ${pct([x['house'] for x in rows], .9):.0f}")
+    print(f"hours locked: middle {pct(hrs, .5):.1f}, 1 in 10 over {pct(hrs, .9):.1f}, 1 in 100 over {pct(hrs, .99):.0f}")
+    ev = sorted([(x["sale"], 1) for x in rows] + [(x["free"], -1) for x in rows])
+    c = m = 0
+    for _, v in ev:
+        c += v
+        m = max(m, c)
+    print(f"most parlays out at once: {m}")
+    for bank, s in [(300, 1), (500, 1), (1000, 1), (1000, 2), (2000, 2), (5000, 5), (10000, 10)]:
+        cash, held, pnl, took, turn, curve, day = bank, [], 0.0, 0, 0.0, [], collections.defaultdict(float)
+        for x in rows:
+            while held and held[0][0] <= x["sale"]:
+                _, mny, p = heapq.heappop(held)
+                cash += mny + p
+            need = min(s, x["house"])
+            if need > cash:
+                continue
+            p = need * x["q"] / (1 - x["q"]) if x["win"] else -need
+            cash -= need
+            heapq.heappush(held, (x["free"], need, p))
+            took, pnl, turn = took + 1, pnl + p, turn + need
+            curve.append(pnl)
+            day[time.strftime("%d", time.gmtime(x["sale"]))] += p
+        pk = dd = 0.0
+        for v in curve:
+            pk, dd = max(pk, v), max(dd, pk - v)
+        mo = turn / days * 30 / 100
+        print(f"bank ${bank}, ${s} a parlay: took {took} of {len(rows)}, result ${pnl:.0f} (${pnl / days * 30:.0f} a month), "
+              f"expected a month ${mo * edge[0]:.0f} (luck ends ${mo * edge[1]:.0f} to ${mo * edge[2]:.0f}), "
+              f"worst drop ${dd:.0f}, worst day ${min(day.values()):.0f}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
-    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest, "qstate": qstate}[cmd]()
+    {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest, "qstate": qstate,
+     "money": money}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
