@@ -36419,3 +36419,11 @@
 {"filled": 10.0, "pnl": 0.33, "price": 0.967, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV250300-00", "track": "kc_maker", "ts": "2026-11-25T08:02:20Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV250300-00", "track": "kc_maker", "ts": "2026-11-25T08:02:20Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV250300-00", "track": "kc_maker_safe", "ts": "2026-11-25T08:02:20Z", "type": "kmaker_fill"}
+{"fee": 0.0515, "outcome": "Kataller Toyama: Yes", "price": 0.29, "shares": 5, "title": "Will Kataller Toyama win on 2026-11-25?", "token": "305343639861037929109229492193405223554986486230571095344553870776536904595", "track": "sharp_pinnacle", "ts": "2026-11-25T08:13:09Z", "type": "paper_buy"}
+{"minutes_left": 1.67, "price": 0.974, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV250315-15", "track": "kc_maker", "ts": "2026-11-25T08:13:20Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.998, "queue": 109445.93, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250315-15", "track": "kc_maker", "ts": "2026-11-25T08:13:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.998, "queue": 109445.93, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250315-15", "track": "kc_maker_safe", "ts": "2026-11-25T08:13:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.998, "queue": 109445.93, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250315-15", "track": "kc_maker_safe_usd", "ts": "2026-11-25T08:13:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.998, "queue": 109445.93, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250315-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T08:13:21Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.998, "queue": 109445.93, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250315-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T08:13:22Z", "type": "kmaker_order"}
+{"minutes_left": 1.67, "price": 0.986, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV250315-15", "track": "kc_maker", "ts": "2026-11-25T08:13:24Z", "type": "kmaker_order"}
