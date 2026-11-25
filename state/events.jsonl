@@ -36539,3 +36539,4 @@
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV250615-15", "track": "kc_maker", "ts": "2026-11-25T11:17:03Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXETH15M-26NOV250615-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T11:17:03Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV250615-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T11:17:03Z", "type": "kmaker_fill"}
+{"fee": 0.0385, "outcome": "No", "price": 0.19, "shares": 5, "title": "Will PSOE win the second-most seats in Madrid in the 2026 Spanish general election?", "token": "54049578119912305275230694517435862997736621571727783073282135971021320040487", "track": "consensus_3", "ts": "2026-11-25T11:20:44Z", "type": "paper_buy"}
