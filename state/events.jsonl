@@ -37569,3 +37569,11 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV26KCBUF-KCRRICE4", "track": "kalshi_patient", "ts": "2026-11-25T22:04:56Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXFSFRIDAY-26NOV27-KDAU", "track": "kalshi_patient", "ts": "2026-11-25T22:04:56Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "yes", "ticker": "KXWTI-26NOV2714-T76.99", "track": "kalshi_patient", "ts": "2026-11-25T22:04:56Z", "type": "kpatient_order"}
+{"outcome": "Lille OSC", "pnl": 2.3875, "price": 1.0, "reason": "resolved", "title": "Spread: FC Bayern M\u00fcnchen (-1.5)", "token": "64796385550714827929137940178599549892016842000378306324232448223331046955650", "track": "w_rabbitfoot1", "ts": "2026-11-25T22:10:42Z", "type": "paper_close"}
+{"outcome": "Lille OSC", "pnl": 2.3875, "price": 1.0, "reason": "resolved", "title": "Spread: FC Bayern M\u00fcnchen (-1.5)", "token": "64796385550714827929137940178599549892016842000378306324232448223331046955650", "track": "wb_rabbitfoot1", "ts": "2026-11-25T22:10:42Z", "type": "paper_close"}
+{"minutes_left": 1.94, "price": 0.995, "queue": 884.63, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV251715-15", "track": "kc_maker", "ts": "2026-11-25T22:13:04Z", "type": "kmaker_order"}
+{"minutes_left": 1.94, "price": 0.995, "queue": 884.63, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV251715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T22:13:04Z", "type": "kmaker_order"}
+{"minutes_left": 1.94, "price": 0.991, "queue": 66.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV251715-15", "track": "kc_maker", "ts": "2026-11-25T22:13:05Z", "type": "kmaker_order"}
+{"minutes_left": 1.94, "price": 0.991, "queue": 66.1, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV251715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T22:13:06Z", "type": "kmaker_order"}
+{"minutes_left": 1.94, "price": 0.998, "queue": 2013.34, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251715-15", "track": "kc_maker", "ts": "2026-11-25T22:13:06Z", "type": "kmaker_order"}
+{"minutes_left": 1.94, "price": 0.998, "queue": 2013.34, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251715-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T22:13:07Z", "type": "kmaker_order"}
