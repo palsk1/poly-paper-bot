@@ -36431,3 +36431,12 @@
 {"minutes_left": 2.1, "price": 0.998, "queue": 4953.23, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV250330-30", "track": "kc_maker_safe", "ts": "2026-11-25T08:27:56Z", "type": "kmaker_order"}
 {"pnl": 0.68, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNCAAMBGAME-26NOV25GONZKSU-KSU", "track": "kalshi_patient", "ts": "2026-11-25T08:32:48Z", "type": "kpatient_result"}
 {"cost": 3.6648, "title": "Will Ethereum dip to $1,500 in November?", "token": "21816062375185165294043008306330911577459257290990682425940493556541008715528", "track": "crypto_no", "ts": "2026-11-25T08:51:00Z", "type": "skip_no_cash"}
+{"fee": 0.0057, "outcome": "No", "price": 0.87, "shares": 5, "title": "Will Bitcoin reach $62,000 on November 25?", "token": "109799527074004493758100966343358294021120249847351045802646227011797015846909", "track": "w_tokor", "ts": "2026-11-25T08:52:02Z", "type": "paper_buy"}
+{"fee": 0.0057, "outcome": "No", "price": 0.87, "shares": 5, "title": "Will Bitcoin reach $62,000 on November 25?", "token": "109799527074004493758100966343358294021120249847351045802646227011797015846909", "track": "wb_tokor", "ts": "2026-11-25T08:52:02Z", "type": "paper_buy"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXLOWTOKC-26NOV25-B21.5", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXLEAVEFEINBERG-27JAN01-26DEC01", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNBA1H-26NOV25CHICHA-TIE", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXXRPMAXMON-XRP-26NOV30-140", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXTRUMPAPPROVE-26NOV25-E38.1", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDSPROT-26NOV26KCBUF-BUFJALLEN17-90", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTEAMFIRSTTD-26NOV25GBLAR-LAR-KMUMPFIELD4", "track": "kalshi_patient", "ts": "2026-11-25T08:55:00Z", "type": "kpatient_order"}
