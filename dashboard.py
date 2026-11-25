@@ -428,6 +428,9 @@ LIVE_BOTS = [
     {"bot": "poly", "label": "Polymarket: soccer draws", "twin": "soccer_draw",
      "say": "Buys \"the game ends in a draw\" a day before kick-off when it looks cheap. Loses most bets, "
             "but each win pays 3-6 times the cost. Bets on every second signal of the paper twin."},
+    {"bot": "pspeed", "label": "Polymarket: Bitcoin 5-minute speed bot", "twin": None,
+     "say": "When Bitcoin jumps on Binance, buys the side it jumped toward in Polymarket's 5-minute Bitcoin bets "
+            "before the old prices are gone. Small bets ($2-5). Started in practice mode (buys nothing) on 25 Nov."},
 ]
 LIVE_URL = "https://github.com/palsk1/poly-paper-bot/releases/download/live-data/"
 

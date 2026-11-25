@@ -89,6 +89,20 @@ CLAIMS_PER_ROUND = 5
 
 
 def claim_all(book):
+    """One claim sweep at a time on this server: the speed bot (pspeed_live.py, 25 Nov) uses the same wallet and
+    claims too. If the other bot is claiming right now, skip; the next round picks up whatever is left."""
+    import fcntl
+    os.makedirs(C.DIR, exist_ok=True)
+    with open(os.path.join(C.DIR, "claim.lock"), "w") as lk:
+        try:
+            fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            book.log("claim_skipped", why="the other bot is claiming right now")
+            return
+        _claim_all(book)
+
+
+def _claim_all(book):
     """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
     "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
     This sweeps ALL claimable positions of the wallet (also old ones from before the bot), once per settle round,

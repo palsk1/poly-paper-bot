@@ -7,6 +7,7 @@ with their paper twins, because a bot that wins on paper can still lose live.
 |---|---|---|---|
 | `kalshi_live.py` | `kc_maker_safe_usd`: a resting bid on the likely side of Kalshi's 15-minute crypto windows, 95c+, in the last 0.75-5.5 minutes, only when Binance is 2+ typical moves on our side (both as is and on Kalshi's dollar scale) | $4 a bid (Jan picked it 22 Nov), up to $30 out at once | `kc_maker_safe_usd` ($10 bids) |
 | `poly_live.py` | `soccer_draw`: Yes on a soccer draw at 15-50c, 20-28 h before kickoff, real ask at most 3c over the listed price, held to the end. **Every second signal only** (blind, by the market's name), so about 20 bets are out at once | ~$1.10-2.00 a bet (5+ shares, $1+), up to $28 out at once | `soccer_draw` (all signals) |
+| `pspeed_live.py` (added 25 Nov, Jan: "Build it, practice mode first") | the speed check's rule (`quoter/speedcheck.py`, week 19-24 Nov "Looks real", +$2.73 per $100 at 0.1 s, $0 at 0.5 s): when Bitcoin's fair price in the current Polymarket 5-minute window moves 3c+ within 2 s on Binance, buy the side it jumped toward at the offer seen (40c to under 95c), all or nothing, never above that price, skip offers of $100+, at most 2 tries a window | $2 a bet (5 shares, so $2-4.75), at most 50 bets and $100 a day, $15 out at once, stops at -$5 a day / -$15 total. **Practice mode (buys nothing) until `PSPEED_LIVE=yes`** | the speed check box (listen only) |
 
 They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on services, `kalshi-live` and
 `poly-live`. Claude has no access to the server or the keys.
@@ -80,7 +81,8 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 
 ## Files
 
-- `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
+- `kalshi_live.py`, `poly_live.py`, `pspeed_live.py`: the bots (`check`, `run`, `status`)
+- `pspeed_setup.sh`: one-time setup of the speed bot (its caps in `~/.live.env`, service `pspeed-live`, started in practice mode). Uses the Polymarket key already on the server; shares the wallet's cash with `poly-live` (claims take turns, `claim.lock`)
 - `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
 - `autoupdate.py` + `autoupdate_setup.sh`: the server updates itself, tested first (`autoupdate.py selftest`)

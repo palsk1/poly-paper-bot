@@ -215,14 +215,15 @@ def push(title, body):
 # ---------------------------------------------------------------- phone control (Jan, 22 Nov: "make it easy")
 CTRL_EVERY = 20
 UPLOAD_S = 900      # copy the notebook to GitHub every 15 minutes (was hourly: too slow to watch the first real bets)
-NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
+NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot", "pspeed": "Speed bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
+           "speed": "pspeed", "pspeed": "pspeed", "s": "pspeed",
            "all": "all", "both": "all", "bots": "all"}
 COMMANDS = {"stop", "off", "pause", "start", "on", "resume", "status", "how", "?", "update", "updates", "help"}
 BOT_TITLES = set(NAMES.values()) | {"Server update"}
 HELP = ("Words you can type here:\n"
         "status = how the bots are doing\n"
-        "stop / start = both bots (or stop kalshi, stop poly, start kalshi, start poly)\n"
+        "stop / start = all bots (or stop kalshi, stop poly, stop speed, start kalshi, start poly, start speed)\n"
         "update = get the newest bot code now (it is tested first; the server also does this by itself every 10 min)\n"
         "updates off / updates on = stop or allow the automatic updates")
 _ctrl = {"t": 0}
