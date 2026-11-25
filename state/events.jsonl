@@ -37110,3 +37110,5 @@
 {"minutes_left": 2.82, "price": 0.953, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV251130-30", "track": "kc_maker", "ts": "2026-11-25T16:27:13Z", "type": "kmaker_order"}
 {"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251130-30", "track": "kc_maker", "ts": "2026-11-25T16:33:09Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.47, "price": 0.953, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV251130-30", "track": "kc_maker", "ts": "2026-11-25T16:33:10Z", "type": "kmaker_fill"}
+{"fee": 0.0073, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Microsoft (MSFT) close above $490 on November 25?", "token": "60338552214626998154129016558601597980866309761099002661132603335188559685726", "track": "endgame_sell98", "ts": "2026-11-25T16:37:45Z", "type": "paper_buy"}
+{"player": "Nicolas Zanellato", "price": 0.79, "set1": "7-6", "set2_games": 0, "shares": 31, "ticker": "KXATPCHALLENGERMATCH-26NOV25ZANSTO-ZAN", "track": "tennis_set", "ts": "2026-11-25T16:37:55Z", "type": "ktennis_buy"}
