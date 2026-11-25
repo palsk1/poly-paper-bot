@@ -34,7 +34,7 @@ Newest tracks (12-25 Nov): `kc_maker_safe_usd_10m` (25 Nov, Jan picked "Paper tw
 4. **Rule changes:**
    - Bug fixes are allowed; always report them to Jan.
    - Do **not** change how these tracks trade (rules, budgets, thresholds) without Jan's OK: `mirror`, `favorites`, `mirror_unlimited`, `screener`, `arb`, `endgame` and `every_horse`. The `leader` settings need his OK too. Suggest changes and let him decide.
-   - `claude` and `panic_fade` belong to Claude. Their rules may be tweaked from 2026-11-10 on, at most 1–2 small changes a day, each reported.
+   - `claude` and `panic_fade` belong to Claude. `panic_fade`: at most 1–2 small changes a day, each reported. `claude` (Jan, 2026-11-25: "experiment with however much you want, I want that one to be pretty flexible"): no limit on how often or how big; any idea, rule, market type or budget split inside its $50 paper pot, as long as it stays paper and every change is logged in `backtest/claude_changes.md` and named in the morning report.
    - Approving or rejecting arb pairs in `arb_pairs.json` is allowed and must be reported.
    - **Lab tracks** (`"lab": true` in config: the 40 `w_*` wallets and their 40 filled-up `wb_*` twins (added on Jan's ask, 2026-11-08 evening), `consensus_*`, `sab_*` and the rule variants, added 2026-11-08) are **frozen until 2027-01-01**: bug fixes only, each reported. Changing their rules resets their evidence. Adding or removing lab tracks needs Jan's OK (he chose "about 60, not 100" on 2026-11-08).
 5. Commits end with the Co-Authored-By trailer the session gives you.
@@ -52,7 +52,7 @@ Newest tracks (12-25 Nov): `kc_maker_safe_usd_10m` (25 Nov, Jan picked "Paper tw
 |---|---|---|
 | mirror / favorites / mirror_unlimited | $20 / $20 / unlimited | Copy wallet **sabsabinxz** `0xd3ecb2aee0d65622da559ff356b00e8c2e626603` ("nothing ever happens" style: buys the boring outcome at 80–97c). `mirror_unlimited` measures how much money copying him needs. |
 | screener | $20 | His style by rule, without him |
-| claude | $50, refilled if it busts | **Claude's sandbox** (Jan, 2026-11-11): change it often to experiment, 1-2 small changes a day, each checked on history, logged in `backtest/claude_changes.md` and reported. Not a 1 Jan candidate (the evidence keeps resetting). |
+| claude | $50, refilled if it busts | **Claude's sandbox** (Jan, 2026-11-11): free to experiment (since 25 Nov no limit on size or number of changes, Jan: "pretty flexible"), checked on history where it can be, every change logged in `backtest/claude_changes.md` and in the morning report, which gives it a line every day. Not a 1 Jan candidate (the evidence keeps resetting). |
 | panic_fade | $50, refilled if it busts | Buys the boring side after a 6c+ one-day scare |
 | arb | $300 | Kalshi × Polymarket, **reviewed twin pairs only**. Holds to the end and flags MISMATCH. |
 | endgame | $100 | 95–99c on markets already decided or nearly decided. Tiers: resolved, proposed (past_deadline and ending_soon dropped 2026-11-08 after the backtest). Includes a sell-early shadow test (records only). |
