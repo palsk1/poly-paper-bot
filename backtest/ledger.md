@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**261 ideas examined, in about 75,911 versions.** 206 dropped, 55 still being tested or waiting. **Looks real: 7.**
+**266 ideas examined, in about 76,406 versions.** 211 dropped, 55 still being tested or waiting. **Looks real: 7.**
 
-Why count: if you test 261 ideas that are all worthless, the luckiest one still looks good. With 261 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 266 ideas that are all worthless, the luckiest one still looks good. With 266 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -261,6 +261,11 @@ Why count: if you test 261 ideas that are all worthless, the luckiest one still 
 | 2026-11-24 | Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC) | 70 | 36 | +$36.51 | Promising, needs more bets | lead, no track | music.py, backtest/music.md |
 | 2026-11-24 | Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week | 8 | 35 | -$26.70 | Losing | dropped | music.py, backtest/music.md |
 | 2026-11-24 | Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to 400 contracts | 1,400 | 1433 | +$11.57 | Ahead, but could be luck | dropped | khourly_sweep.py offer |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (all 3 samples) | 246 | 308 | -$0.22 | Behind, but could be bad luck | dropped | props.py |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (found by looking) | 246 | 227 | +$11.21 | Promising, needs more bets | dropped | props.py ureport |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (fresh check) | 1 | 232 | +$7.88 | Ahead, but could be luck | dropped | props.py freport |
+| 2026-11-24 | Kalshi player props: always No, 2h before (14 kinds, fair sample) | 1 | 2537 | -$4.74 | Losing | dropped | props.py ureport |
+| 2026-11-24 | Kalshi player props: always Yes, 2h before (14 kinds, fair sample) | 1 | 2588 | -$13.07 | Losing | dropped | props.py ureport |
 | 2026-11-24 | Known answer, winner still under 97c: buy it (crypto, stocks, soccer) | 14 | 38 | -$27.30 | Behind, but could be bad luck | dropped | known.py report |
 | 2026-11-24 | No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 60 | 104 | +$1.06 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
 | 2026-11-24 | Soccer after the final whistle: buy the leader at 99c+ (the grind) | 14 | 801 | +$0.06 | Ahead, but could be luck | dropped | known.py report |

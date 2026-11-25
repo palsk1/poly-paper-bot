@@ -3334,6 +3334,71 @@
    "verdict": "Looks real",
    "status": "open",
    "src": "quoter/speedcheck.py edge"
+  },
+  {
+   "id": "kalshi_nfl_props_no_where_yes_is_50_75c_24h_before_fresh_che",
+   "date": "2026-11-24",
+   "what": "Kalshi NFL props: No where Yes is 50-75c, 24h before (fresh check)",
+   "tries": 1,
+   "bets": 484,
+   "groups": 232,
+   "per100": 7.88,
+   "floor100": -1.53,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "props.py freport"
+  },
+  {
+   "id": "kalshi_player_props_always_yes_2h_before_14_kinds_fair_sampl",
+   "date": "2026-11-24",
+   "what": "Kalshi player props: always Yes, 2h before (14 kinds, fair sample)",
+   "tries": 1,
+   "bets": 9036,
+   "groups": 2588,
+   "per100": -13.07,
+   "floor100": -22.72,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "props.py ureport"
+  },
+  {
+   "id": "kalshi_player_props_always_no_2h_before_14_kinds_fair_sample",
+   "date": "2026-11-24",
+   "what": "Kalshi player props: always No, 2h before (14 kinds, fair sample)",
+   "tries": 1,
+   "bets": 8610,
+   "groups": 2537,
+   "per100": -4.74,
+   "floor100": -8.5,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "props.py ureport"
+  },
+  {
+   "id": "kalshi_nfl_props_no_where_yes_is_50_75c_24h_before_found_by_",
+   "date": "2026-11-24",
+   "what": "Kalshi NFL props: No where Yes is 50-75c, 24h before (found by looking)",
+   "tries": 246,
+   "bets": 454,
+   "groups": 227,
+   "per100": 11.21,
+   "floor100": -10.72,
+   "verdict": "Promising, needs more bets",
+   "status": "dropped",
+   "src": "props.py ureport"
+  },
+  {
+   "id": "kalshi_nfl_props_no_where_yes_is_50_75c_24h_before_all_3_sam",
+   "date": "2026-11-24",
+   "what": "Kalshi NFL props: No where Yes is 50-75c, 24h before (all 3 samples)",
+   "tries": 246,
+   "bets": 1619,
+   "groups": 308,
+   "per100": -0.22,
+   "floor100": -12.94,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "props.py"
   }
  ]
 }
