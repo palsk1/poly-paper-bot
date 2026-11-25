@@ -36832,3 +36832,17 @@
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV29NYJMIA-MIAKMCCORD14-1", "track": "kalshi_patient", "ts": "2026-11-25T13:54:22Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXSILVERMON-26NOV3017-T45.99", "track": "kalshi_patient", "ts": "2026-11-25T13:54:22Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXGOLDMON-26NOV3017-T3763.99", "track": "kalshi_patient", "ts": "2026-11-25T13:54:22Z", "type": "kpatient_order"}
+{"outcome": "Draw", "pnl": -1.1943, "price": 0.0, "reason": "resolved", "title": "Will Kashima Antlers vs. Jeonbuk FC end in a draw?", "token": "16206849710588983406069639228858880617731025111159346033188968638890941619969", "track": "soccer_draw", "ts": "2026-11-25T13:55:47Z", "type": "paper_close"}
+{"outcome": "Draw", "pnl": -0.9369, "price": 0.0, "reason": "resolved", "title": "Will Gamba Osaka vs. Port FC end in a draw?", "token": "74488982455203275986065522754138731014136140009257430018307372207753973059006", "track": "soccer_draw", "ts": "2026-11-25T13:55:47Z", "type": "paper_close"}
+{"minutes_left": 2.41, "price": 0.983, "queue": 688.02, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV250900-00", "track": "kc_maker", "ts": "2026-11-25T13:57:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.983, "queue": 688.02, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV250900-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T13:57:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV250900-00", "track": "kc_maker", "ts": "2026-11-25T13:57:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV250900-00", "track": "kc_maker", "ts": "2026-11-25T13:57:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV250900-00", "track": "kc_maker_safe", "ts": "2026-11-25T13:57:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV250900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-25T13:57:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV250900-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T13:57:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV250900-00", "track": "kc_maker", "ts": "2026-11-25T13:57:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV250900-00", "track": "kc_maker_safe", "ts": "2026-11-25T13:57:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV250900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-25T13:57:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV250900-00", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T13:57:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 4.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV250900-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T13:57:40Z", "type": "kmaker_order"}
