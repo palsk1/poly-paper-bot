@@ -37379,3 +37379,5 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_usd", "ts": "2026-11-25T19:33:42Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T19:33:42Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T19:33:42Z", "type": "kmaker_fill"}
+{"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "S&P 500 (SPY) closes above $725 on November 25?", "token": "76753783519705440149847798177995614729062289498400908007255281274276093392133", "track": "endgame_sell98", "ts": "2026-11-25T19:38:18Z", "type": "paper_buy"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV2514-T68.7499", "track": "kalshi_patient", "ts": "2026-11-25T19:38:27Z", "type": "kpatient_result"}
