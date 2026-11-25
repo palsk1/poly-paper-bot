@@ -536,8 +536,13 @@ def live_rows(tracks):
         last = rows[-1]["t"] if rows else None
         # Jan, 22 Nov: "why can't I see my Kalshi balance". The bots note the real account balance (`balance`, or `cash`
         # on the Polymarket login line); newest = balance now, first one since this mode started = started with.
-        bal = [(r["t"], float(r.get("balance") if r.get("balance") is not None else r.get("cash")))
+        bal = [(r["t"], float(r.get("balance") if r.get("balance") is not None else r.get("cash")) + float(r.get("in_bids") or 0))
                for r in rows if r.get("t") and (r.get("balance") is not None or (r.get("k") == "login" and r.get("cash") is not None))]
+        if b["bot"] == "kalshi" and bal and not any("in_bids" in r for r in rows[-20:]):
+            # Jan, 25 Nov ("why does it say -17"): Kalshi's balance leaves out money held in waiting bids, so a reading
+            # taken mid-round looks like a loss. Older notes don't carry `in_bids`: use the highest of the last 4 readings
+            # (about 40 minutes; a 15-minute round always ends inside that), which is the balance with no bids out.
+            bal = bal[:-1] + [(bal[-1][0], max(v for _, v in bal[-4:]))]   # notes come every 10 minutes
         bal_since = [x for x in bal if str(x[0]) >= str(since or "")]
         recent = []
         for r in real[::-1][:10]:
