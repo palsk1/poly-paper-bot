@@ -49,6 +49,13 @@
       "source": "kmaker",
       "rules": "kc_maker_safe_usd"
     },
+    "kc_maker_safe_usd_10m": {
+      "label": "Paper twin of the real Kalshi bot with a longer window (25 Nov, Jan picked 'Paper twin first'): same bid one tick in front of the best bid on the winning side, same price-gap check and the real bot's 2.3 cushion, but it may start with 10 minutes left (not 5.5) and takes 90c+ (not 95c+). History: beat today's rule on three separate stretches, +$0.85 vs +$0.59 per $100 on the fresh week 17-24 Nov with real trade sizes (backtest/kearly.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_safe_usd_10m"
+    },
     "kc_maker_safe_kprice": {
       "label": "Twin of kc_maker_safe checked on Kalshi's own price (19 Nov, Jan: make a paper twin, name it clearly): same bid (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but the 'at least 2 typical moves past the start price' check uses Kalshi's own settle number (the CF Benchmarks 60-second average, free at /live_data/events) instead of Binance. Re-test: backtest/kprice.md. $100 paper",
       "start_cash": 100,
@@ -1256,6 +1263,12 @@
     "kc_maker_safe_usd": {
       "inherit": "kc_maker_safe",
       "usd_gap": true
+    },
+    "kc_maker_safe_usd_10m": {
+      "inherit": "kc_maker_safe_usd",
+      "min_spot_z": 2.3,
+      "level": 0.9,
+      "max_minutes_left": 10.0
     },
     "kc_maker_safe_kprice": {
       "inherit": "kc_maker",

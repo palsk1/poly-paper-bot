@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**257 ideas examined, in about 73,199 versions.** 205 dropped, 52 still being tested or waiting. **Looks real: 6.**
+**260 ideas examined, in about 75,899 versions.** 206 dropped, 54 still being tested or waiting. **Looks real: 6.**
 
-Why count: if you test 257 ideas that are all worthless, the luckiest one still looks good. With 257 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 260 ideas that are all worthless, the luckiest one still looks good. With 260 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -254,6 +254,9 @@ Why count: if you test 257 ideas that are all worthless, the luckiest one still 
 | 2026-11-24 | Foreign elections, Kalshi: follow the polls, 10c+ apart (Wikipedia poll average vs price) | 40 | 14 | +$3.00 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
 | 2026-11-24 | Foreign elections, Polymarket: follow the polls, 10c+ apart (Wikipedia poll average vs price) | 40 | 29 | +$26.71 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
 | 2026-11-24 | Foreign elections, Polymarket: No on the 60-98c favourite a week before (backward look) | 40 | 25 | +$13.07 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
+| 2026-11-24 | Kalshi 15-min early bid, cushion 1.5 + calm Kalshi (check month only) | 900 | 1127 | +$1.09 | Ahead, but could be luck | dropped | kearly.py |
+| 2026-11-24 | Kalshi 15-min safe bid earlier and cheaper: 85-97c, 4-10 min left, cushion 2.0 (check month only) | 900 | 430 | +$1.84 | Promising, needs more bets | open | kearly.py |
+| 2026-11-24 | Kalshi 15-min safe bid with a longer window: 90c+, 1-10 min left, cushion 2.3 (check month only) | 900 | 1681 | +$0.69 | Promising, needs more bets | open | kearly.py |
 | 2026-11-24 | Kalshi album first-week units: buy where HITS's midweek forecast is 10c+ away from the price (Fri 06:00 UTC) | 4 | 27 | +$10.76 | Ahead, but could be luck | dropped | music.py, backtest/music.md |
 | 2026-11-24 | Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC) | 70 | 36 | +$36.51 | Promising, needs more bets | lead, no track | music.py, backtest/music.md |
 | 2026-11-24 | Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week | 8 | 35 | -$26.70 | Losing | dropped | music.py, backtest/music.md |

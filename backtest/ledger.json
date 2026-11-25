@@ -3282,6 +3282,45 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "elect.py, backtest/elect.md"
+  },
+  {
+   "id": "kalshi_15_min_safe_bid_earlier_and_cheaper_85_97c_4_10_min_l",
+   "date": "2026-11-24",
+   "what": "Kalshi 15-min safe bid earlier and cheaper: 85-97c, 4-10 min left, cushion 2.0 (check month only)",
+   "tries": 900,
+   "bets": 620,
+   "groups": 430,
+   "per100": 1.84,
+   "floor100": -1.56,
+   "verdict": "Promising, needs more bets",
+   "status": "open",
+   "src": "kearly.py"
+  },
+  {
+   "id": "kalshi_15_min_safe_bid_with_a_longer_window_90c_1_10_min_lef",
+   "date": "2026-11-24",
+   "what": "Kalshi 15-min safe bid with a longer window: 90c+, 1-10 min left, cushion 2.3 (check month only)",
+   "tries": 900,
+   "bets": 3517,
+   "groups": 1681,
+   "per100": 0.69,
+   "floor100": -0.03,
+   "verdict": "Promising, needs more bets",
+   "status": "open",
+   "src": "kearly.py"
+  },
+  {
+   "id": "kalshi_15_min_early_bid_cushion_1_5_calm_kalshi_check_month_",
+   "date": "2026-11-24",
+   "what": "Kalshi 15-min early bid, cushion 1.5 + calm Kalshi (check month only)",
+   "tries": 900,
+   "bets": 1946,
+   "groups": 1127,
+   "per100": 1.09,
+   "floor100": -1.23,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "kearly.py"
   }
  ]
 }
