@@ -426,7 +426,7 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
       <div class="kv">${rows.map(([k, v]) => `<div>${esc(k)}</div><div>${v}</div>`).join("")}</div>
       ${b.finished && b.curve && b.curve.length > 1 ? `<div class="realchart" data-bot="${esc(b.bot)}" style="margin-top:8px"></div>` : ""}
       ${recent}${open}
-      <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>. With this few bets, the result is mostly luck.</p></div>`;
+      <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. ${b.twin ? `Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>.` : "Paper twin: the speed check box (listen only)."} With this few bets, the result is mostly luck.</p></div>`;
   };
   $("real").innerHTML = `<h2>Real money</h2><p class="note">Your two small bots with real money, on your AWS server. Updated about once an hour.</p>` + L.map(card).join("");
   document.querySelectorAll("#real a[data-twin]").forEach(a => a.onclick = ev => { ev.preventDefault(); openDetail(a.dataset.twin); });
