@@ -37343,3 +37343,31 @@
 {"minutes_left": 2.85, "price": 0.996, "queue": 5154.6, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV251415-15", "track": "kc_maker_safe", "ts": "2026-11-25T19:12:13Z", "type": "kmaker_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXPOKEMON-26NOVPIKEX109-103.56", "track": "kalshi_patient", "ts": "2026-11-25T19:12:37Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXYTVIEWSW-TAT26NOV29-4.9M", "track": "kalshi_patient", "ts": "2026-11-25T19:12:37Z", "type": "kpatient_order"}
+{"fee": 0.0067, "outcome": "No", "price": 0.84, "shares": 5, "title": "Will the price of Ethereum be above $1,800 on November 30?", "token": "20418667430947893734906746467026898264622427494147070757319493063527855240513", "track": "crypto_no", "ts": "2026-11-25T19:27:26Z", "type": "paper_buy"}
+{"cost": 4.1074, "title": "Will the price of Bitcoin be between $60,000 and $62,000 on December 1?", "token": "16948033385448817485055841814412214491327590917870185521618689946630316742988", "track": "crypto_no", "ts": "2026-11-25T19:27:27Z", "type": "skip_no_cash"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251415-15", "track": "kc_maker", "ts": "2026-11-25T19:27:59Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV251415-15", "track": "kc_maker", "ts": "2026-11-25T19:28:00Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV251415-15", "track": "kc_maker", "ts": "2026-11-25T19:28:01Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251415-15", "track": "kc_maker", "ts": "2026-11-25T19:28:01Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV251415-15", "track": "kc_maker", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251415-15", "track": "kc_maker_safe", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV251415-15", "track": "kc_maker_safe", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251415-15", "track": "kc_maker_safe", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXSOL15M-26NOV251415-15", "track": "kc_maker_safe", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV251415-15", "track": "kc_maker_safe_usd", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV251415-15", "track": "kc_maker_safe_usd", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251415-15", "track": "kc_maker_safe_usd", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV251415-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251415-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": false, "ticker": "KXDOGE15M-26NOV251415-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV251415-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T19:28:02Z", "type": "kmaker_fill"}
+{"minutes_left": 1.96, "price": 0.998, "queue": 13469.68, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker", "ts": "2026-11-25T19:28:03Z", "type": "kmaker_order"}
+{"minutes_left": 1.96, "price": 0.998, "queue": 13469.68, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe", "ts": "2026-11-25T19:28:04Z", "type": "kmaker_order"}
+{"minutes_left": 1.96, "price": 0.998, "queue": 13469.68, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_usd", "ts": "2026-11-25T19:28:04Z", "type": "kmaker_order"}
+{"minutes_left": 1.96, "price": 0.998, "queue": 13469.68, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T19:28:04Z", "type": "kmaker_order"}
+{"minutes_left": 1.96, "price": 0.998, "queue": 13469.68, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T19:28:04Z", "type": "kmaker_order"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXITFMATCH-26NOV25SCRGAG-SCR", "track": "kalshi_patient", "ts": "2026-11-25T19:28:09Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXNHLGOAL-26NOV25UTAMIN-MINMBOLDY12-2", "track": "kalshi_patient", "ts": "2026-11-25T19:28:13Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXNYTHEAD-26NOV-T7", "track": "kalshi_patient", "ts": "2026-11-25T19:28:14Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "yes", "through": true, "ticker": "KXTRUMPPHOTOD-26NOV29-SUN", "track": "kalshi_patient", "ts": "2026-11-25T19:28:15Z", "type": "kpatient_fill"}
+{"filled": 9.4, "price": 0.91, "side": "no", "through": true, "ticker": "KXTRUMPSTATESMON-26NOV-NY", "track": "kalshi_patient", "ts": "2026-11-25T19:28:15Z", "type": "kpatient_fill"}
