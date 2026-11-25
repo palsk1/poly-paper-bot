@@ -67,3 +67,30 @@ The same box, still listen only (no key, no login, no order code; the selftest r
 3. **Polymarket ETH and SOL 5-minute windows**, next to Bitcoin (`edge eth ...`, `edge sol ...`).
 
 Score after a week (about 2 Dec): `lead`, `edge`, `edge eth`, `edge sol`, `kcancel`. If the box's CPU sits above 20% for long, turn off the extras with `SPEED_POLY_COINS=btc` and `SPEED_KALSHI=0` in `~/.quoter.env`.
+
+## Who the speed firms are, and when they are slow (25 Nov, Jan: "research speed firms")
+**What's public:**
+- In January 2026 Polymarket put a taker fee on the 5- and 15-minute crypto windows. The fee is highest near 50c and pays the makers' daily rebate ([Finance Magnates](https://www.financemagnates.com/cryptocurrency/polymarket-introduces-dynamic-fees-to-curb-latency-arbitrage-in-short-term-crypto-markets/)).
+- On 18 Feb 2026 it dropped the 0.5 s wait on taker orders. Makers now have to pull an old offer within about 0.1-0.2 s or lose it ([AiCoin](https://www.aicoin.com/en/article/518164)).
+- Bot writers now say "be the maker, not the taker": the best bots live on rebates and quick cancels. GoodFallen's 4 in 5 profit dollars were rebates (`backtest/wallet5m.md`).
+- Live bot write-ups say the lag is unstable: sometimes 200-400 ms, sometimes about zero ([dev.to](https://dev.to/benjamin_martin_749c1d57f/live-lessons-from-running-a-5-minute-polymarket-crypto-bot-273m)).
+- Since 7 Aug 2026 the windows settle on a 30-second Chainlink average, not a single tick ([casatrick](https://casatrick.substack.com/p/polymarket-twap-latency-trading-bots)).
+- Polymarket's fee page now lists a rate of 0.05 for the Bitcoin 5-minute windows ([docs](https://docs.polymarket.com/trading/fees)). Our scoring uses 0.07, which we measured on real fills on 17 Nov. If 0.05 is right, our numbers are about $1 per $100 too low near 50c. We keep the stricter number.
+
+**What our own log says** (19-24 Nov, Bitcoin, Binance at 100 ms, asks 40-95c, the same bets as the week score; every cut below was found by looking):
+
+18,456 times an old-price offer was still up when the box heard the jump:
+- **2 in 3 ended with someone else buying it** (a racer), a median 427 ms after we heard the jump.
+- **1 in 3 ended with the maker pulling it**, a median 244 ms after.
+
+So the typical racer is slower than our 100 ms. The fastest ones aren't. That is the 0 ms vs 100 ms gap: +3.05 vs +2.73.
+
+| Cut | Per $100 |
+|---|---|
+| Offer under $5 / $5-25 / $25-100 / $100+ | +5.50 / +3.60 / +3.60 / +1.22 |
+| Weekend (2 days) / weekdays | +4.29 / +2.05 |
+| 09-12 UTC (Europe morning) / other 3-hour blocks | -1.40 / +1.59 to +5.23 |
+
+The big offers are the weakest. Those are likely the pros' own quotes, pulled in time or left up on purpose. The time-of-day cut is 8 blocks over 6 days: treat it as noise until more weeks agree.
+
+A London box would save about 25 ms. At $0.32 per $100 for each 100 ms, that's about $0.08 per $100: not worth it.
