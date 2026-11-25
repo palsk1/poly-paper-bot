@@ -885,9 +885,43 @@ def money(local=None, edge=None):
               f"worst drop ${dd:.0f}, worst day ${min(day.values()):.0f}")
 
 
+def stale(local=None):
+    """Last-look check (25 Nov, Jan: "do we need more testing?"). The listener reads a sold parlay's legs again when
+    the sale is heard ('after' lines, quoter.py after_sale). A new house has no last look, so it is bound even when
+    the legs moved while the buyer took his 10 seconds. A sale counts as 'stale' when the legs multiplied after the
+    sale are above our quote: the parlay was then worth more than we sold it for, and a pro with last look would have
+    said no. Prints how many of our would-be sales were stale and the house result on stale vs other sales."""
+    import exam
+    lines = q_logs(local or os.environ.get("QUOTER_DIR"))
+    after = {x["rfq"]: x for x in lines if x.get("k") == "after"}
+    st = json.load(open("state/quoter.json")) if os.path.exists("state/quoter.json") else {}
+    cache = st.get("leg_results") or {}
+    _, _, won, pending, bets = q_match(lines, "main", result=lambda t: cache[t] if t in cache else (leg_result(t) if not local else None))
+    by_t = {(r.get("seen") or 0) / 1000: r for r in won}
+    groups = {"stale": [], "fine": [], "no after line": []}
+    for b in bets:
+        r = by_t.get(b["t"])
+        a = after.get(r["rfq"]) if r else None
+        if not a or any(m is None for m in a.get("mids") or [None]):
+            groups["no after line"].append(b)
+            continue
+        fair_after = 1.0
+        for m in a["mids"]:
+            fair_after *= m
+        groups["stale" if fair_after > b["q"] else "fine"].append(b)
+    print(f"{len(won)} would-be sales, {len(bets)} settled, {pending} waiting, {len(after)} after lines")
+    for k, bs in groups.items():
+        if not bs:
+            print(f"{k}: none")
+            continue
+        pnl = sum(x["pay"] - x["cost"] for x in bs)
+        c = exam.score(bs, f"Combo house sales, {k}", tries=1, log=False, quiet=True)
+        print(f"{k}: {len(bs)} sales, house result ${pnl:.0f} at $25 a parlay, {c.get('per100')} per $100 ({c.get('verdict')})")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "peek"
     t0 = time.time()
     {"peek": peek, "peek2": peek2, "peek3": peek3, "run": run, "replay": replay, "qscore": qscore, "qtest": qtest, "qstate": qstate,
-     "money": money}[cmd]()
+     "money": money, "stale": stale}[cmd]()
     print(f"done in {time.time() - t0:.0f}s")
