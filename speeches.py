@@ -38,7 +38,107 @@ def peek():
         print("   apis:", apis[:20], flush=True)
 
 
-API = "https://rollcall.com/wp-json/factbase/v1/search?media=&type=&sort=date&location=all&place=all&page={}&format=json"
+# Bug fix 2026-11-24: the old list address (wp-json/factbase/v1/search) answers 404 since about 18 Nov 2026, which
+# left trump_week / trump_week_k with a stale record (no bets). The new one gives the same rows, newest first, 40 a page.
+API = "https://rollcall.com/api/factbase/transcripts?person=trump&page={}"
+
+
+def peek5():
+    """Roll Call moved its list API about 18 Nov 2026 (the old wp-json search answers 404). Look at the new one."""
+    base = "https://rollcall.com/api/factbase/transcripts"
+    for q in ("?person=trump", "?person=trump&page=2", "?person=trump&page=1&per_page=50", "?person=trump&sort=date&page=1"):
+        try:
+            s = raw(base + q, 40)
+        except Exception as e:
+            print("FAIL", q, str(e)[:150], flush=True)
+            continue
+        print("OK", q, len(s), flush=True)
+        print("   body:", re.sub(r"\s+", " ", s[:3000]), flush=True)
+        try:
+            j = json.loads(s)
+            print("   keys:", list(j)[:20] if isinstance(j, dict) else type(j).__name__, flush=True)
+        except Exception:
+            pass
+
+
+def peek6():
+    """Kalshi's weekly KXTRUMPSAY list showed 0 open markets on 24 Nov 2026: newest events, and any similar series."""
+    import bot
+    for st in ("open", "closed", "settled", None):
+        try:
+            q = {"series_ticker": "KXTRUMPSAY", "limit": 10, **({"status": st} if st else {})}
+            ev = bot.kalshi_get("/events", q).get("events") or []
+            print("events", st, [(e.get("event_ticker"), e.get("title"), e.get("strike_date") or e.get("close_time")) for e in ev[:10]], flush=True)
+        except Exception as e:
+            print("events", st, "FAIL", str(e)[:150], flush=True)
+    try:
+        sers = bot.kalshi_get("/series", {"category": "Mentions"}).get("series") or []
+        print("series with TRUMP:", [(x.get("ticker"), x.get("title"), x.get("frequency")) for x in sers if "TRUMP" in str(x.get("ticker"))][:60], flush=True)
+    except Exception as e:
+        print("series FAIL", str(e)[:150], flush=True)
+
+
+def peek7():
+    """Does a new transcript page still parse? (24 Nov 2026: list fixed, but new days came back empty)"""
+    import json as _j
+    rows = _j.loads(raw(API.format(1), 40)).get("data") or []
+    for x in [r for r in rows if "no-transcript" not in str(r.get("slug"))][:2]:
+        u = x["factbase_url"]
+        s = raw(u, 60)
+        b = parse(s)
+        print("URL", u, "len", len(s), "blocks", len(b), b[:3], flush=True)
+        i = max(s.find("Donald Trump"), 0)
+        for k in ("speaker", "transcript", "data-", "__NEXT_DATA__", "wp-json", "/api/"):
+            j = s.find(k, i)
+            print("  near", k, j, re.sub(r"\s+", " ", s[j:j + 700]) if j >= 0 else "", flush=True)
+
+
+def peek8():
+    """Transcript pages now load their text from an API in the browser: find that API."""
+    import json as _j
+    rows = _j.loads(raw(API.format(1), 40)).get("data") or []
+    x = [r for r in rows if "no-transcript" not in str(r.get("slug"))][0]
+    slug = x["slug"]
+    s = raw(x["factbase_url"], 60)
+    for m in re.finditer(r"factbaseTranscript", s):
+        print("  page:", re.sub(r"\s+", " ", s[max(0, m.start() - 300):m.start() + 300]), flush=True)
+        break
+    for js in sorted(set(re.findall(r'src="(https://rollcall.com/build/assets/[^"]+\.js)"', s))):
+        try:
+            t = raw(js, 60)
+        except Exception as e:
+            print("JS FAIL", js, str(e)[:100], flush=True)
+            continue
+        print("JS", js, len(t), flush=True)
+        for k in ("factbaseTranscript", "api/factbase", "factbaseSlug"):
+            for m in list(re.finditer(re.escape(k), t))[:4]:
+                print("   ", k, ":", t[max(0, m.start() - 250):m.start() + 450].replace("\n", " "), flush=True)
+    for u in (f"https://rollcall.com/api/factbase/transcripts?person=trump&slug={slug}",
+              f"https://rollcall.com/api/factbase/transcript?person=trump&slug={slug}",
+              f"https://rollcall.com/api/factbase/transcripts/{slug}",
+              f"https://rollcall.com/api/factbase/transcript/{slug}",
+              f"https://rollcall.com/api/factbase/transcripts?person=trump&document_id={x['document_id']}"):
+        try:
+            t = raw(u, 40)
+            print("OK", u, len(t), re.sub(r"\s+", " ", t[:1200]), flush=True)
+        except Exception as e:
+            print("FAIL", u, str(e)[:100], flush=True)
+
+
+def peek9():
+    """Shape of the transcript JSON (api/factbase/transcripts?person=trump&slug=...)."""
+    import json as _j
+    slug = "donald-trump-remarks-protecting-families-department-of-justice-november-23-2026"
+    j = _j.loads(raw(f"https://rollcall.com/api/factbase/transcripts?person=trump&slug={slug}", 40))
+    print("top", list(j), flush=True)
+    for k, v in j.items():
+        if k == "meta":
+            print("meta keys", list(v), flush=True)
+            continue
+        print(k, type(v).__name__, len(v) if hasattr(v, "__len__") else v, flush=True)
+        items = v if isinstance(v, list) else list(v.values()) if isinstance(v, dict) else []
+        for it in items[:3]:
+            print("   item", _j.dumps(it)[:900], flush=True)
 
 
 def peek2():
@@ -747,4 +847,4 @@ def kmonth(score=True):
 
 
 if __name__ == "__main__":
-    {"peek": peek, "peek4": peek4, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()
+    {"peek": peek, "peek4": peek4, "peek5": peek5, "peek6": peek6, "peek7": peek7, "peek8": peek8, "peek9": peek9, "posts": do_posts, "peek2": peek2, "peek3": peek3, "list": do_list, "texts": do_texts, "run": run, "events": events, "kalshi": kalshi, "kmonth": kmonth, "kalshi_dry": lambda: kalshi(False), "dry": lambda: run(False)}[sys.argv[1] if len(sys.argv) > 1 else "peek"]()

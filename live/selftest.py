@@ -7,6 +7,7 @@ import datetime as dt
 import os
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,7 @@ TMP = tempfile.mkdtemp()
 # Start clean: the server's own settings (POLY_TAKE=all, caps, LIVE=yes, ...) can sit in the environment when the
 # auto-update runs this test, and they changed what the checks saw (23 Nov: "takes every second signal" failed).
 for _k in list(os.environ):
-    if _k.startswith(("KALSHI_", "POLY_", "NTFY_", "LIVE")):
+    if _k.startswith(("KALSHI_", "POLY_", "PSPEED_", "NTFY_", "LIVE")):
         os.environ.pop(_k)
 os.environ["LIVE_DIR"] = TMP
 os.environ["LIVE_ENV"] = os.path.join(TMP, "none.env")
@@ -24,8 +25,9 @@ import bot  # noqa: E402
 import common as C  # noqa: E402
 import kalshi_live as K  # noqa: E402
 import poly_live as P  # noqa: E402
+import pspeed_live as SP  # noqa: E402
 
-C._switch.update(t=1e18, val={"kalshi": "on", "poly": "on"}, fails=0)   # no GitHub read in the test
+C._switch.update(t=1e18, val={"kalshi": "on", "poly": "on", "pspeed": "on"}, fails=0)   # no GitHub read in the test
 OK = []
 
 
@@ -379,6 +381,161 @@ def test_balance():
           "the alive line carries the real balance, and a failed balance read never stops the bot")
 
 
+# ---------------------------------------------------------------- the speed bot (Bitcoin 5-minute windows)
+def test_pspeed():
+    from decimal import Decimal
+    import random
+    for k in ("LIVE", "PSPEED_LIVE"):
+        os.environ.pop(k, None)
+    os.environ["LIVE"] = "yes"
+    SP.practice_unless_own_flag()
+    check(not SP.is_real() and not C.is_live(),
+          "the speed bot stays in practice mode on a server with LIVE=yes until it has its own PSPEED_LIVE=yes")
+    sent = []
+    w = 1_800_000_000 // 300 * 300
+    clock = {"t": w + 60.0}
+    b = C.Book("pspeed_t")
+    sp = SP.Speed(b, send=lambda tok, amt, mx: sent.append((tok, amt, mx)) or SimpleNamespace(ok=True),
+                  clock=lambda: clock["t"])
+    sp.why_stopped = None
+    sp.add_window(w, "UP", "DOWN", "0xc")
+    rnd = random.Random(1)
+    p = 90_000.0
+    plans = []
+    for sec in range(-1000, 60):          # 15+ minutes of $3 moves every 5 s before the window, then calm
+        if sec < 0 and sec % 5 == 0:
+            p += rnd.choice((-3, 3))
+        plans.append(sp.on_price(p, (w + sec) * 1000))
+    check(not any(plans) and sp.fair.sigma(w), "a calm Bitcoin price gives no jump")
+    sp.books.lv["UP"] = {"a": {0.55: 20.0}, "b": {0.53: 50.0}}
+    sp.books.lv["DOWN"] = {"a": {0.47: 50.0}, "b": {0.45: 20.0}}
+    plan = sp.on_price(p + 150, (w + 60) * 1000 + 400)
+    check(plan and plan["side"] == "Up" and plan["ask"] == 0.55 and plan["token"] == "UP"
+          and plan["amount"] == Decimal("2.75") and plan["shares"] >= 5,
+          "a $150 Bitcoin jump within 2 s buys Up at the offer seen, 5 shares (=$2.75 at 55c)")
+    check(sp.on_price(p + 300, (w + 61) * 1000) is None, "one jump at a time: nothing again within 3 s")
+    sp.execute(plan)
+    check(not sent and len(b.state["open"]) == 1 and next(iter(b.state["open"].values()))["paid"] == 0.55,
+          "practice mode sends nothing and writes the bet down at the offer it saw")
+    # settle: Up won
+    clock["t"] = w + 300 + 91
+    sp.settle(result=lambda ww: True)
+    o_pnl = b.state["realized"]
+    check(not b.state["open"] and b.state["won"] == 1 and abs(o_pnl - (5 - 2.75 - 0.07 * 5 * 0.55 * 0.45)) < 0.01,
+          "a won window pays $1 a share, less the cost and the fee estimate")
+    clock["t"] = w + 60.0
+    # caps and skips
+    sp.busy = False
+    plan2 = sp.decide(w, "Up", 0.7, (w + 70) * 1000)
+    check(plan2 is not None, "a second buy in the same window is allowed")
+    sp.busy = False
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "at most 2 buys tried in one 5-minute window")
+    sp.tries.clear()
+    sp.busy = True
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "no second order while one is still on its way")
+    sp.busy = False
+    sp.books.lv["UP"]["a"] = {0.55: 200.0}
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "skips offers of $100 or more (those made the least)")
+    sp.books.lv["UP"]["a"] = {0.96: 20.0}
+    check(sp.decide(w, "Up", 0.99, (w + 80) * 1000) is None, "never buys at 95c or more")
+    sp.books.lv["UP"]["a"] = {0.39: 20.0}
+    check(sp.decide(w, "Up", 0.5, (w + 80) * 1000) is None, "never buys under 40c")
+    sp.books.lv["UP"]["a"] = {0.55: 3.0}
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "skips an offer too small for Polymarket's 5 shares")
+    sp.books.lv["UP"]["a"] = {0.55: 20.0}
+    b.state["open"] = {"x": {"cost": 14.0, "w": w, "side": "Up", "shares": 1, "spent": 14}}
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "stops at $15 waiting on results")
+    b.state["open"] = {}
+    b.day()["spent"] = 99.0
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "stops at $100 put in a day")
+    b.day()["spent"] = 0.0
+    b.day()["bets"] = 50
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "stops at 50 bets a day")
+    b.day()["bets"] = 0
+    # the shared off switches
+    sp.tries.clear()
+    open(os.path.join(TMP, "STOP-pspeed"), "w").write("test\n")
+    sp.why_stopped = C.stop_reason("pspeed", b)
+    check(sp.why_stopped and sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "a STOP-pspeed file pauses new buys")
+    os.remove(os.path.join(TMP, "STOP-pspeed"))
+    C._switch["val"] = {"kalshi": "on", "poly": "on", "pspeed": "off"}
+    check("switch" in (C.stop_reason("pspeed", b) or ""), "live/switch.json can turn the speed bot off")
+    C._switch["val"] = {"kalshi": "on", "poly": "on", "pspeed": "on"}
+    b.day()["pnl"] = -5.0
+    check("today" in (C.stop_reason("pspeed", b) or ""), "the speed bot pauses for the day after losing $5")
+    b.day()["pnl"] = 0.0
+    b.state["realized"] = -15.0
+    check("total loss" in (C.stop_reason("pspeed", b) or ""), "the speed bot stops for good after losing $15")
+    os.remove(os.path.join(TMP, "STOP-pspeed"))
+    b.state["realized"] = 0.0
+    check(C.stop_reason("pspeed", b) is None, "nothing else stops it")
+    sc = os.path.join(os.path.dirname(HERE), "quoter", "speedcheck.py")
+    if os.path.exists(sc):          # in the repo; the server's side-folder test only has live/
+        import ast
+        import speedcore
+        want = {n.name: ast.get_source_segment(open(sc).read(), n) for n in ast.parse(open(sc).read()).body
+                if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+        mine = {n.name: ast.get_source_segment(open(speedcore.__file__).read(), n)
+                for n in ast.parse(open(speedcore.__file__).read()).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+        src = open(sc).read()
+        same_consts = all(f'{k} = {getattr(speedcore, k)!r}'.replace("'", '"') in src or f"{k} = {getattr(speedcore, k)}" in src
+                          for k in ("GAMMA", "CLOB", "PM_WS", "BN_WS", "MOVE", "WIN"))
+        check(all(mine.get(n) == want.get(n) for n in speedcore.COPIED) and same_consts,
+              "the speed bot's copy (speedcore.py) still matches the paper speed check word for word")
+    check(C.ALIASES["speed"] == "pspeed" and "pspeed" in __import__("autoupdate").BOTS,
+          "the phone knows 'stop speed', and the auto-update restarts the speed bot when it is switched on")
+    # no jump in the last 5 seconds, none without 15 minutes of prices
+    f = SP.Fair()
+    for sec in range(-1000, 298):
+        f.add(90_000 + (sec % 2) * 3, (w + sec) * 1000)
+    check(f.jump((w + 296) * 1000) is None and f.add(90_400, (w + 296) * 1000 + 500) and
+          f.jump((w + 296) * 1000 + 500) is None, "no buys in a window's last 5 seconds")
+    f2 = SP.Fair()
+    for sec in range(-100, 60):
+        f2.add(90_000 + (sec % 2) * 3, (w + sec) * 1000)
+    f2.add(90_400, (w + 60) * 1000 + 500)
+    check(f2.jump((w + 60) * 1000 + 500) is None, "no buys until it has heard 15 minutes of prices before the window")
+    # REAL mode: the order is all or nothing, limit = the offer seen
+    os.environ["LIVE"] = "yes"
+    os.environ["PSPEED_LIVE"] = "yes"
+    check(SP.is_real(), "real buys need both LIVE=yes and PSPEED_LIVE=yes")
+    orders = []
+
+    class Fake:
+        wallet_type = "POLY_PROXY"
+
+        def place_market_order(self, **kw):
+            orders.append(kw)
+            ok = len(orders) == 1
+            return SimpleNamespace(ok=ok, order_id="0x" + "ab" * 32, status="matched" if ok else "killed",
+                                   making_amount=kw["amount"], taking_amount=Decimal("5") if ok else Decimal("0"),
+                                   code="FOK_KILLED", message="no fill")
+    P._client = Fake()
+    b2 = C.Book("pspeed_r")
+    sp2 = SP.Speed(b2, send=SP.sender(), clock=lambda: w + 60.0)
+    sp2.why_stopped, sp2.cash = None, 30.0
+    sp2.add_window(w, "UP", "DOWN", "0xc")
+    sp2.books.lv["UP"] = {"a": {0.55: 20.0}, "b": {0.45: 50.0}}
+    sp2.books.lv["DOWN"] = {"a": {}, "b": {}}
+    pl = sp2.decide(w, "Up", 0.7, int(time.time() * 1000))
+    sp2.execute(pl)
+    check(len(orders) == 1 and orders[0]["order_type"] == "FOK" and orders[0]["max_price"] == Decimal("0.55")
+          and orders[0]["side"] == "BUY" and len(b2.state["open"]) == 1,
+          "a real speed buy is all-or-nothing and never pays above the offer it saw")
+    pl = sp2.decide(w, "Down", 0.7, int(time.time() * 1000))
+    check(pl and pl["ask"] == 0.55 and pl["token"] == "DOWN", "Down's offer is read from Up's mirrored buy offers")
+    sp2.execute(pl)
+    check(len(orders) == 2 and len(b2.state["open"]) == 1 and not sp2.busy,
+          "a killed order (the offer was gone) buys nothing and frees the bot for the next jump")
+    sp2.cash = 2.0
+    sp2.tries.clear()
+    check(sp2.decide(w, "Up", 0.7, int(time.time() * 1000)) is None, "never buys with less cash than the bet")
+    o = next(iter(b2.state["open"].values()))
+    check("ab" * 20 not in str(o), "the public notebook keeps only the end of the order number")
+    for k in ("LIVE", "PSPEED_LIVE"):
+        os.environ.pop(k, None)
+
+
 if __name__ == "__main__":
     test_sign()
     test_balance()
@@ -387,6 +544,7 @@ if __name__ == "__main__":
     test_mode_switch()
     test_kalshi()
     test_poly()
+    test_pspeed()
     for w in OK:
         print("ok  ", w)
     print(f"ALL OK ({len(OK)} checks)")

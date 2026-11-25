@@ -23,6 +23,20 @@ only if its trade arrives (trades come 6-50 s after the request). Restart the se
 **What it never does:** send a quote, sign anything, or move money. There's no code for it. It doesn't hold a private
 key. It only has an API login, which can't move money by itself.
 
+## Back on, on its own box (25 Nov 2026)
+
+Jan put the combo house on hold on 22 Nov and the old box now runs the real bots. On 25 Nov Jan asked what more
+testing would help (`backtest/combo_money.md`): more days, and a "last look" check. So the listener goes back on, on a
+**new $12 box of its own** (paid from AWS credit), so the real bots aren't slowed down. Same setup as below
+(steps 1-5), with a fresh empty wallet from `make_creds.py new`. London (eu-west-2) if the create screen allows it,
+else Stockholm. Still listen only: no key, no quotes, no money.
+
+**Last-look check (new 25 Nov):** when a sale is heard, the listener reads its legs' books again and writes an
+`after` line with their middle prices. A new house has no last look (only makers with about $2,500 of combo volume
+get one), so it is bound even if the legs moved while the buyer took his 10 seconds. `python3 combos.py stale`
+splits our would-be sales into "stale" (legs multiplied after the sale above our quote: a pro with last look would
+have said no) and the rest, with the house result for each.
+
 ## Rules written down before the first request (PROTOCOL.md 5c)
 
 | Rule | What we'd quote | Which requests |

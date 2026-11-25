@@ -36,7 +36,7 @@ import common as C  # noqa: E402
 
 REPO_DIR = os.path.dirname(HERE)
 WATCH = ["live", "bot.py", "config.json"]       # what the real bots run; anything else never restarts them
-BOTS = ["kalshi", "poly"]
+BOTS = ["kalshi", "poly", "pspeed"]   # a bot whose service is not switched on is never started
 TITLE = "Server update"
 WAIT_S = 90
 PY = sys.executable
@@ -366,7 +366,8 @@ def selftest():
     REPO_DIR = server
     WAIT_S = 0
     # The side-folder test runs the new code's own selftest.py; its autoupdate.py is not in the fake repo.
-    svc = {"kalshi": {"on": True, "active": True, "n": 0}, "poly": {"on": True, "active": True, "n": 0}}
+    svc = {"kalshi": {"on": True, "active": True, "n": 0}, "poly": {"on": True, "active": True, "n": 0},
+           "pspeed": {"on": False, "active": False, "n": 0}}     # the speed bot: installed later, off here
     calls = []
     crash_on = {"v": None}
 

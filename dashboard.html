@@ -392,7 +392,7 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
     const rows = [
       ["Each bet", b.bet != null ? money(b.bet, false) + (b.bot === "poly" ? " at most" : "") : "–"],
       ["Most out at once", b.max_open != null ? money(b.max_open, false) : "–"],
-      [b.bot === "poly" ? "Cash now (open bets not counted)" : "Balance now", b.bal_now != null ? `${money(b.bal_now, false)} <span class="sub">(${esc(ago(b.bal_at))})</span>` : `<span class="sub">not reported yet</span>`],
+      [b.bot === "poly" ? "Cash now (open bets not counted)" : "Balance now (read between rounds)", b.bal_now != null ? `${money(b.bal_now, false)} <span class="sub">(${esc(ago(b.bal_at))})</span>` : `<span class="sub">not reported yet</span>`],
       // Polymarket's number is cash only and jumps when money is added or bets are placed, so a "change" there
       // would mislead; the P&L line above is the real result.
       b.bot !== "poly" && b.bal_start != null ? ["First balance we saw", money(b.bal_start, false)] : null,
@@ -426,7 +426,7 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
       <div class="kv">${rows.map(([k, v]) => `<div>${esc(k)}</div><div>${v}</div>`).join("")}</div>
       ${b.finished && b.curve && b.curve.length > 1 ? `<div class="realchart" data-bot="${esc(b.bot)}" style="margin-top:8px"></div>` : ""}
       ${recent}${open}
-      <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>. With this few bets, the result is mostly luck.</p></div>`;
+      <p class="sub">Counted since ${esc(stockholm(String(b.since || "").slice(0, 16)))}. Last news from the server ${esc(ago(b.last_seen))}. ${b.twin ? `Paper twin: <a href="#detail-h" data-twin="${esc(b.twin)}">${esc(b.twin)}</a>.` : "Paper twin: the speed check box (listen only)."} With this few bets, the result is mostly luck.</p></div>`;
   };
   $("real").innerHTML = `<h2>Real money</h2><p class="note">Your two small bots with real money, on your AWS server. Updated about once an hour.</p>` + L.map(card).join("");
   document.querySelectorAll("#real a[data-twin]").forEach(a => a.onclick = ev => { ev.preventDefault(); openDetail(a.dataset.twin); });
