@@ -36624,3 +36624,15 @@
 {"minutes_left": 2.76, "price": 0.996, "queue": 9984.04, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T11:57:16Z", "type": "kmaker_order"}
 {"minutes_left": 2.76, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV250700-00", "track": "kc_maker", "ts": "2026-11-25T11:57:17Z", "type": "kmaker_order"}
 {"minutes_left": 2.76, "price": 0.987, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV250700-00", "track": "kc_maker_safe", "ts": "2026-11-25T11:57:17Z", "type": "kmaker_order"}
+{"fee": 0.0016, "outcome": "No", "price": 0.967, "shares": 5, "title": "Will the highest temperature in Miami be between 76-77\u00b0F on November 26?", "token": "3875729018574865754493306031810863848079546380025441814480107400051244510362", "track": "endgame_sell98", "ts": "2026-11-25T12:03:30Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV250700-00", "track": "kc_maker", "ts": "2026-11-25T12:04:28Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker", "ts": "2026-11-25T12:04:29Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.87, "price": 0.987, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV250700-00", "track": "kc_maker", "ts": "2026-11-25T12:04:30Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV250700-00", "track": "kc_maker_safe", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker_safe", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.87, "price": 0.987, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV250700-00", "track": "kc_maker_safe", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "yes", "through": true, "ticker": "KXBNB15M-26NOV250700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker_safe_usd", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "yes", "through": true, "ticker": "KXBTC15M-26NOV250700-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T12:04:31Z", "type": "kmaker_fill"}
+{"pnl": 7.81, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV25EFSGHE-GHE", "track": "tennis_set", "ts": "2026-11-25T12:04:32Z", "type": "econ_settle"}
