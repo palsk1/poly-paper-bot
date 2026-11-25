@@ -37381,3 +37381,7 @@
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXETH15M-26NOV251430-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T19:33:42Z", "type": "kmaker_fill"}
 {"fee": 0.0075, "outcome": "No", "price": 0.969, "shares": 5, "title": "S&P 500 (SPY) closes above $725 on November 25?", "token": "76753783519705440149847798177995614729062289498400908007255281274276093392133", "track": "endgame_sell98", "ts": "2026-11-25T19:38:18Z", "type": "paper_buy"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXSOLD-26NOV2514-T68.7499", "track": "kalshi_patient", "ts": "2026-11-25T19:38:27Z", "type": "kpatient_result"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will Solana dip to $65 on November 25?", "token": "49310825364758083563170118110425104263350132027327935967286372644324507892488", "track": "endgame_sell98", "ts": "2026-11-25T19:42:09Z", "type": "paper_buy"}
+{"minutes_left": 2.74, "price": 0.976, "queue": 28.8, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:15Z", "type": "kmaker_order"}
+{"minutes_left": 2.74, "price": 0.996, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:17Z", "type": "kmaker_order"}
+{"minutes_left": 2.74, "price": 0.991, "queue": 257.07, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV251445-45", "track": "kc_maker", "ts": "2026-11-25T19:42:18Z", "type": "kmaker_order"}
