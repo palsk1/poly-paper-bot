@@ -87,6 +87,7 @@ Jan, 23 Nov: "I wish I heard these numbers sooner". Every lead, candidate and re
 | `tennis_set` (Kalshi, paper) | about $10 | about $180 out at once | about $25 a bet (gone at 2c more a share) | about -$75 (3 lost bets) | ~17 bets a day x $25 x $2.45 per $100 (`backtest/tennis.md`) |
 | `trump_week_k` (Kalshi, paper) | about $2 (about $63 a month) | about $100-300 | about $25 a bet (a third of signals find no seller) | about -$25 a week | `backtest/speeches_kalshi.md` |
 | Album ladders, Yes at 10-90c on Saturday night (Kalshi, lead only, no track) | about $2 (about $13 a week, Saturdays only) | about $125 | about $25-50 a bet (median $35 sold at our price in 2 hours) | about -$50 | 49 history bets, `backtest/music.md` |
+| Combo house (Polymarket, paper, on hold) | about $20 at $1 a parlay, about $100 at $5 | about $300 at $1 (takes 3 sales in 4), $1,000 for every sale; $5,000 at $5 | unknown, should scale to about $5-10 a parlay (we can fill part of a ticket) | about -$40 at $1, -$200 at $5; worst drop -$100 at $1 | +$1.61 per $100 on 8,527 paper parlays, 1,377 sales a day (`backtest/combo_money.md`) |
 
 More bots or accounts don't raise a ceiling: they stand in the same line for the same sellers (and Kalshi allows one account per person). Only new kinds of markets do (research thread "Grow the Kalshi crypto bot to hourly and daily rounds", 23 Nov).
 
@@ -271,9 +272,14 @@ strategies make us enough money to expand."** The listener (`quoter` service) is
 then. Where it stood: 6,612 finished parlays at about +$3 per $100 ("Ahead, but could be luck"; the locked 1,000-bet test
 in PROTOCOL 5c passed on 18 Nov), the pre-kick-off side scorecard behind, the $100 pot at $5 a parlay down $76.
 To bring it back:
-- **Money:** about $500 at $1 a parlay (takes about 9 sales in 10 on 17-22 Nov, roughly +$34 a day on paper, one
-  losing day of about -$19), $1,000 for every sale; at $5 a parlay about $2,000-3,000. Unknown: how many real requests
-  are small enough, because a real house must cover the size the buyer asks for.
+- **Money (re-done 25 Nov, `combos.py money`, `backtest/combo_money.md`, Jan: "how much minimum?"):** Polymarket lets
+  a quoter fill only part of a ticket, so the house can put up $1 on every parlay (the old worry that it must cover
+  the buyer's whole ticket, middle $78 and 1 in 10 over $1,296, was wrong). Money comes back after about 3 hours (1 in
+  10 over 12 hours), at most 822 parlays out at once. $300 at $1 a parlay takes 3 sales in 4: about $500 a month on
+  paper (luck range $20 to $1,000), worst drop -$102, worst day -$36. $1,000 takes every sale (about $660 a month);
+  $5,000 at $5 about $3,100 a month, worst drop -$353. Risks: the lead is thin (low luck end +$0.07 per $100), the
+  pre-kick-off side scorecard is behind (-$1.82), and without Polymarket's "last look" (only after about $2,500 of
+  combo volume) every accepted quote binds us even if the legs moved in the buyer's 10 seconds.
 - **Where:** either an AWS box (`quoter/README.md`, `setup.sh`), or GitHub Actions like `kfastlive.yml` (nonstop
   6-hour shifts, free on a public repo) with the empty wallet's login put in repo secrets by Jan. Jan's call.
 - **Real quoting** needs a funded wallet and a quote bot that answers in under 0.4 s, on Jan's server only. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to
