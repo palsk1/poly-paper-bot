@@ -32,3 +32,20 @@ Per $100 bought, after fees. Binance at 100 ms: 3,056 jumps, $56,565 bought, +$3
 - **One day.** That's 239 windows, and jumps inside one window move together.
 
 Next: score again after a full week, on days this cut never saw. Kalshi and other coins come after that (scout #3).
+
+
+## Second score: a fresh week (25 Nov 2026)
+
+Days the first cut never saw: 19-25 Nov (to 08:00 UTC), 1,820 Bitcoin 5-minute windows. Same rule, same 40-95c band, nothing changed. Command: `python3 quoter/speedcheck.py edge speed-202611{19..25}.jsonl.gz`.
+
+| Price heard first from | 0 ms | 100 ms | 200 ms | 500 ms | 1 s |
+|---|---|---|---|---|---|
+| Binance | +3.20 | **+2.90** (range +1.8 to +4.1) | +2.24 | +0.23 | -1.24 |
+| Coinbase | +2.69 | +2.03 | +1.35 | -0.11 | -1.62 |
+
+Per $100 bought, after fees. Binance at 100 ms: 28,907 jumps, $547,915 bought on paper, +$15,899.
+
+- **It held up.** About half the first day's number, but the whole luck range stays above $0, and it fades with delay exactly as before. Exam-style verdict: "Promising, needs more bets" on paper.
+- **Still paper fills.** The test assumes we get every offer we saw, up to $25. Faster firms take some first, and our own view is ~30 ms old. Only real orders can measure that.
+- **Ceiling (rough guess, paper):** at $25 a jump the paper says ~$2,500 a day, which is surely far above what real fills allow. Money needed: a few hundred dollars (bets end within 5 minutes). Size where it stops growing: unknown until real orders; the offers at the old price are usually small. Bad day: unknown; a speed race can turn negative the day a faster bot arrives.
+- **Next (Jan decides):** keep the box past its 25 Nov delete date and run a tiny real test ($1-2 orders, a few days) side by side with paper.
