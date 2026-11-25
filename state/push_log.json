@@ -63,16 +63,10 @@
   "2026-11-25": {
    "failed": 0,
    "muted": 45,
-   "sent": 6
+   "sent": 7
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade_4c] bought 1 (practice money)",
-   "track": "panic_fade_4c",
-   "ts": "2026-11-18T01:13:01Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade_4c] bought 1 (practice money)",
@@ -1266,6 +1260,12 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-25T12:20:16Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.40)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-25T13:31:59Z"
   }
  ]
 }
