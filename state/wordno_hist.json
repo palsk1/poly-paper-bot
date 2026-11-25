@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   117,
-   278
+   122,
+   285
   ],
   "S:andy burnham": [
    8,
@@ -27,6 +27,10 @@
   "S:coreweave": [
    8,
    16
+  ],
+  "S:dell": [
+   5,
+   7
   ],
   "S:disney": [
    4,
@@ -370,6 +374,34 @@
   ],
   "ST:coreweave|trump": [
    0,
+   1
+  ],
+  "ST:dell|ai#50+": [
+   1,
+   1
+  ],
+  "ST:dell|blackwell": [
+   1,
+   1
+  ],
+  "ST:dell|crowdstrike": [
+   0,
+   1
+  ],
+  "ST:dell|dram/nand#3+": [
+   1,
+   1
+  ],
+  "ST:dell|inference": [
+   1,
+   1
+  ],
+  "ST:dell|shortage": [
+   0,
+   1
+  ],
+  "ST:dell|vera rubin": [
+   1,
    1
   ],
   "ST:disney|adobe": [
@@ -1096,6 +1128,10 @@
    1,
    1
   ],
+  "T:ai#50+": [
+   1,
+   1
+  ],
   "T:ai#7+": [
    1,
    1
@@ -1212,6 +1248,10 @@
    0,
    1
   ],
+  "T:blackwell": [
+   1,
+   1
+  ],
   "T:blockade": [
    0,
    1
@@ -1318,7 +1358,7 @@
   ],
   "T:crowdstrike": [
    0,
-   1
+   2
   ],
   "T:customer#25+": [
    1,
@@ -1377,6 +1417,10 @@
    1
   ],
   "T:dram#10+": [
+   1,
+   1
+  ],
+  "T:dram/nand#3+": [
    1,
    1
   ],
@@ -1557,6 +1601,10 @@
    2
   ],
   "T:impeach/impeached/impeachment": [
+   1,
+   1
+  ],
+  "T:inference": [
    1,
    1
   ],
@@ -1844,6 +1892,10 @@
    1,
    1
   ],
+  "T:shortage": [
+   0,
+   1
+  ],
   "T:si/super intelligence": [
    1,
    1
@@ -1952,6 +2004,10 @@
    0,
    1
   ],
+  "T:vera rubin": [
+   1,
+   1
+  ],
   "T:veto": [
    1,
    1
@@ -1985,8 +2041,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   52,
-   92
+   57,
+   99
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -2060,6 +2116,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|ai#50+": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|ai#7+": [
    1,
    1
@@ -2100,6 +2160,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|blackwell": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|board#3+": [
    1,
    1
@@ -2134,7 +2198,7 @@
   ],
   "WT:earnings-call-mentions|crowdstrike": [
    0,
-   1
+   2
   ],
   "WT:earnings-call-mentions|customer#25+": [
    1,
@@ -2165,6 +2229,10 @@
    1
   ],
   "WT:earnings-call-mentions|dram#10+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|dram/nand#3+": [
    1,
    1
   ],
@@ -2206,6 +2274,10 @@
   ],
   "WT:earnings-call-mentions|iger": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|inference": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|inflation": [
@@ -2328,6 +2400,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|shortage": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|si/super intelligence": [
    1,
    1
@@ -2374,6 +2450,10 @@
   ],
   "WT:earnings-call-mentions|uranium": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|vera rubin": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|zipline": [
@@ -3312,6 +3392,13 @@
   "7211316": 1795564740,
   "7211317": 1795564740,
   "7229965": 1795564740,
+  "7231389": 1795582740,
+  "7231390": 1795582740,
+  "7231391": 1795582740,
+  "7231392": 1795582740,
+  "7231393": 1795582740,
+  "7231394": 1795582740,
+  "7231395": 1795582740,
   "7288809": 1795478340,
   "7288810": 1795478340,
   "7288811": 1795478340,
@@ -3321,5 +3408,5 @@
   "7288815": 1795478340,
   "7288816": 1795478340
  },
- "synced": 1795568775
+ "synced": 1795570691
 }
