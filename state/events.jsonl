@@ -37006,3 +37006,9 @@
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXLOWTLAX-26NOV24-B50.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "yes", "ticker": "KXLOWTLV-26NOV24-B43.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXLOWTSEA-26NOV24-B42.5", "track": "kalshi_patient", "ts": "2026-11-25T15:12:39Z", "type": "kpatient_result"}
+{"fee": 0.0073, "outcome": "Yes", "price": 0.97, "shares": 5, "title": "Will Apple (AAPL) close above $340 on November 25?", "token": "115501919164044378342914084973235528703425012373190500560439940792898624488945", "track": "endgame_sell98", "ts": "2026-11-25T15:17:09Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.37, "price": 0.963, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:17:15Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXETH15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:17:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:17:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.04, "price": 0.996, "side": "no", "through": false, "ticker": "KXXRP15M-26NOV251015-15", "track": "kc_maker", "ts": "2026-11-25T15:17:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.13, "price": 0.987, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV251015-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-25T15:17:16Z", "type": "kmaker_fill"}
