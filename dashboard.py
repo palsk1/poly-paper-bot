@@ -278,7 +278,7 @@ def park_future(row, why):
     """Jan, 22 Nov: the combo house works on paper but needs far more money than he has ("too much money for now").
     Its cards stay on the page, but marked as a future idea, not something to fund now."""
     row["future"] = why
-    row["pv"] = ("future", "Future idea: too much money for now")
+    row["pv"] = ("future", "Testing again on paper (since 25 Nov), still too much money for real")
     row["notes"] = [why] + row["notes"]
     return row
 
@@ -327,10 +327,11 @@ def combo_row(q):
                   "When the parlay really sells and our price was lower than the pro's, we count it as our sale. No real money moves.",
                   bets, COMBO_POT, tied=tied, waiting=q.get("waiting") or 0, extra=extra, notes=notes, recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
+    park_future(row, "Still too much money for real. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
                      "up to about 950 sat waiting for their games at once: about $4,800 tied up at $5 a parlay, or about $950 at $1. "
-                     "That's more than you want to put in, so it's on hold (your call, 22 Nov) until other strategies earn enough to expand. "
-                     "The server stopped listening on 22 Nov, so these numbers stop growing.")
+                     "Real money stays on hold (your call, 22 Nov). Since 25 Nov it listens again on paper, on its own server, "
+                     "for more days and to check how often the games moved before a buyer said yes. "
+                     "With partial fills, $300 at $1 a parlay would do (backtest/combo_money.md).")
     return row
 
 
@@ -355,8 +356,8 @@ def combo_pot_row(q):
                           "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
-                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
+    park_future(row, "Still too much money for real: the same combo house, so it's parked with the main card. "
+                     "It stopped on 22 Nov and listens again on paper since 25 Nov, on its own server.")
     return row
 
 
@@ -379,8 +380,8 @@ def combo_pre_row(q):
                           "Same $300 pot and $5 a parlay as the main combo house card."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
-                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
+    park_future(row, "Still too much money for real: the same combo house, so it's parked with the main card. "
+                     "It stopped on 22 Nov and listens again on paper since 25 Nov, on its own server.")
     return row
 
 
