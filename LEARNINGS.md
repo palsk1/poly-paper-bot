@@ -280,6 +280,9 @@ To bring it back:
   $5,000 at $5 about $3,100 a month, worst drop -$353. Risks: the lead is thin (low luck end +$0.07 per $100), the
   pre-kick-off side scorecard is behind (-$1.82), and without Polymarket's "last look" (only after about $2,500 of
   combo volume) every accepted quote binds us even if the legs moved in the buyer's 10 seconds.
+- **Back on as paper (25 Nov, Jan: "we can create a new box"):** the listener restarts on its own new $12 box to get
+  more full days, and now also re-reads the legs when a sale is heard (`after` lines), so `combos.py stale` can show
+  how many of our sales a last-look pro would have refused and what they cost. Still listen only, no money.
 - **Where:** either an AWS box (`quoter/README.md`, `setup.sh`), or GitHub Actions like `kfastlive.yml` (nonstop
   6-hour shifts, free on a public repo) with the empty wallet's login put in repo secrets by Jan. Jan's call.
 - **Real quoting** needs a funded wallet and a quote bot that answers in under 0.4 s, on Jan's server only. Its 3 dashboard cards now say **FUTURE: too much money for now**, and the server moved to

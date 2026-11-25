@@ -288,6 +288,7 @@ class Pricer:
         self.day = None
         self.held = collections.OrderedDict()     # rfq -> (seconds, log line): priced, waiting for a trade
         self.traded = collections.OrderedDict()   # rfq -> seconds: trades that came before their request was priced
+        self.recheck = collections.deque(maxlen=2000)  # (rfq, leg tokens): sold requests whose legs we read again
 
     @staticmethod
     def _trim(d):
@@ -306,6 +307,7 @@ class Pricer:
             self.traded.pop(rfq)
             self.log.put(line)
             self.counts["written, sold"] += 1
+            self.recheck.append((rfq, line.get("tokens") or []))
             return
         self.held[rfq] = (time.time(), line)
         self._trim(self.held)
@@ -316,6 +318,7 @@ class Pricer:
         if v:
             self.log.put(v[1])
             self.counts["written, sold"] += 1
+            self.recheck.append((rfq, v[1].get("tokens") or []))
         else:
             self.traded[rfq] = time.time()
             self._trim(self.traded)
@@ -347,9 +350,36 @@ class Pricer:
             self.seen_tokens |= set(new)
             self.log.put({"k": "legs", "legs": new})
 
+    async def after_sale(self, loop):
+        """Jan, 25 Nov: "do we need more testing?". Polymarket gives a 'last look' (a second to cancel) only to big
+        makers, so a new house is bound by every accepted quote even if the legs moved in the buyer's 10 seconds.
+        When a sale is heard, read its legs' books again (fresh, no cache) and write their mids as an 'after' line,
+        so the scoring can see how often the price had moved against us by the time the buyer said yes."""
+        if not self.recheck:
+            return
+        batch, toks = [], set()
+        while self.recheck and len(toks) < 100:
+            rfq, tk = self.recheck.popleft()
+            batch.append((rfq, tk))
+            toks |= set(tk)
+        try:
+            got = await loop.run_in_executor(None, books, sorted(toks)[:100], http_fast)
+        except Exception:  # noqa: BLE001
+            self.counts["after books failed"] += 1
+            return
+        t = now_ms()
+        for rfq, tk in batch:
+            mids = []
+            for tok in tk:
+                b = got.get(tok)
+                mids.append(round((b[0] + b[1]) / 2, 4) if b and b[0] is not None and b[1] is not None else None)
+            self.log.put({"k": "after", "rfq": rfq, "mids": mids, "read": t})
+            self.counts["after written"] += 1
+
     async def loop(self, loop):
         while True:
             await asyncio.sleep(BATCH_S)
+            await self.after_sale(loop)
             if not self.pending:
                 continue
             batch = list(self.pending)
@@ -536,6 +566,10 @@ async def run():
 
 
 # ---------------------------------------------------------------- offline check
+async def _after_once(pr):
+    await pr.after_sale(asyncio.get_running_loop())
+
+
 def selftest():
     import tempfile
     cat = Catalog()
@@ -587,6 +621,18 @@ def selftest():
     pr.hold({"k": "req", "rfq": "r3"})
     got = [json.loads(x).get("rfq") for x in open(lg.path())][1:]
     assert got == ["r1", "r3"] and "r2" in pr.held and not pr.traded, got
+    # after a sale, the legs are read again and written as an 'after' line
+    pr.recheck.clear()
+    pr.hold({"k": "req", "rfq": "r4", "tokens": ["ta", "tc"]})
+    pr.sold("r4")
+    real_fast = globals()["http_fast"]
+    globals()["http_fast"] = fake
+    try:
+        asyncio.run(_after_once(pr))
+    finally:
+        globals()["http_fast"] = real_fast
+    aft = [json.loads(x) for x in open(lg.path()) if '"after"' in x]
+    assert aft and aft[-1]["rfq"] == "r4" and aft[-1]["mids"] == [0.6, 0.5], aft
     src = open(__file__).read()
     assert "RFQ_QUOTE" not in src.replace('"RFQ_QUOTE" not in', ""), "listen only: never send quotes"
     print("quoter selftest ok")
