@@ -39236,3 +39236,11 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXBTCMINMON-BTC-26NOV30-5000000", "track": "kalshi_patient", "ts": "2026-11-26T19:11:19Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFL1H-26NOV29TENJAC-TIE", "track": "kalshi_patient", "ts": "2026-11-26T19:11:19Z", "type": "kpatient_order"}
 {"fee": 0.0022, "outcome": "KAMUI", "price": 0.991, "shares": 5, "title": "Counter-Strike: aimclub vs KAMUI (BO3) - Exort Fiesta Playoffs", "token": "5750651813165380920049995116498030977285814351973010825054200451584309199290", "track": "endgame_strict", "ts": "2026-11-26T19:14:54Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXINXU-26NOV27H1000-T7319.9999", "track": "kalshi_patient", "ts": "2026-11-26T19:17:47Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXRT-HEX-72", "track": "kalshi_patient", "ts": "2026-11-26T19:17:49Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXTRUMPPHOTO-26NOV29-6", "track": "kalshi_patient", "ts": "2026-11-26T19:17:50Z", "type": "kpatient_fill"}
+{"player": "Axel Nefve", "price": 0.67, "set1": "6-4", "set2_games": 0, "shares": 37, "ticker": "KXATPCHALLENGERMATCH-26NOV26NEFWIL-NEF", "track": "tennis_set", "ts": "2026-11-26T19:22:15Z", "type": "ktennis_buy"}
+{"fee": 0.0019, "outcome": "No", "price": 0.96, "shares": 5, "title": "Will Ethereum dip to $1,650 on November 26?", "token": "115407538860449363316581965628822700760126108944876514250699304701794228478880", "track": "endgame_sell98", "ts": "2026-11-26T19:26:42Z", "type": "paper_buy"}
+{"minutes_left": 3.2, "price": 0.983, "queue": 2346.59, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261430-30", "track": "kc_maker", "ts": "2026-11-26T19:26:49Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.983, "queue": 2346.59, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261430-30", "track": "kc_maker_safe", "ts": "2026-11-26T19:26:49Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.952, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV261430-30", "track": "kc_maker", "ts": "2026-11-26T19:26:51Z", "type": "kmaker_order"}
