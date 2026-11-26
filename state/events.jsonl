@@ -38591,3 +38591,4 @@
 {"minutes_left": 7.18, "price": 0.989, "queue": 211.0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV260600-00", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T10:52:51Z", "type": "kmaker_order"}
 {"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in Paris be 6\u00b0C on November 26?", "token": "19222119388572314213696619798736566086889329837874722146991215044293987551347", "track": "endgame_sell98", "ts": "2026-11-26T10:56:34Z", "type": "paper_buy"}
 {"pnl": 10.97, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26GUNWIS-GUN", "track": "tennis_set", "ts": "2026-11-26T10:56:42Z", "type": "econ_settle"}
+{"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV260600-00", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T11:02:48Z", "type": "kmaker_fill"}
