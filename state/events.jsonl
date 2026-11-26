@@ -38783,3 +38783,5 @@
 {"minutes_left": 1.8, "price": 0.987, "queue": 10.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV260845-45", "track": "kc_maker", "ts": "2026-11-26T13:43:12Z", "type": "kmaker_order"}
 {"minutes_left": 1.8, "price": 0.987, "queue": 10.0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV260845-45", "track": "kc_maker_safe", "ts": "2026-11-26T13:43:12Z", "type": "kmaker_order"}
 {"minutes_left": 1.8, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV260845-45", "track": "kc_maker", "ts": "2026-11-26T13:43:15Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.34, "price": 0.966, "side": "no", "through": true, "ticker": "KXETH15M-26NOV260845-45", "track": "kc_maker", "ts": "2026-11-26T13:47:47Z", "type": "kmaker_fill"}
+{"player": "Eduardo Ribeiro", "price": 0.69, "set1": "6-2", "set2_games": 0, "shares": 36, "ticker": "KXATPCHALLENGERMATCH-26NOV26ALCRIB-RIB", "track": "tennis_set", "ts": "2026-11-26T13:47:50Z", "type": "ktennis_buy"}
