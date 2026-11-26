@@ -1,0 +1,111 @@
+guard {'guard': 0.0} 0 fills 40894 cost 69293 per100 0.92 lo -0.1 hi 1.99 rb/100 0.65 day 71 worst -229 maxout 78
+guard {'guard': 0.0} 100 fills 38544 cost 72007 per100 -0.93 lo -2.07 hi 0.18 rb/100 0.66 day -74 worst -408 maxout 83
+guard {'guard': 0.0} 250 fills 36348 cost 70964 per100 -2.64 lo -3.84 hi -1.31 rb/100 0.66 day -208 worst -578 maxout 83
+guard {'guard': 0.0} 500 fills 35337 cost 70991 per100 -3.93 lo -5.21 hi -2.66 rb/100 0.66 day -310 worst -697 maxout 85
+guard {'guard': 0.01} 0 fills 36002 cost 58030 per100 1.18 lo -0.07 hi 2.52 rb/100 0.68 day 76 worst -262 maxout 77
+guard {'guard': 0.01} 100 fills 34187 cost 61005 per100 -1.01 lo -2.45 hi 0.37 rb/100 0.69 day -69 worst -474 maxout 84
+guard {'guard': 0.01} 250 fills 32247 cost 59857 per100 -2.69 lo -4.17 hi -1.12 rb/100 0.7 day -179 worst -542 maxout 83
+guard {'guard': 0.01} 500 fills 31277 cost 59812 per100 -3.95 lo -5.47 hi -2.32 rb/100 0.7 day -262 worst -607 maxout 87
+guard {'guard': 0.02} 0 fills 31526 cost 48218 per100 1.73 lo 0.19 hi 3.31 rb/100 0.72 day 92 worst -284 maxout 76
+guard {'guard': 0.02} 100 fills 30216 cost 51675 per100 -1.06 lo -2.62 hi 0.6 rb/100 0.72 day -61 worst -478 maxout 82
+guard {'guard': 0.02} 250 fills 28427 cost 50437 per100 -2.54 lo -4.2 hi -0.78 rb/100 0.73 day -142 worst -540 maxout 82
+guard {'guard': 0.02} 500 fills 27623 cost 50422 per100 -4.41 lo -6.09 hi -2.63 rb/100 0.73 day -247 worst -622 maxout 91
+guard {'guard': 0.04} 0 fills 24589 cost 34713 per100 1.97 lo -0.12 hi 3.97 rb/100 0.77 day 76 worst -210 maxout 74
+guard {'guard': 0.04} 100 fills 23927 cost 37887 per100 -0.67 lo -3.0 hi 1.61 rb/100 0.77 day -28 worst -416 maxout 77
+guard {'guard': 0.04} 250 fills 22641 cost 37248 per100 -3.09 lo -5.71 hi -0.77 rb/100 0.78 day -128 worst -533 maxout 78
+guard {'guard': 0.04} 500 fills 22133 cost 37546 per100 -4.75 lo -7.28 hi -2.5 rb/100 0.78 day -198 worst -545 maxout 82
+plain {} 0 fills 73385 cost 146844 per100 -0.42 lo -0.56 hi -0.27 rb/100 0.65 day -68 worst -138 maxout 72
+plain {} 100 fills 69813 cost 154488 per100 -2.21 lo -2.36 hi -2.06 rb/100 0.65 day -379 worst -582 maxout 80
+plain {} 250 fills 68451 cost 156973 per100 -2.71 lo -2.88 hi -2.54 rb/100 0.64 day -472 worst -636 maxout 89
+plain {} 500 fills 67692 cost 159170 per100 -3.27 lo -3.44 hi -3.08 rb/100 0.64 day -578 worst -720 maxout 94
+pull {'jump': 0.01} 0 fills 73118 cost 145563 per100 0.25 lo 0.1 hi 0.43 rb/100 0.65 day 40 worst -22 maxout 72
+pull {'jump': 0.01} 100 fills 69685 cost 151870 per100 -1.41 lo -1.61 hi -1.23 rb/100 0.64 day -239 worst -394 maxout 79
+pull {'jump': 0.01} 250 fills 67886 cost 153355 per100 -2.02 lo -2.2 hi -1.83 rb/100 0.64 day -345 worst -506 maxout 86
+pull {'jump': 0.01} 500 fills 66369 cost 154461 per100 -2.58 lo -2.78 hi -2.39 rb/100 0.64 day -443 worst -626 maxout 99
+pull {'jump': 0.02} 0 fills 73186 cost 145861 per100 0.17 lo 0.04 hi 0.34 rb/100 0.65 day 28 worst -43 maxout 72
+pull {'jump': 0.02} 100 fills 69727 cost 152282 per100 -1.47 lo -1.65 hi -1.29 rb/100 0.65 day -248 worst -370 maxout 78
+pull {'jump': 0.02} 250 fills 68158 cost 154190 per100 -1.99 lo -2.15 hi -1.79 rb/100 0.64 day -340 worst -477 maxout 87
+pull {'jump': 0.02} 500 fills 66697 cost 155338 per100 -2.68 lo -2.85 hi -2.48 rb/100 0.64 day -463 worst -619 maxout 93
+pull {'jump': 0.03} 0 fills 73166 cost 146044 per100 0.04 lo -0.11 hi 0.2 rb/100 0.65 day 6 worst -68 maxout 73
+pull {'jump': 0.03} 100 fills 69787 cost 152712 per100 -1.43 lo -1.59 hi -1.27 rb/100 0.65 day -243 worst -359 maxout 80
+pull {'jump': 0.03} 250 fills 68252 cost 154732 per100 -2.14 lo -2.31 hi -1.97 rb/100 0.64 day -368 worst -501 maxout 87
+pull {'jump': 0.03} 500 fills 66917 cost 156193 per100 -2.73 lo -2.92 hi -2.54 rb/100 0.64 day -473 worst -606 maxout 93
+
+== pull {'jump': 0.01} 100 ms: 69685 fills, $151,870 locked in bets, P&L $-2,147 (-1.41 per $100, range -1.61..-1.23), rebate at most $978
+   by day: {'1117': -85, '1118': -357, '1119': -394, '1120': -252, '1121': -124, '1122': -228, '1123': -261, '1124': -270, '1125': -176}
+   Bitcoin in the 2 s before the fill
+     moved against us 1c+      14687 fills, $   30,410 locked, P&L $  -1,206 = -3.97 per $100
+     moved our way 1c+         15561 fills, $   36,079 locked, P&L $     811 = +2.25 per $100
+     quiet                     39437 fills, $   85,381 locked, P&L $  -1,752 = -2.05 per $100
+   price of our offer (Up book)
+     0-10c                       236 fills, $      575 locked, P&L $     -10 = -1.68 per $100
+     10-20c                     1302 fills, $    3,026 locked, P&L $       8 = +0.27 per $100
+     20-30c                     3768 fills, $    8,445 locked, P&L $    -101 = -1.20 per $100
+     30-40c                     7257 fills, $   15,889 locked, P&L $    -428 = -2.69 per $100
+     40-50c                    19952 fills, $   43,029 locked, P&L $    -643 = -1.49 per $100
+     50-60c                    24770 fills, $   53,401 locked, P&L $    -959 = -1.80 per $100
+     60-70c                     7351 fills, $   16,162 locked, P&L $     191 = +1.18 per $100
+     70-80c                     3448 fills, $    7,758 locked, P&L $     -51 = -0.66 per $100
+     80-90c                     1339 fills, $    3,085 locked, P&L $    -153 = -4.96 per $100
+     90-100c                     262 fills, $      500 locked, P&L $      -2 = -0.44 per $100
+
+=== EXAM: BTC 5-min seller pull {'jump': 0.01} 100ms ===
+Verdict: Losing
+Bets: 2363 bets on 2363 events over 9 days. Counted as 2363 separate bets (bets on the same event count once).
+Result: -$1.41 per $100 bet (total -$2147.28 on $151869.94). Luck range -$1.60 to -$1.23.
+Halves: first -$1.53, second -$1.30 per $100. Not ahead in both: could be one good stretch.
+Luck bar: this is 1 of 298 tries. The luckiest of 298 worthless ideas would show about +$0.40 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$1.86. Below $0: not proven.
+== pull {'jump': 0.02} 250 ms: 68158 fills, $154,190 locked in bets, P&L $-3,064 (-1.99 per $100, range -2.15..-1.79), rebate at most $993
+   by day: {'1117': -79, '1118': -477, '1119': -445, '1120': -356, '1121': -273, '1122': -359, '1123': -370, '1124': -346, '1125': -360}
+   Bitcoin in the 2 s before the fill
+     moved against us 1c+      19319 fills, $   42,548 locked, P&L $  -1,885 = -4.43 per $100
+     moved our way 1c+         12422 fills, $   29,849 locked, P&L $     196 = +0.66 per $100
+     quiet                     36417 fills, $   81,794 locked, P&L $  -1,376 = -1.68 per $100
+   price of our offer (Up book)
+     0-10c                       198 fills, $      627 locked, P&L $     -14 = -2.25 per $100
+     10-20c                     1041 fills, $    2,729 locked, P&L $     137 = +5.04 per $100
+     20-30c                     3176 fills, $    7,653 locked, P&L $     -52 = -0.68 per $100
+     30-40c                     6883 fills, $   15,854 locked, P&L $    -249 = -1.57 per $100
+     40-50c                    20460 fills, $   45,394 locked, P&L $  -1,447 = -3.19 per $100
+     50-60c                    25053 fills, $   55,306 locked, P&L $  -1,067 = -1.93 per $100
+     60-70c                     7030 fills, $   15,997 locked, P&L $     -15 = -0.10 per $100
+     70-80c                     2992 fills, $    7,130 locked, P&L $    -156 = -2.18 per $100
+     80-90c                     1124 fills, $    2,962 locked, P&L $    -175 = -5.90 per $100
+     90-100c                     201 fills, $      537 locked, P&L $     -26 = -4.92 per $100
+
+=== EXAM: BTC 5-min seller pull {'jump': 0.02} 250ms ===
+Verdict: Losing
+Bets: 2363 bets on 2363 events over 9 days. Counted as 2363 separate bets (bets on the same event count once).
+Result: -$1.99 per $100 bet (total -$3064.10 on $154190.03). Luck range -$2.17 to -$1.81.
+Halves: first -$2.07, second -$1.90 per $100. Not ahead in both: could be one good stretch.
+Luck bar: this is 1 of 298 tries. The luckiest of 298 worthless ideas would show about +$0.40 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$2.43. Below $0: not proven.
+LEDGER ROW {"id": "btc_5_min_seller_pull_jump_0_02_250ms", "date": "2026-11-26", "what": "BTC 5-min seller pull {'jump': 0.02} 250ms", "tries": 32, "bets": 2363, "groups": 2363, "per100": -1.99, "floor100": -2.43, "verdict": "Losing", "status": "dropped", "src": "maker5m.py report"}
+== plain {} 250 ms: 68451 fills, $156,973 locked in bets, P&L $-4,247 (-2.71 per $100, range -2.88..-2.54), rebate at most $1,011
+   by day: {'1117': -171, '1118': -636, '1119': -523, '1120': -546, '1121': -397, '1122': -517, '1123': -496, '1124': -499, '1125': -462}
+   Bitcoin in the 2 s before the fill
+     moved against us 1c+      27003 fills, $   61,209 locked, P&L $  -3,549 = -5.80 per $100
+     moved our way 1c+         10440 fills, $   25,339 locked, P&L $      40 = +0.16 per $100
+     quiet                     31008 fills, $   70,425 locked, P&L $    -738 = -1.05 per $100
+   price of our offer (Up book)
+     0-10c                       137 fills, $      475 locked, P&L $      -3 = -0.58 per $100
+     10-20c                      882 fills, $    2,491 locked, P&L $     138 = +5.55 per $100
+     20-30c                     2725 fills, $    7,071 locked, P&L $     -85 = -1.20 per $100
+     30-40c                     6792 fills, $   15,916 locked, P&L $    -404 = -2.54 per $100
+     40-50c                    21432 fills, $   47,797 locked, P&L $  -1,872 = -3.92 per $100
+     50-60c                    25788 fills, $   57,157 locked, P&L $  -1,383 = -2.42 per $100
+     60-70c                     6926 fills, $   16,104 locked, P&L $    -277 = -1.72 per $100
+     70-80c                     2724 fills, $    6,880 locked, P&L $    -126 = -1.84 per $100
+     80-90c                      887 fills, $    2,585 locked, P&L $    -206 = -7.99 per $100
+     90-100c                     158 fills, $      498 locked, P&L $     -29 = -5.76 per $100
+
+=== EXAM: BTC 5-min seller plain {} 250ms ===
+Verdict: Losing
+Bets: 2363 bets on 2363 events over 9 days. Counted as 2363 separate bets (bets on the same event count once).
+Result: -$2.71 per $100 bet (total -$4247.43 on $156973.13). Luck range -$2.88 to -$2.53.
+Halves: first -$2.78, second -$2.63 per $100. Not ahead in both: could be one good stretch.
+Luck bar: this is 1 of 299 tries. The luckiest of 299 worthless ideas would show about +$0.39 per $100 on this many bets.
+Worst case per $100 (one more disaster added, bar raised for all tries): -$3.13. Below $0: not proven.
+== small bank: pull 2c, 100 ms, 5-share offers, cap 5 one way, 10 a side: 13258 fills, $29,103 locked, -1.38 per $100, $-44.60 a day, rebate at most $22.17 a day, worst day $-118, most in one window $21
+== small bank: pull 2c, 250 ms, 5-share offers, cap 5 one way, 10 a side: 13482 fills, $30,137 locked, -1.84 per $100, $-61.48 a day, rebate at most $22.92 a day, worst day $-120, most in one window $20
