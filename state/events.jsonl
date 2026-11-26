@@ -38769,3 +38769,5 @@
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV29SEASF-SEA15", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXWTIMAX-26NOV30-T112.50", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.9253, "shares": 10, "side": "no", "ticker": "KXNFLESCALATORRECYDS-26NOV26PHIDAL-PHIDSMITH6", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV260815-15", "track": "kc_maker", "ts": "2026-11-26T13:17:07Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.21, "price": 0.979, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV260815-15", "track": "kc_maker_safe", "ts": "2026-11-26T13:17:07Z", "type": "kmaker_fill"}
