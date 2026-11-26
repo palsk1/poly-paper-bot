@@ -3113,6 +3113,14 @@ def kmaker_place(tracks, names):
                                                                    "bid": bid, "ask": ask, "placed": False,
                                                                    "z": round(z, 2), "z_usd": None if zu is None else round(zu, 2)}
                         continue
+                if r.get("min_usd_z") is not None:   # cushion on Kalshi's price scale only (kc_maker_mid, 26 Nov, backtest/kcflip.md)
+                    zu = kmaker_z(series, fnum(m.get("floor_strike"), None), left, side,
+                                  open_ts=(close - dt.timedelta(minutes=15)).timestamp())
+                    if zu is None or zu < r["min_usd_z"]:
+                        tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
+                                                                   "bid": bid, "ask": ask, "placed": False,
+                                                                   "z_usd": None if zu is None else round(zu, 2)}
+                        continue
                 zk = None
                 if r.get("min_kalshi_z") is not None:   # the check on Kalshi's own number (kc_maker_safe_kprice)
                     zk = kmaker_kz(m.get("event_ticker"), fnum(m.get("floor_strike"), None), left, side)
