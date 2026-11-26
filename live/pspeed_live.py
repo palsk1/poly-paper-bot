@@ -12,8 +12,8 @@ Jan, 25 Nov 2026 ("Do we testrun the bot on 5 min windows that looked promising 
   * Buy the side it jumped toward at the best sell offer we can see right then, only at 40c to under 95c,
     taker fee included, held to the window's result.
 
-Extra care for real money (the speed-firm reading, 25 Nov): the price limit is the offer we SAW (never pays more;
-all or nothing, so a gone offer costs nothing), skip offers of $100+ (those made the least), small fixed bets.
+Extra care for real money (the speed-firm reading, 25 Nov): the price limit is the offer we SAW, plus PSPEED_EXTRA_C cents
+(0 unless Jan picks more, at most 3; Polymarket holds every crypto-window buy 150 ms, so offers move); all or nothing, so a gone offer costs nothing), skip offers of $100+ (those made the least), small fixed bets.
 
 PRACTICE MODE unless ~/.live.env has PSPEED_LIVE=yes (on top of the LIVE=yes the other bots use). In practice mode it
 writes down what it would buy at the offer it saw and scores that at the result: a paper twin on this server.
@@ -63,7 +63,8 @@ WIN = S.WIN
 SETTLE_AFTER = 90    # Gamma marks a window's result a minute or two after its end
 DEFAULTS = {"PSPEED_BET": 2, "PSPEED_MAX_BET": 5, "PSPEED_MAX_OFFER_USD": 100, "PSPEED_PER_WINDOW": 2,
             "PSPEED_MAX_BETS_DAY": 50, "PSPEED_DAY_SPEND_MAX": 100, "PSPEED_MAX_OPEN_USD": 15,
-            "PSPEED_DAY_LOSS_STOP": 5, "PSPEED_TOTAL_LOSS_STOP": 15}
+            "PSPEED_DAY_LOSS_STOP": 5, "PSPEED_TOTAL_LOSS_STOP": 15,
+            "PSPEED_EXTRA_C": 0}     # cents the order may pay above the offer seen (Jan picks; never more than 3)
 
 
 def cap(k):
@@ -244,11 +245,13 @@ class Speed:
             return None
         self.tries[w] = self.tries.get(w, 0) + 1
         self.busy = True
+        extra = min(3.0, max(0.0, cap("PSPEED_EXTRA_C"))) / 100
+        limit = round(min(0.99, ask + extra), 4)
         return {**sig, "token": tok, "condition_id": toks[2], "amount": amount, "shares": shares,
-                "fee_est": round(fee, 4), "cost": cost}
+                "fee_est": round(fee, 4), "cost": cost, "limit": limit}
 
     def execute(self, plan):
-        """Send it (real mode) or write it down (practice). Runs in a worker thread. Never pays above the seen ask."""
+        """Send it (real mode) or write it down (practice). Runs in a worker thread. Never pays more than the seen ask + PSPEED_EXTRA_C cents (0 unless Jan picks more)."""
         try:
             rec = {k: v for k, v in plan.items() if k != "amount"}
             rec.update({"placed": C.iso(), "day": C.today(), "amount": float(plan["amount"]),
@@ -257,7 +260,7 @@ class Speed:
                 t0 = time.time()
                 rec["wait_ms"] = int(t0 * 1000) - plan["heard_ms"]     # heard the jump -> order starts
                 try:
-                    res = self.send(plan["token"], plan["amount"], Decimal(str(plan["ask"])))
+                    res = self.send(plan["token"], plan["amount"], Decimal(str(plan.get("limit", plan["ask"]))))
                 except Exception as e:
                     rec.update(getattr(self.send, "timing", None) or {})
                     with self.lock:
