@@ -199,6 +199,13 @@
       "loses": "The coin swings back across the start price before the close. One loss eats about 15-30 wins.",
       "group": "kcmaker"
     },
+    "kc_maker_mid": {
+      "say": "Like kc_maker, but it skips the coins that sit close to their start price. Those near-the-line bets were where almost all the flips came from. It asks for less room than the real bot, so it bets more often.",
+      "example": "Bitcoin started the 15 minutes at $63,400. With 3 minutes left it is $150 clear, enough for this one but not for the real bot. We offer 96c for Yes. Bitcoin stays above: the $0.96 pays $1.00.",
+      "wins": "The coin stays on the winning side to the end, which it nearly always does once it has some room.",
+      "loses": "The coin swings back across the start price in the last minutes. One loss eats about 30 wins.",
+      "group": "kcmaker"
+    },
     "kc_maker_safe_kprice": {
       "say": "Same as kc_maker_safe, but it checks 'is the coin well clear of the start price?' on Kalshi's own price, the exact number that decides the bet, instead of on Binance.",
       "example": "Bitcoin started the 15 minutes at $63,400. With 3 minutes left Kalshi's own price says $63,480, far enough above. We offer 96c for Yes. Bitcoin stays above: the $0.96 pays $1.00.",
