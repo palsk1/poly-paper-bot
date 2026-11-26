@@ -3425,6 +3425,71 @@
    "verdict": "Losing",
    "status": "dropped",
    "src": "maker5m.py report"
+  },
+  {
+   "id": "buy_and_sell_inside_the_window_btc_best_of_4359_rules_on_the",
+   "date": "2026-11-26",
+   "what": "Buy and sell inside the window, btc: best of 4359 rules on the first days, graded on fresh days (buy at the offer; at 4min, ask 8c-30c; sell after 15s)",
+   "tries": 8378,
+   "bets": 174,
+   "groups": 174,
+   "per100": -14.52,
+   "floor100": -62.03,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "swing.py exams"
+  },
+  {
+   "id": "buy_and_sell_inside_the_window_ksec_best_of_2846_rules_on_th",
+   "date": "2026-11-26",
+   "what": "Buy and sell inside the window, ksec: best of 2846 rules on the first days, graded on fresh days (buy at the offer; at 3min, ask 8c-30c; sell at +20c / stop -10c)",
+   "tries": 5790,
+   "bets": 112,
+   "groups": 41,
+   "per100": -1.77,
+   "floor100": -52.24,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "swing.py exams"
+  },
+  {
+   "id": "buy_and_sell_inside_the_window_kmin_best_of_5806_rules_on_th",
+   "date": "2026-11-26",
+   "what": "Buy and sell inside the window, kmin: best of 5806 rules on the first days, graded on fresh days (waiting bid; join the best bid at 88c-97c in the last 7min; sell at +5c / else hold)",
+   "tries": 11292,
+   "bets": 11227,
+   "groups": 2782,
+   "per100": -1.2,
+   "floor100": -2.94,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "swing.py exams"
+  },
+  {
+   "id": "speed_buy_on_btc_5_min_1_s_late_not_in_the_first_12_s_sell_a",
+   "date": "2026-11-26",
+   "what": "Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills",
+   "tries": 8378,
+   "bets": 902,
+   "groups": 710,
+   "per100": 7.44,
+   "floor100": -0.07,
+   "verdict": "Promising, needs more bets",
+   "status": "open",
+   "src": "swing.py exams"
+  },
+  {
+   "id": "speed_buy_on_btc_5_min_1_s_late_not_in_the_first_12_s_hold_t",
+   "date": "2026-11-26",
+   "what": "Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills",
+   "tries": 8378,
+   "bets": 902,
+   "groups": 710,
+   "per100": 11.47,
+   "floor100": 1.12,
+   "verdict": "Looks real",
+   "status": "open",
+   "src": "swing.py exams"
   }
  ]
 }
