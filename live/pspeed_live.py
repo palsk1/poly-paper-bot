@@ -31,6 +31,7 @@ Settings in ~/.live.env (live/pspeed_setup.sh writes these; change the numbers t
   PSPEED_MAX_BETS_DAY=50     most bets a day (UTC)
   PSPEED_DAY_SPEND_MAX=100   most dollars put in a day
   PSPEED_MAX_OPEN_USD=15     most dollars waiting on results at once
+  PSPEED_SKIP_FIRST_S=12     no orders in the first 12 s of a window (the offers we see are stale then)
   PSPEED_DAY_LOSS_STOP=5     no new bets for the rest of the day after losing this much
   PSPEED_TOTAL_LOSS_STOP=15  stop for good (writes ~/live-data/STOP-pspeed) after losing this much in total
 It uses the Polymarket key already on the server for poly_live.py (same wallet and cash). It never sells.
@@ -64,7 +65,8 @@ SETTLE_AFTER = 90    # Gamma marks a window's result a minute or two after its e
 DEFAULTS = {"PSPEED_BET": 2, "PSPEED_MAX_BET": 5, "PSPEED_MAX_OFFER_USD": 100, "PSPEED_PER_WINDOW": 2,
             "PSPEED_MAX_BETS_DAY": 50, "PSPEED_DAY_SPEND_MAX": 100, "PSPEED_MAX_OPEN_USD": 15,
             "PSPEED_DAY_LOSS_STOP": 5, "PSPEED_TOTAL_LOSS_STOP": 15,
-            "PSPEED_EXTRA_C": 1}     # cents the order may pay above the offer seen (Jan picked 1c on 26 Nov; never more than 3)
+            "PSPEED_EXTRA_C": 1,     # cents the order may pay above the offer seen (Jan picked 1c on 26 Nov; never more than 3)
+            "PSPEED_SKIP_FIRST_S": 12}  # no orders in a window's first seconds: the price feed reconnects then (27 Nov)
 
 
 def cap(k):
@@ -223,6 +225,8 @@ class Speed:
             why = "paused"
         elif self.busy:
             why = "an order is still on its way"
+        elif r / 1000 - w < cap("PSPEED_SKIP_FIRST_S"):
+            why = "first seconds of the window (offers not up to date yet)"
         elif ask * (size or 0) >= cap("PSPEED_MAX_OFFER_USD"):
             why = "offer too big (the big ones made the least)"
         elif (size or 0) < shares:

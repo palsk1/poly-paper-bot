@@ -110,3 +110,22 @@ A London box would save about 25 ms. At $0.32 per $100 for each 100 ms, that's a
 | Up to 2c more | 80 in 100, +$3.50 | 76, +$3.36 | 62, +$3.16 |
 
 Per $100 bought, after the 0.07 fee. 16,104 jumps. The cuts were picked after looking. The real bot filled 1 of 10, well under these, so the paper fills look too kind. Only more real orders can settle it. The allowance is `PSPEED_EXTRA_C` (default 0, at most 3c); Jan picks.
+
+## The first 12 seconds of a window are blind (26 Nov evening)
+
+Of the real bot's first 49 orders, 15 went out in the first 6 s of a window: all 15 were killed, and for 8 of them the
+speed box still showed the offer up with plenty of shares. The cause is in our own feed code (`market()` in
+`live/pspeed_live.py` and `quoter/speedcheck.py`): the Polymarket socket is closed and reopened when a window ends and
+again when the next one is listed about 10 s later, so in seconds 1-11 the book updates come 5 times slower than
+after (found by the swing-trading thread). Orders in those seconds trade on stale offers.
+
+Re-score of the same 20-25 Nov jumps (16,104 tried), split by seconds into the window:
+
+| | paper rule, 100 ms | same price +1c, 300 ms | same price +1c, 500 ms |
+|---|---|---|---|
+| all | +$4.16 per $100 | +$4.02 | +$3.85 |
+| first 12 s (1,500 jumps) | +$6.02 | +$6.06 | +$6.08 |
+| after 12 s (14,604 jumps) | +$4.00 | +$3.80 | +$3.54 |
+
+So the stale seconds are less than 1 in 10 of the money and the result doesn't rest on them: after 12 s it is still
+about +$3.50 to +$4.00 per $100 on paper. PR adds `PSPEED_SKIP_FIRST_S=12` (no real orders in a window's first 12 s).
