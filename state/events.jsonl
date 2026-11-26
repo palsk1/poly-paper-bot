@@ -39099,3 +39099,10 @@
 {"minutes_left": 4.85, "price": 0.976, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV261300-00", "track": "kc_maker", "ts": "2026-11-26T17:55:14Z", "type": "kmaker_order"}
 {"minutes_left": 4.85, "price": 0.976, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV261300-00", "track": "kc_maker_safe", "ts": "2026-11-26T17:55:15Z", "type": "kmaker_order"}
 {"minutes_left": 4.85, "price": 0.976, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV261300-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T17:55:15Z", "type": "kmaker_order"}
+{"fee": 0.0011, "outcome": "No", "price": 0.977, "shares": 5, "title": "Will the highest temperature in Buenos Aires be 31\u00b0C on November 27?", "token": "93807190696087823799745673988271994145138332808699462929572436209705063543124", "track": "endgame_sell98", "ts": "2026-11-26T17:57:49Z", "type": "paper_buy"}
+{"minutes_left": 2.17, "price": 0.992, "queue": 1701.42, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261300-00", "track": "kc_maker", "ts": "2026-11-26T17:57:50Z", "type": "kmaker_order"}
+{"minutes_left": 2.17, "price": 0.992, "queue": 1701.42, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261300-00", "track": "kc_maker_safe", "ts": "2026-11-26T17:57:50Z", "type": "kmaker_order"}
+{"minutes_left": 2.17, "price": 0.992, "queue": 1701.42, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261300-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T17:57:51Z", "type": "kmaker_order"}
+{"minutes_left": 2.17, "price": 0.996, "queue": 572.43, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV261300-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T17:57:52Z", "type": "kmaker_order"}
+{"minutes_left": 2.17, "price": 0.997, "queue": 404.07, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV261300-00", "track": "kc_maker_safe_usd", "ts": "2026-11-26T17:57:53Z", "type": "kmaker_order"}
+{"minutes_left": 2.17, "price": 0.997, "queue": 404.07, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV261300-00", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T17:57:53Z", "type": "kmaker_order"}
