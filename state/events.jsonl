@@ -37807,3 +37807,5 @@
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXMOTOGPRACE-VALE26-RAFE", "track": "kalshi_patient", "ts": "2026-11-26T01:19:14Z", "type": "kpatient_fill"}
 {"filled": 0.46, "price": 0.96, "side": "no", "through": false, "ticker": "KXNBAOT-26NOV25SACGSW-1", "track": "kalshi_patient", "ts": "2026-11-26T01:19:17Z", "type": "kpatient_fill"}
 {"player": "Carl Emil Overbeck", "price": 0.73, "set1": "6-3", "set2_games": 0, "shares": 34, "ticker": "KXATPCHALLENGERMATCH-26NOV25KUBOVE-OVE", "track": "tennis_set", "ts": "2026-11-26T01:26:48Z", "type": "ktennis_buy"}
+{"fee": 0.0429, "outcome": "Yes", "price": 0.78, "shares": 5, "title": "Will Gold (XAUUSD) hit (HIGH) $3,600 in November?", "token": "53805361064302829056590940399400630448954408730433755474310334929790119518802", "track": "w_tokor", "ts": "2026-11-26T01:35:34Z", "type": "paper_buy"}
+{"fee": 0.0429, "outcome": "Yes", "price": 0.78, "shares": 5, "title": "Will Gold (XAUUSD) hit (HIGH) $3,600 in November?", "token": "53805361064302829056590940399400630448954408730433755474310334929790119518802", "track": "wb_tokor", "ts": "2026-11-26T01:35:34Z", "type": "paper_buy"}
