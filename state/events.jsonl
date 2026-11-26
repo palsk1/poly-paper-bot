@@ -38760,3 +38760,4 @@
 {"cost": 4.0577, "title": "Will the price of Ethereum be above $1,800 on December 1?", "token": "109545169792593519400279210298934000782434691983119874947597725922116660935368", "track": "crypto_no", "ts": "2026-11-26T13:03:09Z", "type": "skip_no_cash"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXHIGHTSATX-26NOV25-B57.5", "track": "kalshi_patient", "ts": "2026-11-26T13:03:39Z", "type": "kpatient_result"}
 {"pnl": 0.28, "price": 0.96, "shares": 7.0, "side": "no", "ticker": "KXLOWTOKC-26NOV25-B23.5", "track": "kalshi_patient", "ts": "2026-11-26T13:03:40Z", "type": "kpatient_result"}
+{"outcome": "Draw", "pnl": -1.4504, "price": 0.0, "reason": "resolved", "title": "Will Borneo Samarinda vs. Persita Tangerang end in a draw?", "token": "23583564766799247156643265741984179827311485782516053649542033077564605085987", "track": "soccer_draw", "ts": "2026-11-26T13:04:26Z", "type": "paper_close"}
