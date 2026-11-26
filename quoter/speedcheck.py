@@ -352,53 +352,31 @@ def window_result(w, fetch=http, c="btc"):
     return None
 
 
-async def market_loop(log, ws_lib, loop):
-    books = Books(log)
-    pending = {}     # (coin, window start) -> tries left for its result
+async def market_socket(log, ws_lib, books, feed):
+    """One Polymarket market socket kept open. New windows' tokens are added and old ones dropped on the open
+    socket ("operation": "subscribe" / "unsubscribe" frames, Polymarket docs), so no window starts blind."""
     while True:
-        now = int(time.time())
-        w0 = now // WIN * WIN
-        subs = []
-        for c in POLY_COINS:
-            for w in (w0, w0 + WIN):
-                try:
-                    got = await loop.run_in_executor(None, window_tokens, w, http, c)
-                except Exception as ex:  # noqa: BLE001
-                    got = None
-                    log.put({"k": "note", "what": "gamma failed", "err": str(ex)[:200]})
-                if got:
-                    books.add_window(w, got[0], got[1], c)
-                    log.put({"k": "win", "w": w, "c": c, "up": got[0], "down": got[1], "cid": got[2]})
-                    subs += [got[0], got[1]]
-                    pending.setdefault((c, w), 30)
-        books.drop_before(w0)
-        # results of finished windows (Gamma marks them a minute or two after the end)
-        for c, w in sorted(pending):
-            if w + WIN + 90 > now:
-                continue
-            try:
-                res = await loop.run_in_executor(None, window_result, w, http, c)
-            except Exception:  # noqa: BLE001
-                res = None
-            if res is not None:
-                log.put({"k": "res", "w": w, "c": c, "up_won": res})
-                pending.pop((c, w))
-            else:
-                pending[(c, w)] -= 1
-                if pending[(c, w)] <= 0:
-                    pending.pop((c, w))
-        until = w0 + WIN - time.time() + 0.5      # reconnect with the next pair of windows just after the turn
+        feed["add"].clear()
+        feed["drop"].clear()
+        subs = sorted(books.tok)
         if not subs:
-            await asyncio.sleep(10)
+            await asyncio.sleep(1)
             continue
         try:
             async with ws_lib.connect(PM_WS, ping_interval=None, max_size=2 ** 23) as ws:
                 await ws.send(json.dumps({"assets_ids": subs, "type": "market"}))
-                end = time.time() + until
+                log.put({"k": "note", "what": "market feed connected", "n": len(subs)})
                 last_ping = time.time()
-                while time.time() < end:
+                while True:
+                    if feed["add"]:
+                        add, feed["add"] = feed["add"], []
+                        await ws.send(json.dumps({"assets_ids": add, "operation": "subscribe"}))
+                        log.put({"k": "note", "what": "market feed added", "n": len(add)})
+                    if feed["drop"]:
+                        drop, feed["drop"] = feed["drop"], []
+                        await ws.send(json.dumps({"assets_ids": drop, "operation": "unsubscribe"}))
                     try:
-                        raw = await asyncio.wait_for(ws.recv(), timeout=max(0.1, min(5, end - time.time())))
+                        raw = await asyncio.wait_for(ws.recv(), timeout=0.25)
                     except asyncio.TimeoutError:
                         raw = None
                     if raw and raw != "PONG":
@@ -409,6 +387,62 @@ async def market_loop(log, ws_lib, loop):
         except Exception as ex:  # noqa: BLE001
             log.put({"k": "note", "what": "market feed disconnected", "err": f"{type(ex).__name__}: {ex}"[:200]})
             await asyncio.sleep(2)
+
+
+async def market_loop(log, ws_lib, loop, step=2.0, lookup=None):
+    """Finds the current and next two windows on Gamma, hands their tokens to the kept-open socket, drops old ones
+    and fetches results. Until 27 Nov the socket was closed at every window turn and reopened only after the Gamma
+    lookups (and again ~10 s later), so seconds 0-11 of each window got about 5 times fewer book updates."""
+    lookup = lookup or window_tokens
+    books = Books(log)
+    feed = {"add": [], "drop": []}
+    asyncio.create_task(market_socket(log, ws_lib, books, feed))
+    pending = {}     # (coin, window start) -> tries left for its result
+    tried = {}       # (coin, window start) -> last Gamma look
+    while True:
+        now = time.time()
+        w0 = int(now) // WIN * WIN
+        have = {(v[2], v[0]) for v in books.tok.values()}
+        for c in POLY_COINS:
+            for w in (w0, w0 + WIN, w0 + 2 * WIN):
+                if (c, w) in have or now - tried.get((c, w), 0) < 5:
+                    continue
+                tried[(c, w)] = now
+                try:
+                    got = await loop.run_in_executor(None, lookup, w, http, c)
+                except Exception as ex:  # noqa: BLE001
+                    got = None
+                    log.put({"k": "note", "what": "gamma failed", "err": str(ex)[:200]})
+                if got:
+                    books.add_window(w, got[0], got[1], c)
+                    feed["add"] += [got[0], got[1]]
+                    log.put({"k": "win", "w": w, "c": c, "up": got[0], "down": got[1], "cid": got[2]})
+                    pending.setdefault((c, w), 30)
+        old = [t for t, v in books.tok.items() if v[0] < w0]
+        if old:
+            books.drop_before(w0)
+            feed["drop"] += old
+        for k in [k for k in tried if len(k) == 2 and k[1] < w0]:
+            tried.pop(k)
+        # results of finished windows (Gamma marks them a minute or two after the end), one look a minute each
+        for c, w in sorted(pending):
+            if w + WIN + 90 > now or now - tried.get(("res", c, w), 0) < 60:
+                continue
+            tried[("res", c, w)] = now
+            try:
+                res = await loop.run_in_executor(None, window_result, w, http, c)
+            except Exception:  # noqa: BLE001
+                res = None
+            if res is not None:
+                log.put({"k": "res", "w": w, "c": c, "up_won": res})
+                pending.pop((c, w))
+                tried.pop(("res", c, w), None)
+            else:
+                pending[(c, w)] -= 1
+                if pending[(c, w)] <= 0:
+                    pending.pop((c, w))
+                    tried.pop(("res", c, w), None)
+        await asyncio.sleep(step)
 
 
 # ---------------------------------------------------------------- Kalshi 15-minute crypto (read only, no key)

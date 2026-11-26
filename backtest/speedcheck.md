@@ -129,3 +129,9 @@ Re-score of the same 20-25 Nov jumps (16,104 tried), split by seconds into the w
 
 So the stale seconds are less than 1 in 10 of the money and the result doesn't rest on them: after 12 s it is still
 about +$3.50 to +$4.00 per $100 on paper. PR adds `PSPEED_SKIP_FIRST_S=12` (no real orders in a window's first 12 s).
+
+**Feed fix on the speed box (27 Nov, Jan: "do the feed fix"):** `quoter/speedcheck.py` now keeps one Polymarket
+socket open and adds the next windows (up to two ahead) and drops old ones with subscribe / unsubscribe frames
+(`market_socket`), so recordings from the restart on have full book updates in seconds 0-11 too. Logs note
+"market feed connected / added". The real bot (`live/pspeed_live.py`) still reconnects and keeps its 12 s skip until
+a few days of these recordings show whether the early seconds are worth betting on.
