@@ -373,6 +373,13 @@ def venues(arg=None):
         for v in vols[:20]:
             oid = int(v[1][1:]) // 10
             say(f"   ${v[0]:,.0f} {v[1]} mark={v[2]} mid={v[3]} {names.get(oid, '')}")
+        cr = [v for v in vols if re.search(r"price|underlying|perp:", names.get(int(v[1][1:]) // 10, ""))]
+        say(f"  crypto / price outcome sides: {len(cr)}, 24h traded ${sum(v[0] for v in cr):,.0f}")
+        for v in cr[:15]:
+            say(f"   ${v[0]:,.0f} {v[1]} mark={v[2]} {names.get(int(v[1][1:]) // 10, '')}")
+        if cr:
+            bk = _get("https://api.hyperliquid.xyz/info", post={"type": "l2Book", "coin": cr[0][1]})
+            say(f"  busiest crypto book: {json.dumps(bk)[:500]}")
         if vols:
             bk = _get("https://api.hyperliquid.xyz/info", post={"type": "l2Book", "coin": vols[0][1]})
             say(f"  busiest book: {json.dumps(bk)[:700]}")
