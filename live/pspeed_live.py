@@ -359,7 +359,7 @@ def sender():
     return send
 
 
-LINE_TEST_DEFAULT = "no"     # "yes" once Jan OKs the can't-fill test buys
+LINE_TEST_DEFAULT = "yes"    # Jan OKed the can't-fill test buys on 26 Nov
 
 
 def keep_line_open(stop_ev, sp=None, every_s=10, test_every_s=900):
