@@ -39605,3 +39605,6 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXJLEAGUETOTAL-26NOV28SHIURD-6", "track": "kalshi_patient", "ts": "2026-11-26T23:15:03Z", "type": "kpatient_order"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV261815-15", "track": "kc_maker", "ts": "2026-11-26T23:17:59Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV261815-15", "track": "kc_maker_mid", "ts": "2026-11-26T23:17:59Z", "type": "kmaker_fill"}
+{"fee": 0.0264, "outcome": "Yes", "price": 0.12, "shares": 5, "title": "Will an open-source model be ranked #1 on Arena by March 31, 2027?", "token": "75025302555569650194360551264691082905125752859495325443218988918520930309624", "track": "w_anoin123", "ts": "2026-11-26T23:25:35Z", "type": "paper_buy"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXITFMATCH-26NOV27SINLOM-LOM", "track": "kalshi_patient", "ts": "2026-11-26T23:27:06Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXLOWTSDF-26NOV26-B38.5", "track": "kalshi_patient", "ts": "2026-11-26T23:27:06Z", "type": "kpatient_fill"}
