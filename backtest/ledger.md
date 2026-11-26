@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**268 ideas examined, in about 76,481 versions.** 212 dropped, 56 still being tested or waiting. **Looks real: 7.**
+**273 ideas examined, in about 118,697 versions.** 215 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 268 ideas that are all worthless, the luckiest one still looks good. With 268 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 273 ideas that are all worthless, the luckiest one still looks good. With 273 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -275,6 +275,11 @@ Why count: if you test 268 ideas that are all worthless, the luckiest one still 
 | 2026-11-24 | US CPI: buy on Polymarket 5c+ under Kalshi | 12 | 19 | -$4.66 | Behind, but could be bad luck | dropped | fed.py cross |
 | 2026-11-25 | Speed check: buy Polymarket 5-min BTC side within 0.1 s of a Binance jump (asks 40-95c), unseen days 19-24 Nov | 12 | 1723 | +$2.73 | Looks real | open | quoter/speedcheck.py edge |
 | 2026-11-26 | BTC 5-min seller pull {'jump': 0.02} 250ms | 32 | 2363 | -$1.99 | Losing | dropped | maker5m.py report |
+| 2026-11-26 | Buy and sell inside the window, btc: best of 4359 rules on the first days, graded on fresh days (buy at the offer; at 4min, ask 8c-30c; sell after 15s) | 8,378 | 174 | -$14.52 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-26 | Buy and sell inside the window, kmin: best of 5806 rules on the first days, graded on fresh days (waiting bid; join the best bid at 88c-97c in the last 7min; sell at +5c / else hold) | 11,292 | 2782 | -$1.20 | Losing | dropped | swing.py exams |
+| 2026-11-26 | Buy and sell inside the window, ksec: best of 2846 rules on the first days, graded on fresh days (buy at the offer; at 3min, ask 8c-30c; sell at +20c / stop -10c) | 5,790 | 41 | -$1.77 | Behind, but could be bad luck | dropped | swing.py exams |
 | 2026-11-26 | kc_maker skip cushion under 1.5, check months | 43 | 7298 | +$0.27 | Promising, needs more bets | open | kcflip.py |
+| 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
+| 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
