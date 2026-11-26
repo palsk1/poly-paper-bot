@@ -148,21 +148,165 @@ def match_rows(drows, fd):
     return out, miss
 
 
+PLAIN = ["## Plain summary (26 Nov 2026)", "",
+         "- **Question (Jan):** does soccer_draw win more when the sharp bookie (Pinnacle) also says the draw is cheap "
+         "on Polymarket? Then we could make the rule pickier.",
+         "- **Pinnacle keeps no free history**, so the past test uses Betfair Exchange, the other sharp price "
+         "(football-data.co.uk, 10,320 games in 2026). The sharp bookies price draws right: 2,659 draws happened, they "
+         "said 2,639.",
+         "- **Where a bookie price exists, Polymarket's draw sits right on it** (about 0.2c apart) and soccer_draw "
+         "loses: -$1.90 per $100 on 1,877 bets. All of the rule's profit came from leagues with no free bookie "
+         "history (Colombia, Brazil's 2nd league, Korea, Egypt, World Cup qualifiers, Libertadores...): +$10.95 per "
+         "$100 on 2,370 bets.",
+         "- **The pickier rule (bookie says the draw is worth 1c+ more than Polymarket's price):** looked great at "
+         "first (+$12.53 per $100, 116 bets), but most of that came from games where the bookie odds were taken "
+         "after our bet. Done fairly: +$4.22 per $100 on 98 bets, one half losing, exam 'Ahead, but could be luck'. "
+         "Not a real filter.",
+         "- **Live, right now (75 draws on Pinnacle and Polymarket):** Polymarket's draw ask sat about 0.7c ABOVE "
+         "Pinnacle's fair price, dearer in 69 of 75, and 0 draws were 2c+ cheap. Same in the leagues that made the "
+         "money. So a 'Pinnacle says cheap' rule would buy almost nothing.",
+         "- **What it means:** Pinnacle can't make soccer_draw pickier. If the draw lead is real, the sharp bookies "
+         "miss it too, in the smaller leagues. The 21 Dec check (PROTOCOL 5) stays as written; this dig adds one "
+         "secondary check written down now, before those games are looked at: `soccer_draw_nofree` (only leagues "
+         "with no free bookie history, list `drawsharp.COVERED` + `BIG`).",
+         "- **Ceiling (rough guess):** as it is, about 540 bets a month in history; at $2 a bet about +$50 a month on "
+         "paper, worst drop -$158, 18 losses in a row. No-free-odds leagues only: about 280 a month, +$60 a month at "
+         "$2, worst drop -$93. Half the games take only $12-25 (bigbets.md), so $5 bets would not all fit.", ""]
+
+
 def report():
     import census
     import exam
+    import statistics as stx
     fd = json.load(gzip.open(FD, "rt"))["rows"]
     ms, hist, rows, kinds = census.sports_rows()          # in-sample only (games before 10 Nov)
+    now = bot.iso(dt.datetime.now(dt.timezone.utc))
     L = ["# Soccer draws vs the sharp bookies (drawsharp.py)", "",
-         f"Generated {bot.iso(dt.datetime.now(dt.timezone.utc))}. Polymarket games before 10 Nov only (the games the "
-         "draw rule was found on; the 21 Dec holdout from 10 Nov is not touched). Bookmaker odds from football-data.co.uk.", ""]
-    res = {}
-    for hn in ("24h before start", "1h before start"):
-        drows = [r for r in rows if r["kind"] == "draw" and r["h"] == hn and 0.15 <= r["p"] < 0.50]
-        m, miss = match_rows(drows, fd)
-        res[hn] = (drows, m, miss)
-        print(f"{hn}: {len(drows)} draw bets, matched {len(m)}, not matched {miss}")
-    return L, res
+         f"Generated {now}. Polymarket games before 10 Nov only (the games the draw rule was found on; the 21 Dec "
+         "holdout from 10 Nov on is not touched). Bookmaker odds: football-data.co.uk. Every bet: Polymarket chart "
+         "price 24h before kickoff +2c + today's sports fee (0.05), held to the result, like `digs_draws.md`. "
+         "'Per $100' = profit per $100 staked.", ""]
+    L += PLAIN
+
+    def p100(sel):
+        c = sum(b["cost"] for b in sel)
+        return 100 * (sum(b["pay"] for b in sel) - c) / c if c else 0.0
+
+    def line(name, sel, key=None):
+        n = len(sel)
+        if not n:
+            return f"| {name} | 0 | | | | |"
+        bk = f"{sum(b[key] for b in sel):.0f}" if key else ""
+        return (f"| {name} | {n} | {sum(b['y'] for b in sel):.0f} | {sum(b['p'] for b in sel):.0f} | {bk} | "
+                f"{p100(sel):+.2f} |")
+
+    # 1. are the bookies themselves right about draws?
+    L += ["## 1. Do the sharp bookies price draws right?", "",
+          "Every 2026 game in the football-data files before 10 Nov: the bookie's draw chance (margin removed) added up, "
+          "against the draws that really happened.", "",
+          "| odds | games | draws happened | bookie said | source mix |", "|---|---|---|---|---|"]
+    for kind, nm in (("pre", "before the weekend (main divisions)"), ("close", "at kickoff (all files)")):
+        n = dr_ = fs = 0
+        src = collections.Counter()
+        for r in fd:
+            res = r.get("FTR") or r.get("Res")
+            if r["_date"] >= "2026-11-10" or res not in ("H", "D", "A"):
+                continue
+            f, sname, _ = book_fair(r, kind)
+            if f is None:
+                continue
+            n += 1
+            dr_ += res == "D"
+            fs += f
+            src[sname] += 1
+        L.append(f"| {nm} | {n:,} | {dr_:,} | {fs:,.0f} | {', '.join(f'{k} {v:,}' for k, v in src.most_common())} |")
+    L += ["", "Pinnacle's own columns are blank in 2026 (its feed closed July 2025), so this is mostly Betfair Exchange, the "
+          "other sharp price.", ""]
+
+    # 2. match the Polymarket draw bets
+    drows = sorted([r for r in rows if r["kind"] == "draw" and r["h"] == "24h before start" and 0.15 <= r["p"] < 0.50],
+                   key=lambda r: r["t"])
+    m, miss = match_rows(drows, fd)
+    B = bets_of(m)
+    for bb, (d, r, sc) in zip(B, m):
+        bb["wd"] = dt.datetime.fromtimestamp(d["mk"]["gst"], dt.timezone.utc).strftime("%a")
+    allb = []
+    for r in drows:
+        c = min(0.99, r["p"] + SLIP)
+        allb.append({"ev": r["ev"], "t": r["t"], "p": r["p"], "y": r["y"], "cost": c + bot.taker_fee(1, c, LIVE_FEE),
+                     "pay": r["y"], "sport": r["sport"]})
+    L += ["## 2. The soccer_draw bets, split by league kind", "",
+          f"{len(drows):,} draw bets (15-50c, 24h before). {len(m):,} matched a football-data game.", "",
+          "| group | bets | draws happened | Polymarket said | bookie said | per $100 |", "|---|---|---|---|---|---|",
+          line("every bet", allb),
+          line("big leagues (epl lal sea bun fl1 ucl uel)", [b for b in allb if b["sport"] in BIG]),
+          line("other leagues with free bookie odds", [b for b in allb if b["sport"] in COVERED and b["sport"] not in BIG]),
+          line("leagues with NO free bookie odds", [b for b in allb if b["sport"] not in COVERED and b["sport"] not in BIG]),
+          line("matched to a bookie price (kickoff odds)", B, "close"), ""]
+    L += ["Where a bookie price exists, Polymarket's draw price sits on it "
+          f"(median gap {100 * stx.median(b['close'] - b['p'] for b in B):+.2f}c at kickoff odds) and the rule loses "
+          "after the 2c + fee. All of the profit is in leagues where no free bookie history exists.", ""]
+
+    # 3. the pickier rule: buy only when the bookie says the draw is worth more than Polymarket's price
+    pre = [b for b in B if b["pre"] is not None]
+    safe = [b for b in pre if b["wd"] not in ("Fri", "Tue")]
+    mid = sorted(b["t"] for b in pre)[len(pre) // 2]
+    L += ["## 3. The pickier rule: bookie fair draw at least X above Polymarket", "",
+          "'Before the weekend' odds are taken on Friday (weekend games) or Tuesday (midweek games). For Friday and "
+          "Tuesday games that can be AFTER our bet, so those odds peek ahead. The honest row drops them. Kickoff odds "
+          "always peek ahead (shown only to see the size of the peek).", "",
+          "| odds used | gap | bets | draws happened | Polymarket said | bookie said | per $100 | first half | second half |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for nm, sel, key in (("before the weekend, all days", pre, "pre"), ("before the weekend, no Fri/Tue games (honest)", safe, "pre"),
+                         ("at kickoff (peeks ahead)", B, "close")):
+        for thr in (None, 0.0, 0.01, 0.015, 0.02):
+            s_ = sel if thr is None else [b for b in sel if b[key] - b["p"] >= thr]
+            h1 = [b for b in s_ if b["t"] < mid]
+            h2 = [b for b in s_ if b["t"] >= mid]
+            gl = "any" if thr is None else f"{100 * thr:+.1f}c+"
+            L.append(f"| {nm} | {gl} | {len(s_)} | {sum(b['y'] for b in s_):.0f} | {sum(b['p'] for b in s_):.0f} | "
+                     f"{sum(b[key] for b in s_):.0f} | {p100(s_):+.2f} | {p100(h1):+.2f} | {p100(h2):+.2f} |")
+    L.append("")
+    honest = [dict(b, cost=25 * b["cost"], pay=25 * b["pay"]) for b in safe if b["pre"] - b["p"] >= 0.01]
+    card = exam.score(honest, "soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue)", tries=15,
+                      src="drawsharp.py report", quiet=True)
+    L += [f"Exam (honest row, gap 1c+, 15 versions tried): **{card['verdict']}**, {card['bets']} bets, "
+          f"{(card.get('per100') or 0):+.2f} per $100.", ""]
+
+    # 4. live look(s): Pinnacle right now
+    lives = sorted(f for f in os.listdir(DIR) if f.startswith("live_"))
+    L += ["## 4. Live: Pinnacle's fair draw vs Polymarket's draw ask right now", "",
+          "| look | draws 15-50c | in the rule's 20-28h window | median Pinnacle minus ask | ask 2c+ under Pinnacle | "
+          "ask above Pinnacle | no-free-odds leagues: median |", "|---|---|---|---|---|---|---|"]
+    for fn in lives:
+        rr = [r for r in json.load(gzip.open(os.path.join(DIR, fn), "rt")) if 0.15 <= r["ask"] <= 0.50]
+        if not rr:
+            continue
+        g = [r["fair_mult"] - r["ask"] for r in rr]
+        w = [r for r in rr if 20 <= r["hrs"] <= 28]
+        nf = [r["fair_mult"] - r["ask"] for r in rr if r["lg"] not in COVERED and r["lg"] not in BIG]
+        L.append(f"| {fn[5:18]} UTC | {len(rr)} | {len(w)} | {100 * stx.median(g):+.1f}c | {sum(x >= 0.02 for x in g)} | "
+                 f"{sum(x < 0 for x in g)} | {100 * stx.median(nf) if nf else 0:+.1f}c ({len(nf)}) |")
+    L.append("")
+
+    # 5. size: bets a month, worst drop, on a small bank
+    L += ["## 5. Size on a $100-300 bank (history, chart price +2c + fee, no check that $2-5 really fits)", "",
+          "| version | bets a month | bet | profit a month | worst drop | longest run of losses |", "|---|---|---|---|---|---|"]
+    for nm, sel in (("soccer_draw as it is", allb), ("only leagues with no free bookie odds", [b for b in allb if b["sport"] not in COVERED and b["sport"] not in BIG])):
+        days = max(1.0, (sel[-1]["t"] - sel[0]["t"]) / 86400)
+        for stake in (2, 5):
+            eq = pk = dd = 0.0
+            st_ = mx = 0
+            for b in sel:
+                eq += stake / b["cost"] * (b["pay"] - b["cost"])
+                pk, dd = max(pk, eq), max(dd, pk - max(eq, -1e9))
+                st_ = 0 if b["y"] else st_ + 1
+                mx = max(mx, st_)
+            L.append(f"| {nm} | {len(sel) / days * 30:.0f} | ${stake} | {eq / days * 30:+.0f} | -${dd:.0f} | {mx} |")
+    L.append("")
+    open(OUT, "w").write("\n".join(L) + "\n")
+    print("\n".join(L))
+    print("wrote", OUT)
 
 
 def bets_of(m):

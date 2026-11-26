@@ -3490,6 +3490,19 @@
    "verdict": "Looks real",
    "status": "open",
    "src": "swing.py exams"
+  },
+  {
+   "id": "soccer_draw_24h_bookie_fair_1c_above_polymarket_no_fri_tue",
+   "date": "2026-11-26",
+   "what": "soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue)",
+   "tries": 15,
+   "bets": 98,
+   "groups": 98,
+   "per100": 4.22,
+   "floor100": -53.23,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "drawsharp.py report"
   }
  ]
 }

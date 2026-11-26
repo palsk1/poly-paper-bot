@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**273 ideas examined, in about 118,697 versions.** 215 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 273 ideas that are all worthless, the luckiest one still looks good. With 273 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -279,6 +279,7 @@ Why count: if you test 273 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | Buy and sell inside the window, kmin: best of 5806 rules on the first days, graded on fresh days (waiting bid; join the best bid at 88c-97c in the last 7min; sell at +5c / else hold) | 11,292 | 2782 | -$1.20 | Losing | dropped | swing.py exams |
 | 2026-11-26 | Buy and sell inside the window, ksec: best of 2846 rules on the first days, graded on fresh days (buy at the offer; at 3min, ask 8c-30c; sell at +20c / stop -10c) | 5,790 | 41 | -$1.77 | Behind, but could be bad luck | dropped | swing.py exams |
 | 2026-11-26 | kc_maker skip cushion under 1.5, check months | 43 | 7298 | +$0.27 | Promising, needs more bets | open | kcflip.py |
+| 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
 
