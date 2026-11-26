@@ -463,7 +463,15 @@ def test_pspeed():
     C._switch["val"] = {"kalshi": "on", "poly": "on", "pspeed": "on"}
     b.day()["pnl"] = -5.0
     check("today" in (C.stop_reason("pspeed", b) or ""), "the speed bot pauses for the day after losing $5")
+    check(C.fresh_day_cap("pspeed", b) and C.stop_reason("pspeed", b) is None,
+          "start from the phone after a day stop gives a fresh $5 for today")
+    b.day()["pnl"] = -9.0
+    check(C.stop_reason("pspeed", b) is None and not C.fresh_day_cap("pspeed", b),
+          "the fresh cap counts from the start, and start does nothing while under the cap")
+    b.day()["pnl"] = -10.0
+    check("today" in (C.stop_reason("pspeed", b) or ""), "losing $5 more after a start pauses it again")
     b.day()["pnl"] = 0.0
+    b.day().pop("base", None)
     b.state["realized"] = -15.0
     check("total loss" in (C.stop_reason("pspeed", b) or ""), "the speed bot stops for good after losing $15")
     os.remove(os.path.join(TMP, "STOP-pspeed"))
@@ -546,6 +554,20 @@ def test_pspeed():
     sp2.execute(pl)
     check(orders[-1]["max_price"] == Decimal("0.58"), "the order is sent with that limit")
     os.environ.pop("PSPEED_EXTRA_C", None)
+    sp2.books.lv["UP"] = {"a": {0.95: 20.0}, "b": {0.94: 50.0}}
+    sp2.books.lv["DOWN"] = {"a": {0.06: 50.0}, "b": {0.05: 20.0}}
+    sp2.win[int(time.time()) // SP.WIN * SP.WIN] = ("UP", "DOWN", "0xc")
+    n0 = len(orders)
+    sp2.why_stopped = "paused"
+    check(SP.line_test(sp2) is None and len(orders) == n0, "the line test sends nothing while the bot is paused")
+    sp2.why_stopped = None
+    rec = SP.line_test(sp2)
+    check(rec and len(orders) == n0 + 1 and orders[-1]["max_price"] == Decimal("0.01")
+          and orders[-1]["amount"] == Decimal("1.00") and orders[-1]["token_id"] == "UP" and not sp2.busy,
+          "the line test is a $1 buy at 1c on a side whose cheapest offer is 10c+ (it can't be filled)")
+    sp2.books.lv["UP"] = {"a": {0.05: 20.0}, "b": {}}
+    sp2.books.lv["DOWN"] = {"a": {0.06: 20.0}, "b": {}}
+    check(SP.line_test(sp2) is None and len(orders) == n0 + 1, "no line test when both sides are offered under 10c")
     o = next(iter(b2.state["open"].values()))
     check("ab" * 20 not in str(o), "the public notebook keeps only the end of the order number")
     for k in ("LIVE", "PSPEED_LIVE"):

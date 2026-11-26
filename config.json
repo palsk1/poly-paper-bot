@@ -56,6 +56,13 @@
       "source": "kmaker",
       "rules": "kc_maker_safe_usd_10m"
     },
+    "kc_maker_mid": {
+      "label": "kc_maker with a middle cushion (26 Nov, Jan picked 'Paper twin first'): same bid as kc_maker (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but it skips windows where Binance, moved onto Kalshi's price, sits less than 1.5 'typical moves until the close' past the start price (kc_maker uses no check, the real bot 2.3). The flips were the near-the-line bets: on kc_maker's own 9-24 Nov bets this kept 2 in 3 bets, +$122 instead of +$105, worst day -$3.45 instead of -$10.17 (backtest/kcflip.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_mid"
+    },
     "kc_maker_safe_kprice": {
       "label": "Twin of kc_maker_safe checked on Kalshi's own price (19 Nov, Jan: make a paper twin, name it clearly): same bid (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but the 'at least 2 typical moves past the start price' check uses Kalshi's own settle number (the CF Benchmarks 60-second average, free at /live_data/events) instead of Binance. Re-test: backtest/kprice.md. $100 paper",
       "start_cash": 100,
@@ -1269,6 +1276,10 @@
       "min_spot_z": 2.3,
       "level": 0.9,
       "max_minutes_left": 10.0
+    },
+    "kc_maker_mid": {
+      "inherit": "kc_maker",
+      "min_usd_z": 1.5
     },
     "kc_maker_safe_kprice": {
       "inherit": "kc_maker",

@@ -3401,6 +3401,19 @@
    "src": "props.py"
   },
   {
+   "id": "kc_maker_skip_cushion_under_1_5_check_months",
+   "date": "2026-11-26",
+   "what": "kc_maker skip cushion under 1.5, check months",
+   "tries": 43,
+   "bets": 7298,
+   "groups": 7298,
+   "per100": 0.27,
+   "floor100": -0.23,
+   "verdict": "Promising, needs more bets",
+   "status": "open",
+   "src": "kcflip.py"
+ },
+ {
    "id": "btc_5_min_seller_pull_jump_0_02_250ms",
    "date": "2026-11-26",
    "what": "BTC 5-min seller pull {'jump': 0.02} 250ms",
