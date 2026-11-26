@@ -13,7 +13,7 @@ Jan, 25 Nov 2026 ("Do we testrun the bot on 5 min windows that looked promising 
     taker fee included, held to the window's result.
 
 Extra care for real money (the speed-firm reading, 25 Nov): the price limit is the offer we SAW, plus PSPEED_EXTRA_C cents
-(0 unless Jan picks more, at most 3; Polymarket holds every crypto-window buy 150 ms, so offers move); all or nothing, so a gone offer costs nothing), skip offers of $100+ (those made the least), small fixed bets.
+(1c, Jan's pick on 26 Nov; at most 3; Polymarket holds every crypto-window buy 150 ms, so offers move); all or nothing, so a gone offer costs nothing), skip offers of $100+ (those made the least), small fixed bets.
 
 PRACTICE MODE unless ~/.live.env has PSPEED_LIVE=yes (on top of the LIVE=yes the other bots use). In practice mode it
 writes down what it would buy at the offer it saw and scores that at the result: a paper twin on this server.
@@ -64,7 +64,7 @@ SETTLE_AFTER = 90    # Gamma marks a window's result a minute or two after its e
 DEFAULTS = {"PSPEED_BET": 2, "PSPEED_MAX_BET": 5, "PSPEED_MAX_OFFER_USD": 100, "PSPEED_PER_WINDOW": 2,
             "PSPEED_MAX_BETS_DAY": 50, "PSPEED_DAY_SPEND_MAX": 100, "PSPEED_MAX_OPEN_USD": 15,
             "PSPEED_DAY_LOSS_STOP": 5, "PSPEED_TOTAL_LOSS_STOP": 15,
-            "PSPEED_EXTRA_C": 0}     # cents the order may pay above the offer seen (Jan picks; never more than 3)
+            "PSPEED_EXTRA_C": 1}     # cents the order may pay above the offer seen (Jan picked 1c on 26 Nov; never more than 3)
 
 
 def cap(k):
@@ -251,7 +251,7 @@ class Speed:
                 "fee_est": round(fee, 4), "cost": cost, "limit": limit}
 
     def execute(self, plan):
-        """Send it (real mode) or write it down (practice). Runs in a worker thread. Never pays more than the seen ask + PSPEED_EXTRA_C cents (0 unless Jan picks more)."""
+        """Send it (real mode) or write it down (practice). Runs in a worker thread. Never pays more than the seen ask + PSPEED_EXTRA_C cents (1c, Jan's pick)."""
         try:
             rec = {k: v for k, v in plan.items() if k != "amount"}
             rec.update({"placed": C.iso(), "day": C.today(), "amount": float(plan["amount"]),
