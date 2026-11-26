@@ -39207,3 +39207,4 @@
 {"filled": 1.74, "pnl": 0.0157, "price": 0.991, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV261330-30", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T18:32:22Z", "type": "kmaker_fill"}
 {"filled": 1.74, "pnl": 0.0157, "price": 0.991, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV261330-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:32:22Z", "type": "kmaker_fill"}
 {"pnl": 8.13, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26HERVAL-HER", "track": "tennis_set", "ts": "2026-11-26T18:32:23Z", "type": "econ_settle"}
+{"player": "Nuria Brancaccio", "price": 0.73, "set1": "6-1", "set2_games": 0, "shares": 34, "ticker": "KXWTACHALLENGERMATCH-26NOV26MARBRA-BRA", "track": "tennis_set", "ts": "2026-11-26T18:38:59Z", "type": "ktennis_buy"}
