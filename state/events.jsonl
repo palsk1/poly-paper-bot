@@ -38065,3 +38065,5 @@
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNFLTEAMTOTAL-26NOV25GBLAR-LAR39", "track": "kalshi_patient", "ts": "2026-11-26T04:36:44Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV25UTAMIN-UTADGUENTHER11", "track": "kalshi_patient", "ts": "2026-11-26T04:36:44Z", "type": "kpatient_result"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNHLGOAL-26NOV25UTAMIN-MINMBOLDY12-2", "track": "kalshi_patient", "ts": "2026-11-26T04:36:44Z", "type": "kpatient_result"}
+{"cost": 3.9583, "title": "Will the price of Ethereum be above $1,800 on December 1?", "token": "109545169792593519400279210298934000782434691983119874947597725922116660935368", "track": "crypto_no", "ts": "2026-11-26T04:51:36Z", "type": "skip_no_cash"}
+{"fee": 0.0493, "outcome": "Draw", "price": 0.27, "shares": 5, "title": "Will Macarthur FC vs. Melbourne City FC end in a draw?", "token": "53173610223318138084740803830535971225520348481671355721974809740770727594008", "track": "soccer_draw", "ts": "2026-11-26T04:51:53Z", "type": "paper_buy"}
