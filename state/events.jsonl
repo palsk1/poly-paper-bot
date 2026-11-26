@@ -39064,3 +39064,8 @@
 {"outcome": "No", "pnl": 0.1866, "price": 1.0, "reason": "resolved", "title": "Will the price of Bitcoin be above $68,000 on November 26?", "token": "27669991015010656340372654376932150942005469555590816032570131374784867313914", "track": "no_only_90_97", "ts": "2026-11-26T17:17:23Z", "type": "paper_close"}
 {"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will XRP dip to $0.90 on November 26?", "token": "67972256540302493982545106570673722250068933085478627161477484682518584406489", "track": "endgame_sell98", "ts": "2026-11-26T17:18:29Z", "type": "paper_buy"}
 {"filled": 10.0, "pnl": 0.18, "price": 0.982, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV261215-15", "track": "kc_maker", "ts": "2026-11-26T17:18:34Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLTDPROT-26NOV26CHIDET-DETBWRIGHT89-1", "track": "kalshi_patient", "ts": "2026-11-26T17:23:53Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNFLTEAMFIRSTTD-26NOV26CHIDET-CHI-KRAYMOND14", "track": "kalshi_patient", "ts": "2026-11-26T17:23:53Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXNFLWINMARGIN-26NOV26PHIDAL-PHI7TO14", "track": "kalshi_patient", "ts": "2026-11-26T17:23:53Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXUELSCORE-26NOV26DINLEV-DIN1LEV4", "track": "kalshi_patient", "ts": "2026-11-26T17:23:55Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXUELSCORE-26NOV26RBSARA-RBS4ARA0", "track": "kalshi_patient", "ts": "2026-11-26T17:23:55Z", "type": "kpatient_fill"}
