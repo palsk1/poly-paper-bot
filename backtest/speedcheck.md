@@ -94,3 +94,19 @@ So the typical racer is slower than our 100 ms. The fastest ones aren't. That is
 The big offers are the weakest. Those are likely the pros' own quotes, pulled in time or left up on purpose. The time-of-day cut is 8 blocks over 6 days: treat it as noise until more weeks agree.
 
 A London box would save about 25 ms. At $0.32 per $100 for each 100 ms, that's about $0.08 per $100: not worth it.
+
+## The real bot's first orders, and Polymarket's 150 ms wait (26 Nov)
+
+- **Real orders:** 10 orders from 16:32 to about 17:25 UTC. 9 were killed: the all-or-nothing order found the offer gone. 1 filled: Down at 64c, lost. Order times were 270-1,009 ms, from sending to Polymarket's answer.
+- **Why it can't be much faster:** Polymarket holds every buy on its crypto windows for **150 ms** before matching it (their changelog: 250 ms → 50 ms on 17 Aug, 150 ms since 4 Sep 2026). That gives sellers time to pull old offers. With about a 65 ms round trip from Stockholm, no order comes back in under about 220 ms. So the 270-340 ms orders are near the floor, and only the slow ones can be helped (keep the line open: PR #216).
+- **Signing:** about 5 ms per order on a throwaway test key (eth_account, this workspace). Signing orders ahead isn't worth building.
+- **Re-score with the real bot's price rule** (20-25 Nov, Binance, seen ask 40-95c, offer under $100 and big enough for the bet, $2 or 5 shares; filled only if the best ask `d` ms later is at most the seen ask + allowance and has enough shares; scratch script, not in the repo):
+
+| Fill rule | 250 ms | 300 ms | 500 ms |
+|---|---|---|---|
+| Paper rule (pay the ask then) | 99 in 100 filled, +$3.14 | 99, +$2.77 | 98, +$1.67 |
+| Same price or better (live bot today) | 51 in 100, +$4.63 | 45, +$4.33 | 33, +$4.32 |
+| Up to 1c more | 69 in 100, +$3.87 | 64, +$4.02 | 49, +$3.85 |
+| Up to 2c more | 80 in 100, +$3.50 | 76, +$3.36 | 62, +$3.16 |
+
+Per $100 bought, after the 0.07 fee. 16,104 jumps. The cuts were picked after looking. The real bot filled 1 of 10, well under these, so the paper fills look too kind. Only more real orders can settle it. The allowance is `PSPEED_EXTRA_C` (default 0, at most 3c); Jan picks.
