@@ -37802,3 +37802,7 @@
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXHORMUZWEEKLY-26NOV29-T27", "track": "kalshi_patient", "ts": "2026-11-26T01:04:21Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNETFLIXRANKMOVIE-26NOV30-GUA", "track": "kalshi_patient", "ts": "2026-11-26T01:04:21Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXBRASILEIROSPREAD-26NOV29ATLVDG-ATL3", "track": "kalshi_patient", "ts": "2026-11-26T01:04:21Z", "type": "kpatient_order"}
+{"cost": 4.4549, "title": "Will XRP dip to $0.80 in November?", "token": "44319258117022198776902927634348660512909406932340510323843304720281151723461", "track": "crypto_no", "ts": "2026-11-26T01:18:50Z", "type": "skip_no_cash"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXLOWTSAN-26NOV25-B49.5", "track": "kalshi_patient", "ts": "2026-11-26T01:19:14Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXMOTOGPRACE-VALE26-RAFE", "track": "kalshi_patient", "ts": "2026-11-26T01:19:14Z", "type": "kpatient_fill"}
+{"filled": 0.46, "price": 0.96, "side": "no", "through": false, "ticker": "KXNBAOT-26NOV25SACGSW-1", "track": "kalshi_patient", "ts": "2026-11-26T01:19:17Z", "type": "kpatient_fill"}
