@@ -39235,3 +39235,4 @@
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNAMEDSTORM-26DEC01EPACTOT-20", "track": "kalshi_patient", "ts": "2026-11-26T19:11:19Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXBTCMINMON-BTC-26NOV30-5000000", "track": "kalshi_patient", "ts": "2026-11-26T19:11:19Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFL1H-26NOV29TENJAC-TIE", "track": "kalshi_patient", "ts": "2026-11-26T19:11:19Z", "type": "kpatient_order"}
+{"fee": 0.0022, "outcome": "KAMUI", "price": 0.991, "shares": 5, "title": "Counter-Strike: aimclub vs KAMUI (BO3) - Exort Fiesta Playoffs", "token": "5750651813165380920049995116498030977285814351973010825054200451584309199290", "track": "endgame_strict", "ts": "2026-11-26T19:14:54Z", "type": "paper_buy"}
