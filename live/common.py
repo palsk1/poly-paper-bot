@@ -183,9 +183,23 @@ def stop_reason(bot, book):
         push(f"{bot} bot STOPPED", msg)
         return msg
     day_stop = envf(f"{bot.upper()}_DAY_LOSS_STOP", 10)
-    if book.day()["pnl"] <= -day_stop:
-        return f"lost ${-book.day()['pnl']:.2f} today (cap ${day_stop:.0f}), waiting for tomorrow (UTC)"
+    d = book.day()
+    since = d["pnl"] - d.get("base", 0.0)     # "start" from the phone after a day stop gives a fresh cap (26 Nov, Jan)
+    if since <= -day_stop:
+        return (f"lost ${-since:.2f} today (cap ${day_stop:.0f}), waiting for tomorrow (UTC). "
+                f"Type start to allow ${day_stop:.0f} more today")
     return None
+
+
+def fresh_day_cap(bot, book):
+    """Jan's "start" after the day-loss cap: count today's loss again from now (the total cap still counts all)."""
+    day_stop = envf(f"{bot.upper()}_DAY_LOSS_STOP", 10)
+    d = book.day()
+    if d["pnl"] - d.get("base", 0.0) <= -day_stop:
+        d["base"] = d["pnl"]
+        book.log("day_cap_reset", base=round(d["pnl"], 4))
+        return True
+    return False
 
 
 def ntfy_post(topic, title, body):
@@ -316,6 +330,7 @@ def control(bot, book, status_fn):
             if os.path.exists(flag):
                 os.remove(flag)
             book.log("phone_start")
+            fresh_day_cap(bot, book)
             why = stop_reason(bot, book)
             push(name, "Running again." if not why else f"Phone stop removed, but still paused: {why}")
         elif cmd in ("status", "how", "?"):

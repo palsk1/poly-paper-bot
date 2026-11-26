@@ -463,7 +463,15 @@ def test_pspeed():
     C._switch["val"] = {"kalshi": "on", "poly": "on", "pspeed": "on"}
     b.day()["pnl"] = -5.0
     check("today" in (C.stop_reason("pspeed", b) or ""), "the speed bot pauses for the day after losing $5")
+    check(C.fresh_day_cap("pspeed", b) and C.stop_reason("pspeed", b) is None,
+          "start from the phone after a day stop gives a fresh $5 for today")
+    b.day()["pnl"] = -9.0
+    check(C.stop_reason("pspeed", b) is None and not C.fresh_day_cap("pspeed", b),
+          "the fresh cap counts from the start, and start does nothing while under the cap")
+    b.day()["pnl"] = -10.0
+    check("today" in (C.stop_reason("pspeed", b) or ""), "losing $5 more after a start pauses it again")
     b.day()["pnl"] = 0.0
+    b.day().pop("base", None)
     b.state["realized"] = -15.0
     check("total loss" in (C.stop_reason("pspeed", b) or ""), "the speed bot stops for good after losing $15")
     os.remove(os.path.join(TMP, "STOP-pspeed"))
