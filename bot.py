@@ -1645,7 +1645,7 @@ def buy_candidates(tracks, name, cands, limit):
         meta = {"title": c["title"], "outcome": c["outcome"], "slug": c["slug"], "event_slug": c["event_slug"],
                 "event_key": c["event_key"], "theme": c["theme"], "end": c["end"], "source": name,
                 "price_source": how}
-        for k in ("target", "tier", "model_p", "signal"):
+        for k in ("target", "tier", "model_p", "signal", "pin_fair"):
             if c.get(k):
                 meta[k] = c[k]
         if r.get("tp_rel"):
@@ -4416,7 +4416,7 @@ def run_fast(tracks, force=False):
     lists = {}
     for kind, fn in (("weather", weather_candidates), ("crypto", crypto_candidates), ("sharp", sharp_candidates),
                      ("mentions", mention_candidates), ("quiet", quiet_candidates), ("kind", mention_candidates),
-                     ("draws", draw_candidates), ("postcount", postcount_candidates),
+                     ("draws", lambda nm: draw_candidates(nm, pin=True)), ("postcount", postcount_candidates),
                      ("wordno", wordno_candidates), ("stocklong", stocklong_candidates),
                      ("trumpweek", trumpweek_candidates)):
         names = [n for n in due if CFG["tracks"][n]["source"] == kind]
@@ -4537,13 +4537,21 @@ def quiet_candidates(names):
     return out
 
 
-def draw_candidates(names):
+def draw_candidates(names, pin=False):
     """Soccer draws (digs.py / census.py, backtest/digs_draws.md, 2026-11-10): the 'end in a draw' leg of a soccer
     game, YES at min_price-max_price, when kickoff is min_hours-max_hours away (the backtest decided 24h before).
-    Polymarket buyers underrate draws by about 2c. Pre-registered as `soccer_draw` in backtest/PROTOCOL.md."""
+    Polymarket buyers underrate draws by about 2c. Pre-registered as `soccer_draw` in backtest/PROTOCOL.md.
+    pin=True (paper run only, Jan 26 Nov, backtest/drawsharp.md): also notes Pinnacle's fair draw chance on each
+    candidate (`pin_fair`, records only, never used to pick). The real bot (live/poly_live.py) calls it without."""
     import sharp
     rs = {n: rules_for(n) for n in names}
     games = sharp.poly_games(max(r["max_hours_to_start"] for r in rs.values()))
+    board = []
+    if pin:
+        try:
+            board = sharp.pinnacle_board([s for s, nm in sharp.PIN_SPORTS.items() if nm == "soccer"])
+        except Exception as e:
+            print(f"draws: Pinnacle note skipped: {e}")
     out = {n: [] for n in names}
     seen = 0
     for g in games:
@@ -4567,11 +4575,28 @@ def draw_candidates(names):
                 c["outcome"] = "Draw"
                 c["theme"] = "soccer"
                 c["start"] = iso(g["start"])   # kickoff, for the real bot's open-bet list (Jan, 23 Nov)
+                if board:
+                    pf = pin_draw_fair(g, board)
+                    if pf is not None:
+                        c["pin_fair"] = pf
+                        c["signal"] += f", Pinnacle fair {pf * 100:.1f}c"
                 out[n].append(c)
     for n in out:
         out[n].sort(key=lambda c: -c["liquidity"])
     print(f"draws: {len(games)} games, {seen} draw markets, " + ", ".join(f"{n} {len(c)}" for n, c in out.items()))
     return out
+
+
+def pin_draw_fair(g, board):
+    """Pinnacle's fair draw chance (margin removed, average of the two ways) for a Polymarket soccer game, or None."""
+    import sharp
+    try:
+        b, amap = sharp.match_game(g, board)
+    except Exception:
+        return None
+    if not b or "draw" not in b["prob"]:
+        return None
+    return round(sum(b["prob"]["draw"]) / 2, 4)
 
 
 def postcount_candidates(names):

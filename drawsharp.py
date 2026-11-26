@@ -169,6 +169,8 @@ PLAIN = ["## Plain summary (26 Nov 2026)", "",
          "miss it too, in the smaller leagues. The 21 Dec check (PROTOCOL 5) stays as written; this dig adds one "
          "secondary check written down now, before those games are looked at: `soccer_draw_nofree` (only leagues "
          "with no free bookie history, list `drawsharp.COVERED` + `BIG`).",
+         "- **Pinnacle note on live paper bets (built 26 Nov, Jan: 'Do it and merge'):** every paper soccer_draw bet "
+         "now records Pinnacle's fair draw chance (`pin_fair`), records only. Score it with the 21 Dec check.",
          "- **Ceiling (rough guess):** as it is, about 540 bets a month in history; at $2 a bet about +$50 a month on "
          "paper, worst drop -$158, 18 losses in a row. No-free-odds leagues only: about 280 a month, +$60 a month at "
          "$2, worst drop -$93. Half the games take only $12-25 (bigbets.md), so $5 bets would not all fit.", ""]
