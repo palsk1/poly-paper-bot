@@ -39362,3 +39362,4 @@
 {"pnl": 0.4176, "price": 0.92, "shares": 5.22, "side": "no", "ticker": "KXUELSCORE-26NOV26OLYACM-OLY2ACM1", "track": "kalshi_patient", "ts": "2026-11-26T20:48:22Z", "type": "kpatient_result"}
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXUELSCORE-26NOV26RBSARA-RBS4ARA0", "track": "kalshi_patient", "ts": "2026-11-26T20:48:22Z", "type": "kpatient_result"}
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXUELSCORE-26NOV26RCCBOU-RCC2BOU1", "track": "kalshi_patient", "ts": "2026-11-26T20:48:22Z", "type": "kpatient_result"}
+{"outcome": "Over", "pnl": 0.0475, "price": 1.0, "reason": "resolved", "title": "Lions Team Total: O/U 20.5", "token": "19812806761984163985192088034328687542674188032871732919029820845233729555240", "track": "endgame_strict", "ts": "2026-11-26T20:50:54Z", "type": "paper_close"}
