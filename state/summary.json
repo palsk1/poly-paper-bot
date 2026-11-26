@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-26T21:29:23Z",
+ "generated": "2026-11-26T22:38:01Z",
  "his_book": {
   "biggest_position_share": 0.229,
   "cost_min_size_each": 218.1,
@@ -61,11 +61,11 @@
    "money_needed": 0.0,
    "open": 100,
    "peak_open_cost": 472.607438,
-   "pnl": -1.4544,
+   "pnl": -1.7044,
    "realized": 1.363,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 2.635,
+   "today": 2.385,
    "trust": {
     "avg_per_100": 5.77,
     "best_per_100": 6.75,
@@ -86,7 +86,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -68.16
    },
-   "unrealized": -2.8174,
+   "unrealized": -3.0674,
    "wins": 5
   },
   "claude": {
@@ -97,11 +97,11 @@
    "money_needed": 0.0,
    "open": 10,
    "peak_open_cost": 44.935,
-   "pnl": 2.545,
+   "pnl": 2.55,
    "realized": 0.62,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.04,
+   "today": 0.045,
    "trust": {
     "avg_per_100": 3.35,
     "best_per_100": 5.27,
@@ -122,7 +122,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -83.38
    },
-   "unrealized": 1.925,
+   "unrealized": 1.93,
    "wins": 4
   },
   "consensus_2": {
@@ -133,11 +133,11 @@
    "money_needed": 181.2955,
    "open": 60,
    "peak_open_cost": 180.9353,
-   "pnl": -1.5668,
+   "pnl": -2.2968,
    "realized": -4.637,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 3.8762,
+   "today": 3.1462,
    "trust": {
     "avg_per_100": -11.31,
     "best_per_100": 0.78,
@@ -158,7 +158,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -36.25
    },
-   "unrealized": 3.0701,
+   "unrealized": 2.3401,
    "wins": 24
   },
   "consensus_3": {
@@ -169,11 +169,11 @@
    "money_needed": 181.0427,
    "open": 60,
    "peak_open_cost": 181.254834,
-   "pnl": -3.5931,
+   "pnl": -3.9981,
    "realized": -2.1931,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.1681,
+   "today": 0.7631,
    "trust": {
     "avg_per_100": -9.63,
     "best_per_100": 2.78,
@@ -194,7 +194,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -35.92
    },
-   "unrealized": -1.4,
+   "unrealized": -1.805,
    "wins": 24
   },
   "control_longshot": {
@@ -205,11 +205,11 @@
    "money_needed": 0.0,
    "open": 32,
    "peak_open_cost": 11.982357,
-   "pnl": 8.85,
+   "pnl": 8.73,
    "realized": 11.9783,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.901,
+   "today": -1.021,
    "trust": {
     "avg_per_100": 173.03,
     "best_per_100": 386.4,
@@ -230,7 +230,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -3.1283,
+   "unrealized": -3.2483,
    "wins": 4
   },
   "control_random": {
@@ -241,11 +241,11 @@
    "money_needed": 0.0,
    "open": 23,
    "peak_open_cost": 60.310764,
-   "pnl": -33.3029,
+   "pnl": -33.6279,
    "realized": -24.0345,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.8795,
+   "today": 0.5545,
    "trust": {
     "avg_per_100": -79.27,
     "best_per_100": -56.12,
@@ -262,7 +262,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": -9.2683,
+   "unrealized": -9.5933,
    "wins": 2
   },
   "crypto_late": {
@@ -309,11 +309,11 @@
    "money_needed": 0.0,
    "open": 8,
    "peak_open_cost": 49.088435,
-   "pnl": -13.1057,
+   "pnl": -13.1957,
    "realized": -17.7629,
    "refills": 0,
-   "skipped_no_cash": 282,
-   "today": 2.685,
+   "skipped_no_cash": 283,
+   "today": 2.595,
    "trust": {
     "avg_per_100": -16.52,
     "best_per_100": 1.91,
@@ -334,7 +334,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -55.29
    },
-   "unrealized": 4.6572,
+   "unrealized": 4.5672,
    "wins": 18
   },
   "econ_fav": {
@@ -377,7 +377,7 @@
    "money_needed": 0.0,
    "open": 13,
    "peak_open_cost": 97.475003,
-   "pnl": 0.3478,
+   "pnl": 0.2978,
    "proof": {
     "avg_edge": 0.0243,
     "bad_rate_upper90": 0.1087,
@@ -390,7 +390,7 @@
    "realized": 2.2261,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.7424,
+   "today": -0.7924,
    "trust": {
     "avg_per_100": 2.29,
     "best_per_100": 2.71,
@@ -411,7 +411,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -18.15
    },
-   "unrealized": -1.8783,
+   "unrealized": -1.9283,
    "wins": 20
   },
   "endgame_97": {
@@ -422,11 +422,11 @@
    "money_needed": 0.0,
    "open": 7,
    "peak_open_cost": 197.655143,
-   "pnl": -33.8528,
+   "pnl": -34.1628,
    "realized": -31.588,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 3.12,
+   "today": 2.81,
    "trust": {
     "avg_per_100": -4.52,
     "best_per_100": -1.29,
@@ -443,7 +443,7 @@
     "proven": false,
     "worst_per_100": -11.76
    },
-   "unrealized": -2.2649,
+   "unrealized": -2.5749,
    "wins": 134
   },
   "endgame_ending_soon": {
@@ -479,36 +479,36 @@
    "wins": 123
   },
   "endgame_sell98": {
-   "cash": 297.9541,
-   "closed": 957,
+   "cash": 307.751,
+   "closed": 960,
    "deposited": 500.0,
    "losses": 71,
    "money_needed": 0.0,
-   "open": 25,
+   "open": 23,
    "peak_open_cost": 194.420013,
-   "pnl": -83.8259,
-   "realized": -80.976,
+   "pnl": -84.404,
+   "realized": -80.9472,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 4.9306,
+   "today": 4.3525,
    "trust": {
     "avg_per_100": -2.16,
     "best_per_100": -1.14,
-    "finished": 957,
-    "profit": -485.4076,
+    "finished": 960,
+    "profit": -485.2981,
     "proven": false,
-    "worst_per_100": -4.28
+    "worst_per_100": -4.27
    },
    "trust_paper": {
-    "avg_per_100": -1.75,
-    "best_per_100": -0.73,
-    "finished": 957,
-    "profit": -80.976,
+    "avg_per_100": -1.74,
+    "best_per_100": -0.72,
+    "finished": 960,
+    "profit": -80.9472,
     "proven": false,
-    "worst_per_100": -3.85
+    "worst_per_100": -3.84
    },
-   "unrealized": -2.8499,
-   "wins": 886
+   "unrealized": -3.4568,
+   "wins": 889
   },
   "endgame_strict": {
    "cash": 500.6375,
@@ -598,11 +598,11 @@
    "money_needed": 0.0,
    "open": 4,
    "peak_open_cost": 24.521349,
-   "pnl": -2.2037,
+   "pnl": -2.1937,
    "realized": -1.3035,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.43,
+   "today": -1.42,
    "trust": {
     "avg_per_100": -2.79,
     "best_per_100": 6.59,
@@ -623,7 +623,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -26.36
    },
-   "unrealized": -0.9003,
+   "unrealized": -0.8903,
    "wins": 18
   },
   "fade_sure": {
@@ -670,11 +670,11 @@
    "money_needed": 0.0,
    "open": 28,
    "peak_open_cost": 128.615571,
-   "pnl": -4.2951,
+   "pnl": -4.3501,
    "realized": -4.2195,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.4114,
+   "today": 1.3564,
    "trust": {
     "avg_per_100": -47.21,
     "best_per_100": 39.63,
@@ -695,7 +695,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.0756,
+   "unrealized": -0.1306,
    "wins": 1
   },
   "fav_cut_losses": {
@@ -706,11 +706,11 @@
    "money_needed": 0.0,
    "open": 22,
    "peak_open_cost": 99.552028,
-   "pnl": -4.862,
+   "pnl": -4.897,
    "realized": -5.52,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.9052,
+   "today": 0.8702,
    "trust": {
     "avg_per_100": -8.85,
     "best_per_100": 4.07,
@@ -731,7 +731,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -45.11
    },
-   "unrealized": 0.658,
+   "unrealized": 0.623,
    "wins": 9
   },
   "fav_fee_free": {
@@ -742,11 +742,11 @@
    "money_needed": 0.0,
    "open": 20,
    "peak_open_cost": 93.64,
-   "pnl": 0.415,
+   "pnl": 0.005,
    "realized": 0.6,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.28,
+   "today": -0.13,
    "trust": {
     "avg_per_100": 6.43,
     "best_per_100": 10.16,
@@ -767,7 +767,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.185,
+   "unrealized": -0.595,
    "wins": 2
   },
   "fav_mid_80_90": {
@@ -778,11 +778,11 @@
    "money_needed": 0.0,
    "open": 30,
    "peak_open_cost": 130.183837,
-   "pnl": -4.2749,
+   "pnl": -4.3949,
    "realized": -8.9211,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 2.105,
+   "today": 1.985,
    "trust": {
     "avg_per_100": -100.0,
     "best_per_100": -100.0,
@@ -799,7 +799,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": 4.6462,
+   "unrealized": 4.5262,
    "wins": 0
   },
   "fav_short_90_95": {
@@ -810,11 +810,11 @@
    "money_needed": 0.0,
    "open": 29,
    "peak_open_cost": 140.846732,
-   "pnl": 3.0289,
+   "pnl": 3.0089,
    "realized": 0.5638,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.8603,
+   "today": 0.8403,
    "trust": {
     "avg_per_100": 0.58,
     "best_per_100": 8.47,
@@ -835,7 +835,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -24.03
    },
-   "unrealized": 2.4652,
+   "unrealized": 2.4452,
    "wins": 21
   },
   "fav_short_95_98": {
@@ -846,11 +846,11 @@
    "money_needed": 0.0,
    "open": 13,
    "peak_open_cost": 93.120455,
-   "pnl": -0.4567,
+   "pnl": -0.3517,
    "realized": -0.6998,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.8611,
+   "today": 0.9661,
    "trust": {
     "avg_per_100": -0.38,
     "best_per_100": 3.83,
@@ -871,7 +871,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -13.9
    },
-   "unrealized": 0.2431,
+   "unrealized": 0.3481,
    "wins": 39
   },
   "favorites": {
@@ -907,78 +907,78 @@
    "wins": 0
   },
   "kalshi_patient": {
-   "cash": 201.4378,
-   "closed": 840,
+   "cash": 52.3378,
+   "closed": 843,
    "deposited": 1000.0,
    "losses": 45,
    "money_needed": 1033.2464,
-   "open": 93,
+   "open": 109,
    "peak_open_cost": 1033.246429,
-   "pnl": 2.3261,
-   "realized": 2.3261,
+   "pnl": 4.5261,
+   "realized": 4.5261,
    "refills": 0,
-   "skipped_no_cash": 228,
-   "today": -7.8531,
+   "skipped_no_cash": 229,
+   "today": -5.6531,
    "trust": {
-    "avg_per_100": 0.42,
-    "best_per_100": 1.79,
-    "finished": 840,
-    "profit": -23.3019,
+    "avg_per_100": 0.45,
+    "best_per_100": 1.81,
+    "finished": 843,
+    "profit": -18.7323,
     "proven": false,
-    "to_go": 32453,
+    "to_go": 28551,
     "to_go_to": "Looks real",
-    "worst_per_100": -2.36
+    "worst_per_100": -2.33
    },
    "trust_paper": {
-    "avg_per_100": 0.42,
-    "best_per_100": 1.79,
-    "finished": 840,
-    "profit": 2.3261,
+    "avg_per_100": 0.45,
+    "best_per_100": 1.81,
+    "finished": 843,
+    "profit": 4.5261,
     "proven": false,
-    "to_go": 32451,
+    "to_go": 28549,
     "to_go_to": "Looks real",
-    "worst_per_100": -2.36
+    "worst_per_100": -2.33
    },
-   "unfilled": 5321,
+   "unfilled": 5326,
    "unrealized": 0.0,
-   "wins": 795
+   "wins": 798
   },
   "kc_maker": {
-   "cash": 207.8034,
-   "closed": 3907,
+   "cash": 258.5134,
+   "closed": 3916,
    "deposited": 100.0,
    "losses": 43,
    "money_needed": 69.84,
-   "open": 5,
+   "open": 0,
    "peak_open_cost": 69.84,
-   "pnl": 156.9235,
-   "realized": 156.9235,
+   "pnl": 158.5135,
+   "realized": 158.5135,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 24.8256,
+   "today": 26.4156,
    "trust": {
-    "avg_per_100": 0.42,
-    "best_per_100": 0.7,
-    "finished": 3907,
-    "profit": 383.5971,
+    "avg_per_100": 0.43,
+    "best_per_100": 0.71,
+    "finished": 3916,
+    "profit": 387.6928,
     "proven": false,
-    "to_go": 3123,
+    "to_go": 2999,
     "to_go_to": "Looks real",
     "worst_per_100": -0.15
    },
    "trust_paper": {
-    "avg_per_100": 0.42,
-    "best_per_100": 0.7,
-    "finished": 3907,
-    "profit": 156.9235,
+    "avg_per_100": 0.43,
+    "best_per_100": 0.71,
+    "finished": 3916,
+    "profit": 158.5135,
     "proven": false,
-    "to_go": 3123,
+    "to_go": 2999,
     "to_go_to": "Looks real",
     "worst_per_100": -0.15
    },
-   "unfilled": 815,
+   "unfilled": 816,
    "unrealized": 0.0,
-   "wins": 3864
+   "wins": 3873
   },
   "kc_maker_early": {
    "cash": 129.6413,
@@ -1018,189 +1018,189 @@
    "wins": 329
   },
   "kc_maker_mid": {
-   "cash": 101.68,
-   "closed": 10,
+   "cash": 102.03,
+   "closed": 14,
    "deposited": 100.0,
    "losses": 0,
-   "money_needed": 29.74,
+   "money_needed": 39.65,
    "open": 0,
-   "peak_open_cost": 29.74,
-   "pnl": 1.68,
-   "realized": 1.68,
+   "peak_open_cost": 39.65,
+   "pnl": 2.03,
+   "realized": 2.03,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.68,
+   "today": 2.03,
    "trust": {
-    "avg_per_100": 1.73,
-    "best_per_100": 2.57,
-    "finished": 10,
-    "profit": 4.3285,
+    "avg_per_100": 1.49,
+    "best_per_100": 2.11,
+    "finished": 14,
+    "profit": 5.2115,
     "proven": false,
-    "to_go": 242,
+    "to_go": 277,
     "to_go_to": "Looks real",
-    "worst_per_100": -37.08
+    "worst_per_100": -26.91
    },
    "trust_paper": {
-    "avg_per_100": 1.73,
-    "best_per_100": 2.57,
-    "finished": 10,
-    "profit": 1.68,
+    "avg_per_100": 1.49,
+    "best_per_100": 2.11,
+    "finished": 14,
+    "profit": 2.03,
     "proven": false,
-    "to_go": 242,
+    "to_go": 277,
     "to_go_to": "Looks real",
-    "worst_per_100": -37.08
+    "worst_per_100": -26.91
    },
    "unfilled": 3,
    "unrealized": 0.0,
-   "wins": 10
+   "wins": 14
   },
   "kc_maker_safe": {
-   "cash": 148.9547,
-   "closed": 2037,
+   "cash": 189.2547,
+   "closed": 2044,
    "deposited": 100.0,
    "losses": 12,
    "money_needed": 69.84,
-   "open": 4,
+   "open": 0,
    "peak_open_cost": 69.84,
-   "pnl": 88.1947,
-   "realized": 88.1947,
+   "pnl": 89.2547,
+   "realized": 89.2547,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 10.9257,
+   "today": 11.9857,
    "trust": {
     "avg_per_100": 0.45,
-    "best_per_100": 0.73,
-    "finished": 2037,
-    "profit": 221.4979,
+    "best_per_100": 0.74,
+    "finished": 2044,
+    "profit": 224.2212,
     "proven": false,
-    "to_go": 1607,
+    "to_go": 1535,
     "to_go_to": "Looks real",
     "worst_per_100": -0.17
    },
    "trust_paper": {
     "avg_per_100": 0.45,
-    "best_per_100": 0.73,
-    "finished": 2037,
-    "profit": 88.1947,
+    "best_per_100": 0.74,
+    "finished": 2044,
+    "profit": 89.2547,
     "proven": false,
-    "to_go": 1607,
+    "to_go": 1536,
     "to_go_to": "Looks real",
     "worst_per_100": -0.17
    },
-   "unfilled": 588,
+   "unfilled": 589,
    "unrealized": 0.0,
-   "wins": 2025
+   "wins": 2032
   },
   "kc_maker_safe_kprice": {
-   "cash": 120.0762,
-   "closed": 703,
+   "cash": 120.2162,
+   "closed": 705,
    "deposited": 100.0,
    "losses": 3,
    "money_needed": 69.81,
    "open": 0,
    "peak_open_cost": 69.81,
-   "pnl": 20.0762,
-   "realized": 20.0762,
+   "pnl": 20.2162,
+   "realized": 20.2162,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 5.9157,
+   "today": 6.0557,
    "trust": {
-    "avg_per_100": 0.29,
+    "avg_per_100": 0.3,
     "best_per_100": 0.7,
-    "finished": 703,
-    "profit": 49.6359,
+    "finished": 705,
+    "profit": 49.9883,
     "proven": false,
-    "to_go": 5299,
+    "to_go": 5240,
     "to_go_to": "Looks real",
     "worst_per_100": -0.76
    },
    "trust_paper": {
-    "avg_per_100": 0.29,
+    "avg_per_100": 0.3,
     "best_per_100": 0.7,
-    "finished": 703,
-    "profit": 20.0762,
+    "finished": 705,
+    "profit": 20.2162,
     "proven": false,
-    "to_go": 5297,
+    "to_go": 5238,
     "to_go_to": "Looks real",
     "worst_per_100": -0.76
    },
    "unfilled": 253,
    "unrealized": 0.0,
-   "wins": 700
+   "wins": 702
   },
   "kc_maker_safe_usd": {
-   "cash": 153.014,
-   "closed": 1137,
+   "cash": 153.174,
+   "closed": 1139,
    "deposited": 100.0,
    "losses": 1,
    "money_needed": 69.84,
    "open": 0,
    "peak_open_cost": 69.84,
-   "pnl": 53.014,
-   "realized": 53.014,
+   "pnl": 53.174,
+   "realized": 53.174,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 2.5476,
+   "today": 2.7076,
    "trust": {
-    "avg_per_100": 0.47,
+    "avg_per_100": 0.48,
     "best_per_100": 0.62,
-    "finished": 1137,
-    "profit": 133.0174,
+    "finished": 1139,
+    "profit": 133.4206,
     "proven": false,
-    "to_go": 47,
+    "to_go": 42,
     "to_go_to": "Looks real",
-    "worst_per_100": -0.02
+    "worst_per_100": -0.01
    },
    "trust_paper": {
-    "avg_per_100": 0.47,
+    "avg_per_100": 0.48,
     "best_per_100": 0.62,
-    "finished": 1137,
-    "profit": 53.014,
+    "finished": 1139,
+    "profit": 53.174,
     "proven": false,
-    "to_go": 47,
+    "to_go": 42,
     "to_go_to": "Looks real",
-    "worst_per_100": -0.02
+    "worst_per_100": -0.01
    },
    "unfilled": 403,
    "unrealized": 0.0,
-   "wins": 1136
+   "wins": 1138
   },
   "kc_maker_safe_usd_10m": {
-   "cash": 105.6827,
-   "closed": 75,
+   "cash": 106.0027,
+   "closed": 76,
    "deposited": 100.0,
    "losses": 0,
    "money_needed": 69.25,
    "open": 0,
    "peak_open_cost": 69.25,
-   "pnl": 5.6827,
-   "realized": 5.6827,
+   "pnl": 6.0027,
+   "realized": 6.0027,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 2.2577,
+   "today": 2.5777,
    "trust": {
-    "avg_per_100": 0.79,
-    "best_per_100": 0.92,
-    "finished": 75,
-    "profit": 14.1746,
+    "avg_per_100": 0.82,
+    "best_per_100": 0.96,
+    "finished": 76,
+    "profit": 15.001,
     "proven": false,
-    "to_go": 468,
+    "to_go": 446,
     "to_go_to": "Looks real",
-    "worst_per_100": -4.78
+    "worst_per_100": -4.68
    },
    "trust_paper": {
-    "avg_per_100": 0.79,
-    "best_per_100": 0.92,
-    "finished": 75,
-    "profit": 5.6827,
+    "avg_per_100": 0.82,
+    "best_per_100": 0.96,
+    "finished": 76,
+    "profit": 6.0027,
     "proven": false,
-    "to_go": 468,
+    "to_go": 446,
     "to_go_to": "Looks real",
-    "worst_per_100": -4.78
+    "worst_per_100": -4.68
    },
    "unfilled": 33,
    "unrealized": 0.0,
-   "wins": 75
+   "wins": 76
   },
   "ladder": {
    "cash": 100.0,
@@ -1488,11 +1488,11 @@
    "money_needed": 0.0,
    "open": 6,
    "peak_open_cost": 19.179178,
-   "pnl": -0.6642,
+   "pnl": -0.7092,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 5,
-   "today": 0.475,
+   "today": 0.43,
    "trust": {
     "avg_per_100": 0.0,
     "best_per_100": null,
@@ -1509,7 +1509,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": -0.6642,
+   "unrealized": -0.7092,
    "wins": 0
   },
   "mirror_unlimited": {
@@ -1520,11 +1520,11 @@
    "money_needed": 36.8956,
    "open": 9,
    "peak_open_cost": 36.895605,
-   "pnl": -3.7151,
+   "pnl": -3.7651,
    "realized": -3.6806,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.4355,
+   "today": 0.3855,
    "trust": {
     "avg_per_100": -47.92,
     "best_per_100": 37.75,
@@ -1545,7 +1545,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.0345,
+   "unrealized": -0.0845,
    "wins": 1
   },
   "momentum_week": {
@@ -1556,11 +1556,11 @@
    "money_needed": 0.0,
    "open": 6,
    "peak_open_cost": 45.23564,
-   "pnl": -2.6444,
+   "pnl": -2.8494,
    "realized": -2.5368,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.2998,
+   "today": -0.5048,
    "trust": {
     "avg_per_100": -2.77,
     "best_per_100": 2.57,
@@ -1581,7 +1581,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -19.75
    },
-   "unrealized": -0.1076,
+   "unrealized": -0.3126,
    "wins": 19
   },
   "no_only_90_97": {
@@ -1592,11 +1592,11 @@
    "money_needed": 0.0,
    "open": 38,
    "peak_open_cost": 189.098869,
-   "pnl": -3.4262,
+   "pnl": -3.4412,
    "realized": -8.6974,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.5835,
+   "today": 1.5685,
    "trust": {
     "avg_per_100": -25.87,
     "best_per_100": 5.62,
@@ -1617,7 +1617,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -95.77
    },
-   "unrealized": 5.2711,
+   "unrealized": 5.2561,
    "wins": 5
   },
   "panic_fade": {
@@ -1628,11 +1628,11 @@
    "money_needed": 0.0,
    "open": 8,
    "peak_open_cost": 32.865674,
-   "pnl": 0.0355,
+   "pnl": 0.1455,
    "realized": 1.6068,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.195,
+   "today": -0.085,
    "trust": {
     "avg_per_100": 1.54,
     "best_per_100": 8.82,
@@ -1653,7 +1653,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -19.47
    },
-   "unrealized": -1.5713,
+   "unrealized": -1.4613,
    "wins": 24
   },
   "panic_fade_10c": {
@@ -1664,11 +1664,11 @@
    "money_needed": 0.0,
    "open": 12,
    "peak_open_cost": 52.29493,
-   "pnl": -0.9612,
+   "pnl": -1.0562,
    "realized": 0.94,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.1286,
+   "today": 1.0336,
    "trust": {
     "avg_per_100": 0.0,
     "best_per_100": 9.6,
@@ -1689,7 +1689,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -24.92
    },
-   "unrealized": -1.9012,
+   "unrealized": -1.9962,
    "wins": 20
   },
   "panic_fade_4c": {
@@ -1700,11 +1700,11 @@
    "money_needed": 0.0,
    "open": 20,
    "peak_open_cost": 83.691365,
-   "pnl": -1.2692,
+   "pnl": -1.4642,
    "realized": 1.6776,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.08,
+   "today": 0.885,
    "trust": {
     "avg_per_100": 0.54,
     "best_per_100": 5.01,
@@ -1725,7 +1725,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -11.32
    },
-   "unrealized": -2.9467,
+   "unrealized": -3.1417,
    "wins": 50
   },
   "postcount_no": {
@@ -1736,11 +1736,11 @@
    "money_needed": 0.0,
    "open": 15,
    "peak_open_cost": 99.984771,
-   "pnl": -1.1454,
+   "pnl": -1.3554,
    "realized": 4.4226,
    "refills": 0,
    "skipped_no_cash": 48,
-   "today": -2.3117,
+   "today": -2.5217,
    "trust": {
     "avg_per_100": -0.11,
     "best_per_100": 16.8,
@@ -1761,7 +1761,7 @@
     "to_go_to": "Promising, needs more bets",
     "worst_per_100": -34.66
    },
-   "unrealized": -5.568,
+   "unrealized": -5.778,
    "wins": 37
   },
   "quiet_no": {
@@ -1840,11 +1840,11 @@
    "money_needed": 23.4033,
    "open": 5,
    "peak_open_cost": 23.403332,
-   "pnl": -0.9928,
+   "pnl": -1.0478,
    "realized": -3.6806,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.0095,
+   "today": -0.0645,
    "trust": {
     "avg_per_100": -47.92,
     "best_per_100": 37.75,
@@ -1865,7 +1865,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": 2.6878,
+   "unrealized": 2.6328,
    "wins": 1
   },
   "screener": {
@@ -1937,40 +1937,40 @@
    "wins": 25
   },
   "soccer_draw": {
-   "cash": 43.7949,
-   "closed": 368,
+   "cash": 35.1131,
+   "closed": 381,
    "deposited": 50.0,
-   "losses": 261,
+   "losses": 273,
    "money_needed": 0.0,
-   "open": 40,
+   "open": 37,
    "peak_open_cost": 56.314375,
-   "pnl": 33.5199,
-   "realized": 44.4232,
+   "pnl": 27.3756,
+   "realized": 33.4918,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -11.994,
+   "today": -18.1383,
    "trust": {
-    "avg_per_100": 6.71,
-    "best_per_100": 21.37,
-    "finished": 368,
-    "profit": 605.5106,
+    "avg_per_100": 4.55,
+    "best_per_100": 18.94,
+    "finished": 381,
+    "profit": 415.1571,
     "proven": false,
-    "to_go": 6294,
+    "to_go": 14036,
     "to_go_to": "Looks real",
-    "worst_per_100": -21.99
+    "worst_per_100": -23.6
    },
    "trust_paper": {
-    "avg_per_100": 7.94,
-    "best_per_100": 22.77,
-    "finished": 368,
-    "profit": 44.4232,
+    "avg_per_100": 5.74,
+    "best_per_100": 20.29,
+    "finished": 381,
+    "profit": 33.4918,
     "proven": false,
-    "to_go": 4503,
+    "to_go": 8896,
     "to_go_to": "Looks real",
-    "worst_per_100": -21.09
+    "worst_per_100": -22.73
    },
-   "unrealized": -10.9034,
-   "wins": 107
+   "unrealized": -6.1163,
+   "wins": 108
   },
   "stock_no": {
    "cash": 89.3674,
@@ -2009,40 +2009,40 @@
    "wins": 56
   },
   "tennis_set": {
-   "cash": 283.4806,
-   "closed": 56,
+   "cash": 328.4806,
+   "closed": 57,
    "deposited": 300.0,
    "losses": 16,
    "money_needed": 101.85,
-   "open": 1,
+   "open": 0,
    "peak_open_cost": 101.85,
-   "pnl": 9.0106,
-   "realized": 9.0106,
+   "pnl": 28.4806,
+   "realized": 28.4806,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -15.96,
+   "today": 3.51,
    "trust": {
-    "avg_per_100": 0.68,
-    "best_per_100": 14.97,
-    "finished": 56,
-    "profit": 9.0106,
+    "avg_per_100": 2.0,
+    "best_per_100": 16.21,
+    "finished": 57,
+    "profit": 28.4806,
     "proven": false,
-    "to_go": 94665,
+    "to_go": 10868,
     "to_go_to": "Looks real",
-    "worst_per_100": -28.93
+    "worst_per_100": -27.44
    },
    "trust_paper": {
-    "avg_per_100": 0.68,
-    "best_per_100": 14.97,
-    "finished": 56,
-    "profit": 9.0106,
+    "avg_per_100": 2.0,
+    "best_per_100": 16.21,
+    "finished": 57,
+    "profit": 28.4806,
     "proven": false,
-    "to_go": 94665,
+    "to_go": 10868,
     "to_go_to": "Looks real",
-    "worst_per_100": -28.93
+    "worst_per_100": -27.44
    },
    "unrealized": 0.0,
-   "wins": 40
+   "wins": 41
   },
   "tennis_set_w": {
    "cash": 300.0,
@@ -2148,11 +2148,11 @@
    "money_needed": 31.6001,
    "open": 5,
    "peak_open_cost": 30.345495,
-   "pnl": -10.5801,
+   "pnl": -11.2251,
    "realized": -10.8626,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.3505,
+   "today": -0.2945,
    "trust": {
     "avg_per_100": -3.19,
     "best_per_100": 24.81,
@@ -2173,7 +2173,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -59.26
    },
-   "unrealized": 0.2825,
+   "unrealized": -0.3625,
    "wins": 18
   },
   "w_aghy": {
@@ -2216,11 +2216,11 @@
    "money_needed": 105.2357,
    "open": 36,
    "peak_open_cost": 112.389112,
-   "pnl": 5.8393,
+   "pnl": 4.9143,
    "realized": 7.1534,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.43,
+   "today": 0.505,
    "trust": {
     "avg_per_100": 70.45,
     "best_per_100": 177.5,
@@ -2241,7 +2241,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -1.3141,
+   "unrealized": -2.2391,
    "wins": 3
   },
   "w_anoin123": {
@@ -2252,11 +2252,11 @@
    "money_needed": 223.6517,
    "open": 72,
    "peak_open_cost": 218.874048,
-   "pnl": -17.0017,
+   "pnl": -16.4617,
    "realized": -4.7776,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.0606,
+   "today": -0.5206,
    "trust": {
     "avg_per_100": -13.13,
     "best_per_100": 5.53,
@@ -2277,7 +2277,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -52.67
    },
-   "unrealized": -12.224,
+   "unrealized": -11.684,
    "wins": 14
   },
   "w_balerinacapuchina": {
@@ -2288,11 +2288,11 @@
    "money_needed": 12.6518,
    "open": 3,
    "peak_open_cost": 14.566895,
-   "pnl": 1.7527,
+   "pnl": 1.7127,
    "realized": 1.7559,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.7345,
+   "today": 0.6945,
    "trust": {
     "avg_per_100": 32.38,
     "best_per_100": 110.9,
@@ -2313,7 +2313,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.0032,
+   "unrealized": -0.0432,
    "wins": 1
   },
   "w_bertapotamous": {
@@ -2360,11 +2360,11 @@
    "money_needed": 28.6788,
    "open": 8,
    "peak_open_cost": 26.233801,
-   "pnl": -14.6488,
+   "pnl": -14.7888,
    "realized": -11.7241,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.08,
+   "today": -0.22,
    "trust": {
     "avg_per_100": -41.5,
     "best_per_100": 5.21,
@@ -2385,7 +2385,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -2.9247,
+   "unrealized": -3.0647,
    "wins": 2
   },
   "w_bigggggggg": {
@@ -2396,11 +2396,11 @@
    "money_needed": 126.6242,
    "open": 26,
    "peak_open_cost": 118.094132,
-   "pnl": -19.8212,
+   "pnl": -19.7012,
    "realized": -16.1283,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.0434,
+   "today": 0.1634,
    "trust": {
     "avg_per_100": -10.16,
     "best_per_100": -5.62,
@@ -2417,7 +2417,7 @@
     "proven": false,
     "worst_per_100": -19.54
    },
-   "unrealized": -3.6929,
+   "unrealized": -3.5729,
    "wins": 29
   },
   "w_blondbeast": {
@@ -2428,11 +2428,11 @@
    "money_needed": 18.8207,
    "open": 5,
    "peak_open_cost": 17.514238,
-   "pnl": 0.1774,
+   "pnl": 0.1724,
    "realized": -0.8309,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.03,
+   "today": -0.035,
    "trust": {
     "avg_per_100": 0.73,
     "best_per_100": 57.04,
@@ -2453,7 +2453,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": 1.0083,
+   "unrealized": 1.0033,
    "wins": 6
   },
   "w_cigarettes": {
@@ -2464,11 +2464,11 @@
    "money_needed": 226.9647,
    "open": 63,
    "peak_open_cost": 217.015871,
-   "pnl": -25.6625,
+   "pnl": -25.2075,
    "realized": -13.7365,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.8628,
+   "today": -1.4078,
    "trust": {
     "avg_per_100": -6.12,
     "best_per_100": 11.0,
@@ -2489,7 +2489,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -39.88
    },
-   "unrealized": -11.926,
+   "unrealized": -11.471,
    "wins": 66
   },
   "w_debased": {
@@ -2500,11 +2500,11 @@
    "money_needed": 41.746,
    "open": 12,
    "peak_open_cost": 42.069483,
-   "pnl": -6.7976,
+   "pnl": -7.0976,
    "realized": -6.8982,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.04,
+   "today": 0.74,
    "trust": {
     "avg_per_100": -30.41,
     "best_per_100": -12.69,
@@ -2521,7 +2521,7 @@
     "proven": false,
     "worst_per_100": -67.77
    },
-   "unrealized": 0.1006,
+   "unrealized": -0.1994,
    "wins": 9
   },
   "w_dominus": {
@@ -2532,11 +2532,11 @@
    "money_needed": 14.0013,
    "open": 2,
    "peak_open_cost": 13.448543,
-   "pnl": 6.5769,
+   "pnl": 6.7419,
    "realized": 6.0323,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.61,
+   "today": 0.775,
    "trust": {
     "avg_per_100": 18.97,
     "best_per_100": 53.78,
@@ -2557,7 +2557,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -54.81
    },
-   "unrealized": 0.5447,
+   "unrealized": 0.7097,
    "wins": 5
   },
   "w_dromedaryy": {
@@ -2568,11 +2568,11 @@
    "money_needed": 8.0849,
    "open": 11,
    "peak_open_cost": 13.178129,
-   "pnl": 3.1526,
+   "pnl": 2.9976,
    "realized": 5.0932,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.625,
+   "today": 0.47,
    "trust": {
     "avg_per_100": 62.51,
     "best_per_100": 199.64,
@@ -2593,7 +2593,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -1.9406,
+   "unrealized": -2.0956,
    "wins": 3
   },
   "w_dropper": {
@@ -2604,11 +2604,11 @@
    "money_needed": 17.2957,
    "open": 2,
    "peak_open_cost": 20.239209,
-   "pnl": -10.666,
+   "pnl": -10.616,
    "realized": -9.316,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.1,
+   "today": -0.05,
    "trust": {
     "avg_per_100": -16.83,
     "best_per_100": 29.96,
@@ -2629,7 +2629,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -1.35,
+   "unrealized": -1.3,
    "wins": 5
   },
   "w_ecash": {
@@ -2637,14 +2637,14 @@
    "closed": 9,
    "deposited": 0.0,
    "losses": 5,
-   "money_needed": 73.2215,
-   "open": 16,
-   "peak_open_cost": 57.939396,
-   "pnl": -19.1715,
+   "money_needed": 77.5715,
+   "open": 17,
+   "peak_open_cost": 62.289396,
+   "pnl": -19.2865,
    "realized": -15.2821,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.6152,
+   "today": 0.5002,
    "trust": {
     "avg_per_100": -48.85,
     "best_per_100": -16.24,
@@ -2661,7 +2661,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": -3.8894,
+   "unrealized": -4.0044,
    "wins": 4
   },
   "w_eightpenguins": {
@@ -2672,11 +2672,11 @@
    "money_needed": 19.8359,
    "open": 7,
    "peak_open_cost": 24.530279,
-   "pnl": -1.1384,
+   "pnl": -1.0834,
    "realized": -1.0903,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.505,
+   "today": -0.45,
    "trust": {
     "avg_per_100": 0.18,
     "best_per_100": 44.92,
@@ -2697,7 +2697,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -93.57
    },
-   "unrealized": -0.0481,
+   "unrealized": 0.0069,
    "wins": 6
   },
   "w_flawfence": {
@@ -2740,11 +2740,11 @@
    "money_needed": 44.6412,
    "open": 20,
    "peak_open_cost": 38.552311,
-   "pnl": -15.0776,
+   "pnl": -15.2526,
    "realized": -13.4693,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.1722,
+   "today": -0.0028,
    "trust": {
     "avg_per_100": -22.25,
     "best_per_100": 2.92,
@@ -2765,7 +2765,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -75.34
    },
-   "unrealized": -1.6084,
+   "unrealized": -1.7834,
    "wins": 7
   },
   "w_hauchn": {
@@ -2776,11 +2776,11 @@
    "money_needed": 14.7479,
    "open": 5,
    "peak_open_cost": 15.056714,
-   "pnl": -2.0029,
+   "pnl": -2.0479,
    "realized": 1.8053,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.805,
+   "today": -0.85,
    "trust": {
     "avg_per_100": 32.12,
     "best_per_100": 49.55,
@@ -2801,7 +2801,7 @@
     "to_go_to": "Promising, needs more bets",
     "worst_per_100": -100.0
    },
-   "unrealized": -3.8082,
+   "unrealized": -3.8532,
    "wins": 2
   },
   "w_hell0pia": {
@@ -2880,11 +2880,11 @@
    "money_needed": 45.7185,
    "open": 6,
    "peak_open_cost": 42.234534,
-   "pnl": -8.1435,
+   "pnl": -8.1085,
    "realized": -6.8947,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.05,
+   "today": 0.085,
    "trust": {
     "avg_per_100": -7.92,
     "best_per_100": 6.19,
@@ -2905,7 +2905,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -40.0
    },
-   "unrealized": -1.2488,
+   "unrealized": -1.2138,
    "wins": 13
   },
   "w_jsram": {
@@ -2948,11 +2948,11 @@
    "money_needed": 25.427,
    "open": 21,
    "peak_open_cost": 28.751079,
-   "pnl": -1.172,
+   "pnl": -1.402,
    "realized": 3.324,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.1166,
+   "today": -0.1134,
    "trust": {
     "avg_per_100": 69.03,
     "best_per_100": 127.88,
@@ -2973,7 +2973,7 @@
     "to_go_to": "Promising, needs more bets",
     "worst_per_100": -100.0
    },
-   "unrealized": -4.4961,
+   "unrealized": -4.7261,
    "wins": 3
   },
   "w_lpgb": {
@@ -3048,11 +3048,11 @@
    "money_needed": 3.8943,
    "open": 1,
    "peak_open_cost": 3.894275,
-   "pnl": 0.6057,
+   "pnl": 0.6557,
    "realized": 0.0,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.05,
+   "today": 0.0,
    "trust": {
     "avg_per_100": 0.0,
     "best_per_100": null,
@@ -3069,7 +3069,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": 0.6057,
+   "unrealized": 0.6557,
    "wins": 0
   },
   "w_pako": {
@@ -3184,11 +3184,11 @@
    "money_needed": 11.3838,
    "open": 2,
    "peak_open_cost": 11.582237,
-   "pnl": -4.4839,
+   "pnl": -4.5339,
    "realized": -3.2355,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.05,
+   "today": 0.0,
    "trust": {
     "avg_per_100": -28.53,
     "best_per_100": 10.71,
@@ -3209,7 +3209,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -1.2484,
+   "unrealized": -1.2984,
    "wins": 4
   },
   "w_sbel": {
@@ -3220,11 +3220,11 @@
    "money_needed": 164.6212,
    "open": 16,
    "peak_open_cost": 134.325154,
-   "pnl": -55.2562,
+   "pnl": -55.4162,
    "realized": -48.0133,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.09,
+   "today": -0.07,
    "trust": {
     "avg_per_100": -21.02,
     "best_per_100": -6.78,
@@ -3241,7 +3241,7 @@
     "proven": false,
     "worst_per_100": -48.98
    },
-   "unrealized": -7.2429,
+   "unrealized": -7.4029,
    "wins": 51
   },
   "w_the_joker": {
@@ -3252,11 +3252,11 @@
    "money_needed": 31.0719,
    "open": 4,
    "peak_open_cost": 29.832281,
-   "pnl": 1.436,
+   "pnl": 1.446,
    "realized": 1.6431,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.53,
+   "today": 0.54,
    "trust": {
     "avg_per_100": -6.43,
     "best_per_100": 25.34,
@@ -3277,7 +3277,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -74.07
    },
-   "unrealized": -0.2071,
+   "unrealized": -0.1971,
    "wins": 9
   },
   "w_thereturnofdarthmaul": {
@@ -3324,11 +3324,11 @@
    "money_needed": 157.1696,
    "open": 27,
    "peak_open_cost": 117.721149,
-   "pnl": -22.2279,
+   "pnl": -22.6879,
    "realized": -32.5185,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 7.1417,
+   "today": 6.6817,
    "trust": {
     "avg_per_100": 8.65,
     "best_per_100": 29.34,
@@ -3349,7 +3349,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -31.19
    },
-   "unrealized": 10.2906,
+   "unrealized": 9.8306,
    "wins": 90
   },
   "w_tunatyler": {
@@ -3360,11 +3360,11 @@
    "money_needed": 23.8393,
    "open": 9,
    "peak_open_cost": 23.238985,
-   "pnl": 0.2407,
+   "pnl": 0.2307,
    "realized": -0.6003,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.4545,
+   "today": -0.4645,
    "trust": {
     "avg_per_100": 9.97,
     "best_per_100": 44.16,
@@ -3385,43 +3385,43 @@
     "to_go_to": "Looks real",
     "worst_per_100": -74.68
    },
-   "unrealized": 0.841,
+   "unrealized": 0.831,
    "wins": 5
   },
   "w_underperformingforal": {
    "cash": null,
-   "closed": 32,
+   "closed": 35,
    "deposited": 0.0,
-   "losses": 22,
+   "losses": 25,
    "money_needed": 31.7751,
-   "open": 11,
+   "open": 8,
    "peak_open_cost": 30.703175,
-   "pnl": -3.1374,
-   "realized": -1.0967,
+   "pnl": -2.9374,
+   "realized": -1.5607,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -2.1223,
+   "today": -1.9223,
    "trust": {
-    "avg_per_100": -4.77,
-    "best_per_100": 1.66,
-    "finished": 32,
-    "profit": -39.4906,
+    "avg_per_100": -5.06,
+    "best_per_100": 0.83,
+    "finished": 35,
+    "profit": -45.7342,
     "proven": false,
-    "to_go": 28,
+    "to_go": 14,
     "to_go_to": "Losing",
-    "worst_per_100": -22.86
+    "worst_per_100": -21.63
    },
    "trust_paper": {
-    "avg_per_100": -4.57,
-    "best_per_100": 1.82,
-    "finished": 32,
-    "profit": -1.0967,
+    "avg_per_100": -4.61,
+    "best_per_100": 1.24,
+    "finished": 35,
+    "profit": -1.5607,
     "proven": false,
-    "to_go": 32,
+    "to_go": 23,
     "to_go_to": "Losing",
-    "worst_per_100": -22.62
+    "worst_per_100": -21.16
    },
-   "unrealized": -2.0407,
+   "unrealized": -1.3767,
    "wins": 10
   },
   "w_vilgefortz": {
@@ -3432,11 +3432,11 @@
    "money_needed": 14.2163,
    "open": 2,
    "peak_open_cost": 14.216266,
-   "pnl": -4.7565,
+   "pnl": -4.7515,
    "realized": -4.7692,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.01,
+   "today": 0.015,
    "trust": {
     "avg_per_100": -99.9,
     "best_per_100": null,
@@ -3453,7 +3453,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": 0.0127,
+   "unrealized": 0.0177,
    "wins": 0
   },
   "w_wan123": {
@@ -3464,11 +3464,11 @@
    "money_needed": 17.2899,
    "open": 5,
    "peak_open_cost": 13.371,
-   "pnl": -2.8501,
+   "pnl": -2.8601,
    "realized": -3.4162,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.125,
+   "today": 0.115,
    "trust": {
     "avg_per_100": -58.11,
     "best_per_100": 10.78,
@@ -3489,7 +3489,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": 0.5662,
+   "unrealized": 0.5562,
    "wins": 1
   },
   "w_youngalphagoat": {
@@ -3532,11 +3532,11 @@
    "money_needed": 34.3996,
    "open": 6,
    "peak_open_cost": 33.144995,
-   "pnl": -8.9796,
+   "pnl": -9.6246,
    "realized": -10.8626,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.4005,
+   "today": -0.2445,
    "trust": {
     "avg_per_100": -3.19,
     "best_per_100": 24.81,
@@ -3557,7 +3557,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -59.26
    },
-   "unrealized": 1.883,
+   "unrealized": 1.238,
    "wins": 18
   },
   "wb_aghy": {
@@ -3568,11 +3568,11 @@
    "money_needed": 15.8479,
    "open": 7,
    "peak_open_cost": 15.68535,
-   "pnl": 2.9921,
+   "pnl": 3.0971,
    "realized": -3.048,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.185,
+   "today": 0.29,
    "trust": {
     "avg_per_100": -100.0,
     "best_per_100": null,
@@ -3589,7 +3589,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": 6.0401,
+   "unrealized": 6.1451,
    "wins": 0
   },
   "wb_albert_1953": {
@@ -3600,11 +3600,11 @@
    "money_needed": 138.8928,
    "open": 46,
    "peak_open_cost": 147.299484,
-   "pnl": 13.7632,
+   "pnl": 12.8982,
    "realized": 8.9606,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.175,
+   "today": 0.31,
    "trust": {
     "avg_per_100": 40.71,
     "best_per_100": 110.58,
@@ -3625,7 +3625,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": 4.8026,
+   "unrealized": 3.9376,
    "wins": 5
   },
   "wb_anoin123": {
@@ -3636,11 +3636,11 @@
    "money_needed": 255.1402,
    "open": 80,
    "peak_open_cost": 252.602368,
-   "pnl": -10.6652,
+   "pnl": -10.3352,
    "realized": -2.5378,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -2.9506,
+   "today": -2.6206,
    "trust": {
     "avg_per_100": -10.51,
     "best_per_100": 6.78,
@@ -3661,7 +3661,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -47.79
    },
-   "unrealized": -8.1274,
+   "unrealized": -7.7974,
    "wins": 15
   },
   "wb_balerinacapuchina": {
@@ -3672,11 +3672,11 @@
    "money_needed": 40.0786,
    "open": 10,
    "peak_open_cost": 42.136462,
-   "pnl": 2.5759,
+   "pnl": 2.2459,
    "realized": 1.8986,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.9845,
+   "today": 0.6545,
    "trust": {
     "avg_per_100": 25.02,
     "best_per_100": 81.85,
@@ -3697,7 +3697,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": 0.6773,
+   "unrealized": 0.3473,
    "wins": 2
   },
   "wb_bertapotamous": {
@@ -3708,11 +3708,11 @@
    "money_needed": 53.8539,
    "open": 12,
    "peak_open_cost": 53.733996,
-   "pnl": 3.135,
+   "pnl": 3.1,
    "realized": 0.8779,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.09,
+   "today": 1.055,
    "trust": {
     "avg_per_100": -7.31,
     "best_per_100": 18.52,
@@ -3733,7 +3733,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -66.79
    },
-   "unrealized": 2.2572,
+   "unrealized": 2.2222,
    "wins": 6
   },
   "wb_betwick": {
@@ -3744,11 +3744,11 @@
    "money_needed": 50.8204,
    "open": 17,
    "peak_open_cost": 52.844616,
-   "pnl": -12.8772,
+   "pnl": -13.0772,
    "realized": -9.5462,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.19,
+   "today": -0.39,
    "trust": {
     "avg_per_100": -27.48,
     "best_per_100": 4.17,
@@ -3769,7 +3769,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -92.3
    },
-   "unrealized": -3.331,
+   "unrealized": -3.531,
    "wins": 5
   },
   "wb_bigggggggg": {
@@ -3780,11 +3780,11 @@
    "money_needed": 133.8667,
    "open": 26,
    "peak_open_cost": 119.541887,
-   "pnl": -26.5873,
+   "pnl": -26.4673,
    "realized": -22.8943,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.0139,
+   "today": 0.1061,
    "trust": {
     "avg_per_100": -12.03,
     "best_per_100": -7.22,
@@ -3801,7 +3801,7 @@
     "proven": false,
     "worst_per_100": -21.83
    },
-   "unrealized": -3.6929,
+   "unrealized": -3.5729,
    "wins": 31
   },
   "wb_blondbeast": {
@@ -3848,11 +3848,11 @@
    "money_needed": 245.1654,
    "open": 68,
    "peak_open_cost": 230.496491,
-   "pnl": -29.8682,
+   "pnl": -29.4032,
    "realized": -18.4566,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.9028,
+   "today": -1.4378,
    "trust": {
     "avg_per_100": -7.3,
     "best_per_100": 8.56,
@@ -3873,7 +3873,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -38.41
    },
-   "unrealized": -11.4116,
+   "unrealized": -10.9466,
    "wins": 72
   },
   "wb_debased": {
@@ -3884,11 +3884,11 @@
    "money_needed": 67.4815,
    "open": 22,
    "peak_open_cost": 70.228392,
-   "pnl": -5.9667,
+   "pnl": -6.2667,
    "realized": -4.5519,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.105,
+   "today": 0.805,
    "trust": {
     "avg_per_100": -22.68,
     "best_per_100": -6.42,
@@ -3905,7 +3905,7 @@
     "proven": false,
     "worst_per_100": -57.3
    },
-   "unrealized": -1.4148,
+   "unrealized": -1.7148,
    "wins": 12
   },
   "wb_dominus": {
@@ -3916,11 +3916,11 @@
    "money_needed": 25.0655,
    "open": 4,
    "peak_open_cost": 22.972093,
-   "pnl": 4.8977,
+   "pnl": 5.0627,
    "realized": 4.4916,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.705,
+   "today": 0.87,
    "trust": {
     "avg_per_100": 6.48,
     "best_per_100": 36.41,
@@ -3941,7 +3941,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -55.61
    },
-   "unrealized": 0.4061,
+   "unrealized": 0.5711,
    "wins": 7
   },
   "wb_dromedaryy": {
@@ -3952,11 +3952,11 @@
    "money_needed": 21.9723,
    "open": 24,
    "peak_open_cost": 27.06556,
-   "pnl": 8.0252,
+   "pnl": 7.7352,
    "realized": 5.0932,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.33,
+   "today": 1.04,
    "trust": {
     "avg_per_100": 62.51,
     "best_per_100": 199.64,
@@ -3977,7 +3977,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": 2.9319,
+   "unrealized": 2.6419,
    "wins": 3
   },
   "wb_dropper": {
@@ -3988,11 +3988,11 @@
    "money_needed": 27.9522,
    "open": 5,
    "peak_open_cost": 29.123309,
-   "pnl": -7.1525,
+   "pnl": -7.1025,
    "realized": -7.4778,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.06,
+   "today": -0.01,
    "trust": {
     "avg_per_100": 0.07,
     "best_per_100": 53.58,
@@ -4013,7 +4013,7 @@
     "to_go_to": "Promising, needs more bets",
     "worst_per_100": -100.0
    },
-   "unrealized": 0.3253,
+   "unrealized": 0.3753,
    "wins": 6
   },
   "wb_ecash": {
@@ -4021,14 +4021,14 @@
    "closed": 16,
    "deposited": 0.0,
    "losses": 8,
-   "money_needed": 146.0361,
-   "open": 34,
-   "peak_open_cost": 128.270191,
-   "pnl": -20.7811,
+   "money_needed": 150.3861,
+   "open": 35,
+   "peak_open_cost": 132.620191,
+   "pnl": -21.3361,
    "realized": -17.7659,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.8103,
+   "today": 0.2553,
    "trust": {
     "avg_per_100": -33.92,
     "best_per_100": -12.5,
@@ -4045,7 +4045,7 @@
     "proven": false,
     "worst_per_100": -78.73
    },
-   "unrealized": -3.0152,
+   "unrealized": -3.5702,
    "wins": 8
   },
   "wb_eightpenguins": {
@@ -4056,11 +4056,11 @@
    "money_needed": 36.4443,
    "open": 17,
    "peak_open_cost": 41.138689,
-   "pnl": -4.5925,
+   "pnl": -4.6575,
    "realized": -2.07,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.2841,
+   "today": -0.3491,
    "trust": {
     "avg_per_100": -2.43,
     "best_per_100": 33.89,
@@ -4081,7 +4081,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -79.8
    },
-   "unrealized": -2.5225,
+   "unrealized": -2.5875,
    "wins": 6
   },
   "wb_flawfence": {
@@ -4092,11 +4092,11 @@
    "money_needed": 35.9851,
    "open": 12,
    "peak_open_cost": 35.312468,
-   "pnl": -1.3952,
+   "pnl": -1.6102,
    "realized": -1.1829,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.17,
+   "today": -0.045,
    "trust": {
     "avg_per_100": -55.85,
     "best_per_100": 16.77,
@@ -4117,7 +4117,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.2122,
+   "unrealized": -0.4272,
    "wins": 0
   },
   "wb_groth": {
@@ -4128,11 +4128,11 @@
    "money_needed": 88.9478,
    "open": 33,
    "peak_open_cost": 90.635295,
-   "pnl": -18.7692,
+   "pnl": -18.6542,
    "realized": -11.9131,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.4328,
+   "today": -1.3178,
    "trust": {
     "avg_per_100": -11.63,
     "best_per_100": 5.24,
@@ -4153,7 +4153,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -48.05
    },
-   "unrealized": -6.8562,
+   "unrealized": -6.7412,
    "wins": 12
   },
   "wb_hauchn": {
@@ -4164,11 +4164,11 @@
    "money_needed": 35.4284,
    "open": 11,
    "peak_open_cost": 35.428396,
-   "pnl": -0.0704,
+   "pnl": -0.1504,
    "realized": 4.438,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -1.92,
+   "today": -2.0,
    "trust": {
     "avg_per_100": 52.83,
     "best_per_100": 118.92,
@@ -4189,7 +4189,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -87.6
    },
-   "unrealized": -4.5083,
+   "unrealized": -4.5883,
    "wins": 7
   },
   "wb_hell0pia": {
@@ -4200,11 +4200,11 @@
    "money_needed": 27.7109,
    "open": 2,
    "peak_open_cost": 27.710855,
-   "pnl": 4.2653,
+   "pnl": 4.3153,
    "realized": 3.2168,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.05,
+   "today": 0.0,
    "trust": {
     "avg_per_100": 0.33,
     "best_per_100": 27.63,
@@ -4225,7 +4225,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -62.81
    },
-   "unrealized": 1.0485,
+   "unrealized": 1.0985,
    "wins": 7
   },
   "wb_hellyeahtrader": {
@@ -4268,11 +4268,11 @@
    "money_needed": 90.6383,
    "open": 16,
    "peak_open_cost": 87.104394,
-   "pnl": -8.4808,
+   "pnl": -8.3908,
    "realized": -7.3367,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.395,
+   "today": 1.485,
    "trust": {
     "avg_per_100": -7.9,
     "best_per_100": 4.88,
@@ -4293,7 +4293,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -36.77
    },
-   "unrealized": -1.1441,
+   "unrealized": -1.0541,
    "wins": 14
   },
   "wb_jsram": {
@@ -4304,11 +4304,11 @@
    "money_needed": 9.8622,
    "open": 5,
    "peak_open_cost": 9.862228,
-   "pnl": -2.1672,
+   "pnl": -2.1822,
    "realized": -1.7561,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.08,
+   "today": 0.065,
    "trust": {
     "avg_per_100": -100.0,
     "best_per_100": null,
@@ -4325,7 +4325,7 @@
     "proven": false,
     "worst_per_100": -100.0
    },
-   "unrealized": -0.4111,
+   "unrealized": -0.4261,
    "wins": 0
   },
   "wb_lava_lava": {
@@ -4336,11 +4336,11 @@
    "money_needed": 40.557,
    "open": 26,
    "peak_open_cost": 43.881075,
-   "pnl": -1.697,
+   "pnl": -2.207,
    "realized": 3.324,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.4216,
+   "today": -0.0884,
    "trust": {
     "avg_per_100": 69.03,
     "best_per_100": 127.88,
@@ -4361,7 +4361,7 @@
     "to_go_to": "Promising, needs more bets",
     "worst_per_100": -100.0
    },
-   "unrealized": -5.0211,
+   "unrealized": -5.5311,
    "wins": 3
   },
   "wb_lpgb": {
@@ -4404,11 +4404,11 @@
    "money_needed": 101.9405,
    "open": 21,
    "peak_open_cost": 98.496974,
-   "pnl": -6.5609,
+   "pnl": -6.5259,
    "realized": -7.5485,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.12,
+   "today": 0.155,
    "trust": {
     "avg_per_100": -20.86,
     "best_per_100": 12.06,
@@ -4429,7 +4429,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -91.26
    },
-   "unrealized": 0.9876,
+   "unrealized": 1.0226,
    "wins": 6
   },
   "wb_new_jeans": {
@@ -4440,11 +4440,11 @@
    "money_needed": 19.7583,
    "open": 7,
    "peak_open_cost": 19.758262,
-   "pnl": 3.9227,
+   "pnl": 3.9727,
    "realized": -0.298,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.205,
+   "today": 0.255,
    "trust": {
     "avg_per_100": -20.36,
     "best_per_100": 17.28,
@@ -4465,7 +4465,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": 4.2206,
+   "unrealized": 4.2706,
    "wins": 1
   },
   "wb_pako": {
@@ -4476,11 +4476,11 @@
    "money_needed": 26.082,
    "open": 8,
    "peak_open_cost": 27.40356,
-   "pnl": -1.0004,
+   "pnl": -0.9854,
    "realized": 1.0095,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.1486,
+   "today": 0.1636,
    "trust": {
     "avg_per_100": 10.83,
     "best_per_100": 79.12,
@@ -4501,7 +4501,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -2.0099,
+   "unrealized": -1.9949,
    "wins": 3
   },
   "wb_rabbitfoot1": {
@@ -4580,11 +4580,11 @@
    "money_needed": 78.304,
    "open": 14,
    "peak_open_cost": 78.302485,
-   "pnl": -3.7471,
+   "pnl": -3.7971,
    "realized": -4.2698,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.185,
+   "today": -0.235,
    "trust": {
     "avg_per_100": -16.31,
     "best_per_100": 4.16,
@@ -4605,7 +4605,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -59.1
    },
-   "unrealized": 0.5227,
+   "unrealized": 0.4727,
    "wins": 5
   },
   "wb_sbel": {
@@ -4616,11 +4616,11 @@
    "money_needed": 173.0596,
    "open": 16,
    "peak_open_cost": 134.325154,
-   "pnl": -63.6946,
+   "pnl": -63.8546,
    "realized": -56.4517,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.09,
+   "today": -0.07,
    "trust": {
     "avg_per_100": -24.17,
     "best_per_100": -10.45,
@@ -4637,7 +4637,7 @@
     "proven": false,
     "worst_per_100": -51.09
    },
-   "unrealized": -7.2429,
+   "unrealized": -7.4029,
    "wins": 52
   },
   "wb_the_joker": {
@@ -4648,11 +4648,11 @@
    "money_needed": 81.209,
    "open": 16,
    "peak_open_cost": 74.144053,
-   "pnl": -5.331,
+   "pnl": -5.411,
    "realized": -5.1666,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.325,
+   "today": 1.245,
    "trust": {
     "avg_per_100": -19.4,
     "best_per_100": 7.96,
@@ -4673,7 +4673,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -75.96
    },
-   "unrealized": -0.1644,
+   "unrealized": -0.2444,
    "wins": 10
   },
   "wb_thereturnofdarthmaul": {
@@ -4684,11 +4684,11 @@
    "money_needed": 81.7738,
    "open": 15,
    "peak_open_cost": 81.773762,
-   "pnl": 4.8262,
+   "pnl": 4.8312,
    "realized": 7.915,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.23,
+   "today": 0.235,
    "trust": {
     "avg_per_100": 158.23,
     "best_per_100": 391.27,
@@ -4709,7 +4709,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -100.0
    },
-   "unrealized": -3.0887,
+   "unrealized": -3.0837,
    "wins": 6
   },
   "wb_tokor": {
@@ -4720,11 +4720,11 @@
    "money_needed": 205.9352,
    "open": 38,
    "peak_open_cost": 163.493027,
-   "pnl": -27.3585,
+   "pnl": -27.7735,
    "realized": -41.2425,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 7.3367,
+   "today": 6.9217,
    "trust": {
     "avg_per_100": -2.44,
     "best_per_100": 9.24,
@@ -4745,7 +4745,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -25.14
    },
-   "unrealized": 13.8839,
+   "unrealized": 13.4689,
    "wins": 93
   },
   "wb_tunatyler": {
@@ -4756,11 +4756,11 @@
    "money_needed": 26.3669,
    "open": 12,
    "peak_open_cost": 25.766618,
-   "pnl": -0.0569,
+   "pnl": -0.0669,
    "realized": -0.6003,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -0.3695,
+   "today": -0.3795,
    "trust": {
     "avg_per_100": 9.97,
     "best_per_100": 44.16,
@@ -4781,43 +4781,43 @@
     "to_go_to": "Looks real",
     "worst_per_100": -74.68
    },
-   "unrealized": 0.5434,
+   "unrealized": 0.5334,
    "wins": 5
   },
   "wb_underperformingforal": {
    "cash": null,
-   "closed": 31,
+   "closed": 34,
    "deposited": 0.0,
-   "losses": 21,
+   "losses": 24,
    "money_needed": 31.815,
-   "open": 11,
+   "open": 8,
    "peak_open_cost": 30.703175,
-   "pnl": -3.1773,
-   "realized": -1.1366,
+   "pnl": -2.9773,
+   "realized": -1.6005,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -2.1223,
+   "today": -1.9223,
    "trust": {
-    "avg_per_100": -5.03,
-    "best_per_100": 1.57,
-    "finished": 31,
-    "profit": -40.3422,
+    "avg_per_100": -5.31,
+    "best_per_100": 0.72,
+    "finished": 34,
+    "profit": -46.5858,
     "proven": false,
-    "to_go": 24,
+    "to_go": 11,
     "to_go_to": "Losing",
-    "worst_per_100": -23.62
+    "worst_per_100": -22.29
    },
    "trust_paper": {
-    "avg_per_100": -4.81,
-    "best_per_100": 1.77,
-    "finished": 31,
-    "profit": -1.1366,
+    "avg_per_100": -4.82,
+    "best_per_100": 1.17,
+    "finished": 34,
+    "profit": -1.6005,
     "proven": false,
-    "to_go": 29,
+    "to_go": 20,
     "to_go_to": "Losing",
-    "worst_per_100": -23.37
+    "worst_per_100": -21.8
    },
-   "unrealized": -2.0407,
+   "unrealized": -1.3767,
    "wins": 10
   },
   "wb_vilgefortz": {
@@ -4828,11 +4828,11 @@
    "money_needed": 20.7165,
    "open": 4,
    "peak_open_cost": 20.716461,
-   "pnl": -4.8948,
+   "pnl": -4.8698,
    "realized": -4.7839,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.095,
+   "today": 0.12,
    "trust": {
     "avg_per_100": -28.67,
     "best_per_100": 11.11,
@@ -4853,7 +4853,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": -0.1109,
+   "unrealized": -0.0859,
    "wins": 2
   },
   "wb_wan123": {
@@ -4864,11 +4864,11 @@
    "money_needed": 56.0251,
    "open": 16,
    "peak_open_cost": 52.106245,
-   "pnl": -0.0503,
+   "pnl": 0.4797,
    "realized": -0.3929,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.77,
+   "today": 1.3,
    "trust": {
     "avg_per_100": -26.6,
     "best_per_100": 21.84,
@@ -4889,7 +4889,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": 0.3426,
+   "unrealized": 0.8726,
    "wins": 4
   },
   "wb_youngalphagoat": {
@@ -4900,11 +4900,11 @@
    "money_needed": 82.666,
    "open": 13,
    "peak_open_cost": 82.666047,
-   "pnl": -28.4872,
+   "pnl": -28.0972,
    "realized": -16.5046,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": -2.775,
+   "today": -2.385,
    "trust": {
     "avg_per_100": -48.84,
     "best_per_100": -23.11,
@@ -4921,7 +4921,7 @@
     "proven": false,
     "worst_per_100": -99.58
    },
-   "unrealized": -11.9825,
+   "unrealized": -11.5925,
    "wins": 2
   },
   "word_no": {
@@ -4932,11 +4932,11 @@
    "money_needed": 0.0,
    "open": 3,
    "peak_open_cost": 9.685,
-   "pnl": 0.963,
+   "pnl": 0.983,
    "realized": -1.1672,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 0.03,
+   "today": 0.05,
    "trust": {
     "avg_per_100": -52.95,
     "best_per_100": 24.45,
@@ -4957,7 +4957,7 @@
     "to_go_to": "Losing",
     "worst_per_100": -100.0
    },
-   "unrealized": 2.1302,
+   "unrealized": 2.1502,
    "wins": 1
   },
   "wx_forecast": {
@@ -5000,11 +5000,11 @@
    "money_needed": 0.0,
    "open": 20,
    "peak_open_cost": 96.137593,
-   "pnl": 3.8415,
+   "pnl": 3.6265,
    "realized": 5.704,
    "refills": 0,
    "skipped_no_cash": 0,
-   "today": 1.2916,
+   "today": 1.0766,
    "trust": {
     "avg_per_100": 8.96,
     "best_per_100": 10.4,
@@ -5025,7 +5025,7 @@
     "to_go_to": "Looks real",
     "worst_per_100": -21.64
    },
-   "unrealized": -1.8625,
+   "unrealized": -2.0775,
    "wins": 14
   }
  }
