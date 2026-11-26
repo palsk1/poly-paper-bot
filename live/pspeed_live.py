@@ -359,12 +359,19 @@ def sender():
     return send
 
 
-def keep_line_open(stop_ev):
+LINE_TEST_DEFAULT = "no"     # "yes" once Jan OKs the can't-fill test buys
+
+
+def keep_line_open(stop_ev, sp=None, every_s=10, test_every_s=900):
     """A tiny public call to Polymarket's order server every 10 s on the same connection the orders use, so an order
-    never waits for a new connection (and we see the round trip in the log every hour)."""
+    never waits for a new connection. Every 15 min the round trips go into the public log ("line").
+    With PSPEED_LINE_TEST=yes (Jan's OK needed) it also sends a test buy every 15 min that cannot be filled: all or
+    nothing, $1 at most 1c a share, on a side whose cheapest offer is 10c or more. It is killed after Polymarket's hold,
+    so its post_ms shows how long Polymarket takes to answer an order when nobody races us (26 Nov: real orders took
+    0.5-1.7 s against a 60 ms check-in)."""
     import poly_live as P
     ms, fails = [], 0
-    last_log = time.time()
+    last_log = last_test = time.time()
     while not stop_ev.is_set():
         t0 = time.time()
         try:
@@ -374,11 +381,50 @@ def keep_line_open(stop_ev):
             fails += 1
             if fails == 1:
                 print(f"line ping failed: {type(e).__name__}: {e}"[:200], flush=True)
-        if time.time() - last_log > 3600 and ms:
+        if sp is not None and time.time() - last_log > test_every_s and ms:
             ms.sort()
-            print(f"line ping: median {ms[len(ms) // 2]} ms over {len(ms)}, {fails} failed", flush=True)
+            with sp.lock:
+                sp.book.log("line", median_ms=ms[len(ms) // 2], fastest_ms=ms[0], slowest_ms=ms[-1], n=len(ms),
+                            failed=fails)
             ms, fails, last_log = [], 0, time.time()
-        stop_ev.wait(10)
+        if (sp is not None and os.environ.get("PSPEED_LINE_TEST", LINE_TEST_DEFAULT).strip().lower() == "yes" and is_real()
+                and time.time() - last_test > test_every_s):
+            last_test = time.time()
+            line_test(sp)
+        stop_ev.wait(every_s)
+
+
+def line_test(sp):
+    """One test buy that cannot be filled (see keep_line_open). Skipped while paused or while a real order is out."""
+    if sp.why_stopped or sp.busy or sp.send is None:
+        return None
+    w = int(time.time()) // WIN * WIN
+    toks = sp.win.get(w)
+    if not toks:
+        return None
+    pick = None
+    for tok, other in ((toks[0], toks[1]), (toks[1], toks[0])):
+        ask, _ = sp.best_ask(tok, other)
+        if ask is not None and ask >= 0.10:
+            pick = tok
+            break
+    if pick is None:
+        return None
+    sp.busy = True
+    rec = {"w": w, "side": "Up" if pick == toks[0] else "Down", "limit": 0.01, "amount": 1.0}
+    t0 = time.time()
+    try:
+        res = sp.send(pick, Decimal("1.00"), Decimal("0.01"))
+        rec.update(getattr(sp.send, "timing", None) or {}, ms=round((time.time() - t0) * 1000),
+                   bought=float(getattr(res, "taking_amount", 0) or 0) if getattr(res, "ok", False) else 0.0)
+    except Exception as e:
+        rec.update(getattr(sp.send, "timing", None) or {}, ms=round((time.time() - t0) * 1000),
+                   answer=f"{type(e).__name__}: {e}"[:160])
+    finally:
+        sp.busy = False
+    with sp.lock:
+        sp.book.log("line_test", **rec)
+    return rec
 
 
 def warm(token):
@@ -523,7 +569,7 @@ def run():
     stop_ev = threading.Event()
     threading.Thread(target=manager, args=(sp, stop_ev), daemon=True).start()
     if is_real():
-        threading.Thread(target=keep_line_open, args=(stop_ev,), daemon=True).start()
+        threading.Thread(target=keep_line_open, args=(stop_ev, sp), daemon=True).start()
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
