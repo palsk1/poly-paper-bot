@@ -39208,3 +39208,12 @@
 {"filled": 1.74, "pnl": 0.0157, "price": 0.991, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV261330-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:32:22Z", "type": "kmaker_fill"}
 {"pnl": 8.13, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26HERVAL-HER", "track": "tennis_set", "ts": "2026-11-26T18:32:23Z", "type": "econ_settle"}
 {"player": "Nuria Brancaccio", "price": 0.73, "set1": "6-1", "set2_games": 0, "shares": 34, "ticker": "KXWTACHALLENGERMATCH-26NOV26MARBRA-BRA", "track": "tennis_set", "ts": "2026-11-26T18:38:59Z", "type": "ktennis_buy"}
+{"fee": 0.001, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will XRP reach $1.00 on November 26?", "token": "105812471864397957234340355425281934956384629103161317331399148161738281851104", "track": "endgame_sell98", "ts": "2026-11-26T18:42:13Z", "type": "paper_buy"}
+{"minutes_left": 2.77, "price": 0.963, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV261345-45", "track": "kc_maker", "ts": "2026-11-26T18:42:13Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.963, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV261345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:42:14Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.988, "queue": 120.37, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV261345-45", "track": "kc_maker", "ts": "2026-11-26T18:42:14Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.988, "queue": 120.37, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV261345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:42:15Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.98, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV261345-45", "track": "kc_maker", "ts": "2026-11-26T18:42:15Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.98, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV261345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:42:16Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.99, "queue": 175.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV261345-45", "track": "kc_maker", "ts": "2026-11-26T18:42:17Z", "type": "kmaker_order"}
+{"minutes_left": 2.77, "price": 0.99, "queue": 175.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV261345-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T18:42:17Z", "type": "kmaker_order"}
