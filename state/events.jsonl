@@ -37981,3 +37981,5 @@
 {"filled": 10.0, "pnl": 0.24, "price": 0.976, "side": "no", "through": true, "ticker": "KXHYPE15M-26NOV252230-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T03:41:11Z", "type": "kmaker_fill"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNBA3PTPROT-26NOV25MINOKC-MINADOSUNMU13-5", "track": "kalshi_patient", "ts": "2026-11-26T03:41:15Z", "type": "kpatient_result"}
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNHLFIRSTGOAL-26NOV25NYRBUF-BUFJQUINN22", "track": "kalshi_patient", "ts": "2026-11-26T03:41:16Z", "type": "kpatient_result"}
+{"fee": 0.0115, "outcome": "No", "price": 0.64, "shares": 5, "title": "Will Bitcoin dip to $58,000 November 23-29?", "token": "65475495787961580493914934153748603016334862064415864077556593946162800263590", "track": "w_tokor", "ts": "2026-11-26T03:45:48Z", "type": "paper_buy"}
+{"fee": 0.0115, "outcome": "No", "price": 0.64, "shares": 5, "title": "Will Bitcoin dip to $58,000 November 23-29?", "token": "65475495787961580493914934153748603016334862064415864077556593946162800263590", "track": "wb_tokor", "ts": "2026-11-26T03:45:48Z", "type": "paper_buy"}
