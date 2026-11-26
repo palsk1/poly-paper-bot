@@ -38640,3 +38640,5 @@
 {"pnl": 9.64, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26PANBAR-PAN", "track": "tennis_set", "ts": "2026-11-26T11:33:33Z", "type": "econ_settle"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXBTC-26NOV2617-B59875", "track": "kalshi_patient", "ts": "2026-11-26T11:33:36Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": true, "ticker": "KXWTI-26NOV2714-T86.99", "track": "kalshi_patient", "ts": "2026-11-26T11:33:40Z", "type": "kpatient_fill"}
+{"fee": 0.0621, "outcome": "No", "price": 0.54, "shares": 5, "title": "Will the average Ornn H100 rental price in March 2027 be above $3.00?", "token": "9915626037621239743849827455113306334063752218234010628044721955950278297742", "track": "w_underperformingforal", "ts": "2026-11-26T11:35:35Z", "type": "paper_buy"}
+{"fee": 0.0621, "outcome": "No", "price": 0.54, "shares": 5, "title": "Will the average Ornn H100 rental price in March 2027 be above $3.00?", "token": "9915626037621239743849827455113306334063752218234010628044721955950278297742", "track": "wb_underperformingforal", "ts": "2026-11-26T11:35:35Z", "type": "paper_buy"}
