@@ -255,15 +255,18 @@ class Speed:
                         "title": f"Bitcoin 5 min {time.strftime('%H:%M', time.gmtime(plan['w']))} UTC {plan['side']}"})
             if is_real():
                 t0 = time.time()
+                rec["wait_ms"] = int(t0 * 1000) - plan["heard_ms"]     # heard the jump -> order starts
                 try:
                     res = self.send(plan["token"], plan["amount"], Decimal(str(plan["ask"])))
                 except Exception as e:
+                    rec.update(getattr(self.send, "timing", None) or {})
                     with self.lock:
                         self.book.log("order_failed", **rec, ms=round((time.time() - t0) * 1000),
                                       err=f"{type(e).__name__}: {e}"[:300])
                     return
                 ms = round((time.time() - t0) * 1000)
                 rec["order_ms"] = ms
+                rec.update(getattr(self.send, "timing", None) or {})
                 rec["signal_to_answer_ms"] = int(time.time() * 1000) - plan["heard_ms"]
                 if not getattr(res, "ok", False):
                     with self.lock:     # all or nothing: the offer was gone, nothing was bought
@@ -327,13 +330,52 @@ def status_text(s):
 
 
 def sender():
-    """The real order call: all or nothing, price limit = the offer we saw."""
+    """The real order call: all or nothing, price limit = the offer we saw. With a stopwatch (26 Nov: the first real
+    orders took 0.3-1 s, too slow; where does the time go?): sign_ms = building and signing the order on this box,
+    post_ms = sending it and Polymarket's answer. Uses the kit's own two steps; falls back to its one-call order."""
     import poly_live as P
 
     def send(token, amount, max_price):
-        return P.client().place_market_order(token_id=token, side="BUY", amount=amount, max_price=max_price,
-                                             order_type="FOK")
+        cl = P.client()
+        t0 = time.time()
+        try:
+            from polymarket._internal.actions.orders.place import post_order_with_allowance_recovery_sync as post
+            prep = cl._prepare_and_sign_market_order
+        except (ImportError, AttributeError):
+            send.timing = {}
+            return cl.place_market_order(token_id=token, side="BUY", amount=amount, max_price=max_price,
+                                         order_type="FOK")
+        signed = prep(asset_id=None, token_id=token, side="BUY", amount=amount, shares=None, max_spend=None,
+                      max_price=max_price, min_price=None, order_type="FOK", builder_code=None)
+        t1 = time.time()
+        try:
+            return post(cl, signed)
+        finally:
+            send.timing = {"sign_ms": round((t1 - t0) * 1000), "post_ms": round((time.time() - t1) * 1000)}
+    send.timing = {}
     return send
+
+
+def keep_line_open(stop_ev):
+    """A tiny public call to Polymarket's order server every 10 s on the same connection the orders use, so an order
+    never waits for a new connection (and we see the round trip in the log every hour)."""
+    import poly_live as P
+    ms, fails = [], 0
+    last_log = time.time()
+    while not stop_ev.is_set():
+        t0 = time.time()
+        try:
+            P.client()._ctx.secure_clob.get_json("/time")
+            ms.append(round((time.time() - t0) * 1000))
+        except Exception as e:
+            fails += 1
+            if fails == 1:
+                print(f"line ping failed: {type(e).__name__}: {e}"[:200], flush=True)
+        if time.time() - last_log > 3600 and ms:
+            ms.sort()
+            print(f"line ping: median {ms[len(ms) // 2]} ms over {len(ms)}, {fails} failed", flush=True)
+            ms, fails, last_log = [], 0, time.time()
+        stop_ev.wait(10)
 
 
 def warm(token):
@@ -477,6 +519,8 @@ def run():
         book.log("login", wallet_type=str(cl.wallet_type), cash=round(sp.cash, 2))
     stop_ev = threading.Event()
     threading.Thread(target=manager, args=(sp, stop_ev), daemon=True).start()
+    if is_real():
+        threading.Thread(target=keep_line_open, args=(stop_ev,), daemon=True).start()
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
