@@ -39334,3 +39334,16 @@
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV261530-30", "track": "kc_maker_mid", "ts": "2026-11-26T20:32:23Z", "type": "kmaker_fill"}
 {"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "no", "through": true, "ticker": "KXDOGE15M-26NOV261530-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T20:32:23Z", "type": "kmaker_fill"}
 {"pnl": 11.63, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26NEFWIL-NEF", "track": "tennis_set", "ts": "2026-11-26T20:32:23Z", "type": "econ_settle"}
+{"outcome": "Over", "pnl": 0.0475, "price": 1.0, "reason": "resolved", "title": "Lions Team Total: O/U 20.5", "token": "19812806761984163985192088034328687542674188032871732919029820845233729555240", "track": "endgame", "ts": "2026-11-26T20:40:44Z", "type": "paper_close"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker", "ts": "2026-11-26T20:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker_safe", "ts": "2026-11-26T20:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker_safe_usd", "ts": "2026-11-26T20:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T20:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker_mid", "ts": "2026-11-26T20:42:11Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.997, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXBNB15M-26NOV261545-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker_safe", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker_safe_usd", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker_mid", "ts": "2026-11-26T20:42:12Z", "type": "kmaker_order"}
+{"minutes_left": 2.81, "price": 0.993, "queue": 1717.58, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261545-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T20:42:13Z", "type": "kmaker_order"}
