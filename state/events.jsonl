@@ -37956,3 +37956,4 @@
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXJUDGECOUNT-26NOV-7", "track": "kalshi_patient", "ts": "2026-11-26T03:02:52Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV28UNCOUSD-UNCO", "track": "kalshi_patient", "ts": "2026-11-26T03:02:52Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXRAINPITM-26NOV-1", "track": "kalshi_patient", "ts": "2026-11-26T03:02:52Z", "type": "kpatient_order"}
+{"minutes_left": 8.22, "price": 0.975, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV252215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-26T03:06:47Z", "type": "kmaker_order"}
