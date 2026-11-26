@@ -38761,3 +38761,11 @@
 {"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXHIGHTSATX-26NOV25-B57.5", "track": "kalshi_patient", "ts": "2026-11-26T13:03:39Z", "type": "kpatient_result"}
 {"pnl": 0.28, "price": 0.96, "shares": 7.0, "side": "no", "ticker": "KXLOWTOKC-26NOV25-B23.5", "track": "kalshi_patient", "ts": "2026-11-26T13:03:40Z", "type": "kpatient_result"}
 {"outcome": "Draw", "pnl": -1.4504, "price": 0.0, "reason": "resolved", "title": "Will Borneo Samarinda vs. Persita Tangerang end in a draw?", "token": "23583564766799247156643265741984179827311485782516053649542033077564605085987", "track": "soccer_draw", "ts": "2026-11-26T13:04:26Z", "type": "paper_close"}
+{"minutes_left": 2.9, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV260815-15", "track": "kc_maker", "ts": "2026-11-26T13:12:07Z", "type": "kmaker_order"}
+{"minutes_left": 2.9, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV260815-15", "track": "kc_maker_safe", "ts": "2026-11-26T13:12:07Z", "type": "kmaker_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXRAINPHXM-26NOV-2", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXBRASILEIROTOTAL-26NOV26SPACR-6", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNCAAFSPREAD-26NOV27AFAUNM-AFA14", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLSPREAD-26NOV29SEASF-SEA15", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXWTIMAX-26NOV30-T112.50", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.9253, "shares": 10, "side": "no", "ticker": "KXNFLESCALATORRECYDS-26NOV26PHIDAL-PHIDSMITH6", "track": "kalshi_patient", "ts": "2026-11-26T13:12:32Z", "type": "kpatient_order"}
