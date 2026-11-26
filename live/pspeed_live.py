@@ -27,7 +27,7 @@ Settings in ~/.live.env (live/pspeed_setup.sh writes these; change the numbers t
   PSPEED_BET=2               dollars a bet (Polymarket's smallest is 5 shares, so at 60c+ a bet costs 5 x the price)
   PSPEED_MAX_BET=5           most one bet may cost
   PSPEED_MAX_OFFER_USD=100   skip when the best offer holds this many dollars or more
-  PSPEED_PER_WINDOW=2        most buys tried in one 5-minute window
+  PSPEED_PER_WINDOW=2        most bets bought in one 5-minute window (killed orders don't count, Jan 26 Nov)
   PSPEED_MAX_BETS_DAY=50     most bets a day (UTC)
   PSPEED_DAY_SPEND_MAX=100   most dollars put in a day
   PSPEED_MAX_OPEN_USD=15     most dollars waiting on results at once
@@ -160,7 +160,7 @@ class Speed:
         self.fair = Fair()
         self.books = S.Books(NoLog())
         self.win = {}                # window start -> (up token, down token, condition id)
-        self.tries = {}              # window start -> buys tried
+        self.tries = {}              # window start -> bets bought (killed orders don't count, Jan 26 Nov)
         self.why_stopped = "starting"
         self.cash = None
         self.busy = False
@@ -247,7 +247,6 @@ class Speed:
             if why != "paused":
                 self.book.log("signal", **sig, skip=why)
             return None
-        self.tries[w] = self.tries.get(w, 0) + 1
         self.busy = True
         extra = min(3.0, max(0.0, cap("PSPEED_EXTRA_C"))) / 100
         limit = round(min(0.99, ask + extra), 4)
@@ -293,7 +292,8 @@ class Speed:
             else:
                 rec.update({"spent": round(plan["shares"] * plan["ask"], 4), "paid": plan["ask"]})
             with self.lock:
-                key = f"{plan['w']}-{plan['side']}-{self.tries.get(plan['w'], 1)}"
+                self.tries[plan["w"]] = self.tries.get(plan["w"], 0) + 1     # only a bought bet uses up the window
+                key = f"{plan['w']}-{plan['side']}-{self.tries[plan['w']]}"
                 self.book.state["open"][key] = rec
                 self.book.state["bets"] += 1
                 d = self.book.day()
