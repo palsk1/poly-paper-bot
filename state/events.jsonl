@@ -39614,3 +39614,12 @@
 {"fee": 0.0504, "outcome": "Draw", "price": 0.28, "shares": 5, "title": "Will AD Cali vs. CA Bucaramanga end in a draw?", "token": "27596082229015230892543014324993625074420494673083774955120374447238548670803", "track": "soccer_draw", "ts": "2026-11-26T23:45:29Z", "type": "paper_buy"}
 {"fee": 0.0544, "outcome": "Draw", "price": 0.32, "shares": 5, "title": "Will Vila Nova FC vs. AC Goianiense end in a draw?", "token": "18459044537842166466910375466960253471982761473780322611746025865981571822771", "track": "soccer_draw", "ts": "2026-11-26T23:45:30Z", "type": "paper_buy"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXTEMPMIAH-26NOV2618-T73.99", "track": "kalshi_patient", "ts": "2026-11-26T23:45:35Z", "type": "kpatient_result"}
+{"minutes_left": 1.99, "price": 0.987, "queue": 1382.51, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261900-00", "track": "kc_maker", "ts": "2026-11-26T23:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.987, "queue": 1382.51, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261900-00", "track": "kc_maker_safe", "ts": "2026-11-26T23:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.987, "queue": 1382.51, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261900-00", "track": "kc_maker_safe_usd", "ts": "2026-11-26T23:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.987, "queue": 1382.51, "shares": 10, "side": "yes", "ticker": "KXBTC15M-26NOV261900-00", "track": "kc_maker_mid", "ts": "2026-11-26T23:58:01Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.971, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV261900-00", "track": "kc_maker", "ts": "2026-11-26T23:58:02Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.971, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV261900-00", "track": "kc_maker_safe", "ts": "2026-11-26T23:58:02Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV261900-00", "track": "kc_maker", "ts": "2026-11-26T23:58:03Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV261900-00", "track": "kc_maker_safe", "ts": "2026-11-26T23:58:03Z", "type": "kmaker_order"}
+{"minutes_left": 1.99, "price": 0.993, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV261900-00", "track": "kc_maker_mid", "ts": "2026-11-26T23:58:03Z", "type": "kmaker_order"}
