@@ -38716,3 +38716,13 @@
 {"kind": "other", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXYTVIEWSW-KEN26NOV29-7.0M", "track": "kalshi_patient", "ts": "2026-11-26T12:17:20Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNCAAF1HSPREAD-26NOV28NAVYCHAR-CHAR11", "track": "kalshi_patient", "ts": "2026-11-26T12:17:20Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXF1POLE-LUSA26-HAM", "track": "kalshi_patient", "ts": "2026-11-26T12:17:20Z", "type": "kpatient_order"}
+{"fee": 0.0015, "outcome": "No", "price": 0.97, "shares": 5, "title": "Will the highest temperature in Seoul (Incheon) be 14\u00b0C on November 27?", "token": "36869612474859712106005971694409358908863081396686364135514387056132856326016", "track": "endgame_sell98", "ts": "2026-11-26T12:26:41Z", "type": "paper_buy"}
+{"minutes_left": 3.0, "price": 0.981, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV260730-30", "track": "kc_maker", "ts": "2026-11-26T12:27:01Z", "type": "kmaker_order"}
+{"minutes_left": 3.0, "price": 0.967, "queue": 30.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV260730-30", "track": "kc_maker", "ts": "2026-11-26T12:27:02Z", "type": "kmaker_order"}
+{"minutes_left": 3.0, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV260730-30", "track": "kc_maker", "ts": "2026-11-26T12:27:03Z", "type": "kmaker_order"}
+{"minutes_left": 3.0, "price": 0.991, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV260730-30", "track": "kc_maker_safe_kprice", "ts": "2026-11-26T12:27:03Z", "type": "kmaker_order"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "yes", "ticker": "KXHIGHMIA-26NOV25-T75", "track": "kalshi_patient", "ts": "2026-11-26T12:27:04Z", "type": "kpatient_result"}
+{"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXHIGHTATL-26NOV25-B56.5", "track": "kalshi_patient", "ts": "2026-11-26T12:27:04Z", "type": "kpatient_result"}
+{"pnl": 0.24, "price": 0.96, "shares": 6.0, "side": "no", "ticker": "KXHIGHTDC-26NOV25-B53.5", "track": "kalshi_patient", "ts": "2026-11-26T12:27:04Z", "type": "kpatient_result"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXLOWTNYC-26NOV25-T32", "track": "kalshi_patient", "ts": "2026-11-26T12:27:04Z", "type": "kpatient_result"}
+{"pnl": 0.09, "price": 0.97, "shares": 3.0, "side": "yes", "ticker": "KXLOWTSDF-26NOV25-B35.5", "track": "kalshi_patient", "ts": "2026-11-26T12:27:04Z", "type": "kpatient_result"}
