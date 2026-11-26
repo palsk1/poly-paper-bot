@@ -3412,6 +3412,19 @@
    "verdict": "Promising, needs more bets",
    "status": "open",
    "src": "kcflip.py"
+  },
+  {
+   "id": "btc_5_min_seller_pull_jump_0_02_250ms",
+   "date": "2026-11-26",
+   "what": "BTC 5-min seller pull {'jump': 0.02} 250ms",
+   "tries": 32,
+   "bets": 2363,
+   "groups": 2363,
+   "per100": -1.99,
+   "floor100": -2.43,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "maker5m.py report"
   }
  ]
 }
