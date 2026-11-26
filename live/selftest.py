@@ -519,9 +519,9 @@ def test_pspeed():
     sp2.books.lv["DOWN"] = {"a": {}, "b": {}}
     pl = sp2.decide(w, "Up", 0.7, int(time.time() * 1000))
     sp2.execute(pl)
-    check(len(orders) == 1 and orders[0]["order_type"] == "FOK" and orders[0]["max_price"] == Decimal("0.55")
+    check(len(orders) == 1 and orders[0]["order_type"] == "FOK" and orders[0]["max_price"] == Decimal("0.56")
           and orders[0]["side"] == "BUY" and len(b2.state["open"]) == 1,
-          "a real speed buy is all-or-nothing and never pays above the offer it saw")
+          "a real speed buy is all-or-nothing and pays at most 1c above the offer it saw")
     pl = sp2.decide(w, "Down", 0.7, int(time.time() * 1000))
     check(pl and pl["ask"] == 0.55 and pl["token"] == "DOWN", "Down's offer is read from Up's mirrored buy offers")
     sp2.execute(pl)
@@ -530,6 +530,22 @@ def test_pspeed():
     sp2.cash = 2.0
     sp2.tries.clear()
     check(sp2.decide(w, "Up", 0.7, int(time.time() * 1000)) is None, "never buys with less cash than the bet")
+    sp2.cash = 30.0
+    for extra, want, what in ((None, 0.56, "with no PSPEED_EXTRA_C it pays at most 1c above the offer seen (Jan's pick)"),
+                              ("0", 0.55, "PSPEED_EXTRA_C=0 makes the limit exactly the offer seen"),
+                              ("10", 0.58, "PSPEED_EXTRA_C is capped at 3c, whatever the file says")):
+        if extra is None:
+            os.environ.pop("PSPEED_EXTRA_C", None)
+        else:
+            os.environ["PSPEED_EXTRA_C"] = extra
+        sp2.tries.clear()
+        sp2.busy = False
+        pl = sp2.decide(w, "Up", 0.7, int(time.time() * 1000))
+        check(pl and abs(pl["limit"] - want) < 1e-9 and pl["ask"] == 0.55, what)
+    sp2.busy = False
+    sp2.execute(pl)
+    check(orders[-1]["max_price"] == Decimal("0.58"), "the order is sent with that limit")
+    os.environ.pop("PSPEED_EXTRA_C", None)
     o = next(iter(b2.state["open"].values()))
     check("ab" * 20 not in str(o), "the public notebook keeps only the end of the order number")
     for k in ("LIVE", "PSPEED_LIVE"):
