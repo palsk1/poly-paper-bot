@@ -67,17 +67,11 @@
   },
   "2026-11-26": {
    "failed": 0,
-   "muted": 34,
-   "sent": 10
+   "muted": 35,
+   "sent": 11
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[fav_short_90_95] bought 3 (practice money)",
-   "track": "fav_short_90_95",
-   "ts": "2026-11-19T05:07:34Z"
-  },
   {
    "result": "sent",
    "title": "Paper top 10",
@@ -1271,6 +1265,12 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-26T09:28:53Z"
+  },
+  {
+   "result": "sent",
+   "title": "[soccer_draw] bought 1 (practice money)",
+   "track": "soccer_draw",
+   "ts": "2026-11-26T10:43:51Z"
   }
  ]
 }
