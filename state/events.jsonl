@@ -39480,3 +39480,5 @@
 {"fee": 0.0051, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will S&P 500 (SPY) hit (LOW) $680 Week of November 23 2026?", "token": "87353514314418958140350223108455181917677413890810997219668626115955673862864", "track": "endgame_sell98", "ts": "2026-11-26T21:51:55Z", "type": "paper_buy"}
 {"outcome": "Draw", "pnl": -1.5015, "price": 0.0, "reason": "resolved", "title": "Will FK Kauno \u017dalgiris vs. R\u012bga FC end in a draw?", "token": "12415917368018272131770960828336455712102035945007240789715402222029681858336", "track": "soccer_draw", "ts": "2026-11-26T21:55:36Z", "type": "paper_close"}
 {"minutes_left": 3.12, "price": 0.959, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV261700-00", "track": "kc_maker", "ts": "2026-11-26T21:56:53Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.41, "price": 0.959, "side": "no", "through": true, "ticker": "KXETH15M-26NOV261700-00", "track": "kc_maker", "ts": "2026-11-26T22:03:22Z", "type": "kmaker_fill"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXBTC-26NOV2617-B59875", "track": "kalshi_patient", "ts": "2026-11-26T22:03:24Z", "type": "kpatient_result"}
