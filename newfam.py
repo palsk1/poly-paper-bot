@@ -86,11 +86,16 @@ def k_series_info(s):
                "ex": str((rows[0].get("title") if rows else "") or "")[:110]}
 
 
-def scan(since="2026-08-27"):
+def scan(since="2026-08-27", kalshi=True):
     t_since = its(since + "T00:00:00Z")
     out = {"made": int(time.time()), "kalshi": {}, "poly_fam": {}, "poly_series": []}
+    if not kalshi:
+        old = rj(os.path.join(CACHE, "scan.json.gz"), {}) or {}
+        out["kalshi"] = old.get("kalshi") or {}
     # ---- Kalshi
     try:
+        if not kalshi:
+            raise RuntimeError("skipped")
         ser = yesno.kget("/series", {}).get("series") or []
     except Exception as e:
         ser = []
@@ -204,6 +209,8 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     if cmd == "scan":
         scan(*(sys.argv[2:3] or []))
+    elif cmd == "scanp":
+        scan(*(sys.argv[2:3] or ["2026-08-27"]), kalshi=False)
     elif cmd == "report":
         report()
     else:
