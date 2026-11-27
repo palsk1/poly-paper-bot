@@ -71,7 +71,7 @@ Wallets were picked on 2026-11-08 from 1,242 leaderboard wallets (`bot.py discov
 | `w_lava_lava` | `0x629bc4a1e53e1d475beb7ea3d388791e96dd995a` | politics, profitable all-time |
 | `w_dropper` | `0x6bab41a0dc40d6dd4c1a915b8c01969479fd1292` | all-rounder, profitable all-time in 5 categories |
 | `w_wan123` | `0xde7be6d489bce070a959e0cb813128ae659b5f4b` | politics + sports, profitable all-time |
-| `w_anoin123` | `0x96489abcb9f583d6835c8ef95ffc923d05a86825` | economics + finance, profitable all-time |
+| `w_anoin123` | `0x96489abcb9f583d6835c8ef95ffc923d05a86825` | world news, both sides + merges; all-time about -$4.7M, nearly all one Iran-strike bet (22 Nov, `walletpnl.py`) |
 | `w_hauchn` | `0xf0ca28d5b0141f0a8e7b251dea80fd881cb166ed` | finance, profitable all-time |
 | `w_betwick` | `0xc851cd9bee7d262afd78674f861f9f576a12cd2a` | finance + mentions, profitable all-time |
 | `w_aghy` | `0xc3daa1bb9ce85866fb1a7c3a5d02816798e641fe` | economics, profitable all-time |

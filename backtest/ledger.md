@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**276 ideas examined, in about 125,843 versions.** 218 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**284 ideas examined, in about 126,161 versions.** 226 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 276 ideas that are all worthless, the luckiest one still looks good. With 276 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 284 ideas that are all worthless, the luckiest one still looks good. With 284 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -284,5 +284,13 @@ Why count: if you test 276 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
 | 2026-11-27 | Kalshi in-game backward look, best cut: nba after stage 3, trailer at 20-35c, small lead | 7,128 | 173 | +$24.26 | Promising, needs more bets | dropped | stages.py sweep |
 | 2026-11-27 | Kalshi in-game: leader after the first stage at 50-80c who was also the pre-game favourite, 13 sports pooled (the tennis rule carried over) | 3 | 3899 | -$3.45 | Losing | dropped | stages.py carry |
+| 2026-11-27 | Late jump before an announcement (awards, picks, Nobel): follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 51 | -$14.14 | Behind, but could be bad luck | dropped | blindspots.py chart, backtest/blindspots.md |
+| 2026-11-27 | Late jump, every other market: follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 253 | -$15.10 | Losing | dropped | blindspots.py chart, backtest/blindspots.md |
+| 2026-11-27 | 'Nothing ever happens' by question type: buy No, Yes 30-70c a day in, real prices | 15 | 128 | -$5.29 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
+| 2026-11-27 | Weather highs: buy No on the 75-95c favourite 3 h into the local day (Qiu & Qiu 2026 paper), chart +1c | 64 | 142 | -$23.23 | Losing | dropped | blindspots.py chart, backtest/blindspots.md |
+| 2026-11-27 | Weather lows: buy Yes on the 60-75c favourite 6 h into the local day (found by looking), real prices | 64 | 117 | -$2.78 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
+| 2026-11-27 | Weather lows: buy Yes on the 60-75c favourite 8 h into the local day (found by looking), real prices | 64 | 83 | -$5.47 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
+| 2026-11-27 | Weather lows: buy Yes on the 75-95c favourite 8 h into the local day (found by looking), real prices | 64 | 131 | -$1.45 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
+| 2026-11-27 | Yardstick: buy No on every other worded market, Yes 30-70c a day in, real prices | 15 | 81 | +$16.31 | Ahead, but could be luck | dropped (yardstick: old 'things don't happen' lean, 1 in 10 signals buyable) | blindspots.py real, backtest/blindspots.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
