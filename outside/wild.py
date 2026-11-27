@@ -291,7 +291,7 @@ def volreal(cur="BTC", start="2022"):
             rows["put8"].append((t0, q[1], max(q[0] - S1, 0), fee, S0))
     if ivgap:
         print(f"{cur}: weekly at-the-money bid-side swing minus DVOL: median {st.median(ivgap):+.1f} points over {len(ivgap)} weeks")
-    import exam
+    sys.path.insert(0, os.getcwd()); import exam
     for k, rs in rows.items():
         if not rs:
             continue
