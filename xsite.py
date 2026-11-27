@@ -469,7 +469,7 @@ def run(score=True):
     import exam
     pairs = rj(PAIRS, []) or []
     tps = rj(os.path.join(CACHE, "tapes.json.gz"), {}) or {}
-    pairs = [x for x in pairs if x["k"]["t"] + "|" + x["p"]["id"] in tps]
+    pairs = [x for x in pairs if x["k"]["t"] + "|" + x["p"]["id"] in tps and x.get("rev", "Y") == os.environ.get("XS_REV", "Y")]
     lines = [f"pairs with prices on both sites: {len(pairs)}, same result on both sites: {sum(x['same_result'] for x in pairs)}"]
     for h in (72, 24, 6, 1):
         a = accuracy(pairs, tps, h)
