@@ -200,19 +200,19 @@
       "rules": "trump_week"
     },
     "trump_week_k": {
-      "label": "UNTESTED (added 2026-11-16). Trump's words of the week, Kalshi: the same rule on Kalshi's weekly 'What will Trump say this week?' markets, any hour of the week. Where his 8-week record is 15c or more above the real sell offer, buys up to $25 of Yes and holds to the result. History: +$33.80 per $100 on 318 bets, 'Promising, needs more bets'; a lot of it from long shots that mostly lose (backtest/speeches_kalshi.md). One bet per word, real order-book fills. $250 paper (about where kc_maker's own pot stands by now), no refills",
+      "label": "UNTESTED (added 2026-11-16). Trump's words of the week, Kalshi: the same rule on Kalshi's weekly 'What will Trump say this week?' markets, any hour of the week. Where his 8-week record is 15c or more above the real sell offer, buys up to $25 of Yes and holds to the result. History: +$33.80 per $100 on 318 bets, 'Promising, needs more bets'; a lot of it from long shots that mostly lose (backtest/speeches_kalshi.md). One bet per word, real order-book fills. $300 paper, no refills",
       "start_cash": 300,
       "source": "ktrump",
       "rules": "trump_week_k"
     },
     "tennis_set_w": {
-      "label": "UNTESTED (added 2026-11-23). Tennis, women's main tour, on Kalshi: when a player has just won the first set and still costs 50c to under 80c, buys up to $25 of her and holds to the end of the match. Looks once per match, right after set 1. History: +$6.96 per $100 on 1,402 bets, about 7 in 10 win; found by looking, and it only works at the price shown, not 2c higher (backtest/tennis.md). Real order-book fills. $250 paper (about where kc_maker's own pot stands by now), no refills",
+      "label": "UNTESTED (added 2026-11-23). Tennis, women's main tour, on Kalshi: when a player has just won the first set and still costs 50c to under 80c, buys up to $25 of her and holds to the end of the match. Looks once per match, right after set 1. History: +$6.96 per $100 on 1,402 bets, about 7 in 10 win; found by looking, and it only works at the price shown, not 2c higher (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
       "start_cash": 300,
       "source": "ktennis",
       "rules": "tennis_set_w"
     },
     "tennis_set": {
-      "label": "UNTESTED (added 2026-11-23). Tennis, all four pro tours (men, women and both second-tier tours), on Kalshi: the same bet as tennis_set_w on every match. When a player has just won the first set and still costs 50c to under 80c, buys up to $25 and holds to the end. History: +$2.45 per $100 on 6,469 bets; the men's matches alone were about $0 (backtest/tennis.md). Real order-book fills. $250 paper (about where kc_maker's own pot stands by now), no refills",
+      "label": "UNTESTED (added 2026-11-23). Tennis, all four pro tours (men, women and both second-tier tours), on Kalshi: the same bet as tennis_set_w on every match. When a player has just won the first set and still costs 50c to under 80c, buys up to $25 and holds to the end. History: +$2.45 per $100 on 6,469 bets; the men's matches alone were about $0 (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
       "start_cash": 300,
       "source": "ktennis",
       "rules": "tennis_set"
