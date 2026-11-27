@@ -45,6 +45,18 @@ def trump_text(blocks):
     return " ".join(b[2] for b in blocks if b[0] == "Donald Trump").lower().replace("’", "'")
 
 
+def transcript_blocks(slug, url):
+    """[speaker, None, text] per paragraph. Bug fix 2026-11-24: since about 18 Nov Roll Call's transcript pages load
+    their text in the browser, so the page itself has none; the same JSON the page uses has every paragraph.
+    Falls back to reading the page the old way."""
+    if slug:
+        j = json.loads(sp.raw(f"https://rollcall.com/api/factbase/transcripts?person=trump&slug={slug}", 60))
+        rows = j.get("data") if isinstance(j, dict) else None
+        if isinstance(rows, list) and rows and isinstance(rows[0], dict) and "text" in rows[0]:
+            return [[str(r.get("speaker") or "").strip(), None, str(r.get("text") or "")] for r in rows]
+    return sp.parse(sp.raw(url, 60))
+
+
 def _add(day, doc, text):
     p = _day_path(day)
     cur = sp.rj(p, {}) or {}
@@ -89,15 +101,17 @@ def sync(max_pages=8, budget_s=150):
             if d["fail"].get(doc, 0) >= 6:      # six scans in a row could not read it: give up on this one
                 d["seen"][doc] = day
                 continue
-            todo.append((doc, day, x["factbase_url"]))
+            todo.append((doc, day, x["factbase_url"], x.get("slug")))
         if not rows or not fresh:
             break
-    for doc, day, url in sorted(todo, key=lambda r: r[1]):
+    for doc, day, url, slug in sorted(todo, key=lambda r: r[1], reverse=True):   # newest first: freshness is what gates bets
         if time.time() - t0 > budget_s:
             print(f"trumpweek: out of time, {len(todo) - new} transcripts left for the next scan")
             break
         try:
-            blocks = sp.parse(sp.raw(url, 60))
+            blocks = transcript_blocks(slug, url)
+            if not blocks:
+                raise ValueError("no paragraphs found (page layout changed?)")
         except Exception as e:
             d["fail"][doc] = d["fail"].get(doc, 0) + 1
             print(f"trumpweek: transcript {doc} failed: {str(e)[:80]}")

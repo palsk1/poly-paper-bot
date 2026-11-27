@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**185 ideas examined, in about 62,823 versions.** 140 dropped, 45 still being tested or waiting. **Looks real: 5.**
+**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 185 ideas that are all worthless, the luckiest one still looks good. With 185 tries, a result has to beat about 3.3 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -168,24 +168,62 @@ Why count: if you test 185 ideas that are all worthless, the luckiest one still 
 | 2026-11-19 | kc_maker_safe check on Binance (re-test, 3 min) | 6 | 16120 | +$0.47 | Looks real | open | kdocs.py run |
 | 2026-11-19 | kc_maker_safe check on Kalshi's own number (twin rule, 3 min) | 6 | 16189 | +$0.40 | Looks real | open | kdocs.py run |
 | 2026-11-22 | AI release-day bets (Polymarket): No where Yes is 10-50c after the first third of the market's life | 260 | 23 | +$1.92 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Always No, first look | 120 | 14 | +$25.30 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | Always Yes, first look | 120 | 14 | -$54.75 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Arena leaderboard bets (Kalshi, fresh check): Yes on the name already holding first place, ask 50-97c, last 3 days | 2 | 101 | -$2.29 | Behind, but could be bad luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Arena leaderboard bets (Polymarket): No where the boards' own change record is 10c+ below the price | 150 | 85 | +$0.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the holder priced 3-50c with 2+ weeks left | 150 | 48 | +$5.60 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Arena leaderboard bets (Polymarket): Yes on the name already holding the place, 50-97c, last 3 days | 150 | 39 | +$4.31 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Arena leaderboard bets (Polymarket): Yes where the boards' own change record is 10c+ above the price | 150 | 59 | +$16.39 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Kalshi: always No on any other app, first look | 170 | 338 | +$1.29 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always No on the holder, first look | 170 | 468 | -$0.33 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always Yes on any other app, first look | 170 | 390 | -$14.02 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: always Yes on the holder, first look | 170 | 446 | -$7.85 | Losing | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Kalshi combo house: crypto 15-min combos | 20 | 325 | -$0.08 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
 | 2026-11-22 | Kalshi combo house: every Yes trade the pros sold | 20 | 28 | +$0.00 | Ahead, but could be luck | dropped | kcombos.py, backtest/kcombos.md |
 | 2026-11-22 | Kalshi combo house: our rule, legs x 1.05, 2-4 legs | 20 | 331 | -$1.33 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
 | 2026-11-22 | Kalshi combo house: sports, every leg a different game | 20 | 332 | -$0.16 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
 | 2026-11-22 | Kalshi combos: buy nearly-sure combos (65c+), fresh days | 2 | 160 | -$5.31 | Behind, but could be bad luck | dropped | kcombos.py, backtest/kcombos.md |
 | 2026-11-22 | Kalshi combos: buy nearly-sure combos (65c+), small tickets, fresh days | 2 | 146 | -$10.66 | Losing | dropped | kcombos.py, backtest/kcombos.md |
+| 2026-11-22 | Kalshi: No on the favourite 24h+ before, #1 spot | 170 | 254 | -$7.76 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite 24h+ before, #2 spot | 170 | 166 | +$37.76 | Promising, needs more bets | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite (50-97c) 24h+ before | 170 | 420 | +$10.27 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the favourite 6-24h before | 170 | 422 | -$4.80 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: No on the holder where the record is 10c+ below the price | 170 | 380 | +$14.18 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi tennis: after a set, buy where a point-by-point model says 5c+ cheap | 130 | 7967 | +$0.83 | Ahead, but could be luck | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: after set 1, buy its winner at 50-80c (no-peek clock) | 130 | 6469 | +$2.45 | Promising, needs more bets | candidate | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just fell 8c+ in 2 minutes | 130 | 18369 | -$8.77 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just lost a set, 3 min later | 130 | 19489 | -$17.16 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: buy the player who just rose 8c+ in 2 minutes | 130 | 18369 | -$4.62 | Losing | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: same, women's main tour only | 130 | 1402 | +$6.96 | Looks real | candidate | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: set-1 winner at 50-80c, men's main tour, timed by Kalshi's set market + 3 min | 130 | 1075 | -$0.94 | Behind, but could be bad luck | dropped | tennis.py lead |
+| 2026-11-22 | Kalshi tennis: set-1 winner at 50-80c, women's main tour, timed by Kalshi's set market + 3 min | 130 | 720 | +$5.46 | Promising, needs more bets | candidate | tennis.py lead |
+| 2026-11-22 | Kalshi: Yes on the favourite 24h+ before | 170 | 396 | -$18.69 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Kalshi: Yes on the holder where the record is 10c+ above the price | 170 | 200 | -$12.01 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Live paper: copy election hot-hand wallet Bigggggggg (w_ and wb_ twins) | 1 | 78 | -$10.04 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
 | 2026-11-22 | Live paper: copy weather wallet HellYeahTrader (w_ and wb_ twins) | 1 | 57 | -$28.09 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
 | 2026-11-22 | Live paper: copy weather wallet sbel (w_ and wb_ twins) | 1 | 105 | -$20.25 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
 | 2026-11-22 | Live paper: endgame 95-97c, sell at 98.5c (endgame_sell98, lab) | 1 | 740 | -$2.56 | Losing | hidden from dashboard 22 Nov (still runs, lab frozen to 1 Jan) | state/summary.md, LEARNINGS.md |
+| 2026-11-22 | No at 10-97c with 10+ days left | 120 | 14 | +$32.37 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | No where count + pace is 10c+ below the price | 120 | 14 | +$32.84 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | No where count + pace is 20c+ below the price | 120 | 13 | +$20.26 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week | 150 | 11 | +$40.36 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid | 150 | 8 | -$15.31 | Too early to tell | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask | 150 | 7 | -$31.92 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Polymarket: always No, a day in | 120 | 3 | -$23.14 | Too early to tell | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | Polymarket: always No on any other app, first look | 170 | 43 | +$8.48 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always No on the holder, first look | 170 | 50 | +$24.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always Yes, a day in | 120 | 4 | -$58.96 | Too early to tell | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | Polymarket: always Yes on any other app, first look | 170 | 58 | -$52.62 | Losing | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: always Yes on the holder, first look | 170 | 50 | -$14.61 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 24h+ before | 170 | 53 | +$27.51 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 24h+ before, #2 spot | 170 | 13 | +$27.58 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket check: No on the favourite 6-24h before | 170 | 53 | -$38.18 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket: No on the holder where the record is 10c+ below the price | 170 | 44 | +$4.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Polymarket tennis: after set 1, buy its winner at 50-80c (no-peek clock) | 112 | 1931 | -$3.64 | Losing | dropped | tennis.py pm |
+| 2026-11-22 | Polymarket: Yes on the holder where the record is 10c+ above the price | 170 | 38 | -$21.81 | Behind, but could be bad luck | dropped | appstore.py, backtest/appstore.md |
+| 2026-11-22 | Same, 10c+, last 10 days only, No | 120 | 13 | -$52.46 | Losing | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | Same, 10c+, last 10 days only, Yes | 120 | 13 | -$81.53 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always No, Yes at 3-97c, first look | 150 | 3 | -$19.95 | Too early to tell | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always Yes at 3-97c, first look | 150 | 3 | -$25.37 | Too early to tell | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly share of a lab: always No, Yes at 3-97c, first look | 150 | 14 | -$18.82 | Losing | dropped | aim.py, backtest/aim.md |
@@ -193,5 +231,56 @@ Why count: if you test 185 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always Yes at 3-97c, first look | 150 | 13 | -$29.52 | Losing | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always No, Yes at 3-97c, first look | 150 | 47 | -$18.95 | Losing | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look | 150 | 47 | -$38.17 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Yes where count + pace is 10c+ above the price | 120 | 13 | -$72.66 | Losing | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-22 | Yes where count + pace is 20c+ above the price | 120 | 13 | -$79.43 | Losing | dropped | spacex.py, backtest/spacex.md |
+| 2026-11-23 | Kalshi hourly crypto: last-minute model of the 60-second average, buy where it says 3c+ too cheap | 1,100 | 290 | -$13.33 | Losing | dropped | khourly_sweep.py, backtest/khourly.md |
+| 2026-11-23 | Kalshi hourly crypto: offer the safe side at 99c (bid 1c on the long shot) 20-30 min before the close, best-case fills | 1,100 | 61 | +$60.91 | Ahead, but could be luck | dropped: no sellers' money there, best-case fills | khourly_sweep.py, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.0 (history, 3 min, $4 bids) | 60 | 161 | -$3.69 | Losing | dropped | khourly.py run, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 105 | -$3.76 | Behind, but could be bad luck | dropped | khourly.py run, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on Kalshi hourly crypto rounds, bar 2.5 (history, 3 min, $4 bids) | 60 | 68 | -$3.06 | Behind, but could be bad luck | dropped | khourly.py run, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on KXNEAR15M, bar 2.3 (history, 3 min, candle fills) | 6 | 828 | +$0.36 | Ahead, but could be luck | lead: untested live | khourly.py run15, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on KXZEC15M, bar 2.3 (history, 3 min, candle fills) | 6 | 754 | +$0.39 | Ahead, but could be luck | lead: untested live | khourly.py run15, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on Polymarket daily noon ladder crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 0 |  | Too early to tell | dropped: about 1 bet a day | khourly.py pmrun, backtest/khourly.md |
+| 2026-11-23 | kc_maker_safe_usd on Polymarket hourly up / down crypto rounds, bar 2.3 (history, 3 min, $4 bids) | 60 | 31 | +$0.90 | Ahead, but could be luck | dropped: about 1 bet a day | khourly.py pmrun, backtest/khourly.md |
+| 2026-11-24 | AI model release ladders (KXGPT, KXCLAUDE, KXGEMINI...): No where Yes is 25-90c | 60 | 12 | +$17.70 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Crypto / stock bets after the answer is fixed: buy the winner at 99c+ | 14 | 1953 | +$0.16 | Promising, needs more bets | dropped | known.py report |
+| 2026-11-24 | Date ladders on Kalshi: No where Yes is 25-90c (first weekly look) | 60 | 137 | +$7.87 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Fed: buy No on long shots at 3-15c, 7 days before (both sites) | 12 | 9 | -$1.28 | Too early to tell | dropped | fed.py backward |
+| 2026-11-24 | Fed: buy the favourite at 85-97c, 7 days before (both sites) | 12 | 10 | -$0.65 | Behind, but could be bad luck | dropped | fed.py backward |
+| 2026-11-24 | Fed decisions: buy on Kalshi 5c+ under Polymarket | 12 | 0 |  | Too early to tell | dropped | fed.py cross |
+| 2026-11-24 | Fed decisions: buy on Polymarket 10c+ under Kalshi | 12 | 0 |  | Too early to tell | dropped | fed.py cross |
+| 2026-11-24 | Fed decisions: buy on Polymarket 5c+ under Kalshi | 12 | 1 | -$100.00 | Too early to tell | dropped | fed.py cross |
+| 2026-11-24 | Fed decisions vs options odds (both, 10c+) | 12 | 8 | -$8.43 | Too early to tell | dropped | fed.py run |
+| 2026-11-24 | Foreign elections, Kalshi: follow the polls, 10c+ apart (Wikipedia poll average vs price) | 40 | 14 | +$3.00 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
+| 2026-11-24 | Foreign elections, Polymarket: follow the polls, 10c+ apart (Wikipedia poll average vs price) | 40 | 29 | +$26.71 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
+| 2026-11-24 | Foreign elections, Polymarket: No on the 60-98c favourite a week before (backward look) | 40 | 25 | +$13.07 | Ahead, but could be luck | dropped | elect.py, backtest/elect.md |
+| 2026-11-24 | Kalshi 15-min early bid, cushion 1.5 + calm Kalshi (check month only) | 900 | 1127 | +$1.09 | Ahead, but could be luck | dropped | kearly.py |
+| 2026-11-24 | Kalshi 15-min safe bid earlier and cheaper: 85-97c, 4-10 min left, cushion 2.0 (check month only) | 900 | 430 | +$1.84 | Promising, needs more bets | open | kearly.py |
+| 2026-11-24 | Kalshi 15-min safe bid with a longer window: 90c+, 1-10 min left, cushion 2.3 (check month only) | 900 | 1681 | +$0.69 | Promising, needs more bets | open | kearly.py |
+| 2026-11-24 | Kalshi album first-week units: buy where HITS's midweek forecast is 10c+ away from the price (Fri 06:00 UTC) | 4 | 27 | +$10.76 | Ahead, but could be luck | dropped | music.py, backtest/music.md |
+| 2026-11-24 | Kalshi album first-week units ladders: Yes on a rung priced 10-90c, 36 hours before close (Sat ~02:00 UTC) | 70 | 36 | +$36.51 | Promising, needs more bets | lead, no track | music.py, backtest/music.md |
+| 2026-11-24 | Kalshi Billboard Hot 100 #1: Yes on the song with the most US Spotify plays in the tracking week | 8 | 35 | -$26.70 | Losing | dropped | music.py, backtest/music.md |
+| 2026-11-24 | Kalshi hourly crypto: offer the safe side at 99c, cushion 2-4, 10-30 min, real 99c buyers, up to 400 contracts | 1,400 | 1433 | +$11.57 | Ahead, but could be luck | dropped | khourly_sweep.py offer |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (all 3 samples) | 246 | 308 | -$0.22 | Behind, but could be bad luck | dropped | props.py |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (found by looking) | 246 | 227 | +$11.21 | Promising, needs more bets | dropped | props.py ureport |
+| 2026-11-24 | Kalshi NFL props: No where Yes is 50-75c, 24h before (fresh check) | 1 | 232 | +$7.88 | Ahead, but could be luck | dropped | props.py freport |
+| 2026-11-24 | Kalshi player props: always No, 2h before (14 kinds, fair sample) | 1 | 2537 | -$4.74 | Losing | dropped | props.py ureport |
+| 2026-11-24 | Kalshi player props: always Yes, 2h before (14 kinds, fair sample) | 1 | 2588 | -$13.07 | Losing | dropped | props.py ureport |
+| 2026-11-24 | Known answer, winner still under 97c: buy it (crypto, stocks, soccer) | 14 | 38 | -$27.30 | Behind, but could be bad luck | dropped | known.py report |
+| 2026-11-24 | No on the nearest open rung only (the 'it will slip' bet), Yes 25-90c | 60 | 104 | +$1.06 | Ahead, but could be luck | dropped | dates.py, backtest/dates.md |
+| 2026-11-24 | Soccer after the final whistle: buy the leader at 99c+ (the grind) | 14 | 801 | +$0.06 | Ahead, but could be luck | dropped | known.py report |
+| 2026-11-24 | Starship flight dates: No where Yes is 2-50c | 60 | 10 | +$24.82 | Promising, needs more bets | re-check | dates.py, backtest/dates.md |
+| 2026-11-24 | US CPI: buy on Kalshi 5c+ under Polymarket | 12 | 7 | -$19.41 | Too early to tell | dropped | fed.py cross |
+| 2026-11-24 | US CPI: buy on Polymarket 10c+ under Kalshi | 12 | 13 | +$47.87 | Ahead, but could be luck | dropped | fed.py cross |
+| 2026-11-24 | US CPI: buy on Polymarket 5c+ under Kalshi | 12 | 19 | -$4.66 | Behind, but could be bad luck | dropped | fed.py cross |
+| 2026-11-25 | Speed check: buy Polymarket 5-min BTC side within 0.1 s of a Binance jump (asks 40-95c), unseen days 19-24 Nov | 12 | 1723 | +$2.73 | Looks real | open | quoter/speedcheck.py edge |
+| 2026-11-26 | BTC 5-min seller pull {'jump': 0.02} 250ms | 32 | 2363 | -$1.99 | Losing | dropped | maker5m.py report |
+| 2026-11-26 | Buy and sell inside the window, btc: best of 4359 rules on the first days, graded on fresh days (buy at the offer; at 4min, ask 8c-30c; sell after 15s) | 8,378 | 174 | -$14.52 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-26 | Buy and sell inside the window, kmin: best of 5806 rules on the first days, graded on fresh days (waiting bid; join the best bid at 88c-97c in the last 7min; sell at +5c / else hold) | 11,292 | 2782 | -$1.20 | Losing | dropped | swing.py exams |
+| 2026-11-26 | Buy and sell inside the window, ksec: best of 2846 rules on the first days, graded on fresh days (buy at the offer; at 3min, ask 8c-30c; sell at +20c / stop -10c) | 5,790 | 41 | -$1.77 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-26 | kc_maker skip cushion under 1.5, check months | 43 | 7298 | +$0.27 | Promising, needs more bets | open | kcflip.py |
+| 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
+| 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
+| 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

@@ -48,6 +48,7 @@ strategy doesn't beat those twins, the "edge" is in the band or the exits, not t
 | `boring_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "other" (`calib.topic`), the first time No's last traded price is at 90-97c with more than 30 days to the end date: wait 5 minutes, take the next real $100+ buy of No within 6 hours, +1c + fee, $25 a bet, one bet per market, no bet if that buy is more than 2c outside the band. Exactly `winners.rule_bets` with `PRESETS[2]`. Not in `btholdout` yet: fetch trade lists (`informed.py`) for markets ending 2026-11-10 or later, then `winners.py drill` | ahead, and band low end above -$5 per $100 |
 | `crypto_no` (added 2026-11-10, Jan's OK, `winners.py`) | Topic "crypto price", the first time No is at 70-90c with 3-7 days to the end date, same fill rule. Exactly `winners.rule_bets` with `PRESETS[0]`. Scored the same way | ahead, and band low end above -$5 per $100 |
 | `soccer_draw_mid` (secondary, added 2026-11-10, `digs.py draws`) | Same as `soccer_draw` but only draws priced 22-32c and only outside the big leagues (slugs epl, lal, sea, bun, fl1, ucl, uel). Found by slicing in-sample data, so it only counts if `soccer_draw` also passes | ahead at +1c |
+| `soccer_draw_nofree` (secondary, added 2026-11-26, `drawsharp.py`) | Same as `soccer_draw` but only leagues whose Polymarket slug prefix is NOT in `drawsharp.COVERED` or `drawsharp.BIG` (leagues with no free bookmaker odds history: Colombia, Brazil Serie B, Korea, Egypt, World Cup qualifiers, Libertadores and the like). Found by slicing in-sample data (+$10.95 per $100 on 2,370 bets vs -$0.70 / -$9.80 in the other leagues), so it only counts if `soccer_draw` also passes. List fixed before any game from 2026-11-10 on was looked at | ahead at +1c |
 | `combo_moving` (added 2026-11-10, Jan's OK, `combo.py`) | The everything-together model, "moving prices only, no clock" version, frozen: same 14 inputs and settings as `combo.fit` (random_state 1), learned on every usable market that ended before 2026-11-10, only on market-days where the price moved 0.2c or more since the day before. Judged on noons from 2026-11-10 on, markets ending 2026-11-10 or later, events it never learned from, moving prices only. Bets when its chance is 12c or more above the cost (chart + `yesno.POLY_EXTRA` + fee, cost 5-95c), one bet per market at the first such noon, $25. Counted at the first real buy within 3 hours +1c + fee (`exam.fills`); bets nobody could buy don't count. Exactly `combo.holdout()` (probe `btcomboholdout`, after a fresh fetch of markets ending 2026-11-10 or later) | ahead, and band low end above -$5 per $100 |
 | `cs2_fav_day` (added 2026-11-11, `cs2.py`) | Polymarket CS2 match winner (slug `cs2-`, market type moneyline): the team whose chart price is 70-97c 24 hours before the listed start, filled at the first real buy of that team within 3 hours and before the start, +1c + fee, $25, held to the result. Exactly `cs2.py` rule `fav24`: `CS2_HOLDOUT=1 python3 cs2.py exam fav24` after fresh fetches (census sports fetch, `cs2_fetch`, `cs2_ai`), games from 2026-11-10 on | ahead, and band low end above -$5 per $100 |
 | `cs2_fav_day_b` (secondary, added 2026-11-11) | Same, only bo3.gg tier B tournaments (rule `fav24b`). Found by slicing in-sample data, so it only counts if `cs2_fav_day` also passes | ahead at +1c |
@@ -166,6 +167,24 @@ bets at real offers can settle it.
   as the holdout tests in section 5).
 - **Side check:** the Kalshi track's own "what $10 / $25 / $50 / $100 would have bought" numbers say how much money
   really fits.
+- **Anything else:** not proven, keep it on paper.
+
+## 5i. Proposed live test: tennis_set_w + tennis_set (written 2026-11-23, NOT locked: waiting for Jan's OK)
+
+Written before the first live bet (`tennis.py`, `backtest/tennis.md`). The history says +$6.96 per $100 on 1,402
+women's main tour bets and +$2.45 per $100 on 6,469 bets on all four tours, "Promising, needs more bets". Found by
+looking (130 cuts), and gone when each share costs 2c more. Only live bets at real offers can settle it.
+
+- **What counts:** every finished bet of each track from its first run, rules as in config (a rule change restarts
+  the count). The two tracks are scored separately; the women's matches are in both.
+- **When:** `tennis_set_w` once, at 300 finished bets (about 4 a day in season and almost none in December, so
+  around April 2027). `tennis_set` once, at 1,000 finished bets (about 12 a day, so around March 2027). On
+  1 Jan 2027 there is a first look, which only says "on track" or "off track".
+- **Pass:** `tennis_set_w`: ahead, and the low end of the luck range above -$5 per $100. `tennis_set`: ahead, and
+  the low end of the luck range above -$2 per $100 (more bets, so a tighter bar).
+- **Rule change 23 Nov, 10:45 UTC (Jan's OK):** the bot never pays more than the sell price it saw (a price limit, like a real order). The first 12 bets were made without it; the count for this test starts at the change.
+- **Side check:** the live bot buys 0 to about 15 minutes after the set (the history test: 7 minutes). Compare the
+  price really paid with the history's 63c average, and the "what $10 / $25 / $50 / $100 would have bought" numbers.
 - **Anything else:** not proven, keep it on paper.
 
 ## 6. Keep it simple

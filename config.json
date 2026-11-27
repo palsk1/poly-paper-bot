@@ -49,6 +49,27 @@
       "source": "kmaker",
       "rules": "kc_maker_safe_usd"
     },
+    "kc_maker_safe_usd_10m": {
+      "label": "Paper twin of the real Kalshi bot with a longer window (25 Nov, Jan picked 'Paper twin first'): same bid one tick in front of the best bid on the winning side, same price-gap check and the real bot's 2.3 cushion, but it may start with 10 minutes left (not 5.5) and takes 90c+ (not 95c+). History: beat today's rule on three separate stretches, +$0.85 vs +$0.59 per $100 on the fresh week 17-24 Nov with real trade sizes (backtest/kearly.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_safe_usd_10m"
+    },
+    "kc_maker_mid": {
+      "label": "kc_maker with a middle cushion (26 Nov, Jan picked 'Paper twin first'): same bid as kc_maker (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but it skips windows where Binance, moved onto Kalshi's price, sits less than 1.5 'typical moves until the close' past the start price (kc_maker uses no check, the real bot 2.3). The flips were the near-the-line bets: on kc_maker's own 9-24 Nov bets this kept 2 in 3 bets, +$122 instead of +$105, worst day -$3.45 instead of -$10.17 (backtest/kcflip.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_mid"
+    },
+    "kc_maker_pct": {
+      "label": "kc_maker with a bid that follows the pot (27 Nov, Jan's ask): same rule as kc_maker, but every bid is a tenth of what the pot holds right now (starts at $25 on $250, never above $100), so wins make the next bids bigger and losses make them smaller. Compare with kc_maker's fixed $10. $250 paper (about where kc_maker's own pot stands by now), no refills",
+      "start_cash": 250,
+      "refill": false,
+      "source": "kmaker",
+      "rules": "kc_maker_pct"
+    },
     "kc_maker_safe_kprice": {
       "label": "Twin of kc_maker_safe checked on Kalshi's own price (19 Nov, Jan: make a paper twin, name it clearly): same bid (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but the 'at least 2 typical moves past the start price' check uses Kalshi's own settle number (the CF Benchmarks 60-second average, free at /live_data/events) instead of Binance. Re-test: backtest/kprice.md. $100 paper",
       "start_cash": 100,
@@ -183,6 +204,18 @@
       "start_cash": 300,
       "source": "ktrump",
       "rules": "trump_week_k"
+    },
+    "tennis_set_w": {
+      "label": "UNTESTED (added 2026-11-23). Tennis, women's main tour, on Kalshi: when a player has just won the first set and still costs 50c to under 80c, buys up to $25 of her and holds to the end of the match. Looks once per match, right after set 1. History: +$6.96 per $100 on 1,402 bets, about 7 in 10 win; found by looking, and it only works at the price shown, not 2c higher (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
+      "start_cash": 300,
+      "source": "ktennis",
+      "rules": "tennis_set_w"
+    },
+    "tennis_set": {
+      "label": "UNTESTED (added 2026-11-23). Tennis, all four pro tours (men, women and both second-tier tours), on Kalshi: the same bet as tennis_set_w on every match. When a player has just won the first set and still costs 50c to under 80c, buys up to $25 and holds to the end. History: +$2.45 per $100 on 6,469 bets; the men's matches alone were about $0 (backtest/tennis.md). Real order-book fills. $300 paper, no refills",
+      "start_cash": 300,
+      "source": "ktennis",
+      "rules": "tennis_set"
     },
     "econ_fav": {
       "label": "Forecast backs the favorite (added 2026-11-09): Kalshi CPI, jobless-claims, unemployment and jobs-report markets. 20-76 hours before the release, buys the side that costs 80-99c when a free forecast (Cleveland Fed for inflation, last release for the jobs numbers) says it is worth 3c+ more. Holds to the result. Real order-book fills. $50 paper",
@@ -1245,6 +1278,21 @@
       "inherit": "kc_maker_safe",
       "usd_gap": true
     },
+    "kc_maker_safe_usd_10m": {
+      "inherit": "kc_maker_safe_usd",
+      "min_spot_z": 2.3,
+      "level": 0.9,
+      "max_minutes_left": 10.0
+    },
+    "kc_maker_mid": {
+      "inherit": "kc_maker",
+      "min_usd_z": 1.5
+    },
+    "kc_maker_pct": {
+      "inherit": "kc_maker",
+      "bid_share": 0.1,
+      "max_usd_per_order": 100
+    },
     "kc_maker_safe_kprice": {
       "inherit": "kc_maker",
       "min_kalshi_z": 2.0
@@ -2003,6 +2051,34 @@
       "min_usd": 5,
       "min_usd_note": "Skip when less than $5 is on offer at a price that fits.",
       "scan_minutes": 55
+    },
+    "tennis_set_w": {
+      "why": "2026-11-23 (tennis thread, Jan: 'yes build a paper track'). tennis.py lead (backtest/tennis.md): on Kalshi the winner of set 1, bought at the real sell offer 50c to under 80c about 7 minutes after the set and held to the end, made +$6.96 per $100 on 1,402 women's main tour bets (both halves ahead; +$5.46 on 720 with a second, stricter clock), all four tours +$2.45 on 6,469. Found by looking (130 cuts), gone at 2c more a share. The live bot reads Kalshi's own live score every 5 minutes and looks ONCE per match, the first time set 1 is over and set 2 is at most 3 games old, so it buys 0 to about 15 minutes after the set. UNTESTED live. Claude's track, rule changes reported.",
+      "series": ["KXWTAMATCH"],
+      "min_price": 0.50,
+      "max_price": 0.80,
+      "price_note": "The set winner's real sell offer must be 50c to under 80c.",
+      "max_spread": 0.08,
+      "max_over_seen": 0.0,
+      "max_over_seen_note": "Since 2026-11-23 10:45 UTC (Jan: 'Do it and merge'): never pays more than the sell price it saw when it decided, like a real order with a price limit. If the offers have moved up, no bet (counted in the track's missed_price).",
+      "max_set2_games": 3,
+      "max_set2_games_note": "If the bot first sees the match more than 3 games into set 2 it is too late: no bet, ever, on that match.",
+      "usd_per_bet": 25,
+      "min_usd": 5,
+      "scan_minutes": 4
+    },
+    "tennis_set": {
+      "why": "2026-11-23. Same rule as tennis_set_w on all four tours Kalshi lists and 365scores could time in the history test (no ITF). History +$2.45 per $100 on 6,469 bets, exam: Promising, needs more bets; men's main tour about $0, men's challengers +$1.55, women's challengers -$0.27. Runs side by side with the women-only track to see if the women's lead is real or just the best of four. UNTESTED live. Claude's track, rule changes reported.",
+      "series": ["KXATPMATCH", "KXWTAMATCH", "KXATPCHALLENGERMATCH", "KXWTACHALLENGERMATCH"],
+      "min_price": 0.50,
+      "max_price": 0.80,
+      "max_spread": 0.08,
+      "max_over_seen": 0.0,
+      "max_over_seen_note": "Since 2026-11-23 10:45 UTC (Jan: 'Do it and merge'): never pays more than the sell price it saw when it decided, like a real order with a price limit. If the offers have moved up, no bet (counted in the track's missed_price).",
+      "max_set2_games": 3,
+      "usd_per_bet": 25,
+      "min_usd": 5,
+      "scan_minutes": 4
     },
     "econ_fav": {
       "why": "2026-11-09 econ.py backtest (backtest/econ.md): on 340 Kalshi data releases 2021-2026, buying the 80-99c side when the forecast said it was worth 3c+ more made +$6.73 per $100 24h before (141 bets, 7 lost) and +$7.75 72h before, both halves ahead, still ahead 2c worse; the same band without the forecast lost about $5 per $100. Found after looking at price bands, so the live track is the real test. Claude's track, rule changes reported.",

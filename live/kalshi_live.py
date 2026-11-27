@@ -21,6 +21,7 @@ Settings in ~/.live.env (Jan's file on the server; none of this is in the repo):
   KALSHI_USD_PER_ORDER=4            money per bid
   KALSHI_MAX_OPEN_USD=30            most money in bids at once
   KALSHI_DAY_LOSS_STOP=10           stop new bids for the rest of the day (UTC) after losing this much
+  KALSHI_MIN_Z_USD=2.3              safety bar after the Binance-vs-Kalshi gap correction (paper twin uses 2.0)
   KALSHI_TOTAL_LOSS_STOP=20         stop for good (writes ~/live-data/STOP-kalshi) after losing this much in total
 """
 import base64
@@ -246,8 +247,9 @@ def place(book):
             if z is None or z < r["min_spot_z"]:
                 continue
             zu = bot.kmaker_z(series, strike, left, side, open_ts=(close - dt.timedelta(minutes=15)).timestamp())
-            if zu is None or zu < r["min_spot_z"]:
-                continue
+            if zu is None or zu < max(r["min_spot_z"], C.envf("KALSHI_MIN_Z_USD", 2.3)):
+                continue                   # real bot only (Jan, 23 Nov): it looks every 15 s, so it caught coins the
+                                           # moment they first cleared 2.0; all 3 first real losses sat at 2.1-2.26
             shares = max(1, int(usd / price + 1e-9))
             cost = round(shares * price, 4)
             if cost > usd + 1e-6:
@@ -264,8 +266,9 @@ def place(book):
                 if cash is None:
                     cash = balance()
                 if cash < cost:
-                    book.log("skip_no_cash", ticker=tk, crypto_cash=round(cash, 2), cost=cost)
-                    if book.state.get("cash_push") != C.today():
+                    tied = round(book.open_cost(), 2)   # money waiting in our own bids comes back within 15 min
+                    book.log("skip_no_cash", ticker=tk, crypto_cash=round(cash, 2), cost=cost, in_bids=tied)
+                    if cash + tied < cost and book.state.get("cash_push") != C.today():
                         book.state["cash_push"] = C.today()
                         book.save()
                         C.push("Kalshi bot: no money to bid with",
@@ -318,7 +321,10 @@ def run():
                 place(book)
         except Exception as e:
             book.log("error", err=f"{type(e).__name__}: {e}"[:300])
-        C.beat(book, time.time() - t0, balance_fn=balance_log)
+        C.beat(book, time.time() - t0,
+               # Jan, 25 Nov: Kalshi's balance leaves out money held in waiting bids, so a reading during a round
+               # looked like a $20 loss; the dashboard adds `in_bids` back
+               balance_fn=lambda: {**balance_log(), "in_bids": book.open_cost()})
         if time.time() - last_up > C.UPLOAD_S:
             last_up = time.time()
             try:

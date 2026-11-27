@@ -1,8 +1,8 @@
 {
  "delta": {
   "G": [
-   108,
-   258
+   126,
+   293
   ],
   "S:andy burnham": [
    8,
@@ -27,6 +27,14 @@
   "S:coreweave": [
    8,
    16
+  ],
+  "S:deere": [
+   4,
+   8
+  ],
+  "S:dell": [
+   5,
+   7
   ],
   "S:disney": [
    4,
@@ -61,8 +69,12 @@
    8
   ],
   "S:trump": [
-   21,
-   47
+   23,
+   55
+  ],
+  "S:trump or melania": [
+   7,
+   12
   ],
   "S:walmart": [
    4,
@@ -366,6 +378,66 @@
   ],
   "ST:coreweave|trump": [
    0,
+   1
+  ],
+  "ST:deere|demand#20+": [
+   1,
+   1
+  ],
+  "ST:deere|exactshot": [
+   0,
+   1
+  ],
+  "ST:deere|fertilizer": [
+   0,
+   1
+  ],
+  "ST:deere|iowa": [
+   0,
+   1
+  ],
+  "ST:deere|see & spray": [
+   1,
+   1
+  ],
+  "ST:deere|starlink": [
+   0,
+   1
+  ],
+  "ST:deere|technology#10+": [
+   1,
+   1
+  ],
+  "ST:deere|tenna": [
+   1,
+   1
+  ],
+  "ST:dell|ai#50+": [
+   1,
+   1
+  ],
+  "ST:dell|blackwell": [
+   1,
+   1
+  ],
+  "ST:dell|crowdstrike": [
+   0,
+   1
+  ],
+  "ST:dell|dram/nand#3+": [
+   1,
+   1
+  ],
+  "ST:dell|inference": [
+   1,
+   1
+  ],
+  "ST:dell|shortage": [
+   0,
+   1
+  ],
+  "ST:dell|vera rubin": [
+   1,
    1
   ],
   "ST:disney|adobe": [
@@ -780,11 +852,63 @@
    1,
    1
   ],
+  "ST:trump or melania|ballroom": [
+   1,
+   1
+  ],
+  "ST:trump or melania|bean": [
+   0,
+   1
+  ],
+  "ST:trump or melania|biden/joe": [
+   0,
+   1
+  ],
+  "ST:trump or melania|border": [
+   1,
+   1
+  ],
+  "ST:trump or melania|chicken/egg": [
+   1,
+   1
+  ],
+  "ST:trump or melania|china/xi": [
+   0,
+   1
+  ],
+  "ST:trump or melania|drone/helipad": [
+   1,
+   1
+  ],
+  "ST:trump or melania|iran": [
+   1,
+   1
+  ],
+  "ST:trump or melania|potato": [
+   0,
+   1
+  ],
+  "ST:trump or melania|poultry": [
+   1,
+   1
+  ],
+  "ST:trump or melania|tomato": [
+   0,
+   1
+  ],
+  "ST:trump or melania|west virginia": [
+   1,
+   1
+  ],
   "ST:trump|alaska": [
    0,
    1
   ],
   "ST:trump|allah": [
+   0,
+   1
+  ],
+  "ST:trump|animal": [
    0,
    1
   ],
@@ -804,8 +928,16 @@
    0,
    1
   ],
+  "ST:trump|biden/kamala/obama (3+ times)": [
+   0,
+   1
+  ],
   "ST:trump|biden/obama": [
    1,
+   1
+  ],
+  "ST:trump|china (3+ times)/xi": [
+   0,
    1
   ],
   "ST:trump|china/chinese": [
@@ -814,6 +946,10 @@
   ],
   "ST:trump|china/russia (15+ times)": [
    0,
+   1
+  ],
+  "ST:trump|death penalty/death row": [
+   1,
    1
   ],
   "ST:trump|deficit": [
@@ -852,13 +988,21 @@
    0,
    1
   ],
+  "ST:trump|huang/jensen": [
+   0,
+   1
+  ],
+  "ST:trump|illegal alien": [
+   1,
+   1
+  ],
   "ST:trump|impeach/impeached/impeachment": [
    1,
    1
   ],
   "ST:trump|iran": [
    1,
-   1
+   2
   ],
   "ST:trump|iran (5+ times)": [
    1,
@@ -895,6 +1039,10 @@
   "ST:trump|nuclear/nuke": [
    2,
    2
+  ],
+  "ST:trump|nvidia": [
+   0,
+   1
   ],
   "ST:trump|putin": [
    0,
@@ -1016,6 +1164,10 @@
    1,
    1
   ],
+  "T:ai#50+": [
+   1,
+   1
+  ],
   "T:ai#7+": [
    1,
    1
@@ -1048,6 +1200,10 @@
    0,
    1
   ],
+  "T:animal": [
+   0,
+   1
+  ],
   "T:anthropic/claude": [
    1,
    1
@@ -1077,11 +1233,15 @@
    1
   ],
   "T:ballroom": [
-   0,
-   1
+   1,
+   2
   ],
   "T:bandwidth": [
    1,
+   1
+  ],
+  "T:bean": [
+   0,
    1
   ],
   "T:bean/soybean": [
@@ -1093,6 +1253,14 @@
    2
   ],
   "T:biden (3+ times)": [
+   0,
+   1
+  ],
+  "T:biden/joe": [
+   0,
+   1
+  ],
+  "T:biden/kamala/obama (3+ times)": [
    0,
    1
   ],
@@ -1116,11 +1284,19 @@
    0,
    1
   ],
+  "T:blackwell": [
+   1,
+   1
+  ],
   "T:blockade": [
    0,
    1
   ],
   "T:board#3+": [
+   1,
+   1
+  ],
+  "T:border": [
    1,
    1
   ],
@@ -1164,6 +1340,10 @@
    1,
    1
   ],
+  "T:chicken/egg": [
+   1,
+   1
+  ],
   "T:chimp/monkey": [
    0,
    1
@@ -1172,11 +1352,19 @@
    0,
    1
   ],
+  "T:china (3+ times)/xi": [
+   0,
+   1
+  ],
   "T:china/chinese": [
    1,
    1
   ],
   "T:china/russia (15+ times)": [
+   0,
+   1
+  ],
+  "T:china/xi": [
    0,
    1
   ],
@@ -1206,13 +1394,17 @@
   ],
   "T:crowdstrike": [
    0,
-   1
+   2
   ],
   "T:customer#25+": [
    1,
    1
   ],
   "T:customer#30+": [
+   1,
+   1
+  ],
+  "T:death penalty/death row": [
    1,
    1
   ],
@@ -1229,6 +1421,10 @@
    1
   ],
   "T:deficit": [
+   1,
+   1
+  ],
+  "T:demand#20+": [
    1,
    1
   ],
@@ -1264,12 +1460,20 @@
    1,
    1
   ],
+  "T:dram/nand#3+": [
+   1,
+   1
+  ],
   "T:dream": [
    0,
    1
   ],
   "T:drone": [
    0,
+   1
+  ],
+  "T:drone/helipad": [
+   1,
    1
   ],
   "T:ebitda": [
@@ -1292,6 +1496,10 @@
    1,
    1
   ],
+  "T:exactshot": [
+   0,
+   1
+  ],
   "T:fake news": [
    0,
    1
@@ -1311,6 +1519,10 @@
   "T:feastable/feastables": [
    1,
    2
+  ],
+  "T:fertilizer": [
+   0,
+   1
   ],
   "T:fight": [
    0,
@@ -1400,6 +1612,10 @@
    0,
    1
   ],
+  "T:huang/jensen": [
+   0,
+   1
+  ],
   "T:huge": [
    0,
    1
@@ -1424,11 +1640,19 @@
    0,
    1
   ],
+  "T:illegal alien": [
+   1,
+   1
+  ],
   "T:immigration": [
    1,
    2
   ],
   "T:impeach/impeached/impeachment": [
+   1,
+   1
+  ],
+  "T:inference": [
    1,
    1
   ],
@@ -1452,9 +1676,13 @@
    1,
    1
   ],
+  "T:iowa": [
+   0,
+   1
+  ],
   "T:iran": [
-   1,
-   2
+   2,
+   4
   ],
   "T:iran (5+ times)": [
    1,
@@ -1564,6 +1792,10 @@
    2,
    2
   ],
+  "T:nvidia": [
+   0,
+   1
+  ],
   "T:nypd": [
    0,
    2
@@ -1601,6 +1833,14 @@
    1
   ],
   "T:pokemon": [
+   1,
+   1
+  ],
+  "T:potato": [
+   0,
+   1
+  ],
+  "T:poultry": [
    1,
    1
   ],
@@ -1704,6 +1944,14 @@
    1,
    1
   ],
+  "T:see & spray": [
+   1,
+   1
+  ],
+  "T:shortage": [
+   0,
+   1
+  ],
   "T:si/super intelligence": [
    1,
    1
@@ -1734,6 +1982,10 @@
   ],
   "T:star wars": [
    1,
+   1
+  ],
+  "T:starlink": [
+   0,
    1
   ],
   "T:stock market": [
@@ -1768,6 +2020,14 @@
    1,
    1
   ],
+  "T:technology#10+": [
+   1,
+   1
+  ],
+  "T:tenna": [
+   1,
+   1
+  ],
   "T:tesla": [
    0,
    1
@@ -1777,6 +2037,10 @@
    1
   ],
   "T:token#25+": [
+   0,
+   1
+  ],
+  "T:tomato": [
    0,
    1
   ],
@@ -1808,6 +2072,10 @@
    0,
    1
   ],
+  "T:vera rubin": [
+   1,
+   1
+  ],
   "T:veto": [
    1,
    1
@@ -1824,6 +2092,10 @@
    0,
    1
   ],
+  "T:west virginia": [
+   1,
+   1
+  ],
   "T:world war": [
    0,
    1
@@ -1837,8 +2109,8 @@
    1
   ],
   "W:earnings-call-mentions": [
-   52,
-   92
+   61,
+   107
   ],
   "W:mamdani-announcement-mentions": [
    9,
@@ -1872,9 +2144,17 @@
    5,
    10
   ],
+  "W:what will trump or melania say thanksgiving turkey pardon": [
+   7,
+   12
+  ],
   "W:what will trump say news conference": [
    9,
    12
+  ],
+  "W:what will trump say protecting american families remarks": [
+   2,
+   8
   ],
   "W:what will trump say trilateral meeting with xi and putin": [
    3,
@@ -1901,6 +2181,10 @@
    1
   ],
   "WT:earnings-call-mentions|ai#25+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|ai#50+": [
    1,
    1
   ],
@@ -1944,6 +2228,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|blackwell": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|board#3+": [
    1,
    1
@@ -1978,7 +2266,7 @@
   ],
   "WT:earnings-call-mentions|crowdstrike": [
    0,
-   1
+   2
   ],
   "WT:earnings-call-mentions|customer#25+": [
    1,
@@ -1993,6 +2281,10 @@
    1
   ],
   "WT:earnings-call-mentions|defense": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|demand#20+": [
    1,
    1
   ],
@@ -2012,6 +2304,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|dram/nand#3+": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|drone": [
    0,
    1
@@ -2022,6 +2318,14 @@
   ],
   "WT:earnings-call-mentions|energy#10+": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|exactshot": [
+   0,
+   1
+  ],
+  "WT:earnings-call-mentions|fertilizer": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|fiscal#10+": [
@@ -2052,6 +2356,10 @@
    0,
    1
   ],
+  "WT:earnings-call-mentions|inference": [
+   1,
+   1
+  ],
   "WT:earnings-call-mentions|inflation": [
    0,
    1
@@ -2066,6 +2374,10 @@
   ],
   "WT:earnings-call-mentions|investigation": [
    1,
+   1
+  ],
+  "WT:earnings-call-mentions|iowa": [
+   0,
    1
   ],
   "WT:earnings-call-mentions|iran": [
@@ -2172,6 +2484,14 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|see & spray": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|shortage": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|si/super intelligence": [
    1,
    1
@@ -2188,6 +2508,10 @@
    1,
    1
   ],
+  "WT:earnings-call-mentions|starlink": [
+   0,
+   1
+  ],
   "WT:earnings-call-mentions|succession/successor": [
    0,
    1
@@ -2199,6 +2523,14 @@
   "WT:earnings-call-mentions|tariff": [
    2,
    3
+  ],
+  "WT:earnings-call-mentions|technology#10+": [
+   1,
+   1
+  ],
+  "WT:earnings-call-mentions|tenna": [
+   1,
+   1
   ],
   "WT:earnings-call-mentions|token#25+": [
    0,
@@ -2218,6 +2550,10 @@
   ],
   "WT:earnings-call-mentions|uranium": [
    0,
+   1
+  ],
+  "WT:earnings-call-mentions|vera rubin": [
+   1,
    1
   ],
   "WT:earnings-call-mentions|zipline": [
@@ -2656,6 +2992,54 @@
    1,
    1
   ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|ballroom": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|bean": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|biden/joe": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|border": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|chicken/egg": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|china/xi": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|drone/helipad": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|iran": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|potato": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|poultry": [
+   1,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|tomato": [
+   0,
+   1
+  ],
+  "WT:what will trump or melania say thanksgiving turkey pardon|west virginia": [
+   1,
+   1
+  ],
   "WT:what will trump say news conference|bean/soybean": [
    0,
    1
@@ -2701,6 +3085,38 @@
    1
   ],
   "WT:what will trump say news conference|world war": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|animal": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|biden/kamala/obama (3+ times)": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|china (3+ times)/xi": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|death penalty/death row": [
+   1,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|huang/jensen": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|illegal alien": [
+   1,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|iran": [
+   0,
+   1
+  ],
+  "WT:what will trump say protecting american families remarks|nvidia": [
    0,
    1
   ],
@@ -3063,7 +3479,42 @@
   "7177987": 1795219140,
   "7177988": 1795219140,
   "7177989": 1795219140,
-  "7177990": 1795219140
+  "7177990": 1795219140,
+  "7211307": 1795564740,
+  "7211308": 1795564740,
+  "7211309": 1795564740,
+  "7211310": 1795564740,
+  "7211311": 1795564740,
+  "7211312": 1795564740,
+  "7211313": 1795564740,
+  "7211314": 1795564740,
+  "7211315": 1795564740,
+  "7211316": 1795564740,
+  "7211317": 1795564740,
+  "7229965": 1795564740,
+  "7231389": 1795582740,
+  "7231390": 1795582740,
+  "7231391": 1795582740,
+  "7231392": 1795582740,
+  "7231393": 1795582740,
+  "7231394": 1795582740,
+  "7231395": 1795582740,
+  "7231447": 1795669140,
+  "7231448": 1795669140,
+  "7231449": 1795669140,
+  "7231450": 1795669140,
+  "7231451": 1795669140,
+  "7231452": 1795669140,
+  "7231453": 1795669140,
+  "7231454": 1795669140,
+  "7288809": 1795478340,
+  "7288810": 1795478340,
+  "7288811": 1795478340,
+  "7288812": 1795478340,
+  "7288813": 1795478340,
+  "7288814": 1795478340,
+  "7288815": 1795478340,
+  "7288816": 1795478340
  },
- "synced": 1795373695
+ "synced": 1795789085
 }

@@ -1,8 +1,8 @@
 # Fast Kalshi paper bot (last 45 seconds)
 
-Live paper test, `kfastlive.py`. 6153 coin-windows from 2026-11-10T10:30 to 2026-11-22T18:15 UTC (879 closes watched). Paper only, nothing is really bought.
+Live paper test, `kfastlive.py`. 8239 coin-windows from 2026-11-10T10:30 to 2026-11-27T14:30 UTC (1177 closes watched). Paper only, nothing is really bought.
 
-Binance guessed Kalshi's result wrong on **99 of 6153** windows. Reading the Kalshi book takes about 144 ms (slowest 1 in 10: 234 ms).
+Binance guessed Kalshi's result wrong on **138 of 8239** windows. Reading the Kalshi book takes about 143 ms (slowest 1 in 10: 228 ms).
 
 P&L is after Kalshi's fee. "Full" = how often the whole order got filled. The proof line uses the repo's rule: one loss costs about a dollar a contract, so losses have to be rarer than what one bet earns, with 90% confidence.
 
@@ -10,23 +10,23 @@ P&L is after Kalshi's fee. "Full" = how often the whole order got filled. The pr
 
 | Test | Chances | Bought | Full | Lost | Avg price | P&L | P&L per $100 | Proof |
 |---|---|---|---|---|---|---|---|---|
-| Buy now, 45 s left, Binance very sure (z 4+) (main) | 4355 | 337 | 327 | 2 | 99.60c | $-10.50 | $-0.32 | needs ~1496 more bets with no loss |
-| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 3569 | 58 | 57 | 0 | 99.79c | $+0.62 | $+0.11 | needs ~2048 more bets with no loss |
-| Wait at 99.5c, 45 s left (z 4+) (main) | 4355 | 165 | 160 | 3 | 99.09c | $-15.99 | $-1.00 | needs ~606 more bets with no loss |
-| Wait at 99.8c, 45 s left (z 2+) (main) | 5253 | 1191 | 1179 | 16 | 98.86c | $-39.00 | $-0.33 | needs ~999 more bets with no loss |
-| Buy now, 60 s left (z 4+) | 3546 | 470 | 455 | 3 | 99.68c | $-20.56 | $-0.45 | needs ~2758 more bets with no loss |
-| Buy now, 30 s left (z 4+) | 5181 | 257 | 254 | 0 | 99.55c | $+8.52 | $+0.34 | needs ~429 more bets with no loss |
-| Control: buy the favourite at 45 s, no Binance | 2054 | 2042 | 2030 | 134 | 92.91c | $+11.76 | $+0.06 | needs ~205 more bets with no loss |
+| Buy now, 45 s left, Binance very sure (z 4+) (main) | 5794 | 419 | 406 | 2 | 99.62c | $-9.19 | $-0.23 | needs ~1583 more bets with no loss |
+| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 4745 | 77 | 75 | 0 | 99.79c | $+0.81 | $+0.11 | needs ~2047 more bets with no loss |
+| Wait at 99.5c, 45 s left (z 4+) (main) | 5794 | 216 | 207 | 3 | 99.16c | $-13.18 | $-0.63 | needs ~618 more bets with no loss |
+| Wait at 99.8c, 45 s left (z 2+) (main) | 7010 | 1566 | 1551 | 21 | 98.88c | $-53.59 | $-0.35 | needs ~1232 more bets with no loss |
+| Buy now, 60 s left (z 4+) | 4683 | 580 | 564 | 3 | 99.71c | $-19.44 | $-0.34 | needs ~2995 more bets with no loss |
+| Buy now, 30 s left (z 4+) | 6899 | 320 | 314 | 2 | 99.00c | $+7.80 | $+0.25 | needs ~280 more bets with no loss |
+| Control: buy the favourite at 45 s, no Binance | 2738 | 2722 | 2706 | 192 | 92.74c | $-74.49 | $-0.30 | needs ~364 more bets with no loss |
 
 ## Orders of 100 contracts
 
 | Test | Chances | Bought | Full | Lost | Avg price | P&L | P&L per $100 | Proof |
 |---|---|---|---|---|---|---|---|---|
-| Buy now, 45 s left, Binance very sure (z 4+) (main) | 4355 | 337 | 320 | 2 | 99.61c | $-81.84 | $-0.25 | needs ~1117 more bets with no loss |
-| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 3569 | 58 | 54 | 0 | 99.80c | $+9.98 | $+0.18 | needs ~1211 more bets with no loss |
-| Wait at 99.5c, 45 s left (z 4+) (main) | 4355 | 165 | 150 | 3 | 99.09c | $-163.75 | $-1.07 | needs ~591 more bets with no loss |
-| Wait at 99.8c, 45 s left (z 2+) (main) | 5253 | 1191 | 1153 | 16 | 98.90c | $-393.94 | $-0.34 | needs ~978 more bets with no loss |
-| Buy now, 60 s left (z 4+) | 3546 | 470 | 446 | 3 | 99.69c | $-172.52 | $-0.38 | needs ~1889 more bets with no loss |
-| Buy now, 30 s left (z 4+) | 5181 | 257 | 248 | 0 | 99.57c | $+100.96 | $+0.40 | needs ~318 more bets with no loss |
-| Control: buy the favourite at 45 s, no Binance | 2054 | 2042 | 2017 | 134 | 93.04c | $-60.43 | $-0.03 | needs ~229 more bets with no loss |
+| Buy now, 45 s left, Binance very sure (z 4+) (main) | 5794 | 419 | 394 | 2 | 99.63c | $-63.48 | $-0.16 | needs ~1141 more bets with no loss |
+| Buy now, 45 s left, Binance extremely sure (z 6+) (main) | 4745 | 77 | 72 | 0 | 99.80c | $+13.43 | $+0.18 | needs ~1175 more bets with no loss |
+| Wait at 99.5c, 45 s left (z 4+) (main) | 5794 | 216 | 192 | 3 | 99.16c | $-137.56 | $-0.70 | needs ~601 more bets with no loss |
+| Wait at 99.8c, 45 s left (z 2+) (main) | 7010 | 1566 | 1512 | 21 | 98.91c | $-539.10 | $-0.36 | needs ~1195 more bets with no loss |
+| Buy now, 60 s left (z 4+) | 4683 | 580 | 554 | 3 | 99.71c | $-152.41 | $-0.27 | needs ~1949 more bets with no loss |
+| Buy now, 30 s left (z 4+) | 6899 | 320 | 306 | 2 | 99.01c | $+95.04 | $+0.31 | needs ~241 more bets with no loss |
+| Control: buy the favourite at 45 s, no Binance | 2738 | 2722 | 2687 | 192 | 92.87c | $-993.67 | $-0.39 | needs ~396 more bets with no loss |
 

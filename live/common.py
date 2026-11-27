@@ -10,7 +10,8 @@ Safety, in the order it is checked before every order:
   4. Spend caps from ~/.live.env (Jan's file, not the repo): money per bet, money out at once, loss per day,
      total loss. Hitting the total-loss cap writes a STOP file, so the bot stays stopped until Jan deletes it.
 
-The bots never pull new code by themselves: an update only happens when Jan runs `bash live/update.sh`.
+Code updates (23 Nov, Jan: "super hard on phone"): live/autoupdate.py, run by a timer on the server every 10 minutes
+and when Jan types `update`, tests new code before switching to it and goes back if a bot won't run on it.
 """
 import datetime as dt
 import gzip
@@ -70,6 +71,7 @@ def today():
 # wallet address, order number or payment number (0x + 40 or more hex characters) is cut to its last 4 characters.
 # Market ids are public and say nothing about who bet, so they stay.
 PUBLIC_IDS = {"condition_id", "token"}
+ORDER_KEYS = {"order_id", "client_order_id", "tx", "tx_hash"}   # order numbers: only the last 4 go public (23 Nov)
 _HEX = re.compile(r"0x[0-9a-fA-F]{40,}")
 
 
@@ -77,7 +79,8 @@ def scrub(v):
     if isinstance(v, str):
         return _HEX.sub(lambda m: "0x.." + m.group(0)[-4:], v)
     if isinstance(v, dict):
-        return {k: (x if k in PUBLIC_IDS else scrub(x)) for k, x in v.items()}
+        return {k: (x if k in PUBLIC_IDS else (".." + x[-4:] if k in ORDER_KEYS and isinstance(x, str) else scrub(x)))
+                for k, x in v.items()}
     if isinstance(v, (list, tuple)):
         return [scrub(x) for x in v]
     return v
@@ -112,7 +115,7 @@ class Book:
         os.replace(tmp, self.state_path)
 
     def log(self, kind, **kw):
-        kw = {k: (v if k in PUBLIC_IDS else scrub(v)) for k, v in kw.items()}
+        kw = scrub(kw)
         row = {"t": iso(), "k": kind, "live": is_live(), **kw}
         with open(os.path.join(DIR, f"{self.name}-{utcnow().strftime('%Y%m')}.jsonl"), "a") as f:
             f.write(json.dumps(row, separators=(",", ":")) + "\n")
@@ -180,9 +183,23 @@ def stop_reason(bot, book):
         push(f"{bot} bot STOPPED", msg)
         return msg
     day_stop = envf(f"{bot.upper()}_DAY_LOSS_STOP", 10)
-    if book.day()["pnl"] <= -day_stop:
-        return f"lost ${-book.day()['pnl']:.2f} today (cap ${day_stop:.0f}), waiting for tomorrow (UTC)"
+    d = book.day()
+    since = d["pnl"] - d.get("base", 0.0)     # "start" from the phone after a day stop gives a fresh cap (26 Nov, Jan)
+    if since <= -day_stop:
+        return (f"lost ${-since:.2f} today (cap ${day_stop:.0f}), waiting for tomorrow (UTC). "
+                f"Type start to allow ${day_stop:.0f} more today")
     return None
+
+
+def fresh_day_cap(bot, book):
+    """Jan's "start" after the day-loss cap: count today's loss again from now (the total cap still counts all)."""
+    day_stop = envf(f"{bot.upper()}_DAY_LOSS_STOP", 10)
+    d = book.day()
+    if d["pnl"] - d.get("base", 0.0) <= -day_stop:
+        d["base"] = d["pnl"]
+        book.log("day_cap_reset", base=round(d["pnl"], 4))
+        return True
+    return False
 
 
 def ntfy_post(topic, title, body):
@@ -212,11 +229,17 @@ def push(title, body):
 # ---------------------------------------------------------------- phone control (Jan, 22 Nov: "make it easy")
 CTRL_EVERY = 20
 UPLOAD_S = 900      # copy the notebook to GitHub every 15 minutes (was hourly: too slow to watch the first real bets)
-NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot"}
+NAMES = {"kalshi": "Kalshi bot", "poly": "Polymarket bot", "pspeed": "Speed bot"}
 ALIASES = {"kalshi": "kalshi", "k": "kalshi", "poly": "poly", "polymarket": "poly", "p": "poly",
+           "speed": "pspeed", "pspeed": "pspeed", "s": "pspeed",
            "all": "all", "both": "all", "bots": "all"}
-COMMANDS = {"stop", "off", "pause", "start", "on", "resume", "status", "how", "?"}
-BOT_TITLES = set(NAMES.values())
+COMMANDS = {"stop", "off", "pause", "start", "on", "resume", "status", "how", "?", "update", "updates", "help"}
+BOT_TITLES = set(NAMES.values()) | {"Server update"}
+HELP = ("Words you can type here:\n"
+        "status = how the bots are doing\n"
+        "stop / start = all bots (or stop kalshi, stop poly, stop speed, start kalshi, start poly, start speed)\n"
+        "update = get the newest bot code now (it is tested first; the server also does this by itself every 10 min)\n"
+        "updates off / updates on = stop or allow the automatic updates")
 _ctrl = {"t": 0}
 _beat = {"t": 0, "n": 0, "slow": 0.0}
 
@@ -291,6 +314,9 @@ def control(bot, book, status_fn):
         if not words:
             continue
         book.log("phone_heard", cmd=" ".join(words[:2]))
+        if words[0] in ("update", "updates", "help"):
+            server_word(words, m.get("id") or "", bot)
+            continue
         cmd, target = words[0], ALIASES.get(words[1], words[1]) if len(words) > 1 else "all"
         if target not in ("all", bot):
             continue
@@ -304,13 +330,63 @@ def control(bot, book, status_fn):
             if os.path.exists(flag):
                 os.remove(flag)
             book.log("phone_start")
+            fresh_day_cap(bot, book)
             why = stop_reason(bot, book)
             push(name, "Running again." if not why else f"Phone stop removed, but still paused: {why}")
         elif cmd in ("status", "how", "?"):
             why = stop_reason(bot, book)
             push(name, status_fn() + ("\nRunning." if not why else f"\nPaused: {why}") +
-                 ("" if is_live() else "\n(Pretend mode: no real money yet.)"))
+                 ("" if is_live() else "\n(Pretend mode: no real money yet.)") + "\n" + update_line())
     book.save()
+
+
+def first_to_answer(msg_id):
+    """Both bots read the same channel. Only the first one to grab a message answers words meant for the server."""
+    if not msg_id:
+        return True
+    os.makedirs(os.path.join(DIR, "heard"), exist_ok=True)
+    try:
+        os.close(os.open(os.path.join(DIR, "heard", re.sub(r"[^A-Za-z0-9_-]", "", msg_id)[:40]),
+                         os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+    except FileExistsError:
+        return False
+    for fn in os.listdir(os.path.join(DIR, "heard")):          # forget after two days
+        p = os.path.join(DIR, "heard", fn)
+        if time.time() - os.path.getmtime(p) > 2 * 86400:
+            os.remove(p)
+    return True
+
+
+def server_word(words, msg_id, bot):
+    """update | updates off | updates on | help (Jan, 23 Nov: no more typing commands on the server).
+    `update` drops ~/live-data/UPDATE-NOW; the service live-update.path sees it and runs live/autoupdate.py,
+    which answers in this channel. Never touches keys or caps."""
+    if not first_to_answer(msg_id):
+        return
+    off = os.path.join(DIR, "NO-AUTO-UPDATE")
+    if words[0] == "help":
+        push("Server update", HELP)
+    elif words[0] == "updates" and len(words) > 1 and words[1] in ("off", "stop", "pause"):
+        with open(off, "w") as f:
+            f.write(f"turned off from the phone at {iso()}\n")
+        push("Server update", "Automatic updates are OFF. The bots keep running on the code they have. "
+                              "Type update to update once, or updates on to turn them back on.")
+    elif words[0] == "updates" and len(words) > 1 and words[1] in ("on", "start", "resume"):
+        if os.path.exists(off):
+            os.remove(off)
+        push("Server update", "Automatic updates are on again (every 10 minutes, new code is tested first).")
+    else:
+        with open(os.path.join(DIR, "UPDATE-NOW"), "w") as f:
+            f.write(f"{msg_id} {iso()}\n")
+        push("Server update", "Looking for new bot code now. You'll get the answer here in a minute or two.")
+
+
+def update_line():
+    try:
+        import autoupdate
+        return autoupdate.status_line()
+    except Exception as e:
+        return f"(update info not readable: {type(e).__name__})"
 
 
 def phone_check(name):
@@ -351,6 +427,20 @@ def gh(method, url, token, body=None, data=None, ctype=None):
     return json.loads(raw) if raw else None
 
 
+def public_copy(src, gz):
+    """gzip a notebook file for the public release, scrubbed again: the state file keeps full order numbers
+    (needed to cancel), and log rows written before 23 Nov still hold them."""
+    with open(src) as a, gzip.open(gz, "wt") as b:
+        if src.endswith(".jsonl"):
+            for line in a:
+                try:
+                    b.write(json.dumps(scrub(json.loads(line)), separators=(",", ":")) + "\n")
+                except ValueError:
+                    pass
+        else:
+            json.dump(scrub(json.load(a)), b, indent=1, sort_keys=True)
+
+
 def upload(prefix):
     """gzip this bot's log and state files and put them on the release `live-data` (replacing old copies).
     The files hold tickers, prices and results, no keys or account numbers. Needs GITHUB_TOKEN in ~/.live.env."""
@@ -377,8 +467,7 @@ def upload(prefix):
             continue
         src = os.path.join(DIR, fn)
         gz = src + ".gz"
-        with open(src, "rb") as a, gzip.open(gz, "wb") as b:
-            shutil.copyfileobj(a, b)
+        public_copy(src, gz)
         name = fn + ".gz"
         if name in have:
             gh("DELETE", f"{api}/releases/assets/{have[name]}", token)

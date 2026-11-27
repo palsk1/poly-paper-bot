@@ -107,7 +107,11 @@ def open_bets(name, tr):
 def recent_closed(tr):
     out = []
     for c in sorted(tr.get("closed", []), key=lambda c: c.get("closed_at") or "", reverse=True)[:MAX_CLOSED]:
+        # Jan, 23 Nov: "I want to be able to see how much was put on each bet" (all paper strategies). Same money basis
+        # as bot.trade_returns: the recorded cost, else shares x buy price + buy fee.
+        basis = c.get("cost") or ((c.get("shares") or 0) * (c.get("entry") or 0) + (c.get("entry_fee") or 0.0))
         out.append({"t": str(c.get("title", ""))[:90], "o": c.get("outcome"), "e": r2(c["entry"] * 100) if c.get("entry") is not None else None,
+                    "c": r2(basis) if basis and basis > 0 else None, "n": r2(c.get("shares")) if c.get("shares") else None,
                     "x": r2(c["exit"] * 100) if c.get("exit") is not None else None, "pnl": r2(c.get("pnl")), "at": (c.get("closed_at") or "")[:16],
                     "why": c.get("reason", "")})
     return out
@@ -274,7 +278,7 @@ def park_future(row, why):
     """Jan, 22 Nov: the combo house works on paper but needs far more money than he has ("too much money for now").
     Its cards stay on the page, but marked as a future idea, not something to fund now."""
     row["future"] = why
-    row["pv"] = ("future", "Future idea: too much money for now")
+    row["pv"] = ("future", "Testing again on paper (since 25 Nov), still too much money for real")
     row["notes"] = [why] + row["notes"]
     return row
 
@@ -323,10 +327,11 @@ def combo_row(q):
                   "When the parlay really sells and our price was lower than the pro's, we count it as our sale. No real money moves.",
                   bets, COMBO_POT, tied=tied, waiting=q.get("waiting") or 0, extra=extra, notes=notes, recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
+    park_future(row, "Still too much money for real. To take every parlay it could have sold (about 1,400 a day, 17-22 Nov), "
                      "up to about 950 sat waiting for their games at once: about $4,800 tied up at $5 a parlay, or about $950 at $1. "
-                     "That's more than you want to put in, so it's on hold (your call, 22 Nov) until other strategies earn enough to expand. "
-                     "The server stopped listening on 22 Nov, so these numbers stop growing.")
+                     "Real money stays on hold (your call, 22 Nov). Since 25 Nov it listens again on paper, on its own server, "
+                     "for more days and to check how often the games moved before a buyer said yes. "
+                     "With partial fills, $300 at $1 a parlay would do (backtest/combo_money.md).")
     return row
 
 
@@ -351,8 +356,8 @@ def combo_pot_row(q):
                           "after the first 20, so it skipped most of them. From 17 Nov sales come all day, so expect fewer skips."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
-                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
+    park_future(row, "Still too much money for real: the same combo house, so it's parked with the main card. "
+                     "It stopped on 22 Nov and listens again on paper since 25 Nov, on its own server.")
     return row
 
 
@@ -375,8 +380,8 @@ def combo_pre_row(q):
                           "Same $300 pot and $5 a parlay as the main combo house card."],
                   recent=recent[:12])
     row["open_list"] = wait[:30]
-    park_future(row, "Future idea, too much money for now: the same combo house, so it's parked with the main card. "
-                     "On 22 Nov the server switched to the two small real-money bots, so these numbers stop growing.")
+    park_future(row, "Still too much money for real: the same combo house, so it's parked with the main card. "
+                     "It stopped on 22 Nov and listens again on paper since 25 Nov, on its own server.")
     return row
 
 
@@ -404,6 +409,7 @@ def kfast_rows():
             bets.append((w["close"], cost, f["pnl"]))
             won += 1 if b["won"] else 0
             recent.append({"t": w["tk"], "o": b["side"].upper(), "e": r2(f["avg"] * 100), "x": 100.0 if b["won"] else 0.0, "pnl": r2(f["pnl"]),
+                           "c": r2(cost), "n": r2(f["filled"]),
                            "why": "window ended", "at": iso_s(w["close"])[:16]})
         wait = "waits with a buy offer" if v["kind"] == "bid" else "buys at the asking price"
         out.append(ext_row("kfast_" + k, f"Fast Kalshi bot (its own nonstop job, practice only): Kalshi 15-minute crypto, {v['L']} seconds before "
@@ -423,6 +429,9 @@ LIVE_BOTS = [
     {"bot": "poly", "label": "Polymarket: soccer draws", "twin": "soccer_draw",
      "say": "Buys \"the game ends in a draw\" a day before kick-off when it looks cheap. Loses most bets, "
             "but each win pays 3-6 times the cost. Bets on every second signal of the paper twin."},
+    {"bot": "pspeed", "label": "Polymarket: Bitcoin 5-minute speed bot", "twin": None,
+     "say": "When Bitcoin jumps on Binance, buys the side it jumped toward in Polymarket's 5-minute Bitcoin bets "
+            "before the old prices are gone. Small bets ($2-5). Started in practice mode (buys nothing) on 25 Nov."},
 ]
 LIVE_URL = "https://github.com/palsk1/poly-paper-bot/releases/download/live-data/"
 
@@ -463,6 +472,33 @@ def mask(x):
     return "..." + s[-4:] if len(s) > 8 else s
 
 
+def kickoff_of(o):
+    """When a real bet's game starts (UTC iso). Bets placed from 23 Nov keep the exact kickoff; older ones only have
+    the signal text "kickoff in 24h" (whole hours), so placed + those hours is about right (within ~30 min)."""
+    if o.get("kickoff"):
+        return str(o["kickoff"])[:16]
+    m = re.search(r"kickoff in (\d+)h", str(o.get("signal") or ""))
+    t0 = bot.parse_iso(o.get("placed")) if o.get("placed") else None
+    if m and t0:
+        k = t0 + dt.timedelta(hours=int(m.group(1)))
+        k = dt.datetime.fromtimestamp(round(k.timestamp() / 900) * 900, dt.timezone.utc)   # games start on the quarter hour
+        return bot.iso(k)[:16]
+    return None
+
+
+def live_open(opn):
+    """Jan, 23 Nov: "see when these approx resolve ... and how much was bet on each". One line per open real bet:
+    title, stake, shares and price, kickoff (soccer) or close time (Kalshi). Soonest first."""
+    out = []
+    for k, o in opn.items():
+        kick = kickoff_of(o)
+        out.append({"t": o.get("title") or o.get("ticker") or k, "cost": r2(float(o.get("cost") or 0)),
+                    "n": r2(float(o.get("shares") or 0)) or None, "p": r2(float(o.get("ask") or o.get("price") or 0) * 100) or None,
+                    "kick": kick, "guess": bool(kick) and not o.get("kickoff"), "close": None if kick else (str(o.get("close") or "")[:16] or None)})
+    out.sort(key=lambda x: x["kick"] or x["close"] or "9999")
+    return out[:60]
+
+
 def live_rows(tracks):
     """Jan, 22 Nov: "will the dashboard show the live bots ... it's important they pertain all vital information,
     %earned, amount it's betting". One block per real bot: mode, money, P&L, per $1, open bets, today, last bets, and
@@ -483,6 +519,11 @@ def live_rows(tracks):
                 stop = r
             elif r.get("k") in ("phone_start", "start") and stop and stop.get("k") == "phone_stop":
                 stop = None
+        # Jan, 27 Nov: "is the bot locked or not? it doesnt show on card". The bots log "paused" / "running" whenever
+        # their pause reason changes (day loss cap, STOP file, switch.json); the newest one says whether it bets now.
+        pr = [r for r in rows if r.get("k") in ("paused", "running")]
+        paused = ({"why": pr[-1].get("why") or "paused", "at": pr[-1].get("t")}
+                  if pr and pr[-1].get("k") == "paused" else None)
         settled = [r for r in rows if r.get("k") == "settled" and r.get("live") == live]
         real = [r for r in settled if (r.get("filled", 1) or 0) > 0]
         unfilled = len(settled) - len(real)
@@ -492,6 +533,7 @@ def live_rows(tracks):
         won = sum(1 for r in real if float(r.get("pnl") or 0) >= 0)
         day = time.strftime("%Y-%m-%d", time.gmtime())
         today = sum(float(r.get("pnl") or 0) for r in real if str(r.get("t", "")).startswith(day))
+        today_n = sum(1 for r in real if str(r.get("t", "")).startswith(day))   # Jan, 23 Nov: bets made today
         opn = state.get("open") or {}
         logins = [r for r in rows if r.get("k") == "login"]
         bet = last_start.get("usd_per_order") or last_start.get("max_bet")
@@ -503,25 +545,54 @@ def live_rows(tracks):
         last = rows[-1]["t"] if rows else None
         # Jan, 22 Nov: "why can't I see my Kalshi balance". The bots note the real account balance (`balance`, or `cash`
         # on the Polymarket login line); newest = balance now, first one since this mode started = started with.
-        bal = [(r["t"], float(r.get("balance") if r.get("balance") is not None else r.get("cash")))
-               for r in rows if r.get("t") and (r.get("balance") is not None or (r.get("k") == "login" and r.get("cash") is not None))]
+        bal_rows = [r for r in rows if r.get("t") and (r.get("balance") is not None or (r.get("k") == "login" and r.get("cash") is not None))]
+        if b["bot"] == "kalshi" and any("in_bids" in r for r in bal_rows):
+            # Jan, 25 Nov: the card said $41.96 while Kalshi said $30.01. Kalshi's balance does NOT hold back money for
+            # waiting bids; it only drops by the cost of bids that already filled and haven't paid out yet. Adding all
+            # waiting bids back (PR #208) counted the unfilled ones twice. So use only readings taken with no bids out,
+            # which are exactly the account's cash.
+            bal_rows = [r for r in bal_rows if "in_bids" not in r or not float(r.get("in_bids") or 0)]
+        bal = [(r["t"], float(r.get("balance") if r.get("balance") is not None else r.get("cash"))) for r in bal_rows]
+        if b["bot"] == "kalshi" and bal and not any("in_bids" in r for r in rows[-20:]):
+            # Older notes don't carry `in_bids`: a reading taken mid-round can be low by the bids that filled, so use the
+            # highest of the last 4 readings (about 40 minutes; a 15-minute round always ends inside that).
+            bal = bal[:-1] + [(bal[-1][0], max(v for _, v in bal[-4:]))]   # notes come every 10 minutes
         bal_since = [x for x in bal if str(x[0]) >= str(since or "")]
         recent = []
         for r in real[::-1][:10]:
             recent.append({"t": r.get("title") or r.get("ticker") or r.get("slug"), "at": str(r.get("t", ""))[:16],
                            "cost": r2(cost(r)), "pnl": r2(float(r.get("pnl") or 0))})
+        # Jan, 22 Nov: "a graph over time for the live bots like I have with the paper strategies". Same step line as
+        # the paper cards: P&L after each finished real bet, with the paper twin over the same time as a second line.
+        # (Balance is not graphed: it jumps when money is added or a bet is placed.)
+        now16, s16 = bot.iso()[:16], str(since or "")[:16]
+        run, cv = 0.0, [[s16, 0.0]] if s16 else []
+        for r in sorted(real, key=lambda r: str(r.get("t", ""))):
+            run += float(r.get("pnl") or 0)
+            cv.append([str(r.get("t", ""))[:16], round(run, 2)])
+        run, tcv = 0.0, [[s16, 0.0]] if s16 else []
+        for c in sorted(tw, key=lambda c: str(c.get("closed_at") or "")):
+            if c.get("closed_at"):
+                run += float(c.get("pnl") or 0)
+                tcv.append([str(c["closed_at"])[:16], round(run, 2)])
+        if len(cv) > MAX_POINTS * 2:
+            step = len(cv) / (MAX_POINTS * 2)
+            cv = [cv[int(i * step)] for i in range(MAX_POINTS * 2 - 1)] + [cv[-1]]
+        cv.append([now16, round(pnl, 2)])
+        tcv.append([now16, round(run, 2)])
         out.append({
+            "curve": cv if s16 else [], "curve2": tcv if s16 else [],
             "bot": b["bot"], "label": b["label"], "say": b["say"], "twin": b["twin"], "live": live, "since": since,
             "stopped": ({"why": "stopped from the phone" if stop.get("k") == "phone_stop" else
                          f"stopped: total loss reached the cap", "at": stop.get("t")} if stop else None),
-            "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
+            "paused": paused, "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
             "cash": (logins[-1].get("cash") if logins else None),
             "bal_now": r2(bal[-1][1]) if bal else None, "bal_at": bal[-1][0] if bal else None,
             "bal_start": r2(bal_since[0][1]) if bal_since else None, "wallet": mask(logins[-1].get("wallet")) if logins else None,
             "finished": len(real), "won": won, "lost": len(real) - won, "unfilled": unfilled,
-            "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today),
+            "put_in": r2(put_in), "pnl": r2(pnl), "per1": r2(pnl / put_in * 100) if put_in else None, "today": r2(today), "today_n": today_n,
             "open_n": len(opn), "open_cost": r2(sum(float(o.get("cost") or 0) for o in opn.values())),
-            "open_list": [o.get("title") or o.get("ticker") or k for k, o in list(opn.items())[:20]],
+            "open_list": live_open(opn),
             "recent": recent,
             "twin_n": len(tw), "twin_pnl": r2(tw_pnl), "twin_per1": r2(tw_pnl / tw_cost * 100) if tw_cost else None,
         })

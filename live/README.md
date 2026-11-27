@@ -7,6 +7,7 @@ with their paper twins, because a bot that wins on paper can still lose live.
 |---|---|---|---|
 | `kalshi_live.py` | `kc_maker_safe_usd`: a resting bid on the likely side of Kalshi's 15-minute crypto windows, 95c+, in the last 0.75-5.5 minutes, only when Binance is 2+ typical moves on our side (both as is and on Kalshi's dollar scale) | $4 a bid (Jan picked it 22 Nov), up to $30 out at once | `kc_maker_safe_usd` ($10 bids) |
 | `poly_live.py` | `soccer_draw`: Yes on a soccer draw at 15-50c, 20-28 h before kickoff, real ask at most 3c over the listed price, held to the end. **Every second signal only** (blind, by the market's name), so about 20 bets are out at once | ~$1.10-2.00 a bet (5+ shares, $1+), up to $28 out at once | `soccer_draw` (all signals) |
+| `pspeed_live.py` (added 25 Nov, Jan: "Build it, practice mode first") | the speed check's rule (`quoter/speedcheck.py`, week 19-24 Nov "Looks real", +$2.73 per $100 at 0.1 s, $0 at 0.5 s): when Bitcoin's fair price in the current Polymarket 5-minute window moves 3c+ within 2 s on Binance, buy the side it jumped toward at the offer seen (40c to under 95c), all or nothing, at most 1c above that price (`PSPEED_EXTRA_C`, Jan's pick 26 Nov, capped at 3c), skip offers of $100+, at most 2 bets bought a window (since 26 Nov killed orders don't count, Jan said go) | $2 a bet (5 shares, so $2-4.75), at most 50 bets and $100 a day, $15 out at once, stops at -$5 a day / -$15 total (since 26 Nov a phone `start` after a day stop allows one more day cap that day, every bot; the total cap still counts everything). **Practice mode (buys nothing) until `PSPEED_LIVE=yes`** | the speed check box (listen only) |
 
 They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on services, `kalshi-live` and
 `poly-live`. Claude has no access to the server or the keys.
@@ -19,7 +20,8 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
   stopped until Jan deletes the file).
 - **Off switches. The easy one is the phone:** in the ntfy app, subscribe to your private channel (its name is
   printed by `add_keys.py`, saved as `NTFY_CONTROL` in `~/.live.env`) and type:
-  `stop` (both bots), `stop kalshi`, `stop poly`, `start` (or `start kalshi` / `start poly`), or `status`.
+  `stop` (both bots), `stop kalshi`, `stop poly`, `start` (or `start kalshi` / `start poly`), `status`,
+  `update` (newest code now), `updates off` / `updates on`, or `help`.
   The bots read it every ~20 seconds and answer in the same channel. Alerts (a lost Kalshi bid, a cap reached) land
   there too. `start` only undoes a phone stop, never a loss-cap stop. Anyone who knows the channel name can stop
   the bots (not move money), so keep the name to yourself. The other switches:
@@ -28,8 +30,17 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
      This file can only stop a bot. It can't start one or raise a limit.
   3. `sudo systemctl stop kalshi-live poly-live`.
   On a stop, the Kalshi bot cancels its waiting bids. Bets already made still settle and are booked.
-- **No self-updates.** The bots never pull new code on their own. Code changes reach the server only when Jan runs
-  `bash ~/poly-paper-bot/live/update.sh`.
+- **Updates by themselves, tested first (23 Nov, Jan: "super hard on phone").** `autoupdate.py`, run by the timer
+  `live-update.timer` every 10 minutes and at once when Jan types `update` in the phone channel:
+  1. Nothing new for the bots (`live/`, `bot.py`, `config.json`)? The copy moves forward quietly, no restart.
+  2. New bot code: its own `selftest.py` runs first in a side folder (offline, no orders). Fails -> the old code
+     keeps running, the phone is told, and that same code is not tried again.
+  3. Passes -> switch, restart the bots that are switched on (never one Jan turned off), wait 90 seconds. A bot not
+     running fine -> back to the old code, restart, phone told.
+  It never touches `~/.live.env` (keys, caps, `LIVE=yes`): caps and the money switch stay Jan's alone.
+  Phone words: `update` (now), `updates off` / `updates on`, `help`. `status` also says when the code was updated.
+  Turn on once: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/autoupdate_setup.sh | bash`.
+  `update.sh` still works by hand as a fallback.
 - Kalshi bids are post-only (never take, never pay a taker fee), die when their window closes, and cancel if Kalshi
   pauses trading. Polymarket buys are all-or-nothing (FOK) and never above listed + 3c.
 - **Winnings:** Kalshi pays out by itself. Polymarket only pays a win once it is claimed: every 10 minutes the bot
@@ -45,7 +56,7 @@ They run on Jan's AWS Lightsail server ("Ubuntu-1", Stockholm), as two always-on
 2. Stop the combo listener (it is done, and the bots take its place):
    `sudo systemctl disable --now quoter`
 3. Install: `curl -fsSL https://raw.githubusercontent.com/palsk1/poly-paper-bot/main/live/setup.sh | bash`
-   It must end with `ALL OK (34 checks)` and "Installed. Nothing is running yet."
+   It must end with `ALL OK (35 checks)` and "Installed. Nothing is running yet."
 4. Make the keys:
    - **Kalshi:** kalshi.com > Account & security > API keys > Create key. Copy the key ID and download the private key file.
      Open the file on your computer (it's text) so you can copy it.
@@ -70,10 +81,12 @@ Side by side with paper (anywhere, reads the public logs): `python3 live/compare
 
 ## Files
 
-- `kalshi_live.py`, `poly_live.py`: the bots (`check`, `run`, `status`)
+- `kalshi_live.py`, `poly_live.py`, `pspeed_live.py`: the bots (`check`, `run`, `status`)
+- `pspeed_setup.sh`: one-time setup of the speed bot (its caps in `~/.live.env`, service `pspeed-live`, started in practice mode). Uses the Polymarket key already on the server; shares the wallet's cash with `poly-live` (claims take turns, `claim.lock`)
 - `common.py`: caps, off switches, the notebook (`~/live-data/<bot>-state.json` + monthly `<bot>-YYYYMM.jsonl`), upload every 15 min to the release `live-data`
 - `add_keys.py`: puts the keys on the server
-- `setup.sh`, `update.sh`, `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
+- `autoupdate.py` + `autoupdate_setup.sh`: the server updates itself, tested first (`autoupdate.py selftest`)
+- `setup.sh`, `update.sh` (by hand, fallback), `requirements.txt` (Polymarket's new official kit `polymarket-client`: the old `py-clob-client` stopped placing orders on 28 Apr 2026)
 - `selftest.py`: offline test with fake answers, must print ALL OK
 - `compare.py`: real vs paper twin
 - `switch.json`: the remote off switch

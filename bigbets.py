@@ -365,6 +365,157 @@ def kalshi(names=("kc_maker_safe", "kc_maker", "kc_maker_early")):
     return res
 
 
+# ---------------------------------------------------------------- kalshi: the real bot's own bids at bigger sizes
+
+KSIZES = (4, 10, 25, 50, 100, 200, 400)
+KCAPS = (300, 500, 700, 1000, 2000)
+LIVE_URL = "https://github.com/palsk1/poly-paper-bot/releases/download/live-data/kalshi-%s.jsonl.gz"
+
+
+def real_bids(months=("202611", "202612")):
+    """Every settled bid of the real Kalshi bot from its public notebook (release live-data). Real money rows only."""
+    import gzip, io, urllib.request
+    out = []
+    for m in months:
+        try:
+            raw = urllib.request.urlopen(LIVE_URL % m, timeout=60).read()
+        except Exception as e:
+            print(f"no notebook for {m}: {e}")
+            continue
+        for line in gzip.open(io.BytesIO(raw), "rt"):
+            try:
+                r = json.loads(line)
+            except Exception:
+                continue
+            if r.get("k") == "settled" and r.get("live") and r.get("ticker") and r.get("result") in ("yes", "no"):
+                out.append({"ticker": r["ticker"], "side": r["side"], "price": r["price"], "placed": r["placed"],
+                            "close": r["close"], "queue": r.get("queue", 0), "exit": 1.0 if r["result"] == r["side"] else 0.0,
+                            "real_filled": r.get("filled", 0), "real_shares": r.get("shares", 0)})
+    return out
+
+
+def size_rows(orders, sizes=KSIZES):
+    """Each order's real trade tape read again -> what a bid of each size would have got and made."""
+    def get(o):
+        try:
+            return bot.kalshi_trades(o["ticker"], bot.parse_iso(o["placed"]).timestamp(), bot.parse_iso(o["close"]).timestamp())
+        except Exception as e:
+            print(f"tape failed for {o['ticker']}: {e}")
+            return None
+    rows = []
+    with ThreadPoolExecutor(2) as ex:   # Kalshi answers 429 when asked faster
+        for o, got in zip(orders, ex.map(get, orders)):
+            if not got:
+                continue
+            trades = got[0]
+            r = {"tk": o["ticker"], "placed": bot.parse_iso(o["placed"]).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "close": bot.parse_iso(o["close"]).strftime("%Y-%m-%dT%H:%M:%SZ"), "price": o["price"], "won": o["exit"] >= 0.5,
+                 "real": [o.get("real_filled"), o.get("real_shares")], "f": {}}
+            for S in sizes:
+                want = max(1, int(S / o["price"]))
+                r["f"][S] = [round(kalshi_fill(o, trades, want), 2), want]
+            rows.append(r)
+    return rows
+
+
+def size_table(rows, name, sizes=KSIZES, caps=KCAPS):
+    """Plain tables for one list of bids: what each bid size made, how it split over winners and losers, the worst
+    day and worst 15 minutes, and what a limited account could really carry."""
+    if not rows:
+        P(f"### {name}: no bids with a trade list\n")
+        return {}
+    rows = sorted(rows, key=lambda r: r["placed"])
+    t0, t1 = bot.parse_iso(rows[0]["placed"]), bot.parse_iso(rows[-1]["close"])
+    days = max((t1 - t0).total_seconds() / DAY, 0.1)
+    lost = [r for r in rows if not r["won"]]
+    P(f"### {name}: {len(rows)} bids over {days:.1f} days (about {len(rows) / days:.0f} a day), {len(lost)} on the losing side\n")
+    P("| Bid size | Bids that got anything | Money that filled | P&L | Per $100 | A day | Winners got | Losers got | Worst day | Worst 15 minutes |")
+    P("|---|---|---|---|---|---|---|---|---|---|")
+    out = {}
+
+    def pnl_of(r, S):
+        f = r["f"][S][0]
+        return f * ((1.0 if r["won"] else 0.0) - r["price"]), f * r["price"]
+    for S in sizes:
+        pnl = cost = 0.0
+        byday, byround = {}, {}
+        some = 0
+        for r in rows:
+            a, c = pnl_of(r, S)
+            pnl += a
+            cost += c
+            some += 1 if r["f"][S][0] > 0 else 0
+            byday[r["close"][:10]] = byday.get(r["close"][:10], 0) + a
+            byround[r["close"]] = byround.get(r["close"], 0) + a
+        wf = [r["f"][S][0] / r["f"][S][1] for r in rows if r["won"]]
+        lf = [r["f"][S][0] / r["f"][S][1] for r in rows if not r["won"]]
+        per100 = 100 * pnl / cost if cost else 0
+        P(f"| ${S} | {some} of {len(rows)} | ${cost:,.0f} | {usd(pnl)} | {usd(per100)} | {usd(pnl / days)} | "
+          f"{100 * statistics.mean(wf):.0f} in 100 | {(str(round(100 * statistics.mean(lf))) + ' in 100') if lf else '-'} | "
+          f"{usd(min(byday.values()))} | {usd(min(byround.values()))} |")
+        out[S] = {"some": some, "spent": round(cost, 2), "pnl": round(pnl, 2), "per100": round(per100, 3), "a_day": round(pnl / days, 2),
+                  "won_fill": round(statistics.mean(wf), 3) if wf else None, "lost_fill": round(statistics.mean(lf), 3) if lf else None,
+                  "worst_day": round(min(byday.values()), 2), "worst_round": round(min(byround.values()), 2),
+                  "days": {k: round(v, 2) for k, v in sorted(byday.items())}}
+    # how many bids are open at once, and what a limited account can carry (a bid locks its full size until its window closes)
+    ev = sorted([(r["placed"], 1) for r in rows] + [(r["close"], -1) for r in rows])
+    cur = top = 0
+    for _, d in ev:
+        cur += d
+        top = max(top, cur)
+    P(f"\nMost bids open at the same moment: {top}. So covering every bid takes about {top} times the bid size.\n")
+    P("What an account of a given size makes a day (a bid is skipped when the money is tied up in other bids):\n")
+    P("| Bid size | " + " | ".join(f"${c:,} account" for c in caps) + " | No limit |")
+    P("|---|" + "---|" * (len(caps) + 1))
+    capres = {}
+    for S in sizes:
+        cells = []
+        for cap in list(caps) + [None]:
+            openb, pnl, took = [], 0.0, 0
+            for r in rows:
+                openb = [(c, x) for c, x in openb if c > r["placed"]]
+                need = r["f"][S][1] * r["price"]
+                if cap is not None and sum(x for _, x in openb) + need > cap:
+                    continue
+                openb.append((r["close"], need))
+                pnl += pnl_of(r, S)[0]
+                took += 1
+            cells.append(f"{usd(pnl / days)} ({took} bids)")
+            capres[f"{S}|{cap}"] = [round(pnl / days, 2), took]
+        P(f"| ${S} | " + " | ".join(cells) + " |")
+    P("")
+    real = [(r["real"][0], r["f"][4][0]) for r in rows if r["real"][1]]
+    if real:
+        same = sum(1 for a, b in real if (a > 0) == (b > 0))
+        P(f"Check of the method on the real $4 bids: the trade-list method and Kalshi agree on 'did it get bought or not' "
+          f"for {same} of {len(real)} bids. Real contracts bought: {sum(a for a, _ in real):,.0f}, the method says "
+          f"{sum(b for _, b in real):,.0f}.\n")
+        out["check"] = {"same": same, "n": len(real), "real": sum(a for a, _ in real), "model": sum(b for _, b in real)}
+    return {"n": len(rows), "days": round(days, 2), "lost": len(lost), "max_open": top, "sizes": out, "caps": capres}
+
+
+def kreal(names=("kc_maker_safe_usd", "kc_maker_safe")):
+    """27 Nov (Jan: "how sure are you the max bet is around 100 dollars?"): the real Kalshi bot's own bids, and its paper
+    twins' bids, replayed at $4 to $400 on Kalshi's real trade lists."""
+    P("## How big can the Kalshi 15-minute bid get? The real bot's bids at bigger sizes\n")
+    P("Each bid's real trade list is read again. A bigger bid only gets what people really sold at our price (after the "
+      "line that stood there first) or below it. It can't know how other traders would have reacted to a big bid, so "
+      "treat the big sizes as the kind end.\n")
+    res, dump = {}, {}
+    rows = size_rows(real_bids())
+    res["real"] = size_table(rows, "The real bot ($4 bids, cushion 2.3)")
+    dump["real"] = rows
+    tracks = bot.load_tracks()
+    for n in names:
+        orders = [c for c in (tracks.get(n) or {}).get("closed") or [] if c.get("reason") == "resolved" and c.get("ticker")]
+        rows = size_rows(orders)
+        res[n] = size_table(rows, f"Paper track {n} (only bids that got bought on paper, so 'got anything' flatters it)")
+        dump[n] = rows
+    import base64, gzip
+    print("KREAL ROWS " + base64.b64encode(gzip.compress(json.dumps(dump, separators=(",", ":")).encode())).decode())
+    return res
+
+
 # ---------------------------------------------------------------- report
 
 def write(res):
@@ -385,6 +536,11 @@ def main(what):
         res["live"] = live()
     if what in ("kalshi", "all"):
         res["kalshi"] = kalshi()
+    if what == "kreal":
+        res["kreal"] = kreal()
+        print("\n".join(LINES))
+        print("KREAL JSON " + json.dumps(res, default=str))
+        return
     if what in ("hist", "all"):
         try:
             res["hist"] = hist()

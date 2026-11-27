@@ -9,15 +9,6 @@
    "slug": "will-at-least-10-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30-2026",
    "title": "Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?"
   },
-  "106375876055695859045413141458606643340242853794519126089005356920987236120368": {
-   "avg": 0.8667,
-   "end": "2026-12-01",
-   "event_slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
-   "outcome": "No",
-   "size": 14179.62,
-   "slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
-   "title": "Strait of Hormuz traffic returns to normal by November 30?"
-  },
   "107593745130639131117879088978522276178202216447775798463548111992845416662727": {
    "avg": 0.5189,
    "end": "2027-01-21",
@@ -41,7 +32,7 @@
    "end": "2026-11-30",
    "event_slug": "spain-general-election-pp-vox-get-50-of-vote",
    "outcome": "Yes",
-   "size": 890.5,
+   "size": 455.11,
    "slug": "spain-general-election-pp-vox-get-50-of-vote",
    "title": "Spain General Election: PP + Vox get 50%+ of Vote?"
   },
@@ -136,6 +127,16 @@
    "size": 166.0,
    "slug": "will-ethereum-dip-to-1000-by-december-31-2026-273-175",
    "title": "Will Ethereum dip to $1,000 by December 31, 2026?"
+  },
+  "21358174018316402371584344482465907546958217546766627917146727658113671843233": {
+   "avg": 0.8799,
+   "end": "2027-04-01",
+   "event_slug": "open-source-model-ranked-1-on-arena-by",
+   "first_seen": "2026-11-25T23:01:00Z",
+   "outcome": "No",
+   "size": 1582.15,
+   "slug": "open-source-model-ranked-1-on-arena-by-march-31-2027",
+   "title": "Will an open-source model be ranked #1 on Arena by March 31, 2027?"
   },
   "2218596292846413598888468480279157025100362996982949466208605007576604865353": {
    "avg": 0.8932,
@@ -246,11 +247,11 @@
    "title": "US x Iran permanent peace deal by June 30, 2026?"
   },
   "35291645172588917457521605652032084946130296187859859151580316412122619317107": {
-   "avg": 0.8836,
+   "avg": 0.8911,
    "end": "2026-11-30",
    "event_slug": "next-prime-minister-of-spain-20260625005215443",
    "outcome": "No",
-   "size": 2715.72,
+   "size": 4566.57,
    "slug": "will-pedro-sanchez-be-the-next-prime-minister-of-spain-20260625005710096",
    "title": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
   },
@@ -521,7 +522,7 @@
    "end": "2027-01-02",
    "event_slug": "largest-ipo-by-market-cap-in-2026-287",
    "outcome": "Yes",
-   "size": 7122.22,
+   "size": 5002.22,
    "slug": "will-spacex-have-the-highest-ipo-market-cap-2026-516",
    "title": "Will SpaceX have the highest IPO Market Cap 2026?"
   },
@@ -605,7 +606,7 @@
    "event_slug": "highest-7-day-average-ship-traffic-through-the-bab-el-mandeb-strait-by-december-31",
    "first_seen": "2026-11-22T15:15:32Z",
    "outcome": "Yes",
-   "size": 1.0,
+   "size": 600.0,
    "slug": "will-the-7-day-average-ship-traffic-through-the-bab-el-mandeb-strait-reach-30-by-december-31",
    "title": "Will the 7-day average ship traffic through the Bab el-Mandeb Strait reach 30+ by December 31?"
   },

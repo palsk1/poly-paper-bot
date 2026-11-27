@@ -747,5 +747,25 @@
   "title": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in November?",
   "token": "4598154058081600141940343986128371425552111800231706218701820270779979460",
   "ts": "2026-11-20T22:01:01Z"
+ },
+ {
+  "days_left": 4.3,
+  "early": true,
+  "end": "2026-12-01",
+  "event_slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
+  "exit_price": 0.997,
+  "first_seen": null,
+  "his_avg": 0.8667,
+  "kind": "sold",
+  "left_on_table_per_share": 0.003,
+  "outcome": "No",
+  "price_source": "his trades",
+  "profit_per_share": 0.1303,
+  "profit_usd": 1847.6,
+  "shares": 14179.62,
+  "slug": "strait-of-hormuz-traffic-returns-to-normal-by-november-30-20260810151158765",
+  "title": "Strait of Hormuz traffic returns to normal by November 30?",
+  "token": "106375876055695859045413141458606643340242853794519126089005356920987236120368",
+  "ts": "2026-11-26T16:44:16Z"
  }
 ]

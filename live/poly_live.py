@@ -37,6 +37,7 @@ import math
 import os
 import sys
 import time
+import urllib.parse
 from decimal import ROUND_UP, Decimal
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -88,6 +89,20 @@ CLAIMS_PER_ROUND = 5
 
 
 def claim_all(book):
+    """One claim sweep at a time on this server: the speed bot (pspeed_live.py, 25 Nov) uses the same wallet and
+    claims too. If the other bot is claiming right now, skip; the next round picks up whatever is left."""
+    import fcntl
+    os.makedirs(C.DIR, exist_ok=True)
+    with open(os.path.join(C.DIR, "claim.lock"), "w") as lk:
+        try:
+            fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            book.log("claim_skipped", why="the other bot is claiming right now")
+            return
+        _claim_all(book)
+
+
+def _claim_all(book):
     """Claim every won bet that is still waiting to be paid out, so the cash is free for the next bets (Jan, 22 Nov:
     "I had to claim manually every time"). Polymarket does not pay out by itself: a won position must be redeemed.
     This sweeps ALL claimable positions of the wallet (also old ones from before the bot), once per settle round,
@@ -184,7 +199,7 @@ def place(book):
         rec = {"slug": slug, "token": c["token"], "condition_id": m.get("conditionId"), "event_key": c["event_key"],
                "title": c["title"], "listed": c["price"], "ask": round(px, 4), "shares": shares, "cost": cost,
                "fee_est": round(fee, 4), "signal": c.get("signal"), "placed": C.iso(), "day": C.today(),
-               "end": c["end"]}
+               "end": c["end"], "kickoff": c.get("start")}
         if C.is_live():
             if have is None:
                 have = cash()
@@ -227,20 +242,29 @@ def place(book):
 def settle(book):
     for slug, o in list(book.state["open"].items()):
         try:
-            rows = bot.http_json(f"{bot.GAMMA}/markets", {"slug": slug})
+            # The one-market address, like the paper bot (bot.market_by_slug). The list address
+            # /markets?slug= leaves out closed markets, so finished games never settled (fixed 23 Nov).
+            rows = bot.http_json(f"{bot.GAMMA}/markets/slug/{urllib.parse.quote(slug)}")
         except Exception as e:
             print(f"gamma failed for {slug}: {e}", flush=True)
             continue
-        m = rows[0] if isinstance(rows, list) and rows else None
+        m = rows[0] if isinstance(rows, list) and rows else (rows if isinstance(rows, dict) else None)
         if not m:
             continue
         prices = [bot.fnum(x, None) for x in bot.jlist(m.get("outcomePrices"))]
-        if not m.get("closed") or len(prices) != 2 or None in prices or max(prices) < 0.99:
+        if not m.get("closed") or len(prices) != 2 or None in prices:
             continue
-        pay = 1.0 if prices[0] >= 0.99 else 0.0
+        if max(prices) >= 0.99:
+            pay = 1.0 if prices[0] >= 0.99 else 0.0
+        elif m.get("umaResolutionStatus") == "resolved" or m.get("resolutionStatus") == "resolved":
+            # A split result: a 50-50, or Polymarket's coming "fair value" payout for a canceled, abandoned or
+            # very late game (banner seen 22 Nov 2026). Each Yes share pays its final price; claimed like a win.
+            pay = round(prices[0], 4)
+        else:
+            continue                       # closed, but the result isn't final yet
         spent = o.get("spent", o["shares"] * o["ask"])
         pnl = o["shares"] * pay - spent - o.get("fee_est", 0)
-        extra = {"result": "draw" if pay else "no draw", "how": "real" if o.get("order_id") else "dry run"}
+        extra = {"result": "draw" if pay >= 0.99 else ("no draw" if pay <= 0 else f"split, paid {pay:.2f} a share"), "how": "real" if o.get("order_id") else "dry run"}
         book.settle(slug, pnl, filled=o["shares"], **extra)   # a lost draw is normal (about 2 in 3): no push
     book.save()
     if C.is_live() and os.environ.get("POLY_RELAYER_KEY"):
