@@ -750,6 +750,50 @@ def usrc():
             print("FAILED", u, str(e)[:120], flush=True)
 
 
+def orfind():
+    """probe aim_orfind: where does Kalshi's 'OpenRouter text market share by model author' come from? Reads Kalshi's rules for the
+    share series, the OpenRouter rankings page and the API paths its scripts call, and prints what answers."""
+    import urllib.request
+    def get(u, n=400000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=30) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    for s in ("KXGOOGSHARE", "KXOPENSHARE", "KXANTHSHARE"):
+        r = _try(f"{bot.KALSHI}/series/{s}") or {}
+        se = r.get("series") or {}
+        print(s, bot.json.dumps({k: se.get(k) for k in ("title", "settlement_sources", "contract_url", "contract_terms_url", "frequency")})[:900], flush=True)
+        r = _try(f"{bot.KALSHI}/markets", {"series_ticker": s, "limit": 1, "status": "settled"}) or {}
+        for m in (r.get("markets") or [])[:1]:
+            print("  rules:", (m.get("rules_primary") or "")[:600], "|", (m.get("rules_secondary") or "")[:900], flush=True)
+    st, html = get("https://openrouter.ai/rankings")
+    print("rankings page", st, len(html), flush=True)
+    paths = sorted(set(re.findall(r'["\'](/api/[A-Za-z0-9_\-/\.?=&]+)', html)))
+    print("api paths in page:", paths[:80], flush=True)
+    for k in ("market share", "marketShare", "market_share", "author"):
+        i = html.find(k)
+        print(" ctx", k, html[max(0, i - 300):i + 300].replace("\n", " ") if i >= 0 else "-", flush=True)
+    js = sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))
+    print("scripts", len(js), flush=True)
+    found = set()
+    for u in js[:120]:
+        st2, t = get("https://openrouter.ai" + u, 3000000)
+        for x in re.findall(r'["\'`](/api/(?:frontend|v1)/[A-Za-z0-9_\-/\.${}]+)', t):
+            if any(w in x.lower() for w in ("rank", "stat", "share", "author", "usage", "dataset", "token")):
+                found.add(x)
+    print("api paths in scripts:", sorted(found)[:150], flush=True)
+    tries = ["/api/frontend/stats/market-share", "/api/frontend/stats/author-share", "/api/frontend/rankings",
+             "/api/frontend/stats/rankings", "/api/v1/datasets/exports/index.json",
+             "/api/v1/datasets/exports/rankings-weekly/2026-11-16.json", "/api/v1/datasets/exports/market-share-daily/2026-11-20.json",
+             "/api/v1/datasets/exports/author-share-daily/2026-11-20.json"] + sorted(found)[:60]
+    for x in tries:
+        if "$" in x or "{" in x:
+            continue
+        st3, t = get("https://openrouter.ai" + x, 200000)
+        print("TRY", x, st3, len(t), t[:700].replace("\n", " "), flush=True)
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1101,6 +1145,8 @@ if __name__ == "__main__":
         use_report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
     elif cmd == "usrc":
         usrc()
+    elif cmd == "orfind":
+        orfind()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
