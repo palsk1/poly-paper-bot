@@ -42233,3 +42233,4 @@
 {"pnl": 0.8145, "price": 0.91, "shares": 9.05, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV27ORULMU-LMU", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
 {"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNFL1H-26NOV27DENPIT-TIE", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
 {"fee": 0.0086, "outcome": "No", "price": 0.78, "shares": 5, "title": "Ilhan Omar federally charged by December 31?", "token": "47592698714175463195253173317845647495794442506760383051063439129436131494421", "track": "panic_fade", "ts": "2026-11-27T23:05:45Z", "type": "paper_buy"}
+{"outcome": "Draw", "pnl": 4.0115, "price": 1.0, "reason": "resolved", "title": "Will FC Groningen vs. Willem II Tilburg end in a draw?", "token": "42839351341626925417029106007446716280054267624759518738018113870789245431336", "track": "soccer_draw", "ts": "2026-11-27T23:06:42Z", "type": "paper_close"}
