@@ -3149,7 +3149,11 @@ def kmaker_place(tracks, names):
                                                                    "z_kalshi": None if zk is None else round(zk, 2)}
                         continue
                 queue = sum(sz for p, sz in bk[side] if abs(p - price) < 1e-6)
-                shares = max(1, int(r.get("usd_per_order", 10) / price))
+                usd = r.get("usd_per_order", 10)
+                if r.get("bid_share"):   # bid a share of the pot, so it grows and shrinks with it (27 Nov, Jan's ask)
+                    pot = tr["cash"] + sum(o["cost"] for o in tr["orders"].values())
+                    usd = min(r.get("max_usd_per_order", 100), max(1.0, pot * r["bid_share"]))
+                shares = max(1, int(usd / price))
                 cost = round(shares * price, 6)
                 maybe_refill(tr, n, cost)
                 if cost > tr["cash"] + EPS:

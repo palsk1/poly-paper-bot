@@ -63,6 +63,13 @@
       "source": "kmaker",
       "rules": "kc_maker_mid"
     },
+    "kc_maker_pct": {
+      "label": "kc_maker with a bid that follows the pot (27 Nov, Jan's ask): same rule as kc_maker, but every bid is a tenth of what the pot holds right now (starts at $25 on $250, never above $100), so wins make the next bids bigger and losses make them smaller. Compare with kc_maker's fixed $10. $250 paper (about where kc_maker's own pot stands by now), no refills",
+      "start_cash": 250,
+      "refill": false,
+      "source": "kmaker",
+      "rules": "kc_maker_pct"
+    },
     "kc_maker_safe_kprice": {
       "label": "Twin of kc_maker_safe checked on Kalshi's own price (19 Nov, Jan: make a paper twin, name it clearly): same bid (one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, $10), but the 'at least 2 typical moves past the start price' check uses Kalshi's own settle number (the CF Benchmarks 60-second average, free at /live_data/events) instead of Binance. Re-test: backtest/kprice.md. $100 paper",
       "start_cash": 100,
@@ -1280,6 +1287,11 @@
     "kc_maker_mid": {
       "inherit": "kc_maker",
       "min_usd_z": 1.5
+    },
+    "kc_maker_pct": {
+      "inherit": "kc_maker",
+      "bid_share": 0.1,
+      "max_usd_per_order": 100
     },
     "kc_maker_safe_kprice": {
       "inherit": "kc_maker",
