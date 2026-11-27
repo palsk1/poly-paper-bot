@@ -40900,3 +40900,4 @@
 {"filled": 10.0, "pnl": 0.11, "price": 0.989, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV270615-15", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T11:25:28Z", "type": "kmaker_fill"}
 {"pnl": 14.54, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV27DONRIN-DON", "track": "tennis_set", "ts": "2026-11-27T11:25:30Z", "type": "econ_settle"}
 {"pnl": -25.59, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV27SANHEN-SAN", "track": "tennis_set", "ts": "2026-11-27T11:25:30Z", "type": "econ_settle"}
+{"outcome": "No", "pnl": 0.0627, "price": 0.983, "reason": "take profit (now 99c), book", "title": "Will the highest temperature in Dallas be between 64-65\u00b0F on November 27?", "token": "33538899207716196307956286030467696286289170407359091106380666397851226747554", "track": "endgame_sell98", "ts": "2026-11-27T11:27:59Z", "type": "paper_close"}
