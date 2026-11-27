@@ -219,11 +219,282 @@ def peek():
             print("   rules:", str(rows[0].get("rules_primary"))[:300])
 
 
+# ---------------------------------------------------------------- fetch: games, stage clocks, 1-minute prices
+import tennis   # k_minutes (1-minute bid / ask, live + /historical), kfee, quote_at, per100
+
+ESPN = "https://site.api.espn.com/apis/site/v2/sports/"
+SPORTS = {   # sport: (ESPN path, extra scoreboard params, Kalshi game series, Kalshi stage series used as a second clock)
+    "nba": ("basketball/nba", "", "KXNBAGAME", ("KXNBA1Q", "KXNBA1H", "KXNBA3Q")),
+    "wnba": ("basketball/wnba", "", "KXWNBAGAME", ()),
+    "ncaamb": ("basketball/mens-college-basketball", "&groups=50", "KXNCAAMBGAME", ("KXNCAAMB1H",)),
+    "ncaawb": ("basketball/womens-college-basketball", "&groups=50", "KXNCAAWBGAME", ()),
+    "nfl": ("football/nfl", "", "KXNFLGAME", ("KXNFL1Q", "KXNFL1H", "KXNFL3Q")),
+    "ncaaf": ("football/college-football", "&groups=80", "KXNCAAFGAME", ("KXNCAAF1Q", "KXNCAAF1H")),
+    "nhl": ("hockey/nhl", "", "KXNHLGAME", ("KXNHL1P", "KXNHL2P")),
+    "mlb": ("baseball/mlb", "", "KXMLBGAME", ()),
+}
+ESPORTS = {  # game: (Kalshi match series, Kalshi map series = the clock)
+    "cs2": ("KXCS2GAME", "KXCS2MAP"), "lol": ("KXLOLGAME", "KXLOLMAP"), "dota2": ("KXDOTA2GAME", "KXDOTA2MAP"),
+    "valorant": ("KXVALORANTGAME", "KXVALORANTMAP"), "cod": ("KXCODGAME", "KXCODMAP"),
+}
+
+
+def ejson(url):
+    for i in range(4):
+        try:
+            return json.loads(raw(url, timeout=30))
+        except Exception as e:
+            if "404" in str(e) or i == 3:
+                raise
+            time.sleep(2 + 3 * i)
+
+
+def espn_day(sport, d0):
+    path, extra, _, _ = SPORTS[sport]
+    d = time.strftime("%Y%m%d", time.gmtime(d0))
+    j = ejson(f"{ESPN}{path}/scoreboard?dates={d}&limit=900{extra}")
+    out = []
+    for e in j.get("events") or []:
+        c = (e.get("competitions") or [{}])[0]
+        if not ((c.get("status") or e.get("status") or {}).get("type") or {}).get("completed"):
+            continue
+        teams = {}
+        for x in c.get("competitors") or []:
+            t = x.get("team") or {}
+            teams[x.get("homeAway")] = {"ab": t.get("abbreviation"), "name": t.get("displayName"), "loc": t.get("location"),
+                                        "short": t.get("shortDisplayName"), "nick": t.get("name"), "score": bot.fnum(x.get("score"), None)}
+        if "home" in teams and "away" in teams:
+            out.append({"id": e["id"], "date": e.get("date"), "home": teams["home"], "away": teams["away"]})
+    return out
+
+
+def _plays(j):
+    """Every play dict with a wall-clock time, from 'plays' or from NFL-style 'drives'."""
+    out = list(j.get("plays") or [])
+    dr = j.get("drives") or {}
+    for d in (dr.get("previous") or []) + ([dr["current"]] if isinstance(dr.get("current"), dict) else []):
+        out += d.get("plays") or []
+    return out
+
+
+def espn_game(sport, gid):
+    """Stage ends of one finished game: [[period, end unix (last play of the period), away score, home score]], first play time."""
+    j = ejson(f"{ESPN}{SPORTS[sport][0]}/summary?event={gid}")
+    per = {}
+    first = None
+    for p in _plays(j):
+        w = its(p.get("wallclock"))
+        n = ((p.get("period") or {}).get("number"))
+        if not w or not n:
+            continue
+        first = w if first is None else min(first, w)
+        a, h = bot.fnum(p.get("awayScore"), None), bot.fnum(p.get("homeScore"), None)
+        cur = per.get(n)
+        if cur is None or w >= cur[0]:
+            per[n] = [w, a if a is not None else (cur[1] if cur else None), h if h is not None else (cur[2] if cur else None)]
+    ends = [[n, v[0], v[1], v[2]] for n, v in sorted(per.items())]
+    return {"first": first, "ends": ends, "n": len(_plays(j))}
+
+
+def espn_fetch(sport, days):
+    d_dir = os.path.join(CACHE, sport)
+    gpath = os.path.join(d_dir, "espn_games.json.gz")
+    games = rj(gpath, {}) or {}
+    dpath = os.path.join(d_dir, "espn_days.json.gz")
+    done_days = set(rj(dpath, []) or [])
+    today = int(time.time()) // DAY * DAY
+    todo = [d0 for d0 in range(today - days * DAY, today - DAY, DAY) if d0 not in done_days]
+    print(f"{sport}: ESPN days to read {len(todo)}, games known {len(games)}", flush=True)
+
+    def day(d0):
+        try:
+            return d0, espn_day(sport, d0), ""
+        except Exception as e:
+            return d0, None, str(e)[:80]
+    with ThreadPoolExecutor(6) as ex:
+        for d0, got, err in ex.map(day, todo):
+            if got is None:
+                print("  day failed", time.strftime("%Y-%m-%d", time.gmtime(d0)), err, flush=True)
+                continue
+            for g in got:
+                games.setdefault(g["id"], g)
+            done_days.add(d0)
+    wj(dpath, sorted(done_days))
+    need = [g for g in games.values() if "ends" not in g]
+    print(f"{sport}: {len(games)} finished games, {len(need)} need play-by-play", flush=True)
+
+    def one(g):
+        try:
+            return g, espn_game(sport, g["id"]), ""
+        except Exception as e:
+            return g, None, str(e)[:80]
+    k = 0
+    with ThreadPoolExecutor(8) as ex:
+        for g, got, err in ex.map(one, need):
+            k += 1
+            if got:
+                g.update(got)
+            elif "404" in err:
+                g["ends"] = []
+            if k % 300 == 0:
+                wj(gpath, games)
+                print(f"  {k}/{len(need)} play-by-play ({(time.time() - T0) / 60:.0f} min)", flush=True)
+            if time.time() - T0 > 200 * 60:
+                break
+    wj(gpath, games)
+    ok = [g for g in games.values() if len(g.get("ends") or []) >= 2]
+    print(f"{sport}: {len(ok)} games with stage end times", flush=True)
+    return games
+
+
+def k_events(series):
+    """{event: {'mk': [market rows]}} of every settled market of a series (both lists)."""
+    import kmentions as km
+    _, ok, n = km.series_markets(series)
+    evs = collections.defaultdict(list)
+    for m in ok.values():
+        evs[m["ev"]].append({k_: m[k_] for k_ in ("t", "ev", "w", "open", "close", "exp", "res", "vol")})
+    print(f"  {series}: {len(ok)} settled markets, {len(evs)} events", flush=True)
+    return dict(evs)
+
+
+def gkey(ev):
+    return ev.split("-", 1)[1] if "-" in ev else ev
+
+
+def norm_toks(s):
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(s or "")).encode("ascii", "ignore").decode().lower().replace("&", " ")
+    return {t for t in re.split(r"[^a-z0-9]+", s) if len(t) >= 2}
+
+
+def team_ok(km_, et):
+    """Kalshi market (its yes name + ticker suffix) is this ESPN team?"""
+    ab = km_["t"].rsplit("-", 1)[-1].upper()
+    if et.get("ab") and ab == str(et["ab"]).upper():
+        return 3
+    w = norm_toks(km_["w"])
+    full = norm_toks(et.get("name")) | norm_toks(et.get("short")) | norm_toks(et.get("loc"))
+    w = {t for t in w if len(t) > 1}
+    if w and w <= full:
+        return 2 if len(w) >= 2 or len(next(iter(w))) >= 4 else 1
+    return 0
+
+
+def match_espn(evs, games):
+    """{kalshi event: (espn game id, yes side 'home'/'away' of the first market)}"""
+    by_day = collections.defaultdict(list)
+    for g in games.values():
+        d = its(g.get("date"))
+        if d and len(g.get("ends") or []) >= 2:
+            by_day[(d - 5 * 3600) // DAY].append(g)          # US evening games: ESPN date is UTC, Kalshi's is local
+    out = {}
+    for ev, mm in evs.items():
+        mm = sorted([m for m in mm if not m["t"].endswith("-TIE")], key=lambda m: m["t"])
+        if len(mm) != 2:
+            continue
+        mm_close = mm[0]["close"]
+        best = None
+        for dd in (-1, 0, 1):
+            for g in by_day.get((mm_close - 5 * 3600) // DAY + dd, []):
+                if not (its(g["date"]) - 3600 <= mm_close <= its(g["date"]) + 9 * 3600):
+                    continue
+                for side, other in (("home", "away"), ("away", "home")):
+                    a, b = team_ok(mm[0], g[side]), team_ok(mm[1], g[other])
+                    if a and b and (best is None or a + b > best[0]):
+                        best = (a + b, g["id"], side)
+        if best:
+            out[ev] = (best[1], best[2])
+    return out
+
+
+def min_fetch(sport, rows, tag):
+    """rows: [(market ticker, series, t0, t1)] -> shards min_<tag>_<nnn>.json.gz of 1-minute [t, bid, ask, contracts, bid low, ask high]."""
+    d_dir = os.path.join(CACHE, sport)
+    rows = sorted(rows)
+    n_sh = (len(rows) + 399) // 400
+    for i in range(n_sh):
+        tp = os.path.join(d_dir, f"min_{tag}_{i:03d}.json.gz")
+        old = rj(tp, {}) or {}
+        chunk = [r for r in rows[i * 400:(i + 1) * 400] if not old.get(r[0])]
+        if not chunk:
+            continue
+        if time.time() - T0 > 260 * 60:
+            print("  out of time, run again to continue", flush=True)
+            return
+
+        def one(r):
+            return r[0], tennis.k_minutes(r[1], r[0], r[2], r[3])
+        with ThreadPoolExecutor(8) as ex:
+            for tk, m in ex.map(one, chunk):
+                old[tk] = m
+        wj(tp, old)
+        print(f"  {sport} minutes file {i + 1}/{n_sh}: {sum(1 for v in old.values() if v)}/{len(old)} with prices ({(time.time() - T0) / 60:.0f} min)", flush=True)
+
+
+def fetch_sport(sport, days=400):
+    d_dir = os.path.join(CACHE, sport)
+    games = espn_fetch(sport, days)
+    _, _, gser, sser = SPORTS[sport]
+    evs = k_events(gser)
+    wj(os.path.join(d_dir, f"k_{gser}.json.gz"), evs)
+    for s in sser:
+        wj(os.path.join(d_dir, f"k_{s}.json.gz"), k_events(s))
+    mt = match_espn(evs, games)
+    wj(os.path.join(d_dir, "match.json.gz"), mt)
+    print(f"{sport}: Kalshi games {len(evs)}, matched to ESPN {len(mt)}", flush=True)
+    rows = []
+    for ev, (gid, side) in mt.items():
+        g = games[gid]
+        mm = sorted([m for m in evs[ev] if not m["t"].endswith("-TIE")], key=lambda m: m["t"])
+        a = (g.get("first") or its(g["date"])) - 20 * 60
+        b = min(mm[0]["close"], g["ends"][-1][1] + 3600) + 60
+        rows.append((mm[0]["t"], gser, a, b))
+    min_fetch(sport, rows, gser)
+
+
+def fetch_esport(game, days=400):
+    d_dir = os.path.join(CACHE, game)
+    gser, mser = ESPORTS[game]
+    evs, maps = k_events(gser), k_events(mser)
+    wj(os.path.join(d_dir, f"k_{gser}.json.gz"), evs)
+    wj(os.path.join(d_dir, f"k_{mser}.json.gz"), maps)
+    first_map = {}
+    for ev, mm in maps.items():
+        k = gkey(ev).rsplit("-", 1)[0]
+        first_map[k] = min(first_map.get(k, 9e18), min(m["close"] for m in mm))
+    rows = []
+    for ev, mm in evs.items():
+        k = gkey(ev)
+        if k not in first_map or len(mm) != 2:
+            continue
+        m = sorted(mm, key=lambda m: m["t"])[0]
+        rows.append((m["t"], gser, first_map[k] - 90 * 60, m["close"] + 60))
+    print(f"{game}: matches with a map clock {len(rows)}", flush=True)
+    min_fetch(game, rows, gser)
+
+
+def fetch(what, days=400):
+    for w in what.split(","):
+        if w in SPORTS:
+            fetch_sport(w, days)
+        elif w in ESPORTS:
+            fetch_esport(w, days)
+        else:
+            print("unknown", w)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     if cmd == "scan":
         scan_kalshi()
         scan_clocks()
+    elif cmd == "fetch":
+        fetch(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 400)
+    elif cmd == "espntest":
+        g = espn_day(sys.argv[2], int(time.time()) // DAY * DAY - 2 * DAY)
+        print(len(g), short(g[:2], 800))
+        print(short(espn_game(sys.argv[2], g[0]["id"]), 1500))
     elif cmd == "peek":
         peek()
     elif cmd == "clocks":
