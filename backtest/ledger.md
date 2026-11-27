@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**296 ideas examined, in about 160,703 versions.** 228 dropped, 68 still being tested or waiting. **Looks real: 11.**
 
-Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 296 ideas that are all worthless, the luckiest one still looks good. With 296 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,5 +282,27 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH end-price markets, 5c+ apart, real trades | 81 | 248 | +$0.43 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
+| 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH reach/dip markets, 5c+ apart, real trades | 81 | 463 | +$5.09 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
+| 2026-11-27 | 1c fee: options price vs Polymarket, reach/dip last 30 min to 6 hours (fresh markets) | 3 | 280 | -$5.90 | Behind, but could be bad luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
+| 2026-11-27 | 5c fee: copy the GoodFallen BTC 5-minute wallet 1s late (one bet = one window) | 5 | 400 | -$0.08 | Behind, but could be bad luck | dropped | wallet5m.py copytest rate=0.05 (refee_misc) |
+| 2026-11-27 | 5c fee: copy the GoodFallen BTC 5-minute wallet 30s late (one bet = one window) | 5 | 400 | +$0.23 | Ahead, but could be luck | dropped | wallet5m.py copytest rate=0.05 (refee_misc) |
+| 2026-11-27 | BTC 5-min seller, keep offers 4c+ on the safe side of Binance fair, 0.1 s, skip first 12 s, after the fee cut (27 Nov only, unseen day), incl. reward at fee 0.05 | 64 | 158 | +$5.75 | Ahead, but could be luck | open: fixed re-check 28 Nov-4 Dec | maker5m.py (refee) |
+| 2026-11-27 | Buy and sell inside the window, btc, taker fee 0.05: best of 4360 rules on the first days, graded on fresh days (buy at the offer; at 4min, ask 8c-30c; sell after 15s) | 8,378 | 184 | -$13.01 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-27 | Buy and sell inside the window, eth, taker fee 0.01: best of 3374 rules on the first days, graded on fresh days (buy at the offer; rose 20c+ in 5s; sell at +20c / else hold) | 8,148 | 174 | -$4.04 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-27 | Buy and sell inside the window, sol, taker fee 0.01: best of 3363 rules on the first days, graded on fresh days (buy at the offer; fell 20c+ in 5s, fair price fell under a third of that; sell after 60s) | 8,148 | 155 | -$0.18 | Behind, but could be bad luck | dropped | swing.py exams |
+| 2026-11-27 | gas ladder vs live GasBuddy, 14/16/18h pooled, 10c edge | 81 | 10 | -$30.31 | Behind, but could be bad luck | dropped | sources.py gasrec |
+| 2026-11-27 | gas ladder vs live GasBuddy, 16h, 10c edge | 81 | 7 | -$47.34 | Too early to tell | dropped | sources.py gasrec |
+| 2026-11-27 | BTC 5-min seller, keep offers 4c on the safe side of Binance fair, 0.1 s, after the fee cut (21-26 Nov), reward in | 64 | 1688 | +$3.00 | Promising, needs more bets | open: fixed re-check 28 Nov-4 Dec | maker5m.py (MAKER5M_FEE=actual), backtest/refee_swing.md |
+| 2026-11-27 | Speed buy on BTC 5-min 1 s late, taker fee 0.05, sell after 60 s, fresh days, PAPER fills | 8,378 | 734 | +$9.12 | Looks real | open (holding still better) | swing.py exams (SWING_FEES=new), backtest/refee_swing.md |
+| 2026-11-27 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), taker fee 0.05, hold to the end, fresh days, PAPER fills | 8,378 | 734 | +$12.86 | Looks real | open | swing.py exams |
+| 2026-11-27 | Speed check BTC 5-min at the 0.07 fee (then real), 100 ms, before the cut (19-20 Nov), skip first 12 s | 12 | 576 | +$2.55 | Promising, needs more bets | open | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check BTC 5-min at the new 0.05 fee, 100 ms, after the 21 Nov fee cut (21-27 Nov), skip first 12 s | 12 | 1882 | +$2.89 | Looks real | open | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check BTC 5-min at the new 0.05 fee, 1 s late, 21-27 Nov, skip first 12 s | 12 | 1882 | -$1.33 | Losing | dropped | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check BTC 5-min at the new 0.05 fee, 500 ms late, 21-27 Nov, skip first 12 s | 12 | 1882 | +$0.74 | Ahead, but could be luck | dropped | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check BTC 5-min at the old 0.07 fee, 100 ms, 21-27 Nov, skip first 12 s | 12 | 1882 | +$2.24 | Promising, needs more bets | open | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check ETH 5-min at the 0.01 fee, 100 ms, 25-27 Nov, skip first 12 s | 12 | 526 | +$1.72 | Ahead, but could be luck | open: re-check with more days | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check ETH 5-min at the old 0.07 fee, 100 ms, 25-27 Nov, skip first 12 s | 12 | 526 | -$0.10 | Behind, but could be bad luck | open: re-check with more days | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
+| 2026-11-27 | Speed check SOL 5-min at the 0.01 fee, 100 ms, 25-27 Nov, skip first 12 s | 12 | 527 | +$0.68 | Ahead, but could be luck | open: re-check with more days | quoter/speedcheck.py edge (window_bets), backtest/refee_speed.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

@@ -316,11 +316,12 @@ def load_spot1m():
 
 
 def tbets(ms, tp, dvol, s1m, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_left=45 * 86400, min_age=3600,
-          vol_mult=1.0, kinds=None, sides=(0, 1), extra=0.01, stake=10.0, wait=1800, max_gap=1.0, first_only=True, fairs=None):
+          vol_mult=1.0, kinds=None, sides=(0, 1), extra=0.01, stake=10.0, wait=1800, max_gap=1.0, first_only=True, fairs=None, fee_rate=None):
     """Bets at prices people really paid. Every 5 minutes with a real trade: Polymarket's price = the last trade of those
     5 minutes, the coin's price = Binance's last finished minute, the swing size = Deribit's DVOL. If the two disagree by
     `gap` or more, buy the cheap side at the FIRST real trade of a later 5 minutes (within `wait` s), + `extra` + fee.
-    One bet per market (the first)."""
+    One bet per market (the first). `fee_rate` = a taker fee rate for every market (e.g. 0.01, Polymarket's crypto
+    fee since 21 Nov 2026); None (the default) keeps each market's own fee as it was then."""
     out = []
     for mid, r in tp.items():
         m = ms.get(mid)
@@ -367,7 +368,7 @@ def tbets(ms, tp, dvol, s1m, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_
             if c <= 0.01:
                 continue
             sh = stake / c
-            fee = bot.taker_fee(sh, c, m["fee"])
+            fee = bot.taker_fee(sh, c, m["fee"] if fee_rate is None else fee_rate)
             win = (m["final"][0] == 1.0) == (side == 0)
             out.append({"ev": m["ev"], "t": y[0], "cost": stake + fee, "pay": sh if win else 0.0, "sh": sh, "id": mid,
                         "kind": m["kind"], "coin": m["coin"], "side": side, "left": left, "p": p if side == 0 else 1 - p,

@@ -679,6 +679,10 @@ def norm_cdf(z):
 
 
 PRICE_KINDS = ("bn", "cb", "cl", "bf", "bs", "kr", "ax")
+# Taker fee rate used in the SCORING only (fee = rate x shares x p x (1-p)). Polymarket cut it on 20 Nov 2026 23:59 UTC
+# to 0.05 on the BTC 5-/15-minute windows and 0.01 on other crypto; the real bot's 26-27 Nov fills paid about 0.05
+# (backtest/refee_speed.md). Default stays the stricter 0.07; change with SPEED_FEE=0.05 or `--fee 0.05`.
+SCORE_FEE = float(os.environ.get("SPEED_FEE", "0.07"))
 
 
 def pkey(o):
@@ -686,11 +690,13 @@ def pkey(o):
     return f"ax:{o.get('s')}" if o["k"] == "ax" else o["k"]
 
 
-def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), say=print, coin="btc"):
+def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), say=print, coin="btc", fee=None):
     """For every Bitcoin jump (the fair price of a side rises `jump`+ within 2 s, as heard by this server), how much
     of Polymarket's sell offers on that side were still at a price below the new fair price minus the fee, `react` ms
-    after we heard it? And what would buying them have paid at the window's result?"""
+    after we heard it? And what would buying them have paid at the window's result? `fee` = taker fee rate
+    (default SCORE_FEE)."""
     import bisect
+    rate = SCORE_FEE if fee is None else fee
     import collections
     import statistics
     px, books, res, pings = collections.defaultdict(list), collections.defaultdict(list), {}, collections.defaultdict(list)
@@ -770,10 +776,9 @@ def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
                 if j < 0 or bk[j][1] is None:
                     continue
                 ask, size = bk[j][1], bk[j][2]
-                fee = 0.07 * ask * (1 - ask)
-                row["at"][d] = {"ask": ask, "size": size, "edge": fair - ask - fee}
+                row["at"][d] = {"ask": ask, "size": size, "edge": fair - ask - rate * ask * (1 - ask)}
             j = bisect.bisect_right(bt, r) - 1
-            if j >= 0 and bk[j][1] is not None and fair - bk[j][1] - 0.07 * bk[j][1] * (1 - bk[j][1]) > 0.01:
+            if j >= 0 and bk[j][1] is not None and fair - bk[j][1] - rate * bk[j][1] * (1 - bk[j][1]) > 0.01:
                 # how long the old ask lasted after we heard the jump
                 k = j
                 while k + 1 < len(bk) and bk[k + 1][1] is not None and bk[k + 1][1] <= bk[j][1] + 1e-9:
@@ -789,7 +794,7 @@ def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
         known = [x for x in rows if x["won"] is not None]
         ck = sum(x["at"][d]["ask"] * x["at"][d]["size"] for x in known)
         p = sum(x["at"][d]["size"] * x["won"] for x in known)
-        fee = sum(0.07 * x["at"][d]["ask"] * (1 - x["at"][d]["ask"]) * x["at"][d]["size"] for x in known)
+        fee = sum(rate * x["at"][d]["ask"] * (1 - x["at"][d]["ask"]) * x["at"][d]["size"] for x in known)
         say(f"  {d:>5} ms after we heard it: {len(rows)} jumps still had an old-price sell offer 1c+ under fair after fees "
             f"(${c:,.0f} on offer); buying all of it: {'no results yet' if not ck else f'{100 * (p - ck - fee) / ck:+.2f} per $100'}")
     la = sorted(x["lasted"] for x in out if x.get("lasted") is not None)
@@ -799,38 +804,58 @@ def score(paths, src=None, jump=0.03, react=(0, 50, 100, 200, 500, 1000, 2000), 
     return out
 
 
+def window_bets(out, d, band=(0.40, 0.95), cap=25.0, fee=None, skip_first=0, t_from=None, t_to=None):
+    """The edge() purchase rule on score()'s jump rows, one bet per window (jumps inside one window move together):
+    buy the jumped-toward side at the best ask seen `d` ms after hearing the jump, up to $cap, ask in `band`, taker
+    fee `fee` x shares x p x (1-p), held to the result. `skip_first` drops jumps heard in a window's first seconds
+    (the box's book feed was nearly blind in seconds 0-11 until the 27 Nov feed fix, swing.FIRST). `t_from` / `t_to`
+    keep windows starting in [t_from, t_to) (unix s). Returns exam-style bets: cost, pay, t, ev, n (jumps), sh."""
+    import collections
+    rate = SCORE_FEE if fee is None else fee
+    byw = collections.defaultdict(lambda: {"cost": 0.0, "pay": 0.0, "sh": 0.0, "n": 0})
+    for x in out:
+        if x["won"] is None or d not in x["at"] or not band[0] <= x["at"][d]["ask"] < band[1]:
+            continue
+        if (t_from is not None and x["w"] < t_from) or (t_to is not None and x["w"] >= t_to):
+            continue
+        if skip_first and x["r"] - x["w"] * 1000 < skip_first * 1000:
+            continue
+        a = x["at"][d]["ask"]
+        sh = min(x["at"][d]["size"], cap / a)
+        b = byw[x["w"]]
+        b["cost"] += sh * (a + rate * a * (1 - a))
+        b["pay"] += sh * x["won"]
+        b["sh"] += sh
+        b["n"] += 1
+    return [dict(v, t=w, ev=w) for w, v in sorted(byw.items()) if v["cost"] > 0]
+
+
 def edge(paths, srcs=("bn", "cb", "bf", "bs", "kr"), band=(0.40, 0.95), cap=25.0, delays=(0, 100, 200, 500, 1000), say=print,
-         coin="btc"):
+         coin="btc", fee=None, skip_first=0):
     """After each jump: buy the jumped-toward side at the best ask seen `d` ms after we heard it, up to $cap, ask in
     `band`, taker fee included, held to the window's result. Luck range by resampling whole windows (jumps inside one
     window move together). First run 18 Nov (20 h): Binance at 100 ms +$5.31 per $100, range +2.3..+8.3,
-    falling to about $0 at 1 s. The 40-95c band was picked after looking."""
-    import collections
+    falling to about $0 at 1 s. The 40-95c band was picked after looking. `fee` = taker fee rate (default SCORE_FEE),
+    `skip_first` = drop jumps in a window's first seconds (see window_bets)."""
     import random
     if coin != "btc":
         srcs = (f"ax:{coin.upper()}",)
     res = {}
     for src in srcs:
-        out = score(paths, src=src, say=lambda *a, **k: None, coin=coin) or []
+        out = score(paths, src=src, say=lambda *a, **k: None, coin=coin, fee=fee) or []
         for d in delays:
-            rows = [x for x in out if x["won"] is not None and d in x["at"] and band[0] <= x["at"][d]["ask"] < band[1]]
-            byw = collections.defaultdict(lambda: [0.0, 0.0])
-            for x in rows:
-                a = x["at"][d]["ask"]
-                f = 0.07 * a * (1 - a)
-                sh = min(x["at"][d]["size"], cap / a)
-                byw[x["w"]][0] += sh * (x["won"] - a - f)
-                byw[x["w"]][1] += sh * (a + f)
-            ws = list(byw.values())
+            bets = window_bets(out, d, band=band, cap=cap, fee=fee, skip_first=skip_first)
+            ws = [(b["pay"] - b["cost"], b["cost"]) for b in bets]
             if not ws:
                 continue
+            nj = sum(b["n"] for b in bets)
             p, s = sum(v[0] for v in ws), sum(v[1] for v in ws)
             rnd = random.Random(2)
             bs = sorted(100 * sum(v[0] for v in smp) / max(1e-9, sum(v[1] for v in smp))
                         for smp in ([ws[rnd.randrange(len(ws))] for _ in ws] for _ in range(500)))
-            say(f"{coin} {src} {d:5} ms, asks {band[0]:.2f}-{band[1]:.2f}: {len(rows)} jumps in {len(ws)} windows, ${s:,.0f} bought, "
+            say(f"{coin} {src} {d:5} ms, asks {band[0]:.2f}-{band[1]:.2f}: {nj} jumps in {len(ws)} windows, ${s:,.0f} bought, "
                 f"P&L ${p:,.0f} = {100 * p / s:+.2f} per $100, luck range {bs[25]:+.1f} to {bs[475]:+.1f}")
-            res[(src, d)] = (len(rows), s, p)
+            res[(src, d)] = (nj, s, p)
     return res
 
 
@@ -1115,8 +1140,14 @@ if __name__ == "__main__":
     elif cmd == "score":
         score(sys.argv[2:])
     elif cmd == "edge":
-        a = sys.argv[2:]
-        edge(a[1:], coin=a[0]) if a and a[0] in ("eth", "sol", "btc") else edge(a)
+        # python3 quoter/speedcheck.py edge [btc|eth|sol] [--fee 0.05] [--skip-first 12] files...
+        a, kw = sys.argv[2:], {}
+        for flag, key in (("--fee", "fee"), ("--skip-first", "skip_first")):
+            if flag in a:
+                i = a.index(flag)
+                kw[key] = float(a[i + 1])
+                del a[i:i + 2]
+        edge(a[1:], coin=a[0], **kw) if a and a[0] in ("eth", "sol", "btc") else edge(a, **kw)
     elif cmd == "lead":
         lead(sys.argv[2:])
     elif cmd == "kcancel":
