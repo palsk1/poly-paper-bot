@@ -282,6 +282,7 @@ Why count: if you test 304 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | Real Kalshi bot rule (2.3 bar) on the 15-min coins it lacks (NEAR, Zcash), real trade lists, $25 bids | 4 | 2,326 | +$0.39 | Promising, needs more bets | open, needs Jan's go | khourly.py grow15, backtest/kgrow15.md |
 | 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH end-price markets, 5c+ apart, real trades | 81 | 248 | +$0.43 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
 | 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH reach/dip markets, 5c+ apart, real trades | 81 | 463 | +$5.09 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
 | 2026-11-27 | 1c fee: options price vs Polymarket, reach/dip last 30 min to 6 hours (fresh markets) | 3 | 280 | -$5.90 | Behind, but could be bad luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
