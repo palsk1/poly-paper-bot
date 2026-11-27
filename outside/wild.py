@@ -89,7 +89,7 @@ def bs_call(S, K, s, T):
 
 def deribit_daily(cur):
     """Daily DVOL closes and daily index closes (BTC-PERPETUAL as a stand-in for the index) since 2021."""
-    c = load(f"dvol_{cur}")
+    c = load(f"dvol2_{cur}")
     if c:
         return c
     end = int(time.time() * 1000); start = 1617235200000  # 1 Apr 2021
@@ -109,7 +109,7 @@ def deribit_daily(cur):
     px = {}
     t0 = start // 1000
     while t0 < end // 1000:
-        t2 = min(end // 1000, t0 + 86400 * 900)
+        t2 = min(end // 1000, t0 + 86400 * 150)
         r = get(f"https://www.deribit.com/api/v2/public/get_tradingview_chart_data?instrument_name={cur}-PERPETUAL"
                 f"&start_timestamp={t0*1000}&end_timestamp={t2*1000}&resolution=60")["result"]
         for ts, o in zip(r.get("ticks", []), r.get("open", [])):
@@ -117,11 +117,17 @@ def deribit_daily(cur):
         t0 = t2
         time.sleep(0.2)
     out = {"dvol": dv, "px": px}
-    save(f"dvol_{cur}", out)
+    save(f"dvol2_{cur}", out)
     return out
 
 
-def vol():
+HAIR = 0.01
+
+
+def vol(hair="1"):
+    global HAIR
+    HAIR = float(hair) / 100
+    print("selling", hair, "vol points under DVOL")
     for cur in ["BTC", "ETH"]:
         d = deribit_daily(cur)
         dv = {int(k): v for k, v in d["dvol"].items()}; px = {int(k): v for k, v in d["px"].items()}
@@ -139,7 +145,7 @@ def vol():
             iv = dv.get(day0) or dv.get(day0 - 86400)
             if not (S0 and S1 and iv):
                 continue
-            s = iv / 100.0 - 0.01      # sell 1 vol point under DVOL (bid side), DVOL is the 30-day swing
+            s = iv / 100.0 - HAIR      # sell HAIR under DVOL (bid side), DVOL is the 30-day swing
             T = 7 / 365.0
             # realized: hourly log moves over the week
             rets = []
