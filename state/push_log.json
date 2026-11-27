@@ -72,23 +72,11 @@
   },
   "2026-11-27": {
    "failed": 0,
-   "muted": 22,
-   "sent": 2
+   "muted": 37,
+   "sent": 4
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade] sold Yes at 95c (+$0.97)",
-   "track": "panic_fade",
-   "ts": "2026-11-19T17:08:00Z"
-  },
-  {
-   "result": "sent",
-   "title": "[stock_no] bought 1 (practice money)",
-   "track": "stock_no",
-   "ts": "2026-11-19T17:10:27Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade_4c] sold No at 88c (+$0.30)",
@@ -1276,6 +1264,18 @@
    "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-4.61)",
    "track": "kalshi_patient",
    "ts": "2026-11-27T01:37:54Z"
+  },
+  {
+   "result": "sent",
+   "title": "[yes_fav_85_95] bought 2 (practice money)",
+   "track": "yes_fav_85_95",
+   "ts": "2026-11-27T05:06:45Z"
+  },
+  {
+   "result": "sent",
+   "title": "Paper top 10",
+   "track": null,
+   "ts": "2026-11-27T05:11:22Z"
   }
  ]
 }
