@@ -519,8 +519,235 @@ def gaps(rounds=None, wait=None):
     say("=== DONE ===")
 
 
+# ================================================================ hl: do crypto outcome books lag the perp?
+UNDER = ("BTC", "ETH", "SOL", "HYPE")
+
+
+def hl_crypto():
+    meta = hl({"type": "outcomeMeta"})
+    mids = hl({"type": "allMids"})
+    res = []
+    for o in meta.get("outcomes", []):
+        d = kv(o.get("description"))
+        u = d.get("underlying") or d.get("perp")
+        if u not in UNDER:
+            continue
+        if o.get("name") == "Recurring" and d.get("class") == "priceBinary":
+            kind, K, T = "above", f(d.get("targetPrice")), ts(d.get("expiry", ""), "%Y%m%d-%H%M")
+        elif o.get("name") == "template:binaryPrice":
+            kind, K, T = "above", f(d.get("threshold")), ts(d.get("time", ""), "%Y%m%d-%H%M")
+        elif o.get("name") == "template:priceTouch":
+            kind, K, T = "touch", f(d.get("target")), ts(d.get("time", ""), "%Y%m%d-%H%M")
+        else:
+            continue
+        if not K or not T or T < time.time() + 600:
+            continue
+        coin = f"#{10 * o['outcome']}"
+        res.append({"coin": coin, "u": u, "kind": kind, "K": K, "T": T, "mid": f(mids.get(coin)), "S": f(mids.get(u)), "desc": o.get("description")[:100]})
+    return res
+
+
+def fair(kind, S, K, T, sig, now):
+    from statistics import NormalDist
+    tau = max(T - now, 1) / (365 * 86400)
+    sd = sig * math.sqrt(tau)
+    if kind == "above":
+        return NormalDist().cdf(math.log(S / K) / sd)
+    x = abs(math.log(K / S)) / sd
+    return min(1.0, 2 * NormalDist().cdf(-x))
+
+
+def hlrec(minutes=None):
+    import websocket  # websocket-client
+    minutes = float(minutes or 60)
+    outs = hl_crypto()
+    # keep outcomes that are not already decided
+    live = [o for o in outs if 0.03 < o["mid"] < 0.97]
+    say(f"crypto outcomes {len(outs)}, between 3c and 97c {len(live)}")
+    for o in live:
+        say(f"  {o['coin']} {o['kind']} {o['u']} K={o['K']} hours left {(o['T'] - time.time()) / 3600:.1f} mid={o['mid']} S={o['S']}")
+    path = os.path.join(CACHE, f"hlrec_{int(time.time())}.jsonl.gz")
+    fh = gzip.open(path, "wt")
+    json.dump({"meta": live}, fh)
+    fh.write("\n")
+    ws = websocket.create_connection("wss://api.hyperliquid.xyz/ws", timeout=30)
+    for u in UNDER:
+        ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "bbo", "coin": u}}))
+    for o in live:
+        ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "l2Book", "coin": o["coin"]}}))
+        ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "trades", "coin": o["coin"]}}))
+    end = time.time() + 60 * minutes
+    n = 0
+    last_ping = time.time()
+    while time.time() < end:
+        try:
+            msg = ws.recv()
+        except Exception as e:
+            say(f"  ws error {e!r}, reconnecting")
+            time.sleep(2)
+            ws = websocket.create_connection("wss://api.hyperliquid.xyz/ws", timeout=30)
+            for u in UNDER:
+                ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "bbo", "coin": u}}))
+            for o in live:
+                ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "l2Book", "coin": o["coin"]}}))
+                ws.send(json.dumps({"method": "subscribe", "subscription": {"type": "trades", "coin": o["coin"]}}))
+            continue
+        tr = time.time()
+        if tr - last_ping > 30:
+            ws.send(json.dumps({"method": "ping"}))
+            last_ping = tr
+        try:
+            m = json.loads(msg)
+        except Exception:
+            continue
+        ch, d = m.get("channel"), m.get("data")
+        if ch == "bbo":
+            b = d.get("bbo") or []
+            if len(b) == 2 and b[0] and b[1]:
+                fh.write(json.dumps(["p", round(tr, 3), d.get("time"), d["coin"], f(b[0]["px"]), f(b[1]["px"])]) + "\n")
+        elif ch == "l2Book":
+            lv = d.get("levels") or [[], []]
+            fh.write(json.dumps(["b", round(tr, 3), d.get("time"), d["coin"], [[f(x["px"]), f(x["sz"])] for x in lv[0][:3]],
+                                 [[f(x["px"]), f(x["sz"])] for x in lv[1][:3]]]) + "\n")
+        elif ch == "trades":
+            for t in d:
+                fh.write(json.dumps(["t", round(tr, 3), t.get("time"), t["coin"], t.get("side"), f(t.get("px")), f(t.get("sz"))]) + "\n")
+        else:
+            continue
+        n += 1
+        if n % 20000 == 0:
+            say(f"  {n} messages, {(end - time.time()) / 60:.0f} min left")
+    fh.close()
+    say(f"recorded {n} messages to {path}")
+    hlscore(path)
+
+
+def hlscore(path=None):
+    import glob
+    paths = [path] if path else sorted(glob.glob(os.path.join(CACHE, "hlrec_*.jsonl.gz")))
+    for p in paths:
+        _hlscore(p)
+    say("=== DONE ===")
+
+
+def _hlscore(path):
+    import bisect
+    with gzip.open(path, "rt") as fh:
+        meta = json.loads(fh.readline())["meta"]
+        P, B, T = {}, {}, {}
+        for line in fh:
+            r = json.loads(line)
+            if r[0] == "p":
+                P.setdefault(r[3], []).append((r[2] / 1000, (r[4] + r[5]) / 2))
+            elif r[0] == "b":
+                if r[4] and r[5]:
+                    B.setdefault(r[3], []).append((r[2] / 1000, r[4][0][0], r[5][0][0], r[5][0][1], r[4][0][1]))
+            elif r[0] == "t":
+                T.setdefault(r[3], []).append((r[2] / 1000, r[4], r[5], r[6]))
+    say(f"\n== {path}: perps {[(k, len(v)) for k, v in P.items()]}, books {sum(len(v) for v in B.values())}, trades {sum(len(v) for v in T.values())}")
+    # realized vol per perp from 10 s returns
+    sig = {}
+    for u, xs in P.items():
+        xs.sort()
+        rets, j, t_prev, p_prev = [], 0, xs[0][0], xs[0][1]
+        for t, p in xs:
+            if t - t_prev >= 10:
+                rets.append(math.log(p / p_prev))
+                t_prev, p_prev = t, p
+        if len(rets) > 20:
+            v = sum(r * r for r in rets) / len(rets)
+            sig[u] = math.sqrt(v * 365 * 86400 / 10)
+    say(f"  realized yearly swing (sigma) from the recording: { {k: round(v, 2) for k, v in sig.items()} }")
+
+    def at(series, t):
+        i = bisect.bisect_right([x[0] for x in series], t) - 1 if False else None
+        return i
+    res = {d: [] for d in (0.0, 0.5, 1.0, 2.0, 5.0)}
+    others = []
+    rows_model = []
+    for o in meta:
+        bk = sorted(B.get(o["coin"], []))
+        if len(bk) < 50 or o["u"] not in P or o["u"] not in sig:
+            continue
+        pt = P[o["u"]]
+        ptimes = [x[0] for x in pt]
+        btimes = [x[0] for x in bk]
+        s = sig[o["u"]]
+        # model check: average |book mid - model| (model uses recorded sigma, so this is rough)
+        for i in range(0, len(bk), max(1, len(bk) // 200)):
+            t, bid, ask = bk[i][0], bk[i][1], bk[i][2]
+            k = bisect.bisect_right(ptimes, t) - 1
+            if k >= 0:
+                rows_model.append(((bid + ask) / 2, fair(o["kind"], pt[k][1], o["K"], o["T"], s, t)))
+        # jumps: model fair moves 2c+ within 2 s of perp price
+        last_jump = -1e9
+        for k in range(len(pt)):
+            t1, S1 = pt[k]
+            k0 = bisect.bisect_left(ptimes, t1 - 2.0)
+            S0 = pt[k0][1]
+            if t1 - last_jump < 10:
+                continue
+            f0 = fair(o["kind"], S0, o["K"], o["T"], s, t1)
+            f1 = fair(o["kind"], S1, o["K"], o["T"], s, t1)
+            if abs(f1 - f0) < 0.02:
+                continue
+            last_jump = t1
+            up = f1 > f0
+            j0 = bisect.bisect_right(btimes, t1 - 2.0) - 1
+            if j0 < 0:
+                continue
+            old_bid, old_ask = bk[j0][1], bk[j0][2]
+            jm = bisect.bisect_right(btimes, t1 + 60) - 1
+            if btimes[-1] < t1 + 60:
+                continue
+            mid60 = (bk[jm][1] + bk[jm][2]) / 2
+            for d in res:
+                j = bisect.bisect_right(btimes, t1 + d) - 1
+                bid, ask, asz, bsz = bk[j][1], bk[j][2], bk[j][3], bk[j][4]
+                if up:
+                    stale = ask <= old_ask + 1e-9
+                    val = mid60 - ask
+                    usd = min(25, asz * ask)
+                    sh = usd / ask
+                else:
+                    stale = bid >= old_bid - 1e-9
+                    val = bid - mid60   # buy No at 1 - bid
+                    usd = min(25, bsz * (1 - bid))
+                    sh = usd / max(1e-6, 1 - bid)
+                res[d].append((stale, val, usd, o["coin"], abs(f1 - f0), (ask - bid), sh))
+            # other people's trades at the old price in the 10 s after the jump
+            for tt, side, px, sz in T.get(o["coin"], []):
+                if t1 <= tt <= t1 + 10:
+                    if up and side == "B" and px <= old_ask + 1e-9:
+                        others.append((tt - t1, mid60 - px, px * sz))
+                    if not up and side == "A" and px >= old_bid - 1e-9:
+                        others.append((tt - t1, px - mid60, (1 - px) * sz))
+    if rows_model:
+        err = sorted(abs(a - b) for a, b in rows_model)
+        say(f"  book middle vs simple model: median miss {100 * err[len(err) // 2]:.1f}c over {len(err)} looks (model is rough)")
+    for d, xs in res.items():
+        if not xs:
+            say(f"  delay {d}s: no jumps")
+            continue
+        st = [x for x in xs if x[0]]
+        pnl = sum(x[1] * x[6] for x in st)
+        stake = sum(x[2] for x in st)
+        say(f"  delay {d}s: jumps {len(xs)}, old price still there {len(st)}, buying it (up to $25, marked at the middle 60 s later): "
+            f"stake ${stake:,.0f}, profit ${pnl:+,.2f} ({100 * pnl / max(stake, 1):+.2f} per $100); all jumps at the then price: "
+            f"${sum(x[1] * x[6] for x in xs):+,.2f} on ${sum(x[2] for x in xs):,.0f}")
+        if st:
+            per = [x[1] for x in st]
+            say(f"     per share: average {100 * sum(per) / len(per):+.2f}c, median {100 * sorted(per)[len(per) // 2]:+.2f}c; "
+                f"by coin {sorted(set(x[3] for x in st))[:8]}")
+    if others:
+        say(f"  other people's trades at the old price within 10 s: {len(others)}, ${sum(x[2] for x in others):,.0f}, "
+            f"average worth {100 * sum(x[1] for x in others) / len(others):+.2f}c a share, median delay {sorted(x[0] for x in others)[len(others) // 2]:.1f}s")
+    else:
+        say("  other people's trades at the old price within 10 s: none")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = sys.argv[2:] or [None]
-    globals()[cmd](*arg)
+    globals()["hlrec" if cmd == "hl" else cmd](*arg)
