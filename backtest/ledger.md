@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**304 ideas examined, in about 161,021 versions.** 236 dropped, 68 still being tested or waiting. **Looks real: 11.**
+**310 ideas examined, in about 161,069 versions.** 242 dropped, 68 still being tested or waiting. **Looks real: 11.**
 
-Why count: if you test 304 ideas that are all worthless, the luckiest one still looks good. With 304 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 310 ideas that are all worthless, the luckiest one still looks good. With 310 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,7 +282,6 @@ Why count: if you test 304 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
-| 2026-11-27 | Real Kalshi bot rule (2.3 bar) on the 15-min coins it lacks (NEAR, Zcash), real trade lists, $25 bids | 4 | 2,326 | +$0.39 | Promising, needs more bets | open, needs Jan's go | khourly.py grow15, backtest/kgrow15.md |
 | 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH end-price markets, 5c+ apart, real trades | 81 | 248 | +$0.43 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
 | 2026-11-27 | 1c fee: options price vs Polymarket, BTC/ETH reach/dip markets, 5c+ apart, real trades | 81 | 463 | +$5.09 | Ahead, but could be luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
 | 2026-11-27 | 1c fee: options price vs Polymarket, reach/dip last 30 min to 6 hours (fresh markets) | 3 | 280 | -$5.90 | Behind, but could be bad luck | dropped | optfair.py fee_rate=0.01 (refee_misc) |
@@ -294,6 +293,12 @@ Why count: if you test 304 ideas that are all worthless, the luckiest one still 
 | 2026-11-27 | Buy and sell inside the window, sol, taker fee 0.01: best of 3363 rules on the first days, graded on fresh days (buy at the offer; fell 20c+ in 5s, fair price fell under a third of that; sell after 60s) | 8,148 | 155 | -$0.18 | Behind, but could be bad luck | dropped | swing.py exams |
 | 2026-11-27 | gas ladder vs live GasBuddy, 14/16/18h pooled, 10c edge | 81 | 10 | -$30.31 | Behind, but could be bad luck | dropped | sources.py gasrec |
 | 2026-11-27 | gas ladder vs live GasBuddy, 16h, 10c edge | 81 | 7 | -$47.34 | Too early to tell | dropped | sources.py gasrec |
+| 2026-11-27 | Kalshi vs Polymarket: Buy on Kalshi where Polymarket's price is 10c+ away (follow Polymarket) | 8 | 208 | +$4.65 | Ahead, but could be luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Buy on Polymarket where Kalshi's price is 10c+ away (follow Kalshi) | 8 | 148 | -$14.82 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Kalshi moved 5c+ in 1h, Polymarket stood still: buy on Polymarket | 8 | 53 | +$3.69 | Ahead, but could be luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Kalshi moved 5c+ in 3h, Polymarket stood still: buy on Polymarket | 8 | 57 | -$21.24 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Polymarket moved 5c+ in 1h, Kalshi stood still: buy on Kalshi | 8 | 135 | -$13.92 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Polymarket moved 5c+ in 3h, Kalshi stood still: buy on Kalshi | 8 | 142 | -$6.28 | Behind, but could be bad luck | dropped | xsite.py run |
 | 2026-11-27 | Late jump before an announcement (awards, picks, Nobel): follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 51 | -$14.14 | Behind, but could be bad luck | dropped | blindspots.py chart, backtest/blindspots.md |
 | 2026-11-27 | Late jump, every other market: follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 253 | -$15.10 | Losing | dropped | blindspots.py chart, backtest/blindspots.md |
 | 2026-11-27 | 'Nothing ever happens' by question type: buy No, Yes 30-70c a day in, real prices | 15 | 128 | -$5.29 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
