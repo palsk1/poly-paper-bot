@@ -32,7 +32,6 @@ import yesno
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(ROOT, "bt_cache", "xs")
-KDAYS = os.path.join(CACHE, "kdays")
 DAY = 86400
 FIRST, LAST = "2026-03-01", "2026-11-09"
 T0 = time.time()
@@ -45,43 +44,43 @@ def left():
 
 
 # ================================================================ Kalshi list
-def kday(d0):
-    p = os.path.join(KDAYS, f"{d0}.json.gz")
-    if os.path.exists(p):
-        return d0, None
-    try:
-        _, n, ok = khouse.list_day(d0)
-    except Exception as e:
-        print(f"  day {d0} failed {str(e)[:80]}", flush=True)
-        return d0, None
-    keep = []
-    for m in ok:
-        cat = launch.kcategory(m["s"], m["q"])
-        if cat in ("sports", "esports"):
-            continue
-        m["cat"] = cat
-        keep.append(m)
-    wj(p, {"n": n, "m": keep})
-    return d0, (n, len(keep))
+SKIP_CAT = {"Sports", "Crypto", "Mentions"}   # sports arb and crypto pairs were dug before; mentions cross is in kmentions.py
 
 
 def klist():
-    os.makedirs(KDAYS, exist_ok=True)
-    days = list(range(tsec(FIRST), tsec(LAST) + 1, DAY))
-    with ThreadPoolExecutor(int(os.environ.get("XS_WORKERS", "4"))) as ex:
-        for d0, r in ex.map(kday, days):
-            if r:
-                print(f"{dt.datetime.utcfromtimestamp(d0):%Y-%m-%d}: {r[0]} settled, {r[1]} non-sports kept ({(time.time() - T0) / 60:.0f} min)", flush=True)
-            if left() < 5:
-                print("time budget used, stop (re-run resumes)")
-                break
-    allm = {}
-    for f in sorted(os.listdir(KDAYS)):
-        for m in (rj(os.path.join(KDAYS, f), {}) or {}).get("m", []):
-            allm[m["t"]] = m
+    """Every settled market of every non-sports Kalshi series, closing 1 Mar-9 Nov. By series, because
+    /historical/markets ignores the close-time filters (found 27 Nov: a day-by-day list read 400,000 rows a day
+    and kept none). Resumable: finished series are kept in bt_cache/xs/kser.json.gz."""
+    import kmentions
+    path = os.path.join(CACHE, "kser.json.gz")
+    done = rj(path, {}) or {}
+    ser = yesno.kget("/series", {}).get("series") or []
+    pick = {x["ticker"]: x for x in ser if x.get("ticker") and x.get("category") not in SKIP_CAT}
+    todo = sorted(t for t in pick if t not in done)
+    print(f"series {len(ser)}, non-sports {len(pick)}, already listed {len(done)}, to list {len(todo)}", flush=True)
+    a, b = tsec(FIRST), tsec(LAST) + DAY
+    ex = ThreadPoolExecutor(int(os.environ.get("XS_WORKERS", "6")))
+    futs = [ex.submit(kmentions.series_markets, t) for t in todo]
+    n = 0
+    for f in futs:
+        if left() < 6:
+            break
+        t, ok, nrows = f.result()
+        cat = pick[t].get("category")
+        done[t] = [dict(m, q=(m["q"] + " " + m["w"]).strip()[:200], cat=cat) for m in ok.values()
+                   if a <= m["close"] < b and m["vol"] >= 100]
+        n += 1
+        if n % 200 == 0:
+            wj(path, done)
+            print(f"  {len(done)} series listed ({(time.time() - T0) / 60:.0f} min)", flush=True)
+    ex.shutdown(wait=False, cancel_futures=True)
+    wj(path, done)
+    allm = {m["t"]: m for v in done.values() for m in v}
     wj(os.path.join(CACHE, "kmarkets.json.gz"), allm)
     c = collections.Counter(m["cat"] for m in allm.values())
-    print(f"kalshi non-sports settled markets: {len(allm)}; by kind: {dict(c.most_common())}")
+    print(f"kalshi non-sports settled markets 1 Mar-9 Nov: {len(allm)} from {len(done)} series; by category: {dict(c.most_common())}")
+    if len(done) < len(pick):
+        print("not finished: run again to resume")
 
 
 # ================================================================ pairing
@@ -133,6 +132,10 @@ def direction(tk):
     return "up" if u and not d else "down" if d and not u else None
 
 
+def is_wx(k):
+    return bool(re.match(r"KX(HIGH|LOWT|TEMP)", k["s"]))
+
+
 def weather_ok(k, p):
     """Kalshi daily high/low series -> same city and same kind on Polymarket. Hourly KXTEMP* rounds have no twin."""
     s = k["s"]
@@ -147,9 +150,9 @@ def weather_ok(k, p):
 
 
 def twin_ok(k, p):
-    if k["cat"] == "crypto price":       # Kalshi 5 PM vs Polymarket noon / reach / dip: other questions; dug in optfair, khourly
+    if launch.kcategory(k["s"], k["q"]) in ("sports", "esports", "crypto price"):   # dug before (arbhunt, xvenue, optfair)
         return False
-    if k["cat"] == "weather" and not weather_ok(k, p):
+    if is_wx(k) and not weather_ok(k, p):
         return False
     a, b = mday(k["q"]), mday(p["q"])
     if a and b and a != b:
@@ -218,7 +221,7 @@ def match():
             if k["_n"] != p["_n"] or not twin_ok(k, p):
                 continue
             s = sum(w[t] ** 2 for t in k["_tk"] & p["_tk"]) / (k["_norm"] * p["_norm"])
-            if s >= (0.3 if k["cat"] == "weather" else MIN_SCORE) and (best is None or s > best[0]):
+            if s >= (0.3 if is_wx(k) else MIN_SCORE) and (best is None or s > best[0]):
                 best = (s, i)
         if best:
             best_k[k["t"]] = best
