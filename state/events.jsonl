@@ -40706,3 +40706,6 @@
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXDIESELMONAK-26NOV30-T6.0000", "track": "kalshi_patient", "ts": "2026-11-27T08:54:27Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXVANCEELSAYEDMEET-27JAN01-DEC01", "track": "kalshi_patient", "ts": "2026-11-27T08:54:27Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXFIBAGAME-26NOV271200FRAEST-FRA", "track": "kalshi_patient", "ts": "2026-11-27T08:54:27Z", "type": "kpatient_order"}
+{"cost": 4.1571, "title": "Will the price of Bitcoin be above $64,000 on November 30?", "token": "88065098603284727307450473682553638885687192859743734702785490391772160485356", "track": "crypto_no", "ts": "2026-11-27T09:09:42Z", "type": "skip_no_cash"}
+{"filled": 4.68, "price": 0.95, "side": "no", "through": false, "ticker": "KXHIGHCHI-26NOV27-B43.5", "track": "kalshi_patient", "ts": "2026-11-27T09:10:28Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXNFLTD-26NOV29SEASF-SFCMCCAFFREY23-3", "track": "kalshi_patient", "ts": "2026-11-27T09:10:33Z", "type": "kpatient_fill"}
