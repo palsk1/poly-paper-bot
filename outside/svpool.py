@@ -401,24 +401,61 @@ class Round:
         self.guar = GUAR.get(game, 0.0)
 
     def row_ev(self, rows):
-        import numpy as np
-        D, nd = neighbours()
-        R = len(rows)
-        out = (rows[:, None, :] + D[None, :, :]) % 3                     # (R, K, 13) results
-        m = np.arange(13)[None, None, :]
-        pr = self.P[m, out].prod(2)                                       # chance of that result
-        q = self.S[m, out].reshape(-1, 13)
-        dist = count_dist(q).reshape(R, len(D), 14)
-        k = 13 - nd                                                       # our rows' number right
-        W = self.N * np.take_along_axis(dist, np.broadcast_to(k[None, :, None], (R, len(D), 1)), 2)[:, :, 0]
-        pool = np.array([self.pool[x] for x in k])[None, :]
-        with np.errstate(divide="ignore", invalid="ignore"):
-            share = np.where(W > 1e-9, (1 - np.exp(-W)) / W, 1.0)         # E[1/(1+others)] for Poisson others
-        pay = pool * share
-        pay = pay + np.where(k[None, :] == 13, np.exp(-W) * max(0.0, self.guar - self.pool[13]), 0.0)
-        pay = np.where(pool / (W + 1) >= MINPAY, pay, 0.0)
-        lev = {kk: (pr * pay * (k[None, :] == kk)).sum(1) for kk in SPLIT}
-        return (pr * pay).sum(1), lev
+        """exact under the model: every result within 3 changes of each row (13, 12, 11, 10 right)."""
+        import numpy as np, itertools
+        rows = np.asarray(rows)
+        R, M = rows.shape
+        m = np.arange(M)[None, :]
+        q0 = self.S[m, rows]                                   # (R, M) public chance of matching our sign
+        p0 = self.P[m, rows]
+        subs = [c for d in range(4) for c in itertools.combinations(range(M), d)]
+        mask = np.zeros((len(subs), M), bool)
+        for i, c in enumerate(subs):
+            mask[i, list(c)] = True
+        qm = np.where(mask[None], 0.0, q0[:, None, :]).reshape(-1, M)
+        base = count_dist(qm).reshape(R, len(subs), M + 1)    # public count over the matches outside the subset
+        tot = np.zeros(R)
+        lev = {k: np.zeros(R) for k in SPLIT}
+        pall = p0.prod(1)
+        start = 0
+        for d in range(4):
+            cs = list(itertools.combinations(range(M), d))
+            sl = slice(start, start + len(cs))
+            start += len(cs)
+            k = M - d
+            if k not in self.pool:
+                continue
+            pos = np.array(cs, int).reshape(len(cs), d)
+            B = base[:, sl, :]                                 # (R, nsub, M+1)
+            for sh in itertools.product((1, 2), repeat=d):
+                sh = np.array(sh, int)
+                if d:
+                    alt = (rows[:, pos] + sh[None, None, :]) % 3   # (R, nsub, d)
+                    qD = self.S[pos[None], alt]
+                    pD = self.P[pos[None], alt]
+                    pr = pall[:, None] / p0[:, pos].prod(2) * pD.prod(2)
+                    poly = np.zeros((R, len(cs), d + 1))
+                    poly[..., 0] = 1
+                    for j in range(d):
+                        qj = qD[..., j:j + 1]
+                        poly[..., 1:] = poly[..., 1:] * (1 - qj) + poly[..., :-1] * qj
+                        poly[..., 0] *= (1 - qD[..., j])
+                    Pk = sum(B[..., k - j] * poly[..., j] for j in range(d + 1))
+                else:
+                    pr = pall[:, None]
+                    Pk = B[..., k]
+                W = self.N * Pk
+                pool = self.pool[k]
+                with np.errstate(divide="ignore", invalid="ignore"):
+                    share = np.where(W > 1e-9, -np.expm1(-W) / W, 1.0)
+                pay = pool * share
+                if k == M:
+                    pay = pay + np.exp(-W) * max(0.0, self.guar - pool)
+                pay = np.where(pool / (W + 1) >= MINPAY, pay, 0.0)
+                v = (pr * pay).sum(1)
+                lev[k] += v
+                tot += v
+        return tot, lev
 
     def ev(self, rows):
         e, lev = self.row_ev(rows)
@@ -466,7 +503,7 @@ def ev(game, nhel=2, nhalv=4, nsamp=2000):
                 if label == "blend":
                     out[f"real_{how}"] = R.real(rows)
             # a random public row (sanity check: should come back near 0.60-0.65)
-            pub = (np.random.default_rng(r["n"]).random((100, 13, 1)) > S.cumsum(1)[None]).sum(2)
+            pub = (np.random.default_rng(r["n"]).random((30, 13, 1)) > S.cumsum(1)[None]).sum(2)
             out[f"{label}_pubrow"] = R.ev(pub)[0]
         res.append(out)
     os.makedirs(CACHE, exist_ok=True)
@@ -486,6 +523,83 @@ def ev(game, nhel=2, nhalv=4, nsamp=2000):
     print("  rounds where blend_value > 1.0:", sum(o["blend_value"] > 1 for o in res), "of", len(res),
           " their real return:", round(np.mean([o["real_value"] for o in res if o["blend_value"] > 1] or [0]), 3))
     return res
+
+
+def toprows(game, C=3000, K=144, every=1):
+    """per round: draw C candidate rows leaning to under-picked signs, score each by the model (blend world),
+    keep the best K. Is the model's best-case play above 1.0 back per 1 kr? And what did it really pay?"""
+    import numpy as np
+    allr = {r["n"]: r for r in load(game)}
+    rs = [r for r in sorted(allr.values(), key=lambda r: r["n"]) if ok_draw(r)][::every]
+    half = len(rs) // 2
+    w = blend_w(rs[:half])
+    print(f"{game}: {len(rs)} rounds, blend weight on odds {w:.2f}, {C} candidates a round, best {K} kept")
+    res = []
+    for r in rs:
+        prev = allr.get(r["n"] - 1)
+        carry = carry_out(prev, pools(prev, 0.0)) if prev and prev.get("dist") and prev.get("sale") else 0.0
+        P, S, O = arrays(r)
+        B = w * P + (1 - w) * S
+        rng = np.random.default_rng(r["n"])
+        cands = []
+        for b in (0.0, 0.5, 1.0, 2.0):
+            g = B * (B / S) ** b
+            g = g / g.sum(1, keepdims=True)
+            cands.append((rng.random((C // 4, 13, 1)) > g.cumsum(1)[None]).sum(2))
+        cands = np.unique(np.concatenate(cands), axis=0)
+        RB = Round(r, B, S, carry, game)
+        eb, _ = RB.row_ev(cands)
+        top = cands[np.argsort(-eb)[:K]]
+        RO = Round(r, P, S, carry, game)
+        eo, _ = RO.row_ev(top)
+        o = {"n": r["n"], "d": r["close"][:10], "carry": carry, "sale": r["sale"],
+             "top1": float(eb.max()), "top10": float(np.sort(eb)[-10:].mean()), "topK": float(np.sort(eb)[-K:].mean()),
+             "topK_odds": float(eo.mean()), "real": RB.real(top), "pub_mean": float(eb.mean())}
+        res.append(o)
+    json.dump(res, open(f"{CACHE}/top_{game}.json", "w"))
+    for sub, sel in (("all", lambda o: True), ("carry in", lambda o: o["carry"] > 0), ("no carry", lambda o: o["carry"] == 0),
+                     ("first half", lambda o: o["n"] <= rs[half - 1]["n"]), ("second half", lambda o: o["n"] > rs[half - 1]["n"])):
+        g = [o for o in res if sel(o)]
+        if g:
+            print(f"  {sub}: {len(g)} rounds  " + "  ".join(f"{k} {np.mean([o[k] for o in g]):.3f}" for k in ("top1", "top10", "topK", "topK_odds", "real", "pub_mean")))
+    good = [o for o in res if o["topK"] > 1.0]
+    print(f"  rounds where the best {K} rows average above 1.0 (model): {len(good)} of {len(res)}; their model {np.mean([o['topK'] for o in good] or [0]):.3f}, real {np.mean([o['real'] for o in good] or [0]):.3f}")
+    print("  best:", [(o["d"], round(o["topK"], 2), round(o["real"], 2), round(o["carry"] / 1e6, 1)) for o in sorted(res, key=lambda o: -o["topK"])[:10]])
+    return res
+
+
+FD_MAIN = "E0 E1 E2 E3 EC SC0 SC1 SC2 D1 D2 I1 I2 SP1 SP2 F1 F2 N1 B1 P1 T1 G1".split()
+FD_NEW = "SWE NOR DNK FIN IRL AUT SWZ POL RUS USA BRA ARG MEX JPN CHN ROU".split()
+
+
+def fdfetch():
+    """football-data.co.uk results with closing odds (Pinnacle + market average), to price the coupons
+    with sharp closing odds instead of Svenska Spel's opening odds."""
+    d = CACHE + "/fd"
+    os.makedirs(d, exist_ok=True)
+    n = 0
+    for season in ("2122", "2223", "2324", "2425", "2526", "2627"):
+        for lg in FD_MAIN:
+            url = f"https://www.football-data.co.uk/mmz4281/{season}/{lg}.csv"
+            path = f"{d}/{season}_{lg}.csv"
+            if os.path.exists(path) and season not in ("2627",):
+                continue
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30) as r:
+                    open(path, "wb").write(r.read())
+                n += 1
+            except Exception as e:
+                print(url, "ERR", str(e)[:80])
+            time.sleep(0.3)
+    for lg in FD_NEW:
+        url = f"https://www.football-data.co.uk/new/{lg}.csv"
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30) as r:
+                open(f"{d}/new_{lg}.csv", "wb").write(r.read())
+            n += 1
+        except Exception as e:
+            print(url, "ERR", str(e)[:80])
+    print("fetched", n, "files; header sample:", open(f"{d}/new_SWE.csv", errors="ignore").readline()[:400] if os.path.exists(f"{d}/new_SWE.csv") else "-")
 
 
 ATG = "https://www.atg.se/services/racinginfo/v1/api/"
@@ -512,5 +626,5 @@ def atgraw():
 
 if __name__ == "__main__":
     cmd =sys.argv[1] if len(sys.argv) > 1 else "explore"
-    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw}[cmd]()
+    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw, "fd": fdfetch, "top": lambda: toprows(sys.argv[2], *[int(x) for x in sys.argv[3:6]])}[cmd]()
     print("=== DONE ===")
