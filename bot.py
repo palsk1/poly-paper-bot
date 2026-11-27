@@ -3018,7 +3018,7 @@ def kmaker_z(series, strike, minutes_left, side, open_ts=None):
 _kmaker_kidx = {}
 
 
-def kmaker_kz(event_ticker, strike, minutes_left, side):
+def kmaker_kz(event_ticker, strike, minutes_left, side, fix=1.5):
     """kc_maker_safe's check on Kalshi's OWN settle number instead of Binance (kc_maker_safe_kprice, 19 Nov, Jan:
     "make a paper twin no matter the result"). GET /live_data/events/{event} (public, no key) gives the CF
     Benchmarks 60-second average Kalshi settles on, one value a second for the last hour. Same formula as
@@ -3048,7 +3048,9 @@ def kmaker_kz(event_ticker, strike, minutes_left, side):
             rets.append(math.log(b / a))
     if len(rets) < 30 or not px:
         return None
-    sd = math.sqrt(sum(r * r for r in rets) / len(rets)) * math.sqrt(1.5) * px * math.sqrt(max(minutes_left, 0.5))
+    # fix: the crypto windows settle on a 60-second average (1.5); the non-crypto ones (kc_maker_fxmetal, 28 Nov,
+    # backtest/k15x.md) settle on one price at the close, so their rule passes kalshi_z_fix 1.0
+    sd = math.sqrt(sum(r * r for r in rets) / len(rets)) * math.sqrt(fix) * px * math.sqrt(max(minutes_left, 0.5))
     if sd <= 0:
         return None
     z = (px - strike) / sd
@@ -3070,7 +3072,7 @@ def kmaker_price(r, bid, ask):
         return None
     if kind == "join":
         return bid, False
-    p = round(bid + kmaker_tick(bid), 4)
+    p = round(bid + (r.get("tick") or kmaker_tick(bid)), 4)   # tick 0.01: the non-crypto series move in 1c steps
     return (p, True) if p < ask - EPS else (bid, False)
 
 
@@ -3143,7 +3145,8 @@ def kmaker_place(tracks, names):
                         continue
                 zk = None
                 if r.get("min_kalshi_z") is not None:   # the check on Kalshi's own number (kc_maker_safe_kprice)
-                    zk = kmaker_kz(m.get("event_ticker"), fnum(m.get("floor_strike"), None), left, side)
+                    zk = kmaker_kz(m.get("event_ticker"), fnum(m.get("floor_strike"), None), left, side,
+                                   fix=r.get("kalshi_z_fix", 1.5))
                     if zk is None or zk < r["min_kalshi_z"]:
                         tr.setdefault("last_check", {})[series] = {"ts": iso(), "left": round(left, 1), "side": side,
                                                                    "bid": bid, "ask": ask, "placed": False,
