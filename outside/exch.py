@@ -158,7 +158,7 @@ def smk_markets(event_ids):
 def smk_contracts(mids):
     ct = []
     for c in chunks(mids, 50):
-        r = tryget(SMK + "/markets/" + ",".join(map(str, c)) + "/contracts/?limit=1000")
+        r = tryget(SMK + "/markets/" + ",".join(map(str, c)) + "/contracts/")
         ct += r.get("contracts", []) if isinstance(r, dict) else []
     return ct
 
@@ -207,6 +207,16 @@ def mb_events(maxn=3000):
         e = out[0]
         print("MB EVENT SAMPLE", json.dumps(e)[:1200])
     return out
+
+
+MB_BOOKS = {}
+
+
+def mb_store(evs):
+    for e in evs:
+        for m in e.get("markets", []) or []:
+            for rn in m.get("runners", []) or []:
+                MB_BOOKS[str(rn.get("id"))] = mb_runner_book(rn)
 
 
 def mb_runner_book(rn):
@@ -385,6 +395,7 @@ def exchange_contracts():
                          "cname": c.get("name") or "", "start": e.get("start_datetime"), "n_out": len(cs)})
     print("smarkets markets", len(mk), "contracts", len(ct))
     me = mb_events()
+    mb_store(me)
     nmb = 0
     for e in me:
         sport = str(e.get("sport-id"))
@@ -540,7 +551,7 @@ def snap(write=True, maxpairs=500):
     return cp, res
 
 
-def exchange_books(cp):
+def exchange_books(cp, refresh_mb=False):
     """Current (offers, bids) per exchange contract in the pair list."""
     books = {}
     smk_m = sorted({p["mid"] for p in cp if p["venue"] == "smk"})
@@ -548,21 +559,13 @@ def exchange_books(cp):
     for p in cp:
         if p["venue"] == "smk":
             books[("smk", p["cid"])] = smk_sides(q.get(p["cid"]) or {})
-    mb_ev = sorted({p["ev"] for p in cp if p["venue"] == "mb"})
-
-    def one(eid):
-        return tryget(MB + f"/events/{eid}?" + urllib.parse.urlencode({"include-prices": "true", "price-depth": 3,
-                                                                       "odds-type": "DECIMAL"}), timeout=30)
-    with ThreadPoolExecutor(8) as ex:
-        evs = list(ex.map(one, mb_ev))
-    if evs:
-        print("MB ONE EVENT", json.dumps(evs[0])[:700])
-    for e in evs:
-        if not isinstance(e, dict):
-            continue
-        for m in e.get("markets", []) or []:
-            for rn in m.get("runners", []) or []:
-                books[("mb", str(rn.get("id")))] = mb_runner_book(rn)
+    if any(p["venue"] == "mb" for p in cp):
+        if refresh_mb:
+            MB_BOOKS.clear()
+            mb_store(mb_events())
+        for p in cp:
+            if p["venue"] == "mb":
+                books[("mb", p["cid"])] = MB_BOOKS.get(p["cid"], ([], []))
     return books
 
 
@@ -578,9 +581,9 @@ def poly_rate(p):
     return 0.05 if p["dom"] not in ("politics", "current_affairs") else 0.04
 
 
-def price_pairs(cp, sizes=(10, 50)):
+def price_pairs(cp, sizes=(10, 50), refresh_mb=False):
     t = time.time()
-    ebooks = exchange_books(cp)
+    ebooks = exchange_books(cp, refresh_mb)
 
     def other(p):
         if p["site"] == "poly":
@@ -682,7 +685,7 @@ def watch(minutes=60, every=60):
     tend = time.time() + minutes * 60
     while time.time() < tend:
         t = time.time()
-        rs = price_pairs(cp, sizes=(10,))
+        rs = price_pairs(cp, sizes=(10,), refresh_mb=True)
         series.append([{k: r.get(k) for k in ("venue", "cid", "site", "t", "x_ask", "x_bid", "o_ask", "o_bid", "A10", "B10")}
                        for r in rs])
         n_arb = sum(1 for r in rs if best_cost(r) < 1)
