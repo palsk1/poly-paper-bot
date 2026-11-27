@@ -40799,3 +40799,16 @@
 {"minutes_left": 2.41, "price": 0.997, "queue": 3823.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T09:57:41Z", "type": "kmaker_order"}
 {"minutes_left": 2.41, "price": 0.997, "queue": 3823.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T09:57:41Z", "type": "kmaker_order"}
 {"player": "Alejo Sanchez Quilez", "price": 0.64, "set1": "6-3", "set2_games": 0, "shares": 39, "ticker": "KXATPCHALLENGERMATCH-26NOV27SANHEN-SAN", "track": "tennis_set", "ts": "2026-11-27T09:57:42Z", "type": "ktennis_buy"}
+{"fee": 0.0022, "outcome": "No", "price": 0.953, "shares": 5, "title": "Will the price of Ethereum be above $1,800 on November 27?", "token": "68104221008125890115888882309789482852748653490976870929450365260748234679293", "track": "endgame_sell98", "ts": "2026-11-27T10:03:33Z", "type": "paper_buy"}
+{"fee": 0.0225, "outcome": "Jong FC Utrecht: Yes", "price": 0.1, "shares": 5, "title": "Will Jong FC Utrecht win on 2026-11-27?", "token": "105494503675591826053420112013179212468436032835917314200344974288122774009721", "track": "sharp_pinnacle", "ts": "2026-11-27T10:04:10Z", "type": "paper_buy"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:10Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:13Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:14Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.29, "price": 0.971, "side": "no", "through": true, "ticker": "KXETH15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:15Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": -9.84, "price": 0.984, "side": "no", "through": true, "ticker": "KXSOL15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:16Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.36, "price": 0.964, "side": "yes", "through": true, "ticker": "KXDOGE15M-26NOV270500-00", "track": "kc_maker_safe", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.17, "price": 0.983, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.09, "price": 0.991, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "no", "through": true, "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T10:04:17Z", "type": "kmaker_fill"}

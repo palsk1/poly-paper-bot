@@ -72,17 +72,11 @@
   },
   "2026-11-27": {
    "failed": 0,
-   "muted": 56,
-   "sent": 5
+   "muted": 58,
+   "sent": 6
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
-   "track": null,
-   "ts": "2026-11-19T21:25:47Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.90)",
@@ -1276,6 +1270,12 @@
    "title": "[tennis_set] BUY Alejo Sanchez Quilez at 66c",
    "track": "tennis_set",
    "ts": "2026-11-27T09:57:42Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kc_maker] FLIP: a late favorite lost ($-9.84)",
+   "track": "kc_maker",
+   "ts": "2026-11-27T10:04:16Z"
   }
  ]
 }
