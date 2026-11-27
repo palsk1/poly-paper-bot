@@ -206,6 +206,13 @@
       "loses": "The coin swings back across the start price in the last minutes. One loss eats about 30 wins.",
       "group": "kcmaker"
     },
+    "kc_maker_pct": {
+      "say": "Same bets as kc_maker, but the bid is not a fixed $10. Every bid is a tenth of what is in the pot right now. Wins make the next bids a little bigger, losses make them smaller.",
+      "example": "The pot holds $250, so the bid is $25. After a good week the pot holds $300, so the bid is $30. After a lost $30 bid the pot holds $270 and the next bid is $27.",
+      "wins": "The coin stays on the winning side to the end. Each win adds a little to the pot and so to the next bid.",
+      "loses": "The coin swings back across the start price. One loss costs a tenth of the whole pot, and eats about 30 wins.",
+      "group": "kcmaker"
+    },
     "kc_maker_safe_kprice": {
       "say": "Same as kc_maker_safe, but it checks 'is the coin well clear of the start price?' on Kalshi's own price, the exact number that decides the bet, instead of on Binance.",
       "example": "Bitcoin started the 15 minutes at $63,400. With 3 minutes left Kalshi's own price says $63,480, far enough above. We offer 96c for Yes. Bitcoin stays above: the $0.96 pays $1.00.",
