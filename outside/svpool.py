@@ -888,7 +888,7 @@ def atg_rows_ev(legs, rows, N, pool, minpay=15.0):
             else:
                 alts = []
                 for combo in itertools.product(*[range(len(legs[m][0])) for m in D]):
-                    ok = np.array([all(combo[i] != r[D[i]] for i in range(d)) for r in rows])
+                    ok = np.all(np.asarray(rows)[:, list(D)] != np.array(combo)[None, :], axis=1)
                     if not ok.any():
                         continue
                     pr = np.prod([legs[D[i]][0][combo[i]] for i in range(d)]) * ok
@@ -1004,6 +1004,8 @@ def atgev(games=("V75", "GS75")):
                 o[key + "_real"] = real / cost
                 o[key + "_rows"] = len(rows)
         res.append(o)
+        if len(res) % 25 == 0:
+            print("  done", len(res), flush=True)
     json.dump(res, open(f"{CACHE}/atgev.json", "w"))
     for k in (7, 6, 5):
         a = np.array([(o[f"W{k}m"], o[f"W{k}r"]) for o in res])
