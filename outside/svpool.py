@@ -602,6 +602,168 @@ def fdfetch():
     print("fetched", n, "files; header sample:", open(f"{d}/new_SWE.csv", errors="ignore").readline()[:400] if os.path.exists(f"{d}/new_SWE.csv") else "-")
 
 
+# ---------------------------------------------------------------- sharp closing odds (football-data.co.uk)
+ALIAS = {"man city": "manchester city", "man united": "manchester united", "man utd": "manchester united",
+         "nott m forest": "nottingham forest", "nottm forest": "nottingham forest", "sheffield weds": "sheffield wednesday",
+         "sheffield w": "sheffield wednesday", "sheffield u": "sheffield united", "qpr": "queens park rangers",
+         "west brom": "west bromwich", "wolves": "wolverhampton", "spurs": "tottenham", "mk dons": "milton keynes dons",
+         "peterboro": "peterborough", "wycombe": "wycombe", "inter": "inter milan", "ath madrid": "atletico madrid",
+         "ath bilbao": "athletic bilbao", "sociedad": "real sociedad", "dortmund": "borussia dortmund",
+         "m gladbach": "monchengladbach", "ein frankfurt": "eintracht frankfurt", "bayern munich": "bayern",
+         "psg": "paris sg", "paris sg": "paris saint germain"}
+
+
+def norm_team(x):
+    import unicodedata, re
+    x = unicodedata.normalize("NFKD", x or "").encode("ascii", "ignore").decode().lower()
+    x = re.sub(r"[^a-z0-9 ]", " ", x)
+    x = re.sub(r"\b(fc|afc|cf|sc|if|ff|bk|fk|ik|sk|ac|as|ssc|club|de|the)\b", " ", x)
+    x = " ".join(x.split())
+    return ALIAS.get(x, x)
+
+
+def tsim(a, b):
+    import difflib
+    a, b = norm_team(a), norm_team(b)
+    if not a or not b:
+        return 0.0
+    if a == b or a.startswith(b) or b.startswith(a):
+        return 1.0
+    ta, tb = a.split(), b.split()
+    if ta[0] == tb[0] and len(ta[0]) >= 4 and (len(ta) == 1 or len(tb) == 1):
+        return 0.9
+    return difflib.SequenceMatcher(None, a, b).ratio()
+
+
+def fd_games():
+    """every game in the football-data files: (date, home, away, closing odds 1/X/2 from Pinnacle or the average)."""
+    import csv, glob, datetime
+    out = {}
+    for path in glob.glob(CACHE + "/fd/*.csv"):
+        try:
+            rows = list(csv.DictReader(open(path, encoding="utf-8-sig", errors="ignore")))
+        except Exception:
+            continue
+        for r in rows:
+            h = r.get("HomeTeam") or r.get("Home")
+            a = r.get("AwayTeam") or r.get("Away")
+            ds = r.get("Date")
+            if not (h and a and ds):
+                continue
+            try:
+                dd = datetime.datetime.strptime(ds, "%d/%m/%Y").date() if len(ds.split("/")[-1]) == 4 else datetime.datetime.strptime(ds, "%d/%m/%y").date()
+            except ValueError:
+                continue
+            odds = None
+            for pre in ("PSC", "AvgC", "PS", "Avg", "B365C", "B365"):
+                trip = [num(r.get(pre + x)) for x in ("H", "D", "A")]
+                if all(t and t > 1 for t in trip):
+                    odds = (pre, trip)
+                    break
+            if not odds:
+                continue
+            out.setdefault(dd, []).append((h, a, odds[0], odds[1]))
+    return out
+
+
+def attach_close(rs, games):
+    """add 'pc' (closing odds) to each match where a football-data game matches by date and names."""
+    import datetime
+    hit = tot = 0
+    for r in rs:
+        for e in r["ev"]:
+            tot += 1
+            e["pc"] = None
+            if not e.get("start") or len(e.get("teams") or []) != 2:
+                continue
+            d0 = datetime.date.fromisoformat(e["start"][:10])
+            best = None
+            for dd in (d0, d0 - datetime.timedelta(days=1), d0 + datetime.timedelta(days=1)):
+                for h, a, src, trip in games.get(dd, []):
+                    sh, sa = tsim(e["teams"][0], h), tsim(e["teams"][1], a)
+                    sc = min(sh, sa)
+                    if sc >= 0.75 and (best is None or sc > best[0]):
+                        best = (sc, trip, src, h, a)
+            if best:
+                e["pc"] = best[1]
+                e["pcsrc"] = best[2]
+                hit += 1
+    return hit, tot
+
+
+def closing(game, K=144, C=3000):
+    """the main test, priced with sharp closing odds: do the best rows by the model pay more than they cost?"""
+    import numpy as np
+    games = fd_games()
+    allr = {r["n"]: r for r in load(game)}
+    rs = [r for r in sorted(allr.values(), key=lambda r: r["n"]) if ok_draw(r)]
+    hit, tot = attach_close(rs, games)
+    full = [r for r in rs if all(e.get("pc") for e in r["ev"])]
+    print(f"{game}: matched {hit} of {tot} matches to closing odds; {len(full)} of {len(rs)} rounds fully matched")
+    # forecasting: closing odds vs public vs opening odds on the matched matches
+    ll = {"close": 0.0, "open": 0.0, "public": 0.0}
+    n = 0
+    band = {}
+    for r in rs:
+        for e in r["ev"]:
+            if not e.get("pc"):
+                continue
+            o = IDX[e["out"]]
+            pc, po = fairp(e["pc"]), fairp(e["od"] or e["so"])
+            sf = [x / sum(e["sf"]) for x in e["sf"]]
+            sf = [max(x, 0.003) for x in sf]
+            ll["close"] -= math.log(pc[o])
+            ll["open"] -= math.log(po[o])
+            ll["public"] -= math.log(sf[o])
+            n += 1
+            for j in range(3):
+                b = int(np.clip(round((sf[j] - pc[j]) * 20), -4, 4))
+                t = band.setdefault(b, [0, 0.0, 0.0, 0.0])
+                t[0] += 1
+                t[1] += pc[j]
+                t[2] += sf[j]
+                t[3] += (o == j)
+    print("  log loss per match:", {k: round(v / max(n, 1), 4) for k, v in ll.items()}, "on", n, "matches (lower = better)")
+    print("  public share minus closing chance (5-pt buckets): n, closing chance, public share, real hit rate")
+    for b in sorted(band):
+        t = band[b]
+        print(f"    {b * 5:+4d} pts n={t[0]:5d} close {t[1] / t[0]:.3f} public {t[2] / t[0]:.3f} real {t[3] / t[0]:.3f}")
+    res = []
+    for r in full:
+        prev = allr.get(r["n"] - 1)
+        carry = carry_out(prev, pools(prev, 0.0)) if prev and prev.get("dist") and prev.get("sale") else 0.0
+        _, S, O = arrays(r)
+        P = np.array([fairp(e["pc"]) for e in r["ev"]])
+        rng = np.random.default_rng(r["n"])
+        cands = []
+        for b in (0.0, 0.5, 1.0, 2.0):
+            g = P * (P / S) ** b
+            g = g / g.sum(1, keepdims=True)
+            cands.append((rng.random((C // 4, 13, 1)) > g.cumsum(1)[None]).sum(2))
+        cands = np.unique(np.concatenate(cands), axis=0)
+        RC = Round(r, P, S, carry, game)
+        ec, lev = RC.row_ev(cands)
+        order = np.argsort(-ec)
+        top = cands[order[:K]]
+        favrow = P.argmax(1)[None, :]
+        o = {"n": r["n"], "d": r["close"][:10], "carry": carry, "top1": float(ec[order[0]]), "top10": float(ec[order[:10]].mean()),
+             "topK": float(ec[order[:K]].mean()), "all": float(ec.mean()), "real": RC.real(top), "fav": float(RC.row_ev(favrow)[0][0]),
+             "hitp": float(np.prod(P[np.arange(13)[None, :], top], axis=1).sum()),
+             "hit": int((top == O[None, :]).all(1).any()),
+             "best12": int((top == O[None, :]).sum(1).max())}
+        res.append(o)
+    json.dump(res, open(f"{CACHE}/close_{game}.json", "w"))
+    for sub, sel in (("all", lambda o: True), ("carry in", lambda o: o["carry"] > 0), ("no carry", lambda o: o["carry"] == 0)):
+        g = [o for o in res if sel(o)]
+        if g:
+            print(f"  {sub}: {len(g)} rounds  " + "  ".join(f"{k} {np.mean([o[k] for o in g]):.3f}" for k in ("top1", "top10", "topK", "all", "fav", "real")))
+    if res:
+        print(f"  best {K} rows: expected 13-right hits {sum(o['hitp'] for o in res):.2f}, real {sum(o['hit'] for o in res)}")
+        good = [o for o in res if o["topK"] > 1.0]
+        print(f"  rounds where the model's best {K} rows average above 1.0: {len(good)} of {len(res)}; model {np.mean([o['topK'] for o in good] or [0]):.3f}, real {np.mean([o['real'] for o in good] or [0]):.3f}")
+    return res
+
+
 ATG = "https://www.atg.se/services/racinginfo/v1/api/"
 
 
@@ -681,7 +843,182 @@ def atgraw():
                     print(gid, d.get("status"), "races", len(races), "turnover", (d.get("pools") or {}).get(g, {}).get("turnover"))
 
 
+# ---------------------------------------------------------------- ATG: V75 / GS75 (7 legs, pays 7, 6 and 5 right)
+ATG_SPLIT = {7: .40, 6: .20, 5: .40}
+
+
+def atg_round(x, alpha=1.0):
+    """per leg: fair win chance from the win-pool odds (power alpha), public share in the big game, winner index."""
+    import numpy as np
+    legs = []
+    for L in x["legs"]:
+        st = [s for s in L["st"] if not s[3] and s[1] and s[2] is not None]
+        if not st or not L["win"]:
+            return None
+        nums = [s[0] for s in st]
+        win = [nums.index(w) for w in L["win"] if w in nums]
+        if len(win) != 1:      # dead heat or winner missing: skip the round
+            return None
+        odds = np.array([s[1] / 100.0 for s in st])
+        p = (1 / odds) ** alpha
+        p = p / p.sum()
+        sh = np.array([max(s[2], 1) / 10000.0 for s in st])
+        sh = sh / sh.sum()
+        legs.append((p, sh, win[0]))
+    return legs
+
+
+def atg_rows_ev(legs, rows, N, pool, minpay=15.0):
+    """exact expected payout per row: every result within 2 changed legs (7, 6, 5 right)."""
+    import numpy as np, itertools
+    M = len(legs)
+    R = len(rows)
+    q0 = np.array([[legs[m][1][r[m]] for m in range(M)] for r in rows])
+    p0 = np.array([[legs[m][0][r[m]] for m in range(M)] for r in rows])
+    tot = np.zeros(R)
+    lev = {k: np.zeros(R) for k in pool}
+    for d in range(3):
+        k = M - d
+        for D in itertools.combinations(range(M), d):
+            q = q0.copy()
+            q[:, list(D)] = 0.0
+            base = count_dist(q)                              # (R, M+1) public right outside D
+            if d == 0:
+                alts = [((), np.ones(R), np.zeros((R, 0)))]
+            else:
+                alts = []
+                for combo in itertools.product(*[range(len(legs[m][0])) for m in D]):
+                    ok = np.array([all(combo[i] != r[D[i]] for i in range(d)) for r in rows])
+                    if not ok.any():
+                        continue
+                    pr = np.prod([legs[D[i]][0][combo[i]] for i in range(d)]) * ok
+                    qs = np.array([[legs[D[i]][1][combo[i]] for i in range(d)]] * R)
+                    alts.append((combo, pr, qs))
+            pnot = p0.prod(1) / np.prod(p0[:, list(D)], axis=1) if d else p0.prod(1)
+            for combo, pr, qs in alts:
+                poly = np.zeros((R, d + 1))
+                poly[:, 0] = 1
+                for j in range(d):
+                    qj = qs[:, j:j + 1]
+                    poly[:, 1:] = poly[:, 1:] * (1 - qj) + poly[:, :-1] * qj
+                    poly[:, 0] *= (1 - qs[:, j])
+                Pk = sum(base[:, k - j] * poly[:, j] for j in range(d + 1))
+                W = N * Pk
+                with np.errstate(divide="ignore", invalid="ignore"):
+                    share = np.where(W > 1e-9, -np.expm1(-W) / W, 1.0)
+                pay = pool[k] * share
+                pay = np.where(pool[k] / (W + 1) >= minpay, pay, 0.0)
+                v = pnot * pr * pay
+                lev[k] += v
+                tot += v
+    return tot, lev
+
+
+def atg_system(legs, budget_rows, how):
+    """pick horses per leg: add the horse with the best score where it buys the most chance per extra row."""
+    import numpy as np
+    M = len(legs)
+    picks = []
+    for p, sh, _ in legs:
+        sc = p if how == "fav" else (p * p / sh if how == "value" else sh)
+        picks.append(list(np.argsort(-sc)))
+    n = [1] * M
+    while True:
+        best = None
+        for m in range(M):
+            if n[m] >= len(picks[m]):
+                continue
+            rows = int(np.prod(n)) // n[m] * (n[m] + 1)
+            if rows > budget_rows:
+                continue
+            cov = sum(legs[m][0][i] for i in picks[m][:n[m]])
+            gain = legs[m][0][picks[m][n[m]]] / max(cov, 1e-9)
+            if best is None or gain > best[0]:
+                best = (gain, m)
+        if best is None:
+            break
+        n[best[1]] += 1
+    return [sorted(picks[m][:n[m]]) for m in range(M)]
+
+
+def atgev(games=("V75", "GS75")):
+    import numpy as np, itertools, collections
+    xs = [x for x in json.load(gzip.open(f"{CACHE}/atg.json.gz", "rt")) if x["g"] in games and x.get("payouts") and x.get("poolpay")]
+    xs.sort(key=lambda x: x["id"].split("_")[1])
+    # row price from the published numbers: payout per row x winning rows = pool money at that level
+    rp = {"V75": 0.5, "GS75": 1.0}
+    # 1) calibration: win-pool chance vs public share in the big game vs real winner
+    band = {}
+    llp = lls = 0.0
+    nn = 0
+    rounds = []
+    for x in xs:
+        legs = atg_round(x)
+        if not legs or len(legs) != 7:
+            continue
+        rounds.append((x, legs))
+        for p, sh, w in legs:
+            llp -= math.log(p[w])
+            lls -= math.log(sh[w])
+            nn += 1
+            for i in range(len(p)):
+                b = int(np.clip(round((sh[i] - p[i]) * 20), -4, 4))
+                t = band.setdefault(b, [0, 0.0, 0.0, 0.0])
+                t[0] += 1
+                t[1] += p[i]
+                t[2] += sh[i]
+                t[3] += (i == w)
+    print(f"ATG {games}: {len(rounds)} rounds {rounds[0][0]['id']} .. {rounds[-1][0]['id']}")
+    print(f"  log loss per leg: win-pool odds {llp / nn:.4f}, big-game public share {lls / nn:.4f}")
+    for b in sorted(band):
+        t = band[b]
+        print(f"    share minus win chance {b * 5:+4d} pts: n={t[0]:6d} win-odds chance {t[1] / t[0]:.3f} share {t[2] / t[0]:.3f} real {t[3] / t[0]:.3f}")
+    # 2) systems
+    res = []
+    for x, legs in rounds:
+        g = x["g"]
+        N = int(x["turnover"]) / 100.0 / rp[g]
+        pool = {int(k): int(v) / 100.0 for k, v in x["poolpay"].items()}
+        o = {"id": x["id"], "g": g}
+        # winners check at the real result
+        win = [l[2] for l in legs]
+        q = np.array([[legs[m][1][win[m]] for m in range(7)]])
+        dist = count_dist(q)[0]
+        for k in (7, 6, 5):
+            o[f"W{k}m"] = N * dist[k]
+            o[f"W{k}r"] = (x["payouts"].get(str(k)) or {}).get("systems", 0)
+        for budget in (1, 200, 600):
+            for how in ("fav", "value", "public"):
+                sysm = atg_system(legs, budget, how)
+                rows = np.array(list(itertools.product(*sysm)))
+                ev, lev = atg_rows_ev(legs, rows, N, pool)
+                right = (rows == np.array(win)[None, :]).sum(1)
+                real = 0.0
+                for kk in right:
+                    if str(kk) in x["payouts"] and int(kk) >= 5:
+                        real += (x["payouts"][str(kk)].get("payout") or 0) / 100.0
+                cost = len(rows) * rp[g]
+                key = f"{budget}_{how}"
+                o[key] = ev.sum() / cost
+                o[key + "_7"] = lev[7].sum() / cost
+                o[key + "_real"] = real / cost
+                o[key + "_rows"] = len(rows)
+        res.append(o)
+    json.dump(res, open(f"{CACHE}/atgev.json", "w"))
+    for k in (7, 6, 5):
+        a = np.array([(o[f"W{k}m"], o[f"W{k}r"]) for o in res])
+        lr = np.log((a[:, 1] + .5) / (a[:, 0] + .5))
+        print(f"  winners {k} right: model median {np.median(a[:, 0]):.0f}, real median {np.median(a[:, 1]):.0f}, log ratio mean {lr.mean():+.2f} sd {lr.std():.2f}")
+    for sub, sel in (("all", lambda o: True), ("V75", lambda o: o["g"] == "V75"), ("GS75", lambda o: o["g"] == "GS75")):
+        g = [o for o in res if sel(o)]
+        print(f"  == {sub}: {len(g)} rounds")
+        for budget in (1, 200, 600):
+            for how in ("fav", "value", "public"):
+                key = f"{budget}_{how}"
+                print(f"    {budget:4d}-row budget {how:6s}: model {np.mean([o[key] for o in g]):.3f} (7-right part {np.mean([o[key + '_7'] for o in g]):.3f}), real {np.mean([o[key + '_real'] for o in g]):.3f}, avg rows {np.mean([o[key + '_rows'] for o in g]):.0f}")
+
+
 if __name__ == "__main__":
     cmd =sys.argv[1] if len(sys.argv) > 1 else "explore"
-    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw, "atg": atgfetch, "fd": fdfetch, "top": lambda: toprows(sys.argv[2], *[int(x) for x in sys.argv[3:6]])}[cmd]()
+    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw, "atg": atgfetch, "atgev": atgev, "close": lambda: closing(sys.argv[2]), "fd": fdfetch, "top": lambda: toprows(sys.argv[2], *[int(x) for x in sys.argv[3:6]])}[cmd]()
     print("=== DONE ===")
