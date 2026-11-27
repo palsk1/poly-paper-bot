@@ -347,14 +347,40 @@ def espn_fetch(sport, days):
     return games
 
 
-def k_events(series):
-    """{event: {'mk': [market rows]}} of every settled market of a series (both lists)."""
-    import kmentions as km
-    _, ok, n = km.series_markets(series)
-    evs = collections.defaultdict(list)
-    for m in ok.values():
-        evs[m["ev"]].append({k_: m[k_] for k_ in ("t", "ev", "w", "open", "close", "exp", "res", "vol")})
-    print(f"  {series}: {len(ok)} settled markets, {len(evs)} events", flush=True)
+def k_events(series, days=400):
+    """{event: [market rows]} of every settled market of a series that closed in the last `days` days (both lists)."""
+    t1 = int(time.time())
+    rows = []
+    for path in ("/markets", "/historical/markets"):
+        cur = None
+        for _ in range(200):
+            p = {"series_ticker": series, "min_close_ts": t1 - days * DAY, "max_close_ts": t1, "limit": 1000}
+            if path == "/markets":
+                p["status"] = "settled"
+            if cur:
+                p["cursor"] = cur
+            try:
+                r = yesno.kget(path, p)
+            except Exception as e:
+                print(f"  {series} {path}: {str(e)[:90]}", flush=True)
+                break
+            got = r.get("markets") or []
+            good = [m for m in got if str(m.get("event_ticker", "")).startswith(series)]
+            rows += good
+            cur = r.get("cursor")
+            if not cur or not got or not good:
+                break
+    evs, seen = collections.defaultdict(list), set()
+    for m in rows:
+        tk, res = m.get("ticker"), str(m.get("result") or "")
+        if tk in seen or res not in ("yes", "no"):
+            continue
+        seen.add(tk)
+        evs[m["event_ticker"]].append({"t": tk, "ev": m["event_ticker"], "w": str(m.get("yes_sub_title") or "")[:60],
+                                       "open": its(m.get("open_time")), "close": its(m.get("close_time")),
+                                       "exp": its(m.get("expected_expiration_time")), "res": res,
+                                       "vol": bot.fnum(m.get("volume_fp") or m.get("volume"), 0)})
+    print(f"  {series}: {len(seen)} settled markets, {len(evs)} events ({(time.time() - T0) / 60:.0f} min)", flush=True)
     return dict(evs)
 
 
@@ -436,10 +462,10 @@ def fetch_sport(sport, days=400):
     d_dir = os.path.join(CACHE, sport)
     games = espn_fetch(sport, days)
     _, _, gser, sser = SPORTS[sport]
-    evs = k_events(gser)
+    evs = k_events(gser, days)
     wj(os.path.join(d_dir, f"k_{gser}.json.gz"), evs)
     for s in sser:
-        wj(os.path.join(d_dir, f"k_{s}.json.gz"), k_events(s))
+        wj(os.path.join(d_dir, f"k_{s}.json.gz"), k_events(s, days))
     mt = match_espn(evs, games)
     wj(os.path.join(d_dir, "match.json.gz"), mt)
     print(f"{sport}: Kalshi games {len(evs)}, matched to ESPN {len(mt)}", flush=True)
@@ -456,7 +482,7 @@ def fetch_sport(sport, days=400):
 def fetch_esport(game, days=400):
     d_dir = os.path.join(CACHE, game)
     gser, mser = ESPORTS[game]
-    evs, maps = k_events(gser), k_events(mser)
+    evs, maps = k_events(gser, days), k_events(mser, days)
     wj(os.path.join(d_dir, f"k_{gser}.json.gz"), evs)
     wj(os.path.join(d_dir, f"k_{mser}.json.gz"), maps)
     first_map = {}
@@ -484,6 +510,168 @@ def fetch(what, days=400):
             print("unknown", w)
 
 
+# ---------------------------------------------------------------- report: buy the leader after a stage
+STAGE_NAME = {"nba": "quarter", "wnba": "quarter", "nfl": "quarter", "ncaaf": "quarter", "ncaamb": "half", "ncaawb": "quarter",
+              "nhl": "period", "mlb": "inning"}
+
+
+def load_mins(sport, tag):
+    d_dir = os.path.join(CACHE, sport)
+    out, i = {}, 0
+    while True:
+        d = rj(os.path.join(d_dir, f"min_{tag}_{i:03d}.json.gz"))
+        if d is None:
+            break
+        out.update(d)
+        i += 1
+    return out
+
+
+def load_sport(sport):
+    """-> list of games: {ev, yes (market row of the YES team), side ('home'/'away' = YES team), res (1 YES won),
+    stages: [[n, end unix, yes score, other score]], mins}"""
+    d_dir = os.path.join(CACHE, sport)
+    gser = SPORTS[sport][2]
+    games = rj(os.path.join(d_dir, "espn_games.json.gz"), {}) or {}
+    evs = rj(os.path.join(d_dir, f"k_{gser}.json.gz"), {}) or {}
+    mt = rj(os.path.join(d_dir, "match.json.gz"), {}) or {}
+    mins = load_mins(sport, gser)
+    out = []
+    for ev, (gid, side) in mt.items():
+        g = games.get(gid)
+        mm = sorted([m for m in evs.get(ev, []) if not m["t"].endswith("-TIE")], key=lambda m: m["t"])
+        if not g or len(mm) != 2 or not mins.get(mm[0]["t"]):
+            continue
+        st = []
+        for n, t, a, h in g.get("ends") or []:
+            if a is None or h is None:
+                continue
+            ys, os_ = (h, a) if side == "home" else (a, h)
+            st.append([n, t, ys, os_])
+        fin = g[side]["score"], g["away" if side == "home" else "home"]["score"]
+        res = 1 if mm[0]["res"] == "yes" else 0
+        if fin[0] is not None and fin[1] is not None and fin[0] != fin[1] and (fin[0] > fin[1]) != bool(res):
+            continue          # ESPN final and Kalshi result disagree: drop (wrong match)
+        out.append({"ev": ev, "yes": mm[0], "side": side, "res": res, "stages": st, "mins": mins[mm[0]["t"]], "close": mm[0]["close"]})
+    return out
+
+
+def buy(g, t, yes, stake=25.0, max_spread=8):
+    q = tennis.quote_at(g["mins"], t, max_spread=max_spread)
+    if not q or t >= g["close"] - 60:
+        return None
+    px = q[1] if yes else 1 - q[0]
+    if not 0 < px < 1:
+        return None
+    n = int(stake / px)
+    if n < 1:
+        return None
+    win = g["res"] == (1 if yes else 0)
+    return {"ev": g["ev"], "t": t, "px": px, "cost": n * px + tennis.kfee(px, n), "pay": float(n) if win else 0.0, "win": win}
+
+
+def stage_bets(gs, stage, lag, lo, hi, who="leader", min_lead=1, max_lead=999):
+    out = []
+    for g in gs:
+        st = [x for x in g["stages"] if x[0] == stage]
+        if not st or stage >= max(x[0] for x in g["stages"]):
+            continue
+        n, te, ys, os_ = st[0]
+        lead = ys - os_
+        if abs(lead) < min_lead or abs(lead) > max_lead:
+            continue
+        yes = lead > 0 if who == "leader" else lead < 0
+        b = buy(g, te + lag * 60, yes)
+        if b and lo <= b["px"] < hi:
+            b["lead"] = abs(lead)
+            out.append(b)
+    out.sort(key=lambda b: b["t"])
+    return out
+
+
+def line(bets):
+    h = len(bets) // 2
+    w = sum(b["win"] for b in bets)
+    ap = sum(b["px"] for b in bets) / len(bets) if bets else 0
+    return (f"{len(bets)} bets, won {w} ({(w / len(bets) * 100 if bets else 0):.0f} in 100, avg price {ap * 100:.0f}c), "
+            f"{tennis.per100(bets):+.2f} per $100 (halves {tennis.per100(bets[:h]):+.2f} / {tennis.per100(bets[h:]):+.2f})")
+
+
+def report_sport(sport):
+    gs = load_sport(sport)
+    print(f"\n=== {sport}: {len(gs)} games with stage times, Kalshi minute prices and an agreeing result ===", flush=True)
+    if not gs:
+        return {}
+    # clock check: how stale is the price at the stage end? spread there
+    maxst = collections.Counter(max(x[0] for x in g["stages"]) for g in gs)
+    print("  stages per game:", dict(maxst))
+    keep = {}
+    nst = 3 if sport in ("nba", "wnba", "nfl", "ncaaf", "ncaawb") else 2 if sport in ("nhl",) else 1 if sport == "ncaamb" else 8
+    for stage in range(1, nst + 1):
+        print(f"\n  after {STAGE_NAME[sport]} {stage}:")
+        # calibration of the leader's price
+        for lag in (1, 3, 5, 10):
+            for lo, hi in ((0.5, 0.8), (0.8, 0.95), (0.2, 0.5)):
+                bl = stage_bets(gs, stage, lag, lo, hi, "leader")
+                bt = stage_bets(gs, stage, lag, 1 - hi, 1 - lo, "trailer")
+                keep[(stage, lag, lo, "L")] = bl
+                print(f"    +{lag:2d} min, leader at {lo * 100:.0f}-{hi * 100:.0f}c: {line(bl)}")
+            if lag == 3:
+                bt = stage_bets(gs, stage, lag, 0.2, 0.5, "trailer")
+                print(f"    +{lag:2d} min, trailer at 20-50c: {line(bt)}")
+    return keep
+
+
+def report_esport(game):
+    d_dir = os.path.join(CACHE, game)
+    gser, mser = ESPORTS[game]
+    evs = rj(os.path.join(d_dir, f"k_{gser}.json.gz"), {}) or {}
+    maps = rj(os.path.join(d_dir, f"k_{mser}.json.gz"), {}) or {}
+    mins = load_mins(game, gser)
+    by = collections.defaultdict(dict)
+    for ev, mm in maps.items():
+        k, num = gkey(ev).rsplit("-", 1)
+        win = [m for m in mm if m["res"] == "yes"]
+        if num.isdigit() and len(win) == 1:
+            by[k][int(num)] = (max(m["close"] for m in mm), win[0]["w"])
+    gs = []
+    for ev, mm in evs.items():
+        mm = sorted(mm, key=lambda m: m["t"])
+        if len(mm) != 2 or not mins.get(mm[0]["t"]) or gkey(ev) not in by:
+            continue
+        mp = by[gkey(ev)]
+        yesn, othn = mm[0]["w"], mm[1]["w"]
+        st, ys, os_ = [], 0, 0
+        for num in sorted(mp):
+            t, w = mp[num]
+            if w == yesn:
+                ys += 1
+            elif w == othn:
+                os_ += 1
+            else:
+                break
+            st.append([num, t, ys, os_])
+        gs.append({"ev": ev, "yes": mm[0], "res": 1 if mm[0]["res"] == "yes" else 0, "stages": st, "mins": mins[mm[0]["t"]], "close": mm[0]["close"]})
+    print(f"\n=== {game}: {len(gs)} matches with map clocks and minute prices ===", flush=True)
+    keep = {}
+    for stage in (1, 2, 3):
+        print(f"\n  after map {stage} (clock: Kalshi's map market closed):")
+        for lag in (0, 1, 3, 5):
+            for lo, hi in ((0.5, 0.8), (0.8, 0.95), (0.2, 0.5)):
+                bl = stage_bets(gs, stage, lag, lo, hi, "leader")
+                keep[(stage, lag, lo, "L")] = bl
+                print(f"    +{lag} min, map leader at {lo * 100:.0f}-{hi * 100:.0f}c: {line(bl)}")
+    return keep
+
+
+def report(what):
+    for w in what.split(","):
+        if w in SPORTS:
+            report_sport(w)
+        elif w in ESPORTS:
+            report_esport(w)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     if cmd == "scan":
@@ -495,6 +683,8 @@ if __name__ == "__main__":
         g = espn_day(sys.argv[2], int(time.time()) // DAY * DAY - 2 * DAY)
         print(len(g), short(g[:2], 800))
         print(short(espn_game(sys.argv[2], g[0]["id"]), 1500))
+    elif cmd == "report":
+        report(sys.argv[2])
     elif cmd == "peek":
         peek()
     elif cmd == "clocks":
