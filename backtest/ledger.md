@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**282 ideas examined, in about 119,030 versions.** 224 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**284 ideas examined, in about 126,161 versions.** 226 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 282 ideas that are all worthless, the luckiest one still looks good. With 282 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 284 ideas that are all worthless, the luckiest one still looks good. With 284 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,6 +282,8 @@ Why count: if you test 282 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | Kalshi in-game backward look, best cut: nba after stage 3, trailer at 20-35c, small lead | 7,128 | 173 | +$24.26 | Promising, needs more bets | dropped | stages.py sweep |
+| 2026-11-27 | Kalshi in-game: leader after the first stage at 50-80c who was also the pre-game favourite, 13 sports pooled (the tennis rule carried over) | 3 | 3899 | -$3.45 | Losing | dropped | stages.py carry |
 | 2026-11-27 | Late jump before an announcement (awards, picks, Nobel): follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 51 | -$14.14 | Behind, but could be bad luck | dropped | blindspots.py chart, backtest/blindspots.md |
 | 2026-11-27 | Late jump, every other market: follow a 10c+ rise in 12 h, last 2.5 days, next hourly price +1c | 16 | 253 | -$15.10 | Losing | dropped | blindspots.py chart, backtest/blindspots.md |
 | 2026-11-27 | 'Nothing ever happens' by question type: buy No, Yes 30-70c a day in, real prices | 15 | 128 | -$5.29 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
