@@ -845,6 +845,40 @@ def orshare():
             print("  rows", len(d), collections.Counter(str(r.get("date"))[:10] for r in d if isinstance(r, dict)).most_common(40), flush=True)
 
 
+def orparams():
+    """probe aim_orparams: which query parameters make author-market-share match the page's own text summary."""
+    import urllib.request
+    def get(u, n=8000000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    st, html = get("https://openrouter.ai/rankings", 3000000)
+    for u in sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))[:150]:
+        _, t = get("https://openrouter.ai" + u)
+        for k in ("authorMarketShare", "Market share by model author", "market-share", "Share of text requests", "metric:"):
+            for mm in list(re.finditer(re.escape(k), t))[:6]:
+                print("JS", k, u[-30:], t[max(0, mm.start() - 400):mm.start() + 500].replace("\n", " "), flush=True)
+    import itertools
+    combos = [""]
+    for k, vs in (("metric", ["requests", "tokens", "count", "request_count"]), ("modality", ["text", "text->text"]),
+                  ("inputModality", ["text"]), ("outputModality", ["text"]), ("category", ["text"]), ("type", ["text"]),
+                  ("view", ["week"])):
+        combos += [f"{k}={v}" for v in vs]
+    combos += ["metric=requests&modality=text", "metric=requests&outputModality=text", "metric=requests&inputModality=text",
+               "metric=requests&outputModality=text&inputModality=text", "metric=requests&type=text", "metric=requests&category=text"]
+    for q in combos:
+        st, t = get(f"{ORF}/author-market-share" + ("?" + q if q else ""))
+        try:
+            d = bot.json.loads(t)["data"]["data"]
+            w = [x for x in d if x["x"] == "2026-11-16"][0]["ys"]
+            tot = sum(w.values())
+            print("Q", q or "-", st, {k: round(100 * v / tot, 1) for k, v in sorted(w.items(), key=lambda kv: -kv[1])[:8]}, flush=True)
+        except Exception as e:
+            print("Q", q or "-", st, str(e)[:60], t[:200], flush=True)
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1200,6 +1234,8 @@ if __name__ == "__main__":
         orfind()
     elif cmd == "orshare":
         orshare()
+    elif cmd == "orparams":
+        orparams()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
