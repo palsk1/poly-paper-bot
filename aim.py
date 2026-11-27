@@ -879,6 +879,38 @@ def orparams():
             print("Q", q or "-", st, str(e)[:60], t[:200], flush=True)
 
 
+ORQ = "metric=requests&modality=text"          # the settings that reproduce the page's own "Market share by model author" text
+
+
+def orday():
+    """probe aim_orday: save the share chart Kalshi settles on (requests, text) and look for a by-day version of it."""
+    import urllib.request
+    def get(u):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read().decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    snap = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M")
+    for extra in ["", "&granularity=day", "&interval=day", "&period=day", "&timeframe=day", "&bucket=day", "&view=day",
+                  "&range=day", "&groupBy=day", "&resolution=day", "&window=day", "&period=daily", "&interval=daily",
+                  "&granularity=daily", "&view=month", "&period=month", "&timeframe=month", "&range=month",
+                  "&from=2026-11-01&to=2026-11-20", "&startDate=2026-11-01&endDate=2026-11-20", "&date=2026-11-20", "&week=2026-11-09"]:
+        st, t = get(f"{ORF}/author-market-share?{ORQ}{extra}")
+        try:
+            js = bot.json.loads(t)
+            d = js["data"]["data"]
+            xs = [w["x"] for w in d]
+            print("D", extra or "-", st, len(d), xs[:2], xs[-3:], f"{sum(d[-1]['ys'].values()):.3e}", flush=True)
+            if not extra:
+                path = os.path.join(CACHE, "or_share_text_req.json.gz")
+                have = rj(path, None) or {"snaps": {}}
+                have["snaps"][snap] = js
+                wj(path, have)
+        except Exception as e:
+            print("D", extra or "-", st, str(e)[:60], t[:150], flush=True)
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1236,6 +1268,8 @@ if __name__ == "__main__":
         orshare()
     elif cmd == "orparams":
         orparams()
+    elif cmd == "orday":
+        orday()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
