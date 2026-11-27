@@ -996,6 +996,279 @@ def run15(arg=None):
     save_log("run15.txt")
 
 
+# ================================================================ every 15-minute coin, real trade lists (probe khr_grow15)
+# 27 Nov 2026 (Jan: "go crazy"; thread "Grow the Kalshi bid bot to more coins"). Which Kalshi 15-minute crypto rounds
+# does the real bot (kc_maker_safe_usd) not bid on, and would they add money at $4 / $25 / $40 bids? Replays the real
+# bot's own way of betting: from 5 to 1 minutes left it looks once a minute (the real bot every 15 s) and bids the first
+# time the leading side's best bid is 95c+ and both Binance cushions pass (plain >= 2.0, price-gap-corrected >= 2.3),
+# one tick in front of the best bid, held to the result. Fills come from the window's real trade list after the bid,
+# the big_kalshi way (bigbets.kalshi_fill): contracts sold AT our price after the line that stood there first, plus
+# everything sold BELOW it. In front of the line (the usual case) nobody stands ahead of us; when there was no room in
+# front, sales at our price don't count at all (the line ahead is unknown), so those bids only get sales below us.
+ALL15 = os.path.join(CACHE, "kc15")
+SIZES15 = (4, 25, 40)
+GROW_BAR = 2.3
+
+
+def scan15():
+    """Every Kalshi crypto series with 15-minute rounds settled in the last 2 days, and a Binance pair for each."""
+    ser = kget("/series", {"category": "Crypto"}).get("series") or []
+    now = int(time.time())
+    out = {}
+    for s in sorted(ser, key=lambda s: s.get("ticker") or ""):
+        tk = s.get("ticker") or ""
+        if "15M" not in tk:
+            continue
+        try:
+            ms = kget("/markets", {"series_ticker": tk, "status": "settled", "limit": 400, "min_close_ts": now - 2 * 86400}).get("markets") or []
+        except Exception as e:
+            say("  failed", tk, str(e)[:80])
+            continue
+        coin = tk[2:].split("15M")[0]
+        sym = bot.KMAKER_SPOT.get(tk) or f"{coin}USDT"
+        try:
+            ok = bool(bot.http_json("https://data-api.binance.vision/api/v3/klines", {"symbol": sym, "interval": "1m", "limit": 2}))
+        except Exception:
+            ok = False
+        vol = sum(map(vol_of, ms))
+        m0 = ms[0] if ms else {}
+        say(f"  {tk:14s} | {s.get('frequency')} | fee {s.get('fee_type')} x{s.get('fee_multiplier')} | 2 days: {len(ms)} rounds, "
+            f"{vol:,.0f} contracts | Binance {sym}: {'yes' if ok else 'NO'} | covered by the real bot: {'yes' if tk in bot.KMAKER_SPOT else 'no'} "
+            f"| tick {json.dumps(m0.get('price_ranges'))[:120]} | {str(s.get('title'))[:50]}")
+        if ms and ok:
+            out[tk] = sym
+    os.makedirs(ALL15, exist_ok=True)
+    kc.wjson(os.path.join(ALL15, "series.json.gz"), out)
+    return out
+
+
+def _sig15(w, bar=2.0):
+    """The real bot's first bid in this window (looks at 5, 4, 3, 2, 1 minutes left), or None."""
+    for mn in (5, 4, 3, 2, 1):
+        t = w["close"] - 60 * mn
+        row = w["c"].get(t)
+        if not row:
+            continue
+        side = kc.leader(row)
+        if not side:
+            continue
+        bid, ask, _, _ = kc.side_view(row, side)
+        if bid is None or ask is None or bid < 0.95 - EPS:
+            continue
+        z, zu = kc.zscore(w, t, mn, side), kc.zscore_usd(w, t, mn, side)
+        if z is None or zu is None or z < 2.0 or zu < bar:
+            continue
+        tick = bot.kmaker_tick(bid)
+        price = round(bid + tick, 4)
+        front = price < ask - EPS
+        if not front:
+            price = bid
+        return {"t": t, "mn": mn, "side": side, "price": price, "front": front, "z": z, "zu": zu, "bid": bid, "ask": ask}
+    return None
+
+
+def _tape15(w):
+    out, cur = [], None
+    try:
+        for _ in range(60):
+            q = {"ticker": w["t"], "min_ts": w["close"] - 330, "max_ts": w["close"] + 5, "limit": 1000}
+            if cur:
+                q["cursor"] = cur
+            res = kget("/markets/trades", q)
+            rows = res.get("trades") or []
+            for x in rows:
+                d = bot.parse_iso(x.get("created_time"))
+                yp = bot.fnum(x.get("yes_price_dollars"), None)
+                if yp is None:
+                    yp = bot.fnum(x.get("yes_price"), 0) / 100
+                if d:
+                    out.append([round(d.timestamp(), 2), round(yp, 4), bot.fnum(x.get("count_fp") or x.get("count"), 0), str(x.get("taker_side") or "")[:1]])
+            cur = res.get("cursor")
+            if not cur or not rows:
+                break
+    except Exception as e:
+        return w, e
+    return w, sorted(out)
+
+
+def fetch15(arg=None):
+    """Markets, last-11-minute candles and Binance minutes of every 15-minute coin (bt_cache/khr/kc15/), then the real
+    trade list of the last 5.5 minutes of every window where the real bot would have bid (tape_<series>.json.gz)."""
+    from concurrent.futures import ThreadPoolExecutor
+    ser = scan15()
+    kc.SERIES, kc.CACHE = dict(ser), ALL15
+    kc.fetch(int(arg or 64))
+    for series in ser:
+        t_s = time.time()
+        path = os.path.join(ALL15, f"tape_{series}.json.gz")
+        tr = kc.rjson(path, {}) or {}
+        ws = kc.load_windows([series])
+        want = [w for w in ws if w["t"] not in tr and _sig15(w)]
+        bad = 0
+        with ThreadPoolExecutor(kc.WORKERS) as ex:
+            for i, (w, out) in enumerate(ex.map(_tape15, want)):
+                if isinstance(out, Exception):
+                    bad += 1
+                    continue
+                tr[w["t"]] = out
+                if i and i % 1500 == 0:
+                    kc.wjson(path, tr)
+        kc.wjson(path, tr)
+        say(f"{series}: {len(ws)} windows, {len(want)} tapes asked, {bad} failed, {len(tr)} kept ({time.time() - t_s:.0f}s)")
+    save_log("fetch15.txt")
+
+
+def _fill15(s, tape, want):
+    at = below = 0.0
+    for ts, yp, n, taker in tape:
+        if ts <= s["t"] or ts > s["close"] + 1:
+            continue
+        if taker == s["side"][0]:
+            continue                           # a buyer of our side doesn't sell to our bid
+        px = yp if s["side"] == "yes" else round(1 - yp, 4)
+        if abs(px - s["price"]) < 1e-6:
+            at += n
+        elif px < s["price"] - 1e-6:
+            below += n
+    return min(float(want), (at if s["front"] else 0.0) + below)
+
+
+def grow_rows(bar=GROW_BAR):
+    """One row per bid: coin, round, price, won, contracts filled at each bid size."""
+    ser = kc.rjson(os.path.join(ALL15, "series.json.gz"), {}) or {}
+    kc.SERIES, kc.CACHE = dict(ser), ALL15
+    rows = []
+    for series in ser:
+        tr = kc.rjson(os.path.join(ALL15, f"tape_{series}.json.gz"), {}) or {}
+        for w in kc.load_windows([series]):
+            s = _sig15(w, bar)
+            if not s or w["t"] not in tr:
+                continue
+            s["close"] = w["close"]
+            r = {"s": series, "tk": w["t"], "close": w["close"], "t": s["t"], "mn": s["mn"], "side": s["side"], "price": s["price"],
+                 "front": s["front"], "won": w["res"] == s["side"], "vol": w["vol"], "f": {}}
+            for S in SIZES15:
+                want = max(1, int(S / s["price"] + 1e-9))
+                r["f"][S] = (_fill15(s, tr[w["t"]], want), want)
+            rows.append(r)
+    return rows
+
+
+def _pnl(r, S):
+    f = r["f"][S][0]
+    return f * ((1.0 if r["won"] else 0.0) - r["price"]), f * r["price"]
+
+
+def grow15(arg=None):
+    import exam
+    rows = grow_rows()
+    if not rows:
+        say("no rows")
+        save_log("grow15.txt")
+        return
+    t_lo, t_hi = min(r["close"] for r in rows), max(r["close"] for r in rows)
+    days = (t_hi - t_lo) / 86400
+    say(f"\n## The real bot's rule on every Kalshi 15-minute coin, real trade lists, {iso(t_lo)} to {iso(t_hi)} UTC ({days:.1f} days)")
+    say("Bar 2.3 (the real bot's), looks once a minute from 5 to 1 minutes left, one tick in front of the best bid at 95c+.\n")
+    say("| Coin | Bot has it? | Bids | Got anything ($4) | Lost (filled) | " + " | ".join(f"${S}: P&L / a day / per $100" for S in SIZES15) + " | Worst day at $40 |")
+    say("|---|---|---|---|---|" + "---|" * len(SIZES15) + "---|")
+    byser = collections.defaultdict(list)
+    for r in rows:
+        byser[r["s"]].append(r)
+    tot = {}
+    for series in sorted(byser, key=lambda x: (x in bot.KMAKER_SPOT, x)):
+        g = byser[series]
+        got = [r for r in g if r["f"][4][0] > 0]
+        cells = []
+        for S in SIZES15:
+            pnl = sum(_pnl(r, S)[0] for r in g)
+            cost = sum(_pnl(r, S)[1] for r in g)
+            cells.append(f"{money(pnl)} / {money(pnl / days)} / {money(100 * pnl / cost if cost else 0)}")
+        byday = collections.defaultdict(float)
+        for r in g:
+            byday[iso(r["close"])[:10]] += _pnl(r, 40)[0]
+        say(f"| {series} | {'yes' if series in bot.KMAKER_SPOT else 'NO'} | {len(g)} | {len(got)} | {sum(1 for r in got if not r['won'])} | "
+            + " | ".join(cells) + f" | {money(min(byday.values()))} |")
+    for label, keep in (("The 7 the bot has", lambda s: s in bot.KMAKER_SPOT), ("The new ones", lambda s: s not in bot.KMAKER_SPOT), ("All together", lambda s: True)):
+        g = [r for r in rows if keep(r["s"])]
+        cells = []
+        for S in SIZES15:
+            pnl = sum(_pnl(r, S)[0] for r in g)
+            cost = sum(_pnl(r, S)[1] for r in g)
+            cells.append(f"{money(pnl)} / {money(pnl / days)} / {money(100 * pnl / cost if cost else 0)}")
+            tot[(label, S)] = (pnl, cost)
+        say(f"| **{label}** | | {len(g)} | {sum(1 for r in g if r['f'][4][0] > 0)} | {sum(1 for r in g if r['f'][4][0] > 0 and not r['won'])} | " + " | ".join(cells) + " | |")
+
+    # losing together: rounds (same close time) where two or more coins lost
+    say("\n### Do coins lose at the same moment?\n")
+    byround = collections.defaultdict(list)
+    for r in rows:
+        if r["f"][4][0] > 0:
+            byround[r["close"]].append(r)
+    for label, keep in (("The 7 the bot has", lambda s: s in bot.KMAKER_SPOT), ("All together", lambda s: True)):
+        multi = 0
+        losers_by_round = collections.Counter()
+        worst = []
+        for c, g in byround.items():
+            g = [r for r in g if keep(r["s"])]
+            lost = [r for r in g if not r["won"]]
+            if lost:
+                losers_by_round[len(lost)] += 1
+            if len(lost) >= 2:
+                multi += 1
+            worst.append((sum(_pnl(r, 40)[0] for r in g), c, [r["s"] for r in lost]))
+        worst.sort()
+        nl = sum(k * v for k, v in losers_by_round.items())
+        say(f"- {label}: {nl} lost bids in {sum(losers_by_round.values())} rounds; rounds with 1 / 2 / 3+ coins losing: "
+            f"{losers_by_round[1]} / {losers_by_round[2]} / {sum(v for k, v in losers_by_round.items() if k >= 3)}. "
+            f"Worst 3 rounds at $40: " + "; ".join(f"{iso(c)} {money(p)} ({', '.join(x.replace('KX', '').replace('15M', '') for x in l)})" for p, c, l in worst[:3]))
+    # chance two coins lose together if they were unrelated
+    nr = len(byround)
+    p_loss = sum(1 for g in byround.values() for r in g if not r["won"]) / max(1, sum(len(g) for g in byround.values()))
+    exp2 = sum(1 - (1 - p_loss) ** len(g) - len(g) * p_loss * (1 - p_loss) ** (len(g) - 1) for g in byround.values())
+    say(f"- If losses had nothing to do with each other (1 filled bid in {1 / p_loss if p_loss else 0:.0f} loses), "
+        f"rounds with 2+ coins losing would happen about {exp2:.1f} times in these {nr} rounds.")
+
+    # new coins one by one, exam on the whole set of new ones
+    newr = [r for r in rows if r["s"] not in bot.KMAKER_SPOT and r["f"][25][0] > 0]
+    if newr:
+        exam.score([{"cost": _pnl(r, 25)[1], "pay": r["f"][25][0] if r["won"] else 0.0, "t": r["close"], "ev": r["close"]} for r in newr],
+                   "kc_maker_safe_usd on the 15-minute coins the real bot lacks (real trade lists, $25 bids)", tries=4,
+                   src="khourly.py grow15, backtest/kgrow15.md", log=arg == "log", status="lead: untested live",
+                   note="The real Kalshi bot's rule on the coins it does not bid on yet, fills from real trade lists.")
+    oldr = [r for r in rows if r["s"] in bot.KMAKER_SPOT and r["f"][25][0] > 0]
+    if oldr:
+        exam.score([{"cost": _pnl(r, 25)[1], "pay": r["f"][25][0] if r["won"] else 0.0, "t": r["close"], "ev": r["close"]} for r in oldr],
+                   "kc_maker_safe_usd replay on its own 7 coins (yardstick, real trade lists, $25 bids)", tries=4, log=False, quiet=False)
+    # how many bids at once (money needed)
+    ev = sorted([(r["t"], 1) for r in rows] + [(r["close"], -1) for r in rows])
+    cur = top = 0
+    for _, d in ev:
+        cur += d
+        top = max(top, cur)
+    ev7 = sorted([(r["t"], 1) for r in rows if r["s"] in bot.KMAKER_SPOT] + [(r["close"], -1) for r in rows if r["s"] in bot.KMAKER_SPOT])
+    cur = top7 = 0
+    for _, d in ev7:
+        cur += d
+        top7 = max(top7, cur)
+    say(f"\nMost bids open at once: {top7} with the 7 coins, {top} with all of them (money needed is about that many bids).")
+    # check against the real bot: same days
+    try:
+        import bigbets
+        real = bigbets.real_bids()
+        if real:
+            r0 = min(bot.parse_iso(o["placed"]).timestamp() for o in real)
+            mine = [r for r in rows if r["s"] in bot.KMAKER_SPOT and r["t"] >= r0]
+            say(f"Check against the real bot since {iso(r0)}: real bids {len(real)}, lost {sum(1 for o in real if o['exit'] < 0.5)}, "
+                f"real contracts bought {sum(o['real_filled'] or 0 for o in real):,.0f}; this replay: {len(mine)} bids, "
+                f"{sum(1 for r in mine if r['f'][4][0] > 0 and not r['won'])} lost, contracts at $4 {sum(r['f'][4][0] for r in mine):,.0f}, "
+                f"P&L at $4 {money(sum(_pnl(r, 4)[0] for r in mine))}. Same windows: {len(set(o['ticker'] for o in real) & set(r['tk'] for r in mine))}.")
+    except Exception as e:
+        say("real-bot check failed:", str(e)[:120])
+    kc.wjson(os.path.join(ALL15, "grow_rows.json.gz"), rows)
+    save_log("grow15.txt")
+
+
 # ================================================================ the other side: offering the safe side at 99c early (probe khr_lsfetch)
 LS_MIN = (30, 20, 10)
 
@@ -1067,4 +1340,4 @@ if __name__ == "__main__":
     arg = None
     if "_" in cmd:
         cmd, arg = cmd.split("_", 1)
-    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report, "more15": lambda: more15(arg), "lsfetch": lambda: ls_fetch(arg), "run15": lambda: run15(arg)}[cmd]()
+    {"scan": scan, "fetch": lambda: fetch(arg), "run": lambda: run(arg), "pmfetch": lambda: pm_fetch(arg), "pmrun": lambda: pm_run(arg), "queue": lambda: queue(arg), "queuereport": queue_report, "more15": lambda: more15(arg), "lsfetch": lambda: ls_fetch(arg), "run15": lambda: run15(arg), "scan15": scan15, "fetch15": lambda: fetch15(arg), "grow15": lambda: grow15(arg), "all15": lambda: (fetch15(arg), grow15())}[cmd]()
