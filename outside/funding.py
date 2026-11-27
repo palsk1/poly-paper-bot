@@ -459,6 +459,37 @@ def fetch2(nmonths=12):
     print("Kraken candle coins", sum(1 for v in kc.values() if v), "rows", sum(len(v) for v in kc.values()))
 
 
+def fetch3():
+    """Kraken SPOT daily candles (USD pairs) for the coins with Kraken Futures funding: does the spot exist, and how
+    far is the perp from it at each day's end."""
+    kr = load("kraken", {})
+    ap = get("https://api.kraken.com/0/public/AssetPairs") or {}
+    pairs = {}
+    for name, p in (ap.get("result") or {}).items():
+        alt = p.get("altname", "")
+        if alt.endswith("USD") and p.get("quote") in ("ZUSD", "USD"):
+            pairs[alt[:-3]] = name
+    alias = {"BTC": "XBT", "DOGE": "XDG"}
+    out = {}
+    for coin, v in kr.items():
+        if not v:
+            continue
+        pn = pairs.get(alias.get(coin, coin)) or pairs.get(coin)
+        if not pn:
+            out[coin] = None
+            continue
+        r = get(f"https://api.kraken.com/0/public/OHLC?pair={pn}&interval=1440")
+        time.sleep(1.2)
+        rows = []
+        for k_, val in ((r or {}).get("result") or {}).items():
+            if k_ != "last":
+                rows = [[int(x[0]) * 1000, float(x[2]), float(x[3]), float(x[4]), float(x[6]) * float(x[4])] for x in val]
+        out[coin] = rows
+    save("kraken_spot", out)
+    print("Kraken spot: coins with a USD spot pair", sum(1 for v in out.values() if v), "missing",
+          sorted(k for k, v in out.items() if not v))
+
+
 def report(*a):
     bf = load("bn_funding", {})
     kl = load("bn_kl", {})
@@ -630,6 +661,80 @@ def report(*a):
         up7 = max(max(c.hi.get(x, 0) for x in range(d, d + 7)) / c.pf[d] - 1 for d in ds[:-7])
         print(f"  {s}: worst 1-day rise {up1*100:.0f}/100, worst 1-day fall {dn1*100:.0f}/100, worst 7-day rise {up7*100:.0f}/100")
 
+    # ---- 2c. the Sweden-legal version: Kraken Pro spot + Kraken Futures short (funding from Kraken itself)
+    print("\n== 2c. Kraken spot + Kraken Futures short, always on (Kraken funding; price gap ignored) ==")
+    print("   $300 all in: buy $300 of the coin, use it as collateral, short $300 of the perp (one account)")
+    kfee = FEE["kr_spot"] + FEE["kr_perp"]
+    rows2 = []
+    for coin, v in kr.items():
+        dd_ = daily(v)
+        ds = sorted(d for d in dd_ if d_first <= d < d_last)
+        if len(ds) < 300:
+            continue
+        h1 = [dd_[d] for d in ds if d <= mid]
+        h2 = [dd_[d] for d in ds if d > mid]
+        f1, f2 = sum(h1) * BANK, sum(h2) * BANK
+        rows2.append((f1 + f2 - BANK * 2 * kfee, coin, f1 - BANK * 2 * kfee, f2 - BANK * 2 * kfee, len(ds)))
+    rows2.sort(reverse=True)
+    for r in rows2[:8] + [x for x in rows2 if x[1] in ("BTC", "ETH")]:
+        print(f"  {r[1]:6s} {r[4]}d: full year ${r[0]:.2f} (${r[0]/r[4]:.3f}/day); 1st half alone ${r[2]:.2f}, 2nd half alone ${r[3]:.2f}")
+    if rows2:
+        print(f"  {len(rows2)} coins: ahead over the year {sum(1 for r in rows2 if r[0] > 0)}, median ${statistics.median(r[0] for r in rows2):.2f}")
+        # rule: pick the 3 best coins of the first half, hold them in the second half ($100 each)
+        best3 = [r[1] for r in sorted(rows2, key=lambda r: -r[2])[:3]]
+        p2 = sum(r[3] for r in rows2 if r[1] in best3) / 3
+        print(f"  pick the 3 best of the 1st half ({', '.join(best3)}), $100 each, 2nd half: ${p2:.2f} on $300 "
+              f"(${p2/max(1, d_last-mid):.3f}/day)")
+        # rolling version: every 30 days pick the 3 coins with the best Kraken funding over the last 90 days,
+        # $100 each; switching a coin costs Kraken spot + perp fees both ways plus a 0.3/100 price-gap guess per side
+        kd = {coin: daily(v) for coin, v in kr.items() if v}
+        t_ = d_first + 90
+        held, tot, months_ = set(), 0.0, []
+        while t_ + 30 <= d_last:
+            sc = []
+            for coin, dd_ in kd.items():
+                w = [dd_.get(x) for x in range(t_ - 90, t_)]
+                if sum(1 for x in w if x is not None) >= 80:
+                    sc.append((sum(x for x in w if x is not None), coin))
+            pick = set(c for _, c in sorted(sc, reverse=True)[:3])
+            cost = len(pick - held) * 100 * 2 * (kfee + 0.003) / 2 + len(held - pick) * 100 * 2 * (kfee + 0.003) / 2
+            earn = sum(sum(kd[c].get(x, 0.0) for x in range(t_, t_ + 30)) * 100 for c in pick)
+            months_.append((dstr(t_), sorted(pick), earn - cost))
+            tot += earn - cost
+            held = pick
+            t_ += 30
+        tot -= len(held) * 100 * (kfee + 0.003)
+        print(f"  rolling monthly top-3 by last 90 days (picked blind each month): ${tot:.2f} over {len(months_)} months "
+              f"on $300 (${tot/max(1, 30*len(months_)):.3f}/day)")
+        for m in months_:
+            print(f"    {m[0]} {','.join(m[1]):24s} ${m[2]:.2f}")
+        # price check: Kraken perp vs Binance spot at day starts, and the coin's own price path
+        kcand = load("kraken_candles", {})
+        for coin in best3 + ["BTC", "ETH"]:
+            kp = {r[0]: r for r in kcand.get(coin, [])}
+            sp = {r[0]: r for r in (kl.get(coin + "USDT") or {}).get("spot", [])}
+            ds = [d for d in range(d_first, d_last) if (d * DAY - H) in kp]
+            if not ds:
+                print(f"  {coin}: no Kraken candles")
+                continue
+            px = [kp[d * DAY - H][3] for d in ds]
+            g = [kp[d * DAY - H][3] / sp[d * DAY - H][3] - 1 for d in ds if (d * DAY - H) in sp]
+            gs = (f"Kraken perp vs Binance spot: typical {statistics.median(abs(x) for x in g)*1e4:.0f} in 10,000, "
+                  f"worst {max(abs(x) for x in g)*1e4:.0f} in 10,000" if g else "no Binance spot to compare")
+            dv = statistics.median(kp[d * DAY - H][4] for d in ds[-30:])
+            print(f"  {coin}: price {px[0]:.4g} -> {px[-1]:.4g} (low {min(px):.4g}, high {max(px):.4g}); {gs}; "
+                  f"Kraken perp volume about ${dv*24:,.0f} a day lately")
+
+    # ---- Swedish tax drag on a hedged pair: the winning leg is taxed 30, the losing leg only deducted at 70 of 100
+    print("\n== Swedish tax drag on a hedged $150/$150 pair held a year (gain taxed 30/100, loss deducted 21/100) ==")
+    for s in ("BTCUSDT", "ETHUSDT", "SOLUSDT"):
+        if s in coins:
+            c = coins[s]
+            ds = sorted(c.pf)
+            mv = abs(c.ps[ds[-1]] / c.ps[ds[0]] - 1) * BANK / 2
+            print(f"  {s}: price moved {mv/(BANK/2)*100:.0f}/100 over the year -> one leg +${mv:.2f}, other -${mv:.2f}, "
+                  f"extra tax about ${0.09*mv:.2f} (on top of 30/100 tax on the funding itself)")
+
     # ---- 4. cross-venue: short the perp where funding is higher, long where lower
     kc = load("kraken_candles", {})
     venues = {
@@ -753,5 +858,5 @@ def cross(va, vb, venues):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     a = sys.argv[2:]
-    {"scan": scan, "fetch": fetch, "fetch2": fetch2, "report": report}[cmd](*a)
+    {"scan": scan, "fetch": fetch, "fetch2": fetch2, "fetch3": fetch3, "report": report}[cmd](*a)
     print("=== DONE ===")
