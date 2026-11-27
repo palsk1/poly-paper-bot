@@ -63,6 +63,20 @@
       "source": "kmaker",
       "rules": "kc_maker_mid"
     },
+    "kc_maker_safe_usd_new": {
+      "label": "The real Kalshi bot's rule on the two coins it skips (27 Nov, Jan: 'Paper test first then merge'): same bid one tick in front of the best bid on the winning side, 95c+, last 0.75-5.5 minutes, same price-gap check and the real bot's 2.3 cushion, $10, but only on NEAR and Zcash, the only other Kalshi 15-minute coins that trade. History: +$4.28 a day at $25 bids over 64 days on real trade lists, exam 'Promising, needs more bets' (backtest/kgrow15.md). $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_safe_usd_new"
+    },
+    "kc_maker_safe_usd_nobtc": {
+      "label": "The real Kalshi bot's rule without Bitcoin (27 Nov, Jan: 'Paper test first then merge'): same bid, same price-gap check, the real bot's 2.3 cushion, $10, on the bot's other 6 coins. Over 64 days of real trade lists Bitcoin made $0.00 at $4 bids with 13 lost bids while the other 6 all made money (backtest/kgrow15.md). Compare with the real bot over the same windows. $100 paper",
+      "start_cash": 100,
+      "refill": true,
+      "source": "kmaker",
+      "rules": "kc_maker_safe_usd_nobtc"
+    },
     "kc_maker_pct": {
       "label": "kc_maker with a bid that follows the pot (27 Nov, Jan's ask): same rule as kc_maker, but every bid is a tenth of what the pot holds right now (starts at $25 on $250, never above $100), so wins make the next bids bigger and losses make them smaller. Compare with kc_maker's fixed $10. $250 paper (about where kc_maker's own pot stands by now), no refills",
       "start_cash": 250,
@@ -595,7 +609,7 @@
       "rules": "wallet_copy"
     },
     "w_anoin123": {
-      "label": "Copy wallet anoin123: economics + finance, profitable all-time. Leaderboard profit this month $196,039, all-time $283,464. 5 shares per copy, no cash limit",
+      "label": "Copy wallet anoin123: world news (Iran, Russia/Ukraine, elections), buys both sides and merges pairs. Picked on a +$196,039 month (8 Nov); its all-time is really about -$4.7 million, nearly all from one Iran-strike bet (checked 22 Nov, walletpnl.py). 5 shares per copy, no cash limit",
       "start_cash": null,
       "source": "wallet",
       "lab": true,
@@ -1287,6 +1301,16 @@
     "kc_maker_mid": {
       "inherit": "kc_maker",
       "min_usd_z": 1.5
+    },
+    "kc_maker_safe_usd_new": {
+      "inherit": "kc_maker_safe_usd",
+      "min_usd_z": 2.3,
+      "series": ["KXNEAR15M", "KXZEC15M"]
+    },
+    "kc_maker_safe_usd_nobtc": {
+      "inherit": "kc_maker_safe_usd",
+      "min_usd_z": 2.3,
+      "series": ["KXETH15M", "KXSOL15M", "KXXRP15M", "KXDOGE15M", "KXHYPE15M", "KXBNB15M"]
     },
     "kc_maker_pct": {
       "inherit": "kc_maker",

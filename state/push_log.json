@@ -72,23 +72,11 @@
   },
   "2026-11-27": {
    "failed": 0,
-   "muted": 74,
-   "sent": 7
+   "muted": 115,
+   "sent": 9
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade_4c] sold No at 94c (+$0.45)",
-   "track": "panic_fade_4c",
-   "ts": "2026-11-19T21:25:49Z"
-  },
-  {
-   "result": "sent",
-   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.30)",
-   "track": "kalshi_patient",
-   "ts": "2026-11-19T22:03:19Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade_4c] bought 1 (practice money)",
@@ -1276,6 +1264,18 @@
    "title": "[endgame] bought 1 (practice money)",
    "track": "endgame",
    "ts": "2026-11-27T10:56:37Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.86)",
+   "track": null,
+   "ts": "2026-11-27T17:17:31Z"
+  },
+  {
+   "result": "sent",
+   "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.80)",
+   "track": null,
+   "ts": "2026-11-27T17:17:31Z"
   }
  ]
 }

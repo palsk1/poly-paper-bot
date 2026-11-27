@@ -15,6 +15,7 @@ Data in bt_cache/opt/ (shared price store). Only markets that ended before the h
 import bisect
 import json
 import collections
+import datetime as dt
 import concurrent.futures as cf
 import math
 import os
@@ -316,11 +317,12 @@ def load_spot1m():
 
 
 def tbets(ms, tp, dvol, s1m, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_left=45 * 86400, min_age=3600,
-          vol_mult=1.0, kinds=None, sides=(0, 1), extra=0.01, stake=10.0, wait=1800, max_gap=1.0, first_only=True, fairs=None):
+          vol_mult=1.0, kinds=None, sides=(0, 1), extra=0.01, stake=10.0, wait=1800, max_gap=1.0, first_only=True, fairs=None, fee_rate=None):
     """Bets at prices people really paid. Every 5 minutes with a real trade: Polymarket's price = the last trade of those
     5 minutes, the coin's price = Binance's last finished minute, the swing size = Deribit's DVOL. If the two disagree by
     `gap` or more, buy the cheap side at the FIRST real trade of a later 5 minutes (within `wait` s), + `extra` + fee.
-    One bet per market (the first)."""
+    One bet per market (the first). `fee_rate` = a taker fee rate for every market (e.g. 0.01, Polymarket's crypto
+    fee since 21 Nov 2026); None (the default) keeps each market's own fee as it was then."""
     out = []
     for mid, r in tp.items():
         m = ms.get(mid)
@@ -367,7 +369,7 @@ def tbets(ms, tp, dvol, s1m, gap=0.05, lo=0.05, hi=0.95, min_left=6 * 3600, max_
             if c <= 0.01:
                 continue
             sh = stake / c
-            fee = bot.taker_fee(sh, c, m["fee"])
+            fee = bot.taker_fee(sh, c, m["fee"] if fee_rate is None else fee_rate)
             win = (m["final"][0] == 1.0) == (side == 0)
             out.append({"ev": m["ev"], "t": y[0], "cost": stake + fee, "pay": sh if win else 0.0, "sh": sh, "id": mid,
                         "kind": m["kind"], "coin": m["coin"], "side": side, "left": left, "p": p if side == 0 else 1 - p,
@@ -683,9 +685,90 @@ def selftest():
     print("optfair selftest ok")
 
 
+# ================================================================ wallets (27 Nov): the crypto wallets' pattern as a plain rule
+def rule_bets(ms, tp, side, lo, hi, min_left, max_left=10 ** 9, kinds=("up", "down"), extra=0.01, stake=10.0, wait=1800, min_age=3600):
+    """Price-only rule on real trades: the first 5 minutes with a real trade where the side's price (last trade) is in
+    [lo, hi] with min_left..max_left before the end; buy at the first real trade of a later 5 minutes (within `wait`),
+    + `extra` + fee. One bet per market. side 0 = Yes, 1 = No."""
+    out = []
+    for mid, r in tp.items():
+        m = ms.get(mid)
+        if not m or r.get("cut") or m["kind"] not in kinds:
+            continue
+        B = r["b"]
+        for i, x in enumerate(B[:-1]):
+            T_ = x[0] + 300
+            left = m["end"] - T_
+            if left < min_left:
+                break
+            if left > max_left or T_ - m["start"] < min_age:
+                continue
+            p = x[2] if side == 0 else 1 - x[2]
+            if not lo <= p <= hi:
+                continue
+            y = B[i + 1]
+            if y[0] - T_ > wait or y[0] >= m["end"]:
+                continue
+            px = y[1] if side == 0 else 1 - y[1]
+            c = min(0.99, px + extra)
+            if c <= 0.01:
+                continue
+            sh = stake / c
+            fee = bot.taker_fee(sh, c, m["fee"])
+            win = (m["final"][0] == 1.0) == (side == 0)
+            out.append({"ev": m["ev"], "t": y[0], "cost": stake + fee, "pay": sh if win else 0.0, "sh": sh, "id": mid, "kind": m["kind"],
+                        "coin": m["coin"], "side": side, "left": left, "px": px, "title": m["q"]})
+            break
+    return out
+
+
+def wallets():
+    """The pattern of the copied crypto wallets (Tokor, 0xf705..., justdance; walletpnl.py scan, 27 Nov): buy Yes on
+    "will Bitcoin / Ethereum reach / dip to $X" bets, mostly at 10-70c with weeks left. Is that a rule, or their calls?"""
+    import exam
+    ms, _, _, _, _ = load()
+    tp = load_tapes(0, None)
+    D = 86400
+    cuts = [("Yes, 10-70c, 7+ days left", 0, .10, .70, 7 * D, None),
+            ("Yes, 10-70c, 20+ days left", 0, .10, .70, 20 * D, None),
+            ("Yes, 30-70c, 7+ days left", 0, .30, .70, 7 * D, None),
+            ("Yes, 10-30c, 7+ days left", 0, .10, .30, 7 * D, None),
+            ("Yes, under 10c, 1+ day left", 0, .02, .10, D, None),
+            ("Yes, 10-70c, 1-7 days left", 0, .10, .70, D, 7 * D),
+            ("dip only: Yes, 10-70c, 7+ days left", 0, .10, .70, 7 * D, ("down",)),
+            ("reach only: Yes, 10-70c, 7+ days left", 0, .10, .70, 7 * D, ("up",)),
+            ("the other side: No, 30-90c, 7+ days left", 1, .30, .90, 7 * D, None)]
+    print(f"{len(tp)} markets with real trade lists; touch (reach/dip) markets among them: "
+          f"{sum(1 for k in tp if ms.get(k, {}).get('kind') in ('up', 'down'))}")
+    print("| rule | bets | won | per $100 | first half | second half |")
+    print("|---|---|---|---|---|---|")
+    res = {}
+    for name, side, lo, hi, mn, x in cuts:
+        kinds = x if isinstance(x, tuple) else ("up", "down")
+        mx = x if isinstance(x, (int, float)) else 10 ** 9
+        b = rule_bets(ms, tp, side, lo, hi, mn, mx, kinds=kinds)
+        res[name] = b
+        print(line(name, b))
+    for name in res:
+        b = res[name]
+        q = collections.defaultdict(list)
+        for x in b:
+            q[dt.datetime.utcfromtimestamp(x["t"]).strftime("%Y-%m")].append(x)
+        print(f"  {name} by month: " + ", ".join(f"{k} {len(v)} {usd(per100(v))}" for k, v in sorted(q.items())))
+        for c in ("BTC", "ETH"):
+            bc = [x for x in b if x["coin"] == c]
+            print(f"    {c}: {len(bc)} bets {usd(per100(bc))}")
+    for name in (cuts[0][0], cuts[1][0], cuts[-1][0]):
+        exam.score(res[name], f"crypto wallets' pattern: {name}", tries=len(cuts), src="optfair.py wallets", log=False)
+    top = sorted(res[cuts[0][0]], key=lambda x: -(x["pay"] - x["cost"]))[:8]
+    print("biggest wins of the first rule:")
+    for x in top:
+        print(f"  {usd(x['pay'] - x['cost'])} at {x['px']:.2f}, {x['left'] / D:.0f} days left: {x['title'][:80]}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     if cmd.startswith("tapes"):
         tapes(int(cmd[5:].strip("_") or 0) or None)
     else:
-        {"fetch": fetch, "run": run, "selftest": selftest}.get(cmd, lambda: sys.exit(f"unknown command {cmd}"))()
+        {"fetch": fetch, "run": run, "selftest": selftest, "wallets": wallets}.get(cmd, lambda: sys.exit(f"unknown command {cmd}"))()

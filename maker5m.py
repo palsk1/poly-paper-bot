@@ -39,9 +39,24 @@ import statistics
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(HERE, "bt_cache", "mk5")
+CACHE = os.environ.get("MAKER5M_CACHE") or os.path.join(HERE, "bt_cache", "mk5")
 WIN = 300
 FEE = 0.07            # taker fee rate we measured on real fills on 17 Nov (docs now say 0.05)
+# Polymarket cut the BTC 5-min taker fee to 0.05 on 20 Nov 2026 23:59 UTC. The fee only moves the seller reward
+# (makers pay none). MAKER5M_FEE=0.05 re-scores at the new rate; MAKER5M_FEE=actual uses 0.07 before the cut and
+# 0.05 after, fill by fill. Default 0.07 = the 26 Nov report. MAKER5M_FIRST=12 keeps out of the first 12 s of a
+# window (the speed box's feed is nearly blind there, see swing.FIRST); default 0 = as in the 26 Nov report.
+FEE_CUT = 1795219140000   # 2026-11-20 23:59 UTC, ms
+_fe = os.environ.get("MAKER5M_FEE", "")
+if _fe and _fe != "actual":
+    FEE = float(_fe)
+FIRST_S = int(os.environ.get("MAKER5M_FIRST", "0") or 0)
+
+
+def fee_rate(t):
+    if _fe == "actual":
+        return 0.07 if t < FEE_CUT else 0.05
+    return FEE
 REBATE = 0.20         # makers' share of the taker fee on their fills (the old flat program; moving to volume tiers)
 FEED_LAG = 22         # median ms from Polymarket's match time to this box hearing the trade
 
@@ -153,6 +168,7 @@ def replay(win, w, up_won, fair_up, bn_t, bn_p, delay=250, rule="plain", size=5.
     fair = None
     blocked = {"a": 0, "b": 0}
     end = (w + WIN - stop_left) * 1000
+    start = (w + FIRST_S) * 1000
 
     # merged event stream: (time, kind, payload)
     ev = [(x[0], 1, x) for x in win["bk"]] + [(x[0] - FEED_LAG, 2, x) for x in win["tr"]]
@@ -185,7 +201,7 @@ def replay(win, w, up_won, fair_up, bn_t, bn_p, delay=250, rule="plain", size=5.
             want = None
             top = ba if k == "a" else bb
             ok = (top is not None and bb is not None and ba is not None and ba - bb > 0.005
-                  and band[0] <= top <= band[1] and now < end and now >= blocked[k])
+                  and band[0] <= top <= band[1] and now < end and now >= blocked[k] and now >= start)
             if ok:
                 if k == "a" and (net <= -cap or done["a"] >= side_max):
                     ok = False
@@ -262,7 +278,7 @@ def replay(win, w, up_won, fair_up, bn_t, bn_p, delay=250, rule="plain", size=5.
         else:
             cost, pay = sh * q, sh * (1 if up_won else 0)
         out.append({"t": t, "sd": sd, "q": q, "sh": sh, "cost": cost, "pay": pay,
-                    "rebate": REBATE * FEE * sh * q * (1 - q)})
+                    "rebate": REBATE * fee_rate(t) * sh * q * (1 - q)})
     return out
 
 
@@ -346,8 +362,9 @@ def report(days, say=print):
                 say(f"     {kk:24} {n:6} fills, ${c:9,.0f} locked, P&L ${p:8,.0f} = {100 * p / c if c else 0:+.2f} per $100")
         bets = [{"ev": x["w"], "t": x["w"], "cost": r["cost"], "pay": r["cost"] + r["pnl"]}
                 for x, r in zip(pw, s["rows"]) if r["cost"] > 0]
-        exam.score(bets, f"BTC 5-min seller {rule} {kw} {d}ms", tries=len(GRID) * 4, src="maker5m.py report",
-                   log=(rule == "pull" and d == 250))
+        tag = (f", fee {os.environ['MAKER5M_FEE']}" if os.environ.get("MAKER5M_FEE") else "") + (f", skip first {FIRST_S}s" if FIRST_S else "")
+        exam.score(bets, f"BTC 5-min seller {rule} {kw} {d}ms{tag}", tries=len(GRID) * 4, src="maker5m.py report",
+                   log=(rule == "pull" and d == 250), ledger=os.environ.get("MAKER5M_LEDGER"))
     # the smallest set-up a $100 bank could run: 5-share offers, at most 5 shares one way, 10 a side per window
     for d in (100, 250):
         s = summary(run_all(days, d, "pull", jump=0.02, cap=5.0, side_max=10.0))

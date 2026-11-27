@@ -2978,7 +2978,8 @@ def kalshi_book_sides(ticker):
 
 
 KMAKER_SPOT = {"KXBTC15M": "BTCUSDT", "KXETH15M": "ETHUSDT", "KXSOL15M": "SOLUSDT", "KXXRP15M": "XRPUSDT",
-               "KXDOGE15M": "DOGEUSDT", "KXHYPE15M": "HYPEUSDT", "KXBNB15M": "BNBUSDT"}
+               "KXDOGE15M": "DOGEUSDT", "KXHYPE15M": "HYPEUSDT", "KXBNB15M": "BNBUSDT",
+               "KXNEAR15M": "NEARUSDT", "KXZEC15M": "ZECUSDT"}   # NEAR / Zcash: paper only (27 Nov, backtest/kgrow15.md)
 _kmaker_spot = {}
 
 
