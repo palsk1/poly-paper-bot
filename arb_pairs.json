@@ -4880,6 +4880,186 @@
    "id": "KXRT-AVE-87|will-dune-part-three-score-at-least-87-on-the-rotten-tomatoes-tomatometer",
    "reason": "Different questions: the Kalshi and Polymarket markets ask about different things (strike, outcome, company, rank or event)",
    "date": "2026-11-26"
+  },
+  {
+   "id": "KXNETFLIXRANKMOVIE-26NOV30-MOS|will-the-mosquito-bowl-be-the-top-us-netflix-movie-this-week",
+   "reason": "Polymarket breaks ties alphabetically and has a late-chart rule; Kalshi has neither (same as earlier Netflix rejects).",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXSPOTIFYALBUMRELEASEDATEBABYBOI-27-JAN01|will-playboi-carti-release-an-album-in-2026",
+   "reason": "Different outcome: Kalshi is one named album (BABY BOI) on Spotify; Polymarket is any new album.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXAIMILLENNIUM-29-27JAN01|will-ai-solve-2-more-millennium-prize-problems-in-2026",
+   "reason": "Different outcome: Kalshi is any 1 of 4 problems (Riemann excluded); Polymarket needs 2 more and counts Riemann.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXMACRONENDORSE27-27APR18-RGLU|will-raphal-glucksmann-win-the-2027-french-presidential-election",
+   "reason": "Different events: Macron endorsing Glucksmann vs Glucksmann winning.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXCBDECISIONENGLAND-26DEC17-H25|will-the-central-bank-of-colombia-increase-the-monetary-policy-interest-rate-by-25-bps-at-the-december-2026-meeting",
+   "reason": "Different events: Bank of England vs Central Bank of Colombia.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNETFLIXRANKSHOWRUNNERUP-26NOV30-THE|will-the-body-season-1-be-the-2-us-netflix-show-this-week-20261201",
+   "reason": "Polymarket breaks ties alphabetically and has a late-chart rule; Kalshi has neither.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXALBUMRELEASEDATE-NEWKEN-27JAN01|will-kendrick-lamar-release-an-album-in-2026",
+   "reason": "Different outcome rules: Polymarket excludes live/re-release/deluxe albums with its own definition; Kalshi defines nothing.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXMEASLES-26-7500|will-there-be-at-least-7500-measles-cases-in-the-us-in-2026-287-181-314-511-633",
+   "reason": "Kalshi is 'above 7500' with no source named; Polymarket is 'at least 7500' on the CDC counter (same as earlier measles rejects).",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXUFCFEATHERWEIGHTTITLE-26-MEVL|will-movsar-evloev-be-the-ufc-featherweight-champion-on-december-31-2026",
+   "reason": "Polymarket excludes interim champions and has a vacant rule; Kalshi has neither (same as the other UFC title rejects).",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXCBDECISIONKOREA-27JAN13-H25|will-the-bank-of-korea-increase-the-base-rate-by-25-bps-at-the-january-2027-meeting",
+   "reason": "Postponed meeting: Kalshi resolves 'maintain' if delayed past expiry, Polymarket follows the postponed meeting.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNHLMETROPOLITAN-27-NJ|will-the-new-jersey-devils-record-90-points",
+   "reason": "Different events: win the division vs record 90+ points.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXHUANGNW-26DEC31-T180|will-solana-reach-180-by-december-31-2026",
+   "reason": "Different events: Jensen Huang net worth vs Solana price.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXFEATURE-26GTA6SCORE-TOTO|will-grand-theft-auto-vi-win-game-of-the-year-at-the-2026-game-awards-20260804145651075",
+   "reason": "Different events: Toto on the GTA VI score vs GTA VI Game of the Year.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXRT-DUNE-70|will-dune-part-three-be-delayed-20260720163825706",
+   "reason": "Different events: Dune Rotten Tomatoes score vs Dune delayed.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNHLATLANTIC-27-MTL|will-the-montreal-canadiens-record-110-points",
+   "reason": "Different events: win the division vs record 110+ points.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXTRUMPSTATES-27JAN01-NH|will-donald-trump-visit-russia-in-2026",
+   "reason": "Different events: Trump visiting New Hampshire vs Russia.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXSBSETLISTS-27-BON|will-03-bonnie-and-clyde-be-played-at-the-2027-big-game-halftime-show",
+   "reason": "Polymarket resolves No if the show is delayed past Mar 31 2027; Kalshi has no delay or cancellation rule (same as earlier setlist rejects).",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXCONGRESSTESTIFY-27JAN-MZUC|will-mark-zuckerberg-be-richest-person-on-december-31-366",
+   "reason": "Different events: Zuckerberg testifying vs being richest person.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXMACRONENDORSE27-27APR18-DLIS|will-david-lisnard-be-on-the-ballot-for-the-2027-french-presidential-election",
+   "reason": "Different events: Macron endorsing Lisnard vs Lisnard on the ballot.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNFL1SEED-NFC26-DET|will-detroit-lions-win-the-2026-nfc-north",
+   "reason": "Different events: NFC 1 seed vs winning the NFC North.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXCS2QUALIFIERS-26PGLSGS2-HERO|will-falcons-win-the-pgl-major-singapore-2026-1793811600000",
+   "reason": "Different events: HEROIC reaching Stage 2 vs Falcons winning the Major.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXRT-HEX-70|will-focker-in-law-score-at-least-70-on-the-rotten-tomatoes-tomatometer-20261130",
+   "reason": "Different films: Hexed vs Focker-In-Law.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNHLCENTRAL-27-DAL|will-the-dallas-stars-record-90-points",
+   "reason": "Different events: win the division vs record 90+ points.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXMOBILEGAMEAD-27JAN01-SCA|will-scarlett-johansson-be-the-2-searched-person-on-google-this-year-20260914",
+   "reason": "Different events: mobile game ad vs Google #2 searched person.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXROGANGUEST-27JAN01-HUN|will-trump-pardon-hunter-biden-before-2027",
+   "reason": "Different events: Hunter Biden on Joe Rogan vs a Trump pardon.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXTOPSONG-26DEC05-CHO|will-housewife-tate-mcrae-be-the-billboard-hot-100-1-song-for-the-week-of-december-5",
+   "reason": "Different songs: Choosin' Texas vs Housewife.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXWHVISIT-27JAN-LMES|will-lionel-messi-be-the-2-searched-person-on-google-this-year-20260914",
+   "reason": "Different events: Messi White House visit vs Google #2 searched person.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXUSACOMPANYSTAKE-27JAN01-PLTR|will-the-us-federal-government-take-a-stake-in-openai",
+   "reason": "Different companies: Palantir vs OpenAI.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXALBUMEQUIV-GTA626NOV26-200K|will-grand-theft-auto-vi-the-album-soundtrack-be-the-billboard-200-1-album-for-the-week-of-december-5",
+   "reason": "Different events: 200K album units vs Billboard 200 #1.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXNHLHART-27-NKUCHEROV86|will-kyle-connor-win-the-2026-27-hart-memorial-trophy",
+   "reason": "Different players: Kucherov vs Kyle Connor.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXRT-HEX-60|will-focker-in-law-score-at-least-60-on-the-rotten-tomatoes-tomatometer-20261130",
+   "reason": "Different films: Hexed vs Focker-In-Law.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXFIRSTSUPERBOWLSONG-JAYZ27FEB15-99P|will-jay-z-appear-at-the-2027-big-game-halftime-show",
+   "reason": "Different events: 99 Problems as Jay-Z's first song vs Jay-Z appearing.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXSP500ADDQ-26DEC31-NET|spacex-ipo-officially-added-to-sp-500-in-2026-20260608202834697",
+   "reason": "Different companies: Cloudflare vs SpaceX.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXALBUMRELEASE-26-PAR|will-drake-release-a-new-album-by-december-31",
+   "reason": "Different artists: PARTYNEXTDOOR vs Drake.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXTOPALBUMSPOTIFYRUNNERUP-26-DEB|will-deb-tirar-ms-fotos-be-the-top-spotify-album-for-2026",
+   "reason": "Different outcome: #2 album on Spotify Wrapped vs top album.",
+   "date": "2026-11-27"
+  },
+  {
+   "id": "KXMODELHIGH-27-1550-OTHE|will-openai-be-the-first-company-to-have-an-ai-model-hit-1550-on-chatbot-arena-in-2026",
+   "reason": "Different outcome: 'Other' lab vs OpenAI.",
+   "date": "2026-11-27"
   }
  ],
  "rejected_events": [
