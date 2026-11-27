@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**275 ideas examined, in about 118,734 versions.** 217 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 275 ideas that are all worthless, the luckiest one still looks good. With 275 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -207,9 +207,9 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | No at 10-97c with 10+ days left | 120 | 14 | +$32.37 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | No where count + pace is 10c+ below the price | 120 | 14 | +$32.84 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | No where count + pace is 20c+ below the price | 120 | 13 | +$20.26 | Ahead, but could be luck | dropped | spacex.py, backtest/spacex.md |
-| 2026-11-22 | OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week | 150 | 11 | +$40.36 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid | 150 | 8 | -$15.31 | Too early to tell | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask | 150 | 7 | -$31.92 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | OpenRouter lab share (Kalshi): Yes at 15-85c on the first day of the week | 150 | 12 | +$31.54 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | OpenRouter weekly token total (Kalshi): No where the public daily count says 15c+ less than the bid | 150 | 9 | +$38.82 | Too early to tell | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | OpenRouter weekly token total (Kalshi): Yes where the public daily count says 15c+ more than the ask | 150 | 8 | -$37.37 | Too early to tell | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Polymarket: always No, a day in | 120 | 3 | -$23.14 | Too early to tell | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Polymarket: always No on any other app, first look | 170 | 43 | +$8.48 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
 | 2026-11-22 | Polymarket: always No on the holder, first look | 170 | 50 | +$24.99 | Ahead, but could be luck | dropped | appstore.py, backtest/appstore.md |
@@ -226,11 +226,11 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-22 | Same, 10c+, last 10 days only, Yes | 120 | 13 | -$81.53 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always No, Yes at 3-97c, first look | 150 | 3 | -$19.95 | Too early to tell | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Usage ladders (Kalshi), monthly app downloads: always Yes at 3-97c, first look | 150 | 3 | -$25.37 | Too early to tell | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly share of a lab: always No, Yes at 3-97c, first look | 150 | 14 | -$18.82 | Losing | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always No, Yes at 3-97c, first look | 150 | 13 | +$0.37 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always Yes at 3-97c, first look | 150 | 13 | -$29.52 | Losing | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always No, Yes at 3-97c, first look | 150 | 47 | -$18.95 | Losing | dropped | aim.py, backtest/aim.md |
-| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look | 150 | 47 | -$38.17 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly share of a lab: always No, Yes at 3-97c, first look | 150 | 15 | -$14.86 | Behind, but could be bad luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always No, Yes at 3-97c, first look | 150 | 14 | +$6.35 | Ahead, but could be luck | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), OpenRouter weekly token total: always Yes at 3-97c, first look | 150 | 14 | -$33.27 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always No, Yes at 3-97c, first look | 150 | 52 | -$20.76 | Losing | dropped | aim.py, backtest/aim.md |
+| 2026-11-22 | Usage ladders (Kalshi), Vercel AI Gateway daily shares: always Yes at 3-97c, first look | 150 | 52 | -$35.23 | Losing | dropped | aim.py, backtest/aim.md |
 | 2026-11-22 | Yes where count + pace is 10c+ above the price | 120 | 13 | -$72.66 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-22 | Yes where count + pace is 20c+ above the price | 120 | 13 | -$79.43 | Losing | dropped | spacex.py, backtest/spacex.md |
 | 2026-11-23 | Kalshi hourly crypto: last-minute model of the 60-second average, buy where it says 3c+ too cheap | 1,100 | 290 | -$13.33 | Losing | dropped | khourly_sweep.py, backtest/khourly.md |
@@ -282,5 +282,6 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | OpenRouter share ladders (Kalshi): buy the winning side after the week is over, chart final | 22 | 5 | +$0.11 | Too early to tell | dropped | aim.py orcheck |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

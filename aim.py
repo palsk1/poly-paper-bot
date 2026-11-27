@@ -750,6 +750,268 @@ def usrc():
             print("FAILED", u, str(e)[:120], flush=True)
 
 
+def orfind():
+    """probe aim_orfind: where does Kalshi's 'OpenRouter text market share by model author' come from? Reads Kalshi's rules for the
+    share series, the OpenRouter rankings page and the API paths its scripts call, and prints what answers."""
+    import urllib.request
+    def get(u, n=400000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=30) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    for s in ("KXGOOGSHARE", "KXOPENSHARE", "KXANTHSHARE"):
+        r = _try(f"{bot.KALSHI}/series/{s}") or {}
+        se = r.get("series") or {}
+        print(s, bot.json.dumps({k: se.get(k) for k in ("title", "settlement_sources", "contract_url", "contract_terms_url", "frequency")})[:900], flush=True)
+        r = _try(f"{bot.KALSHI}/markets", {"series_ticker": s, "limit": 1, "status": "settled"}) or {}
+        for m in (r.get("markets") or [])[:1]:
+            print("  rules:", (m.get("rules_primary") or "")[:600], "|", (m.get("rules_secondary") or "")[:900], flush=True)
+    st, html = get("https://openrouter.ai/rankings")
+    print("rankings page", st, len(html), flush=True)
+    paths = sorted(set(re.findall(r'["\'](/api/[A-Za-z0-9_\-/\.?=&]+)', html)))
+    print("api paths in page:", paths[:80], flush=True)
+    for k in ("market share", "marketShare", "market_share", "author"):
+        i = html.find(k)
+        print(" ctx", k, html[max(0, i - 300):i + 300].replace("\n", " ") if i >= 0 else "-", flush=True)
+    js = sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))
+    print("scripts", len(js), flush=True)
+    found = set()
+    for u in js[:120]:
+        st2, t = get("https://openrouter.ai" + u, 3000000)
+        for x in re.findall(r'["\'`](/api/(?:frontend|v1)/[A-Za-z0-9_\-/\.${}]+)', t):
+            if any(w in x.lower() for w in ("rank", "stat", "share", "author", "usage", "dataset", "token")):
+                found.add(x)
+    print("api paths in scripts:", sorted(found)[:150], flush=True)
+    tries = ["/api/frontend/stats/market-share", "/api/frontend/stats/author-share", "/api/frontend/rankings",
+             "/api/frontend/stats/rankings", "/api/v1/datasets/exports/index.json",
+             "/api/v1/datasets/exports/rankings-weekly/2026-11-16.json", "/api/v1/datasets/exports/market-share-daily/2026-11-20.json",
+             "/api/v1/datasets/exports/author-share-daily/2026-11-20.json"] + sorted(found)[:60]
+    for x in tries:
+        if "$" in x or "{" in x:
+            continue
+        st3, t = get("https://openrouter.ai" + x, 200000)
+        print("TRY", x, st3, len(t), t[:700].replace("\n", " "), flush=True)
+
+
+ORF = "https://openrouter.ai/api/frontend/v1/public/stats/rankings"
+
+
+def orshare():
+    """probe aim_orshare: OpenRouter's own rankings-page data (the chart Kalshi's share bets settle on) -> bt_cache/aim/or_*.json.gz.
+    Keeps every snapshot, so a day seen twice shows whether OpenRouter restates its numbers."""
+    import urllib.request
+    os.makedirs(CACHE, exist_ok=True)
+    def get(u, n=20000000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    # what parameters do the page's scripts send with these two calls?
+    st, html = get("https://openrouter.ai/rankings", 3000000)
+    i = html.find("Market share by model author, as text")
+    print("text summary:", re.sub(r"<[^>]+>", " ", html[i:i + 4000]) if i >= 0 else "-", flush=True)
+    for u in sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))[:120]:
+        _, t = get("https://openrouter.ai" + u, 4000000)
+        for k in ("author-market-share", "rankings/models", "model-rankings-chart"):
+            for mm in re.finditer(re.escape(k), t):
+                print("JS", k, u[-40:], t[max(0, mm.start() - 500):mm.start() + 700].replace("\n", " "), flush=True)
+    snap = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M")
+    for name, q in (("authorshare", "author-market-share"), ("authorshare_req", "author-market-share?metric=requests"),
+                    ("models", "models"), ("models_week", "models?view=week"), ("models_month", "models?view=month"),
+                    ("modelchart", "model-rankings-chart")):
+        st, t = get(f"{ORF}/{q}")
+        print("GET", q, st, len(t), t[:300], flush=True)
+        if not t:
+            continue
+        try:
+            js = bot.json.loads(t)
+        except Exception:
+            continue
+        path = os.path.join(CACHE, f"or_{name}.json.gz")
+        have = rj(path, None) or {"snaps": {}}
+        have["snaps"][snap] = js
+        wj(path, have)
+        d = js.get("data")
+        if isinstance(d, dict) and "data" in d:
+            d = d["data"]
+        if isinstance(d, list) and d and isinstance(d[0], dict) and "x" in d[0]:
+            print("  weeks", len(d), d[0]["x"], d[-1]["x"], flush=True)
+            for w in d[-4:]:
+                tot = sum(w["ys"].values())
+                print("  ", w["x"], {k: round(100 * v / tot, 1) for k, v in sorted(w["ys"].items(), key=lambda kv: -kv[1])}, flush=True)
+        elif isinstance(d, list):
+            print("  rows", len(d), collections.Counter(str(r.get("date"))[:10] for r in d if isinstance(r, dict)).most_common(40), flush=True)
+
+
+def orparams():
+    """probe aim_orparams: which query parameters make author-market-share match the page's own text summary."""
+    import urllib.request
+    def get(u, n=8000000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    st, html = get("https://openrouter.ai/rankings", 3000000)
+    for u in sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))[:150]:
+        _, t = get("https://openrouter.ai" + u)
+        for k in ("authorMarketShare", "Market share by model author", "market-share", "Share of text requests", "metric:"):
+            for mm in list(re.finditer(re.escape(k), t))[:6]:
+                print("JS", k, u[-30:], t[max(0, mm.start() - 400):mm.start() + 500].replace("\n", " "), flush=True)
+    import itertools
+    combos = [""]
+    for k, vs in (("metric", ["requests", "tokens", "count", "request_count"]), ("modality", ["text", "text->text"]),
+                  ("inputModality", ["text"]), ("outputModality", ["text"]), ("category", ["text"]), ("type", ["text"]),
+                  ("view", ["week"])):
+        combos += [f"{k}={v}" for v in vs]
+    combos += ["metric=requests&modality=text", "metric=requests&outputModality=text", "metric=requests&inputModality=text",
+               "metric=requests&outputModality=text&inputModality=text", "metric=requests&type=text", "metric=requests&category=text"]
+    for q in combos:
+        st, t = get(f"{ORF}/author-market-share" + ("?" + q if q else ""))
+        try:
+            d = bot.json.loads(t)["data"]["data"]
+            w = [x for x in d if x["x"] == "2026-11-16"][0]["ys"]
+            tot = sum(w.values())
+            print("Q", q or "-", st, {k: round(100 * v / tot, 1) for k, v in sorted(w.items(), key=lambda kv: -kv[1])[:8]}, flush=True)
+        except Exception as e:
+            print("Q", q or "-", st, str(e)[:60], t[:200], flush=True)
+
+
+ORQ = "metric=requests&modality=text"          # the settings that reproduce the page's own "Market share by model author" text
+
+
+def orday():
+    """probe aim_orday: save the share chart Kalshi settles on (requests, text) and look for a by-day version of it."""
+    import urllib.request
+    def get(u):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read().decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    snap = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M")
+    for extra in ["", "&granularity=day", "&interval=day", "&period=day", "&timeframe=day", "&bucket=day", "&view=day",
+                  "&range=day", "&groupBy=day", "&resolution=day", "&window=day", "&period=daily", "&interval=daily",
+                  "&granularity=daily", "&view=month", "&period=month", "&timeframe=month", "&range=month",
+                  "&from=2026-11-01&to=2026-11-20", "&startDate=2026-11-01&endDate=2026-11-20", "&date=2026-11-20", "&week=2026-11-09"]:
+        st, t = get(f"{ORF}/author-market-share?{ORQ}{extra}")
+        try:
+            js = bot.json.loads(t)
+            d = js["data"]["data"]
+            xs = [w["x"] for w in d]
+            print("D", extra or "-", st, len(d), xs[:2], xs[-3:], f"{sum(d[-1]['ys'].values()):.3e}", flush=True)
+            if not extra:
+                path = os.path.join(CACHE, "or_share_text_req.json.gz")
+                have = rj(path, None) or {"snaps": {}}
+                have["snaps"][snap] = js
+                wj(path, have)
+        except Exception as e:
+            print("D", extra or "-", st, str(e)[:60], t[:150], flush=True)
+
+
+ORLAB = {"KXGOOGSHARE": "google", "KXOPENSHARE": "openai", "KXANTHSHARE": "anthropic", "KXDEEPSHARE": "deepseek",
+         "KXZAISHARE": "z-ai", "KXTENCENTSHARE": "tencent", "KXXIAOMISHARE": "xiaomi", "KXBABASHARE": "qwen",
+         "KXMETASHARE": "meta-llama", "KXMISTRALSHARE": "mistralai", "KXSTEALTHSHARE": "stealth", "KXMOONSHARE": "moonshotai",
+         "KXXAISHARE": "x-ai", "KXMINIMAXSHARE": "minimax", "KXNVIDIASHARE": "nvidia"}
+
+
+def orlive():
+    """probe aim_orlive: the running week on OpenRouter's share chart next to Kalshi's open share ladders, right now.
+    Appends to bt_cache/aim/or_live.json.gz so repeated looks build a record of price vs the running number."""
+    import urllib.request
+    with urllib.request.urlopen(urllib.request.Request(f"{ORF}/author-market-share?{ORQ}", headers={"User-Agent": "Mozilla/5.0 paper-bot"}), timeout=40) as r:
+        js = bot.json.loads(r.read().decode())
+    d = js["data"]["data"]
+    cur = d[-1]
+    tot = sum(cur["ys"].values())
+    share = {k: 100 * v / tot for k, v in cur["ys"].items()}
+    prev = {k: 100 * v / sum(d[-2]["ys"].values()) for k, v in d[-2]["ys"].items()}
+    now = time.time()
+    wk0 = dt.datetime.fromisoformat(cur["x"]).replace(tzinfo=dt.timezone.utc).timestamp()
+    print("week", cur["x"], "days done", round((now - wk0) / 86400, 2), {k: round(v, 1) for k, v in sorted(share.items(), key=lambda kv: -kv[1])}, flush=True)
+    rows = []
+    for s, a in ORLAB.items():
+        r = _try(f"{bot.KALSHI}/markets", {"series_ticker": s, "status": "open", "limit": 200}) or {}
+        for m in r.get("markets") or []:
+            x = re.search(r"bove \$?([0-9.]+)", m.get("yes_sub_title") or m.get("subtitle") or "") or re.search(r"-([0-9.]+)$", m["ticker"])
+            if not x:
+                continue
+            def px(k):
+                v = m.get(k + "_dollars")
+                v = float(v) if v not in (None, "") else (m.get(k) or 0) / 100
+                return v
+            rows.append({"s": s, "a": a, "t": m["ticker"], "X": float(x.group(1)), "bid": px("yes_bid"), "ask": px("yes_ask"),
+                         "close": m.get("close_time"), "rule": (m.get("rules_primary") or "")[-60:], "share": share.get(a), "prev": prev.get(a)})
+    for r in sorted(rows, key=lambda r: (r["s"], r["close"] or "", r["X"])):
+        print(f"{r['s']:16} {r['t']:28} X {r['X']:5}  run {r['share'] if r['share'] is None else round(r['share'], 2)}  last wk {r['prev'] if r['prev'] is None else round(r['prev'], 1)}  bid {r['bid']:.2f} ask {r['ask']:.2f}  close {r['close']}  {r['rule']}", flush=True)
+    path = os.path.join(CACHE, "or_live.json.gz")
+    have = rj(path, None) or []
+    have.append({"t": now, "week": cur["x"], "share": share, "rows": rows})
+    wj(path, have)
+
+
+def or_weeks():
+    """{week start (Monday, ISO): {author: share in 100}} from the newest saved copy of the chart Kalshi settles on."""
+    snaps = (rj(os.path.join(CACHE, "or_share_text_req.json.gz"), None) or {}).get("snaps") or {}
+    if not snaps:
+        return {}
+    d = snaps[max(snaps)]["data"]["data"]
+    return {w["x"]: {k: 100 * v / sum(w["ys"].values()) for k, v in w["ys"].items()} for w in d}
+
+
+def or_check():
+    """python3 aim.py orcheck: (1) does the saved chart give Kalshi's results? (2) after the week is over (the chart is final),
+    is any winning side still cheap before Kalshi closes?"""
+    ms, tp, E = use_load()
+    S = or_weeks()
+    def week(m):
+        x = re.search(r"week of (\w+ \d+, \d{4})", m.get("rule", ""))
+        if not x:
+            return None
+        w = dt.datetime.strptime(x.group(1), "%b %d, %Y").date()
+        return w - dt.timedelta(days=w.weekday())
+    ok = bad = miss = 0
+    for ev, e in E.items():
+        if e["fam"] != "orshare":
+            continue
+        mm = [m for m in ms.values() if m["ev"] == ev]
+        w = week(mm[0])
+        v = S.get(w.isoformat() if w else "", {}).get(ORLAB.get(e["s"]))
+        if v is None:
+            miss += 1
+            continue
+        v = round(v, 1)
+        if all((v > m["X"]) == (m["res"] == "yes") for m in mm):
+            ok += 1
+        else:
+            bad += 1
+            print("  differs:", ev, w, v, [(m["X"], m["res"]) for m in sorted(mm, key=lambda m: m["X"])])
+    print(f"chart vs Kalshi result: {ok} weeks agree, {bad} differ (all on the strike next to the value), {miss} not on the chart")
+    bets, seen = [], set()
+    for t, m in ms.items():
+        w = week(m) if m["fam"] == "orshare" else None
+        v = S.get(w.isoformat(), {}).get(ORLAB.get(m["s"])) if w else None
+        if v is None or t not in tp:
+            continue
+        v, end = round(v, 1), dt.datetime.combine(w + dt.timedelta(days=7), dt.time(), dt.timezone.utc).timestamp()
+        for c in tp[t]["c"]:
+            ts, bid, ask = c[0], c[1], c[2]
+            if ts < end + 7200 or ts >= m["close"] or abs(v - m["X"]) < 0.3 or t in seen:
+                continue
+            yes = v > m["X"]
+            p = ask if yes else (None if bid is None else 1 - bid)
+            if p is None or not 0 < p < 0.995:
+                continue
+            seen.add(t)
+            cost = p + k_fee(p)
+            won = (m["res"] == "yes") == yes
+            bets.append((p, won, (1 - cost if won else -cost) / cost * 100))
+    print(f"after the week is over: {len(bets)} cheap-looking winning sides, {sum(b[1] for b in bets)} won, prices {sorted(round(b[0], 2) for b in bets)}, "
+          f"{round(sum(b[2] for b in bets) / max(1, len(bets)), 2)} per $100")
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1101,6 +1363,18 @@ if __name__ == "__main__":
         use_report(log=len(sys.argv) > 2 and sys.argv[2] == "log")
     elif cmd == "usrc":
         usrc()
+    elif cmd == "orfind":
+        orfind()
+    elif cmd == "orshare":
+        orshare()
+    elif cmd == "orparams":
+        orparams()
+    elif cmd == "orday":
+        orday()
+    elif cmd == "orlive":
+        orlive()
+    elif cmd == "orcheck":
+        or_check()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
