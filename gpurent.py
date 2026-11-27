@@ -149,6 +149,10 @@ def fetch():
     print(f"\ntapes {len(tp)}/{len(ms)}, trades {sum(r['n'] for r in tp.values())}, cut {sum(r['cut'] for r in tp.values())}",
           flush=True)
     ornn()
+    try:
+        arch()
+    except Exception as e:
+        print("arch failed", e, flush=True)
 
 
 def ornn():
@@ -210,6 +214,56 @@ def ornn():
             print(f"  {k}: {json.dumps(v)[:300]}", flush=True)
 
 
+def arch():
+    """Older index days: every archived copy (web.archive.org) of the free index-history JSON, merged per GPU and day.
+    Each copy holds the 3 months before it was saved, so the copies together reach back further than today's free window."""
+    snaps = []
+    for u in ["api.ornnai.com/api/gpu/", "data.ornn.com/api/public-index/gpu/"]:
+        r = get("https://web.archive.org/cdx/search/cdx", {"url": u, "matchType": "prefix", "output": "json", "limit": 3000,
+                                                          "filter": "statuscode:200"})
+        if isinstance(r, list):
+            snaps += [row for row in r[1:] if "index-history" in row[2]]
+        else:
+            print("cdx", u, r, flush=True)
+    print(f"archived index-history copies: {len(snaps)}", flush=True)
+    merged, seen = collections.defaultdict(dict), set()
+    for row in sorted(snaps, key=lambda r: r[1]):
+        key = (row[1][:8], row[2])
+        if key in seen:
+            continue
+        seen.add(key)
+        m = re.search(r"/gpu/([^/]+)/index-history", row[2])
+        name = urllib.parse.unquote(m.group(1)).replace("+", " ") if m else "?"
+        try:
+            req = urllib.request.Request(f"https://web.archive.org/web/{row[1]}id_/{row[2]}", headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=40) as f:
+                j = json.loads(f.read().decode("utf-8", "replace"))
+        except Exception as e:
+            print("  copy failed", row[1], row[2][:90], str(e)[:60], flush=True)
+            continue
+        rows = j.get("data") if isinstance(j, dict) else None
+        n_new = 0
+        for x in rows or []:
+            d = str(x.get("timestamp") or x.get("date"))[:10]
+            v = x.get("index_value")
+            if v is None:
+                continue
+            old = merged[name].get(d)
+            if old is None:
+                n_new += 1
+            elif abs(old[0] - v) > 0.005:
+                merged[name][d] = [old[0], old[1], v, row[1]]     # keep the first copy, note the change
+                continue
+            merged[name].setdefault(d, [v, row[1]])
+        print(f"  {row[1]} {name}: {len(rows or [])} days, {n_new} new", flush=True)
+        time.sleep(0.5)
+    wj(os.path.join(CACHE, "ornn_arch.json.gz"), merged)
+    for n, dd in merged.items():
+        ks = sorted(dd)
+        ch = sum(1 for v in dd.values() if len(v) > 2)
+        print(f"ARCH {n}: {len(ks)} days {ks[0]} .. {ks[-1]}, changed later {ch}", flush=True)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
-    {"fetch": fetch, "ornn": ornn}.get(cmd, lambda: print(__doc__))()
+    {"fetch": fetch, "ornn": ornn, "arch": arch}.get(cmd, lambda: print(__doc__))()
