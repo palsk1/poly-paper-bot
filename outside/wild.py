@@ -227,9 +227,14 @@ def exp_code(t):
 
 def week_trades(cur, t0, hours=3):
     """All option trades of cur in [t0, t0+hours] for the weekly expiring t0+7d (history.deribit.com)."""
-    key = f"wk_{cur}_{t0}"
-    c = load(key)
+    # one file per coin (wkall_<cur>), not one per week: the shared store holds at most 1,000 files a release
+    if cur not in WK:
+        WK[cur] = load(f"wkall_{cur}") or {}
+    if str(t0) in WK[cur]:
+        return WK[cur][str(t0)]
+    c = load(f"wk_{cur}_{t0}")       # old per-week files, if a store pull brought any
     if c is not None:
+        WK[cur][str(t0)] = c
         return c
     code = f"{cur}-{exp_code(t0 + 7 * 86400)}-"
     out = []; st0 = t0 * 1000; end = (t0 + hours * 3600) * 1000
@@ -243,8 +248,11 @@ def week_trades(cur, t0, hours=3):
         if not r.get("has_more") or not tr:
             break
         st0 = tr[-1]["timestamp"] + 1
-    save(key, out)
+    WK[cur][str(t0)] = out
     return out
+
+
+WK = {}
 
 
 def volreal(cur="BTC", start="2022"):
@@ -289,6 +297,7 @@ def volreal(cur="BTC", start="2022"):
         if q and 0.88 * S0 < q[0] < 0.95 * S0:
             fee = min(0.0003 * S0, 0.125 * q[1]) + min(0.00015 * S0, 0.125 * q[1])
             rows["put8"].append((t0, q[1], max(q[0] - S1, 0), fee, S0))
+    save(f"wkall_{cur}", WK.get(cur, {}))
     if ivgap:
         print(f"{cur}: weekly at-the-money bid-side swing minus DVOL: median {st.median(ivgap):+.1f} points over {len(ivgap)} weeks")
     sys.path.insert(0, os.getcwd()); import exam
