@@ -116,17 +116,23 @@ DEBUG = {"smk_quote": 0, "mb": 0}
 
 
 def smk_events(dom, maxn=1200):
+    """Smarkets pages with a cursor (pagination.next_page), not offsets. Category nodes are dropped later
+    (they have no markets)."""
     out = []
     for state in ("upcoming", "live"):
-        off = 0
-        while off < maxn:
-            q = {"type_domain": dom, "state": state, "limit": 200, "offset": off, "sort": "id"}
-            r = tryget(SMK + "/events/?" + urllib.parse.urlencode(q))
-            evs = r.get("events", []) if isinstance(r, dict) else []
-            out += [e for e in evs if e.get("bettable")]
-            if len(evs) < 200:
+        url = SMK + "/events/?" + urllib.parse.urlencode({"type_domain": dom, "state": state, "limit": 200,
+                                                          "sort": "start_datetime,id"})
+        seen = 0
+        while url and seen < maxn:
+            r = tryget(url)
+            if not isinstance(r, dict) or r.get("_err"):
+                print("smk err", dom, state, (r or {}).get("_err") if isinstance(r, dict) else r)
                 break
-            off += 200
+            evs = r.get("events", [])
+            seen += len(evs)
+            out += [e for e in evs if e.get("type") != "top_level_event"]
+            nxt = (r.get("pagination") or {}).get("next_page")
+            url = (SMK + "/events/" + nxt if nxt.startswith("?") else nxt) if nxt and evs else None
     return out
 
 
@@ -215,18 +221,15 @@ def mb_runner_book(rn):
 
 
 # ---------------------------------------------------------------- Polymarket / Kalshi
-def poly_events(maxn=4000):
-    out, off = [], 0
-    while len(out) < maxn:
-        r = tryget(GAMMA + "/events?" + urllib.parse.urlencode(
-            {"closed": "false", "active": "true", "limit": 100, "offset": off, "order": "volume24hr", "ascending": "false"}))
-        if not isinstance(r, list) or not r:
-            break
-        out += r
-        off += 100
-        if len(r) < 100:
-            break
-    return out
+def poly_events(maxn=8000):
+    """Open Polymarket events via the repo's own keyset helper (plain pages of 100 answer 406 since Nov)."""
+    sys.path.insert(0, ".")
+    import bot
+    try:
+        return bot.gamma_events({"closed": "false", "active": "true"}, max_pages=maxn // 100)
+    except Exception as e:  # noqa
+        print("poly events failed", str(e)[:200])
+        return []
 
 
 def poly_book(tok):
@@ -360,6 +363,7 @@ def exchange_contracts():
             evs[str(e["id"])] = e
     print("smarkets bettable events", len(evs), {d: len(l) for d, l in zip(SMK_DOMAINS, res)})
     mk = smk_markets(list(evs))
+    mk = [m for m in mk if not any(b in (m.get("name") or "").lower() + " " for b in MKT_SKIP)]
     ct = smk_contracts([str(m["id"]) for m in mk])
     by_m = {}
     for c in ct:
@@ -539,14 +543,18 @@ def exchange_books(cp):
         if p["venue"] == "smk":
             books[("smk", p["cid"])] = smk_sides(q.get(p["cid"]) or {})
     mb_ev = sorted({p["ev"] for p in cp if p["venue"] == "mb"})
-    for c in chunks(mb_ev, 50):
-        r = tryget(MB + "/events?" + urllib.parse.urlencode({"ids": ",".join(c), "include-prices": "true",
-                                                             "price-depth": 3, "odds-type": "DECIMAL", "per-page": 50}),
-                   timeout=40)
-        for e in (r.get("events", []) if isinstance(r, dict) else []):
-            for m in e.get("markets", []) or []:
-                for rn in m.get("runners", []) or []:
-                    books[("mb", str(rn.get("id")))] = mb_runner_book(rn)
+
+    def one(eid):
+        return tryget(MB + f"/events/{eid}?" + urllib.parse.urlencode({"include-prices": "true", "price-depth": 3,
+                                                                       "odds-type": "DECIMAL"}), timeout=30)
+    with ThreadPoolExecutor(8) as ex:
+        evs = list(ex.map(one, mb_ev))
+    for e in evs:
+        if not isinstance(e, dict):
+            continue
+        for m in e.get("markets", []) or []:
+            for rn in m.get("runners", []) or []:
+                books[("mb", str(rn.get("id")))] = mb_runner_book(rn)
     return books
 
 
