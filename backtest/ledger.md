@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**280 ideas examined, in about 118,760 versions.** 222 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 280 ideas that are all worthless, the luckiest one still looks good. With 280 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,5 +282,11 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | Kalshi vs Polymarket: Buy on Kalshi where Polymarket's price is 10c+ away (follow Polymarket) | 8 | 208 | +$4.65 | Ahead, but could be luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Buy on Polymarket where Kalshi's price is 10c+ away (follow Kalshi) | 8 | 148 | -$14.82 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Kalshi moved 5c+ in 1h, Polymarket stood still: buy on Polymarket | 8 | 53 | +$3.69 | Ahead, but could be luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Kalshi moved 5c+ in 3h, Polymarket stood still: buy on Polymarket | 8 | 57 | -$21.24 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Polymarket moved 5c+ in 1h, Kalshi stood still: buy on Kalshi | 8 | 135 | -$13.92 | Behind, but could be bad luck | dropped | xsite.py run |
+| 2026-11-27 | Kalshi vs Polymarket: Polymarket moved 5c+ in 3h, Kalshi stood still: buy on Kalshi | 8 | 142 | -$6.28 | Behind, but could be bad luck | dropped | xsite.py run |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

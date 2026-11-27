@@ -374,7 +374,7 @@ def bet(x, r, buy):
     if not buy:
         return None
     buy.update(ev=x["k"]["ev"], t=r["t"], pnl=buy["pay"] - buy["cost"], cat=x["k"]["cat"], same=x["same_result"],
-               q=x["p"]["q"][:90], kt=x["k"]["t"])
+               title=x["p"]["q"][:90], kt=x["k"]["t"])
     return buy
 
 
@@ -485,7 +485,7 @@ def run(score=True):
         lines.append(f"{name}: {len(bets)} bets, {per100(bets):+.2f} per $100, won {sum(b['pay'] > 0 for b in bets)}, "
                      f"results differ {sum(not b['same'] for b in bets)}; {dict(cats.most_common(5))}")
         if score and bets:
-            exam.score(bets, "Kalshi vs Polymarket: " + name, tries=len(RULES), src="xsite.py run", log=False)
+            exam.score(bets, "Kalshi vs Polymarket: " + name, tries=len(RULES), src="xsite.py run", status="dropped", log=True)
     print("\n".join(lines))
     return res, lines
 

@@ -3503,6 +3503,84 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "drawsharp.py report"
+  },
+  {
+   "id": "kalshi_vs_polymarket_buy_on_polymarket_where_kalshi_s_price_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Buy on Polymarket where Kalshi's price is 10c+ away (follow Kalshi)",
+   "tries": 8,
+   "bets": 220,
+   "groups": 148,
+   "per100": -14.82,
+   "floor100": -49.9,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "xsite.py run"
+  },
+  {
+   "id": "kalshi_vs_polymarket_buy_on_kalshi_where_polymarket_s_price_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Buy on Kalshi where Polymarket's price is 10c+ away (follow Polymarket)",
+   "tries": 8,
+   "bets": 303,
+   "groups": 208,
+   "per100": 4.65,
+   "floor100": -56.57,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "xsite.py run"
+  },
+  {
+   "id": "kalshi_vs_polymarket_kalshi_moved_5c_in_1h_polymarket_stood_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Kalshi moved 5c+ in 1h, Polymarket stood still: buy on Polymarket",
+   "tries": 8,
+   "bets": 62,
+   "groups": 53,
+   "per100": 3.69,
+   "floor100": -100.0,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "xsite.py run"
+  },
+  {
+   "id": "kalshi_vs_polymarket_kalshi_moved_5c_in_3h_polymarket_stood_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Kalshi moved 5c+ in 3h, Polymarket stood still: buy on Polymarket",
+   "tries": 8,
+   "bets": 66,
+   "groups": 57,
+   "per100": -21.24,
+   "floor100": -90.66,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "xsite.py run"
+  },
+  {
+   "id": "kalshi_vs_polymarket_polymarket_moved_5c_in_1h_kalshi_stood_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Polymarket moved 5c+ in 1h, Kalshi stood still: buy on Kalshi",
+   "tries": 8,
+   "bets": 179,
+   "groups": 135,
+   "per100": -13.92,
+   "floor100": -51.89,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "xsite.py run"
+  },
+  {
+   "id": "kalshi_vs_polymarket_polymarket_moved_5c_in_3h_kalshi_stood_",
+   "date": "2026-11-27",
+   "what": "Kalshi vs Polymarket: Polymarket moved 5c+ in 3h, Kalshi stood still: buy on Kalshi",
+   "tries": 8,
+   "bets": 177,
+   "groups": 142,
+   "per100": -6.28,
+   "floor100": -53.46,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "xsite.py run"
   }
  ]
 }
