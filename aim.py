@@ -794,6 +794,57 @@ def orfind():
         print("TRY", x, st3, len(t), t[:700].replace("\n", " "), flush=True)
 
 
+ORF = "https://openrouter.ai/api/frontend/v1/public/stats/rankings"
+
+
+def orshare():
+    """probe aim_orshare: OpenRouter's own rankings-page data (the chart Kalshi's share bets settle on) -> bt_cache/aim/or_*.json.gz.
+    Keeps every snapshot, so a day seen twice shows whether OpenRouter restates its numbers."""
+    import urllib.request
+    os.makedirs(CACHE, exist_ok=True)
+    def get(u, n=20000000):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 paper-bot", "Accept": "*/*"}), timeout=40) as r:
+                return r.status, r.read(n).decode("utf-8", "replace")
+        except Exception as e:
+            return str(e)[:80], ""
+    # what parameters do the page's scripts send with these two calls?
+    st, html = get("https://openrouter.ai/rankings", 3000000)
+    i = html.find("Market share by model author, as text")
+    print("text summary:", re.sub(r"<[^>]+>", " ", html[i:i + 4000]) if i >= 0 else "-", flush=True)
+    for u in sorted(set(re.findall(r'(/_next/static/[^"\']+?\.js)', html)))[:120]:
+        _, t = get("https://openrouter.ai" + u, 4000000)
+        for k in ("author-market-share", "rankings/models", "model-rankings-chart"):
+            for mm in re.finditer(re.escape(k), t):
+                print("JS", k, u[-40:], t[max(0, mm.start() - 500):mm.start() + 700].replace("\n", " "), flush=True)
+    snap = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M")
+    for name, q in (("authorshare", "author-market-share"), ("authorshare_req", "author-market-share?metric=requests"),
+                    ("models", "models"), ("models_week", "models?view=week"), ("models_month", "models?view=month"),
+                    ("modelchart", "model-rankings-chart")):
+        st, t = get(f"{ORF}/{q}")
+        print("GET", q, st, len(t), t[:300], flush=True)
+        if not t:
+            continue
+        try:
+            js = bot.json.loads(t)
+        except Exception:
+            continue
+        path = os.path.join(CACHE, f"or_{name}.json.gz")
+        have = rj(path, None) or {"snaps": {}}
+        have["snaps"][snap] = js
+        wj(path, have)
+        d = js.get("data")
+        if isinstance(d, dict) and "data" in d:
+            d = d["data"]
+        if isinstance(d, list) and d and isinstance(d[0], dict) and "x" in d[0]:
+            print("  weeks", len(d), d[0]["x"], d[-1]["x"], flush=True)
+            for w in d[-4:]:
+                tot = sum(w["ys"].values())
+                print("  ", w["x"], {k: round(100 * v / tot, 1) for k, v in sorted(w["ys"].items(), key=lambda kv: -kv[1])}, flush=True)
+        elif isinstance(d, list):
+            print("  rows", len(d), collections.Counter(str(r.get("date"))[:10] for r in d if isinstance(r, dict)).most_common(40), flush=True)
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1147,6 +1198,8 @@ if __name__ == "__main__":
         usrc()
     elif cmd == "orfind":
         orfind()
+    elif cmd == "orshare":
+        orshare()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
