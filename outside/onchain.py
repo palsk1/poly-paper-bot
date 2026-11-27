@@ -229,6 +229,43 @@ def scan(arg=None):
     say("=== DONE ===")
 
 
+# ================================================================ peek (structures)
+def peek(arg=None):
+    meta, outs, qs, mids, vol = hl_outcomes()
+    seen = {}
+    for o in outs:
+        k = o.get("name")
+        seen.setdefault(k, 0)
+        if seen[k] < 2:
+            say("HL outcome", short(o, 700), "| vol", vol.get(f"#{10*o['outcome']}"), vol.get(f"#{10*o['outcome']+1}"))
+        seen[k] += 1
+    for q in qs[:6]:
+        say("HL question", short(q, 900))
+    say("feeScale", meta.get("feeScale"))
+    x = get("https://api-mainnet.xo.market/api/public/liquidity-rewards/earning-pools")
+    d = x.get("data") if isinstance(x, dict) else None
+    say("XO pools:", len(d) if d else short(x, 300), "keys", short({k: v for k, v in x.items() if k != "data"}, 300) if isinstance(x, dict) else "")
+    for p in (d or [])[:3]:
+        say("XO pool", short(p, 1500))
+    for p in (d or []):
+        say("XO pool short", short({k: p.get(k) for k in p if k != "market"}, 400), (p.get("market") or {}).get("title"))
+    x = get("https://api-mainnet.xo.market/api/markets", {"marketScope": "onlyClob", "take": 10})
+    say("XO markets", short(x, 1200))
+    x = get("https://openapi.opinion.trade/openapi/market", {"status": "activated", "sortBy": 5, "limit": 5})
+    lst = (x.get("result") or {}).get("list") if isinstance(x, dict) else None
+    say("Opinion total", (x.get("result") or {}).get("total") if isinstance(x, dict) else x)
+    if lst:
+        say("Opinion market", short(lst[0], 1500))
+        tok = lst[0].get("yesTokenId")
+        say("Opinion book", short(get("https://openapi.opinion.trade/openapi/token/orderbook", {"token_id": tok}), 800))
+        for m in lst:
+            say("  ", m.get("marketTitle"), m.get("volume24h"), m.get("volume"))
+    for u, body in [("https://graphql.predict.fun/graphql", {"query": "{ categories(first: 3) { edges { node { slug title } } } }"}),
+                    ("https://api.predict.fun/graphql", {"query": "{ __typename }"})]:
+        say("Predict", u, short(get(u, post=body), 400))
+    say("=== DONE ===")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
