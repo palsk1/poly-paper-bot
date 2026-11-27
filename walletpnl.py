@@ -376,6 +376,175 @@ def report(addr):
         print(" ", k, json.dumps(v)[:500])
 
 
+
+# ================================================================ scan: every copied wallet + new leaderboard wallets (27 Nov)
+
+def _lb(addr):
+    out = {}
+    for period in ("ALL", "MONTH", "WEEK"):
+        try:
+            d = (bot.http_json(f"{bot.DATA}/v2/leaderboard", {"user": addr, "timePeriod": period, "category": "OVERALL"}) or {}).get("data") or {}
+            out[period] = (round(fnum(d.get("pnl"))), round(fnum(d.get("volume"))))
+            out["name"] = d.get("user_name") or out.get("name")
+        except Exception as e:
+            out[period] = None
+    return out
+
+
+def _quiet_pages(path, params, pages):
+    out, cur = [], None
+    for i in range(pages):
+        p = dict(params, limit=500)
+        if cur:
+            p["cursor"] = cur
+        try:
+            res = bot.http_json(f"{bot.DATA}/{path}", p)
+        except Exception as e:
+            print(f"    {path} page {i} failed: {e}")
+            break
+        rows = bot.envelope_rows(res, "data", "positions", "activity")
+        cur = ((res.get("pagination") or {}).get("next_cursor") or res.get("next_cursor")) if isinstance(res, dict) else None
+        out += rows
+        if not rows or not cur:
+            break
+    return out
+
+
+def _dleft(p):
+    try:
+        end = dt.datetime.fromisoformat(str(p.get("end_date"))[:10]).replace(tzinfo=dt.timezone.utc).timestamp() + 86400
+        d = (end - fnum(p.get("first_entry_at"))) / 86400
+    except Exception:
+        return "?"
+    return "<1d" if d < 1 else "1-7d" if d < 7 else "7-30d" if d < 30 else "30d+"
+
+
+def profile(addr, label=""):
+    import walletcheck
+    addr = addr.lower()
+    lb = _lb(addr)
+    pos = {}
+    for st in ("OPEN", "CLOSED", "REDEEMABLE"):
+        for r in _quiet_pages("v2/positions", {"user": addr, "status": st}, 20):
+            pos.setdefault(r.get("token_id"), r)
+    pos = list(pos.values())
+    act = _quiet_pages("v2/activity", {"user": addr}, 40)
+    tt = collections.defaultdict(float)
+    for a in act:
+        k = a.get("type") if a.get("type") != "TRADE" else "SELL" if str(a.get("side")).upper() == "SELL" else "BUY"
+        tt[k] += usd(a)
+    ts_ = [fnum(a.get("timestamp")) for a in act if fnum(a.get("timestamp"))]
+    span = max(1.0, (max(ts_) - min(ts_)) / 86400) if ts_ else 1.0
+    buys = [a for a in act if a.get("type") == "TRADE" and str(a.get("side")).upper() == "BUY"]
+    sz = sorted(usd(a) for a in buys)
+    sides = collections.defaultdict(set)
+    bc = collections.defaultdict(float)
+    for a in buys:
+        sides[a.get("condition_id")].add(a.get("outcome_index"))
+        bc[a.get("condition_id")] += usd(a)
+    both_usd = sum(v for k, v in bc.items() if len(sides[k]) > 1)
+    rows = []
+    for p in pos:
+        n = fnum(p.get("total_size"))
+        avg = fnum(p.get("avg_price"))
+        cost = n * avg
+        if cost <= 0:
+            continue
+        o = str(p.get("outcome"))
+        rows.append(dict(cost=cost, pnl=fnum(p.get("total_pnl")), ev=p.get("event_slug") or p.get("slug"),
+                         cat=walletcheck.cat(p.get("slug") or "", p.get("title") or ""),
+                         side=o if o in ("Yes", "No", "Up", "Down", "Over", "Under") else "name",
+                         band=walletcheck.band(avg), dl=_dleft(p), t=fnum(p.get("last_event_at")),
+                         title=(p.get("title") or "")[:60]))
+    tot_cost = sum(r["cost"] for r in rows)
+    tot_pnl = sum(r["pnl"] for r in rows)
+    bk = collections.defaultdict(lambda: [0, set(), 0.0, 0.0])
+    for r in rows:
+        for key in ((r["cat"], r["side"], r["band"], r["dl"]), (r["cat"], r["side"], r["band"], "*"), (r["cat"], r["side"], "*", "*"), (r["cat"], "*", "*", "*")):
+            b = bk[key]
+            b[0] += 1
+            b[1].add(r["ev"])
+            b[2] += r["cost"]
+            b[3] += r["pnl"]
+    good = [(k, v) for k, v in bk.items() if v[0] >= 15 and len(v[1]) >= 8 and v[2] > 0]
+    best = sorted(good, key=lambda kv: -kv[1][3])[:4]
+    cats = sorted(((k[0], v) for k, v in bk.items() if k[1:] == ("*", "*", "*")), key=lambda kv: -kv[1][2])
+    top = sorted(rows, key=lambda r: -r["pnl"])
+    recent = [r for r in rows if r["t"] >= dt.datetime(2026, 9, 1, tzinfo=dt.timezone.utc).timestamp()]
+    out = dict(addr=addr, label=label, name=lb.get("name"), lb_all=lb.get("ALL"), lb_month=lb.get("MONTH"), lb_week=lb.get("WEEK"),
+               positions=len(rows), pos_cost=round(tot_cost), pos_pnl=round(tot_pnl),
+               top5_pnl=round(sum(r["pnl"] for r in top[:5])), events=len({r["ev"] for r in rows}),
+               since_sep=(len(recent), round(sum(r["cost"] for r in recent)), round(sum(r["pnl"] for r in recent))),
+               act_rows=len(act), act_days=round(span, 1), buys_per_day=round(len(buys) / span, 1),
+               buy_median=round(sz[len(sz) // 2]) if sz else 0, buy_p90=round(sz[int(.9 * len(sz))]) if sz else 0,
+               both_share=round(both_usd / max(1.0, sum(bc.values())), 2),
+               money={k: round(v) for k, v in tt.items()},
+               cats=[(c, v[0], round(v[2]), round(v[3])) for c, v in cats[:5]],
+               best=[("/".join(k), v[0], len(v[1]), round(v[2]), round(v[3])) for k, v in best],
+               top3=[(round(r["pnl"]), r["title"]) for r in top[:3]], worst3=[(round(r["pnl"]), r["title"]) for r in top[-3:]])
+    # price band and time-left across all categories
+    gb = collections.defaultdict(lambda: [0, 0.0, 0.0])
+    for r in rows:
+        for key in (("side", r["side"]), ("band", r["band"]), ("left", r["dl"])):
+            g = gb[key]
+            g[0] += 1
+            g[1] += r["cost"]
+            g[2] += r["pnl"]
+    out["by"] = {f"{a}:{b}": (v[0], round(v[1]), round(v[2])) for (a, b), v in gb.items()}
+    print("WSCAN " + json.dumps(out))
+    print(f"  {label or addr} {lb.get('name')}: all-time {lb.get('ALL')}, month {lb.get('MONTH')}; positions {len(rows)} cost ${tot_cost:,.0f} pnl ${tot_pnl:,.0f}; "
+          f"{out['buys_per_day']} buys/day median ${out['buy_median']}; both sides {out['both_share']}; best {out['best'][:1]}")
+    return out
+
+
+def scan(new=25):
+    new = int(new)
+    cfg = json.load(open("config.json"))
+    tracks = cfg.get("tracks", cfg)
+    ours = {}
+    for k, v in tracks.items():
+        if isinstance(v, dict) and k.startswith("w_") and v.get("address"):
+            ours[v["address"].lower()] = k
+    lead = cfg.get("leader", {}).get("address")
+    if lead:
+        ours.setdefault(lead.lower(), "leader (sabsabinxz)")
+    print(f"== our wallets: {len(ours)}")
+    for a, k in ours.items():
+        try:
+            profile(a, k)
+        except Exception as e:
+            print("  profile failed", k, e)
+    print("\n== looking for new wallets (leaderboards: month and all-time, every category)")
+    seen = {}
+    for cat in ("OVERALL", "POLITICS", "SPORTS", "CRYPTO", "CULTURE", "ECONOMICS", "TECH", "FINANCE", "WEATHER", "MENTIONS"):
+        for period in ("MONTH", "ALL"):
+            try:
+                rows = bot.leaderboard(cat, period, "PNL", 50, 2)
+            except Exception as e:
+                print(f"  leaderboard {cat}/{period} failed: {e}")
+                continue
+            for r in rows:
+                a = str(r.get("user_id") or "").lower()
+                if a and a not in ours:
+                    d = seen.setdefault(a, {"name": r.get("user_name"), "hits": set()})
+                    d["hits"].add(f"{cat}/{period}")
+    print(f"  {len(seen)} wallets on the boards that we don't copy")
+    cand = []
+    for a, d in seen.items():
+        lb = _lb(a)
+        al, mo = lb.get("ALL"), lb.get("MONTH")
+        if not al or not mo:
+            continue
+        # keep: making money all-time AND this month, not a giant (all-time volume under $200M), ratio of profit to volume sane
+        if al[0] > 0 and mo[0] > 0 and al[1] < 2e8:
+            cand.append((al[0] / max(1, al[1]) * 100, a, d, lb))
+    print(f"  {len(cand)} of them are ahead both all-time and this month")
+    for _, a, d, lb in sorted(cand, key=lambda x: -x[3]["ALL"][0])[:new]:
+        try:
+            profile(a, f"NEW {d['name']} ({', '.join(sorted(d['hits']))[:80]})")
+        except Exception as e:
+            print("  profile failed", a, e)
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
-    {"fetch": fetch, "report": report}[cmd](sys.argv[2])
+    {"fetch": fetch, "report": report, "profile": profile, "scan": scan}[cmd](*sys.argv[2:])
