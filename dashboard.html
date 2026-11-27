@@ -386,7 +386,8 @@ $("hiddennote").innerHTML = (D.n_stopped || D.n_hidden) ? `Not shown here: ${D.n
   const per1 = x => x == null ? "–" : `<span class="num ${cls(x)}">${x < 0 ? "−" : "+"}${Math.abs(x).toFixed(1)}c per $1 bet</span> <span class="sub">(${x < 0 ? "−" : "+"}${Math.abs(x).toFixed(1)}%)</span>`;
   const card = b => {
     const mode = b.stopped ? `<span class="mode off">STOPPED</span> <span class="sub">${esc(b.stopped.why)}, ${esc(ago(b.stopped.at))}</span>`
-      : b.live ? `<span class="mode on">REAL MONEY</span>` : `<span class="mode">PRACTICE RUN</span> <span class="sub">no real orders yet</span>`;
+      : b.paused ? `<span class="mode off">PAUSED</span> <span class="sub">${esc(b.paused.why)}, ${esc(ago(b.paused.at))}</span>`
+      : b.live ? `<span class="mode on">REAL MONEY</span> <span class="sub">betting now</span>` : `<span class="mode">PRACTICE RUN</span> <span class="sub">no real orders yet</span>`;
     const late = b.last_seen && (Date.now() - new Date(b.last_seen)) > 3 * 36e5
       ? `<p class="warn">No news from the server for ${esc(ago(b.last_seen))}. The bot may be down, or the hourly upload failed.</p>` : "";
     const rows = [
