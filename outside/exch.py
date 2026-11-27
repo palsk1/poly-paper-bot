@@ -132,6 +132,9 @@ def smk_events(dom, maxn=1200):
             seen += len(evs)
             out += [e for e in evs if e.get("type") != "top_level_event"]
             nxt = (r.get("pagination") or {}).get("next_page")
+            if DEBUG.get("nxt", 0) < 1:
+                DEBUG["nxt"] = 1
+                print("SMK NEXT PAGE", nxt, "| first event", json.dumps(evs[:1])[:400])
             url = (SMK + "/events/" + nxt if nxt.startswith("?") else nxt) if nxt and evs else None
     return out
 
@@ -144,7 +147,10 @@ def chunks(xs, n):
 def smk_markets(event_ids):
     mk = []
     for c in chunks(event_ids, 50):
-        r = tryget(SMK + "/events/" + ",".join(map(str, c)) + "/markets/?limit=500")
+        r = tryget(SMK + "/events/" + ",".join(map(str, c)) + "/markets/")
+        if DEBUG.get("smkm", 0) < 2:
+            DEBUG["smkm"] = DEBUG.get("smkm", 0) + 1
+            print("SMK MARKETS SAMPLE", c[:3], json.dumps(r)[:500])
         mk += r.get("markets", []) if isinstance(r, dict) else []
     return mk
 
@@ -549,6 +555,8 @@ def exchange_books(cp):
                                                                        "odds-type": "DECIMAL"}), timeout=30)
     with ThreadPoolExecutor(8) as ex:
         evs = list(ex.map(one, mb_ev))
+    if evs:
+        print("MB ONE EVENT", json.dumps(evs[0])[:700])
     for e in evs:
         if not isinstance(e, dict):
             continue
@@ -580,6 +588,11 @@ def price_pairs(cp, sizes=(10, 50)):
         return {"k": kalshi_book(p["kt"])}
     with ThreadPoolExecutor(12) as ex:
         books = list(ex.map(other, cp))
+    if cp and DEBUG.get("pp", 0) < 1:
+        DEBUG["pp"] = 1
+        p0 = cp[0]
+        print("PAIR0", p0["venue"], p0["cid"], p0["cname"], "| other", p0.get("tok") or p0.get("kt"),
+              "| xbook", ebooks.get((p0["venue"], p0["cid"])), "| obook", json.dumps(books[0])[:300])
     out = []
     for p, b in zip(cp, books):
         ofs, bds = ebooks.get((p["venue"], p["cid"]), ([], []))
