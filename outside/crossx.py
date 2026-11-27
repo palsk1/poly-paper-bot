@@ -12,7 +12,7 @@ import gzip, io, json, os, sys, time, zipfile, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 
 DIR = "bt_cache/out_crossx"
-UA = {"User-Agent": "Mozilla/5.0 (research script)"}
+UA = {"User-Agent": "Mozilla/5.0 (research script)", "Accept": "application/json"}
 # taker fee per trade, entry tier, small EU account (checked 27 Nov 2026 on the venues' fee pages):
 # kraken pro tier 1 0.80 (stable/fx pairs 0.20); bitstamp 0.40 (stable 0.08); coinbase advanced EU 0.50 (stable pairs
 # not public, guess 0.10); bitvavo 0.25 (stable 0.10); okx EU 0.10; binance 0.10 / bitfinex 0.20 = reference only
@@ -656,6 +656,46 @@ def depeg():
     print("=== DONE ===")
 
 
+def wallets(coins=("INIT", "GMT", "MERL", "BLUR", "NEX", "NES", "ZRO", "BTT", "FET", "CFG", "ZK", "LUNA")):
+    """Are deposits / withdrawals open for the coins with lasting gaps, and does anyone really trade at the gap?"""
+    try:
+        A = get("https://api.kraken.com/0/public/Assets")["result"]
+        for k, v in A.items():
+            if v.get("altname") in coins:
+                print("kraken asset", v["altname"], "status", v.get("status"))
+    except Exception as e:
+        print("kraken assets", e)
+    try:
+        for a in get("https://api.bitvavo.com/v2/assets"):
+            if a["symbol"] in coins:
+                print("bitvavo asset", a["symbol"], "deposit", a.get("depositStatus"), "withdraw", a.get("withdrawalStatus"),
+                      "fee", a.get("withdrawalFee"), "networks", a.get("networks"))
+    except Exception as e:
+        print("bitvavo assets", e)
+    now = time.time()
+    for c in coins[:6]:
+        try:
+            r = get(f"https://api.kraken.com/0/public/Trades?pair={c}EUR&count=1000")["result"]
+            tr = [t for k, t in r.items() if k != "last"][0]
+            rec = [t for t in tr if now - float(t[2]) < 7200]
+            sells = [t for t in rec if t[3] == "s"]; buys = [t for t in rec if t[3] == "b"]
+            eur_s = sum(float(t[0]) * float(t[1]) for t in sells); eur_b = sum(float(t[0]) * float(t[1]) for t in buys)
+            print(f"kraken {c}/EUR last 2 h: {len(sells)} taker sells EUR{eur_s:.0f} (avg px "
+                  f"{(sum(float(t[0])*float(t[1]) for t in sells)/max(1e-9,sum(float(t[1]) for t in sells))):.5f}), "
+                  f"{len(buys)} taker buys EUR{eur_b:.0f}")
+        except Exception as e:
+            print("kraken trades", c, str(e)[:80])
+        try:
+            tr = get(f"https://api.bitvavo.com/v2/{c}-EUR/trades?limit=1000")
+            rec = [t for t in tr if now - t["timestamp"] / 1000 < 7200]
+            eur = sum(float(t["price"]) * float(t["amount"]) for t in rec)
+            px = sum(float(t["price"]) * float(t["amount"]) for t in rec) / max(1e-9, sum(float(t["amount"]) for t in rec))
+            print(f"bitvavo {c}/EUR last 2 h: {len(rec)} trades EUR{eur:.0f} avg px {px:.5f}")
+        except Exception as e:
+            print("bitvavo trades", c, str(e)[:80])
+    print("=== DONE wallets ===")
+
+
 def hosts():
     for u in ["https://api.kraken.com/0/public/Time", "https://www.bitstamp.net/api/v2/ticker/btceur/",
               "https://api.exchange.coinbase.com/products/BTC-EUR/ticker", "https://api.bitvavo.com/v2/time",
@@ -693,6 +733,10 @@ if __name__ == "__main__":
         sample(int(a[1]) if len(a) > 1 else 60, int(a[2]) if len(a) > 2 else 15)
     elif a[0] == "report":
         report()
+    elif a[0] == "wallets":
+        wallets()
+    elif a[0] == "fresh":
+        wallets(); sample(int(a[1]) if len(a) > 1 else 45, 15); wallets()
     elif a[0] == "depeg":
         depeg()
     elif a[0] == "all":
