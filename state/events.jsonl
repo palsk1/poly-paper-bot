@@ -40113,3 +40113,11 @@
 {"minutes_left": 2.87, "price": 0.985, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T02:57:07Z", "type": "kmaker_order"}
 {"minutes_left": 2.87, "price": 0.99, "queue": 3548.59, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T02:57:08Z", "type": "kmaker_order"}
 {"minutes_left": 2.87, "price": 0.984, "queue": 0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T02:57:10Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.15, "price": 0.985, "side": "no", "through": true, "ticker": "KXBNB15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T03:02:49Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.1, "price": 0.99, "side": "no", "through": true, "ticker": "KXBTC15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T03:02:51Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.16, "price": 0.984, "side": "no", "through": true, "ticker": "KXETH15M-26NOV262200-00", "track": "kc_maker", "ts": "2026-11-27T03:02:51Z", "type": "kmaker_fill"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXRAINABQM-26NOV-1", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXEFLCHAMPIONSHIPTOTAL-26NOV28PNENOR-1", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXYOSEMITEEXCHANGE-26AUG-26DEC01", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXF1TOP10-QATA26-ALO", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXONPOS-26DEC03-T127.5", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
