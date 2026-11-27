@@ -362,6 +362,7 @@ def defi():
 
 # ---------------------------------------------------------------- pendle
 SHOWN = 0
+SHOWNERR = 0
 
 
 def pendle():
@@ -394,6 +395,9 @@ def pendle():
             try:
                 h = get(f"https://api-v2.pendle.finance/core/v1/{chain}/markets/{addr}/historical-data?time_frame=day")
             except Exception as e2:
+                global SHOWNERR
+                if SHOWNERR < 2:
+                    SHOWNERR += 1; print("hist fail:", str(e)[:150], "|", str(e2)[:150])
                 continue
         global SHOWN
         if not SHOWN:
