@@ -174,7 +174,165 @@ def scan(arg=None):
     save_log("scan.txt")
 
 
+# ================================================================ fetch
+START = int(dt.datetime(2026, 10, 1, tzinfo=UTC).timestamp())
+
+
+def slim(m, series):
+    return {"t": m.get("ticker"), "ev": m.get("event_ticker"), "s": series, "close": kc.tsec(m.get("close_time")),
+            "open": kc.tsec(m.get("open_time")), "strike": bot.fnum(m.get("floor_strike"), None),
+            "cap": bot.fnum(m.get("cap_strike"), None), "st": m.get("strike_type"),
+            "settle": bot.fnum(m.get("expiration_value"), None), "res": str(m.get("result") or "").lower(), "vol": vol_of(m)}
+
+
+def list_all(series, t0, t1):
+    out, seen = [], set()
+    cut = kc.hist_cutoff()
+    for path in ("/markets", "/historical/markets"):
+        if path == "/historical/markets" and (not cut or t0 >= cut):
+            continue
+        cur = None
+        for _ in range(300):
+            q = {"series_ticker": series, "min_close_ts": t0, "max_close_ts": t1, "limit": 1000}
+            if path == "/markets":
+                q["status"] = "settled"
+            if cur:
+                q["cursor"] = cur
+            try:
+                res = kget(path, q)
+            except Exception as e:
+                say(f"  {series} {path} failed: {str(e)[:120]}")
+                break
+            rows = res.get("markets") or []
+            for m in rows:
+                sm = slim(m, series)
+                if sm["t"] and sm["t"] not in seen and sm["res"] in ("yes", "no") and sm["close"]:
+                    seen.add(sm["t"])
+                    out.append(sm)
+            cur = res.get("cursor")
+            if not cur or not rows:
+                break
+    return sorted(out, key=lambda m: m["close"])
+
+
+def tape(m):
+    """Every trade of the last TAPE_SEC seconds: [ts, yes_price, contracts, taker 'y'/'n'], oldest first. None = failed."""
+    paths = ["/markets/trades", "/historical/trades"]
+    if kc.hist_cutoff() and m["close"] < kc.hist_cutoff():
+        paths = paths[::-1]
+    for path in paths:
+        out, cur, ok = [], None, False
+        for _ in range(40):
+            q = {"ticker": m["t"], "min_ts": m["close"] - TAPE_SEC, "max_ts": m["close"] + 5, "limit": 1000}
+            if cur:
+                q["cursor"] = cur
+            try:
+                res = kget(path, q)
+            except Exception:
+                break
+            rows = res.get("trades") or []
+            for x in rows:
+                d = bot.parse_iso(x.get("created_time"))
+                yp = bot.fnum(x.get("yes_price_dollars"), None)
+                if yp is None and x.get("yes_price") is not None:
+                    yp = bot.fnum(x.get("yes_price"), 0) / 100
+                if d and yp is not None:
+                    out.append([round(d.timestamp(), 2), yp, bot.fnum(x.get("count_fp") or x.get("count"), 0),
+                                str(x.get("taker_side") or "")[:1]])
+            cur = res.get("cursor")
+            if not cur or not rows:
+                ok = True
+                break
+        if ok and out:
+            return sorted(out)
+        if ok and path == paths[-1]:
+            return []
+    return None
+
+
+def live_idx(ev):
+    """Kalshi's own settle number: {second: value} for the hour before the close (None = failed)."""
+    try:
+        d = (kget(f"/live_data/events/{ev}").get("live_data") or {}).get("details") or {}
+    except Exception as e:
+        return None
+    ts = d.get("timeseries") or []
+    return {str(int(bot.fnum(q.get("t"), 0)) // 1000): round(float(q["v"]), 8) for q in ts if q.get("v") is not None}
+
+
+def fetch(arg=None):
+    t_go = time.time()
+    names = [x for x in (arg.split(",") if arg else TARGETS)]
+    budget = float(os.environ.get("K15X_MIN", "150")) * 60
+    kc.LOOKBACK_MIN = LOOK
+    t1 = int(time.time()) - 300
+    for series in names:
+        t_s = time.time()
+        ms = list_all(series, START, t1)
+        old = {m["t"]: m for m in (rj(p(series, "markets"), []) or [])}
+        for m in ms:
+            old[m["t"]] = m
+        ms = sorted(old.values(), key=lambda m: m["close"])
+        wj(p(series, "markets"), ms)
+        say(f"{series}: {len(ms)} settled windows, {iso(ms[0]['close']) if ms else '-'} to {iso(ms[-1]['close']) if ms else '-'}, "
+            f"{sum(m['vol'] for m in ms):,.0f} contracts ({time.time() - t_s:.0f}s)")
+        if not ms:
+            continue
+        ms = [m for m in ms if m["vol"] > 0]
+        # candles: the whole window by the minute
+        cs = rj(p(series, "candles"), {}) or {}
+        kc._SAVE[0] = lambda: wj(p(series, "candles"), cs)
+        kc._BATCH_OK[0] = None
+        kc.fetch_candles(ms, cs)
+        kc._SAVE[0] = None
+        wj(p(series, "candles"), cs)
+        say(f"  candles: {sum(1 for m in ms if cs.get(m['t']))} of {len(ms)} windows ({time.time() - t_s:.0f}s)")
+        # trade lists of the last 6 minutes, newest windows first (older ones may come from /historical)
+        tr = rj(p(series, "trades"), {}) or {}
+        want = [m for m in sorted(ms, key=lambda m: -m["close"]) if m["t"] not in tr]
+        bad = 0
+        with ThreadPoolExecutor(kc.WORKERS) as ex:
+            for c0 in range(0, len(want), 400):
+                part = want[c0:c0 + 400]
+                for m, out in zip(part, ex.map(tape, part)):
+                    if out is None:
+                        bad += 1
+                    else:
+                        tr[m["t"]] = out
+                wj(p(series, "trades"), tr)
+                print(f"   trades {c0 + len(part)}/{len(want)} ({time.time() - t_s:.0f}s)", flush=True)
+                if time.time() - t_go > budget:
+                    break
+        wj(p(series, "trades"), tr)
+        say(f"  trade lists: {len(want)} asked, {bad} failed, {len(tr)} kept, {sum(len(v) for v in tr.values()):,} trades ({time.time() - t_s:.0f}s)")
+        # Kalshi's own settle number, by the second for the last 16 minutes, by the minute for the hour
+        ix = rj(p(series, "idx"), {}) or {}
+        evs = sorted({m["ev"] for m in ms if m["ev"] not in ix}, reverse=True)
+        bad = 0
+        if time.time() - t_go < budget:
+            with ThreadPoolExecutor(4) as ex:
+                for c0 in range(0, len(evs), 400):
+                    part = evs[c0:c0 + 400]
+                    for e, kv in zip(part, ex.map(live_idx, part)):
+                        if not kv:
+                            bad += 1
+                            ix[e] = {}
+                            continue
+                        last = max(int(k) for k in kv)
+                        ix[e] = {k: v for k, v in kv.items() if int(k) % 60 == 0 or int(k) > last - 16 * 60}
+                    wj(p(series, "idx"), ix)
+                    if time.time() - t_go > budget:
+                        break
+        wj(p(series, "idx"), ix)
+        say(f"  settle number: {len(evs)} asked, {bad} empty/failed, {sum(1 for v in ix.values() if v)} kept ({time.time() - t_s:.0f}s)")
+        save_log(f"fetch_{'_'.join(names)[:50]}.txt")
+        if time.time() - t_go > budget:
+            say("time budget used up; run again to continue")
+            break
+    save_log(f"fetch_{'_'.join(names)[:50]}.txt")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     arg = sys.argv[2] if len(sys.argv) > 2 else None
-    {"scan": scan}[cmd](arg)
+    {"scan": scan, "fetch": fetch}[cmd](arg)
