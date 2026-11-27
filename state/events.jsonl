@@ -41845,3 +41845,8 @@
 {"minutes_left": 3.15, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV271445-45", "track": "kc_maker_safe_usd_nobtc", "ts": "2026-11-27T19:41:55Z", "type": "kmaker_order"}
 {"minutes_left": 3.15, "price": 0.988, "queue": 0, "shares": 27, "side": "yes", "ticker": "KXSOL15M-26NOV271445-45", "track": "kc_maker_pct", "ts": "2026-11-27T19:41:55Z", "type": "kmaker_order"}
 {"minutes_left": 3.15, "price": 0.988, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV271445-45", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T19:41:55Z", "type": "kmaker_order"}
+{"fee": 0.0011, "outcome": "No", "price": 0.978, "shares": 5, "title": "Will the highest temperature in Atlanta be between 54-55\u00b0F on November 27?", "token": "63583971509386172001651773554152755532876396366648224655222252556543238856177", "track": "endgame_sell98", "ts": "2026-11-27T19:44:13Z", "type": "paper_buy"}
+{"minutes_left": 0.77, "price": 0.987, "queue": 25.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV271445-45", "track": "kc_maker", "ts": "2026-11-27T19:44:14Z", "type": "kmaker_order"}
+{"minutes_left": 0.77, "price": 0.987, "queue": 25.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV271445-45", "track": "kc_maker_safe", "ts": "2026-11-27T19:44:15Z", "type": "kmaker_order"}
+{"minutes_left": 0.77, "price": 0.987, "queue": 25.0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV271445-45", "track": "kc_maker_mid", "ts": "2026-11-27T19:44:15Z", "type": "kmaker_order"}
+{"minutes_left": 0.77, "price": 0.987, "queue": 25.0, "shares": 27, "side": "yes", "ticker": "KXDOGE15M-26NOV271445-45", "track": "kc_maker_pct", "ts": "2026-11-27T19:44:15Z", "type": "kmaker_order"}
