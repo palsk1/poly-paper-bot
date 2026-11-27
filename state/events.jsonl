@@ -40165,3 +40165,5 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNBASPREAD-26NOV27PHIIND-IND20", "track": "kalshi_patient", "ts": "2026-11-27T04:02:48Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV29ATLMIN-MINKCOUSINS8-15", "track": "kalshi_patient", "ts": "2026-11-27T04:02:48Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXTRUMPMEETM-26DEC01-LULA", "track": "kalshi_patient", "ts": "2026-11-27T04:02:48Z", "type": "kpatient_order"}
+{"fee": 0.001, "outcome": "No", "price": 0.979, "shares": 5, "title": "Will Ethereum reach $1,750 on November 26?", "token": "77975733022275792179846895223393398925089899051294182341889058274108410435211", "track": "endgame_sell98", "ts": "2026-11-27T04:07:27Z", "type": "paper_buy"}
+{"player": "Kaichi Uchida", "price": 0.67, "set1": "7-6", "set2_games": 0, "shares": 37, "ticker": "KXATPCHALLENGERMATCH-26NOV26UCHMIL-UCH", "track": "tennis_set", "ts": "2026-11-27T04:08:03Z", "type": "ktennis_buy"}
