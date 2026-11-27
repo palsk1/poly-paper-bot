@@ -213,7 +213,7 @@ A strategy gets real money only if **every** answer is yes:
   $7.39 in rewards. `maker_flat` sold 42 times right after a fill and never once above cost (the price was about 4c
   lower by the next check): a bot that looks every 5 minutes only gets filled by people with fresher news. Open bets
   were closed once at the real bid; the numbers stay on the scoreboard, frozen. Review:
-  `/mnt/project-files/research/maker-review-2026-11-12.md`.
+  `/mnt/project-files/research/strategy-reviews/polymarket-maker-review-2026-11-12.md`.
 - **On Kalshi, waiting for sellers mostly means being picked off (12 Nov, `khouse.py`).** We thought the patient
   side of a trade earns the gap. On 3.2 million real trades it doesn't: a buy order 1c above the best one lost about
   $5 per $100 at 50-90c and $5 to $13 during live games, where the seller has just seen the last play. Only the
