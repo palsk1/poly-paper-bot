@@ -241,8 +241,6 @@ def arch():
             print("cdx", u, r, flush=True)
     print(f"archived index-history copies: {len(snaps)}", flush=True)
     merged = collections.defaultdict(dict)
-    for n, dd in (rj(os.path.join(CACHE, "ornn_arch.json.gz"), {}) or {}).items():
-        merged[n].update(dd)
     seen, want = set(), []
     for row in sorted(snaps, key=lambda r: r[1]):
         m = re.search(r"/gpu/([^/]+)/index-history", row[2])
@@ -257,7 +255,7 @@ def arch():
     print(f"copies to read: {len(want)}", flush=True)
     for row, name in want:
         j = None
-        for i in range(4):
+        for i in range(5):
             try:
                 req = urllib.request.Request(f"https://web.archive.org/web/{row[1]}id_/{row[2]}", headers={"User-Agent": "Mozilla/5.0"})
                 with urllib.request.urlopen(req, timeout=60) as f:
@@ -265,11 +263,29 @@ def arch():
                 break
             except Exception as e:
                 err = str(e)[:60]
-                time.sleep(10 + 20 * i)
+                time.sleep(30 + 60 * i)
         if j is None:
             print("  copy failed", row[1], row[2][:90], err, flush=True)
             continue
         rows = j.get("data") if isinstance(j, dict) else None
+        # older copies label a day at 20:00 UTC of the day before, today's at 04:00 UTC: pick the shift that matches
+        # today's free window best where they overlap (no overlap: no shift)
+        ref = {}
+        for f in sorted(os.listdir(CACHE)):
+            if re.match(r"ornn_\d{8}\.json\.gz$", f):
+                for r in ((rj(os.path.join(CACHE, f), {}).get("hist") or {}).get(name) or {}).get("rows") or []:
+                    ref[r["timestamp"][:10]] = float(r["index_value"])
+        def shifted(k):
+            return {str(dt.date.fromisoformat(str(x.get("timestamp"))[:10]) + dt.timedelta(k)): x.get("index_value")
+                    for x in rows or [] if x.get("index_value") is not None}
+        best, shift = None, 0
+        for k in (0, 1, -1):
+            dd = shifted(k)
+            ov = [abs(dd[d] - ref[d]) for d in dd if d in ref]
+            if len(ov) >= 5 and (best is None or sum(ov) / len(ov) < best):
+                best, shift = sum(ov) / len(ov), k
+        print(f"    {name} copy {row[1]}: shift {shift} day(s), gap to today's window {best}", flush=True)
+        rows = [{"timestamp": d, "index_value": v} for d, v in sorted(shifted(shift).items())]
         n_new = 0
         for x in rows or []:
             d = str(x.get("timestamp") or x.get("date"))[:10]
@@ -285,6 +301,10 @@ def arch():
             merged[name].setdefault(d, [v, row[1]])
         print(f"  {row[1]} {name}: {len(rows or [])} days, {n_new} new", flush=True)
         time.sleep(4)
+    old = rj(os.path.join(CACHE, "ornn_arch.json.gz"), {}) or {}
+    for n, dd in old.items():           # keep days a failed read could not refresh
+        for d, v in dd.items():
+            merged[n].setdefault(d, v)
     wj(os.path.join(CACHE, "ornn_arch.json.gz"), merged)
     for n, dd in merged.items():
         ks = sorted(dd)
@@ -416,6 +436,8 @@ def prob(p, idx, t, M, sims=4000, seed=1):
     if len(kn) < 8:
         return None
     last_d = kn[-1][0]
+    if t - d2t(last_d) > 4 * DAY:          # a hole in the history: no stale forecasts
+        return None
     m7 = sum(math.log(x) for _, x in kn[-7:]) / 7
     end = p["day"]
     if p["kind"] == "avg":
@@ -503,6 +525,8 @@ def looks(ms, tp, idx):
         for L in LOOKS:
             t = endt - L * DAY
             if t > time.time() or (m["start"] and t < m["start"]):
+                continue
+            if m.get("closed_t") and t > m["closed_t"] - 6 * 3600:     # a touch market closes the moment it is hit
                 continue
             px = last_before(b, t)
             if px is None or px - 0 < 0.005 and False:
