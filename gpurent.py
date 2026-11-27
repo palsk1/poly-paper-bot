@@ -320,13 +320,28 @@ NAME = {"A100": "A100 SXM4", "B200": "B200", "B300": "B300", "H100": "H100 SXM",
         "RTX 6000": "RTX PRO 6000 WS"}
 
 
+# web.archive.org copy 20260922134747 of data.ornn.com/api/public-index/gpu/<gpu>/index-history (the 3 months before
+# 22 Sep), read by hand because the archive blocks Actions after a few reads. One value a day from 2026-06-22; the
+# dates line up with today's free window as they are (checked: mean gap 1-8c on 25 shared days, revisions).
+WEBCOPY_FROM = "2026-06-22"
+WEBV = {
+"B200": "4.29 4.37 4.44 4.48 4.5 4.42 4.38 4.41 4.46 5.15 5.13 5.14 5.14 5.14 5.22 5.3 5.74 6.15 6.69 6.79 6.75 6.94 7.28 7.26 7.25 7.24 7.16 7.14 7.12 7.05 6.9 6.77 6.78 6.7 6.58 6.5 6.45 6.44 6.37 6.41 6.43 6.33 6.09 5.96 5.84 5.75 5.76 5.73 5.7 5.68 5.71 5.72 5.82 6 5.91 5.93 6.17 6.6 6.63 6.87 6.95 6.74 6.64 6.55 6.45 6.22 6.03 6.01 6.06 6.05 6.07 6.4 6.46 6.28 6.4 6.42 6.64 6.75 6.72 6.82 6.89 6.84 6.8 7.06 7.19 7.21 7.03 7.1 7.26 7.43 7.71 7.71",
+"H200": "3.44 3.38 3.35 2.99 3.49 3.57 3.57 3.61 3.65 3.89 4.02 4.06 4.02 4.03 4.1 4.01 4.1 4.21 4.27 4.47 4.39 4.39 4.36 4.62 4.77 4.79 4.78 4.9 4.99 4.96 4.84 4.66 4.55 4.55 4.86 5.31 5 4.98 5.4 5.62 5.25 4.82 4.36 4.54 4.81 4.92 4.83 4.56 4.67 4.67 4.49 4.51 4.7 4.86 4.94 4.75 5 5.11 5.29 5.44 5.09 4.85 4.42 4.33 4.26 4.24 4.29 4.49 4.44 4.5 4.42 4.51 4.47 4.59 4.63 4.55 4.47 4.56 4.91 4.91 4.93 5.12 4.69 4.38 4.6 4.68 5.27 5.16 5.6 5.13 5.22 5.07",
+"A100 SXM4": "1.02 1.02 1.02 1 1.03 0.99 1.01 1.02 1.02 0.99 1.01 1.02 1.02 1.01 1.01 1.04 1.03 1.02 1.01 1.01 1.04 1.03 1.03 1.04 1.04 1.02 0.99 1.01 1.02 1.04 1.03 1.06 1.06 1.06 1.05 1.05 1.04 1.06 1.03 1.03 1.06 1.03 1.04 1.04 1.04 1.04 1.03 1.05 1.06 1.06 1.08 1.05 1.04 1.04 1.03 1.02 1.05 1.06 1.09 1.08 1.07 1.08 1.07 1.07 1.08 1.06 1.06 1.21 1.03 1.03 1.02 1 0.98 1.01 1.06 1.09 1.06 1.05 1.02 0.98 0.98 0.99 1.03 1.03 1.02 1.02 1.05 1.01 1 0.99 0.97 0.99",
+}
+
+
 def index_days():
     """{gpu: {day: value}} from today's free window plus any archived copies (the free window wins)."""
     out = collections.defaultdict(dict)
-    a = rj(os.path.join(CACHE, "ornn_arch.json.gz"), {}) or {}
-    for n, dd in a.items():
-        for d, v in dd.items():
-            out[n][d] = v[0]
+    for n, txt in WEBV.items():
+        for i, x in enumerate(txt.split()):
+            out[n][str(dt.date.fromisoformat(WEBCOPY_FROM) + dt.timedelta(i))] = float(x)
+    for f in ("ornn_arch.json.gz",):
+        a = rj(os.path.join(CACHE, f), {}) or {}
+        for n, dd in a.items():
+            for d, v in dd.items():
+                out[n][d] = v[0]
     files = sorted(f for f in os.listdir(CACHE) if re.match(r"ornn_\d{8}\.json\.gz$", f))
     for f in files:
         o = rj(os.path.join(CACHE, f), {})
@@ -669,7 +684,7 @@ def report():
     print(f"\ntries counted: {tries}")
     for name, b in cards[:1]:
         exam.score(b, "GPU rental bets: Ornn index model 10c+ off the price", tries=tries, src="gpurent.py",
-                   note="Polymarket Ornn GPU rental brackets/touch markets, settled Aug-Oct 2026; counted by settle month")
+                   note="Polymarket Ornn GPU rental day-value brackets and touch bets, settled May-Oct 2026; counted by settle month; re-check once the monthly-average bets settle (Jan-Feb 2027)", status="dropped")
     for name, b in cards[1:3]:
         exam.score(b, "GPU rental bets: " + name, tries=tries, src="gpurent.py", log=False)
     if best:
@@ -678,7 +693,7 @@ def report():
         print("\nbest backward-look cell:", nm)
         for x in sorted(b, key=lambda x: -(x["pay"] - x["cost"]))[:8]:
             print(f"   {x['question'][:80]} paid {x['px']:.2f} {'Yes' if x['yes'] else 'No'} -> {usd(x['pay'] - x['cost'])}")
-        exam.score(b, nm, tries=tries, src="gpurent.py", note="found by looking (backward look)")
+        exam.score(b, nm, tries=tries, src="gpurent.py", note="found by looking (backward look)", status="dropped")
     for name, b in cards[:1]:
         print(f"\nbiggest wins of '{name}':")
         for x in sorted(b, key=lambda x: -(x["pay"] - x["cost"]))[:10]:

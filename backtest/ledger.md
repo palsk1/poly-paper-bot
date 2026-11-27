@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**292 ideas examined, in about 119,663 versions.** 234 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**294 ideas examined, in about 119,835 versions.** 236 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 292 ideas that are all worthless, the luckiest one still looks good. With 292 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 294 ideas that are all worthless, the luckiest one still looks good. With 294 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,6 +282,8 @@ Why count: if you test 292 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | GPU rental bets: non-holder bracket 21 days left, No at Yes 3c+ | 86 | 4 | +$9.03 | Too early to tell | dropped | gpurent.py |
+| 2026-11-27 | GPU rental bets: Ornn index model 10c+ off the price | 86 | 4 | -$11.64 | Too early to tell | dropped | gpurent.py |
 | 2026-11-27 | kesport eSoccer: waiting bid on the Tie, 30 min before (all games) | 72 | 800 | +$12.73 | Ahead, but could be luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 10c+ above the real ask | 51 | 397 | -$3.28 | Behind, but could be bad luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 15c+ above the real ask (fresh half) | 51 | 19 | -$2.74 | Behind, but could be bad luck | dropped | kesport.py |

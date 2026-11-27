@@ -3737,6 +3737,32 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "kesport.py"
+  },
+  {
+   "id": "gpu_rental_bets_ornn_index_model_10c_off_the_price",
+   "date": "2026-11-27",
+   "what": "GPU rental bets: Ornn index model 10c+ off the price",
+   "tries": 86,
+   "bets": 11,
+   "groups": 4,
+   "per100": -11.64,
+   "floor100": -100.0,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "gpurent.py"
+  },
+  {
+   "id": "gpu_rental_bets_non_holder_bracket_21_days_left_no_at_yes_3c",
+   "date": "2026-11-27",
+   "what": "GPU rental bets: non-holder bracket 21 days left, No at Yes 3c+",
+   "tries": 86,
+   "bets": 9,
+   "groups": 4,
+   "per100": 9.03,
+   "floor100": -84.49,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "gpurent.py"
   }
  ]
 }
