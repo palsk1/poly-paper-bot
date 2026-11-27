@@ -879,6 +879,33 @@ def winners(arg=None):
     say("=== DONE ===")
 
 
+# ================================================================ daily: history of HL's daily crypto yes/no (backward look)
+def dprobe(arg=None):
+    now = int(time.time() * 1000)
+    for body in ({"type": "settledOutcome", "outcome": 49100}, {"type": "settledOutcome", "outcome": 48800},
+                 {"type": "candleSnapshot", "req": {"coin": "#491670", "interval": "1h", "startTime": now - 86400000, "endTime": now}}):
+        say(short(body), "->", short(hl(body), 600))
+    for u, p in (("https://api.ironflow.sh/v1/markets", {"market_class": "prediction", "q": "BTC", "include_inactive": "true", "limit": 5}),
+                 ("https://api.ironflow.sh/v1/predictions/summary", {"window": "1d"})):
+        say(u, "->", short(get(u, p), 900))
+    # find recurring outcome ids of earlier days: walk ids below today's and ask settledOutcome
+    meta = hl({"type": "outcomeMeta"})
+    rec = sorted(o["outcome"] for o in meta.get("outcomes", []) if o.get("name") == "Recurring")
+    say("today's recurring ids", rec)
+    lo = rec[0] if rec else 49166
+    found = []
+    for oid in range(lo - 1, lo - 1200, -1):
+        r = hl({"type": "settledOutcome", "outcome": oid})
+        if isinstance(r, dict) and "priceBinary" in json.dumps(r):
+            found.append((oid, r))
+        if len(found) >= 12:
+            break
+    say(f"settled recurring found walking down {len(found)}")
+    for oid, r in found[:12]:
+        say(f"  {oid}: {short(r, 400)}")
+    say("=== DONE ===")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
