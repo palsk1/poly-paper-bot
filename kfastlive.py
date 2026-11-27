@@ -307,7 +307,10 @@ def save_day(w):
 
 
 def git_save():
-    report()
+    try:
+        report()
+    except Exception as e:  # a report bug must never stop the paper data from being saved
+        print(f"report failed: {e!r}")
     if os.environ.get("KFL_NOSAVE"):
         print("KFL_NOSAVE set: not pushing")
         return
