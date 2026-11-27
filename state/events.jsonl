@@ -42020,3 +42020,32 @@
 {"outcome": "No", "pnl": -0.0544, "price": 0.32, "reason": "wallet exit (book)", "title": "Will the average Ornn B200 rental price in January 2027 be above $8.50?", "token": "101687573039809378480923826418057859465710053721031088043882612111453910688974", "track": "wb_underperformingforal", "ts": "2026-11-27T20:46:18Z", "type": "paper_close"}
 {"pnl": 0.12, "price": 0.96, "shares": 3.0, "side": "no", "ticker": "KXCOPPERW-26NOV2714-T5.63", "track": "kalshi_patient", "ts": "2026-11-27T20:53:57Z", "type": "kpatient_result"}
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXGOLDW-26NOV2714-T3841.99", "track": "kalshi_patient", "ts": "2026-11-27T20:53:57Z", "type": "kpatient_result"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 3338.13, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV271600-00", "track": "kc_maker", "ts": "2026-11-27T20:59:09Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 3338.13, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV271600-00", "track": "kc_maker_safe", "ts": "2026-11-27T20:59:10Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 3338.13, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV271600-00", "track": "kc_maker_mid", "ts": "2026-11-27T20:59:10Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 3338.13, "shares": 27, "side": "yes", "ticker": "KXETH15M-26NOV271600-00", "track": "kc_maker_pct", "ts": "2026-11-27T20:59:10Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 3338.13, "shares": 10, "side": "yes", "ticker": "KXETH15M-26NOV271600-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T20:59:10Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 1654.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV271600-00", "track": "kc_maker", "ts": "2026-11-27T20:59:11Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 1654.28, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV271600-00", "track": "kc_maker_mid", "ts": "2026-11-27T20:59:12Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.998, "queue": 1654.28, "shares": 27, "side": "no", "ticker": "KXSOL15M-26NOV271600-00", "track": "kc_maker_pct", "ts": "2026-11-27T20:59:12Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.994, "queue": 1521.7, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV271600-00", "track": "kc_maker", "ts": "2026-11-27T20:59:12Z", "type": "kmaker_order"}
+{"minutes_left": 0.86, "price": 0.994, "queue": 1521.7, "shares": 27, "side": "no", "ticker": "KXXRP15M-26NOV271600-00", "track": "kc_maker_pct", "ts": "2026-11-27T20:59:13Z", "type": "kmaker_order"}
+{"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTD-26NOV29TENJAC-TENTPOLLARD20-2", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXSPOTIFYWRAPPEDRELEASE-26-DEC04", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXDIESELMONAK-26NOV30-T6.0000", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLRECYDSPROT-26NOV29NYJMIA-MIACDOUGLAS7-120", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXYTVIEWSW-TAY26NOV29-16.0M", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXHIGHTPHX-26NOV27-B79.5", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXXRPMAXMON-XRP-26NOV30-170", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV29BALHOU-HOUTDELL1", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXFDANOMWHEN-28-26DEC01", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXDDCOLDBREW-26DEC02-T4.48", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.94, "shares": 10, "side": "yes", "ticker": "KXH100MS-26NOV-3.000", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXNCAAFOT-26NOV28LOUUK-1", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXPRESSBRIEFINGCOUNT-26NOV-A5", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXBKDWHOPPER-26DEC02-T8.09", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV29NOCIN-NOTETIENNE3-100", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXWT20MATCH-26NOV272230NEZWNZW-NEZW", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXHYPEMINMON-HYPE-26NOV30-5250", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXUSDMXNEVENT-01DEC261130-T200000", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
+{"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXALBUMRELEASEDATE-NEWFUTURE-26DEC01", "track": "kalshi_patient", "ts": "2026-11-27T21:00:29Z", "type": "kpatient_order"}
