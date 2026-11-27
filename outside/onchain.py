@@ -5,6 +5,11 @@
     python3 outside/onchain.py gaps [rounds]   # probe out_onchain_gaps_10: same-event prices, HL / XO / Limitless vs Polymarket / Kalshi
     python3 outside/onchain.py rewards         # probe out_onchain_rewards: reward pools in cash on XO / Limitless, real books
     python3 outside/onchain.py winners         # probe out_onchain_winners: top wallets on Hyperliquid outcomes
+    python3 outside/onchain.py hlscore         # re-score bt_cache/out_onchain/hlrec_*.jsonl.gz
+    python3 outside/onchain.py daily [n]       # results of settled HL crypto outcomes (HL settledOutcome works; HL serves no
+                                               # candles for settled coins and ironflow keyless = 24 h, so prices are missing)
+
+Findings: backtest/outside_onchain.md (27 Nov 2026).
 
 Nothing here signs, logs in or places orders. Data goes to bt_cache/out_onchain/.
 """
