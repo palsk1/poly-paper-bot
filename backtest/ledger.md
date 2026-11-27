@@ -290,5 +290,15 @@ Why count: if you test 282 ideas that are all worthless, the luckiest one still 
 | 2026-11-27 | Weather lows: buy Yes on the 60-75c favourite 8 h into the local day (found by looking), real prices | 64 | 83 | -$5.47 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
 | 2026-11-27 | Weather lows: buy Yes on the 75-95c favourite 8 h into the local day (found by looking), real prices | 64 | 131 | -$1.45 | Behind, but could be bad luck | dropped | blindspots.py real, backtest/blindspots.md |
 | 2026-11-27 | Yardstick: buy No on every other worded market, Yes 30-70c a day in, real prices | 15 | 81 | +$16.31 | Ahead, but could be luck | dropped (yardstick: old 'things don't happen' lean, 1 in 10 signals buyable) | blindspots.py real, backtest/blindspots.md |
+| 2026-11-27 | Outside: crypto carry, Kraken spot + Kraken perp on the 3 best-funding alts, monthly switch | 240 | 7 | +$15.59 | Too early to tell | interesting for later (found by looking) | outside/funding.py, backtest/outside_funding.md |
+| 2026-11-27 | Outside: funding spread between venues (HL / Binance / Kraken), rule picked on half 1 | 240 | 271 | Kraken-Binance -$129 total on unseen half | Losing | dropped | outside/funding.py |
+| 2026-11-27 | Outside: sell weekly BTC straddle at real Deribit bids | 6 | 270 | +$0.47 a week per $100 margin | Ahead, but could be luck | dropped | outside/wild.py, backtest/outside_wild.md |
+| 2026-11-27 | Outside: sell weekly BTC put 8 below the price at real Deribit bids | 6 | 287 | +$0.24 a week per $100 margin | Ahead, but could be luck | dropped | outside/wild.py |
+| 2026-11-27 | Outside: Stryktipset best 144-row system, odds vs Svenska folket | 60 | 241 | -$15.05 | Behind, but could be bad luck | dropped | outside/svpool.py, backtest/outside_svpool.md |
+| 2026-11-27 | Outside: Europatipset best 144-row system | 60 | 494 | -$3.04 | Behind, but could be bad luck | dropped | outside/svpool.py |
+| 2026-11-27 | Outside: ATG V75/GS75 best 200-row system | 60 | 429 | -$6.71 | Behind, but could be bad luck | dropped | outside/svpool.py |
+| 2026-11-27 | Outside: back away teams at Betfair close 60-70c (2% commission) | 27 | 451 | +$3.45 | Ahead, but could be luck | dropped (Betfair closed to Sweden) | outside/exch.py bfe, backtest/outside_exch.md |
+| 2026-11-27 | Outside: buy stablecoins under 99c, Binance hourly 2019-2026 (UST included) | 4 | 45 | -$1.68 | Behind, but could be bad luck | dropped | outside/crossx.py depeg, backtest/outside_crossx.md |
+| 2026-11-27 | Outside: Hyperliquid crypto yes/no, taker buys after a 5-s move their way (one afternoon, mid 60 s later, before fee) | 1 | 230 | +$1.06 | Too early to tell | interesting for later | outside/onchain.py, backtest/outside_onchain.md |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
