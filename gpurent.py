@@ -247,7 +247,7 @@ def arch():
     for row in sorted(snaps, key=lambda r: r[1]):
         m = re.search(r"/gpu/([^/]+)/index-history", row[2])
         name = urllib.parse.unquote(m.group(1)).replace("+", " ") if m else "?"
-        if "startDate" in row[2] or row[1][:8] >= "20260901":      # the free window covers Sep onwards
+        if "startDate" in row[2] or row[1][:8] >= "20261001":      # a copy holds the 3 months before it: Sep copies reach June
             continue
         key = (name, row[1][:6], row[1][6:8] >= "15")               # two copies a month per GPU are enough
         if key in seen:
