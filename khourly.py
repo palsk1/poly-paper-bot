@@ -1008,6 +1008,7 @@ def run15(arg=None):
 ALL15 = os.path.join(CACHE, "kc15")
 SIZES15 = (4, 25, 40)
 GROW_BAR = 2.3
+REAL7 = {"KXBTC15M", "KXETH15M", "KXSOL15M", "KXXRP15M", "KXDOGE15M", "KXHYPE15M", "KXBNB15M"}   # the coins the real bot trades (bot.KMAKER_SPOT also has paper-only coins since 27 Nov)
 
 
 def scan15():
@@ -1033,7 +1034,7 @@ def scan15():
         vol = sum(map(vol_of, ms))
         m0 = ms[0] if ms else {}
         say(f"  {tk:14s} | {s.get('frequency')} | fee {s.get('fee_type')} x{s.get('fee_multiplier')} | 2 days: {len(ms)} rounds, "
-            f"{vol:,.0f} contracts | Binance {sym}: {'yes' if ok else 'NO'} | covered by the real bot: {'yes' if tk in bot.KMAKER_SPOT else 'no'} "
+            f"{vol:,.0f} contracts | Binance {sym}: {'yes' if ok else 'NO'} | covered by the real bot: {'yes' if tk in REAL7 else 'no'} "
             f"| tick {json.dumps(m0.get('price_ranges'))[:120]} | {str(s.get('title'))[:50]}")
         if ms and ok:
             out[tk] = sym
@@ -1176,7 +1177,7 @@ def grow15(arg=None):
     for r in rows:
         byser[r["s"]].append(r)
     tot = {}
-    for series in sorted(byser, key=lambda x: (x in bot.KMAKER_SPOT, x)):
+    for series in sorted(byser, key=lambda x: (x in REAL7, x)):
         g = byser[series]
         got = [r for r in g if r["f"][4][0] > 0]
         cells = []
@@ -1187,9 +1188,9 @@ def grow15(arg=None):
         byday = collections.defaultdict(float)
         for r in g:
             byday[iso(r["close"])[:10]] += _pnl(r, 40)[0]
-        say(f"| {series} | {'yes' if series in bot.KMAKER_SPOT else 'NO'} | {len(g)} | {len(got)} | {sum(1 for r in got if not r['won'])} | "
+        say(f"| {series} | {'yes' if series in REAL7 else 'NO'} | {len(g)} | {len(got)} | {sum(1 for r in got if not r['won'])} | "
             + " | ".join(cells) + f" | {money(min(byday.values()))} |")
-    for label, keep in (("The 7 the bot has", lambda s: s in bot.KMAKER_SPOT), ("The new ones", lambda s: s not in bot.KMAKER_SPOT), ("All together", lambda s: True)):
+    for label, keep in (("The 7 the bot has", lambda s: s in REAL7), ("The new ones", lambda s: s not in REAL7), ("All together", lambda s: True)):
         g = [r for r in rows if keep(r["s"])]
         cells = []
         for S in SIZES15:
@@ -1205,7 +1206,7 @@ def grow15(arg=None):
     for r in rows:
         if r["f"][4][0] > 0:
             byround[r["close"]].append(r)
-    for label, keep in (("The 7 the bot has", lambda s: s in bot.KMAKER_SPOT), ("All together", lambda s: True)):
+    for label, keep in (("The 7 the bot has", lambda s: s in REAL7), ("All together", lambda s: True)):
         multi = 0
         losers_by_round = collections.Counter()
         worst = []
@@ -1230,13 +1231,13 @@ def grow15(arg=None):
         f"rounds with 2+ coins losing would happen about {exp2:.1f} times in these {nr} rounds.")
 
     # new coins one by one, exam on the whole set of new ones
-    newr = [r for r in rows if r["s"] not in bot.KMAKER_SPOT and r["f"][25][0] > 0]
+    newr = [r for r in rows if r["s"] not in REAL7 and r["f"][25][0] > 0]
     if newr:
         exam.score([{"cost": _pnl(r, 25)[1], "pay": r["f"][25][0] if r["won"] else 0.0, "t": r["close"], "ev": r["close"]} for r in newr],
                    "kc_maker_safe_usd on the 15-minute coins the real bot lacks (real trade lists, $25 bids)", tries=4,
                    src="khourly.py grow15, backtest/kgrow15.md", log=arg == "log", status="lead: untested live",
                    note="The real Kalshi bot's rule on the coins it does not bid on yet, fills from real trade lists.")
-    oldr = [r for r in rows if r["s"] in bot.KMAKER_SPOT and r["f"][25][0] > 0]
+    oldr = [r for r in rows if r["s"] in REAL7 and r["f"][25][0] > 0]
     if oldr:
         exam.score([{"cost": _pnl(r, 25)[1], "pay": r["f"][25][0] if r["won"] else 0.0, "t": r["close"], "ev": r["close"]} for r in oldr],
                    "kc_maker_safe_usd replay on its own 7 coins (yardstick, real trade lists, $25 bids)", tries=4, log=False, quiet=False)
@@ -1246,7 +1247,7 @@ def grow15(arg=None):
     for _, d in ev:
         cur += d
         top = max(top, cur)
-    ev7 = sorted([(r["t"], 1) for r in rows if r["s"] in bot.KMAKER_SPOT] + [(r["close"], -1) for r in rows if r["s"] in bot.KMAKER_SPOT])
+    ev7 = sorted([(r["t"], 1) for r in rows if r["s"] in REAL7] + [(r["close"], -1) for r in rows if r["s"] in REAL7])
     cur = top7 = 0
     for _, d in ev7:
         cur += d
@@ -1258,7 +1259,7 @@ def grow15(arg=None):
         real = bigbets.real_bids()
         if real:
             r0 = min(bot.parse_iso(o["placed"]).timestamp() for o in real)
-            mine = [r for r in rows if r["s"] in bot.KMAKER_SPOT and r["t"] >= r0]
+            mine = [r for r in rows if r["s"] in REAL7 and r["t"] >= r0]
             say(f"Check against the real bot since {iso(r0)}: real bids {len(real)}, lost {sum(1 for o in real if o['exit'] < 0.5)}, "
                 f"real contracts bought {sum(o['real_filled'] or 0 for o in real):,.0f}; this replay: {len(mine)} bids, "
                 f"{sum(1 for r in mine if r['f'][4][0] > 0 and not r['won'])} lost, contracts at $4 {sum(r['f'][4][0] for r in mine):,.0f}, "

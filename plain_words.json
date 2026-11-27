@@ -206,6 +206,20 @@
       "loses": "The coin swings back across the start price in the last minutes. One loss eats about 30 wins.",
       "group": "kcmaker"
     },
+    "kc_maker_safe_usd_new": {
+      "say": "The real Kalshi bot's exact rule, tried on two coins it doesn't trade yet: NEAR and Zcash. A paper test before anyone adds them to the real bot.",
+      "example": "NEAR started the 15 minutes at $2.10. With 3 minutes left it is at $2.16, far clear. We offer 99.2c for Yes. NEAR stays above: the $0.992 pays $1.00.",
+      "wins": "The coin stays on the winning side to the end, which it almost always does when it is that far clear.",
+      "loses": "The coin swings back across the start price before the close. One loss eats about 100 wins. Big crypto moves often hit several coins in the same 15 minutes.",
+      "group": "kcmaker"
+    },
+    "kc_maker_safe_usd_nobtc": {
+      "say": "The real Kalshi bot's exact rule, but without Bitcoin. Over 64 days Bitcoin made nothing and lost the most bids, while the other 6 coins made money. This checks if that holds.",
+      "example": "Ether started the 15 minutes at $3,000. With 3 minutes left it is $25 clear, far enough. We offer 99.3c for Yes. Ether stays above: the $0.993 pays $1.00. Bitcoin windows are skipped.",
+      "wins": "The coin stays on the winning side to the end, and the 6 coins keep doing better than Bitcoin.",
+      "loses": "A coin swings back across the start price before the close (one loss eats about 100 wins), or Bitcoin's bad stretch was just bad luck and the real bot does as well with it.",
+      "group": "kcmaker"
+    },
     "kc_maker_pct": {
       "say": "Same bets as kc_maker, but the bid is not a fixed $10. Every bid is a tenth of what is in the pot right now. Wins make the next bids a little bigger, losses make them smaller.",
       "example": "The pot holds $250, so the bid is $25. After a good week the pot holds $300, so the bid is $30. After a lost $30 bid the pot holds $270 and the next bid is $27.",

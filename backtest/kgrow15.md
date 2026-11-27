@@ -75,5 +75,5 @@ Worst case per $100 (one more disaster added, bar raised for all tries): +$0.06.
 
 - Adding NEAR and Zcash is a small plus (a few dollars a day at $25-40 bids), not a big one. It also adds one more coin to lose in a bad round.
 - The more useful find is that Bitcoin has been flat. Without it, the other 6 coins made +$1,460 at $40 bids in 64 days in this replay.
-- Both changes are server settings, Jan's call. A paper twin first would be the careful way.
+- Both changes are server settings, Jan's call. **27 Nov, Jan: "Paper test first then merge"**: paper tracks `kc_maker_safe_usd_new` (NEAR + Zcash) and `kc_maker_safe_usd_nobtc` (6 coins, no Bitcoin) run the real bot's exact rule (z 2.0, 2.3 on Kalshi's scale) at $10 bids. Compare with the real bot for 1-2 weeks.
 - Don't redo: every 15-minute coin Kalshi lists has now been checked (27 Nov). New coins only if Kalshi lists more.
