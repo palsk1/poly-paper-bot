@@ -350,9 +350,9 @@ def pm_events():
     import bot
     evs, seen = [], set()
     for tag in PM_TAGS:
-        for off in (0, 500):
+        for off in range(0, 1000, 100):
             try:
-                r = bot.http_json(f"{bot.GAMMA}/events", {"tag_slug": tag, "closed": "false", "limit": 500, "offset": off})
+                r = bot.http_json(f"{bot.GAMMA}/events", {"tag_slug": tag, "closed": "false", "limit": 100, "offset": off})
             except Exception as e:
                 say(f"  gamma {tag}: {e}")
                 break
@@ -362,7 +362,7 @@ def pm_events():
                 if e.get("id") not in seen:
                     seen.add(e.get("id"))
                     evs.append(e)
-            if len(r) < 500:
+            if len(r) < 100:
                 break
     for q in ["Super Bowl Champion 2027", "NBA Champion 2027", "Premier League Winner", "Champions League Winner", "La Liga Winner"]:
         try:
