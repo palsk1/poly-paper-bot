@@ -206,6 +206,13 @@
       "loses": "The coin swings back across the start price in the last minutes. One loss eats about 30 wins.",
       "group": "kcmaker"
     },
+    "kc_maker_fxmetal": {
+      "say": "The real Kalshi bot's exact bet, but on Kalshi's new 15-minute currency and metal rounds (euro, pound, yen, Canadian and Australian dollar, gold, silver, copper, platinum, palladium) instead of crypto. A paper test before any real money.",
+      "example": "Gold started the 15 minutes at $2,650.00. With 3 minutes left it is at $2,652.40, far clear for gold. We offer 98c for Yes. Gold stays above: the $0.98 pays $1.00.",
+      "wins": "The price stays on the winning side to the end, which it almost always does when it is that far clear.",
+      "loses": "The price swings back to or across the start price before the close. One loss eats about 50 wins. An exact tie pays Yes, so a No bet loses if the price comes back to the very same number.",
+      "group": "kcmaker"
+    },
     "kc_maker_safe_usd_new": {
       "say": "The real Kalshi bot's exact rule, tried on two coins it doesn't trade yet: NEAR and Zcash. A paper test before anyone adds them to the real bot.",
       "example": "NEAR started the 15 minutes at $2.10. With 3 minutes left it is at $2.16, far clear. We offer 99.2c for Yes. NEAR stays above: the $0.992 pays $1.00.",
