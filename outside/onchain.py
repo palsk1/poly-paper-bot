@@ -906,6 +906,130 @@ def dprobe(arg=None):
     say("=== DONE ===")
 
 
+def daily(maxn=None):
+    """Settled HL crypto outcomes (list from ironflow, results from HL settledOutcome, prices from HL 15-min candles).
+    Rules: buy the side priced 57-92c (the winning wallets' band) or other bands, N hours before the end, held to the end."""
+    maxn = int(maxn or 700)
+    path = os.path.join(CACHE, "daily.json.gz")
+    try:
+        with gzip.open(path, "rt") as fh:
+            db = json.load(fh)
+    except Exception:
+        db = {}
+    lst = {}
+    for q in ("BTC", "ETH", "SOL", "HYPE"):
+        for off in range(0, 6000, 500):
+            r = get("https://api.ironflow.sh/v1/markets", {"market_class": "prediction", "q": q, "include_inactive": "true", "limit": 500, "offset": off})
+            d = r.get("data") if isinstance(r, dict) else None
+            if not d:
+                if off == 0:
+                    say(f"  ironflow {q}: {short(r, 200)}")
+                break
+            for m in d:
+                md = m.get("metadata") or {}
+                if md.get("side_index") != 0:
+                    continue
+                desc = md.get("description") or ""
+                k = kv(desc)
+                u = k.get("perp") or k.get("underlying")
+                if u not in UNDER:
+                    continue
+                lst[str(md.get("outcome_id"))] = {"name": md.get("outcome_name"), "desc": desc, "venue": md.get("venue"), "coin": m.get("hl_coin")}
+            if len(d) < 500:
+                break
+    say(f"ironflow outcomes on BTC/ETH/SOL/HYPE (Yes side): {len(lst)}; by name {dict((n, sum(1 for v in lst.values() if v['name'] == n)) for n in set(v['name'] for v in lst.values()))}")
+    now = time.time()
+    todo = []
+    for oid, v in lst.items():
+        k = kv(v["desc"])
+        T = ts(k.get("time") or k.get("expiry") or "", "%Y%m%d-%H%M")
+        if not T or T > now - 3600:
+            continue
+        v["T"] = T
+        todo.append((oid, v))
+    todo.sort(key=lambda x: -x[1]["T"])
+    # mix: all recurring dailies first, then others
+    todo = [x for x in todo if x[1]["name"] in ("Recurring",)] + [x for x in todo if x[1]["name"] not in ("Recurring",)]
+    calls = 0
+    for oid, v in todo:
+        if oid in db:
+            continue
+        if calls >= maxn:
+            break
+        s = hl({"type": "settledOutcome", "outcome": int(oid)})
+        sf = f((s or {}).get("settleFraction"), None) if isinstance(s, dict) else None
+        T = v["T"]
+        c = hl({"type": "candleSnapshot", "req": {"coin": v["coin"] or f"#{10 * int(oid)}", "interval": "15m", "startTime": int((T - 30 * 3600) * 1000), "endTime": int(T * 1000)}})
+        calls += 1
+        if not isinstance(c, list):
+            c = []
+        db[oid] = {**v, "sf": sf, "c": [[x["t"] // 1000, f(x["c"]), f(x["v"]), x.get("n")] for x in c]}
+        if calls % 50 == 0:
+            say(f"  {calls} read")
+            with gzip.open(path, "wt") as fh:
+                json.dump(db, fh)
+        time.sleep(1.0)
+    with gzip.open(path, "wt") as fh:
+        json.dump(db, fh)
+    say(f"stored {len(db)} settled outcomes")
+    dscore(db)
+
+
+def dscore(db=None):
+    if db is None:
+        with gzip.open(os.path.join(CACHE, "daily.json.gz"), "rt") as fh:
+            db = json.load(fh)
+    sys.path.insert(0, ".")
+    import exam
+    rows = [v for v in db.values() if v.get("sf") in (0.0, 1.0) and v.get("c")]
+    say(f"\n== scoring {len(rows)} settled yes/no crypto outcomes with candles ==")
+    by = {}
+    for v in rows:
+        by.setdefault(v["name"], 0)
+        by[v["name"]] += 1
+    say(f"  by type {by}")
+    EXTRA = 0.01   # pay 1c over the last trade (spread + slippage)
+    tries = 0
+    results = []
+    for kind in ("Recurring", "template:binaryPrice", "template:priceTouch", "all"):
+        for hrs in (1, 3, 6, 12, 20):
+            for lo, hi in ((0.57, 0.92), (0.80, 0.97), (0.05, 0.43), (0.43, 0.57)):
+                tries += 1
+                bets = []
+                for v in rows:
+                    if kind != "all" and v["name"] != kind:
+                        continue
+                    t_at = v["T"] - hrs * 3600
+                    cs = [x for x in v["c"] if x[0] + 900 <= t_at and x[0] + 900 > t_at - 3 * 3600 and (x[3] or 0) > 0]
+                    if not cs:
+                        continue
+                    p = cs[-1][1]
+                    # buy the side whose price sits in the band
+                    if lo <= p <= hi:
+                        cost, pay = min(0.999, p + EXTRA), v["sf"]
+                    elif lo <= 1 - p <= hi:
+                        cost, pay = min(0.999, 1 - p + EXTRA), 1 - v["sf"]
+                    else:
+                        continue
+                    k = kv(v["desc"])
+                    bets.append({"cost": 25.0, "pay": 25.0 * pay / cost, "t": v["T"], "ev": (k.get("perp") or k.get("underlying")) + str(int(v["T"] // 86400))})
+                if len(bets) < 15:
+                    continue
+                st = sum(b["cost"] for b in bets)
+                pr = sum(b["pay"] - b["cost"] for b in bets)
+                wins = sum(1 for b in bets if b["pay"] > 0)
+                results.append((100 * pr / st, kind, hrs, lo, hi, len(bets), wins, bets))
+                say(f"  {kind:22} {hrs:>2}h before, side at {lo:.2f}-{hi:.2f}: {len(bets):>4} bets, won {wins}, {100 * pr / st:+.2f} per $100")
+    if results:
+        best = max(results, key=lambda r: r[0])
+        say(f"\n  best cell (found by looking among {tries}): {best[1]} {best[2]}h {best[3]}-{best[4]}: {best[0]:+.2f} per $100 on {best[5]} bets")
+        exam.score(best[7], f"HL crypto outcomes {best[1]} {best[2]}h band {best[3]}-{best[4]}", tries=tries, src="outside/onchain.py daily")
+        wb = [r for r in results if r[1] == "Recurring" and r[3] == 0.57]
+        for r in wb:
+            exam.score(r[7], f"HL daily yes/no favourite 57-92c {r[2]}h before", tries=tries, src="outside/onchain.py daily", log=False)
+    say("=== DONE ===")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
