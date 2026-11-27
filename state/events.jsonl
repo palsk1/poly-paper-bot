@@ -40485,3 +40485,4 @@
 {"filled": 10.0, "pnl": 0.3, "price": 0.97, "side": "yes", "through": false, "ticker": "KXBNB15M-26NOV270200-00", "track": "kc_maker", "ts": "2026-11-27T07:03:06Z", "type": "kmaker_fill"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXXRPD-26NOV2702-T0.9799", "track": "kalshi_patient", "ts": "2026-11-27T07:03:08Z", "type": "kpatient_fill"}
 {"fee": 0.0544, "outcome": "No", "price": 0.68, "shares": 5, "title": "Will AI solve 0 more Millennium Prize Problems in 2026?", "token": "26615354544378591694965726741213830197651534400889931749095877249002057483435", "track": "panic_fade_10c", "ts": "2026-11-27T07:03:48Z", "type": "paper_buy"}
+{"pnl": 0.3, "price": 0.97, "shares": 10.0, "side": "no", "ticker": "KXXRPD-26NOV2702-T0.9799", "track": "kalshi_patient", "ts": "2026-11-27T07:07:55Z", "type": "kpatient_result"}
