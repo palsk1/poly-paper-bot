@@ -451,6 +451,9 @@ MKT_SKIP = ("handicap", "over/under", "total", "correct score", "half", "corners
             "goalscorer", "win to nil", "margin", "odd/even", "tie break", "to score")
 
 
+LINE = re.compile(r"[+-]\d|\d\.5\b")   # handicap / total lines ("Virginia -7.5", "Over 2.5")
+
+
 def match_all(rows, pm, ke):
     """Pair each exchange contract with a Polymarket / Kalshi outcome on the same event. Event names must share
     words; outcome names must match closely. Only main 'who wins' style markets."""
@@ -469,7 +472,7 @@ def match_all(rows, pm, ke):
             kidx.setdefault(w, set()).add(i)
     for r in rows:
         mlow = r["mname"].lower() + " "
-        if any(b in mlow for b in MKT_SKIP):
+        if any(b in mlow for b in MKT_SKIP) or LINE.search(r["mname"]) or LINE.search(r["cname"]):
             continue
         te = set(toks(r["evname"]))
         if not te:
