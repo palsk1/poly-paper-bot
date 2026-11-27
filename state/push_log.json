@@ -73,22 +73,10 @@
   "2026-11-27": {
    "failed": 0,
    "muted": 3,
-   "sent": 0
+   "sent": 2
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade] sold Yes at 84c (+$0.29)",
-   "track": "panic_fade",
-   "ts": "2026-11-19T15:25:40Z"
-  },
-  {
-   "result": "sent",
-   "title": "[stock_no] bought 5 (practice money)",
-   "track": "stock_no",
-   "ts": "2026-11-19T16:33:43Z"
-  },
   {
    "result": "sent",
    "title": "[panic_fade] sold Yes at 95c (+$0.97)",
@@ -1276,6 +1264,18 @@
    "title": "[soccer_draw] bought 1 (practice money)",
    "track": "soccer_draw",
    "ts": "2026-11-26T20:19:50Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-9.30)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-27T01:37:53Z"
+  },
+  {
+   "result": "sent",
+   "title": "[kalshi_patient] FLIP: a nearly-sure bet lost ($-4.61)",
+   "track": "kalshi_patient",
+   "ts": "2026-11-27T01:37:54Z"
   }
  ]
 }
