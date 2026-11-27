@@ -40787,3 +40787,15 @@
 {"kind": "sports", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXNFLTOTAL-26NOV27DENPIT-62", "track": "kalshi_patient", "ts": "2026-11-27T09:52:50Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLTDPROT-26NOV29WASARI-WASJCROSKEYMERRITT22-2", "track": "kalshi_patient", "ts": "2026-11-27T09:52:50Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXBRASILEIROSCORE-26NOV27FLUCRU-FLU1CRU0", "track": "kalshi_patient", "ts": "2026-11-27T09:52:50Z", "type": "kpatient_order"}
+{"minutes_left": 2.41, "price": 0.983, "queue": 9.15, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:35Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.983, "queue": 9.15, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T09:57:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.991, "queue": 1121.96, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:36Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.991, "queue": 1121.96, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T09:57:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.964, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:37Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.964, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXDOGE15M-26NOV270500-00", "track": "kc_maker_safe", "ts": "2026-11-27T09:57:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.971, "queue": 557.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:38Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.984, "queue": 0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:39Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 3823.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker", "ts": "2026-11-27T09:57:40Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 3823.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_mid", "ts": "2026-11-27T09:57:41Z", "type": "kmaker_order"}
+{"minutes_left": 2.41, "price": 0.997, "queue": 3823.42, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV270500-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T09:57:41Z", "type": "kmaker_order"}
+{"player": "Alejo Sanchez Quilez", "price": 0.64, "set1": "6-3", "set2_games": 0, "shares": 39, "ticker": "KXATPCHALLENGERMATCH-26NOV27SANHEN-SAN", "track": "tennis_set", "ts": "2026-11-27T09:57:42Z", "type": "ktennis_buy"}

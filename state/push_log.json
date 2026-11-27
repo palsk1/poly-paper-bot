@@ -73,16 +73,10 @@
   "2026-11-27": {
    "failed": 0,
    "muted": 56,
-   "sent": 4
+   "sent": 5
   }
  },
  "recent": [
-  {
-   "result": "sent",
-   "title": "[panic_fade_4c] sold No at 88c (+$0.30)",
-   "track": "panic_fade_4c",
-   "ts": "2026-11-19T18:18:06Z"
-  },
   {
    "result": "sent",
    "title": "[endgame_sell98] FLIP: a 'sure thing' lost ($-4.81)",
@@ -1276,6 +1270,12 @@
    "title": "Paper top 10",
    "track": null,
    "ts": "2026-11-27T05:11:22Z"
+  },
+  {
+   "result": "sent",
+   "title": "[tennis_set] BUY Alejo Sanchez Quilez at 66c",
+   "track": "tennis_set",
+   "ts": "2026-11-27T09:57:42Z"
   }
  ]
 }
