@@ -17,6 +17,8 @@ How a trade is priced (see backtest/swing.md "How the test works"):
     Up gets the best bid; Down is the mirror (buy at 1 - bid, sell at 1 - ask). An order decided at step t trades
     at the prices of step t + delay (0.5 s to 2 s), and only if the price is still within the limit.
   - Taker fee both ways: 0.07 x shares x p x (1 - p) (what we measured on real fills).
+    Since 20 Nov 23:59 UTC Polymarket charges 0.05 on BTC and 0.01 on ETH/SOL windows: re-score with
+    SWING_FEES=new SWING_TAG=_new python3 swing.py grid btc  (backtest/refee_swing.md).
   - A waiting order below / above the best price fills only when a later real trade prints THROUGH its price
     ("sure" fills), or AT its price ("lucky" fills, shown apart as the hopeful end).
   - Anything still held at the end is paid $1 or $0 by the real result.
@@ -33,12 +35,28 @@ import sys
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(HERE, "bt_cache", "sw")
+CACHE = os.environ.get("SWING_CACHE") or os.path.join(HERE, "bt_cache", "sw")
 WIN = 300
 STEP = 100            # ms per grid step
 NS = WIN * 1000 // STEP
 FEE = 0.07
 KFEE = 0.07
+# Polymarket taker fee rate per coin. Polymarket cut it on 20 Nov 2026 23:59 UTC: 0.05 on BTC 5/15-min windows,
+# 0.01 on all other crypto. SWING_FEES=old (default, 0.07 everywhere, the 26 Nov report) | new | btc=0.05,eth=0.01,...
+# SWING_TAG is added to the grid / speed / exams file names so runs at different fees don't overwrite each other.
+FEE_SETS = {"old": {"btc": 0.07, "eth": 0.07, "sol": 0.07}, "new": {"btc": 0.05, "eth": 0.01, "sol": 0.01}}
+
+
+def poly_fees():
+    v = os.environ.get("SWING_FEES", "old")
+    if v in FEE_SETS:
+        return dict(FEE_SETS[v])
+    out = dict(FEE_SETS["old"])
+    out.update({k: float(x) for k, x in (kv.split("=") for kv in v.split(",") if kv)})
+    return out
+
+
+TAG = os.environ.get("SWING_TAG", "")
 FIRST = 120           # no decisions in the first 12 s of a Polymarket window: the box's book feed reconnects there
                       # (about 1 book update in 6 gets through in seconds 1-11), so the recorded book is stale
 
@@ -256,7 +274,9 @@ class Data:
         self.rows = np.arange(2 * n)
         self.NS, self.sps, self.first, self.endstop_s = NS, 1000 // STEP, FIRST, 10
         self.lags_s, self.holds_s = (1, 5, 15, 30, 60), (5, 15, 30, 60)
-        self.fee = fee
+        rate = poly_fees()[("btc", "eth", "sol")[coin]]
+        self.fee_rate = rate
+        self.fee = lambda p, r=rate: r * p * (1 - p)
         self.min_maker_d = 1
         lset = set(LEARN) if coin == 0 else {"20261125"}
         self.is_learn = lambda d_: d_ in lset
@@ -675,8 +695,8 @@ def grid(D, out, delays_s):
     print(out, len(jobs), "rules to test on", D.n, "windows,", len(D.days), "days", flush=True)
     with mp.get_context("fork").Pool(4) as pool:
         rows = [r for r in pool.imap_unordered(_one, jobs, chunksize=8) if r]
-    with open(os.path.join(CACHE, f"{out}.json"), "w") as fh:
-        json.dump({"days": D.days, "learn": [d_ for d_ in D.days if D.is_learn(d_)], "windows": D.n, "rows": rows}, fh)
+    with open(os.path.join(CACHE, f"{out}{TAG}.json"), "w") as fh:
+        json.dump({"fee": getattr(D, "fee_rate", None), "days": D.days, "learn": [d_ for d_ in D.days if D.is_learn(d_)], "windows": D.n, "rows": rows}, fh)
     print("saved", len(rows), flush=True)
 
 
@@ -718,8 +738,8 @@ def facts(coin=0):
     for lo, hi in ((0.05, 0.2), (0.2, 0.4), (0.4, 0.6), (0.6, 0.8), (0.8, 0.95)):
         s = (M >= lo) & (M < hi)
         gap = (A - B)[s]
-        f2 = (fee(A) + fee(B))[s]
-        print(f"  {lo:.2f}-{hi:.2f}: gap {gap.mean()*100:.2f}c + fees {f2.mean()*100:.2f}c = {(gap+f2).mean()*100:.2f}c   (with a waiting sell order on the way out: {(gap + fee(A)[s]).mean()*100:.2f}c)")
+        f2 = (D.fee(A) + D.fee(B))[s]
+        print(f"  {lo:.2f}-{hi:.2f}: gap {gap.mean()*100:.2f}c + fees {f2.mean()*100:.2f}c = {(gap+f2).mean()*100:.2f}c   (with a waiting sell order on the way out: {(gap + D.fee(A)[s]).mean()*100:.2f}c)")
     print("\nHow far the middle price moves (average size of the move, cents):")
     for h in (10, 50, 150, 300, 600, 1200):
         dM = M[:, h:] - M[:, :-h]
@@ -760,7 +780,7 @@ def usd(x):
 
 
 def load_grid(name):
-    p = os.path.join(CACHE, f"grid_{name}.json")
+    p = os.path.join(CACHE, f"grid_{name}{TAG}.json")
     if not os.path.exists(p):
         return None
     with open(p) as fh:
@@ -897,7 +917,10 @@ def exams():
             made[name] = KMin() if name == "kmin" else KSec() if name == "ksec" else Data(("btc", "eth", "sol").index(name))
         return made[name]
 
-    for name in ("btc", "ksec", "kmin"):
+    led = os.environ.get("SWING_LEDGER")                   # None = the shared backtest/ledger.json
+    fees = poly_fees()
+    ftxt = lambda name: "" if os.environ.get("SWING_FEES", "old") == "old" or name not in fees else f", taker fee {fees[name]}"
+    for name in os.environ.get("SWING_EXAM_SETS", "btc,ksec,kmin").split(","):
         g = load_grid(name)
         minn = 100 if name in ("btc", "kmin") else 40
         real = [r for r in g["rows"] if r["family"] != SPEED and not r["lucky"] and r["held"] < 0.5
@@ -906,18 +929,18 @@ def exams():
         D = data(name)
         res = rerun(D, row)
         how = "buy at the offer" if row["kind"] == "T" else "waiting bid"
-        c = exam.score(exam_bets(D, res), f"Buy and sell inside the window, {name}: best of {len(real)} rules on the first days, graded on fresh days ({how}; {row['rule']}; {row['exit']})",
-                       tries=len(g["rows"]), src="swing.py exams", status="dropped")
+        c = exam.score(exam_bets(D, res), f"Buy and sell inside the window, {name}{ftxt(name)}: best of {len(real)} rules on the first days, graded on fresh days ({how}; {row['rule']}; {row['exit']})",
+                       tries=len(g["rows"]), src="swing.py exams", status="dropped", ledger=led)
         cards.append((name, how, row, c))
     g = load_grid("btc")
     D = data("btc")
     for ex in ("sell after 60s", "hold to the end"):
         row = [r for r in g["rows"] if r["family"] == SPEED and r["rule"] == "fair +6c in 2s, share under half of that" and r["exit"] == ex and not r["lucky"]][0]
         res = rerun(D, row)
-        c = exam.score(exam_bets(D, res), f"Speed buy on BTC 5-min 1 s late (not in the first 12 s), {ex}, fresh days, PAPER fills",
-                       tries=len(g["rows"]), src="swing.py exams", status="open")
+        c = exam.score(exam_bets(D, res), f"Speed buy on BTC 5-min 1 s late (not in the first 12 s){ftxt('btc')}, {ex}, fresh days, PAPER fills",
+                       tries=len(g["rows"]), src="swing.py exams", status="open", ledger=led)
         cards.append(("btc", "speed", row, c))
-    with open(os.path.join(CACHE, "exams.json"), "w") as fh:
+    with open(os.path.join(CACHE, f"exams{TAG}.json"), "w") as fh:
         json.dump([{"set": a, "how": b, "rule": r["rule"], "exit": r["exit"], "learn": r["per100_learn"], "fresh": r["per100_fresh"],
                     "card": {k: v for k, v in c.items() if isinstance(v, (int, float, str, bool, type(None)))}} for a, b, r, c in cards], fh)
     return cards
@@ -954,7 +977,7 @@ def speed():
                     L2 = (f"Shares on offer at the price we would pay (1 s late, fresh book, 20+): middle {np.median(sz):.0f}, "
                           f"one in four under {np.percentile(sz, 25):.0f}, one in four over {np.percentile(sz, 75):.0f}. "
                           f"Middle price paid {np.median(r['p']) * 100:.0f}c.")
-    with open(os.path.join(CACHE, "speed.json"), "w") as fh:
+    with open(os.path.join(CACHE, f"speed{TAG}.json"), "w") as fh:
         json.dump({"rows": rows, "note": L2}, fh)
     print("\n".join(L)); print(L2)
     return L, L2
@@ -992,9 +1015,9 @@ def report():
             else:
                 mk_n += 1
                 mk_sure += both
-    with open(os.path.join(CACHE, "exams.json")) as fh:
+    with open(os.path.join(CACHE, f"exams{TAG}.json")) as fh:
         ex = json.load(fh)
-    with open(os.path.join(CACHE, "speed.json")) as fh:
+    with open(os.path.join(CACHE, f"speed{TAG}.json")) as fh:
         spd = json.load(fh)
     sp = {(r["late"], r["guard"], r["exit"]): r for r in spd["rows"]}
     k_hold = sp[("1 s late", "...and 20+ shares on offer", "hold to the end")]
@@ -1059,7 +1082,7 @@ def report():
           "- **Buying the other side later is the same trade as selling.** It pays the same fee and locks the money to the end, so it was not tested apart.", "",
           "## Verdict", "",
           "Dropped as a strategy: no track. The useful outcomes are (1) keep holding to the end in every bot we have, (2) the 12-second blind spot at each window start, which is a concrete thing to fix or avoid in the real speed bot.", ""]
-    with open(os.path.join(HERE, "backtest", "swing.md"), "w") as fh:
+    with open(os.environ.get("SWING_REPORT") or os.path.join(HERE, "backtest", "swing.md"), "w") as fh:
         fh.write("\n".join(L))
     print("wrote backtest/swing.md", len(L), "lines")
 
