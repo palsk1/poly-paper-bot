@@ -911,6 +911,47 @@ def orday():
             print("D", extra or "-", st, str(e)[:60], t[:150], flush=True)
 
 
+ORLAB = {"KXGOOGSHARE": "google", "KXOPENSHARE": "openai", "KXANTHSHARE": "anthropic", "KXDEEPSHARE": "deepseek",
+         "KXZAISHARE": "z-ai", "KXTENCENTSHARE": "tencent", "KXXIAOMISHARE": "xiaomi", "KXBABASHARE": "qwen",
+         "KXMETASHARE": "meta-llama", "KXMISTRALSHARE": "mistralai", "KXSTEALTHSHARE": "stealth", "KXMOONSHARE": "moonshotai",
+         "KXXAISHARE": "x-ai", "KXMINIMAXSHARE": "minimax", "KXNVIDIASHARE": "nvidia"}
+
+
+def orlive():
+    """probe aim_orlive: the running week on OpenRouter's share chart next to Kalshi's open share ladders, right now.
+    Appends to bt_cache/aim/or_live.json.gz so repeated looks build a record of price vs the running number."""
+    import urllib.request
+    with urllib.request.urlopen(urllib.request.Request(f"{ORF}/author-market-share?{ORQ}", headers={"User-Agent": "Mozilla/5.0 paper-bot"}), timeout=40) as r:
+        js = bot.json.loads(r.read().decode())
+    d = js["data"]["data"]
+    cur = d[-1]
+    tot = sum(cur["ys"].values())
+    share = {k: 100 * v / tot for k, v in cur["ys"].items()}
+    prev = {k: 100 * v / sum(d[-2]["ys"].values()) for k, v in d[-2]["ys"].items()}
+    now = time.time()
+    wk0 = dt.datetime.fromisoformat(cur["x"]).replace(tzinfo=dt.timezone.utc).timestamp()
+    print("week", cur["x"], "days done", round((now - wk0) / 86400, 2), {k: round(v, 1) for k, v in sorted(share.items(), key=lambda kv: -kv[1])}, flush=True)
+    rows = []
+    for s, a in ORLAB.items():
+        r = _try(f"{bot.KALSHI}/markets", {"series_ticker": s, "status": "open", "limit": 200}) or {}
+        for m in r.get("markets") or []:
+            x = re.search(r"bove \$?([0-9.]+)", m.get("yes_sub_title") or m.get("subtitle") or "") or re.search(r"-([0-9.]+)$", m["ticker"])
+            if not x:
+                continue
+            def px(k):
+                v = m.get(k + "_dollars")
+                v = float(v) if v not in (None, "") else (m.get(k) or 0) / 100
+                return v
+            rows.append({"s": s, "a": a, "t": m["ticker"], "X": float(x.group(1)), "bid": px("yes_bid"), "ask": px("yes_ask"),
+                         "close": m.get("close_time"), "rule": (m.get("rules_primary") or "")[-60:], "share": share.get(a), "prev": prev.get(a)})
+    for r in sorted(rows, key=lambda r: (r["s"], r["close"] or "", r["X"])):
+        print(f"{r['s']:16} {r['t']:28} X {r['X']:5}  run {r['share'] if r['share'] is None else round(r['share'], 2)}  last wk {r['prev'] if r['prev'] is None else round(r['prev'], 1)}  bid {r['bid']:.2f} ask {r['ask']:.2f}  close {r['close']}  {r['rule']}", flush=True)
+    path = os.path.join(CACHE, "or_live.json.gz")
+    have = rj(path, None) or []
+    have.append({"t": now, "week": cur["x"], "share": share, "rows": rows})
+    wj(path, have)
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1270,6 +1311,8 @@ if __name__ == "__main__":
         orparams()
     elif cmd == "orday":
         orday()
+    elif cmd == "orlive":
+        orlive()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
