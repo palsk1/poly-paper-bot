@@ -40121,3 +40121,8 @@
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXYOSEMITEEXCHANGE-26AUG-26DEC01", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXF1TOP10-QATA26-ALO", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.96, "shares": 10, "side": "no", "ticker": "KXONPOS-26DEC03-T127.5", "track": "kalshi_patient", "ts": "2026-11-27T03:03:23Z", "type": "kpatient_order"}
+{"cost": 4.306, "title": "Will Solana reach $80 November 23-29?", "token": "35513727423536401443621707990316145206503613160121029926194975139533219229948", "track": "crypto_no", "ts": "2026-11-27T03:15:11Z", "type": "skip_no_cash"}
+{"pnl": 3.31, "side": "yes", "ticker": "KXATPCHALLENGERMATCH-26NOV26NOGMAT-MAT", "track": "tennis_set", "ts": "2026-11-27T03:15:33Z", "type": "econ_settle"}
+{"filled": 10.0, "price": 0.91, "side": "yes", "through": false, "ticker": "KXGOLDMON-26NOV3017-T3443.99", "track": "kalshi_patient", "ts": "2026-11-27T03:15:34Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXITFMATCH-26NOV27KAOBOR-BOR", "track": "kalshi_patient", "ts": "2026-11-27T03:15:34Z", "type": "kpatient_fill"}
+{"filled": 9.4, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLFIRSTTD-26NOV29TENJAC-TENTPOLLARD20", "track": "kalshi_patient", "ts": "2026-11-27T03:15:36Z", "type": "kpatient_fill"}
