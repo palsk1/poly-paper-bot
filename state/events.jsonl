@@ -42226,3 +42226,10 @@
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNFLFIRSTTD-26NOV29BALHOU-BALBALDST", "track": "kalshi_patient", "ts": "2026-11-27T23:00:38Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "yes", "ticker": "KXUSDMXNEVENT-01DEC261130-T193000", "track": "kalshi_patient", "ts": "2026-11-27T23:00:38Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXNHLGOAL-26NOV27PITBUF-BUFBMALENSTYN29-1", "track": "kalshi_patient", "ts": "2026-11-27T23:00:38Z", "type": "kpatient_order"}
+{"outcome": "No", "pnl": 0.2859, "price": 1.0, "reason": "resolved", "title": "Will Japan win Group F at the 2027 AFC Asian Cup?", "token": "35343882080347519496055092708093241978573224917711221803477143614017767658145", "track": "boring_no", "ts": "2026-11-27T23:02:37Z", "type": "paper_close"}
+{"pnl": 0.09, "price": 0.91, "shares": 1.0, "side": "no", "ticker": "KXBRENTW-26NOV2717-T91.99", "track": "kalshi_patient", "ts": "2026-11-27T23:05:16Z", "type": "kpatient_result"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXLALIGASCORE-26NOV27LEVSAN-LEV3SAN1", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
+{"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "yes", "ticker": "KXNCAAMBGAME-26NOV27BELLBUT-BUT", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
+{"pnl": 0.8145, "price": 0.91, "shares": 9.05, "side": "yes", "ticker": "KXNCAAWBGAME-26NOV27ORULMU-LMU", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
+{"pnl": 0.8, "price": 0.92, "shares": 10.0, "side": "no", "ticker": "KXNFL1H-26NOV27DENPIT-TIE", "track": "kalshi_patient", "ts": "2026-11-27T23:05:17Z", "type": "kpatient_result"}
+{"fee": 0.0086, "outcome": "No", "price": 0.78, "shares": 5, "title": "Ilhan Omar federally charged by December 31?", "token": "47592698714175463195253173317845647495794442506760383051063439129436131494421", "track": "panic_fade", "ts": "2026-11-27T23:05:45Z", "type": "paper_buy"}
