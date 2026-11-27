@@ -361,6 +361,9 @@ def defi():
 
 
 # ---------------------------------------------------------------- pendle
+SHOWN = 0
+
+
 def pendle():
     out = []
     for chain in (1, 42161, 8453):
@@ -392,10 +395,30 @@ def pendle():
                 h = get(f"https://api-v2.pendle.finance/core/v1/{chain}/markets/{addr}/historical-data?time_frame=day")
             except Exception as e2:
                 continue
-        ts = h.get("timestamp") or []
-        imp = h.get("impliedApy") or []
-        und = h.get("underlyingApy") or []
-        tvl = h.get("tvl") or [0] * len(ts)
+        global SHOWN
+        if not SHOWN:
+            SHOWN = 1
+            print("shape:", str(h)[:600])
+        if isinstance(h, dict) and isinstance(h.get("results"), list):
+            res = h["results"]
+            def col(*ks):
+                out = []
+                for x in res:
+                    v = None
+                    for k in ks:
+                        if x.get(k) is not None:
+                            v = x[k]; break
+                    out.append(v)
+                return out
+            ts = col("timestamp", "time"); imp = col("impliedApy", "implied_apy"); und = col("underlyingApy", "underlyingInterestApy", "underlying_apy")
+            tvl = col("tvl", "liquidity", "totalTvl")
+        else:
+            ts = h.get("timestamp") or []
+            imp = h.get("impliedApy") or []
+            und = h.get("underlyingApy") or h.get("underlyingInterestApy") or []
+            tvl = h.get("tvl") or [0] * len(ts)
+        if isinstance(tvl, list):
+            tvl = [x.get("usd", 0) if isinstance(x, dict) else (x or 0) for x in tvl]
         if len(ts) < 40 or len(imp) != len(ts) or len(und) != len(ts):
             continue
         # buy the fixed yield at day i, hold to the end of the history (or expiry): fixed - floating that followed
