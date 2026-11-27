@@ -27,7 +27,7 @@ UTC = dt.timezone.utc
 DAY = 86400
 CACHE = os.path.join(bot.ROOT, "bt_cache", "nf", "ty")
 BUA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-K_DIR = r"KX(10|30|2|5|7)YRDIR(HM|LM|HW|LW)|KXUST10A|KXUST2A"
+K_DIR = r"KX(10|30|2|5|7)YRDIR(HM|LM|HW|LW)|KXUST10AD?|KXUST2AD?"
 TENORS = {"2": "DGS2", "5": "DGS5", "10": "DGS10", "30": "DGS30"}
 
 
@@ -375,7 +375,11 @@ def fill(m, b, t, yes, extra=0.01, stake=10.0, window=7200):
         return None
     c = min(0.99, px + extra)
     sh = stake / c
-    return {"t": nxt[0][0], "px": px, "c": c, "sh": sh, "cost": stake + bot.taker_fee(sh, c, m.get("fee") or 0.0)}
+    if m.get("site") == "kalshi":
+        fee = math.ceil(7 * sh * c * (1 - c) - 1e-9) / 100
+    else:
+        fee = bot.taker_fee(sh, c, m.get("fee") or 0.0)
+    return {"t": nxt[0][0], "px": px, "c": c, "sh": sh, "cost": stake + fee}
 
 
 def settle(m, tp):
@@ -455,7 +459,7 @@ def looks(m, Y, step=DAY, hour=2, intraday=0.0):
             n = bdays(max(dt.date.fromisoformat(st["day"]), dt.date.fromisoformat(m["p0"]) - dt.timedelta(days=1)), last)
             if m["kind"] == "touch":
                 started = st["day"] >= m["p0"]
-                touched = started and (st["hi"] >= m["k"] if up else st["lo"] < m["k"])
+                touched = started and ((st["hi"] > m["k"] if m.get("strict") else st["hi"] >= m["k"]) if up else st["lo"] < m["k"])
                 P = 1.0 if touched else p_touch(st["y"], m["k"], st["sd"], n, up, intraday)
             else:
                 touched = n <= 0
@@ -480,7 +484,7 @@ def bets(ms, Y, gap=0.10, extra=0.01, stake=10.0, side="both", intraday=0.0, sel
             no = p - P >= gap and side in ("both", "no")
             if not (yes or no):
                 continue
-            f = fill(m, m["b"], t, yes, extra, stake)
+            f = fill(m, m["b"], t, yes, extra - (0.01 if m.get("site") == "kalshi" else 0.0), stake)
             if not f or not 0.05 <= f["px"] <= 0.95:
                 continue
             res = m["res"]
@@ -493,6 +497,67 @@ def bets(ms, Y, gap=0.10, extra=0.01, stake=10.0, side="both", intraday=0.0, sel
             if once:
                 break
     return out
+
+
+KMON = {m[:3]: i + 1 for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
+                                            "september", "october", "november", "december"))}
+KD = r"([A-Z][a-z]{2})[a-z]*\.?\s+(\d{1,2}),?\s+(\d{4})"
+
+
+def kload(verbose=False):
+    """Kalshi how-high / how-low (and one-day close) yield markets, in the same shape as the Polymarket rungs.
+    Price steps are hourly candles: [t, mid, mid, best bid, best ask] (buying Yes pays the ask, No pays 1 - bid)."""
+    import glob
+    km_ = rj(os.path.join(CACHE, "kmarkets.json.gz"), {}) or {}
+    out, skipped = {}, collections.Counter()
+    for path in glob.glob(os.path.join(CACHE, "ktapes_*.json.gz")):
+        ser = os.path.basename(path)[7:-8]
+        if not re.fullmatch(K_DIR, ser):
+            continue
+        tp = rj(path, {}) or {}
+        mt = re.match(r"KX(\d+)YRDIR([HL])", ser) or re.match(r"KXUST(\d+)A", ser)
+        ten = mt.group(1)
+        if ten not in TENORS:
+            skipped["tenor"] += 1
+            continue
+        for tk, m in (km_.get(ser) or {}).items():
+            if tk not in tp:
+                continue
+            rule = m["rule"]
+            lv = re.search(r"(above|below|greater than|less than|at or above|at or below)\s+(\d+\.\d+)%", rule)
+            if not lv:
+                skipped["no level"] += 1
+                continue
+            up = lv.group(1) in ("above", "greater than", "at or above")
+            ds = re.findall(KD, rule)
+            if not ds:
+                skipped["no date"] += 1
+                continue
+            dd = [dt.date(int(y), KMON[mo.lower()], int(d)) for mo, d, y in ds if mo.lower() in KMON]
+            kind = "touch" if re.search(r"any business day|any day|at any", rule) else "day"
+            p0, p1 = (dd[0], dd[-1]) if kind == "touch" else (dd[-1], dd[-1])
+            c = yesno_fix(tp[tk]["c"])
+            b = [[int(x[0]), (x[1] + x[2]) / 2, (x[1] + x[2]) / 2, x[1], x[2]] for x in c
+                 if x[1] is not None and x[2] is not None and 0 < x[2] and x[1] < x[2]]
+            if not b:
+                skipped["no quotes"] += 1
+                continue
+            out["K" + tk] = {"id": tk, "eslug": m["ev"], "title": m["q"], "q": m["q"], "site": "kalshi", "ten": ten,
+                             "hl": "high" if up else "low", "k": float(lv.group(2)), "p0": p0.isoformat(),
+                             "p1": p1.isoformat(), "kind": kind, "res": 1.0 if m["res"] == "yes" else 0.0,
+                             "done": p1.isoformat() <= DONE_BY, "b": b, "start": m["open"], "end": m["close"],
+                             "closed_t": m["close"], "vol": m["vol"], "fee": None, "strict": True, "rule": rule}
+    if verbose:
+        print("kalshi rungs", len(out), "skipped", dict(skipped))
+    return out
+
+
+def yesno_fix(cs):
+    """Some Kalshi candle quotes come 100 times too small (see fed.k_tapes)."""
+    vals = [x for c in cs for x in c[1:3] if x is not None]
+    if vals and max(vals) <= 0.0101:
+        cs = [[c[0], None if c[1] is None else c[1] * 100, None if c[2] is None else c[2] * 100] + c[3:] for c in cs]
+    return sorted(cs)
 
 
 def usd(x):
@@ -511,6 +576,9 @@ def line(name, bb):
 def run(*a):
     import exam
     ms, Y = load()
+    site = "Polymarket"
+    if "kalshi" in a:
+        ms, site = kload(True), "Kalshi"
     done = {k: m for k, m in ms.items() if m["done"]}
     print("rungs with tape + rule parsed:", len(ms), "settled", sum(m["res"] is not None for m in ms.values()),
           "events", len({m["eslug"] for m in ms.values()}))
@@ -522,7 +590,7 @@ def run(*a):
     for e, mm in sorted(ev.items(), key=lambda x: x[1][0]["p1"]):
         st = [x for x in mm if x["res"] is not None]
         print(f"  {mm[0]['p0']}..{mm[0]['p1']} {e[:62]:62s} {len(mm):2d} rungs, {len(st):2d} settled ({sum(x['res'] == 1.0 for x in st)} Yes)"
-              f" ${sum(x['vol'] or 0 for x in mm):>10,.0f} fee {mm[0]['fee']} {'DONE' if mm[0]['done'] else 'open'}")
+              f" {sum(x['vol'] or 0 for x in mm):>10,.0f} traded, fee {mm[0]['fee']} {'DONE' if mm[0]['done'] else 'open'}")
     for bg in (True, False):
         global BG
         BG = 0.5826 if bg else 0.0
@@ -548,7 +616,8 @@ def run(*a):
              ("both sides, 20c gap", {"gap": 0.20}), ("both sides, 10c gap, +2c", {"extra": 0.02}),
              ("both sides, 10c gap, no daily-close fix", {"bg": False}),
              ("both sides, 10c gap, touch ladders only", {"sel": lambda m: m["kind"] == "touch"}),
-             ("both sides, 10c gap, one-day Friday bets only", {"sel": lambda m: m["kind"] == "day"}))
+             ("both sides, 10c gap, one-day bets only", {"sel": lambda m: m["kind"] == "day"}),
+             ("touch ladders only, plain reflection", {"bg": False, "sel": lambda m: m["kind"] == "touch"}))
     res = {}
     print("\nRULES (one bet per rung, first look where model and price are 10c+ apart, $10 a bet, worst real trade of the "
           "next 2 h + 1c + fee). Finished spans only; open spans shown apart, marked at the last trade:")
@@ -596,9 +665,10 @@ def run(*a):
         print(f"  {k_[0]:5s} {k_[1]:6s}: {n_:3d} rungs, {w:3d} paid ({w / n_:.2f}), first price {ps / n_:.2f}, model {Ps / n_:.2f}")
     if "noexam" not in a:
         tries = len(rules) + cuts
-        for name in ("both sides, 10c gap", "Yes only, 10c gap", "No only, 10c gap", "both sides, 20c gap"):
-            exam.score(res[name], f"Treasury yield ladders (Polymarket): {name}", tries=tries, src="tyield.py",
-                       note="how high / how low Treasury yield vs a touch model on Treasury.gov par closes; finished spans")
+        for name in ("both sides, 10c gap", "touch ladders only, plain reflection", "both sides, 10c gap, one-day bets only"):
+            exam.score(res[name], f"Treasury yield ladders ({site}): {name}", tries=tries, src="tyield.py",
+                       note="how high / how low Treasury yield vs a touch model on Treasury.gov par closes; finished spans",
+                       status="dropped")
 
 if __name__ == "__main__":
     main()

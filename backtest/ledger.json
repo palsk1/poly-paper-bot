@@ -3763,6 +3763,84 @@
    "verdict": "Too early to tell",
    "status": "dropped",
    "src": "gpurent.py"
+  },
+  {
+   "id": "treasury_yield_ladders_polymarket_both_sides_10c_gap",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Polymarket): both sides, 10c gap",
+   "tries": 21,
+   "bets": 100,
+   "groups": 22,
+   "per100": 12.94,
+   "floor100": -36.1,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "tyield.py"
+  },
+  {
+   "id": "treasury_yield_ladders_polymarket_touch_ladders_only_plain_r",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Polymarket): touch ladders only, plain reflection",
+   "tries": 21,
+   "bets": 83,
+   "groups": 7,
+   "per100": 50.05,
+   "floor100": -91.87,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "tyield.py"
+  },
+  {
+   "id": "treasury_yield_ladders_polymarket_both_sides_10c_gap_one_day",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Polymarket): both sides, 10c gap, one-day bets only",
+   "tries": 21,
+   "bets": 15,
+   "groups": 15,
+   "per100": 26.52,
+   "floor100": -88.59,
+   "verdict": "Ahead, but could be luck",
+   "status": "dropped",
+   "src": "tyield.py"
+  },
+  {
+   "id": "treasury_yield_ladders_kalshi_both_sides_10c_gap",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Kalshi): both sides, 10c gap",
+   "tries": 20,
+   "bets": 864,
+   "groups": 74,
+   "per100": -6.2,
+   "floor100": -31.34,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "tyield.py"
+  },
+  {
+   "id": "treasury_yield_ladders_kalshi_touch_ladders_only_plain_refle",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Kalshi): touch ladders only, plain reflection",
+   "tries": 20,
+   "bets": 338,
+   "groups": 4,
+   "per100": -5.65,
+   "floor100": -68.64,
+   "verdict": "Too early to tell",
+   "status": "dropped",
+   "src": "tyield.py"
+  },
+  {
+   "id": "treasury_yield_ladders_kalshi_both_sides_10c_gap_one_day_bet",
+   "date": "2026-11-27",
+   "what": "Treasury yield ladders (Kalshi): both sides, 10c gap, one-day bets only",
+   "tries": 20,
+   "bets": 542,
+   "groups": 70,
+   "per100": -9.91,
+   "floor100": -35.12,
+   "verdict": "Behind, but could be bad luck",
+   "status": "dropped",
+   "src": "tyield.py"
   }
  ]
 }

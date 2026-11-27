@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**294 ideas examined, in about 119,835 versions.** 236 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**300 ideas examined, in about 119,958 versions.** 242 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 294 ideas that are all worthless, the luckiest one still looks good. With 294 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 300 ideas that are all worthless, the luckiest one still looks good. With 300 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -302,5 +302,11 @@ Why count: if you test 294 ideas that are all worthless, the luckiest one still 
 | 2026-11-27 | kesport KXTTSTARMATCH: Elo 10c+ above the real ask | 51 | 167 | -$16.95 | Behind, but could be bad luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXTTSTARMATCH: Fade a 5c+ move in the last 20 min (fresh half) | 51 | 136 | -$28.01 | Losing | dropped | kesport.py |
 | 2026-11-27 | kesport KXTTSTARMATCH: Side that won its last game, other lost (fresh half) | 51 | 109 | -$17.96 | Losing | dropped | kesport.py |
+| 2026-11-27 | Treasury yield ladders (Kalshi): both sides, 10c gap | 20 | 74 | -$6.20 | Behind, but could be bad luck | dropped | tyield.py |
+| 2026-11-27 | Treasury yield ladders (Kalshi): both sides, 10c gap, one-day bets only | 20 | 70 | -$9.91 | Behind, but could be bad luck | dropped | tyield.py |
+| 2026-11-27 | Treasury yield ladders (Kalshi): touch ladders only, plain reflection | 20 | 4 | -$5.65 | Too early to tell | dropped | tyield.py |
+| 2026-11-27 | Treasury yield ladders (Polymarket): both sides, 10c gap | 21 | 22 | +$12.94 | Ahead, but could be luck | dropped | tyield.py |
+| 2026-11-27 | Treasury yield ladders (Polymarket): both sides, 10c gap, one-day bets only | 21 | 15 | +$26.52 | Ahead, but could be luck | dropped | tyield.py |
+| 2026-11-27 | Treasury yield ladders (Polymarket): touch ladders only, plain reflection | 21 | 7 | +$50.05 | Too early to tell | dropped | tyield.py |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.
