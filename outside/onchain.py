@@ -350,20 +350,16 @@ def pm_events():
     import bot
     evs, seen = [], set()
     for tag in PM_TAGS:
-        for off in range(0, 1000, 100):
-            try:
-                r = bot.http_json(f"{bot.GAMMA}/events", {"tag_slug": tag, "closed": "false", "limit": 100, "offset": off})
-            except Exception as e:
-                say(f"  gamma {tag}: {e}")
-                break
-            if not r:
-                break
-            for e in r:
-                if e.get("id") not in seen:
-                    seen.add(e.get("id"))
-                    evs.append(e)
-            if len(r) < 100:
-                break
+        try:
+            r = bot.gamma_events({"tag_slug": tag, "closed": "false"}, max_pages=6)
+        except Exception as e:
+            say(f"  gamma {tag}: {e}")
+            continue
+        say(f"  gamma {tag}: {len(r)} events")
+        for e in r:
+            if e.get("id") not in seen:
+                seen.add(e.get("id"))
+                evs.append(e)
     for q in ["Super Bowl Champion 2027", "NBA Champion 2027", "Premier League Winner", "Champions League Winner", "La Liga Winner"]:
         try:
             r = bot.http_json(f"{bot.GAMMA}/public-search", {"q": q, "limit_per_type": 5})
