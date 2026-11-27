@@ -21,6 +21,7 @@ import statistics
 import sys
 import time
 import urllib.parse
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 import backtest as bt
@@ -182,10 +183,20 @@ def ornn():
         print(f"ornn {n}: {len(h['rows']) if h else 0} days {h and h['rows'][0]} .. {h and h['rows'][-1]} access "
               f"{h and h.get('access')} | range {str(out[f'range {n}'])[:160]}", flush=True)
     out["hist"] = hist
-    for path in ("/ocpi", "/markets", "/methodology", "/docs/methodology"):
+    # older days: archived copies of the free JSON / market pages (web.archive.org), and the old dashboard
+    arch = {}
+    for u in ["data.ornn.com/api/public-index/*", "api.ornnai.com/api/*", "data.ornn.com/markets/*", "dashboard.ornnai.com*",
+              "index.ornn.com*", "ornnai.com/api/*"]:
+        r = get("https://web.archive.org/cdx/search/cdx", {"url": u, "output": "json", "limit": 400, "filter": "statuscode:200"})
+        arch[u] = r
+        print(f"archive {u}: {len(r) - 1 if isinstance(r, list) else r}", flush=True)
+        if isinstance(r, list):
+            for row in r[1:12]:
+                print("   ", row[1], row[2][:140], row[3], flush=True)
+    out["archive"] = arch
+    for path in ("/ocpi", "/markets", "/markets/h100-sxm", "/methodology", "/docs/methodology", "@https://dashboard.ornnai.com"):
         try:
-            import urllib.request
-            req = urllib.request.Request("https://data.ornn.com" + path, headers={"User-Agent": "Mozilla/5.0"})
+            req = urllib.request.Request(path[1:] if path[0] == "@" else "https://data.ornn.com" + path, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(req, timeout=25) as f:
                 txt = f.read().decode("utf-8", "replace")
             out["page " + path] = txt[:200000]
