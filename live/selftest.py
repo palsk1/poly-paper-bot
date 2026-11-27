@@ -421,7 +421,7 @@ def test_pspeed():
     clock["t"] = w + 300 + 91
     sp.settle(result=lambda ww: True)
     o_pnl = b.state["realized"]
-    check(not b.state["open"] and b.state["won"] == 1 and abs(o_pnl - (5 - 2.75 - 0.07 * 5 * 0.55 * 0.45)) < 0.01,
+    check(not b.state["open"] and b.state["won"] == 1 and abs(o_pnl - (5 - 2.75 - 0.05 * 5 * 0.55 * 0.45)) < 0.01,
           "a won window pays $1 a share, less the cost and the fee estimate")
     clock["t"] = w + 60.0
     # caps and skips

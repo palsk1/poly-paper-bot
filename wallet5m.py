@@ -469,9 +469,10 @@ def run():
         fh.write("\n".join(lines) + "\n")
 
 
-def copytest(say=print):
+def copytest(say=print, rate=0.07):
     """A copier who sees each of the wallet's fills d seconds late and buys the same side at the next real sell offer
-    on the window's trade list (a buy of that side, or a sell of the other side at 1 - price), plus the taker fee."""
+    on the window's trade list (a buy of that side, or a sell of the other side at 1 - price), plus the taker fee.
+    `rate` = Polymarket's taker fee rate for BTC 5-minute windows: 0.07 until 20 Nov 2026 (the report), 0.05 since."""
     import bisect
     tapes = rj("tapes.json.gz", {}) or {}
     ws = {x["slug"]: x for x in windows()}
@@ -507,7 +508,7 @@ def copytest(say=print):
                     res[d][2] += 1
                     continue
                 p = a[i][1]
-                res[d][0] += f["sz"] * (p + 0.07 * p * (1 - p))
+                res[d][0] += f["sz"] * (p + rate * p * (1 - p))
                 res[d][1] += f["sz"] * won
     if not own[0]:
         return
