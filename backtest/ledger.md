@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**300 ideas examined, in about 119,958 versions.** 242 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**310 ideas examined, in about 121,682 versions.** 250 dropped, 60 still being tested or waiting. **Looks real: 9.**
 
-Why count: if you test 300 ideas that are all worthless, the luckiest one still looks good. With 300 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 310 ideas that are all worthless, the luckiest one still looks good. With 310 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,8 +282,16 @@ Why count: if you test 300 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | buy the 15-minute leader at 50-70c with 1 min left, Kalshi non-crypto (taker, $10) | 180 | 1944 | -$2.77 | Behind, but could be bad luck | dropped | k15x.py run (backward look) |
+| 2026-11-27 | buy the 15-minute leader at 50-70c with 2 min left, Kalshi non-crypto (taker, $10) | 180 | 2562 | -$2.12 | Behind, but could be bad luck | dropped | k15x.py run (backward look) |
+| 2026-11-27 | buy the 15-minute leader at 70-80c with 1 min left, Kalshi non-crypto (taker, $10) | 180 | 1620 | -$2.19 | Behind, but could be bad luck | dropped | k15x.py run (backward look) |
+| 2026-11-27 | buy the 15-minute leader at 70-80c with 2 min left, Kalshi non-crypto (taker, $10) | 180 | 2197 | -$3.10 | Losing | dropped | k15x.py run (backward look) |
+| 2026-11-27 | buy the 15-minute leader at 80-90c with 1 min left, Kalshi non-crypto (taker, $10) | 180 | 2274 | -$3.76 | Losing | dropped | k15x.py run (backward look) |
+| 2026-11-27 | buy the 15-minute leader at 80-90c with 2 min left, Kalshi non-crypto (taker, $10) | 180 | 2896 | -$0.66 | Behind, but could be bad luck | dropped | k15x.py run (backward look) |
 | 2026-11-27 | GPU rental bets: non-holder bracket 21 days left, No at Yes 3c+ | 86 | 4 | +$9.03 | Too early to tell | dropped | gpurent.py |
 | 2026-11-27 | GPU rental bets: Ornn index model 10c+ off the price | 86 | 4 | -$11.64 | Too early to tell | dropped | gpurent.py |
+| 2026-11-27 | kc_maker on Kalshi's new non-crypto 15-minute windows (FX, yields, oil, metals, S&P; $4 bids, tape fills) | 160 | 3622 | -$0.06 | Behind, but could be bad luck | dropped | k15x.py run, backtest/k15x.md |
+| 2026-11-27 | kc_maker_safe_usd (cushion 2.3 on Kalshi's number) on Kalshi's new non-crypto 15-minute windows (FX, yields, oil, metals, S&P; $4 bids, tape fills) | 160 | 2619 | +$0.60 | Looks real | open | k15x.py run, backtest/k15x.md |
 | 2026-11-27 | kesport eSoccer: waiting bid on the Tie, 30 min before (all games) | 72 | 800 | +$12.73 | Ahead, but could be luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 10c+ above the real ask | 51 | 397 | -$3.28 | Behind, but could be bad luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 15c+ above the real ask (fresh half) | 51 | 19 | -$2.74 | Behind, but could be bad luck | dropped | kesport.py |
@@ -302,6 +310,8 @@ Why count: if you test 300 ideas that are all worthless, the luckiest one still 
 | 2026-11-27 | kesport KXTTSTARMATCH: Elo 10c+ above the real ask | 51 | 167 | -$16.95 | Behind, but could be bad luck | dropped | kesport.py |
 | 2026-11-27 | kesport KXTTSTARMATCH: Fade a 5c+ move in the last 20 min (fresh half) | 51 | 136 | -$28.01 | Losing | dropped | kesport.py |
 | 2026-11-27 | kesport KXTTSTARMATCH: Side that won its last game, other lost (fresh half) | 51 | 109 | -$17.96 | Losing | dropped | kesport.py |
+| 2026-11-27 | kfast cushion 4+: 45-second buy on Kalshi's non-crypto 15-minute windows ($10) | 162 | 539 | +$0.98 | Promising, needs more bets | open | k15x.py run |
+| 2026-11-27 | kfast plain: 45-second buy on Kalshi's non-crypto 15-minute windows ($10) | 162 | 4053 | -$0.32 | Losing | dropped | k15x.py run |
 | 2026-11-27 | Treasury yield ladders (Kalshi): both sides, 10c gap | 20 | 74 | -$6.20 | Behind, but could be bad luck | dropped | tyield.py |
 | 2026-11-27 | Treasury yield ladders (Kalshi): both sides, 10c gap, one-day bets only | 20 | 70 | -$9.91 | Behind, but could be bad luck | dropped | tyield.py |
 | 2026-11-27 | Treasury yield ladders (Kalshi): touch ladders only, plain reflection | 20 | 4 | -$5.65 | Too early to tell | dropped | tyield.py |

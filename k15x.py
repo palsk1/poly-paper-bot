@@ -346,6 +346,9 @@ GROUP = {"FX": ["KXUSDCAD15M", "KXAUDUSD15M", "KXEURUSD15M", "KXGBPUSD15M", "KXU
          "Metals": ["KXGOLD15M", "KXSILVER15M", "KXCOPPER15M", "KXPLATINUM15M", "KXPALLADIUM15M"], "S&P 500": ["KXINX15M"]}
 
 
+NEWS = ("08:45", "09:00", "09:45", "10:00", "10:15", "14:15", "14:30", "16:00", "16:15")   # New York closes right after data / open / close
+
+
 def leader(row):
     """khourly.leader: a 99c / $1.00 book counts (1c steps here), empty books (gap over 50c) have none."""
     yb, ya = row[0], row[1]
@@ -416,13 +419,13 @@ def fee(c, px):
     return math.ceil(0.07 * c * px * (1 - px) * 100 - 1e-9) / 100
 
 
-def taker_rows(ws, sec=45, lo=0.90, hi=0.99):
+def taker_rows(ws, sec=45, lo=0.90, hi=0.99, look=60):
     """The 45-second buy: the leader at the minute mark before, then the first real trade from `sec` before the close
     where someone BOUGHT that side; we pay that price + the taker fee, at most the contracts bought that second."""
     out = []
     for w in ws:
         t0 = w["close"] - sec
-        row = w["c"].get(w["close"] - 60)
+        row = w["c"].get(w["close"] - look)
         side = leader(row) if row else None
         if not side:
             continue
@@ -550,7 +553,7 @@ def run(arg=None):
         for mnt in (1, 2, 3, 5):
             for lev in (0.90, 0.95):
                 rows = [r for s in have for r in maker_rows(data[s], mnt, lev)]
-                for bar in (None, 2.0, 2.3):
+                for bar in (None, 2.0, 2.3, 3.0):
                     tries += 1
                     rr = [r for r in rows if bar is None or (r["z"] is not None and r["z"] >= bar)]
                     b1 = bets_of([r for r in rr if r["t"] < mids[r["s"]]])
@@ -572,6 +575,11 @@ def run(arg=None):
             b2 = [b for b in bs if b["t"] >= allmid[b["s"]]]
             P(f"- {name}, ${usd} bids: all {fmt(bs, days_all)}; first half {fmt(b1, days_all / 2)}; fresh half {fmt(b2, days_all / 2)}")
         bs = bets_of(rows, 4)
+        fresh = [b for b in bs if b["t"] >= allmid[b["s"]]]
+        c2 = exam.score(fresh, f"{name}, fresh second half only", tries=1, prereg=True, log=False, quiet=True)
+        P(f"  EXAM fresh half only (rule fixed before): {c2['verdict']} | {c2['bets']} bets, {c2.get('groups')} separate | "
+          f"{money(c2.get('per100') or 0)} per $100 (luck {c2.get('lo100')} to {c2.get('hi100')}) | worst case {c2.get('floor100')}")
+        cards[name + " (fresh half)"] = c2
         cards[name] = exam.score(bs, f"{name} on Kalshi's new non-crypto 15-minute windows (FX, yields, oil, metals, S&P; $4 bids, tape fills)",
                                  tries=tries, src="k15x.py run, backtest/k15x.md", log=log, quiet=False)
         P(f"  EXAM {name}: {cards[name]['verdict']} | {cards[name]['bets']} bets, {cards[name].get('groups')} separate | "
@@ -581,6 +589,30 @@ def run(arg=None):
         for b in bs:
             per_s[b["s"]].append(b)
         P("  per series: " + "; ".join(f"{NAMES.get(s, s)} {fmt(v, span[s][2])}" for s, v in sorted(per_s.items())))
+    # 3b. harder fill check and by group for the cushion-2.3 rule
+    P("\n## 3b. kc_maker_safe_usd, harder checks ($4 bids)\n")
+    safe = [r for s in data for r in maker_rows(data[s], 3, 0.95) if r["z"] is not None and r["z"] >= 2.3]
+    strict = [dict(r, sold=tape_fill(r["w"]["tr"], r["t"], r["side"], r["price"], False)) for r in safe]
+    late = [dict(r, sold=tape_fill(r["w"]["tr"], r["t"] + 20, r["side"], r["price"], r["front"])) for r in safe]
+    for nm, rr in (("only contracts sold BELOW our price count", strict), ("our bid placed 20 s late", late)):
+        bs = bets_of(rr, 4)
+        b1 = [b for b in bs if b["t"] < allmid[b["s"]]]
+        b2 = [b for b in bs if b["t"] >= allmid[b["s"]]]
+        P(f"- {nm}: all {fmt(bs, days_all)}; first half {fmt(b1, days_all / 2)}; fresh half {fmt(b2, days_all / 2)}")
+    for g, ss in GROUP.items():
+        bs = bets_of([r for r in safe if r["s"] in ss], 4)
+        c = exam.score(bs, f"kc_maker_safe_usd on Kalshi 15-minute {g}", tries=tries, log=False, quiet=True)
+        P(f"- {g}: {fmt(bs, days_all)} | exam {c['verdict']} ({money(c.get('per100') or 0)} per $100, luck {c.get('lo100')} to {c.get('hi100')}, halves {c.get('half1')} / {c.get('half2')})")
+    bys = collections.defaultdict(lambda: [0.0, 0])
+    for b in bets_of(safe, 4):
+        wk = dt.datetime.fromtimestamp(b["t"], UTC).strftime("%G-W%V")
+        bys[wk][0] += b["pay"] - b["cost"]
+        bys[wk][1] += 1
+    P("- by week: " + "; ".join(f"{k} {money(v[0])} ({v[1]} bets)" for k, v in sorted(bys.items())))
+    bb = sorted(bets_of(safe, 4), key=lambda b: b["pay"] - b["cost"])
+    tot = sum(b["pay"] - b["cost"] for b in bb)
+    P(f"- without the best 20 wins: {money(tot - sum(b['pay'] - b['cost'] for b in bb[-20:]))} (all {money(tot)}); one loss costs about "
+      f"{money(-(bb[0]['pay'] - bb[0]['cost']))}, a typical win {money(sorted(b['pay'] - b['cost'] for b in bb)[len(bb) // 2])}")
     # 4. the 45-second buy
     P("\n## 4. The 45-second buy (kfast): first real buy of the leader in the last 45 s at 90-99c, taker fee paid, $10\n")
     for zbar in (None, 4.0):
@@ -592,10 +624,31 @@ def run(arg=None):
         for band in ((0.90, 0.95), (0.95, 0.98), (0.98, 0.995)):
             g = [b for b in bs if band[0] - EPS <= b["price"] < band[1] - EPS]
             P(f"    bought at {band[0] * 100:.0f}-{band[1] * 100:.1f}c: {fmt(g, days_all)}")
-        nm = f"kfast 45-second buy on Kalshi's non-crypto 15-minute windows (cushion {zbar or 'none'}, $10)"
+        nm = (f"kfast {'plain' if zbar is None else 'cushion 4+'}: 45-second buy on Kalshi's non-crypto 15-minute windows ($10)")
         c = exam.score(bs, nm, tries=tries + 2, src="k15x.py run", log=log)
         cards[nm] = c
         P(f"  EXAM: {c['verdict']} | {c['bets']} bets | {money(c.get('per100') or 0)} per $100 | halves {c.get('half1')} / {c.get('half2')}")
+    # 4b. backward-look lead: the leader looks too cheap at 50-90c in the last minutes (table 1). Buy it at the first
+    # real buy on the tape (taker price + fee), 2 minutes and 1 minute left, by price band; first half vs fresh half.
+    P("\n## 4b. Backward look: buy the leader at 50-90c with 1-2 minutes left at the first real buy on the tape, fee paid, $10\n")
+    P("| Group | Left | Bought at | All: bets / lost / per $100 / profit / a day | First half | Fresh half |")
+    P("|---|---|---|---|---|---|")
+    for g, ss in list(GROUP.items()) + [("All", list(data))]:
+        have = [s for s in ss if s in data]
+        if not have:
+            continue
+        for sec in (120, 60):
+            for band in ((0.5, 0.7), (0.7, 0.8), (0.8, 0.9)):
+                rows = [r for s in have for r in taker_rows(data[s], sec, band[0], band[1] - 0.001, look=sec + 60)]
+                bs = bets_of(rows, 10)
+                b1 = [b for b in bs if b["t"] < allmid[b["s"]]]
+                b2 = [b for b in bs if b["t"] >= allmid[b["s"]]]
+                P(f"| {g} | {sec // 60} min | {band[0] * 100:.0f}-{band[1] * 100:.0f}c | {fmt(bs, days_all)} | {fmt(b1, days_all / 2)} | {fmt(b2, days_all / 2)} |")
+                if g == "All":
+                    nm = f"buy the 15-minute leader at {band[0] * 100:.0f}-{band[1] * 100:.0f}c with {sec // 60} min left, Kalshi non-crypto (taker, $10)"
+                    c = exam.score(bs, nm, tries=tries + 20, src="k15x.py run (backward look)", log=log, quiet=True)
+                    cards[nm] = c
+                    P(f"|  | EXAM | {c['verdict']} | {c['bets']} bets, {c.get('groups')} separate, {money(c.get('per100') or 0)} per $100, luck {c.get('lo100')} to {c.get('hi100')} | halves {c.get('half1')} | {c.get('half2')} |")
     # 5. the losses one by one (main maker rule)
     rows = [r for s in data for r in maker_rows(data[s], 3, 0.95)]
     bs = {b["tk"]: b for b in bets_of(rows, 4)}
@@ -618,6 +671,8 @@ def run(arg=None):
         "gap to the ask": lambda r: f"{round((r['ask'] - r['bid']) * 100)}c",
         "series group": lambda r: next((g for g, ss in GROUP.items() if r["s"] in ss), "?"),
         "side": lambda r: r["side"],
+        "close time (New York)": lambda r: (dt.datetime.fromtimestamp(r["close"], UTC) - dt.timedelta(hours=5 if r["close"] > 1793570400 else 4)).strftime("%H:%M")
+        if (dt.datetime.fromtimestamp(r["close"], UTC) - dt.timedelta(hours=5 if r["close"] > 1793570400 else 4)).strftime("%H:%M") in NEWS else "other",
     }
     for fname, fn in feats.items():
         agg = collections.defaultdict(lambda: [0, 0, 0.0])
@@ -639,8 +694,13 @@ def run(arg=None):
             for b in bs2:
                 byday[b["t"] // 86400] += b["pay"] - b["cost"]
             worst = min(byday.values()) if byday else 0
+            out = collections.defaultdict(float)
+            for b in bs2:
+                out[b["ev"]] += b["cost"]
+            o = sorted(out.values())
+            omax, o99 = (o[-1], o[int(len(o) * 0.99)]) if o else (0, 0)
             P(f"- ${usd} bids, {nm}: {n} bets ({full} filled whole), {money(pnl)} in all, {money(pnl / days_all)} a day, "
-              f"{money(per)} per $100, worst day {money(worst)}")
+              f"{money(per)} per $100, worst day {money(worst)}, money out at one close: most {money(omax)}, 99 in 100 under {money(o99)}")
     with open(os.path.join(CACHE, "run.txt"), "w") as fh:
         fh.write("\n".join(L) + "\n")
     with open(os.path.join(CACHE, "cards.json"), "w") as fh:
