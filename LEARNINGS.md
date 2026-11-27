@@ -132,7 +132,9 @@ Too few bets means luck. A row only matters once a track has 30+ finished bets.
 
 <!-- AUTO:END -->
 
-## The 1 Jan decision checklist (draft, Jan to OK)
+## The 1 Jan decision checklist (locked 27 Nov, Jan's OK)
+
+Jan locked this on 27 Nov 2026 with one change: the money does not have to go into only one strategy. If two pass, the $300 may be split over the two.
 
 A strategy gets real money only if **every** answer is yes:
 
@@ -146,7 +148,7 @@ A strategy gets real money only if **every** answer is yes:
 6. **A stop rule is set before the first dollar**, for example "if $300 turns into $250, stop and look".
 
 - If nothing passes: **keep your money** (or keep paper testing into 2027).
-- If two pass: pick the one with the better worst case, not the bigger profit.
+- If two pass: the $300 may be split over the two (Jan, 27 Nov). The one with the better worst case gets the bigger half, not the one with the bigger profit.
 - Start with the low end ($300). Add more only after a month of real results that match the paper.
 
 ## Calendar
@@ -393,7 +395,7 @@ Still running on purpose, though the idea looks dead: the endgame lab variants `
   side by side with its paper twin, so we see if real fills match paper.
 - **Be the house on Polymarket combos? (11 Nov, now candidate #13, `combos.py replay`, "Promising, needs more bets")** On 4,945 combo buys by ordinary buyers, the pros kept $31 per $100. Selling 2-4 leg combos (no legs from the same game) at the legs' price +5%, only when that beats the pros' price: +$3.99 per $100 at risk on 1,581 buys, luck range +$0.68 to +$7.29, both halves ahead. Long shots lose for us. Jan said go (11 Nov): a listen-only paper quoter (`quoter/`) runs on Jan's own server (AWS Lightsail Stockholm, the free plan allows only that region) with a fresh empty wallet, since 11 Nov 12:17 UTC. Listen-only quoters DO get the requests and trade prices, and every 30 s Polymarket reports ~2,500-2,900 requests nobody quoted. Pass rule fixed with Jan's OK (PROTOCOL.md 5c): above +$1.00 per $100 at risk and both halves ahead, at 1 Jan or 1,000 settled bets. Score: probe `cmb_qscore`. **Bug found 15 Nov:** the server's day file filled up by ~02:00 UTC, so 11-15 Nov only counted parlays sold 01:00-03:20 Stockholm (late US evening, right before games); the rest of each day was missed. That's why the dashboard line jumped once a night. Fix: write only requests that really sold (needs a server restart). The first ~700 bets are a night-only slice. **Loss review (16 Nov, 842 settled, -$157 at $25 a parlay):** the night of 15-16 Nov lost $345, almost all on NBA parlays sold while games were on, many sharing the same favourites (Hawks in 24) who all won. Sold before any game had started: 132 parlays, +$9.57 per $100 (halves +$13.68 / +$5.46); sold with a game on: 710, -$2.68 (worst 1-2 hours into a game, -$12.59). Found by looking, so "could be luck". Jan picked a side scorecard (dashboard row `combo_prekick`, `combos.PRE_FROM`): same rule, only parlays sold before kick-off, counted from 16 Nov 09:30 UTC. No pass bar fixed yet; the locked main test is unchanged. **$100 pot (17 Nov, Jan: he'd start real money with $100, then add $200 if sure):** dashboard row `combo_pot100` replays the same sales with a real $100 pot at $5 a parlay, skipping a sale when no $5 is free (`combos.pot_sim`). On the night-only data to 16 Nov it could afford 143 of 904 parlays (each night's first ~20) and was -$34; with an endless pot the same sales were -$43 at $5 a parlay. Full-day logging from 17 Nov should spread sales out and cut the skips.
 
-1. **OK the 1 Jan checklist above?** Then it gets locked like the other rules.
+1. ~~**OK the 1 Jan checklist above?**~~ **Locked 27 Nov (Jan: yes, and the money may be split over two strategies if two pass).**
 2. ~~**Merge the open research PRs** (#66)~~ **Merged 10 Nov.**
 3. ~~**every_horse and ladder**: keep, or stop?~~ **Stopped 12 Nov (Jan: "Dump").**
 4. **Kalshi from Sweden:** the top candidate is a Kalshi strategy. Worth checking early.
