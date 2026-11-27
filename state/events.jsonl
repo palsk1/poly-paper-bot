@@ -41012,3 +41012,11 @@
 {"kind": "sports", "price": 0.95, "shares": 10, "side": "yes", "ticker": "KXNBATOTAL-26NOV27ATLBOS-195", "track": "kalshi_patient", "ts": "2026-11-27T12:50:08Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXNFLRSHYDS-26NOV29NOCIN-NOTETIENNE3-100", "track": "kalshi_patient", "ts": "2026-11-27T12:50:08Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.93, "shares": 10, "side": "no", "ticker": "KXNFL2H-26NOV29SEASF-TIE", "track": "kalshi_patient", "ts": "2026-11-27T12:50:08Z", "type": "kpatient_order"}
+{"minutes_left": 3.24, "price": 0.978, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV270800-00", "track": "kc_maker", "ts": "2026-11-27T12:56:45Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.978, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV270800-00", "track": "kc_maker_mid", "ts": "2026-11-27T12:56:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.978, "queue": 0, "shares": 25, "side": "no", "ticker": "KXDOGE15M-26NOV270800-00", "track": "kc_maker_pct", "ts": "2026-11-27T12:56:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.978, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV270800-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-27T12:56:46Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.982, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV270800-00", "track": "kc_maker", "ts": "2026-11-27T12:56:47Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.982, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV270800-00", "track": "kc_maker_safe", "ts": "2026-11-27T12:56:47Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.982, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV270800-00", "track": "kc_maker_mid", "ts": "2026-11-27T12:56:47Z", "type": "kmaker_order"}
+{"minutes_left": 3.24, "price": 0.982, "queue": 0, "shares": 25, "side": "yes", "ticker": "KXHYPE15M-26NOV270800-00", "track": "kc_maker_pct", "ts": "2026-11-27T12:56:47Z", "type": "kmaker_order"}
