@@ -85,6 +85,7 @@ def klist():
 
 # ================================================================ pairing
 HOLD = tsec("2026-11-10")
+PAIRS = os.path.join(ROOT, "backtest", "xs_pairs.json.gz")     # in git, so a probe on the branch can read it
 TOL = 2 * DAY          # Polymarket end within 2 days of Kalshi's close or planned expiry
 MIN_SCORE = float(os.environ.get("XS_SCORE", "0.55"))
 
@@ -180,7 +181,8 @@ def p_load():
 
 def match():
     """Text + date + defining numbers only. No price filter: a price filter would hide the very gaps we test."""
-    K = list((rj(os.path.join(CACHE, "kmarkets.json.gz"), {}) or {}).values())
+    K = [m for m in (rj(os.path.join(CACHE, "kmarkets.json.gz"), {}) or {}).values()
+         if not m["s"].startswith("KXMVE") and launch.kcategory(m["s"], m["q"]) not in ("sports", "esports", "crypto price")]
     P = p_load()
     print(f"kalshi {len(K)} non-sports settled, polymarket {len(P)} non-sports finished two-way")
     for x in K:
@@ -240,7 +242,7 @@ def match():
                       "p": {a: p.get(a) for a in ("id", "q", "slug", "ev_slug", "toks", "start", "end", "closed_t", "final", "vol", "fee")},
                       "score": round(s, 3), "same_result": p_yes == k_yes})
     pairs.sort(key=lambda x: -x["score"])
-    wj(os.path.join(CACHE, "pairs.json.gz"), pairs)
+    wj(PAIRS, pairs)
     c = collections.Counter(x["k"]["cat"] for x in pairs)
     agree = sum(x["same_result"] for x in pairs)
     print(f"pairs: {len(pairs)}, same result {agree}; by kind {dict(c.most_common())}")
@@ -278,7 +280,7 @@ def tape_one(job):
 
 def tapes():
     import informed
-    pairs = rj(os.path.join(CACHE, "pairs.json.gz"), []) or []
+    pairs = rj(PAIRS, []) or []
     path = os.path.join(CACHE, "tapes.json.gz")
     have = rj(path, {}) or {}
     todo = [x for x in pairs if x["k"]["t"] + "|" + x["p"]["id"] not in have]
@@ -465,7 +467,7 @@ NAMES = {"follow_k": "Buy on Polymarket where Kalshi's price is {g}c+ away (foll
 
 def run(score=True):
     import exam
-    pairs = rj(os.path.join(CACHE, "pairs.json.gz"), []) or []
+    pairs = rj(PAIRS, []) or []
     tps = rj(os.path.join(CACHE, "tapes.json.gz"), {}) or {}
     pairs = [x for x in pairs if x["k"]["t"] + "|" + x["p"]["id"] in tps]
     lines = [f"pairs with prices on both sites: {len(pairs)}, same result on both sites: {sum(x['same_result'] for x in pairs)}"]
