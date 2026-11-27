@@ -129,7 +129,7 @@ Swedes can use it). Are some listed far below what they normally sell for?
 **What the data says** (two snapshots, about 12 minutes apart, of all 37,450 listed CS2 items + their sale history, 27 Nov): only 55 items
 that sell 20+ times a week had a cheapest listing at least 5c per $1 under what a resale brings after Skinport's
 8 on each 100 seller fee. Buying one of each: about EUR 1,500 in, about EUR 130 paper gain. In the second
-snapshot 53 of the 55 were still there: nobody grabs them, which means they are not free money (most likely
+snapshot 53 of the 55 were still there: nobody grabbed them in 12 minutes, a hint (not proof) that they are not free money (most likely
 items still under Steam's 7-day "trade protection": you cannot resell them for a week and the seller can take
 them back). Plus: 7-8 days before you can resell, then the price you get is a guess.
 
