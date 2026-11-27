@@ -708,6 +708,66 @@ def report(*a):
               f"on $300 (${tot/max(1, 30*len(months_)):.3f}/day)")
         for m in months_:
             print(f"    {m[0]} {','.join(m[1]):24s} ${m[2]:.2f}")
+        # same rule, but only coins Kraken also sells as spot for USD, and the real perp-vs-spot gap at each switch
+        ksp = load("kraken_spot")
+        kcand_ = load("kraken_candles", {})
+        if ksp:
+            spd = {c: {int(r[0] // DAY) + 1: r[3] for r in v} for c, v in ksp.items() if v}
+            ppd = {c: {int((r[0] + H) // DAY): r[3] for r in v if (r[0] + H) % DAY == 0} for c, v in kcand_.items() if v}
+
+            def prem(c, d):
+                if c in spd and c in ppd and d in spd[c] and d in ppd[c]:
+                    return ppd[c][d] / spd[c][d] - 1
+                return None
+            t_, held, tot2, mon2, bets_k = d_first + 90, {}, 0.0, [], []
+            while t_ + 30 <= d_last:
+                sc = []
+                for coin, dd_ in kd.items():
+                    if coin not in spd:
+                        continue
+                    w = [dd_.get(x) for x in range(t_ - 90, t_)]
+                    if sum(1 for x in w if x is not None) >= 80 and prem(coin, t_) is not None:
+                        sc.append((sum(x for x in w if x is not None), coin))
+                pick = [c for _, c in sorted(sc, reverse=True)[:3]]
+                m_p = 0.0
+                for c in list(held):
+                    if c not in pick:      # close: buy back the perp, sell the spot; lose today's premium
+                        p = prem(c, t_) or 0.0
+                        r = -100 * (kfee + 0.001) - 100 * p
+                        held[c]["pnl"] += r
+                        m_p += r
+                        bets_k.append(held.pop(c))
+                for c in pick:
+                    if c not in held:      # open: short the perp at its premium over spot
+                        p = prem(c, t_) or 0.0
+                        r = -100 * (kfee + 0.001) + 100 * p
+                        held[c] = {"coin": c, "t": t_ * 86400, "pnl": r}
+                        m_p += r
+                    f = sum(kd[c].get(x, 0.0) for x in range(t_, t_ + 30)) * 100
+                    held[c]["pnl"] += f
+                    m_p += f
+                mon2.append((dstr(t_), pick, m_p))
+                tot2 += m_p
+                t_ += 30
+            for c in list(held):
+                p = prem(c, t_) or 0.0
+                r = -100 * (kfee + 0.001) - 100 * p
+                held[c]["pnl"] += r
+                tot2 += r
+                bets_k.append(held.pop(c))
+            print(f"  same rule, Kraken-spot coins only, real perp-vs-spot gap at each switch: ${tot2:.2f} over {len(mon2)} months "
+                  f"(${tot2/max(1, 30*len(mon2)):.3f}/day on $300)")
+            for m in mon2:
+                print(f"    {m[0]} {','.join(m[1]):24s} ${m[2]:.2f}")
+            print(f"  Kraken has no USD spot for: {sorted(c for c in kd if c not in spd)}")
+            try:
+                sys.path.insert(0, ".")
+                import exam
+                exam.score([{"cost": 100.0, "pay": 100.0 + b["pnl"], "t": b["t"], "ev": f"{b['coin']}-{b['t']}"} for b in bets_k],
+                           "funding Kraken spot+perp carry, rolling top-3", tries=3, src="outside/funding.py",
+                           note="rule fixed before the run; 3 versions looked at", log=False)
+            except Exception as ex:
+                print("exam skipped:", ex)
         # price check: Kraken perp vs Binance spot at day starts, and the coin's own price path
         kcand = load("kraken_candles", {})
         for coin in best3 + ["BTC", "ETH"]:
