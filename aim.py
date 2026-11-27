@@ -952,6 +952,66 @@ def orlive():
     wj(path, have)
 
 
+def or_weeks():
+    """{week start (Monday, ISO): {author: share in 100}} from the newest saved copy of the chart Kalshi settles on."""
+    snaps = (rj(os.path.join(CACHE, "or_share_text_req.json.gz"), None) or {}).get("snaps") or {}
+    if not snaps:
+        return {}
+    d = snaps[max(snaps)]["data"]["data"]
+    return {w["x"]: {k: 100 * v / sum(w["ys"].values()) for k, v in w["ys"].items()} for w in d}
+
+
+def or_check():
+    """python3 aim.py orcheck: (1) does the saved chart give Kalshi's results? (2) after the week is over (the chart is final),
+    is any winning side still cheap before Kalshi closes?"""
+    ms, tp, E = use_load()
+    S = or_weeks()
+    def week(m):
+        x = re.search(r"week of (\w+ \d+, \d{4})", m.get("rule", ""))
+        if not x:
+            return None
+        w = dt.datetime.strptime(x.group(1), "%b %d, %Y").date()
+        return w - dt.timedelta(days=w.weekday())
+    ok = bad = miss = 0
+    for ev, e in E.items():
+        if e["fam"] != "orshare":
+            continue
+        mm = [m for m in ms.values() if m["ev"] == ev]
+        w = week(mm[0])
+        v = S.get(w.isoformat() if w else "", {}).get(ORLAB.get(e["s"]))
+        if v is None:
+            miss += 1
+            continue
+        v = round(v, 1)
+        if all((v > m["X"]) == (m["res"] == "yes") for m in mm):
+            ok += 1
+        else:
+            bad += 1
+            print("  differs:", ev, w, v, [(m["X"], m["res"]) for m in sorted(mm, key=lambda m: m["X"])])
+    print(f"chart vs Kalshi result: {ok} weeks agree, {bad} differ (all on the strike next to the value), {miss} not on the chart")
+    bets, seen = [], set()
+    for t, m in ms.items():
+        w = week(m) if m["fam"] == "orshare" else None
+        v = S.get(w.isoformat(), {}).get(ORLAB.get(m["s"])) if w else None
+        if v is None or t not in tp:
+            continue
+        v, end = round(v, 1), dt.datetime.combine(w + dt.timedelta(days=7), dt.time(), dt.timezone.utc).timestamp()
+        for c in tp[t]["c"]:
+            ts, bid, ask = c[0], c[1], c[2]
+            if ts < end + 7200 or ts >= m["close"] or abs(v - m["X"]) < 0.3 or t in seen:
+                continue
+            yes = v > m["X"]
+            p = ask if yes else (None if bid is None else 1 - bid)
+            if p is None or not 0 < p < 0.995:
+                continue
+            seen.add(t)
+            cost = p + k_fee(p)
+            won = (m["res"] == "yes") == yes
+            bets.append((p, won, (1 - cost if won else -cost) / cost * 100))
+    print(f"after the week is over: {len(bets)} cheap-looking winning sides, {sum(b[1] for b in bets)} won, prices {sorted(round(b[0], 2) for b in bets)}, "
+          f"{round(sum(b[2] for b in bets) / max(1, len(bets)), 2)} per $100")
+
+
 # ================================================================ usage bets on Kalshi: ladders ("above X") on a public usage number
 def use_fam(s):
     if re.search(r"V(SPEND|REQ)$|^KXOSSPEND$|^KXOPENSOURCESHARE$", s):
@@ -1313,6 +1373,8 @@ if __name__ == "__main__":
         orday()
     elif cmd == "orlive":
         orlive()
+    elif cmd == "orcheck":
+        or_check()
     elif cmd == "klist":
         klist(PICKS.get(arg, arg) or ARENA_K)
     elif cmd == "ktapes":
