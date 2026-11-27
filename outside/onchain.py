@@ -266,6 +266,259 @@ def peek(arg=None):
     say("=== DONE ===")
 
 
+# ================================================================ gaps: same event, same second
+STOP = {"fc", "afc", "cf", "the", "de", "club", "sc", "ac", "cd", "rc", "ud", "real", "city", "united", "of", "and", "vs", "will",
+        "win", "to", "sl", "cfc", "hotspur", "albion", "wanderers"}
+
+
+def toks(name):
+    t = str(name).lower()
+    for a, b in (("é", "e"), ("á", "a"), ("ó", "o"), ("í", "i"), ("ü", "u"), ("ñ", "n"), ("ö", "o"), ("ã", "a")):
+        t = t.replace(a, b)
+    return {x for x in re.findall(r"[a-z0-9]+", t) if x not in STOP and len(x) > 2}
+
+
+def kv(desc):
+    out = {}
+    for part in str(desc).split("|"):
+        if ":" in part:
+            k, v = part.split(":", 1)
+            out[k] = v
+    return out
+
+
+def hl_book(coin):
+    bk = hl({"type": "l2Book", "coin": coin})
+    lv = bk.get("levels") if isinstance(bk, dict) else None
+    if not lv:
+        return None
+    return {"bids": [(f(b["px"]), f(b["sz"])) for b in lv[0]], "asks": [(f(a["px"]), f(a["sz"])) for a in lv[1]]}
+
+
+def walk_usd(levels, usd):
+    """Buy up to `usd` dollars along ascending ask levels: (avg price, shares) or None if too thin."""
+    left, sh, cost = usd, 0.0, 0.0
+    for p, z in levels:
+        if p <= 0:
+            continue
+        take = min(z, left / p)
+        sh += take
+        cost += take * p
+        left -= take * p
+        if left <= 1e-6:
+            return cost / sh, sh
+    return None
+
+
+def flip(levels):
+    """Bids of Yes seen as asks of No (merged book)."""
+    return sorted(((1 - p, z) for p, z in levels), key=lambda x: x[0])
+
+
+def hl_items():
+    meta = hl({"type": "outcomeMeta"})
+    outs = {o["outcome"]: o for o in meta.get("outcomes", [])}
+    items = []
+    for o in outs.values():
+        d = kv(o.get("description"))
+        if o.get("name") == "template:sportsContestWinner":
+            items.append({"kind": "game2", "a": d.get("participantA"), "b": d.get("participantB"), "comp": d.get("competition"),
+                          "start": d.get("scheduledStart"), "coin": f"#{10 * o['outcome']}",
+                          "label": f"{d.get('participantA')} beat {d.get('participantB')}"})
+    for q in meta.get("questions", []):
+        d = kv(q.get("description"))
+        if q.get("name") == "template:sportsContestResult":
+            for oid in q.get("namedOutcomes", []):
+                part = kv((outs.get(oid) or {}).get("description")).get("participant")
+                items.append({"kind": "soccer3", "a": d.get("participantA"), "b": d.get("participantB"), "comp": d.get("competition"),
+                              "start": d.get("scheduledStart"), "pick": part or "Draw", "coin": f"#{10 * oid}",
+                              "label": f"{d.get('participantA')} v {d.get('participantB')}: {part or 'Draw'}"})
+        elif q.get("name") == "template:sportsTournamentWinner":
+            for oid in q.get("namedOutcomes", []):
+                part = kv((outs.get(oid) or {}).get("description")).get("participant")
+                if part:
+                    items.append({"kind": "future", "comp": d.get("competition"), "pick": part, "coin": f"#{10 * oid}",
+                                  "label": f"{d.get('competition')} winner: {part}"})
+    return items
+
+
+PM_TAGS = ["nfl", "nba", "nhl", "epl", "la-liga", "serie-a", "bundesliga", "ligue-1", "ucl", "champions-league", "soccer", "ncaab", "college-football"]
+
+
+def pm_events():
+    sys.path.insert(0, ".")
+    import bot
+    evs, seen = [], set()
+    for tag in PM_TAGS:
+        for off in (0, 500):
+            try:
+                r = bot.http_json(f"{bot.GAMMA}/events", {"tag_slug": tag, "closed": "false", "limit": 500, "offset": off})
+            except Exception as e:
+                say(f"  gamma {tag}: {e}")
+                break
+            if not r:
+                break
+            for e in r:
+                if e.get("id") not in seen:
+                    seen.add(e.get("id"))
+                    evs.append(e)
+            if len(r) < 500:
+                break
+    for q in ["Super Bowl Champion 2027", "NBA Champion 2027", "Premier League Winner", "Champions League Winner", "La Liga Winner"]:
+        try:
+            r = bot.http_json(f"{bot.GAMMA}/public-search", {"q": q, "limit_per_type": 5})
+            for e in (r or {}).get("events") or []:
+                if e.get("id") not in seen and not e.get("closed"):
+                    seen.add(e.get("id"))
+                    evs.append(bot.http_json(f"{bot.GAMMA}/events/{e['id']}"))
+        except Exception as e:
+            say(f"  search {q}: {e}")
+    return evs
+
+
+def pm_index(evs):
+    sys.path.insert(0, ".")
+    import bot
+    rows = []
+    for e in evs:
+        for m in e.get("markets") or []:
+            if m.get("closed") or not m.get("active", True):
+                continue
+            outs = bot.jlist(m.get("outcomes"))
+            tks = bot.market_tokens(m)
+            if len(outs) != 2 or len(tks) != 2:
+                continue
+            rows.append({"et": e.get("title") or "", "q": m.get("question") or "", "git": m.get("groupItemTitle") or "", "outs": outs,
+                         "tks": tks, "start": m.get("gameStartTime") or e.get("startTime") or "", "m": m, "smt": m.get("sportsMarketType")})
+    return rows
+
+
+def ts(s, fmt):
+    import calendar
+    try:
+        return calendar.timegm(time.strptime(s, fmt))
+    except Exception:
+        return None
+
+
+def match(items, rows):
+    pairs = []
+    for it in items:
+        best = None
+        if it["kind"] in ("game2", "soccer3"):
+            ta, tb = toks(it["a"]), toks(it["b"])
+            t0 = ts(it.get("start") or "", "%Y%m%d-%H%M")
+            for r in rows:
+                text = toks(r["et"])
+                if not (ta & text and tb & text):
+                    continue
+                st = ts(str(r["start"])[:19].replace(" ", "T"), "%Y-%m-%dT%H:%M:%S") if r["start"] else None
+                if t0 and st and abs(st - t0) > 30 * 3600:
+                    continue
+                q = r["q"].lower()
+                if it["kind"] == "game2":
+                    if r["smt"] not in (None, "moneyline") or "draw" in q or "spread" in q or "o/u" in q:
+                        continue
+                    o0, o1 = toks(r["outs"][0]), toks(r["outs"][1])
+                    if o0 & ta and o1 & tb:
+                        best = (r, 0)
+                        break
+                    if o0 & tb and o1 & ta:
+                        best = (r, 1)
+                        break
+                    continue
+                if r["outs"][0].lower() != "yes":
+                    continue
+                if it["pick"] == "Draw":
+                    if "draw" in q:
+                        best = (r, 0)
+                        break
+                elif toks(it["pick"]) & toks(r["git"] or r["q"]) and "draw" not in q and " win" in " " + q:
+                    best = (r, 0)
+                    break
+        else:
+            tp = toks(it["pick"])
+            c = str(it["comp"]).lower()
+            comp = toks(c) | ({"super", "bowl"} if "football league" in c else set()) | ({"nba"} if "nba" in c else set())
+            for r in rows:
+                if r["outs"][0].lower() != "yes" or not tp or not (comp & toks(r["et"])):
+                    continue
+                g = toks(r["git"] or r["q"])
+                if tp <= g or (r["git"] and toks(r["git"]) and toks(r["git"]) <= tp):
+                    best = (r, 0)
+                    break
+        if best:
+            pairs.append((it, best[0], best[1]))
+    return pairs
+
+
+def gaps(rounds=None, wait=None):
+    sys.path.insert(0, ".")
+    import bot
+    rounds, wait = int(rounds or 6), int(wait or 90)
+    items = hl_items()
+    say(f"HL items {len(items)}: " + str({k: sum(1 for i in items if i['kind'] == k) for k in ('game2', 'soccer3', 'future')}))
+    evs = pm_events()
+    rows = pm_index(evs)
+    say(f"PM events {len(evs)}, two-outcome markets {len(rows)}")
+    pairs = match(items, rows)
+    say(f"matched pairs {len(pairs)}")
+    for it, r, side in pairs:
+        say(f"  PAIR {it['label'][:58]!r} <-> {r['et'][:40]!r} / {r['q'][:50]!r} -> {r['outs'][side]}")
+    got = {id(p[0]) for p in pairs}
+    say(f"unmatched HL items {sum(1 for i in items if id(i) not in got)}: {[i['label'][:38] for i in items if id(i) not in got][:50]}")
+    log, track, USD = [], {}, 25.0
+    for rd in range(rounds):
+        t0 = time.time()
+        n_lock = 0
+        for it, r, side in pairs:
+            hb = hl_book(it["coin"])
+            if not hb or not hb["asks"] or not hb["bids"]:
+                continue
+            pb_yes, pb_no = bot.book(r["tks"][side]), bot.book(r["tks"][1 - side])
+            if not pb_yes or not pb_no or not pb_yes["asks"] or not pb_yes["bids"]:
+                continue
+            rate = bot.fee_rate(r["m"])
+            rec = {"t": round(time.time(), 1), "rd": rd, "k": it["kind"], "lab": it["label"][:70], "hb": hb["bids"][0][0], "ha": hb["asks"][0][0],
+                   "pb": pb_yes["bids"][0][0], "pa": pb_yes["asks"][0][0], "rate": rate,
+                   "hdepth": round(sum(p * z for p, z in hb["asks"][:5])), "pdepth": round(sum(p * z for p, z in pb_yes["asks"][:5]))}
+            for name, hl_lv, pm_lv in (("hlY_pmN", hb["asks"], pb_no["asks"]), ("hlN_pmY", flip(hb["bids"]), pb_yes["asks"])):
+                if not pm_lv:
+                    continue
+                top = hl_lv[0][0] + pm_lv[0][0] + rate * pm_lv[0][0] * (1 - pm_lv[0][0]) + 0.001
+                rec[name + "_top"] = round(1 - top, 4)
+                a, b = walk_usd(hl_lv, USD / 2), walk_usd(pm_lv, USD / 2)
+                if a and b:
+                    rec[name] = round(1 - (a[0] + b[0] + rate * b[0] * (1 - b[0]) + 0.001), 4)
+                if top < 1:
+                    n_lock += 1
+                    track.setdefault((it["label"], name), []).append((rd, rec[name + "_top"], rec.get(name)))
+            log.append(rec)
+        say(f"round {rd}: {len(log)} reads so far, {time.time() - t0:.0f}s, top-of-book locks after fees this round {n_lock}")
+        if rd < rounds - 1:
+            time.sleep(max(0, wait - (time.time() - t0)))
+    with gzip.open(os.path.join(CACHE, f"gaps_{int(time.time())}.json.gz"), "wt") as fh:
+        json.dump(log, fh)
+    say("\n== HL middle minus Polymarket middle ==")
+    for k in ("game2", "soccer3", "future"):
+        xs = sorted((x["hb"] + x["ha"]) / 2 - (x["pb"] + x["pa"]) / 2 for x in log if x["k"] == k)
+        if not xs:
+            continue
+        say(f"  {k}: reads {len(xs)}, median {100 * xs[len(xs) // 2]:+.2f}c, 10%/90% {100 * xs[len(xs) // 10]:+.2f}c/{100 * xs[9 * len(xs) // 10]:+.2f}c, "
+            f"2c+ apart {sum(1 for x in xs if abs(x) >= 0.02)}")
+        sh = sorted(x["ha"] - x["hb"] for x in log if x["k"] == k)
+        sp = sorted(x["pa"] - x["pb"] for x in log if x["k"] == k)
+        dh = sorted(x["hdepth"] for x in log if x["k"] == k)
+        dp = sorted(x["pdepth"] for x in log if x["k"] == k)
+        say(f"     gap bid-ask: HL median {100 * sh[len(sh) // 2]:.2f}c, PM {100 * sp[len(sp) // 2]:.2f}c; $ on the first 5 asks: HL {dh[len(dh) // 2]}, PM {dp[len(dp) // 2]}")
+    say("\n== locks: buy one side on each site, after fees ==")
+    for (lab, name), v in sorted(track.items(), key=lambda x: -max(y[1] for y in x[1]))[:40]:
+        say(f"  {lab[:58]!r} {name}: rounds {[y[0] for y in v]} per $1 at the top {[y[1] for y in v]} at $25 {[y[2] for y in v]}")
+    allv = [x[n] for x in log for n in ("hlY_pmN", "hlN_pmY") if n in x]
+    say(f"  lock checks at $25: {len(allv)}, above $0: {sum(1 for v in allv if v > 0)}, best {max(allv) if allv else None}")
+    say("=== DONE ===")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
