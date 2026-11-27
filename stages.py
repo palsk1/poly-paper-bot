@@ -184,11 +184,48 @@ def scan_clocks():
                 print("    365 parse", e)
 
 
+# ---------------------------------------------------------------- peek: what the stage markets look like
+PEEK = ("KXNBA1Q", "KXNBA1H", "KXNBA3Q", "KXNBAGAME", "KXNFL1Q", "KXNFL1H", "KXNFLGAME", "KXNCAAF1H", "KXNCAAMB1H", "KXNCAAMBGAME",
+        "KXNHL1P", "KXNHL2P", "KXNHLGAME", "KXCS2MAP", "KXCS2GAME", "KXLOLMAP", "KXLOLGAME", "KXDOTA2MAP", "KXDOTA2GAME",
+        "KXVALORANTMAP", "KXVALORANTGAME", "KXCODMAP", "KXMLBGAME", "KXMLBF5", "KXMLB1I", "KXWNBAGAME", "KXUEFANL1H")
+
+
+def first_close(series):
+    """Oldest settled market of a series (historical list first)."""
+    for path in ("/historical/markets", "/markets"):
+        try:
+            p = {"series_ticker": series, "limit": 1000}
+            if path == "/markets":
+                p["status"] = "settled"
+            r = yesno.kget(path, p)
+            got = [m for m in r.get("markets") or [] if str(m.get("event_ticker", "")).startswith(series)]
+            if got:
+                return min(got, key=lambda m: m.get("close_time") or "z").get("close_time"), path, len(got), bool(r.get("cursor"))
+        except Exception as e:
+            print("   ", series, path, str(e)[:80])
+    return None, None, 0, False
+
+
+def peek():
+    for s in PEEK:
+        _, rows, err = recent_settled(s, 10)
+        fc = first_close(s)
+        print(f"\n== {s}: {len(rows)} settled in 10 days {err} | oldest seen {fc}", flush=True)
+        for m in rows[:4]:
+            print("  ", m.get("ticker"), "|", m.get("event_ticker"), "|", str(m.get("title"))[:70], "|", str(m.get("yes_sub_title"))[:30],
+                  "| open", m.get("open_time"), "| close", m.get("close_time"), "| exp", m.get("expected_expiration_time"), "| res", m.get("result"),
+                  "| vol", m.get("volume_fp") or m.get("volume"))
+        if rows:
+            print("   rules:", str(rows[0].get("rules_primary"))[:300])
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     if cmd == "scan":
         scan_kalshi()
         scan_clocks()
+    elif cmd == "peek":
+        peek()
     elif cmd == "clocks":
         scan_clocks()
     else:
