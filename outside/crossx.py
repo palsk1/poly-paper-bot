@@ -13,13 +13,16 @@ from concurrent.futures import ThreadPoolExecutor
 
 DIR = "bt_cache/out_crossx"
 UA = {"User-Agent": "Mozilla/5.0 (research script)"}
-# taker fee per trade, small account (rough): kraken pro 0.40, stable/fx pairs 0.20; bitstamp 0.40; coinbase advanced
-# 1.20; bitvavo 0.25; okx 0.10; binance 0.10; bitfinex 0.20
-FEES = {"kraken": 0.0040, "bitstamp": 0.0040, "coinbase": 0.0120, "bitvavo": 0.0025, "okx": 0.0010,
+# taker fee per trade, entry tier, small EU account (checked 27 Nov 2026 on the venues' fee pages):
+# kraken pro tier 1 0.80 (stable/fx pairs 0.20); bitstamp 0.40 (stable 0.08); coinbase advanced EU 0.50 (stable pairs
+# not public, guess 0.10); bitvavo 0.25 (stable 0.10); okx EU 0.10; binance 0.10 / bitfinex 0.20 = reference only
+# (no MiCA licence covering Sweden); firi guess 0.70
+FEES = {"kraken": 0.0080, "bitstamp": 0.0040, "coinbase": 0.0050, "bitvavo": 0.0025, "okx": 0.0010,
         "binance": 0.0010, "bitfinex": 0.0020, "firi": 0.0070}
-STABLE_FEE = {"kraken": 0.0020, "bitstamp": 0.0040, "coinbase": 0.0000, "bitvavo": 0.0025, "okx": 0.0010,
+STABLE_FEE = {"kraken": 0.0020, "bitstamp": 0.0008, "coinbase": 0.0010, "bitvavo": 0.0010, "okx": 0.0010,
               "binance": 0.0010, "bitfinex": 0.0020}
 STABLES = {"USDC", "USDT", "EURC", "USDG", "PYUSD", "DAI", "EURQ", "EURR", "RLUSD", "USDE", "FDUSD", "EURI", "USD1"}
+USABLE = {"kraken", "bitstamp", "coinbase", "bitvavo", "okx", "firi"}
 QUOTES = {"EUR", "BTC", "USD", "SEK", "USDC"}
 
 
@@ -252,6 +255,11 @@ def sample(minutes=60, every=15):
     for (v, b, q) in m:
         vc[v] = vc.get(v, 0) + 1
     print("pairs found per venue:", vc)
+    for s_ in ("BTCSEK",):
+        try:
+            print("firi depth sample:", json.dumps(get(f"https://api.firi.com/v2/markets/{s_}/depth"))[:300])
+        except Exception as e:
+            print("firi depth", e)
     # keep coins quoted in EUR on 2+ venues for the cross check; cross pairs for triangles; stable/fx pairs
     eurv = {}
     for (v, b, q) in m:
@@ -275,7 +283,7 @@ def sample(minutes=60, every=15):
             t0 = time.time()
             top, errs = tops(keep)
             # candidates: cross-venue gross gap > fees on top of book
-            cands = []
+            cands = []; susp = []
             byc = {}
             for (v, b, q), t in top.items():
                 if q == "EUR":
@@ -285,9 +293,11 @@ def sample(minutes=60, every=15):
                     for vb, tb in lst:
                         if va == vb:
                             continue
-                        fa, fb = fee(va, b, "EUR"), fee(vb, b, "EUR")
-                        if tb[0] * (1 - fb) > ta[2] * (1 + fa):
-                            cands.append((b, va, vb))
+                        g = tb[0] / ta[2]
+                        if g > 1.03:
+                            susp.append((b, va, vb, round((g - 1) * 1e4)))   # >3 EUR per 100: other coin / wallet shut
+                        elif g > 1.001:
+                            cands.append((b, va, vb, round((g - 1) * 1e4, 1)))
             # triangles with top of book: EUR->C->BTC->EUR and back
             tri = []
             for v in set(k[0] for k in top):
@@ -308,7 +318,7 @@ def sample(minutes=60, every=15):
             # re-check candidates on full books right away (cap per snapshot)
             checks = []
             def chk(c):
-                b, va, vb = c
+                b, va, vb = c[:3]
                 try:
                     t1 = time.time()
                     with ThreadPoolExecutor(2) as ex:
@@ -318,16 +328,18 @@ def sample(minutes=60, every=15):
                     for eur in (50, 100, 300):
                         p = cross_profit(A[1], fee(va, b, "EUR"), B[0], fee(vb, b, "EUR"), eur)
                         r[str(eur)] = None if p is None else round(p, 3)
+                        g0 = cross_profit(A[1], 0, B[0], 0, eur)
+                        r["g" + str(eur)] = None if g0 is None else round(g0, 3)
                     r["ga"] = A[1][0][0] if A[1] else None; r["gb"] = B[0][0][0] if B[0] else None
                     return r
                 except Exception as e:
                     return {"b": b, "buy": va, "sell": vb, "err": str(e)[:60]}
-            cands.sort()
+            cands.sort(key=lambda c: -c[3])
             with ThreadPoolExecutor(6) as ex:
-                checks = list(ex.map(chk, cands[:24]))
+                checks = list(ex.map(chk, cands[:30]))
             nchk += len(checks)
             rec = {"t": round(t0, 1), "top": {"|".join(k): [round(x, 10) for x in v[:4]] for k, v in top.items()},
-                   "cands": [list(c) for c in cands], "checks": checks, "tri": tri, "errs": errs, "eursek": eursek}
+                   "cands": [list(c) for c in cands], "susp": susp, "checks": checks, "tri": tri, "errs": errs, "eursek": eursek}
             f.write(json.dumps(rec, separators=(",", ":")) + "\n")
             n += 1
             if n % 20 == 1:
@@ -354,7 +366,7 @@ def fx_sek():
 def load():
     recs = []
     for fn in sorted(os.listdir(DIR)) if os.path.isdir(DIR) else []:
-        if fn.startswith("snap_"):
+        if fn.startswith("snap_") and fn > "snap_20261127T1405":  # first file = 3-min debug run, old fees
             with gzip.open(f"{DIR}/{fn}", "rt") as f:
                 for line in f:
                     try:
@@ -370,52 +382,69 @@ def report():
         print("no snapshots"); return
     print(f"\n=== REPORT: {len(R)} snapshots, {time.strftime('%Y-%m-%d %H:%M', time.gmtime(R[0]['t']))} to "
           f"{time.strftime('%Y-%m-%d %H:%M', time.gmtime(R[-1]['t']))} UTC ===")
-    # 1. cross-venue
-    pos = {}
-    tot = {"50": 0, "100": 0, "300": 0}
-    best = []
-    ncand = sum(len(r["cands"]) for r in R)
-    nchk = 0
-    prev = set()
-    episodes = {}
-    for r in R:
-        cur = set()
-        for c in r["checks"]:
-            if "err" in c:
-                continue
-            nchk += 1
-            key = (c["b"], c["buy"], c["sell"])
-            for e in ("50", "100", "300"):
-                if c.get(e) is not None and c[e] > 0:
-                    pos.setdefault(key, {"50": [], "100": [], "300": []})[e].append(c[e])
-            if c.get("100") is not None and c["100"] > 0:
-                cur.add(key)
-                if key not in prev:
-                    episodes.setdefault(key, []).append([c["100"], c.get("300") or 0, 1])
-                else:
-                    ep = episodes[key][-1]; ep[0] = max(ep[0], c["100"]); ep[1] = max(ep[1], c.get("300") or 0); ep[2] += 1
-            best.append((c.get("100") or -99, c))
-        prev = cur
-    print(f"\n1) CROSS-VENUE (EUR pairs): top-of-book candidates {ncand}, re-checked on full books {nchk}")
-    n100 = sum(len(v["100"]) for v in pos.values()); n300 = sum(len(v["300"]) for v in pos.values())
-    print(f"   re-checks still positive after both taker fees: at EUR100 {n100}, at EUR300 {n300}")
-    neps = sum(len(v) for v in episodes.values())
-    e100 = sum(ep[0] for v in episodes.values() for ep in v); e300 = sum(ep[1] for v in episodes.values() for ep in v)
     hours = (R[-1]["t"] - R[0]["t"]) / 3600 or 1
-    print(f"   separate episodes (one trade per gap until it closes): {neps}; take each once: "
-          f"EUR{e100:.2f} at EUR100 a trade, EUR{e300:.2f} at EUR300, over {hours:.1f} h")
-    rows = sorted(((sum(v['100']), k, len(v['100']), len(episodes.get(k, [])), sum(v['300']), len(v['300']))
-                   for k, v in pos.items()), reverse=True)[:20]
-    print("   coin buy->sell | positive looks | episodes | sum EUR at 100 | at 300 (n)")
-    for s, k, n, ne, s3, n3 in rows:
-        print(f"   {k[0]:7s} {k[1]:>8s}->{k[2]:<8s} {n:4d} {ne:4d}  {s:8.2f}  {s3:8.2f} ({n3})")
+    ncand = sum(len(r["cands"]) for r in R)
+    nsusp = {}
+    for r in R:
+        for s_ in r.get("susp", []):
+            nsusp[tuple(s_[:3])] = max(nsusp.get(tuple(s_[:3]), 0), s_[3])
+    print(f"\n1) CROSS-VENUE (EUR pairs): top-of-book gaps over 0.10 EUR per 100 before fees: {ncand} looks over {hours:.1f} h")
+    print(f"   gaps over 3 EUR per 100 (same ticker, other coin, or wallets closed; not tradeable): {len(nsusp)} pairs, e.g. "
+          + ", ".join(f"{k[0]} {k[1]}->{k[2]}" for k in list(nsusp)[:8]))
+    for label, ok_venues, lens in (("all venues, real taker fees", None, "taker"),
+                                   ("Sweden-usable venues only (no binance/bitfinex), real taker fees", USABLE, "taker"),
+                                   ("Sweden-usable, if both sides paid only 0.05 (big-volume / maker world)", USABLE, "cheap")):
+        pos = {}; episodes = {}; prev = set(); nchk = 0; best = []
+        for r in R:
+            cur = set()
+            for c in r["checks"]:
+                if "err" in c or not c.get("ga") or not c.get("gb") or c["gb"] / c["ga"] > 1.03:
+                    continue
+                if ok_venues and (c["buy"] not in ok_venues or c["sell"] not in ok_venues):
+                    continue
+                nchk += 1
+                key = (c["b"], c["buy"], c["sell"])
+                vals = {}
+                for e in ("50", "100", "300"):
+                    if lens == "taker":
+                        vals[e] = c.get(e)
+                    else:
+                        g = c.get("g" + e)
+                        vals[e] = None if g is None else g - int(e) * 0.001
+                for e, v in vals.items():
+                    if v is not None and v > 0:
+                        pos.setdefault(key, {"50": [], "100": [], "300": []})[e].append(v)
+                v1 = vals["100"]
+                if v1 is not None and v1 > 0:
+                    cur.add(key)
+                    if key not in prev:
+                        episodes.setdefault(key, []).append([v1, vals["300"] or 0, 1])
+                    else:
+                        ep = episodes[key][-1]; ep[0] = max(ep[0], v1); ep[1] = max(ep[1], vals["300"] or 0); ep[2] += 1
+                best.append((v1 if v1 is not None else -99, c))
+            prev = cur
+        n100 = sum(len(v["100"]) for v in pos.values()); n300 = sum(len(v["300"]) for v in pos.values())
+        neps = sum(len(v) for v in episodes.values())
+        e100 = sum(ep[0] for v in episodes.values() for ep in v); e300 = sum(ep[1] for v in episodes.values() for ep in v)
+        lens_ = [ep[2] for v in episodes.values() for ep in v]
+        print(f"\n   [{label}] re-checked on full books: {nchk}; still positive at EUR100: {n100}, at EUR300: {n300}")
+        print(f"   separate episodes: {neps} (median length {sorted(lens_)[len(lens_)//2] if lens_ else 0} looks); "
+              f"taking each once: EUR{e100:.2f} at EUR100 a trade, EUR{e300:.2f} at EUR300 a trade")
+        rows = sorted(((sum(v['100']), k, len(v['100']), len(episodes.get(k, [])), sum(v['300']), len(v['300']))
+                       for k, v in pos.items()), reverse=True)[:12]
+        if rows:
+            print("   coin buy->sell | positive looks | episodes | sum EUR at 100 | at 300 (n)")
+        for s, k, n, ne, s3, n3 in rows:
+            print(f"   {k[0]:7s} {k[1]:>8s}->{k[2]:<8s} {n:4d} {ne:4d}  {s:8.2f}  {s3:8.2f} ({n3})")
+        for p, c in sorted(best, key=lambda x: -x[0])[:3]:
+            print("    best:", c)
     # gross gaps on top of book, by coin, how often > 1 per mille ignoring fees (to show how far fees are)
     gg = {}
     for r in R:
         byc = {}
         for k, v in r["top"].items():
             vn, b, q = k.split("|")
-            if q == "EUR" and b not in STABLES:
+            if q == "EUR" and b not in STABLES and vn in USABLE:
                 byc.setdefault(b, []).append((vn, v))
         for b, lst in byc.items():
             if len(lst) < 2:
@@ -423,7 +452,8 @@ def report():
             hb = max(lst, key=lambda x: x[1][0]); la = min(lst, key=lambda x: x[1][2])
             if hb[0] != la[0]:
                 g = (hb[1][0] / la[1][2] - 1) * 1e4
-                gg.setdefault(b, []).append(g)
+                if g < 300:
+                    gg.setdefault(b, []).append(g)
     print("\n   gross gap best bid elsewhere vs cheapest ask, per coin (cents per EUR100, before fees): median / 90th pct / max, looks")
     rows = []
     for b, l in gg.items():
@@ -432,10 +462,7 @@ def report():
     rows.sort(reverse=True)
     for p90, b, med, mx, n in rows[:25]:
         print(f"   {b:8s} {med:8.1f} {p90:8.1f} {mx:9.1f} {n:5d}")
-    print("   (100 = EUR1.00 per EUR100 before fees; the cheapest pair of taker fees is 2 x 0.10 = 20 on okx+binance)")
-    print("   biggest single re-checked results at EUR100:")
-    for p, c in sorted(best, key=lambda x: -x[0])[:8]:
-        print("   ", c)
+    print("   (100 = EUR1.00 per EUR100 before fees; cheapest usable pair of taker fees: okx 0.10 + bitvavo 0.25 = 35)")
     # 2. triangles
     print("\n2) TRIANGLES inside one venue (EUR->coin->BTC->EUR and back), cents per EUR100")
     tri = {}
@@ -621,6 +648,9 @@ def depeg():
              for t in bets_all[0.99] if not t[0].startswith("UST")]
         if b:
             exam.score(b, "crossx stablecoin dip buy (<$0.99, Binance hourly, no UST)", tries=4)
+        b2 = [{"ev": t[0] + t[1][:7], "t": time.mktime(time.strptime(t[1], "%Y-%m-%d %H:00")), "cost": 100.0,
+               "pay": 100.0 + t[5], "sh": 100.0} for t in bets_all[0.99]]
+        exam.score(b2, "crossx stablecoin dip buy (<$0.99, Binance hourly, UST included)", tries=4)
     except Exception as e:
         print("exam skipped:", e)
     print("=== DONE ===")
