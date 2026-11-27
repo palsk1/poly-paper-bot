@@ -42127,3 +42127,7 @@
 {"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXXRPD-26NOV2717-T0.9799", "track": "kalshi_patient", "ts": "2026-11-27T22:02:26Z", "type": "kpatient_result"}
 {"fee": 0.0091, "outcome": "No", "price": 0.962, "shares": 5, "title": "Will the Hodge Conjecture be the next Millennium Prize Problem solved by AI?", "token": "56231361318729609047657776916607067027265303031581727015326514725055404863922", "track": "boring_no", "ts": "2026-11-27T22:05:33Z", "type": "paper_buy"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXHIGHTPHX-26NOV27-B79.5", "track": "kalshi_patient", "ts": "2026-11-27T22:05:39Z", "type": "kpatient_fill"}
+{"minutes_left": 6.29, "price": 0.979, "queue": 256.44, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV271715-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-27T22:08:44Z", "type": "kmaker_order"}
+{"minutes_left": 6.29, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXHYPE15M-26NOV271715-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-27T22:08:46Z", "type": "kmaker_order"}
+{"minutes_left": 6.29, "price": 0.992, "queue": 102.0, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV271715-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-27T22:08:47Z", "type": "kmaker_order"}
+{"minutes_left": 6.29, "price": 0.989, "queue": 51.0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV271715-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-27T22:08:47Z", "type": "kmaker_order"}
