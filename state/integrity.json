@@ -1,23 +1,23 @@
 {
  "alerted": {},
- "checked": "2026-11-27T18:58:42Z",
+ "checked": "2026-11-27T19:06:52Z",
  "deep_checked": "2026-11-27T05:11:21Z",
  "deep_problems": [],
  "problems": [
   {
    "key": "too_good",
    "track": "kc_maker_mid",
-   "what": "131 finished trades and not one loss: check the fills before trusting it"
+   "what": "133 finished trades and not one loss: check the fills before trusting it"
   },
   {
    "key": "too_good",
    "track": "kc_maker_pct",
-   "what": "40 finished trades and not one loss: check the fills before trusting it"
+   "what": "43 finished trades and not one loss: check the fills before trusting it"
   },
   {
    "key": "too_good",
    "track": "kc_maker_safe_usd_10m",
-   "what": "130 finished trades and not one loss: check the fills before trusting it"
+   "what": "131 finished trades and not one loss: check the fills before trusting it"
   }
  ]
 }
