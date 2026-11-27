@@ -214,13 +214,27 @@ def ornn():
             print(f"  {k}: {json.dumps(v)[:300]}", flush=True)
 
 
+def slow(url, tries=3):
+    last = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=120) as f:
+                return json.loads(f.read().decode("utf-8", "replace"))
+        except Exception as e:
+            last = str(e)[:120]
+            time.sleep(5 + 10 * i)
+    return {"_err": last}
+
+
 def arch():
     """Older index days: every archived copy (web.archive.org) of the free index-history JSON, merged per GPU and day.
     Each copy holds the 3 months before it was saved, so the copies together reach back further than today's free window."""
     snaps = []
-    for u in ["api.ornnai.com/api/gpu/", "data.ornn.com/api/public-index/gpu/"]:
-        r = get("https://web.archive.org/cdx/search/cdx", {"url": u, "matchType": "prefix", "output": "json", "limit": 3000,
-                                                          "filter": "statuscode:200"})
+    for u in ["api.ornnai.com/api/gpu/*", "data.ornn.com/api/public-index/gpu/*", "api.ornnai.com/api/*",
+              "data.ornn.com/api/public-index/*"]:
+        r = slow("https://web.archive.org/cdx/search/cdx?" + urllib.parse.urlencode(
+            {"url": u, "output": "json", "limit": 3000, "filter": "statuscode:200"}))
         if isinstance(r, list):
             snaps += [row for row in r[1:] if "index-history" in row[2]]
         else:
