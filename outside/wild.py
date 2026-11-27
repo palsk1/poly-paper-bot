@@ -216,6 +216,101 @@ def vol(hair="1"):
         print("live check failed:", e)
 
 
+# ---------------------------------------------------------------- volreal (real Deribit option trades)
+MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
+
+def exp_code(t):
+    g = time.gmtime(t)
+    return f"{g.tm_mday}{MON[g.tm_mon-1]}{g.tm_year % 100:02d}"
+
+
+def week_trades(cur, t0, hours=3):
+    """All option trades of cur in [t0, t0+hours] for the weekly expiring t0+7d (history.deribit.com)."""
+    key = f"wk_{cur}_{t0}"
+    c = load(key)
+    if c is not None:
+        return c
+    code = f"{cur}-{exp_code(t0 + 7 * 86400)}-"
+    out = []; st0 = t0 * 1000; end = (t0 + hours * 3600) * 1000
+    for _ in range(60):
+        r = get("https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?"
+                f"currency={cur}&kind=option&start_timestamp={st0}&end_timestamp={end}&count=1000&sorting=asc&include_old=true")["result"]
+        tr = r.get("trades") or []
+        for x in tr:
+            if x["instrument_name"].startswith(code):
+                out.append([x["instrument_name"], x["timestamp"], x["price"], x["index_price"], x.get("iv"), x["direction"], x["amount"]])
+        if not r.get("has_more") or not tr:
+            break
+        st0 = tr[-1]["timestamp"] + 1
+    save(key, out)
+    return out
+
+
+def volreal(cur="BTC", start="2022"):
+    d = deribit_daily(cur)
+    px = {int(k): v for k, v in d["px"].items()}; dv = {int(k): v for k, v in d["dvol"].items()}
+    t = 1617955200 + 8 * 3600
+    t0s = []
+    while t + 7 * 86400 < time.time():
+        if time.gmtime(t).tm_year >= int(start):
+            t0s.append(t)
+        t += 7 * 86400
+    rows = {"straddle": [], "put8": []}
+    ivgap = []
+    for t0 in t0s:
+        try:
+            tr = week_trades(cur, t0)
+        except Exception as e:
+            print("fetch fail", t0, str(e)[:80]); continue
+        S0 = px.get(t0); S1 = px.get(t0 + 7 * 86400)
+        if not tr or not S0 or not S1:
+            continue
+        sells = [x for x in tr if x[5] == "sell"]        # taker sold = price at the bid: what we would get selling now
+        def best(kind, target):
+            c = [x for x in sells if x[0].endswith("-" + kind)]
+            if not c:
+                return None
+            k = min({float(x[0].split("-")[2]) for x in c}, key=lambda K: abs(K - target))
+            xs = [x for x in c if float(x[0].split("-")[2]) == k]
+            # average bid-side price in USD, first hour preferred
+            pr = st.mean(x[2] * x[3] for x in xs[:20])
+            iv = st.mean(x[4] for x in xs[:20] if x[4]) if any(x[4] for x in xs[:20]) else None
+            return k, pr, iv
+        c = best("C", S0); p = best("P", S0)
+        if c and p and abs(c[0] - p[0]) / S0 < 0.02:
+            fee = min(0.0003 * S0, 0.125 * c[1]) + min(0.0003 * S0, 0.125 * p[1]) + 0.00015 * S0 * 2
+            pay = max(S1 - c[0], 0) + max(p[0] - S1, 0)
+            rows["straddle"].append((t0, c[1] + p[1], pay, fee, S0))
+            day0 = t0 - t0 % 86400
+            if dv.get(day0) and c[2] and p[2]:
+                ivgap.append((c[2] + p[2]) / 2 - dv[day0])
+        q = best("P", 0.92 * S0)
+        if q and 0.88 * S0 < q[0] < 0.95 * S0:
+            fee = min(0.0003 * S0, 0.125 * q[1]) + min(0.00015 * S0, 0.125 * q[1])
+            rows["put8"].append((t0, q[1], max(q[0] - S1, 0), fee, S0))
+    if ivgap:
+        print(f"{cur}: weekly at-the-money bid-side swing minus DVOL: median {st.median(ivgap):+.1f} points over {len(ivgap)} weeks")
+    import exam
+    for k, rs in rows.items():
+        if not rs:
+            continue
+        m = 0.15 if k == "straddle" else 0.10
+        per100 = [100 * (a - b - f) / (m * S0) for _, a, b, f, S0 in rs]
+        cum = peak = dd = 0
+        for x in per100:
+            cum += x; peak = max(peak, cum); dd = min(dd, cum - peak)
+        years = {}
+        for (t0, *_), x in zip(rs, per100):
+            years.setdefault(time.strftime("%Y", time.gmtime(t0)), []).append(x)
+        prem = st.mean(a / S0 for _, a, b, f, S0 in rs)
+        print(f"{cur} {k} REAL bid prices: {len(rs)} weeks, premium {prem*100:.2f}% of the coin, per $100 margin a week "
+              f"mean {st.mean(per100):+.2f}, worst week {min(per100):+.1f}, worst run {dd:+.1f}, weeks lost {sum(x<0 for x in per100)}")
+        print("   by year: " + ", ".join(f"{y} {st.mean(v):+.2f} ({len(v)})" for y, v in sorted(years.items())))
+        bets = [{"ev": t0, "t": t0, "cost": m * S0, "pay": m * S0 + (a - b - f)} for t0, a, b, f, S0 in rs]
+        exam.score(bets, f"wild: sell weekly {k} {cur} at real Deribit bids", tries=6, src="outside/wild.py volreal", log=False)
+
+
 # ---------------------------------------------------------------- defi
 def defi():
     pools = get("https://yields.llama.fi/pools")["data"]
@@ -383,5 +478,5 @@ def skins(tag="now"):
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "hosts"
-    {"hosts": hosts, "vol": vol, "defi": defi, "pendle": pendle, "skins": skins}[cmd](*sys.argv[2:])
+    {"hosts": hosts, "vol": vol, "volreal": volreal, "defi": defi, "pendle": pendle, "skins": skins}[cmd](*sys.argv[2:])
     print("=== DONE ===")
