@@ -430,8 +430,11 @@ def test_pspeed():
           "no orders in the first 12 s of a window (the offers seen then are stale)")
     plan2 = sp.decide(w, "Up", 0.7, (w + 70) * 1000)
     check(plan2 is not None, "a second buy in the same window is allowed")
-    sp.busy = False
-    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "at most 2 buys tried in one 5-minute window")
+    sp.execute(plan2)
+    check(sp.tries.get(w) == 2 and not sp.busy, "each bought bet counts toward the window cap")
+    check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "at most 2 bets bought in one 5-minute window")
+    b.state["open"] = {}
+    b.day()["spent"], b.day()["bets"] = 0.0, 0
     sp.tries.clear()
     sp.busy = True
     check(sp.decide(w, "Up", 0.7, (w + 80) * 1000) is None, "no second order while one is still on its way")
@@ -537,6 +540,11 @@ def test_pspeed():
     sp2.execute(pl)
     check(len(orders) == 2 and len(b2.state["open"]) == 1 and not sp2.busy,
           "a killed order (the offer was gone) buys nothing and frees the bot for the next jump")
+    check(sp2.tries.get(w) == 1, "a killed order does not use up one of the window's 2 tries (Jan 26 Nov)")
+    sp2.tries[w] = 1
+    pl = sp2.decide(w, "Down", 0.7, (w + 60) * 1000)
+    check(pl is not None, "after 1 bought and 1 killed order the window still has room for a second bet")
+    sp2.busy = False
     sp2.cash = 2.0
     sp2.tries.clear()
     check(sp2.decide(w, "Up", 0.7, (w + 60) * 1000) is None, "never buys with less cash than the bet")
