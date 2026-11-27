@@ -746,6 +746,143 @@ def _hlscore(path):
         say("  other people's trades at the old price within 10 s: none")
 
 
+# ================================================================ rewards: venues that pay makers in cash
+def xo_book(snap):
+    """XO bookSnapshot -> {outcome: (bids, asks)} in dollars and shares."""
+    out = {}
+    for b in (snap or {}).get("books") or []:
+        bids = [(x["priceTick"] / 1000, int(x["sizeMicro"]) / 1e6) for x in b.get("bids") or []]
+        asks = [(x["priceTick"] / 1000, int(x["sizeMicro"]) / 1e6) for x in b.get("asks") or []]
+        out[b.get("outcome")] = (sorted(bids, key=lambda x: -x[0]), sorted(asks, key=lambda x: x[0]))
+    return out
+
+
+def rewards(arg=None):
+    x = get("https://api-mainnet.xo.market/api/public/liquidity-rewards/earning-pools", {"take": 100})
+    pools = x.get("data") if isinstance(x, dict) else []
+    say(f"== XO earning pools: {len(pools)} meta {short(x.get('meta') if isinstance(x, dict) else x, 300)}")
+    tot_usdc = 0.0
+    for p in pools:
+        m = p.get("market") or {}
+        u = p.get("usdc") or {}
+        c = p.get("cp") or {}
+        say(f"\n  {m.get('title')!r} ends {m.get('expiresAt')} prices {m.get('prices')}")
+        say(f"    usdc: {short({k: u.get(k) for k in u}, 700)}")
+        say(f"    cp:   dailyPool {c.get('dailyPool')} maxDist {c.get('maxDistanceCents')} minSize {c.get('minOrderSizeShares')} rest {c.get('minOrderRestSeconds')}s eligible {c.get('eligible')}")
+        say(f"    other keys: {[k for k in p if k not in ('market', 'usdc', 'cp')]} {short({k: p[k] for k in p if k not in ('market', 'usdc', 'cp')}, 400)}")
+        bk = xo_book(m.get("bookSnapshot"))
+        for oc, (bids, asks) in bk.items():
+            say(f"    book {oc}: bids {bids[:4]} asks {asks[:4]}")
+        pool = f(u.get("dailyPool"))
+        tot_usdc += pool
+        if pool > 0 and bk:
+            dist = f(u.get("maxDistanceCents"), 2) / 100
+            yes = bk.get("Yes") or bk.get("UP") or list(bk.values())[0]
+            if yes[0] and yes[1]:
+                mid = (yes[0][0][0] + yes[1][0][0]) / 2
+                qual = sum(z for pz, z in yes[0] if mid - pz <= dist) + sum(z for pz, z in yes[1] if pz - mid <= dist)
+                say(f"    USDC pool ${pool}/day; mid {mid:.3f}; shares already resting within {100 * dist:.1f}c of mid (Yes book): {qual:,.0f}")
+        for path in (f"/api/public/liquidity-rewards/markets/{p.get('marketId')}", f"/api/public/liquidity-rewards/markets/{p.get('marketId')}/epochs/{(x.get('meta') or {}).get('currentEpoch', 0) - 1}",
+                     f"/api/public/liquidity-rewards/markets/{p.get('marketId')}/epochs/{(x.get('meta') or {}).get('currentEpoch', 0) - 1}/makers"):
+            r = get("https://api-mainnet.xo.market/api" + path.replace("/api", "", 1))
+            say(f"    {path[-60:]}: {short(r, 500)}")
+    say(f"\n  total USDC a day across pools: ${tot_usdc:,.2f}")
+    say("\n== Limitless: markets with rewards today ==")
+    rows = []
+    for page in range(1, 20):
+        r = get("https://api.limitless.exchange/markets/active", {"limit": 25, "page": page})
+        d = r.get("data") if isinstance(r, dict) else None
+        if not d:
+            break
+        rows += d
+    rw = [(f((m.get("settings") or {}).get("effectiveDailyReward") or (m.get("settings") or {}).get("dailyReward")), m.get("title"), m.get("isRewardable")) for m in rows]
+    say(f"  markets {len(rows)}, rewardable flag {sum(1 for r in rw if r[2])}, with a daily reward above $0: {sum(1 for r in rw if r[0] > 0)}, total ${sum(r[0] for r in rw):,.2f}/day")
+    for r in sorted(rw, reverse=True)[:10]:
+        say(f"   {r}")
+    say("\n== Opinion: maker rebates and volume ==")
+    lst = []
+    for page in range(1, 10):
+        r = get("https://openapi.opinion.trade/openapi/market", {"status": "activated", "sortBy": 5, "limit": 20, "page": page})
+        d = (r.get("result") or {}).get("list") if isinstance(r, dict) else None
+        if not d:
+            break
+        lst += d
+    say(f"  markets {len(lst)}, 24h volume ${sum(f(m.get('volume24h')) for m in lst):,.0f}; rebates seen {set(json.dumps(m.get('rebate')) for m in lst)}")
+    for m in sorted(lst, key=lambda m: -f(m.get("volume24h")))[:12]:
+        say(f"   ${f(m.get('volume24h')):,.0f} 24h  {str(m.get('marketTitle'))[:70]!r} type {m.get('marketType')} children {len(m.get('childMarkets') or [])}")
+    say("=== DONE ===")
+
+
+# ================================================================ winners: who makes money on HL outcomes
+WALLETS = {  # loris.tools HIP-4 leaderboard, read 27 Nov 2026 (realized P&L, all time)
+    "0xfcecc2a54724cf0502eb7c916e2717ef76a510ed": "+$708k",
+    "0x7177edd4e52e01f5f78093a8834529c31424c621": "+$228k",
+    "0x8d95fd2584a06832a23d3e61a6b2764567d1c14c": "+$224k",
+    "0xaddc680878f96b93189f700d17f4a9bfcf80ff54": "+$210k",
+    "0xbf2a12006918a9118368910b047291e440c2d457": "+$145k",
+    "0xc369ad451ff4f0e00ec26610b19d46a29ce3208d": "+$112k",
+    "0xb965ba35929c3ebf97f8a1356179b05b16819b6f": "+$110k",
+    "0x25773676902085225ae5751075e4161369334897": "+$70k",
+    "0x06b79146f1e54ef4e1ab9b1fe2cc4b4576cc33f1": "-$12k (biggest volume)",
+    "0x3bf39e4677efb07a775437b5e4bd6acf12906858": "-$19k (2nd volume)",
+    "0x469e9a7f624b04c24f0e64edf8d8a277e6bf58a5": "-$328k",
+    "0xd9ee2b58b061d62d8090f4cba11b5c2043b0cd0c": "-$265k",
+    "0xd501ccbdb70ce518b2da68c685045fa54458ec35": "-$178k",
+}
+
+
+def winners(arg=None):
+    meta = hl({"type": "outcomeMeta"})
+    names = {}
+    for o in meta.get("outcomes", []):
+        names[o["outcome"]] = (o.get("name", "").replace("template:", ""), kv(o.get("description")))
+    since = int((time.time() - 30 * 86400) * 1000)
+    for w, tag in WALLETS.items():
+        fills = []
+        start = since
+        for _ in range(6):
+            r = hl({"type": "userFillsByTime", "user": w, "startTime": start, "aggregateByTime": True})
+            if not isinstance(r, list) or not r:
+                break
+            fills += r
+            if len(r) < 2000:
+                break
+            start = max(x["time"] for x in r) + 1
+        oc = [x for x in fills if str(x.get("coin", "")).startswith("#")]
+        if not oc:
+            say(f"\n{w[:10]} {tag}: fills {len(fills)}, outcome fills 0 {short(fills[:1], 300)}")
+            continue
+        vol = sum(f(x["px"]) * f(x["sz"]) for x in oc)
+        maker = sum(f(x["px"]) * f(x["sz"]) for x in oc if not x.get("crossed"))
+        pnl = sum(f(x.get("closedPnl")) for x in oc)
+        fee = sum(f(x.get("fee")) for x in oc)
+        kinds = {}
+        for x in oc:
+            k = names.get(int(x["coin"][1:]) // 10, ("settled/unknown", {}))[0]
+            kinds.setdefault(k, [0, 0.0])
+            kinds[k][0] += 1
+            kinds[k][1] += f(x["px"]) * f(x["sz"])
+        buys = [f(x["px"]) for x in oc if x.get("side") == "B"]
+        prices = sorted(buys)
+        sz = sorted(f(x["px"]) * f(x["sz"]) for x in oc)
+        coins = {}
+        for x in oc:
+            coins.setdefault(x["coin"], []).append(x)
+        flips = sum(1 for c, xs in coins.items() if {y.get("side") for y in xs} == {"A", "B"})
+        hrs = {}
+        for x in oc:
+            h = time.gmtime(x["time"] / 1000).tm_hour
+            hrs[h] = hrs.get(h, 0) + 1
+        say(f"\n{w[:10]} {tag}: last 30 days outcome fills {len(oc)} (of {len(fills)} fills, other = perps/spot), ${vol:,.0f} traded, "
+            f"maker share {100 * maker / max(vol, 1):.0f} in 100, closed P&L ${pnl:+,.0f}, fees ${fee:,.0f}")
+        say(f"   kinds: {sorted(((k, v[0], round(v[1])) for k, v in kinds.items()), key=lambda z: -z[2])[:6]}")
+        if prices:
+            say(f"   buy prices 10/50/90: {prices[len(prices) // 10]:.3f} / {prices[len(prices) // 2]:.3f} / {prices[9 * len(prices) // 10]:.3f}; "
+                f"fill size median ${sz[len(sz) // 2]:,.0f}, 90th ${sz[9 * len(sz) // 10]:,.0f}; markets {len(coins)}, both bought and sold in {flips}")
+        say(f"   busiest UTC hours {sorted(hrs.items(), key=lambda z: -z[1])[:5]}; sample {short(oc[-1], 260)}")
+    say("=== DONE ===")
+
+
 if __name__ == "__main__":
     os.makedirs(CACHE, exist_ok=True)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
