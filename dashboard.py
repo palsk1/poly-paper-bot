@@ -519,6 +519,11 @@ def live_rows(tracks):
                 stop = r
             elif r.get("k") in ("phone_start", "start") and stop and stop.get("k") == "phone_stop":
                 stop = None
+        # Jan, 27 Nov: "is the bot locked or not? it doesnt show on card". The bots log "paused" / "running" whenever
+        # their pause reason changes (day loss cap, STOP file, switch.json); the newest one says whether it bets now.
+        pr = [r for r in rows if r.get("k") in ("paused", "running")]
+        paused = ({"why": pr[-1].get("why") or "paused", "at": pr[-1].get("t")}
+                  if pr and pr[-1].get("k") == "paused" else None)
         settled = [r for r in rows if r.get("k") == "settled" and r.get("live") == live]
         real = [r for r in settled if (r.get("filled", 1) or 0) > 0]
         unfilled = len(settled) - len(real)
@@ -580,7 +585,7 @@ def live_rows(tracks):
             "bot": b["bot"], "label": b["label"], "say": b["say"], "twin": b["twin"], "live": live, "since": since,
             "stopped": ({"why": "stopped from the phone" if stop.get("k") == "phone_stop" else
                          f"stopped: total loss reached the cap", "at": stop.get("t")} if stop else None),
-            "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
+            "paused": paused, "last_seen": last, "bet": bet, "max_open": last_start.get("max_open") or last_start.get("max_open_usd"),
             "cash": (logins[-1].get("cash") if logins else None),
             "bal_now": r2(bal[-1][1]) if bal else None, "bal_at": bal[-1][0] if bal else None,
             "bal_start": r2(bal_since[0][1]) if bal_since else None, "wallet": mask(logins[-1].get("wallet")) if logins else None,
