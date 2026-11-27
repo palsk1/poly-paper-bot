@@ -54,6 +54,7 @@ P2COIN = {v[1]: k for k, v in PAIRS.items()}
 SHARES = 10
 HALF = 5            # Kalshi tape window around the Polymarket read, seconds each way
 DEFAULT_PFEE = 0.07
+NEW_PFEE = {"BTC": 0.05, "*": 0.01}   # Polymarket crypto taker fee since 20 Nov 2026 23:59 UTC (BTC windows 0.05, other coins 0.01)
 KRE = re.compile(r"^(KX[A-Z]+15M)-")
 PRE = re.compile(r"^([a-z]+)-updown-15m-(\d+)$")
 
@@ -276,14 +277,16 @@ def kfee(n, p):
     return math.ceil(0.07 * n * p * (1 - p) * 100 - 1e-9) / 100
 
 
-def pair_reads(win, res, p_delta, k_mode, half=HALF, shares=SHARES):
+def pair_reads(win, res, p_delta, k_mode, half=HALF, shares=SHARES, pfee=None):
     """Every moment both sites can be priced. k_mode "tape": Kalshi = worst real taker price within +-half s of the
     true Polymarket read time. k_mode "book": Kalshi = the book the recorder saved in the same pass (the naive way).
-    Row: (coin, close, secs to end, combo, kalshi price, poly price, total cost a pair incl. fees, pays or None)"""
+    Row: (coin, close, secs to end, combo, kalshi price, poly price, total cost a pair incl. fees, pays or None)
+    `pfee` = {coin: Polymarket taker fee rate} to price every window at one fee (e.g. NEW_PFEE, the fees since
+    21 Nov 2026); None (the default) keeps each window's own fee from the results file."""
     rows = []
     for (coin, close), w in win.items():
         r = res.get(f"{coin}:{close}") or {}
-        rate = r.get("fee", DEFAULT_PFEE)
+        rate = r.get("fee", DEFAULT_PFEE) if pfee is None else pfee.get(coin, pfee.get("*", DEFAULT_PFEE))
         ts = [x[0] for x in w["kt"]]
         kbt = [x[0] for x in w["kb"]]
         for t, bids, asks in w["pb"]:
