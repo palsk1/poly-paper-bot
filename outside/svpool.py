@@ -605,6 +605,63 @@ def fdfetch():
 ATG = "https://www.atg.se/services/racinginfo/v1/api/"
 
 
+def atg_compact(d, g):
+    pool = (d.get("pools") or {}).get(g) or {}
+    res = pool.get("result") or {}
+    legs = []
+    for r in d.get("races") or []:
+        win = [w.get("number") for w in ((((r.get("pools") or {}).get("vinnare") or {}).get("result") or {}).get("winners") or [])]
+        st = []
+        for s in r.get("starts") or []:
+            sp = s.get("pools") or {}
+            st.append([s.get("number"), (sp.get("vinnare") or {}).get("odds"), (sp.get(g) or {}).get("betDistribution"),
+                       bool(s.get("scratched")), (s.get("result") or {}).get("place"), (s.get("result") or {}).get("finalOdds")])
+        legs.append({"race": r.get("id"), "win": win, "scr": (r.get("result") or {}).get("scratchings"), "st": st})
+    return {"id": d.get("id"), "g": g, "turnover": pool.get("turnover"), "payouts": res.get("payouts"),
+            "poolpay": pool.get("payouts"), "systems": pool.get("systemCount"), "jackpot": pool.get("jackpotAmount") or res.get("jackpotAmount"),
+            "keys": sorted(pool.keys()), "rkeys": sorted(res.keys()), "legs": legs}
+
+
+def atgfetch():
+    """ATG V75 / V85 / GS75 rounds: per horse win odds, the big game's bet share, winner, payouts."""
+    import datetime
+    a = datetime.date.fromisoformat(sys.argv[2])
+    b = datetime.date.fromisoformat(sys.argv[3])
+    path = f"{CACHE}/atg.json.gz"
+    have = {}
+    if os.path.exists(path):
+        have = {x["id"]: x for x in json.load(gzip.open(path, "rt"))}
+    day = a
+    new = 0
+    while day <= b:
+        if day.weekday() in (5, 6):
+            try:
+                cal = get(ATG + "calendar/day/" + day.isoformat())
+            except Exception as e:
+                print(day, "cal ERR", str(e)[:80])
+                day += datetime.timedelta(days=1)
+                continue
+            for g, v in (cal.get("games") or {}).items():
+                if g not in ("V75", "V85", "GS75", "V86"):
+                    continue
+                for x in v:
+                    gid = x["id"]
+                    if gid in have:
+                        continue
+                    try:
+                        have[gid] = atg_compact(get(ATG + "games/" + gid), g)
+                        new += 1
+                    except Exception as e:
+                        print(gid, "ERR", str(e)[:80])
+        day += datetime.timedelta(days=1)
+    json.dump(list(have.values()), gzip.open(path, "wt"))
+    print("atg rounds saved", len(have), "new", new)
+    import collections
+    print(collections.Counter(x["g"] for x in have.values()))
+    x = sorted(have.values(), key=lambda x: x["id"])[-1]
+    print(x["id"], x["keys"], x["rkeys"], x["poolpay"], x["payouts"])
+
+
 def atgraw():
     """save the raw ATG game JSON of a few days (to learn the format)."""
     os.makedirs(CACHE + "/raw", exist_ok=True)
@@ -626,5 +683,5 @@ def atgraw():
 
 if __name__ == "__main__":
     cmd =sys.argv[1] if len(sys.argv) > 1 else "explore"
-    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw, "fd": fdfetch, "top": lambda: toprows(sys.argv[2], *[int(x) for x in sys.argv[3:6]])}[cmd]()
+    {"explore": explore, "fetch": fetch, "calib": lambda: calib(sys.argv[2]), "ev": lambda: ev(sys.argv[2], *[int(x) for x in sys.argv[3:5]]), "atgraw": atgraw, "atg": atgfetch, "fd": fdfetch, "top": lambda: toprows(sys.argv[2], *[int(x) for x in sys.argv[3:6]])}[cmd]()
     print("=== DONE ===")
