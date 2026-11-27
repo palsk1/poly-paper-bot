@@ -2178,7 +2178,15 @@ def arb_settle(tracks):
 # ---- "is it proven?" (90% confidence that resolution mismatches are rarer than the edge)
 
 def binom_cdf(k, n, p):
-    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k + 1))
+    # Log space: math.comb(n, i) turns into a number too big for a float once n reaches a few thousand
+    # (kfastlive crashed on 27 Nov 2026 with OverflowError).
+    if p <= 0:
+        return 1.0
+    if p >= 1:
+        return 1.0 if k >= n else 0.0
+    lp, lq, lg = math.log(p), math.log1p(-p), math.lgamma(n + 1)
+    return min(1.0, sum(math.exp(lg - math.lgamma(i + 1) - math.lgamma(n - i + 1) + i * lp + (n - i) * lq)
+                        for i in range(min(k, n) + 1)))
 
 
 def upper90(k, n):
@@ -2204,9 +2212,20 @@ def proof(n, k, e, realized, what="trades", bad="bad outcomes"):
     proven = n >= 20 and ub < e and realized > 0
     need = 0
     if not proven:
-        m = max(n, 1)
-        while upper90(k, m) >= e and m < n + 5000:
-            m += 1
+        # smallest m in [max(n,1), n+5000] with upper90(k, m) < e (upper90 falls as m grows), by bisection
+        lo, hi = max(n, 1), n + 5000
+        if upper90(k, lo) >= e:
+            if upper90(k, hi) >= e:
+                lo = hi
+            else:
+                while hi - lo > 1:
+                    mid = (lo + hi) // 2
+                    if upper90(k, mid) >= e:
+                        lo = mid
+                    else:
+                        hi = mid
+                lo = hi
+        m = lo
         need = max(m - n, 20 - n, 0)
     if n == 0:
         verdict = (f"Not proven yet: no finished {what}. Each one earns about {e * 100:.1f}c a share, so it needs about "
