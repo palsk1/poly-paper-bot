@@ -27,6 +27,7 @@ UTC = dt.timezone.utc
 DAY = 86400
 CACHE = os.path.join(bot.ROOT, "bt_cache", "nf", "ty")
 BUA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+K_DIR = r"KX(10|30|2|5|7)YRDIR(HM|LM|HW|LW)|KXUST10A|KXUST2A"
 TENORS = {"2": "DGS2", "5": "DGS5", "10": "DGS10", "30": "DGS30"}
 
 
@@ -201,7 +202,7 @@ def fetch():
     print("polymarket part done", flush=True)
 
 
-def kfetch():
+def kfetch(pat=None):
     import yesno
     try:
         ser = yesno.kget("/series", {}).get("series") or []
@@ -209,6 +210,8 @@ def kfetch():
         print("kalshi series failed", e)
         return
     hit = []
+    if pat:
+        ser = [s for s in ser if re.fullmatch(pat, str(s.get("ticker")))]
     for s in ser:
         t = (str(s.get("ticker")) + " " + str(s.get("title"))).lower()
         if re.search(r"treasur|yield|tnote|t-note|\b(2|5|10|30)[- ]year|\b(2|5|10|30)y\b|kx(10|2|5|30)y|mortgage rate", t):
@@ -217,7 +220,7 @@ def kfetch():
     hit = hit[:40]
     import kmentions as km
     import dates
-    have = {}
+    have = rj(os.path.join(CACHE, "kmarkets.json.gz"), {}) or {}
     for s in hit:
         tk = s["ticker"]
         try:
@@ -230,7 +233,9 @@ def kfetch():
     wj(os.path.join(CACHE, "kmarkets.json.gz"), have)
     t0 = time.time()
     for tk, ok in have.items():
-        mm = [m for m in ok.values() if (m.get("vol") or 0) >= 200]
+        if pat and not re.fullmatch(pat, tk):
+            continue
+        mm = [m for m in ok.values() if (m.get("vol") or 0) >= 50]
         if not mm:
             continue
         path = os.path.join(CACHE, f"ktapes_{tk}.json.gz")
@@ -251,9 +256,49 @@ def ncdf(x):
 
 
 def load_yields():
-    """{tenor: [(day, close)]} from FRED, sorted."""
-    Y = rj(os.path.join(CACHE, "fred.json.gz"), {}) or {}
-    return {k: sorted(v.items()) for k, v in Y.items()}
+    """{tenor: [(day, close)]} from Treasury.gov's Daily Par Yield Curve (the settle source), sorted."""
+    par = rj(os.path.join(CACHE, "ust_par.json.gz"), {}) or {}
+    out = {k: {} for k in TENORS}
+    for rows in par.values():
+        for r in rows:
+            try:
+                d = dt.datetime.strptime(r["Date"], "%m/%d/%Y").strftime("%Y-%m-%d")
+            except Exception:
+                continue
+            for k in TENORS:
+                v = r.get(f"{k} Yr")
+                try:
+                    out[k][d] = float(v)
+                except (TypeError, ValueError):
+                    pass
+    return {k: sorted(v.items()) for k, v in out.items()}
+
+
+MDAY = r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:,\s*(\d{4}))?"
+
+
+def dates_of(m):
+    """(first day, last day, kind) from the rule text: kind 'touch' (any day in the span) or 'day' (one day's value)."""
+    d = str(m.get("desc") or "")
+    yr = dt.datetime.utcfromtimestamp(m["end"] - 1).year
+
+    def mk(mon, dd, y):
+        return dt.date(int(y or yr), MONTHS[mon.lower()], int(dd))
+    x = re.search(r"between\s+" + MDAY + r"\s+and\s+(?:market close on\s+)?" + MDAY, d)
+    if x:
+        a = mk(x.group(1), x.group(2), x.group(3) or x.group(6))
+        b = mk(x.group(4), x.group(5), x.group(6))
+        return a, b, "touch"
+    x = re.search(r"any day in\s+(\w+)\s+(\d{4})", d)
+    if x and x.group(1).lower() in MONTHS:
+        a = dt.date(int(x.group(2)), MONTHS[x.group(1).lower()], 1)
+        b = (dt.date(a.year + (a.month == 12), a.month % 12 + 1, 1) - dt.timedelta(days=1))
+        return a, b, "touch"
+    x = re.search(r"yield on (?:on )?" + MDAY + r"\s+is greater than", d)
+    if x:
+        a = mk(x.group(1), x.group(2), x.group(3))
+        return a, a, "day"
+    return None
 
 
 def parse(m):
@@ -263,7 +308,7 @@ def parse(m):
     lv = re.findall(r"(\d+\.\d+|\d+)\s*%", str(m.get("item") or "") + " " + str(m.get("q")))
     if not mt or not lv:
         return None
-    hl = "high" if re.search(r"how high|reach|above|hit|\u2191", t, re.I) else "low" if re.search(r"how low|dip|below|\u2193", t, re.I) else None
+    hl = "high" if re.search(r"how high|reach|above|hit|>|greater|\u2191", t, re.I) else "low" if re.search(r"how low|dip|below|\u2193", t, re.I) else None
     if re.search(r"how high", str(m.get("title")), re.I):
         hl = "high"
     if re.search(r"how low", str(m.get("title")), re.I):
@@ -281,18 +326,21 @@ def bdays(a, b):
     return n
 
 
-def state(series, t, start_day, look=60):
+def state(series, t, start_day, look=60, end_day=None):
     """Last close known at time t (a close of day d is known from d 21:00 UTC), running max/min of closes since
     start_day, daily swing (sd of the last `look` daily changes)."""
-    known = [(d, v) for d, v in series if its(d + "T21:00:00Z") <= t]
+    known = [(d, v) for d, v in series if its(d + "T00:00:00Z") + DAY + 3600 <= t]
     if len(known) < look + 2:
         return None
-    since = [v for d, v in known if d >= start_day]
+    since = [v for d, v in known if start_day <= d <= (end_day or "9999")]
     ch = [known[i][1] - known[i - 1][1] for i in range(len(known) - look, len(known))]
     mu = sum(ch) / len(ch)
     sd = math.sqrt(sum((c - mu) ** 2 for c in ch) / (len(ch) - 1))
     return {"y": known[-1][1], "day": known[-1][0], "hi": max(since) if since else known[-1][1],
             "lo": min(since) if since else known[-1][1], "sd": sd}
+
+
+BG = 0.5826
 
 
 def p_touch(y, k, sd, n, up, intraday=0.0):
@@ -304,6 +352,7 @@ def p_touch(y, k, sd, n, up, intraday=0.0):
     dist -= intraday
     if dist <= 0:
         return 1.0
+    dist += BG * sd           # daily closes, not a continuous path: shift the barrier out (Broadie-Glasserman)
     return min(1.0, 2 * (1 - ncdf(dist / (sd * math.sqrt(n)))))
 
 
@@ -343,13 +392,15 @@ def main():
         fetch()
         kfetch()
     elif cmd == "kfetch":
-        kfetch()
+        arg = sys.argv[2] if len(sys.argv) > 2 else None
+        kfetch(K_DIR if arg == "dir" else arg)
     elif cmd == "run":
         run(*sys.argv[2:])
     else:
         print(__doc__)
 
 
+DONE_BY = "2026-11-20"
 MONTHS = {m: i + 1 for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
                                           "september", "october", "november", "december"))}
 
@@ -359,7 +410,7 @@ def period_start(m):
     t = str(m.get("title") or "").lower()
     for name, i in MONTHS.items():
         if re.search(rf"\bin {name}\b", t):
-            y = dt.datetime.utcfromtimestamp(m["end"]).year
+            y = dt.datetime.utcfromtimestamp(m["end"] - 1).year
             return f"{y}-{i:02d}-01"
     return dt.datetime.utcfromtimestamp(m.get("start") or m["end"]).strftime("%Y-%m-%d")
 
@@ -373,37 +424,51 @@ def load():
         p = parse(m)
         if not p or mid not in tp or not m.get("end"):
             continue
-        m = dict(m, ten=p[0], hl=p[1], k=p[2], p0=period_start(m))
+        dd = dates_of(m)
+        if not dd:
+            continue
+        m = dict(m, ten=p[0], hl=p[1], k=p[2], p0=dd[0].isoformat(), p1=dd[1].isoformat(), kind=dd[2])
         m["res"] = settle(m, tp)
+        m["done"] = m["p1"] <= DONE_BY       # the whole span is over: every rung has its answer (no early-Yes bias)
         m["b"] = tp[mid]["b"]
         out[mid] = m
     return out, Y
 
 
-def looks(m, Y, step=DAY, hour=15, intraday=0.0):
-    """One look a day at `hour` UTC: (t, model chance, last real price, state)."""
+def looks(m, Y, step=DAY, hour=2, intraday=0.0):
+    """One look a day at `hour` UTC (US closed, last Treasury close published): (t, model chance, last real price,
+    state, already decided by the closes so far, business days left)."""
     ser = Y.get(m["ten"]) or []
     b = m["b"]
     if not b:
         return []
     t0 = max(b[0][0], (m.get("start") or b[0][0]))
     t = (t0 // DAY + 1) * DAY + hour * 3600
-    stop = min(m["end"], m.get("closed_t") or m["end"]) - 6 * 3600
+    last = dt.date.fromisoformat(m["p1"])
+    stop = min(its(m["p1"] + "T20:00:00Z"), m.get("closed_t") or m["end"])
     rows = []
+    up = m["hl"] == "high"
     while t < stop:
-        st = state(ser, t, m["p0"])
+        st = state(ser, t, m["p0"], end_day=m["p1"])
         p = last_before(b, t)
         if st and p is not None:
-            up = m["hl"] == "high"
-            touched = st["hi"] >= m["k"] if up else st["lo"] <= m["k"]
-            n = bdays(dt.date.fromisoformat(st["day"]), dt.datetime.utcfromtimestamp(m["end"] - 1).date())
-            P = 1.0 if touched else p_touch(st["y"], m["k"], st["sd"], n, up, intraday)
+            n = bdays(max(dt.date.fromisoformat(st["day"]), dt.date.fromisoformat(m["p0"]) - dt.timedelta(days=1)), last)
+            if m["kind"] == "touch":
+                started = st["day"] >= m["p0"]
+                touched = started and (st["hi"] >= m["k"] if up else st["lo"] < m["k"])
+                P = 1.0 if touched else p_touch(st["y"], m["k"], st["sd"], n, up, intraday)
+            else:
+                touched = n <= 0
+                z = (st["y"] - m["k"]) / max(1e-9, st["sd"] * math.sqrt(max(n, 1e-9)))
+                P = ncdf(z if up else -z)
             rows.append((t, P, p, st, touched, n))
         t += step
     return rows
 
 
-def bets(ms, Y, gap=0.10, extra=0.01, stake=10.0, side="both", intraday=0.0, sel=None, once=True):
+def bets(ms, Y, gap=0.10, extra=0.01, stake=10.0, side="both", intraday=0.0, sel=None, once=True, bg=True):
+    global BG
+    BG = 0.5826 if bg else 0.0
     out = []
     for mid, m in ms.items():
         if sel and not sel(m):
@@ -416,14 +481,15 @@ def bets(ms, Y, gap=0.10, extra=0.01, stake=10.0, side="both", intraday=0.0, sel
             if not (yes or no):
                 continue
             f = fill(m, m["b"], t, yes, extra, stake)
-            if not f:
+            if not f or not 0.05 <= f["px"] <= 0.95:
                 continue
             res = m["res"]
             mark = res if res is not None else (m["b"][-1][2])
             win_val = mark if yes else 1 - mark
-            out.append({"ev": m["eslug"], "t": f["t"], "cost": f["cost"], "pay": f["sh"] * win_val, "sh": f["sh"],
+            out.append({"ev": m["p1"][:7] + ("" if m["kind"] == "touch" and m["p0"][:7] == m["p1"][:7] else "-" + m["kind"] + m["p0"]),
+                        "event": m["eslug"], "t": f["t"], "cost": f["cost"], "pay": f["sh"] * win_val, "sh": f["sh"],
                         "px": f["px"], "q": p if yes else 1 - p, "yes": yes, "id": mid, "P": P, "settled": res is not None,
-                        "k": m["k"], "ten": m["ten"], "hl": m["hl"], "y": st["y"], "n": n})
+                        "k": m["k"], "ten": m["ten"], "hl": m["hl"], "y": st["y"], "n": n, "done": m["done"]})
             if once:
                 break
     return out
@@ -445,75 +511,94 @@ def line(name, bb):
 def run(*a):
     import exam
     ms, Y = load()
-    print("rungs with tape + parse:", len(ms), "settled", sum(m["res"] is not None for m in ms.values()),
+    done = {k: m for k, m in ms.items() if m["done"]}
+    print("rungs with tape + rule parsed:", len(ms), "settled", sum(m["res"] is not None for m in ms.values()),
           "events", len({m["eslug"] for m in ms.values()}))
+    print("finished spans (every rung answered):", len(done), "rungs,", len({m["eslug"] for m in done.values()}), "events,",
+          sum(m["res"] == 1.0 for m in done.values()), "paid Yes, unsettled", sum(m["res"] is None for m in done.values()))
     ev = collections.defaultdict(list)
     for m in ms.values():
         ev[m["eslug"]].append(m)
-    for e, mm in sorted(ev.items()):
+    for e, mm in sorted(ev.items(), key=lambda x: x[1][0]["p1"]):
         st = [x for x in mm if x["res"] is not None]
-        print(f"  {e}: {len(mm)} rungs, {len(st)} settled ({sum(x['res'] == 1.0 for x in st)} Yes), "
-              f"${sum(x['vol'] or 0 for x in mm):,.0f} traded, tenor {mm[0]['ten']} {mm[0]['hl']}, from {mm[0]['p0']}, "
-              f"fee {mm[0]['fee']}")
-    # who forecasts better on settled rungs, daily looks
-    rows = []
-    for m in ms.values():
-        if m["res"] is None:
-            continue
-        for t, P, p, st, touched, n in looks(m, Y):
-            if not touched:
-                rows.append((P, p, m["res"], m["eslug"]))
-    if rows:
-        bm = sum((P - r) ** 2 for P, p, r, e in rows) / len(rows)
-        bp = sum((p - r) ** 2 for P, p, r, e in rows) / len(rows)
-        print(f"\nsettled-rung daily looks: {len(rows)}; model miss {bm:.4f}, price miss {bp:.4f} (lower is better)")
-    # how the model and the price compare on every look (open rungs too)
-    allr = [(P, p) for m in ms.values() for t, P, p, st, touched, n in looks(m, Y) if not touched]
-    if allr:
-        diffs = sorted(P - p for P, p in allr)
-        print(f"all looks {len(allr)}: model minus price, middle {diffs[len(diffs) // 2]:+.3f}, "
-              f"10th {diffs[len(diffs) // 10]:+.3f}, 90th {diffs[9 * len(diffs) // 10]:+.3f}")
-    tries = 0
+        print(f"  {mm[0]['p0']}..{mm[0]['p1']} {e[:62]:62s} {len(mm):2d} rungs, {len(st):2d} settled ({sum(x['res'] == 1.0 for x in st)} Yes)"
+              f" ${sum(x['vol'] or 0 for x in mm):>10,.0f} fee {mm[0]['fee']} {'DONE' if mm[0]['done'] else 'open'}")
+    for bg in (True, False):
+        global BG
+        BG = 0.5826 if bg else 0.0
+        rows = [(P, p, m["res"], m) for m in done.values() if m["res"] is not None
+                for t, P, p, st, touched, n in looks(m, Y) if not touched]
+        bm = sum((P - r) ** 2 for P, p, r, m in rows) / len(rows)
+        bp = sum((p - r) ** 2 for P, p, r, m in rows) / len(rows)
+        print(f"\nfinished spans, daily looks {len(rows)} ({'daily-close correction' if bg else 'plain reflection'}): "
+              f"model miss {bm:.4f}, price miss {bp:.4f} (lower is better)")
+        for kind in ("touch", "day"):
+            r2 = [x for x in rows if x[3]["kind"] == kind]
+            if r2:
+                print(f"   {kind}: {len(r2)} looks, model {sum((P - r) ** 2 for P, p, r, m in r2) / len(r2):.4f}, "
+                      f"price {sum((p - r) ** 2 for P, p, r, m in r2) / len(r2):.4f}")
+        # calibration in bands
+        for lo_, hi_ in ((0, .1), (.1, .3), (.3, .5), (.5, .7), (.7, .9), (.9, 1.01)):
+            r2 = [x for x in rows if lo_ <= x[1] < hi_]
+            if r2:
+                print(f"   price {lo_:.1f}-{hi_:.1f}: {len(r2):5d} looks, paid {sum(x[2] for x in r2) / len(r2):.2f}, "
+                      f"price avg {sum(x[1] for x in r2) / len(r2):.2f}, model avg {sum(x[0] for x in r2) / len(r2):.2f}")
+    BG = 0.5826
+    rules = (("both sides, 10c gap", {}), ("Yes only, 10c gap", {"side": "yes"}), ("No only, 10c gap", {"side": "no"}),
+             ("both sides, 20c gap", {"gap": 0.20}), ("both sides, 10c gap, +2c", {"extra": 0.02}),
+             ("both sides, 10c gap, no daily-close fix", {"bg": False}),
+             ("both sides, 10c gap, touch ladders only", {"sel": lambda m: m["kind"] == "touch"}),
+             ("both sides, 10c gap, one-day Friday bets only", {"sel": lambda m: m["kind"] == "day"}))
     res = {}
-    for name, kw in (("both sides, 10c gap", {}), ("Yes only, 10c gap", {"side": "yes"}), ("No only, 10c gap", {"side": "no"}),
-                     ("both sides, 20c gap", {"gap": 0.20}), ("both sides, 10c gap, +2c", {"extra": 0.02}),
-                     ("both, 10c, intraday +3bp", {"intraday": 0.03})):
+    print("\nRULES (one bet per rung, first look where model and price are 10c+ apart, $10 a bet, worst real trade of the "
+          "next 2 h + 1c + fee). Finished spans only; open spans shown apart, marked at the last trade:")
+    for name, kw in rules:
         bb = bets(ms, Y, **kw)
-        tries += 1
-        res[name] = bb
-        print(line(name, bb))
-        print(line(name + " [settled only]", [b for b in bb if b["settled"]]))
-    print("\nbiggest wins / losses (both sides, 10c gap):")
+        res[name] = [b for b in bb if b["done"]]
+        print(line(name, res[name]))
+        print(line("     open spans, marked", [b for b in bb if not b["done"]]))
+        ev_p = collections.defaultdict(float)
+        for b in res[name]:
+            ev_p[b["ev"]] += b["pay"] - b["cost"]
+        print("     by month group: " + ", ".join(f"{k} {usd(v)}" for k, v in sorted(ev_p.items())))
+        if ev_p:
+            top = sorted(ev_p.items(), key=lambda x: -x[1])
+            print(f"     events ahead {sum(v > 0 for v in ev_p.values())} of {len(ev_p)}; best event {top[0][0][:50]} "
+                  f"{usd(top[0][1])}; without the best 3 events {usd(sum(v for k, v in top[3:]))}")
+        BG = 0.5826
+    print("\nbiggest wins / losses (both sides, 10c gap, finished spans):")
     bb = sorted(res["both sides, 10c gap"], key=lambda b: b["pay"] - b["cost"])
-    for b in bb[:6] + bb[-8:]:
-        print(f"  {b['ev'][:60]:60s} {b['ten']}y {b['hl']} {b['k']:.2f} y={b['y']:.2f} n={b['n']} "
-              f"{'Yes' if b['yes'] else 'No'} at {b['px']:.2f} model {b['P']:.2f} "
-              f"{'settled' if b['settled'] else 'marked'} P&L {usd(b['pay'] - b['cost'])} "
+    for b in bb[:6] + bb[-10:]:
+        print(f"  {b['event'][:58]:58s} {b['ten']}y {b['hl']} {b['k']:.2f} y={b['y']:.2f} n={b['n']} "
+              f"{'Yes' if b['yes'] else 'No'} at {b['px']:.2f} (last {b['q']:.2f}) model {b['P']:.2f} P&L {usd(b['pay'] - b['cost'])} "
               f"{dt.datetime.utcfromtimestamp(b['t']).date()}")
-    # backward look: settled rungs, what the paid ones had in common
-    print("\nbackward look, settled rungs: share paid by distance at first look (in daily swings x sqrt(days left))")
-    bk = collections.defaultdict(lambda: [0, 0, 0.0])
-    for m in ms.values():
-        if m["res"] is None:
+    # backward look on finished spans
+    print("\nbackward look, finished spans: first look of each rung, by distance (yield gap / (daily swing x root of days left))")
+    bk = collections.defaultdict(lambda: [0, 0, 0.0, 0.0])
+    cuts = 0
+    for m in done.values():
+        if m["res"] is None or m["kind"] != "touch":
             continue
-        L = looks(m, Y)
-        L = [x for x in L if not x[4]]
+        L = [x for x in looks(m, Y) if not x[4]]
         if not L:
             continue
         t, P, p, st, touched, n = L[0]
         z = abs(m["k"] - st["y"]) / max(1e-6, st["sd"] * math.sqrt(max(1, n)))
-        key = "<0.5" if z < 0.5 else "0.5-1" if z < 1 else "1-2" if z < 2 else "2+"
-        bk[key][0] += 1
-        bk[key][1] += m["res"] == 1.0
-        bk[key][2] += p
-    for k_, (n_, w, ps) in sorted(bk.items()):
-        print(f"  {k_:6s}: {n_} rungs, {w} paid, average first price {ps / n_:.2f}")
+        for key in (("dist", "<0.5" if z < 0.5 else "0.5-1" if z < 1 else "1-2" if z < 2 else "2+"),
+                    ("side", m["hl"]), ("tenor", m["ten"] + "y"),
+                    ("span", "month" if (dt.date.fromisoformat(m["p1"]) - dt.date.fromisoformat(m["p0"])).days < 40 else "long")):
+            bk[key][0] += 1
+            bk[key][1] += m["res"] == 1.0
+            bk[key][2] += p
+            bk[key][3] += P
+    for k_, (n_, w, ps, Ps) in sorted(bk.items()):
+        cuts += 1
+        print(f"  {k_[0]:5s} {k_[1]:6s}: {n_:3d} rungs, {w:3d} paid ({w / n_:.2f}), first price {ps / n_:.2f}, model {Ps / n_:.2f}")
     if "noexam" not in a:
-        for name, bb in res.items():
-            s_ = [b for b in bb if b["settled"]]
-            exam.score(s_, f"Treasury yield ladders: {name} (settled rungs)", tries=tries + 4, src="tyield.py",
-                       note="Polymarket how high / how low Treasury yield, model = reflection rule on FRED closes")
-
+        tries = len(rules) + cuts
+        for name in ("both sides, 10c gap", "Yes only, 10c gap", "No only, 10c gap", "both sides, 20c gap"):
+            exam.score(res[name], f"Treasury yield ladders (Polymarket): {name}", tries=tries, src="tyield.py",
+                       note="how high / how low Treasury yield vs a touch model on Treasury.gov par closes; finished spans")
 
 if __name__ == "__main__":
     main()
