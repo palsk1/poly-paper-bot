@@ -4,9 +4,14 @@ Tennis found one lead: on Kalshi, the winner of set 1 at 50-80c is a little too 
 (tennis.py, backtest/tennis.md). This tool asks the same question for basketball (after a quarter / the half),
 hockey (after a period), baseball (after an inning) and esports (after a map), on Kalshi and Polymarket.
 
-Commands (probe `stg_<cmd>`):
-  scan      every Kalshi sports series that looks like a game winner or a stage winner, with size; free clocks test
-  fetch ... (later) settled games + 1-minute bid / ask + stage times -> bt_cache/stg/ (shared price store)
+Commands (probe `stg_<cmd>`, arguments joined by _):
+  scan                    every Kalshi sports series that looks like a game or stage winner, with size; free clocks test
+  peek                    what the stage markets look like
+  fetch <sports> <days>   ESPN stage ends + Kalshi markets + 1-minute bid / ask -> bt_cache/stg/<sport>/ (price store)
+  report <sports>         leader / trailer after each stage, by price band and minutes later
+  carry                   the tennis rule on every sport, pooled, with the exam
+  sweep                   backward look over every cut, with the exam
+Result (27 Nov): nothing, see backtest/stages.md.
 """
 import collections
 import gzip
@@ -630,6 +635,8 @@ def report_esport(game):
     mins = load_mins(game, gser)
     by = collections.defaultdict(dict)
     for ev, mm in maps.items():
+        if "-" not in gkey(ev):
+            continue
         k, num = gkey(ev).rsplit("-", 1)
         win = [m for m in mm if m["res"] == "yes"]
         if num.isdigit() and len(win) == 1:
@@ -672,6 +679,149 @@ def report(what):
             report_esport(w)
 
 
+# ---------------------------------------------------------------- the tennis rule, carried over unchanged
+def pre_price(g):
+    """YES side's middle price in the first minute bars we have (before the first stage)."""
+    st = g["stages"][0][1] if g["stages"] else g["close"]
+    for t, b, a, *_ in g["mins"]:
+        if t >= st - 10 * 60:
+            break
+        if b is not None and a is not None and 0 < b < a < 100 and a - b <= 8:
+            return (a + b) / 200
+    return None
+
+
+def load_any(w):
+    if w in SPORTS:
+        return load_sport(w)
+    d_dir = os.path.join(CACHE, w)
+    gser, mser = ESPORTS[w]
+    evs = rj(os.path.join(d_dir, f"k_{gser}.json.gz"), {}) or {}
+    maps = rj(os.path.join(d_dir, f"k_{mser}.json.gz"), {}) or {}
+    mins = load_mins(w, gser)
+    by = collections.defaultdict(dict)
+    for ev, mm in maps.items():
+        if "-" not in gkey(ev):
+            continue
+        k, num = gkey(ev).rsplit("-", 1)
+        win = [m for m in mm if m["res"] == "yes"]
+        if num.isdigit() and len(win) == 1:
+            by[k][int(num)] = (max(m["close"] for m in mm), win[0]["w"])
+    gs = []
+    for ev, mm in evs.items():
+        mm = sorted(mm, key=lambda m: m["t"])
+        if len(mm) != 2 or not mins.get(mm[0]["t"]) or gkey(ev) not in by:
+            continue
+        st, ys, os_ = [], 0, 0
+        for num in sorted(by[gkey(ev)]):
+            t, w_ = by[gkey(ev)][num]
+            if w_ == mm[0]["w"]:
+                ys += 1
+            elif w_ == mm[1]["w"]:
+                os_ += 1
+            else:
+                break
+            st.append([num, t, ys, os_])
+        gs.append({"ev": ev, "yes": mm[0], "res": 1 if mm[0]["res"] == "yes" else 0, "stages": st, "mins": mins[mm[0]["t"]], "close": mm[0]["close"]})
+    return gs
+
+
+def tennis_rule(gs, stage, lag, fav=None):
+    """Leader after `stage` at 50-80c; fav=True only when the leader was also the pre-game favourite, False only underdogs."""
+    out = []
+    for b in stage_bets(gs, stage, lag, 0.5, 0.8, "leader"):
+        out.append(b)
+    if fav is None:
+        return out
+    pp = {g["ev"]: pre_price(g) for g in gs}
+    lead_yes = {}
+    for g in gs:
+        st = [x for x in g["stages"] if x[0] == stage]
+        if st:
+            lead_yes[g["ev"]] = st[0][2] > st[0][3]
+    keep = []
+    for b in out:
+        p = pp.get(b["ev"])
+        if p is None:
+            continue
+        lp = p if lead_yes[b["ev"]] else 1 - p
+        if (lp >= 0.5) == fav:
+            keep.append(b)
+    return keep
+
+
+ALL = ("nba", "wnba", "ncaamb", "ncaawb", "nfl", "ncaaf", "nhl", "mlb", "cs2", "lol", "dota2", "valorant", "cod")
+
+
+def carry():
+    """The tennis lead carried over with no new tuning: leader after the FIRST stage, 50-80c, 3 minutes later
+    (maps: right when Kalshi's map market closes), split by whether the leader was the pre-game favourite."""
+    import exam
+    pooled = {None: [], True: [], False: []}
+    print("| sport | first stage | all leaders 50-80c | leader was pre-game favourite | leader was pre-game underdog |")
+    print("|---|---|---|---|---|")
+    for w in ALL:
+        if not os.path.isdir(os.path.join(CACHE, w)):
+            continue
+        gs = load_any(w)
+        if not gs:
+            continue
+        lag = 0 if w in ESPORTS else 3
+        cells = []
+        for fav in (None, True, False):
+            b = tennis_rule(gs, 1, lag, fav)
+            for x in b:
+                x["ev"] = w + ":" + x["ev"]
+            pooled[fav] += b
+            cells.append(f"{len(b)} bets, {tennis.per100(b):+.2f}" if b else "-")
+        print(f"| {w} | {'map 1' if w in ESPORTS else STAGE_NAME[w] + ' 1'} | {' | '.join(cells)} |")
+    for fav, nm in ((None, "all leaders"), (True, "leader was the pre-game favourite"), (False, "leader was the pre-game underdog")):
+        b = sorted(pooled[fav], key=lambda x: x["t"])
+        h = len(b) // 2
+        print(f"\npooled, {nm}: {len(b)} bets, {tennis.per100(b):+.2f} per $100 (halves {tennis.per100(b[:h]):+.2f} / {tennis.per100(b[h:]):+.2f})")
+    exam.score(sorted(pooled[True], key=lambda x: x["t"]), "Kalshi in-game: leader after the first stage at 50-80c who was also the pre-game favourite, 13 sports pooled (the tennis rule carried over)",
+               tries=3, src="stages.py carry", status="dropped")
+
+
+# ---------------------------------------------------------------- backward look: every cut, which ones beat the price?
+def sweep(min_bets=150):
+    """Every sport x stage x minutes after x price band x leader / trailer x lead size (small / big). Prints the
+    cuts that are ahead in both halves, with how many cuts were tried (all of them count as tries)."""
+    bands = ((0.2, 0.35), (0.35, 0.5), (0.5, 0.65), (0.65, 0.8), (0.8, 0.9), (0.9, 0.97))
+    rows, tries = [], 0
+    for w in ALL:
+        if not os.path.isdir(os.path.join(CACHE, w)):
+            continue
+        gs = load_any(w)
+        if not gs:
+            continue
+        nst = max((len(g["stages"]) for g in gs), default=1)
+        for stage in range(1, min(nst, 8) + 1):
+            for lag in ((0, 3) if w in ESPORTS else (1, 3, 10)):
+                for who in ("leader", "trailer"):
+                    for lo, hi in bands:
+                        for sz, (a, b) in (("any lead", (1, 999)), ("small lead", (1, 1 if w in (*ESPORTS, "nhl", "mlb") else 6)), ("big lead", (2 if w in (*ESPORTS, "nhl", "mlb") else 7, 999))):
+                            tries += 1
+                            bs = stage_bets(gs, stage, lag, lo, hi, who, a, b)
+                            if len(bs) < min_bets:
+                                continue
+                            h = len(bs) // 2
+                            rows.append((tennis.per100(bs), tennis.per100(bs[:h]), tennis.per100(bs[h:]), len(bs), w, stage, lag, who, lo, hi, sz, bs))
+    rows.sort(key=lambda r: -r[0])
+    print(f"cuts tried: {tries}, with {min_bets}+ bets: {len(rows)}; ahead: {sum(r[0] > 0 for r in rows)}; ahead in both halves: {sum(r[1] > 0 and r[2] > 0 for r in rows)}")
+    print("average of all cuts with enough bets: %+.2f per $100" % (sum(r[0] for r in rows) / max(1, len(rows))))
+    print("\n| sport | after stage | min later | side | price | lead | bets | per $100 | halves |\n|---|---|---|---|---|---|---|---|---|")
+    for r in [r for r in rows if r[1] > 0 and r[2] > 0][:25]:
+        print(f"| {r[4]} | {r[5]} | {r[6]} | {r[7]} | {r[8] * 100:.0f}-{r[9] * 100:.0f}c | {r[10]} | {r[3]} | {r[0]:+.2f} | {r[1]:+.2f} / {r[2]:+.2f} |")
+    best = [r for r in rows if r[1] > 0 and r[2] > 0]
+    if best:
+        import exam
+        r = best[0]
+        exam.score(r[11], f"Kalshi in-game backward look, best cut: {r[4]} after stage {r[5]}, {r[7]} at {r[8] * 100:.0f}-{r[9] * 100:.0f}c, {r[10]}",
+                   tries=tries, src="stages.py sweep", status="dropped")
+    return rows, tries
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "scan"
     if cmd == "scan":
@@ -685,6 +835,10 @@ if __name__ == "__main__":
         print(short(espn_game(sys.argv[2], g[0]["id"]), 1500))
     elif cmd == "report":
         report(sys.argv[2])
+    elif cmd == "carry":
+        carry()
+    elif cmd == "sweep":
+        sweep()
     elif cmd == "peek":
         peek()
     elif cmd == "clocks":

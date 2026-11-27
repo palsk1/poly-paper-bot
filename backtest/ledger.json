@@ -3503,6 +3503,32 @@
    "verdict": "Ahead, but could be luck",
    "status": "dropped",
    "src": "drawsharp.py report"
+  },
+  {
+   "id": "kalshi_in_game_leader_after_the_first_stage_at_50_80c_who_wa",
+   "date": "2026-11-27",
+   "what": "Kalshi in-game: leader after the first stage at 50-80c who was also the pre-game favourite, 13 sports pooled (the tennis rule carried over)",
+   "tries": 3,
+   "bets": 3899,
+   "groups": 3899,
+   "per100": -3.45,
+   "floor100": -6.9,
+   "verdict": "Losing",
+   "status": "dropped",
+   "src": "stages.py carry"
+  },
+  {
+   "id": "kalshi_in_game_backward_look_best_cut_nba_after_stage_3_trai",
+   "date": "2026-11-27",
+   "what": "Kalshi in-game backward look, best cut: nba after stage 3, trailer at 20-35c, small lead",
+   "tries": 7128,
+   "bets": 173,
+   "groups": 173,
+   "per100": 24.26,
+   "floor100": -31.03,
+   "verdict": "Promising, needs more bets",
+   "status": "dropped",
+   "src": "stages.py sweep"
   }
  ]
 }
