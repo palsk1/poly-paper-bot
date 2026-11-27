@@ -2,9 +2,9 @@
 
 Kept by `exam.py`. One line per idea. A new line is added every time an idea sits the exam (`exam.score`). Rebuild this page with `python3 exam.py ledger`.
 
-**274 ideas examined, in about 118,712 versions.** 216 dropped, 58 still being tested or waiting. **Looks real: 8.**
+**292 ideas examined, in about 119,663 versions.** 234 dropped, 58 still being tested or waiting. **Looks real: 8.**
 
-Why count: if you test 274 ideas that are all worthless, the luckiest one still looks good. With 274 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
+Why count: if you test 292 ideas that are all worthless, the luckiest one still looks good. With 292 tries, a result has to beat about 3.4 "luck steps" instead of the usual 1.6 before the exam calls it real. Every new try raises that bar a little for everyone.
 
 | Date | Idea | Versions tried | Separate bets | Per $100 | Verdict | Now | Where |
 |---|---|---|---|---|---|---|---|
@@ -282,5 +282,23 @@ Why count: if you test 274 ideas that are all worthless, the luckiest one still 
 | 2026-11-26 | soccer draw 24h, bookie fair 1c+ above Polymarket (no Fri/Tue) | 15 | 98 | +$4.22 | Ahead, but could be luck | dropped | drawsharp.py report |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), hold to the end, fresh days, PAPER fills | 8,378 | 710 | +$11.47 | Looks real | open | swing.py exams |
 | 2026-11-26 | Speed buy on BTC 5-min 1 s late (not in the first 12 s), sell after 60s, fresh days, PAPER fills | 8,378 | 710 | +$7.44 | Promising, needs more bets | open | swing.py exams |
+| 2026-11-27 | kesport eSoccer: waiting bid on the Tie, 30 min before (all games) | 72 | 800 | +$12.73 | Ahead, but could be luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 10c+ above the real ask | 51 | 397 | -$3.28 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXEBASKETBALLGAME: Elo 15c+ above the real ask (fresh half) | 51 | 19 | -$2.74 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXEBASKETBALLGAME: Upset look: underdog, won its last game (fresh half) | 51 | 131 | -$22.83 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXEFOOTBALLGAME: Elo 10c+ above the real ask | 51 | 80 | -$20.24 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXEFOOTBALLGAME: Fade a 5c+ move in the last 20 min (fresh half) | 51 | 49 | -$28.46 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXEFOOTBALLGAME: Follow a 5c+ move in the last 20 min (fresh half) | 51 | 61 | -$17.72 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXESOCCERGAME: Elo 10c+ above the real ask | 57 | 861 | -$2.24 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXESOCCERGAME: Waiting bid on the Tie (30 min before), filled on real trade at or below our bid (fresh half) | 57 | 479 | +$11.68 | Ahead, but could be luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXLIGAPROMATCH: Buy any side priced 15-30c (fresh half) | 51 | 256 | -$22.66 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXLIGAPROMATCH: Elo 10c+ above the real ask | 51 | 1215 | -$4.50 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXLIGAPROMATCH: Elo 15c+ above the real ask (fresh half) | 51 | 374 | -$2.95 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTELITEMATCH: Elo 10c+ above the real ask | 51 | 1244 | -$11.59 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTELITEMATCH: Player new to Kalshi (under 5 games) vs veteran (30+): veteran (fresh half) | 51 | 47 | -$42.63 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTELITEMATCH: Upset look: underdog, night in New York (0-6) (fresh half) | 51 | 270 | -$8.11 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTSTARMATCH: Elo 10c+ above the real ask | 51 | 167 | -$16.95 | Behind, but could be bad luck | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTSTARMATCH: Fade a 5c+ move in the last 20 min (fresh half) | 51 | 136 | -$28.01 | Losing | dropped | kesport.py |
+| 2026-11-27 | kesport KXTTSTARMATCH: Side that won its last game, other lost (fresh half) | 51 | 109 | -$17.96 | Losing | dropped | kesport.py |
 
 "Per $100" is the strictest number the dig reported (real or pessimistic prices). Lines from before 2026-11-10 were filled in by hand from the reports: their verdicts are the dig's own words put into the exam's five verdicts, and their version counts are estimates.

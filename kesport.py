@@ -378,6 +378,7 @@ def load_games(s, lag=2):
         T = st - lag * 60
         g = {"ev": ev, "s": s, "start": st, "T": T, "close": max(m["close"] for m in ms), "side": [], "tie": None}
         ok = True
+        own = {m["t"]: bool(cs.get(m["t"])) for m in sides + tie}
         if not tie and len(sides) == 2:
             for X, Y in ((0, 1), (1, 0)):
                 if not cs.get(sides[X]["t"]) and cs.get(sides[Y]["t"]):
@@ -394,7 +395,7 @@ def load_games(s, lag=2):
             q, vol = at(rows, T)
             q30, _ = at(rows, T - 20 * 60)
             d = {"t": m["t"], "name": m["name"], "p": player(m["name"], s), "won": m["res"] == "yes", "q": q, "q20": q30, "vol": vol,
-                 "open": m["open"], "allvol": m["vol"]}
+                 "open": m["open"], "allvol": m["vol"], "rows": rows, "own": own.get(m["t"])}
             if str(m["t"]).endswith("-TIE"):
                 g["tie"] = d
             else:
@@ -515,6 +516,36 @@ def pelo(g, X):
     return pe
 
 
+def maker(g, X, wait=30, strict=False, step=1):
+    """Waiting bid 1c above the best bid, placed `wait` min before the start (or 1 min after the market opens),
+    pulled at the start. Filled when a later candle's lowest ask reaches our bid (someone sold at our price).
+    No fee: these series charge takers only."""
+    if not X.get("own") or not X.get("rows"):
+        return None
+    t0 = max(g["start"] - wait * 60, X["open"] + 60)
+    if t0 >= g["start"] - 120:
+        return None
+    q, _ = at(X["rows"], t0)
+    if not q or q[0] <= 0:
+        return None
+    b = q[0] + step
+    if b >= q[1] or b >= 97 or q[1] - q[0] > MAXSPREAD:      # a wide, empty book: a 2c bid on a 16c tie is a stale quote
+        return None
+    if strict == "trade":       # a real trade at or below our price in a later minute
+        fills = [r for r in X["rows"] if t0 + 60 <= r[0] <= g["start"] and (r[3] or 0) > 0 and r[4] is not None and r[4] <= b]
+        filled = bool(fills)
+    else:
+        filled = any(r[5] is not None and (r[5] < b if strict else r[5] <= b) for r in X["rows"] if t0 + 60 <= r[0] <= g["start"])
+    if not filled:
+        return None
+    p = b / 100
+    C = max(1, int(STAKE / p))
+    out = dict(ev=g["ev"], t=t0, cost=round(C * p, 4), pay=float(C if X["won"] else 0), sh=C, px=p, name=X["name"])
+    if strict == "trade":
+        out["tv"] = sum(r[3] for r in fills)
+    return out
+
+
 def p100(bets):
     c = sum(b["cost"] for b in bets)
     return 100 * sum(b["pay"] - b["cost"] for b in bets) / c if c else 0.0
@@ -544,12 +575,54 @@ def cut_bets(games, pick, key="buy"):
     return out
 
 
+SUMMARY = """## Short version (for Jan)
+
+**Nothing here beats the price when you buy.** Six new Kalshi families, about 36,000 finished games with a real
+pre-game price: Liga Pro table tennis (5,400 games), TT Elite table tennis (6,754, Kalshi stopped it on 3 Oct),
+TT Star table tennis (485, stopped 16 Oct), eBasketball (4,196), eSoccer (18,894) and eFootball (177).
+
+- **Player ratings (Elo) from Kalshi's own results lose to the price in every family**, even though these leagues are
+  new. Mixing Elo into the price adds nothing (fresh-half miss scores equal to the price alone). Buying where Elo says a
+  side is worth 10c+ more than the ask: Liga Pro -$4.50 per $100 (1,215 bets), TT Elite -$11.59 (1,244), TT Star -$16.95,
+  eBasketball -$3.28 (397), eSoccer -$2.24 (861), eFootball -$20.24. Verdicts "Losing" or "Behind, but could be bad luck".
+- **Price-only cuts** (price band, hour of day, games played in the last 6 hours, last result, form, late price moves,
+  busy or quiet books, the eSoccer tie at the ask): about 50 per family, nearly all lose $2-20 per $100 at the ask,
+  because the gap between buy and sell prices (1-9c) is bigger than any lean. The best first-half cuts all lost on the
+  fresh half.
+- **Backward look:** upsets (winner under 35c) happen about as often as the price says; nothing they shared beforehand
+  (last result, tiredness, night games, Elo, a falling price) made buying underdogs pay.
+- **One lean, and it is fading:** a *waiting* bid (not buying the offer) on the eSoccer "Tie" 30 minutes before the
+  start, 1c above the best bid, counted as filled only when a real trade happened at or below our price: 800 fills,
+  +$12.73 per $100, first half +$14.30, fresh half +$11.68, exam "Ahead, but could be luck" (57 cuts tried on eSoccer).
+  But the last 14 days were about even (+$0.97 per $100 on 303 fills) and since 24 Nov it fills about once a day:
+  the tie's buy-sell gap closed from ~5c to ~2c, so someone else now sits there. No track.
+
+**Ceiling of the one lean (rough guess):** best average day so far about $15-20 at $10 a bid (fresh half), now about $0
+(1 fill a day); money needed about $100 (most out at once was $99); stops growing at about $10 a game (others traded
+about 54 contracts at or below our price per fill); bad day -$225.
+
+**Recommendation:** no paper track. Free re-check in 3 weeks on games after 27 Nov with the rule exactly as written
+here (eSoccer Tie, 30 min before, best bid +1c, real trade at or below our price, hold): only worth a look if fills come
+back above ~10 a day and it stays ahead.
+
+**Traps found:** (1) the scheduled start is in the event name in New York time (`26NOV271100` = 27 Nov 11:00 New York);
+the close time is when the result came in, never use it. (2) Kalshi only returns a candle for minutes where something
+changed: carry the last quote forward. (3) Markets older than 28 Sep (TT Elite, TT Star) are not in the batch candle call;
+fetch them one by one (`hist`). (4) eSoccer has many duplicate, cancelled events (settled at 33c each, result `scalar`):
+drop them. (5) A 2c bid on a 16c tie is a stale empty book, not a bargain: the first version of the tie lean got most
+of its profit from 4 such fills paying $200-500 each; a 10c limit on the buy-sell gap removes them. (6) With a waiting
+bid, "the sell offer touched our price" is kinder than "a real trade happened at our price" (1,124 fills, about +$19
+per $100, vs 800 fills, +$12.73). (7) Most of these markets trade little before the start (typical game 14-211
+contracts before the start, 1,000-4,000 including live play): the money is in live trading, which this dig did not test.
+"""
+
+
 def report(log=True):
     L = ["# Kalshi's new all-day families: table tennis and e-sports (27 Nov 2026)", "",
          "Research only, paper only. `kesport.py`, data `bt_cache/nf/kes/` (shared store folder `bt_cache/nf`).", "",
          "Every bet is bought at the real asking price 2 minutes before the scheduled start (start time from the event name, "
          "never from the close), plus Kalshi's fee, $10 a bet, one bet per game. 'First half' = the older half of each family's "
-         "games, where rules were picked; 'fresh half' = the newer half, the check.", ""]
+         "games, where rules were picked; 'fresh half' = the newer half, the check.", "", SUMMARY, "## Details per family", ""]
     allcards = []
     summary = []
     for s in SERIES:
@@ -583,8 +656,6 @@ def report(log=True):
         rated = [g for g in ok if min(g["n"]) >= 5]
         for nm, part in (("first half", [g for g in rated if g["T"] < mid]), ("fresh half", [g for g in rated if g["T"] >= mid])):
             ys = [1.0 if g["side"][0]["won"] else 0.0 for g in part]
-            if g["tie"] is not None if part else False:
-                pass
             L.append(f"- Forecast check, {nm} ({len(part)} games, both players 5+ earlier games): price miss score "
                      f"{logloss([g['side'][0]['fair'] for g in part], ys):.4f}, Elo (K={bestK}) {logloss([pelo(g, g['side'][0]) for g in part], ys):.4f} "
                      f"(lower is better; a coin flip is 0.6931).")
@@ -628,7 +699,7 @@ def report(log=True):
         def other(g, X):
             return g["side"][1] if X is g["side"][0] else g["side"][0]
         rules += [
-            ("Side whose rival played 2+ more games today", lambda g, X: X is not g.get("tie") and (other(g, X)["today"] - X["today"]) >= 2),
+            ("Side whose rival played 2+ more games in the last 6 hours", lambda g, X: X is not g.get("tie") and (other(g, X)["today"] - X["today"]) >= 2),
             ("Side that lost its last game, other won", lambda g, X: X is not g.get("tie") and X["prev"] is False and other(g, X)["prev"] is True),
             ("Side that won its last game, other lost", lambda g, X: X is not g.get("tie") and X["prev"] is True and other(g, X)["prev"] is False),
             ("Side with 4-5 of last 5 won, rival 0-1", lambda g, X: X is not g.get("tie") and (X["form5"] or 0) >= 4 and other(g, X)["form5"] is not None and other(g, X)["form5"] <= 1),
@@ -662,6 +733,31 @@ def report(log=True):
             TRIES[s] += 1
             res.append(("eSoccer: bet against the Tie (No at 60-97c)", bs))
             L.append(line("eSoccer: bet against the Tie (No at 60-97c)", bs, mid))
+        for nm, sel in (("Waiting bid on the favourite (30 min before)", lambda g: max(g["side"], key=lambda d: d["fair"])),
+                        ("Waiting bid on the underdog (30 min before)", lambda g: min(g["side"], key=lambda d: d["fair"])),
+                        ("Waiting bid on the Tie (30 min before)", lambda g: g.get("tie"))):
+            if "Tie" in nm and not any(g["tie"] for g in ok):
+                continue
+            for mode, tag in ((False, "sell offer reached our bid"), ("trade", "real trade at or below our bid")):
+                bs, tried = [], 0
+                for g in ok:
+                    X = sel(g)
+                    if X is None:
+                        continue
+                    tried += 1
+                    b = maker(g, X, 30, mode)
+                    if b:
+                        bs.append(b)
+                TRIES[s] += 1
+                res.append((nm + ", filled on " + tag, bs))
+                L.append(line(nm + f", filled on {tag} ({len(bs)} of {tried})", bs, mid))
+        # the planned Elo rule 10 minutes before instead of 2
+        g10, _ = load_games(s, lag=10)
+        add_elo(g10, bestK)
+        ok10 = [g for g in g10 if g["ok"]]
+        bs10 = cut_bets(ok10, lambda g, X: X is not g.get("tie") and min(g["n"]) >= 5 and pelo(g, X) - (X["buy"] / 100 + 0.02) >= 0.10)
+        TRIES[s] += 1
+        L.append(line("Elo 10c+ above the ask, bought 10 min before", bs10, mid))
         # backward look: the upsets
         dogs = []
         for g in ok:
@@ -679,8 +775,8 @@ def report(log=True):
             ("Elo likes it (Elo 10c+ above price)", lambda g, X: min(g["n"]) >= 5 and (pelo(g, X) - X["fair"]) >= 0.10),
             ("price fell 5c+ in the last 20 min", lambda g, X: X["q20"] and (sum(X["q20"]) - sum(X["q"])) / 2 >= 5),
             ("price rose 5c+ in the last 20 min", lambda g, X: X["q20"] and (sum(X["q"]) - sum(X["q20"])) / 2 >= 5),
-            ("rival played 3+ games today", lambda g, X: other(g, X)["today"] >= 3),
-            ("its 1st game today", lambda g, X: X["today"] == 0),
+            ("rival played 3+ games in the last 6 hours", lambda g, X: other(g, X)["today"] >= 3),
+            ("its 1st game in 6 hours", lambda g, X: X["today"] == 0),
             ("night in New York (0-6)", lambda g, X: time.gmtime(g["start"] - 5 * 3600).tm_hour < 6),
             ("rival on a 4-5 of 5 run", lambda g, X: (other(g, X)["form5"] or 0) >= 4),
         ]
@@ -713,12 +809,53 @@ def report(log=True):
     return L, allcards, summary
 
 
+def tie_lean(log=True):
+    """The one lean: a waiting bid on the eSoccer Tie. Every nearby version, so the count of tries is honest."""
+    games, _ = load_games("KXESOCCERGAME")
+    ok = [g for g in games if g["ok"]]
+    mid = ok[len(ok) // 2]["start"] - 120
+    L = ["## The one lean: a waiting bid on the eSoccer Tie", "",
+         "Bid 1c above the best bid on 'Tie' some minutes before the scheduled start, pulled at the start, filled when the "
+         "lowest sell offer later reached our bid. No fee (these series charge only the buyer who takes an offer). "
+         "Nearby versions, all counted as tries:", "",
+         "| Version | Fills | 1st half $ per $100 | Fresh half $ per $100 |", "|---|---|---|---|"]
+    main = None
+    for wait in (15, 30, 45):
+        for strict, step in ((False, 0), (False, 1), (True, 0), (True, 1), ("trade", 1)):
+            bs = [b for g in ok for b in [maker(g, g["tie"], wait, strict, step)] if b]
+            TRIES["KXESOCCERGAME"] += 1
+            how = {False: "sell offer reached our bid", True: "sell offer went below our bid", "trade": "a real trade at or below our bid"}[strict]
+            nm = f"{wait} min before, bid {'+1c' if step else 'at the best bid'}, filled when {how}"
+            L.append(f"| {nm} | {len(bs)} | {p100([b for b in bs if b['t'] < mid]):+.2f} | {p100([b for b in bs if b['t'] >= mid]):+.2f} |")
+            if wait == 30 and strict == "trade":
+                main = bs
+    card = exam.score(main, "kesport eSoccer: waiting bid on the Tie, 30 min before (all games)", tries=TRIES["KXESOCCERGAME"],
+                      src="kesport.py", log=log, quiet=True)
+    byday = collections.defaultdict(float)
+    for b in main:
+        byday[time.strftime("%Y-%m-%d", time.gmtime(b["t"]))] += b["pay"] - b["cost"]
+    days = sorted(byday.values())
+    nd = len(byday)
+    won = sum(1 for b in main if b["pay"] > 0)
+    tv = sum(b.get("tv", 0) for b in main)
+    L += ["", f"Main version (30 min before, +1c, filled only when a real trade happened at or below our bid): {len(main)} fills, {won} won (the price said about "
+          f"{sum(b['px'] for b in main):.0f}), {p100(main):+.2f} per $100, exam on all games: **{card['verdict']}** "
+          f"(luck range {card.get('lo100')} to {card.get('hi100')}, worst case {card.get('floor100')}). Fills on {nd} days, "
+          f"about {len(main) / max(1, nd):.0f} a day; worst day ${days[0]:.2f}, best day ${days[-1]:.2f} at $10 a bid. "
+          f"Contracts others traded at or below our price in those minutes: {tv / max(1, len(main)):.0f} a fill on average "
+          f"(a $10 bid at ~16c is ~60 contracts), so $10 is about where it stops growing.", ""]
+    return L, card, main
+
+
 def big_wins(bets, n=8):
     return sorted(bets, key=lambda b: -(b["pay"] - b["cost"]))[:n]
 
 
 def run():
     L, cards, summary = report()
+    TL, tcard, tmain = tie_lean()
+    L += TL
+    cards.append(("KXESOCCERGAME", "waiting bid on the Tie", tcard, tmain, 0))
     L += ["## Biggest wins, read one by one", ""]
     for s, nm, card, bs, mid in cards:
         if card.get("per100") is not None and card["per100"] > 0:
