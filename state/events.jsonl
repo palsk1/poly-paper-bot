@@ -40126,3 +40126,4 @@
 {"filled": 10.0, "price": 0.91, "side": "yes", "through": false, "ticker": "KXGOLDMON-26NOV3017-T3443.99", "track": "kalshi_patient", "ts": "2026-11-27T03:15:34Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.91, "side": "no", "through": true, "ticker": "KXITFMATCH-26NOV27KAOBOR-BOR", "track": "kalshi_patient", "ts": "2026-11-27T03:15:34Z", "type": "kpatient_fill"}
 {"filled": 9.4, "price": 0.92, "side": "no", "through": true, "ticker": "KXNFLFIRSTTD-26NOV29TENJAC-TENTPOLLARD20", "track": "kalshi_patient", "ts": "2026-11-27T03:15:36Z", "type": "kpatient_fill"}
+{"outcome": "Draw", "pnl": -0.9369, "price": 0.0, "reason": "resolved", "title": "Will S\u00e3o Paulo FC vs. Clube do Remo end in a draw?", "token": "37400103553283580002421307386239190022677389093339435940091744513463343173070", "track": "soccer_draw", "ts": "2026-11-27T03:18:42Z", "type": "paper_close"}
