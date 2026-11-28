@@ -43153,3 +43153,6 @@
 {"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXMLSSCORE-26NOV27RSLVAN-RSL1VAN2", "track": "kalshi_patient", "ts": "2026-11-28T06:02:11Z", "type": "kpatient_result"}
 {"pnl": 0.7, "price": 0.93, "shares": 10.0, "side": "no", "ticker": "KXNBAPTSPROT-26NOV27LALSAS-LALQGRIMES5-20", "track": "kalshi_patient", "ts": "2026-11-28T06:02:11Z", "type": "kpatient_result"}
 {"outcome": "Draw", "pnl": -0.8336, "price": 0.0, "reason": "resolved", "title": "Will CS Herediano vs. Escorpiones de Bel\u00e9n end in a draw?", "token": "98530230178231710437911301905898724198759648158180696926102626728008377415709", "track": "soccer_draw", "ts": "2026-11-28T06:02:48Z", "type": "paper_close"}
+{"minutes_left": 2.64, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV280115-15", "track": "kc_maker", "ts": "2026-11-28T06:12:24Z", "type": "kmaker_order"}
+{"minutes_left": 2.64, "price": 0.979, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXSOL15M-26NOV280115-15", "track": "kc_maker_safe", "ts": "2026-11-28T06:12:25Z", "type": "kmaker_order"}
+{"minutes_left": 2.64, "price": 0.979, "queue": 0, "shares": 28, "side": "yes", "ticker": "KXSOL15M-26NOV280115-15", "track": "kc_maker_pct", "ts": "2026-11-28T06:12:25Z", "type": "kmaker_order"}
