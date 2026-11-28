@@ -42662,3 +42662,7 @@
 {"kind": "sports", "price": 0.97, "shares": 10, "side": "no", "ticker": "KXNCAAMBGAME-26NOV30SEMOWICH-SEMO", "track": "kalshi_patient", "ts": "2026-11-28T02:53:23Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXFDANOMWHEN-28-26DEC01", "track": "kalshi_patient", "ts": "2026-11-28T02:53:23Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXLIGAMXSCORE-26NOV28AMEMON-AME2MON1", "track": "kalshi_patient", "ts": "2026-11-28T02:53:23Z", "type": "kpatient_order"}
+{"fee": 0.0115, "outcome": "No", "price": 0.36, "shares": 5, "title": "Will Elon Musk post 65-89 tweets from November 26 to November 28, 2026?", "token": "21079373299152640308795649082956477997785185654244393829501666954680045781697", "track": "postcount_no", "ts": "2026-11-28T02:59:56Z", "type": "paper_buy"}
+{"pnl": 0.9, "price": 0.91, "shares": 10.0, "side": "no", "ticker": "KXBIGGESTQUAKE-27NOV26-7.0", "track": "kalshi_patient", "ts": "2026-11-28T03:00:06Z", "type": "kpatient_result"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": true, "ticker": "KXEFLCHAMPIONSHIPTOTAL-26NOV28LICWOL-6", "track": "kalshi_patient", "ts": "2026-11-28T03:00:06Z", "type": "kpatient_fill"}
+{"pnl": 0.6, "price": 0.94, "shares": 10.0, "side": "no", "ticker": "KXWTI-26NOV2714-T86.99", "track": "kalshi_patient", "ts": "2026-11-28T03:00:10Z", "type": "kpatient_result"}
