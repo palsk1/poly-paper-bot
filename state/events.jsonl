@@ -42804,3 +42804,6 @@
 {"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXMLSSCORE-26NOV27CLBMIA-CLB2MIA3", "track": "kalshi_patient", "ts": "2026-11-28T04:03:20Z", "type": "kpatient_result"}
 {"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXNCAAMBGAME-26NOV30SEMOWICH-SEMO", "track": "kalshi_patient", "ts": "2026-11-28T04:03:22Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.92, "side": "no", "through": true, "ticker": "KXTRUMPMEETM-26DEC01-MBS", "track": "kalshi_patient", "ts": "2026-11-28T04:03:22Z", "type": "kpatient_fill"}
+{"fee": 0.0042, "outcome": "Yes", "price": 0.983, "shares": 5, "title": "Ayo Dosunmu: Rebounds O/U 3.5", "token": "15194858803441299495019550768572393858875245976963661878148556439976619987899", "track": "endgame", "ts": "2026-11-28T04:07:28Z", "type": "paper_buy"}
+{"fee": 0.0042, "outcome": "Yes", "price": 0.983, "shares": 5, "title": "Ayo Dosunmu: Rebounds O/U 3.5", "token": "15194858803441299495019550768572393858875245976963661878148556439976619987899", "track": "endgame_strict", "ts": "2026-11-28T04:07:28Z", "type": "paper_buy"}
+{"pnl": 0.59, "price": 0.94, "shares": 10.0, "side": "yes", "ticker": "KXNCAAFTOTAL-26NOV27TEXTXAM-22", "track": "kalshi_patient", "ts": "2026-11-28T04:07:49Z", "type": "kpatient_result"}
