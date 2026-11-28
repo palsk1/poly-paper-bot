@@ -42884,3 +42884,4 @@
 {"kind": "other", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNATGASMON-26NOV3017-T3.799", "track": "kalshi_patient", "ts": "2026-11-28T04:50:02Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "yes", "ticker": "KXOPENSOURCESHARE-26NOV30-T63.5", "track": "kalshi_patient", "ts": "2026-11-28T04:50:02Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.91, "shares": 10, "side": "no", "ticker": "KXHYPED-26NOV2817-T66.9999", "track": "kalshi_patient", "ts": "2026-11-28T04:50:02Z", "type": "kpatient_order"}
+{"outcome": "Draw", "pnl": -1.1429, "price": 0.0, "reason": "resolved", "title": "Will Club Independiente Petrolero vs. CDT Real Oruro end in a draw?", "token": "93767902072347892050576669026769195028677841481296060112125942552828468945199", "track": "soccer_draw", "ts": "2026-11-28T04:50:38Z", "type": "paper_close"}
