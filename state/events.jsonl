@@ -43706,3 +43706,11 @@
 {"kind": "other", "price": 0.95, "shares": 10, "side": "no", "ticker": "KXTECHRANKLISTAICODE-26NOV30-GEMI", "track": "kalshi_patient", "ts": "2026-11-28T11:37:18Z", "type": "kpatient_order"}
 {"kind": "other", "price": 0.92, "shares": 10, "side": "no", "ticker": "KXBIGGESTQUAKE-28NOV26-6.8", "track": "kalshi_patient", "ts": "2026-11-28T11:37:18Z", "type": "kpatient_order"}
 {"kind": "sports", "price": 0.94, "shares": 10, "side": "no", "ticker": "KXNFLPASSYDS-26NOV29NOCIN-CINJBURROW9-400", "track": "kalshi_patient", "ts": "2026-11-28T11:37:18Z", "type": "kpatient_order"}
+{"minutes_left": 3.2, "price": 0.967, "queue": 3391.79, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV280645-45", "track": "kc_maker", "ts": "2026-11-28T11:41:49Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.967, "queue": 3391.79, "shares": 30, "side": "no", "ticker": "KXBTC15M-26NOV280645-45", "track": "kc_maker_pct", "ts": "2026-11-28T11:41:49Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.978, "queue": 270.34, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV280645-45", "track": "kc_maker", "ts": "2026-11-28T11:41:51Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.978, "queue": 270.34, "shares": 30, "side": "no", "ticker": "KXETH15M-26NOV280645-45", "track": "kc_maker_pct", "ts": "2026-11-28T11:41:51Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.966, "queue": 0, "shares": 10, "side": "yes", "ticker": "KXHYPE15M-26NOV280645-45", "track": "kc_maker", "ts": "2026-11-28T11:41:52Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.966, "queue": 0, "shares": 30, "side": "yes", "ticker": "KXHYPE15M-26NOV280645-45", "track": "kc_maker_pct", "ts": "2026-11-28T11:41:53Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.966, "queue": 0, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV280645-45", "track": "kc_maker", "ts": "2026-11-28T11:41:55Z", "type": "kmaker_order"}
+{"minutes_left": 3.2, "price": 0.966, "queue": 0, "shares": 30, "side": "no", "ticker": "KXXRP15M-26NOV280645-45", "track": "kc_maker_pct", "ts": "2026-11-28T11:41:56Z", "type": "kmaker_order"}
