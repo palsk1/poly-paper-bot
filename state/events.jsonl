@@ -42571,3 +42571,21 @@
 {"minutes_left": 1.66, "price": 0.993, "queue": 60.1, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker", "ts": "2026-11-28T01:58:24Z", "type": "kmaker_order"}
 {"minutes_left": 1.66, "price": 0.993, "queue": 60.1, "shares": 10, "side": "yes", "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker_safe", "ts": "2026-11-28T01:58:25Z", "type": "kmaker_order"}
 {"minutes_left": 1.66, "price": 0.993, "queue": 60.1, "shares": 26, "side": "yes", "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker_pct", "ts": "2026-11-28T01:58:25Z", "type": "kmaker_order"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV272100-00", "track": "kc_maker", "ts": "2026-11-28T02:03:45Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXSOL15M-26NOV272100-00", "track": "kc_maker", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV272100-00", "track": "kc_maker_safe", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXSOL15M-26NOV272100-00", "track": "kc_maker_safe", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.07, "price": 0.993, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker_safe", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV272100-00", "track": "kc_maker_mid", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 26.0, "pnl": 0.052, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV272100-00", "track": "kc_maker_pct", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 26.0, "pnl": 0.078, "price": 0.997, "side": "yes", "through": false, "ticker": "KXSOL15M-26NOV272100-00", "track": "kc_maker_pct", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 26.0, "pnl": 0.182, "price": 0.993, "side": "yes", "through": true, "ticker": "KXXRP15M-26NOV272100-00", "track": "kc_maker_pct", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.02, "price": 0.998, "side": "yes", "through": true, "ticker": "KXHYPE15M-26NOV272100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "pnl": 0.03, "price": 0.997, "side": "yes", "through": false, "ticker": "KXSOL15M-26NOV272100-00", "track": "kc_maker_safe_kprice", "ts": "2026-11-28T02:03:46Z", "type": "kmaker_fill"}
+{"filled": 10.0, "price": 0.97, "side": "no", "through": true, "ticker": "KXETHMINMON-ETH-26NOV30-125000", "track": "kalshi_patient", "ts": "2026-11-28T02:03:53Z", "type": "kpatient_fill"}
+{"filled": 5.13, "price": 0.96, "side": "no", "through": true, "ticker": "KXMISOINDM-01NOV26-T55", "track": "kalshi_patient", "ts": "2026-11-28T02:03:53Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.95, "side": "no", "through": false, "ticker": "KXNBA2Q-26NOV27LALSAS-TIE", "track": "kalshi_patient", "ts": "2026-11-28T02:03:54Z", "type": "kpatient_fill"}
+{"filled": 10.0, "price": 0.93, "side": "no", "through": true, "ticker": "KXNBAPTSPROT-26NOV27LALSAS-LALQGRIMES5-20", "track": "kalshi_patient", "ts": "2026-11-28T02:03:54Z", "type": "kpatient_fill"}
+{"pnl": 0.4, "price": 0.96, "shares": 10.0, "side": "no", "ticker": "KXNFLPASSYDS-26NOV27DENPIT-PITMRUDOLPH2-300", "track": "kalshi_patient", "ts": "2026-11-28T02:03:54Z", "type": "kpatient_result"}
+{"pnl": 0.5, "price": 0.95, "shares": 10.0, "side": "no", "ticker": "KXNFLTDPROT-26NOV27DENPIT-PITMRUDOLPH2-1", "track": "kalshi_patient", "ts": "2026-11-28T02:03:54Z", "type": "kpatient_result"}
