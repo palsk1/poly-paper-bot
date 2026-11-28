@@ -43245,3 +43245,9 @@
 {"fee": 0.0481, "outcome": "Draw", "price": 0.26, "shares": 5, "title": "Will Sh\u014dnan Bellm\u0101re vs. Kataller Toyama end in a draw?", "token": "91260992862580517026662914430418389118656413470618158700112377091522269374209", "track": "soccer_draw", "ts": "2026-11-28T07:02:33Z", "type": "paper_buy"}
 {"filled": 10.0, "price": 0.96, "side": "no", "through": true, "ticker": "KXLALIGASPREAD-26NOV28ELCATM-ELC2", "track": "kalshi_patient", "ts": "2026-11-28T07:02:39Z", "type": "kpatient_fill"}
 {"filled": 10.0, "price": 0.94, "side": "no", "through": false, "ticker": "KXTEMPLAXHS-26NOV2802-T61.99", "track": "kalshi_patient", "ts": "2026-11-28T07:02:42Z", "type": "kpatient_fill"}
+{"minutes_left": 6.57, "price": 0.987, "queue": 0, "shares": 10, "side": "no", "ticker": "KXBNB15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:26Z", "type": "kmaker_order"}
+{"minutes_left": 6.57, "price": 0.974, "queue": 612.05, "shares": 10, "side": "no", "ticker": "KXBTC15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:27Z", "type": "kmaker_order"}
+{"minutes_left": 6.57, "price": 0.972, "queue": 0, "shares": 10, "side": "no", "ticker": "KXDOGE15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:28Z", "type": "kmaker_order"}
+{"minutes_left": 6.57, "price": 0.979, "queue": 51.0, "shares": 10, "side": "no", "ticker": "KXETH15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:28Z", "type": "kmaker_order"}
+{"minutes_left": 6.57, "price": 0.989, "queue": 124.3, "shares": 10, "side": "no", "ticker": "KXSOL15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:30Z", "type": "kmaker_order"}
+{"minutes_left": 6.57, "price": 0.987, "queue": 102.98, "shares": 10, "side": "no", "ticker": "KXXRP15M-26NOV280215-15", "track": "kc_maker_safe_usd_10m", "ts": "2026-11-28T07:08:31Z", "type": "kmaker_order"}
